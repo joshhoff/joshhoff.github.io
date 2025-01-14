@@ -21,18 +21,53 @@
   <script type="module">
     // Your access token can be found at: https://ion.cesium.com/tokens.
     // This is the default access token from your ion account
+    
+    let openweathermapapi = '95de4d1641b053b5e200f8e7e94eb256';
 
+    let cityId = 2509520; // City ID for the desired location
 
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkOTcwYzYzNC05NzBjLTQzOTAtOWYxZi0wZWU3ZDhiYThmNjQiLCJpZCI6MjU1OTIyLCJpYXQiOjE3MzE4NTI5MDN9.aZVEVGfAXdZMkYkyD1096cJtWk5QDYKPzAuNqlmA-ZQ';
+    let apiUrl = `http://api.openweathermap.org/data/2.5/weather?id=2509520&units=metric&lang=en&appid=95de4d1641b053b5e200f8e7e94eb256`;
+let temp_max
+let temp_min
+let temp_current
+async function fetchWeatherData() {
+    try {
+        let response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+        let data = await response.json();
+        //console.log(data.main.temp_max, data.main.temp_min); // Log the weather data
+        temp_max = data.main.temp_max;
+        temp_min = data.main.temp_min;
+        temp_current = data.main.temp;
+
+        return {temp_max, temp_min, temp_current}; // Return the weather data for further use
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+    }
+}
+
+// Call the function
+fetchWeatherData().then(() => {
+    console.log(temp_max); // Logs the correct value of temp_max
+    console.log(temp_min); // Logs the correct value of temp_min
+    console.log(temp_current); // Logs the correct value of temp
+})
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzZTgzYjY4Yi04ZDczLTQ0NGItYTg3My0yYjQzYmIyYWJkYjYiLCJpZCI6MjU1OTIyLCJpYXQiOjE3MzI1MzU0NDJ9.AjNM5tkePE6VUagpLXuwtuLfxTgzGOXO4xd3qyZo8wY';
 
     // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrain: Cesium.Terrain.fromWorldTerrain(),
+    terrain: Cesium.Terrain.fromWorldTerrain(),
+    timeline: false,
+    animation: false,
+    sceneModePicker: false,
+    baseLayerPicker: false,
     });    
 
     // Fly the camera to San Francisco at the given longitude, latitude, and height.
     viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(-1.132528101890982, 39.92215371876793, 1200),
+      destination: Cesium.Cartesian3.fromDegrees(-1.135403093381864, 39.91440984795412, 1400),
       orientation: {
         heading: Cesium.Math.toRadians(10.0),
         pitch: Cesium.Math.toRadians(-30.0),
@@ -42,44 +77,114 @@
     // Add Cesium OSM Buildings, a global 3D buildings layer.
     //const buildingTileset = await Cesium.createOsmBuildingsAsync();
     //viewer.scene.primitives.add(buildingTileset); 
-    
-    //Townhall
-    viewer.scene.primitives.add(
-    await Cesium.Cesium3DTileset.fromIonAssetId(2961289),
-        );
-    
-    //Huertas
-    viewer.scene.primitives.add(
-    await Cesium.Cesium3DTileset.fromIonAssetId(2944454),
-        );
+let style_weather;
 
-    //Dino
-    viewer.scene.primitives.add(
-    await Cesium.Cesium3DTileset.fromIonAssetId(2838491),
-        );
+let weatherStyle = async () => {
+    // Ensure the weather data is fetched and temp_current is populated
+    await fetchWeatherData();
 
-    //Observatory
-    viewer.scene.primitives.add(
-    await Cesium.Cesium3DTileset.fromIonAssetId(2843124),
-        );
+    // Create the style using the global variable temp_current
+    style_weather = new Cesium.Cesium3DTileStyle({
+        color: {
+            conditions: [
+                [`(${temp_current} >= 1.0)  && (${temp_current} < 5.0)`, "color('#FF00FF')"],
+                [`(${temp_current} >= 5.0) && (${temp_current} < 10.0)`, "color('#FF0000')"],
+                [`(${temp_current} >= 10.0) && (${temp_current} < 15.0)`, "color('#FFFF00')"],
+                [`(${temp_current} >= 15.0) && (${temp_current} < 20.0)`, "color('#00FF00')"],
+                [`(${temp_current} >= 20.0) && (${temp_current} < 25.0)`, "color('#00FFFF')"],
+                [`(${temp_current} >= 25.0)`, "color('#0000FF')"]
+            ]
+        }
+    });
 
-    //Church and Bell Tower
-    viewer.scene.primitives.add(
-    await Cesium.Cesium3DTileset.fromIonAssetId(2867508),
-        );
+    console.log("Weather Style Created:", style_weather);
+    return style_weather; // Return the style for further use
+};
 
-    //Ecomuseum
+// Example usage
+(async () => {
+    let style_weather = await weatherStyle(); // Fetch the style after fetching weather data
+    console.log("Returned Style:", style_weather); // Use the returned style as needed
+})();
+
+       
+//Plaza 
+    let plaza = await Cesium.Cesium3DTileset.fromIonAssetId(2974209);
+    plaza.style = style_weather
+    viewer.scene.primitives.add(plaza);
+         
+    let plaza2 = await Cesium.Cesium3DTileset.fromIonAssetId(2974208)
+    plaza2.style = style_weather
+    viewer.scene.primitives.add(plaza2);
+
+    let plaza3 = await Cesium.Cesium3DTileset.fromIonAssetId(2974207)
+    plaza3.style = style_weather
+    viewer.scene.primitives.add(plaza3);
+
+//Townhall
+    let townhall = await Cesium.Cesium3DTileset.fromIonAssetId(2974185)
+    townhall.style = style_weather
+    viewer.scene.primitives.add(townhall);
+
+    let townhall2 = await Cesium.Cesium3DTileset.fromIonAssetId(2974187);
+    townhall2.style = style_weather
+    viewer.scene.primitives.add(townhall2);
+
+
+//Huertas
+
+    //viewer.scene.primitives.add(
+    //await Cesium.Cesium3DTileset.fromIonAssetId(2944454),
+        //);
+
+//Dino
+    let dino = await Cesium.Cesium3DTileset.fromIonAssetId(2974105)
+    dino.style = style_weather
+    viewer.scene.primitives.add(dino);
+
+
+//Observatory
+    let observatory = await Cesium.Cesium3DTileset.fromIonAssetId(2974130)
+    observatory.style = style_weather
+    viewer.scene.primitives.add(observatory);
+
+
+//Church and Bell Tower
+    let church = await Cesium.Cesium3DTileset.fromIonAssetId(2974173)
+    church.style = style_weather
+    viewer.scene.primitives.add(church);
+
+    let church2 = await Cesium.Cesium3DTileset.fromIonAssetId(2974172)
+    church2.style = style_weather
+    viewer.scene.primitives.add(church2);
+
+//Ecomuseum
     //viewer.scene.primitives.add(
     //await Cesium.Cesium3DTileset.fromIonAssetId(2914915),
         //);
 
-    //Washing Station
-    viewer.scene.primitives.add(
-    await Cesium.Cesium3DTileset.fromIonAssetId(2914915),
-        );
+//Laundry
+    let laundry = await Cesium.Cesium3DTileset.fromIonAssetId(2974174)
+    laundry.style = style_weather
+    viewer.scene.primitives.add(laundry);
 
-    viewer.extend(Cesium.viewerCesium3DTilesInspectorMixin);
 
+//Widget for coordinate selection
+    viewer.scene.pickPositionEnabled = true;
+
+    viewer.scene.canvas.addEventListener('click', function (event) {
+        const mousePosition = new Cesium.Cartesian2(event.clientX, event.clientY);
+        const cartesian = viewer.scene.pickPosition(mousePosition);
+
+    if (Cesium.defined(cartesian)) {
+        const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+        const latitude = Cesium.Math.toDegrees(cartographic.latitude);
+        const longitude = Cesium.Math.toDegrees(cartographic.longitude);
+        const height = cartographic.height;
+
+        console.log(`Picked Position: Latitude: ${latitude}, Longitude: ${longitude}, Height: ${height}`);
+    }
+});
 
 
   </script>
