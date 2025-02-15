@@ -4,6 +4,8 @@
 
 <head>
 
+    
+
   <meta charset="utf-8">
 
   <!-- Include the CesiumJS JavaScript and CSS files -->
@@ -19,12 +21,11 @@
   <div id="cesiumContainer"></div>
 
   <script type="module">
-    // Your access token can be found at: https://ion.cesium.com/tokens.
-    // This is the default access token from your ion account
+
     
     let openweathermapapi = '95de4d1641b053b5e200f8e7e94eb256';
 
-    let cityId = 2509520; // City ID for the desired location
+    let cityId = 2509520; 
 
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?id=2509520&units=metric&lang=en&appid=95de4d1641b053b5e200f8e7e94eb256`;
 let temp_max
@@ -42,21 +43,21 @@ async function fetchWeatherData() {
         temp_min = data.main.temp_min;
         temp_current = data.main.temp;
 
-        return {temp_max, temp_min, temp_current}; // Return the weather data for further use
+        return {temp_max, temp_min, temp_current}; 
     } catch (error) {
         console.error('Error fetching weather data:', error);
     }
 }
 
-// Call the function
+
 fetchWeatherData().then(() => {
-    console.log(temp_max); // Logs the correct value of temp_max
-    console.log(temp_min); // Logs the correct value of temp_min
-    console.log(temp_current); // Logs the correct value of temp
+    console.log(temp_max); 
+    console.log(temp_min); 
+    console.log(temp_current); 
 })
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzZTgzYjY4Yi04ZDczLTQ0NGItYTg3My0yYjQzYmIyYWJkYjYiLCJpZCI6MjU1OTIyLCJpYXQiOjE3MzI1MzU0NDJ9.AjNM5tkePE6VUagpLXuwtuLfxTgzGOXO4xd3qyZo8wY';
 
-    // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
+    
     const viewer = new Cesium.Viewer('cesiumContainer', {
     terrain: Cesium.Terrain.fromWorldTerrain(),
     timeline: false,
@@ -65,7 +66,7 @@ fetchWeatherData().then(() => {
     baseLayerPicker: false,
     });    
 
-    // Fly the camera to San Francisco at the given longitude, latitude, and height.
+   
     viewer.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(-1.135403093381864, 39.91440984795412, 1400),
       orientation: {
@@ -74,16 +75,13 @@ fetchWeatherData().then(() => {
       }
     });
 
-    // Add Cesium OSM Buildings, a global 3D buildings layer.
-    //const buildingTileset = await Cesium.createOsmBuildingsAsync();
-    //viewer.scene.primitives.add(buildingTileset); 
+
 let style_weather;
 
 let weatherStyle = async () => {
-    // Ensure the weather data is fetched and temp_current is populated
+    
     await fetchWeatherData();
 
-    // Create the style using the global variable temp_current
     style_weather = new Cesium.Cesium3DTileStyle({
         color: {
             conditions: [
@@ -98,28 +96,26 @@ let weatherStyle = async () => {
     });
 
     console.log("Weather Style Created:", style_weather);
-    return style_weather; // Return the style for further use
+    return style_weather; 
 };
 
-// Example usage
+
 (async () => {
-    let style_weather = await weatherStyle(); // Fetch the style after fetching weather data
-    console.log("Returned Style:", style_weather); // Use the returned style as needed
+    let style_weather = await weatherStyle();
+    console.log("Returned Style:", style_weather); 
 })();
+
+    viewer.scene.setTerrain(
+    new Cesium.Terrain(
+        Cesium.CesiumTerrainProvider.fromIonAssetId(1),
+    ),
+    );
 
        
 //Plaza 
-    let plaza = await Cesium.Cesium3DTileset.fromIonAssetId(2974209);
+    let plaza = await Cesium.Cesium3DTileset.fromIonAssetId(3031260);
     plaza.style = style_weather
     viewer.scene.primitives.add(plaza);
-         
-    let plaza2 = await Cesium.Cesium3DTileset.fromIonAssetId(2974208)
-    plaza2.style = style_weather
-    viewer.scene.primitives.add(plaza2);
-
-    let plaza3 = await Cesium.Cesium3DTileset.fromIonAssetId(2974207)
-    plaza3.style = style_weather
-    viewer.scene.primitives.add(plaza3);
 
 //Townhall
     let townhall = await Cesium.Cesium3DTileset.fromIonAssetId(2974185)
@@ -132,10 +128,9 @@ let weatherStyle = async () => {
 
 
 //Huertas
-
-    //viewer.scene.primitives.add(
-    //await Cesium.Cesium3DTileset.fromIonAssetId(2944454),
-        //);
+    let huertas = await Cesium.Cesium3DTileset.fromIonAssetId(3019394)
+    huertas.style = style_weather
+    viewer.scene.primitives.add(huertas);    
 
 //Dino
     let dino = await Cesium.Cesium3DTileset.fromIonAssetId(2974105)
