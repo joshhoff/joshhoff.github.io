@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Active and Passive Voice Practice Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f4f8; padding: 20px; }
+    h1 { color: #333; }
+    .card { background: #fff; padding: 20px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    button { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #45a049; }
+    .game-container { max-width: 500px; margin: auto; padding: 20px; }
+    .sentence-container { font-size: 1.2em; }
+    .transform-btn { background: #f57c00; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    .clear-btn { background: #f44336; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+    .feedback { font-size: 1.1em; color: #4CAF50; margin-top: 20px; }
+    .incorrect-feedback { font-size: 1.1em; color: red; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Active and Passive Voice Practice Game</h1>
+
+  <div class="game-container">
+    <div class="sentence-container" id="active-sentence">
+      <p><strong>Active Voice:</strong> "The cat chased the mouse." </p>
+    </div>
+
+    <button class="transform-btn" onclick="transformSentence()">Transform to Passive</button>
+    <button class="clear-btn" onclick="clearScenario()">Clear</button>
+
+    <div class="sentence-container" id="passive-sentence" style="display: none;">
+      <p><strong>Passive Voice:</strong> "The mouse was chased by the cat." </p>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+  </div>
+
+  <script>
+    const activeSentences = [
+      "The cat chased the mouse.",
+      "The teacher explains the lesson.",
+      "The chef cooked a delicious meal.",
+      "The children played soccer.",
+      "The manager wrote the report.",
+      "She painted a beautiful picture.",
+      "He cleaned the house.",
+      "The company launched a new product.",
+      "The scientists discovered a new planet.",
+      "They built a new school.",
+      "I read an interesting book.",
+      "We visited the museum.",
+      "The kids enjoyed the party.",
+      "John fixed the car.",
+      "She wrote an email."
+    ];
+
+    const passiveSentences = [
+      "The mouse was chased by the cat.",
+      "The lesson is explained by the teacher.",
+      "A delicious meal was cooked by the chef.",
+      "Soccer was played by the children.",
+      "The report was written by the manager.",
+      "A beautiful picture was painted by her.",
+      "The house was cleaned by him.",
+      "A new product was launched by the company.",
+      "A new planet was discovered by the scientists.",
+      "A new school was built by them.",
+      "An interesting book was read by me.",
+      "The museum was visited by us.",
+      "The party was enjoyed by the kids.",
+      "The car was fixed by John.",
+      "An email was written by her."
+    ];
+
+    let currentIndex = 0;
+
+    function getRandomSentence() {
+      currentIndex = Math.floor(Math.random() * activeSentences.length);
+      document.getElementById('active-sentence').innerHTML = `<p><strong>Active Voice:</strong> "${activeSentences[currentIndex]}"</p>`;
+      document.getElementById('passive-sentence').style.display = "none";
+      document.getElementById('feedback').textContent = "";
+    }
+
+    function transformSentence() {
+      const feedback = document.getElementById("feedback");
+      const passiveSentence = document.getElementById("passive-sentence");
+
+      // Show the passive sentence
+      passiveSentence.style.display = "block";
+      passiveSentence.innerHTML = `<p><strong>Passive Voice:</strong> "${passiveSentences[currentIndex]}"</p>`;
+
+      // Provide feedback
+      feedback.textContent = "Great job! You transformed the sentence correctly.";
+    }
+
+    function clearScenario() {
+      document.getElementById('active-sentence').innerHTML = "<p><strong>Active Voice:</strong> Click the button to generate a new sentence.</p>";
+      document.getElementById('passive-sentence').style.display = "none";
+      document.getElementById('feedback').textContent = "";
+    }
+
+    // Initialize with a random sentence
+    getRandomSentence();
+  </script>
+</body>
+</html>

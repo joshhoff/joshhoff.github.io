@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phrasal Verbs in the Workplace Game</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f4f8; padding: 20px; }
+    h1 { color: #333; }
+    .card { background: #fff; padding: 20px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    button { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #45a049; }
+    .game-container { max-width: 600px; margin: auto; padding: 20px; }
+    .sentence-container { font-size: 1.2em; }
+    .transform-btn { background: #f57c00; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    .clear-btn { background: #f44336; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+    .feedback { font-size: 1.1em; color: #4CAF50; margin-top: 20px; }
+    .incorrect-feedback { font-size: 1.1em; color: red; margin-top: 20px; }
+    .icon-container { text-align: center; font-size: 50px; margin-top: 20px; }
+    .icon-container i { color: #00796b; }
+  </style>
+</head>
+<body>
+  <h1>Phrasal Verbs in the Workplace Game</h1>
+
+  <div class="game-container">
+    <div class="sentence-container" id="phrasal-verb">
+      <p><strong>Phrasal Verb:</strong> Click the button to see a new phrasal verb.</p>
+    </div>
+
+    <div id="icon-container" class="icon-container">
+      <!-- Icon will be displayed here -->
+      <i id="phrasal-icon" class=""></i>
+    </div>
+
+    <button class="transform-btn" onclick="nextPhrasalVerb()">Next Phrasal Verb</button>
+    <button class="clear-btn" onclick="clearScenario()">Clear</button>
+    <button id="reveal-btn" onclick="revealDefinition()">Reveal Definition</button>
+
+    <div id="definition-container" class="feedback" style="display: none;">
+      <p><strong>Definition:</strong> <span id="phrasal-definition"></span></p>
+      <p><strong>Example:</strong> <span id="phrasal-example"></span></p>
+    </div>
+  </div>
+
+  <script>
+    // Phrasal verbs, their definitions, example sentences, and icons
+    const phrasalVerbs = [
+      {
+        verb: "To look into",
+        definition: "To investigate or examine something.",
+        example: "I will look into the issue and get back to you.",
+        icon: "fas fa-search"
+      },
+      {
+        verb: "To take over",
+        definition: "To assume control or responsibility for something.",
+        example: "He will take over the project next month.",
+        icon: "fas fa-users-cog"
+      },
+      {
+        verb: "To set up",
+        definition: "To arrange or establish something.",
+        example: "We need to set up a meeting with the client.",
+        icon: "fas fa-cogs"
+      },
+      {
+        verb: "To follow up",
+        definition: "To take further action on something previously discussed.",
+        example: "I will follow up on your request tomorrow.",
+        icon: "fas fa-phone-alt"
+      },
+      {
+        verb: "To carry out",
+        definition: "To execute or perform a task or activity.",
+        example: "She will carry out the audit next week.",
+        icon: "fas fa-tasks"
+      },
+      {
+        verb: "To put off",
+        definition: "To delay or postpone something.",
+        example: "We had to put off the meeting until next week.",
+        icon: "fas fa-calendar-times"
+      },
+      {
+        verb: "To bring up",
+        definition: "To introduce a topic or issue.",
+        example: "She brought up an important point during the meeting.",
+        icon: "fas fa-bullhorn"
+      },
+      {
+        verb: "To go over",
+        definition: "To review or examine something in detail.",
+        example: "Let's go over the presentation before the meeting.",
+        icon: "fas fa-book-open"
+      },
+      {
+        verb: "To hand in",
+        definition: "To submit something (e.g., a report, assignment).",
+        example: "I need to hand in my report by the end of the day.",
+        icon: "fas fa-upload"
+      },
+      {
+        verb: "To back up",
+        definition: "To support or confirm something.",
+        example: "Can you back up your claims with evidence?",
+        icon: "fas fa-arrow-alt-circle-up"
+      },
+      {
+        verb: "To take on",
+        definition: "To accept a responsibility or task.",
+        example: "She will take on the new responsibilities starting next week.",
+        icon: "fas fa-clipboard-check"
+      },
+      {
+        verb: "To turn down",
+        definition: "To reject or refuse an offer or invitation.",
+        example: "He turned down the job offer.",
+        icon: "fas fa-thumbs-down"
+      },
+      {
+        verb: "To make up",
+        definition: "To invent or create something (e.g., a story).",
+        example: "She made up an excuse to leave early.",
+        icon: "fas fa-lightbulb"
+      },
+      {
+        verb: "To get ahead",
+        definition: "To progress or advance in your work or career.",
+        example: "If you want to get ahead, you must work hard and be proactive.",
+        icon: "fas fa-arrow-up"
+      },
+      {
+        verb: "To break down",
+        definition: "To analyze or explain something in detail.",
+        example: "Let's break down the data to see the trends.",
+        icon: "fas fa-chart-pie"
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function nextPhrasalVerb() {
+      // Move to the next phrasal verb
+      currentIndex = (currentIndex + 1) % phrasalVerbs.length;
+      const currentVerb = phrasalVerbs[currentIndex];
+      
+      document.getElementById('phrasal-verb').innerHTML = `<p><strong>Phrasal Verb:</strong> ${currentVerb.verb}</p>`;
+      document.getElementById('phrasal-definition').innerHTML = currentVerb.definition;
+      document.getElementById('phrasal-example').innerHTML = currentVerb.example;
+      document.getElementById('phrasal-icon').className = currentVerb.icon;
+      document.getElementById('definition-container').style.display = "none";
+      document.getElementById('reveal-btn').style.display = "inline-block";
+    }
+
+    function clearScenario() {
+      document.getElementById('phrasal-verb').innerHTML = `<p><strong>Phrasal Verb:</strong> Click the button to see a new phrasal verb.</p>`;
+      document.getElementById('definition-container').style.display = "none";
+      document.getElementById('reveal-btn').style.display = "none";
+      document.getElementById('phrasal-icon').className = "";
+    }
+
+    function revealDefinition() {
+      document.getElementById('definition-container').style.display = "block";
+      document.getElementById('reveal-btn').style.display = "none";
+    }
+
+    // Initialize with the first phrasal verb
+    nextPhrasalVerb();
+  </script>
+</body>
+</html>
