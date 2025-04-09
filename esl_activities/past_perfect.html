@@ -165,16 +165,16 @@
       const eventLeft = parseFloat(document.getElementById('event-marker').style.left);
       let reasonFirst;
 
-      if (connector === "before" || connector === "because" || connector === "as soon as") {
-        reasonFirst = reasonLeft > eventLeft;
-      } else {
-        reasonFirst = reasonLeft < eventLeft;
-      }
+      let subjectLower = subject === "I" ? "I" : subject.toLowerCase();
+      let sentence;
 
-      let subjectLower = subject === "I" ? "I" : subject.toLowerCase()
-      let sentence = reasonFirst   
-        ? `${subject} had ${currentReason} ${connector} ${subjectLower} ${currentEvent}.`
-        : `${subject} ${currentEvent} ${connector} ${subjectLower} had ${currentReason}.`
+      if (connector === "before" || connector === "because" || connector === "as soon as") {
+      sentence = `${subject} had ${currentReason} ${connector} ${subjectLower} ${currentEvent}.`;
+      } else if (connector === "after") {
+      sentence = `${subject} ${currentEvent} ${connector} ${subjectLower} had ${currentReason}.`;
+      } else {
+      sentence = `${subject} had ${currentEvent} ${connector} ${subjectLower} ${currentReason}.`;
+      }
 
       document.getElementById('final-sentence').textContent = sentence;
     }
