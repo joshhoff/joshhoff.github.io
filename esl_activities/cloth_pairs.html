@@ -1,0 +1,710 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhyming Clothes Match</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+        }
+        
+        .draggable {
+            cursor: grab;
+            transition: transform 0.2s, filter 0.2s;
+        }
+        
+        .draggable:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+        
+        .draggable.dragging {
+            opacity: 0.8;
+            filter: brightness(1.1);
+        }
+        
+        .dropzone {
+            transition: all 0.3s ease;
+        }
+        
+        .dropzone.highlight {
+            background-color: rgba(255, 255, 255, 0.7) !important;
+            transform: scale(1.05);
+        }
+        
+        .correct-match {
+            animation: correct 0.5s ease;
+        }
+        
+        @keyframes correct {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .incorrect-match {
+            animation: incorrect 0.5s ease;
+        }
+        
+        @keyframes incorrect {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-40{height:10rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border-2{border-width:2px}.border-dashed{border-style:dashed}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(165 180 252 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pl-6{padding-left:1.5rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-bold{font-weight:700}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-indigo-900{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:flex-row{flex-direction:row}}</style></head>
+<body class="p-4" data-new-gr-c-s-check-loaded="8.929.0" data-gr-ext-installed="">
+    <div class="max-w-5xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-900 mb-2">Rhyming Clothes Match</h1>
+            <p class="text-xl text-indigo-700">Drag the clothes to their rhyming pairs!</p>
+        </header>
+        
+        <div class="bg-white rounded-xl shadow-xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-2xl font-bold text-indigo-800">Level: <span id="level-display">1</span></div>
+                <div class="text-2xl font-bold text-indigo-800">Score: <span id="score-display">0</span></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- Left side - Draggable items -->
+                <div class="bg-indigo-100 rounded-lg p-4 flex-1">
+                    <h2 class="text-xl font-bold text-center mb-4 text-indigo-800">Drag These</h2>
+                    <div id="draggable-container" class="grid grid-cols-2 gap-4"><div class="draggable bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center h-40" draggable="true" data-item="shoe"><svg width="80" height="80" viewBox="0 0 100 100"><path d="M20,70 C20,50 30,40 70,40 C80,40 90,50 90,60 L90,70 C90,75 85,80 80,80 L30,80 C25,80 20,75 20,70 Z" fill="#3498DB" stroke="#333" stroke-width="2"></path><path d="M20,70 L90,70 L90,75 C90,78 87,80 84,80 L26,80 C23,80 20,78 20,75 Z" fill="#333"></path></svg><div class="mt-2 text-lg font-bold text-gray-800">Shoe</div></div><div class="draggable bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center h-40" draggable="true" data-item="hat"><svg width="80" height="80" viewBox="0 0 100 100"><path d="M20,70 C20,40 80,40 80,70 L90,70 C90,35 10,35 10,70 L20,70 Z" fill="#FF5733" stroke="#333" stroke-width="2"></path><path d="M10,70 L90,70 C90,80 10,80 10,70 Z" fill="#FF5733" stroke="#333" stroke-width="2"></path></svg><div class="mt-2 text-lg font-bold text-gray-800">Hat</div></div><div class="draggable bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center h-40" draggable="true" data-item="vest"><svg width="80" height="80" viewBox="0 0 100 100"><path d="M30,30 L70,30 L70,80 L50,70 L30,80 Z" fill="#27AE60" stroke="#333" stroke-width="2"></path></svg><div class="mt-2 text-lg font-bold text-gray-800">Vest</div></div><div class="draggable bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center h-40" draggable="true" data-item="tie"><svg width="80" height="80" viewBox="0 0 100 100"><path d="M40,30 L60,30 L65,40 L50,80 L35,40 Z" fill="#9B59B6" stroke="#333" stroke-width="2"></path></svg><div class="mt-2 text-lg font-bold text-gray-800">Tie</div></div></div>
+                </div>
+                
+                <!-- Right side - Drop zones -->
+                <div class="bg-indigo-100 rounded-lg p-4 flex-1">
+                    <h2 class="text-xl font-bold text-center mb-4 text-indigo-800">Drop Zones</h2>
+                    <div id="dropzone-container" class="grid grid-cols-2 gap-4"><div class="dropzone bg-white bg-opacity-50 rounded-lg border-2 border-dashed border-indigo-300 p-4 flex flex-col items-center justify-center h-40" data-rhyme="cat"><div class="text-lg font-bold text-indigo-800">Cat</div><div class="text-sm text-indigo-600 mt-1">Rhymes with...</div></div><div class="dropzone bg-white bg-opacity-50 rounded-lg border-2 border-dashed border-indigo-300 p-4 flex flex-col items-center justify-center h-40" data-rhyme="pie"><div class="text-lg font-bold text-indigo-800">Pie</div><div class="text-sm text-indigo-600 mt-1">Rhymes with...</div></div><div class="dropzone bg-white bg-opacity-50 rounded-lg border-2 border-dashed border-indigo-300 p-4 flex flex-col items-center justify-center h-40" data-rhyme="best"><div class="text-lg font-bold text-indigo-800">Best</div><div class="text-sm text-indigo-600 mt-1">Rhymes with...</div></div><div class="dropzone bg-white bg-opacity-50 rounded-lg border-2 border-dashed border-indigo-300 p-4 flex flex-col items-center justify-center h-40" data-rhyme="blue"><div class="text-lg font-bold text-indigo-800">Blue</div><div class="text-sm text-indigo-600 mt-1">Rhymes with...</div></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-indigo-800 mb-4">How to Play</h2>
+            <ul class="list-disc pl-6 text-indigo-700 space-y-2">
+                <li>Drag the clothing items from the left side to their rhyming pairs on the right.</li>
+                <li>For example, "hat" rhymes with "cat".</li>
+                <li>Complete each level to move to the next one!</li>
+                <li>Each correct match earns you 10 points.</li>
+            </ul>
+        </div>
+        
+        <!-- Modal for level completion -->
+        <div id="level-complete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl p-8 max-w-md w-full text-center">
+                <h2 class="text-3xl font-bold text-indigo-800 mb-4">Level Complete!</h2>
+                <p class="text-xl text-indigo-700 mb-6">Great job matching all the rhyming clothes!</p>
+                <div class="mb-6">
+                    <p class="text-lg font-bold text-indigo-800">Score: <span id="modal-score">150</span></p>
+                </div>
+                <button id="next-level-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors">
+                    Next Level
+                </button>
+            </div>
+        </div>
+        
+        <!-- Game complete modal -->
+        <div id="game-complete-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl p-8 max-w-md w-full text-center">
+                <h2 class="text-3xl font-bold text-indigo-800 mb-4">Congratulations!</h2>
+                <p class="text-xl text-indigo-700 mb-6">You've completed all levels!</p>
+                <div class="mb-6">
+                    <p class="text-lg font-bold text-indigo-800">Final Score: <span id="final-score">150</span></p>
+                </div>
+                <button id="restart-game-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors">
+                    Play Again
+                </button>
+            </div>
+        </div>
+        
+        <div id="celebration" class="celebration hidden"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Game state
+            const state = {
+                currentLevel: 1,
+                score: 0,
+                matchedPairs: 0,
+                totalPairs: 0
+            };
+            
+            // Levels data with rhyming clothes pairs
+            const levels = [
+                // Level 1
+                [
+                    { item: "Hat", rhyme: "Cat", color: "#FF5733" },
+                    { item: "Shoe", rhyme: "Blue", color: "#3498DB" },
+                    { item: "Vest", rhyme: "Best", color: "#27AE60" },
+                    { item: "Tie", rhyme: "Pie", color: "#9B59B6" }
+                ],
+                // Level 2
+                [
+                    { item: "Sock", rhyme: "Rock", color: "#F1C40F" },
+                    { item: "Coat", rhyme: "Boat", color: "#E74C3C" },
+                    { item: "Jeans", rhyme: "Beans", color: "#3498DB" },
+                    { item: "Shirt", rhyme: "Dirt", color: "#2ECC71" },
+                    { item: "Glove", rhyme: "Dove", color: "#9B59B6" }
+                ],
+                // Level 3
+                [
+                    { item: "Skirt", rhyme: "Alert", color: "#FF5733" },
+                    { item: "Cape", rhyme: "Grape", color: "#9B59B6" },
+                    { item: "Pants", rhyme: "Dance", color: "#3498DB" },
+                    { item: "Hood", rhyme: "Wood", color: "#795548" },
+                    { item: "Belt", rhyme: "Melt", color: "#F39C12" },
+                    { item: "Scarf", rhyme: "Wharf", color: "#16A085" }
+                ]
+            ];
+            
+            // DOM elements
+            const draggableContainer = document.getElementById('draggable-container');
+            const dropzoneContainer = document.getElementById('dropzone-container');
+            const levelDisplay = document.getElementById('level-display');
+            const scoreDisplay = document.getElementById('score-display');
+            const levelCompleteModal = document.getElementById('level-complete-modal');
+            const gameCompleteModal = document.getElementById('game-complete-modal');
+            const modalScore = document.getElementById('modal-score');
+            const finalScore = document.getElementById('final-score');
+            const nextLevelBtn = document.getElementById('next-level-btn');
+            const restartGameBtn = document.getElementById('restart-game-btn');
+            const celebration = document.getElementById('celebration');
+            
+            // Initialize game
+            initLevel(state.currentLevel);
+            
+            // Event listeners
+            nextLevelBtn.addEventListener('click', () => {
+                levelCompleteModal.classList.add('hidden');
+                state.currentLevel++;
+                initLevel(state.currentLevel);
+            });
+            
+            restartGameBtn.addEventListener('click', () => {
+                gameCompleteModal.classList.add('hidden');
+                state.currentLevel = 1;
+                state.score = 0;
+                updateScore();
+                initLevel(state.currentLevel);
+            });
+            
+            // Initialize a level
+            function initLevel(levelNum) {
+                if (levelNum > levels.length) {
+                    // Game complete
+                    finalScore.textContent = state.score;
+                    gameCompleteModal.classList.remove('hidden');
+                    return;
+                }
+                
+                levelDisplay.textContent = levelNum;
+                draggableContainer.innerHTML = '';
+                dropzoneContainer.innerHTML = '';
+                
+                const levelData = levels[levelNum - 1];
+                state.matchedPairs = 0;
+                state.totalPairs = levelData.length;
+                
+                // Shuffle the items for draggables
+                const shuffledItems = [...levelData].sort(() => Math.random() - 0.5);
+                
+                // Create draggable items
+                shuffledItems.forEach((pair, index) => {
+                    const draggable = createDraggableItem(pair, index);
+                    draggableContainer.appendChild(draggable);
+                });
+                
+                // Shuffle the rhymes for dropzones
+                const shuffledRhymes = [...levelData].sort(() => Math.random() - 0.5);
+                
+                // Create drop zones
+                shuffledRhymes.forEach((pair, index) => {
+                    const dropzone = createDropzone(pair, index);
+                    dropzoneContainer.appendChild(dropzone);
+                });
+                
+                // Set up drag and drop
+                setupDragAndDrop();
+            }
+            
+            // Create a draggable clothing item with SVG illustration
+            function createDraggableItem(pair, index) {
+                const draggable = document.createElement('div');
+                draggable.className = 'draggable bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center h-40';
+                draggable.setAttribute('draggable', 'true');
+                draggable.dataset.item = pair.item.toLowerCase();
+                
+                // Create SVG illustration based on the clothing item
+                const svg = createClothingSVG(pair.item, pair.color);
+                
+                const label = document.createElement('div');
+                label.className = 'mt-2 text-lg font-bold text-gray-800';
+                label.textContent = pair.item;
+                
+                draggable.appendChild(svg);
+                draggable.appendChild(label);
+                
+                return draggable;
+            }
+            
+            // Create a drop zone for rhyming words
+            function createDropzone(pair, index) {
+                const dropzone = document.createElement('div');
+                dropzone.className = 'dropzone bg-white bg-opacity-50 rounded-lg border-2 border-dashed border-indigo-300 p-4 flex flex-col items-center justify-center h-40';
+                dropzone.dataset.rhyme = pair.rhyme.toLowerCase();
+                
+                const rhymeWord = document.createElement('div');
+                rhymeWord.className = 'text-lg font-bold text-indigo-800';
+                rhymeWord.textContent = pair.rhyme;
+                
+                const hint = document.createElement('div');
+                hint.className = 'text-sm text-indigo-600 mt-1';
+                hint.textContent = 'Rhymes with...';
+                
+                dropzone.appendChild(rhymeWord);
+                dropzone.appendChild(hint);
+                
+                return dropzone;
+            }
+            
+            // Create SVG illustrations for clothing items
+            function createClothingSVG(item, color) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '80');
+                svg.setAttribute('height', '80');
+                svg.setAttribute('viewBox', '0 0 100 100');
+                
+                switch(item.toLowerCase()) {
+                    case 'hat':
+                        // Simple hat SVG
+                        const hat = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        hat.setAttribute('d', 'M20,70 C20,40 80,40 80,70 L90,70 C90,35 10,35 10,70 L20,70 Z');
+                        hat.setAttribute('fill', color);
+                        hat.setAttribute('stroke', '#333');
+                        hat.setAttribute('stroke-width', '2');
+                        
+                        const hatBrim = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        hatBrim.setAttribute('d', 'M10,70 L90,70 C90,80 10,80 10,70 Z');
+                        hatBrim.setAttribute('fill', color);
+                        hatBrim.setAttribute('stroke', '#333');
+                        hatBrim.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(hat);
+                        svg.appendChild(hatBrim);
+                        break;
+                        
+                    case 'shoe':
+                        // Simple shoe SVG
+                        const shoe = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        shoe.setAttribute('d', 'M20,70 C20,50 30,40 70,40 C80,40 90,50 90,60 L90,70 C90,75 85,80 80,80 L30,80 C25,80 20,75 20,70 Z');
+                        shoe.setAttribute('fill', color);
+                        shoe.setAttribute('stroke', '#333');
+                        shoe.setAttribute('stroke-width', '2');
+                        
+                        const shoeSole = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        shoeSole.setAttribute('d', 'M20,70 L90,70 L90,75 C90,78 87,80 84,80 L26,80 C23,80 20,78 20,75 Z');
+                        shoeSole.setAttribute('fill', '#333');
+                        
+                        svg.appendChild(shoe);
+                        svg.appendChild(shoeSole);
+                        break;
+                        
+                    case 'vest':
+                        // Simple vest SVG
+                        const vest = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        vest.setAttribute('d', 'M30,30 L70,30 L70,80 L50,70 L30,80 Z');
+                        vest.setAttribute('fill', color);
+                        vest.setAttribute('stroke', '#333');
+                        vest.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(vest);
+                        break;
+                        
+                    case 'tie':
+                        // Simple tie SVG
+                        const tie = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        tie.setAttribute('d', 'M40,30 L60,30 L65,40 L50,80 L35,40 Z');
+                        tie.setAttribute('fill', color);
+                        tie.setAttribute('stroke', '#333');
+                        tie.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(tie);
+                        break;
+                        
+                    case 'sock':
+                        // Simple sock SVG
+                        const sock = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        sock.setAttribute('d', 'M40,20 L70,20 L70,60 C70,70 60,80 50,80 C40,80 30,70 30,60 L30,40 L40,40 Z');
+                        sock.setAttribute('fill', color);
+                        sock.setAttribute('stroke', '#333');
+                        sock.setAttribute('stroke-width', '2');
+                        
+                        const sockTop = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        sockTop.setAttribute('d', 'M40,20 L70,20 L70,30 L40,30 Z');
+                        sockTop.setAttribute('fill', '#fff');
+                        sockTop.setAttribute('stroke', '#333');
+                        sockTop.setAttribute('stroke-width', '1');
+                        
+                        svg.appendChild(sock);
+                        svg.appendChild(sockTop);
+                        break;
+                        
+                    case 'coat':
+                        // Simple coat SVG
+                        const coat = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        coat.setAttribute('d', 'M30,30 L40,20 L60,20 L70,30 L70,80 L30,80 Z');
+                        coat.setAttribute('fill', color);
+                        coat.setAttribute('stroke', '#333');
+                        coat.setAttribute('stroke-width', '2');
+                        
+                        const coatOpening = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        coatOpening.setAttribute('d', 'M50,20 L50,80');
+                        coatOpening.setAttribute('stroke', '#333');
+                        coatOpening.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(coat);
+                        svg.appendChild(coatOpening);
+                        break;
+                        
+                    case 'jeans':
+                        // Simple jeans SVG
+                        const jeans = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        jeans.setAttribute('d', 'M30,20 L70,20 L70,40 L60,80 L50,80 L40,80 L30,40 Z');
+                        jeans.setAttribute('fill', color);
+                        jeans.setAttribute('stroke', '#333');
+                        jeans.setAttribute('stroke-width', '2');
+                        
+                        const jeansSeam = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        jeansSeam.setAttribute('d', 'M50,20 L50,50');
+                        jeansSeam.setAttribute('stroke', '#333');
+                        jeansSeam.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(jeans);
+                        svg.appendChild(jeansSeam);
+                        break;
+                        
+                    case 'shirt':
+                        // Simple shirt SVG
+                        const shirt = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        shirt.setAttribute('d', 'M20,30 L40,20 L60,20 L80,30 L80,80 L20,80 Z');
+                        shirt.setAttribute('fill', color);
+                        shirt.setAttribute('stroke', '#333');
+                        shirt.setAttribute('stroke-width', '2');
+                        
+                        const collar = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        collar.setAttribute('d', 'M40,20 L50,40 L60,20');
+                        collar.setAttribute('fill', 'none');
+                        collar.setAttribute('stroke', '#333');
+                        collar.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(shirt);
+                        svg.appendChild(collar);
+                        break;
+                        
+                    case 'glove':
+                        // Simple glove SVG
+                        const glove = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        glove.setAttribute('d', 'M30,80 L30,50 C30,40 40,30 50,30 C60,30 70,40 70,50 L70,80 Z');
+                        glove.setAttribute('fill', color);
+                        glove.setAttribute('stroke', '#333');
+                        glove.setAttribute('stroke-width', '2');
+                        
+                        const fingers = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        fingers.setAttribute('d', 'M35,50 L35,30 M45,50 L45,20 M55,50 L55,20 M65,50 L65,30');
+                        fingers.setAttribute('stroke', '#333');
+                        fingers.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(glove);
+                        svg.appendChild(fingers);
+                        break;
+                        
+                    case 'skirt':
+                        // Simple skirt SVG
+                        const skirt = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        skirt.setAttribute('d', 'M30,30 L70,30 L80,80 L20,80 Z');
+                        skirt.setAttribute('fill', color);
+                        skirt.setAttribute('stroke', '#333');
+                        skirt.setAttribute('stroke-width', '2');
+                        
+                        const skirtPleat = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        skirtPleat.setAttribute('d', 'M50,30 L50,80');
+                        skirtPleat.setAttribute('stroke', '#333');
+                        skirtPleat.setAttribute('stroke-width', '1');
+                        skirtPleat.setAttribute('stroke-dasharray', '4,4');
+                        
+                        svg.appendChild(skirt);
+                        svg.appendChild(skirtPleat);
+                        break;
+                        
+                    case 'cape':
+                        // Simple cape SVG
+                        const cape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        cape.setAttribute('d', 'M20,30 C20,20 80,20 80,30 L70,80 L30,80 Z');
+                        cape.setAttribute('fill', color);
+                        cape.setAttribute('stroke', '#333');
+                        cape.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(cape);
+                        break;
+                        
+                    case 'pants':
+                        // Simple pants SVG
+                        const pants = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        pants.setAttribute('d', 'M30,20 L70,20 L70,40 L65,80 L55,80 L50,40 L45,80 L35,80 L30,40 Z');
+                        pants.setAttribute('fill', color);
+                        pants.setAttribute('stroke', '#333');
+                        pants.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(pants);
+                        break;
+                        
+                    case 'hood':
+                        // Simple hood SVG
+                        const hood = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        hood.setAttribute('d', 'M30,20 C30,10 70,10 70,20 L70,50 C70,65 50,80 50,80 C50,80 30,65 30,50 Z');
+                        hood.setAttribute('fill', color);
+                        hood.setAttribute('stroke', '#333');
+                        hood.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(hood);
+                        break;
+                        
+                    case 'belt':
+                        // Simple belt SVG
+                        const belt = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        belt.setAttribute('x', '20');
+                        belt.setAttribute('y', '40');
+                        belt.setAttribute('width', '60');
+                        belt.setAttribute('height', '20');
+                        belt.setAttribute('fill', color);
+                        belt.setAttribute('stroke', '#333');
+                        belt.setAttribute('stroke-width', '2');
+                        
+                        const buckle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        buckle.setAttribute('x', '45');
+                        buckle.setAttribute('y', '42');
+                        buckle.setAttribute('width', '10');
+                        buckle.setAttribute('height', '16');
+                        buckle.setAttribute('fill', '#FFD700');
+                        buckle.setAttribute('stroke', '#333');
+                        buckle.setAttribute('stroke-width', '1');
+                        
+                        svg.appendChild(belt);
+                        svg.appendChild(buckle);
+                        break;
+                        
+                    case 'scarf':
+                        // Simple scarf SVG
+                        const scarf = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        scarf.setAttribute('d', 'M30,30 C40,20 60,20 70,30 L70,50 L60,60 L40,60 L30,50 Z');
+                        scarf.setAttribute('fill', color);
+                        scarf.setAttribute('stroke', '#333');
+                        scarf.setAttribute('stroke-width', '2');
+                        
+                        const scarfEnd = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        scarfEnd.setAttribute('d', 'M40,60 L30,80 M60,60 L70,80');
+                        scarfEnd.setAttribute('stroke', color);
+                        scarfEnd.setAttribute('stroke-width', '8');
+                        scarfEnd.setAttribute('stroke-linecap', 'round');
+                        
+                        svg.appendChild(scarf);
+                        svg.appendChild(scarfEnd);
+                        break;
+                        
+                    default:
+                        // Generic clothing item
+                        const generic = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        generic.setAttribute('x', '20');
+                        generic.setAttribute('y', '20');
+                        generic.setAttribute('width', '60');
+                        generic.setAttribute('height', '60');
+                        generic.setAttribute('fill', color);
+                        generic.setAttribute('stroke', '#333');
+                        generic.setAttribute('stroke-width', '2');
+                        
+                        svg.appendChild(generic);
+                }
+                
+                return svg;
+            }
+            
+            // Set up drag and drop functionality
+            function setupDragAndDrop() {
+                const draggables = document.querySelectorAll('.draggable');
+                const dropzones = document.querySelectorAll('.dropzone');
+                
+                draggables.forEach(draggable => {
+                    draggable.addEventListener('dragstart', () => {
+                        draggable.classList.add('dragging');
+                    });
+                    
+                    draggable.addEventListener('dragend', () => {
+                        draggable.classList.remove('dragging');
+                    });
+                });
+                
+                dropzones.forEach(dropzone => {
+                    dropzone.addEventListener('dragover', e => {
+                        e.preventDefault();
+                        dropzone.classList.add('highlight');
+                    });
+                    
+                    dropzone.addEventListener('dragleave', () => {
+                        dropzone.classList.remove('highlight');
+                    });
+                    
+                    dropzone.addEventListener('drop', e => {
+                        e.preventDefault();
+                        dropzone.classList.remove('highlight');
+                        
+                        const dragging = document.querySelector('.dragging');
+                        if (dragging) {
+                            const itemName = dragging.dataset.item;
+                            const rhymeName = dropzone.dataset.rhyme;
+                            
+                            // Check if the pair is correct based on the level data
+                            const levelData = levels[state.currentLevel - 1];
+                            const isCorrect = levelData.some(pair => 
+                                pair.item.toLowerCase() === itemName && 
+                                pair.rhyme.toLowerCase() === rhymeName
+                            );
+                            
+                            if (isCorrect) {
+                                // Correct match
+                                handleCorrectMatch(dragging, dropzone);
+                            } else {
+                                // Incorrect match
+                                handleIncorrectMatch(dragging, dropzone);
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Handle correct match
+            function handleCorrectMatch(draggable, dropzone) {
+                // Add the draggable to the dropzone
+                dropzone.innerHTML = '';
+                dropzone.appendChild(draggable);
+                draggable.setAttribute('draggable', 'false');
+                draggable.classList.remove('draggable');
+                dropzone.classList.add('correct-match');
+                
+                // Update score and check level completion
+                state.score += 10;
+                state.matchedPairs++;
+                updateScore();
+                
+                // Play success sound (would be here if audio was supported)
+                
+                if (state.matchedPairs === state.totalPairs) {
+                    // Level complete
+                    setTimeout(() => {
+                        showCelebration();
+                        modalScore.textContent = state.score;
+                        levelCompleteModal.classList.remove('hidden');
+                    }, 1000);
+                }
+            }
+            
+            // Handle incorrect match
+            function handleIncorrectMatch(draggable, dropzone) {
+                dropzone.classList.add('incorrect-match');
+                setTimeout(() => {
+                    dropzone.classList.remove('incorrect-match');
+                }, 500);
+                
+                // Play error sound (would be here if audio was supported)
+            }
+            
+            // Update score display
+            function updateScore() {
+                scoreDisplay.textContent = state.score;
+            }
+            
+            // Show celebration animation
+            function showCelebration() {
+                celebration.classList.remove('hidden');
+                
+                // Create confetti
+                for (let i = 0; i < 100; i++) {
+                    createConfetti();
+                }
+                
+                setTimeout(() => {
+                    celebration.classList.add('hidden');
+                    celebration.innerHTML = '';
+                }, 3000);
+            }
+            
+            // Create a single confetti element
+            function createConfetti() {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Random properties
+                const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
+                const size = Math.random() * 10 + 5;
+                const left = Math.random() * 100;
+                
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.left = `${left}%`;
+                confetti.style.top = '-20px';
+                confetti.style.opacity = '1';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                
+                celebration.appendChild(confetti);
+                
+                // Animate falling
+                const duration = Math.random() * 3 + 2;
+                const rotation = Math.random() * 360;
+                
+                confetti.animate([
+                    { 
+                        transform: 'translateY(0) rotate(0deg)',
+                        opacity: 1
+                    },
+                    { 
+                        transform: `translateY(${window.innerHeight}px) rotate(${rotation}deg)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'ease-in',
+                    fill: 'forwards'
+                });
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93eb1b388794b8e3',t:'MTc0NzA2NTM4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+</body>
