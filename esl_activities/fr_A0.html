@@ -1,0 +1,895 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English for Beginners (A0) | Professional English</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f9ff;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .btn-primary {
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+            height: 200px;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .quiz-option {
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            transform: translateX(5px);
+        }
+        
+        .quiz-option.correct {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.ml-3{margin-left:0.75rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-32{height:8rem}.h-5{height:1.25rem}.h-8{height:2rem}.min-h-screen{min-height:100vh}.w-16{width:4rem}.w-32{width:8rem}.w-40{width:10rem}.w-5{width:1.25rem}.w-8{width:2rem}.w-full{width:100%}.max-w-3xl{max-width:48rem}.flex-shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-4{border-width:4px}.border-l-4{border-left-width:4px}.border-blue-100{--tw-border-opacity:1;border-color:rgb(219 234 254 / var(--tw-border-opacity, 1))}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-green-200{--tw-border-opacity:1;border-color:rgb(187 247 208 / var(--tw-border-opacity, 1))}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.border-purple-100{--tw-border-opacity:1;border-color:rgb(243 232 255 / var(--tw-border-opacity, 1))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(250 204 21 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-50{--tw-gradient-from:#f0fdf4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(240 253 244 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-600{--tw-gradient-from:#16a34a var(--tw-gradient-from-position);--tw-gradient-to:rgb(22 163 74 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-50{--tw-gradient-from:#eef2ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(238 242 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-600{--tw-gradient-from:#4f46e5 var(--tw-gradient-from-position);--tw-gradient-to:rgb(79 70 229 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-100{--tw-gradient-to:#dbeafe var(--tw-gradient-to-position)}.to-blue-700{--tw-gradient-to:#1d4ed8 var(--tw-gradient-to-position)}.to-green-100{--tw-gradient-to:#dcfce7 var(--tw-gradient-to-position)}.to-green-700{--tw-gradient-to:#15803d var(--tw-gradient-to-position)}.to-indigo-100{--tw-gradient-to:#e0e7ff var(--tw-gradient-to-position)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-400{--tw-text-opacity:1;color:rgb(250 204 21 / var(--tw-text-opacity, 1))}.text-yellow-700{--tw-text-opacity:1;color:rgb(161 98 7 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-400:hover{--tw-bg-opacity:1;background-color:rgb(156 163 175 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 768px){.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:text-2xl{font-size:1.5rem;line-height:2rem}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.929.0" data-gr-ext-installed="">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-blue-600 text-white py-4 px-6 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                    </svg>
+                    <h1 class="text-xl md:text-2xl font-bold">English for Beginners (A0)</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <span class="mr-2">🇫🇷</span>
+                        <span class="text-sm">Français</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="mr-2">🇬🇧</span>
+                        <span class="text-sm">English</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="bg-white shadow-sm">
+            <div class="container mx-auto px-6 py-2">
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progress-bar" class="progress-bar bg-blue-600 h-2.5 rounded-full" style="width: 50%;"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Début</span>
+                    <span>Fin</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <!-- Welcome Section -->
+            <section id="welcome" class="section">
+                <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex justify-center mb-6">
+                        <div class="bg-blue-100 p-4 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Bienvenue au cours d'anglais professionnel!</h2>
+                    <p class="text-gray-600 text-center mb-6">
+                        Dans ce cours, vous apprendrez les salutations professionnelles, les nombres et comment vous décrire en anglais.
+                    </p>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    Ce cours est conçu pour les débutants complets (niveau A0) dont la langue maternelle est le français.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                            <div class="flex justify-center mb-4">
+                                <span class="text-3xl">👋</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-center text-gray-800 mb-2">Salutations professionnelles</h3>
+                            <p class="text-sm text-gray-600 text-center">Apprenez à saluer vos collègues et clients en anglais</p>
+                        </div>
+                        <div class="card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                            <div class="flex justify-center mb-4">
+                                <span class="text-3xl">🔢</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-center text-gray-800 mb-2">Nombres</h3>
+                            <p class="text-sm text-gray-600 text-center">Maîtrisez les nombres en anglais pour le contexte professionnel</p>
+                        </div>
+                        <div class="card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                            <div class="flex justify-center mb-4">
+                                <span class="text-3xl">🙋‍♂️</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-center text-gray-800 mb-2">Se décrire</h3>
+                            <p class="text-sm text-gray-600 text-center">Apprenez à vous présenter et à parler de vous-même</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <button onclick="nextSection()" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg">
+                            Commencer
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Greetings Section -->
+            <section id="greetings" class="section">
+                <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="bg-blue-100 text-blue-600 p-2 rounded-full mr-3">1</span>
+                        Salutations professionnelles
+                    </h2>
+                    <p class="text-gray-600 mb-8">
+                        Voici les salutations les plus courantes en anglais professionnel. Cliquez sur chaque carte pour voir la traduction.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-blue-800 mb-2">Good morning</div>
+                                        <div class="text-gray-600">(8:00 - 12:00)</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold mb-2">Bonjour</div>
+                                        <div>(le matin)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-blue-800 mb-2">Good afternoon</div>
+                                        <div class="text-gray-600">(12:00 - 18:00)</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold mb-2">Bonjour</div>
+                                        <div>(l'après-midi)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-blue-800 mb-2">Good evening</div>
+                                        <div class="text-gray-600">(18:00 - 22:00)</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold mb-2">Bonsoir</div>
+                                        <div>(le soir)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-blue-800 mb-2">Nice to meet you</div>
+                                        <div class="text-gray-600">(Première rencontre)</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold mb-2">Enchanté(e)</div>
+                                        <div>(de faire votre connaissance)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                    <strong>Astuce :</strong> En anglais professionnel, on utilise souvent "Hello" ou "Hi" suivi du prénom de la personne.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Pratiquons !</h3>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
+                        <p class="text-gray-700 mb-4">Complétez ces dialogues professionnels :</p>
+                        
+                        <div class="mb-6">
+                            <p class="mb-2"><strong>Dialogue 1:</strong> (9:00 du matin)</p>
+                            <p class="mb-1">Person A: "___________, how are you today?"</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <button class="quiz-option px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100" onclick="checkAnswer(this, 'Good morning')">Good morning</button>
+                                <button class="quiz-option px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100" onclick="checkAnswer(this, 'Good afternoon')">Good afternoon</button>
+                                <button class="quiz-option px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100" onclick="checkAnswer(this, 'Good evening')">Good evening</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p class="mb-2"><strong>Dialogue 2:</strong> (Première rencontre avec un client)</p>
+                            <p class="mb-1">Person A: "Hello, I'm John from ABC Company."</p>
+                            <p class="mb-1">Person B: "Hello John, I'm Sarah. ___________."</p>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <button class="quiz-option px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100" onclick="checkAnswer(this, 'Good morning')">Good morning</button>
+                                <button class="quiz-option px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100" onclick="checkAnswer(this, 'Nice to meet you')">Nice to meet you</button>
+                                <button class="quiz-option px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-100" onclick="checkAnswer(this, 'Goodbye')">Goodbye</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button onclick="prevSection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-full">
+                            Retour
+                        </button>
+                        <button onclick="nextSection()" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg">
+                            Continuer
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Numbers Section -->
+            <section id="numbers" class="section active">
+                <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="bg-blue-100 text-blue-600 p-2 rounded-full mr-3">2</span>
+                        Les nombres en anglais
+                    </h2>
+                    <p class="text-gray-600 mb-8">
+                        Apprenons les nombres en anglais, essentiels dans un contexte professionnel pour parler de prix, de dates et de quantités.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">1</div>
+                            <div class="text-gray-600">One</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">2</div>
+                            <div class="text-gray-600">Two</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">3</div>
+                            <div class="text-gray-600">Three</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">4</div>
+                            <div class="text-gray-600">Four</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">5</div>
+                            <div class="text-gray-600">Five</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">10</div>
+                            <div class="text-gray-600">Ten</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">20</div>
+                            <div class="text-gray-600">Twenty</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                            <div class="text-2xl font-bold text-blue-800">100</div>
+                            <div class="text-gray-600">One hundred</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Nombres dans un contexte professionnel</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-green-50 to-green-100 border border-green-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-green-800 mb-2">The meeting is at 3:30 PM.</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-green-600 to-green-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold mb-2">La réunion est à 15h30.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-green-50 to-green-100 border border-green-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-green-800 mb-2">The project costs $1,500.</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-green-600 to-green-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold mb-2">Le projet coûte 1 500 $.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-green-50 to-green-100 border border-green-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-green-800 mb-2">We need 20 copies.</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-green-600 to-green-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold mb-2">Nous avons besoin de 20 copies.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-green-50 to-green-100 border border-green-200 p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-green-800 mb-2">My phone number is 555-123-4567.</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-green-600 to-green-700 text-white p-6">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold mb-2">Mon numéro de téléphone est le 555-123-4567.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Pratiquons !</h3>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
+                        <p class="text-gray-700 mb-4">Écrivez ces nombres en anglais :</p>
+                        
+                        <div class="mb-4">
+                            <p class="mb-2">12 = <input type="text" id="number-1" class="border border-gray-300 rounded px-3 py-1 w-40" placeholder="En anglais..."></p>
+                            <button class="text-sm text-blue-600 hover:underline" onclick="checkNumberAnswer('number-1', 'twelve')">Vérifier</button>
+                            <span id="number-1-result" class="ml-2 text-sm text-green-600">✓ Correct!</span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="mb-2">45 = <input type="text" id="number-2" class="border border-gray-300 rounded px-3 py-1 w-40" placeholder="En anglais..."></p>
+                            <button class="text-sm text-blue-600 hover:underline" onclick="checkNumberAnswer('number-2', 'forty-five')">Vérifier</button>
+                            <span id="number-2-result" class="ml-2 text-sm text-green-600">✓ Correct!</span>
+                        </div>
+                        
+                        <div>
+                            <p class="mb-2">100 = <input type="text" id="number-3" class="border border-gray-300 rounded px-3 py-1 w-40" placeholder="En anglais..."></p>
+                            <button class="text-sm text-blue-600 hover:underline" onclick="checkNumberAnswer('number-3', 'one hundred')">Vérifier</button>
+                            <span id="number-3-result" class="ml-2 text-sm"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button onclick="prevSection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-full">
+                            Retour
+                        </button>
+                        <button onclick="nextSection()" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg">
+                            Continuer
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Self-Description Section -->
+            <section id="self-description" class="section">
+                <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="bg-blue-100 text-blue-600 p-2 rounded-full mr-3">3</span>
+                        Se décrire en anglais
+                    </h2>
+                    <p class="text-gray-600 mb-8">
+                        Apprenez à vous présenter et à parler de vous-même dans un contexte professionnel.
+                    </p>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Phrases clés pour se présenter</h3>
+                    
+                    <div class="grid grid-cols-1 gap-4 mb-8">
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                            <div class="font-bold text-purple-800 mb-1">My name is... (Je m'appelle...)</div>
+                            <div class="text-gray-600 italic">Example: My name is Marie Dupont.</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                            <div class="font-bold text-purple-800 mb-1">I am from... (Je viens de...)</div>
+                            <div class="text-gray-600 italic">Example: I am from France.</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                            <div class="font-bold text-purple-800 mb-1">I work as a/an... (Je travaille comme...)</div>
+                            <div class="text-gray-600 italic">Example: I work as an accountant.</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                            <div class="font-bold text-purple-800 mb-1">I work for... (Je travaille pour...)</div>
+                            <div class="text-gray-600 italic">Example: I work for ABC Company.</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Adjectifs pour se décrire</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                        <div class="flip-card" style="height: 120px;" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-indigo-50 to-indigo-100 border border-indigo-200 p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-indigo-800">Organized</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold">Organisé(e)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" style="height: 120px;" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-indigo-50 to-indigo-100 border border-indigo-200 p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-indigo-800">Creative</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold">Créatif/Créative</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" style="height: 120px;" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-indigo-50 to-indigo-100 border border-indigo-200 p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-indigo-800">Hardworking</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold">Travailleur/Travailleuse</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" style="height: 120px;" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-indigo-50 to-indigo-100 border border-indigo-200 p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-indigo-800">Friendly</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold">Amical(e)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" style="height: 120px;" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-indigo-50 to-indigo-100 border border-indigo-200 p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-indigo-800">Punctual</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold">Ponctuel(le)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flip-card" style="height: 120px;" onclick="this.classList.toggle('flipped')">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front bg-gradient-to-r from-indigo-50 to-indigo-100 border border-indigo-200 p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold text-indigo-800">Experienced</div>
+                                    </div>
+                                </div>
+                                <div class="flip-card-back bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4">
+                                    <div class="text-center">
+                                        <div class="text-xl font-bold">Expérimenté(e)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Exemple de présentation</h3>
+                    
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-8">
+                        <p class="text-blue-800 mb-4">
+                            <strong>Hello, my name is Marie Dupont. I am from Paris, France. I work as a marketing specialist for ABC Company. I am creative, organized, and hardworking. I have five years of experience in digital marketing.</strong>
+                        </p>
+                        <p class="text-gray-600 italic">
+                            (Bonjour, je m'appelle Marie Dupont. Je viens de Paris, en France. Je travaille comme spécialiste marketing pour ABC Company. Je suis créative, organisée et travailleuse. J'ai cinq ans d'expérience en marketing digital.)
+                        </p>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Pratiquons !</h3>
+                    <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
+                        <p class="text-gray-700 mb-4">Créez votre propre présentation en anglais en utilisant le modèle ci-dessous :</p>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Hello, my name is</label>
+                                <input type="text" id="name-input" class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Votre nom...">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-1">I am from</label>
+                                <input type="text" id="origin-input" class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Votre ville/pays...">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-1">I work as a/an</label>
+                                <input type="text" id="job-input" class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Votre profession...">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-1">I am (three adjectives)</label>
+                                <input type="text" id="adj-input" class="border border-gray-300 rounded px-3 py-2 w-full" placeholder="Trois adjectifs séparés par des virgules...">
+                            </div>
+                            
+                            <button onclick="generateIntroduction()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Générer ma présentation
+                            </button>
+                            
+                            <div id="introduction-result" class="mt-4 p-4 bg-white border border-blue-300 rounded-lg">
+                <p class="text-blue-800 mb-4">
+                    <strong>Hello, my name is Josh. I am from Angola. I work as a/an Teacher. I am funny, smart, stupid.</strong>
+                </p>
+                <p class="text-gray-600 italic">
+                    (Bonjour, je m'appelle Josh. Je viens de Angola. Je travaille comme Teacher. Je suis funny, smart, stupid.)
+                </p>
+            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button onclick="prevSection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-full">
+                            Retour
+                        </button>
+                        <button onclick="nextSection()" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg">
+                            Continuer
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conclusion Section -->
+            <section id="conclusion" class="section">
+                <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                    <div class="flex justify-center mb-6">
+                        <div class="bg-green-100 p-4 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Félicitations !</h2>
+                    <p class="text-gray-600 text-center mb-8">
+                        Vous avez terminé le cours d'anglais professionnel de niveau A0. Vous avez appris :
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 text-center">
+                            <div class="flex justify-center mb-4">
+                                <span class="text-3xl">👋</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Salutations professionnelles</h3>
+                            <p class="text-sm text-gray-600">Comment saluer vos collègues et clients en anglais</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 text-center">
+                            <div class="flex justify-center mb-4">
+                                <span class="text-3xl">🔢</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Nombres</h3>
+                            <p class="text-sm text-gray-600">Les nombres en anglais pour le contexte professionnel</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 text-center">
+                            <div class="flex justify-center mb-4">
+                                <span class="text-3xl">🙋‍♂️</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Se décrire</h3>
+                            <p class="text-sm text-gray-600">Comment vous présenter et parler de vous-même</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-blue-700">
+                                    <strong>Conseil :</strong> Pratiquez régulièrement ces phrases et expressions pour améliorer votre anglais professionnel.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Que voulez-vous faire maintenant ?</h3>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <button onclick="restartCourse()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            Recommencer le cours
+                        </button>
+                        <button onclick="downloadCertificate()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Obtenir mon certificat
+                        </button>
+                    </div>
+                    
+                    <div id="certificate" class="hidden bg-white border-4 border-blue-200 p-8 rounded-lg mb-8">
+                        <div class="text-center">
+                            <h2 class="text-3xl font-bold text-blue-800 mb-2">Certificate of Completion</h2>
+                            <p class="text-xl text-gray-600 mb-6">This certifies that</p>
+                            <p class="text-2xl font-bold text-gray-800 mb-6" id="certificate-name">Your Name</p>
+                            <p class="text-xl text-gray-600 mb-6">has successfully completed the</p>
+                            <p class="text-2xl font-bold text-blue-800 mb-6">Professional English (A0) Course</p>
+                            <p class="text-lg text-gray-600 mb-8">Covering greetings, numbers, and self-descriptions</p>
+                            <div class="flex justify-center">
+                                <div class="w-32 h-32 flex items-center justify-center bg-blue-100 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <button onclick="prevSection()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-full">
+                            Retour
+                        </button>
+                        <button onclick="restartCourse()" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-lg">
+                            Terminer
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container mx-auto px-6 text-center">
+                <p>© 2023 English for Beginners (A0) | Professional English</p>
+                <p class="text-gray-400 text-sm mt-2">Un cours interactif pour les francophones débutants en anglais</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Current section tracking
+        let currentSectionIndex = 0;
+        const sections = ['welcome', 'greetings', 'numbers', 'self-description', 'conclusion'];
+        
+        // Navigation functions
+        function showSection(index) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the current section
+            document.getElementById(sections[index]).classList.add('active');
+            
+            // Update progress bar
+            const progressPercentage = (index / (sections.length - 1)) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Update current index
+            currentSectionIndex = index;
+        }
+        
+        function nextSection() {
+            if (currentSectionIndex < sections.length - 1) {
+                showSection(currentSectionIndex + 1);
+            }
+        }
+        
+        function prevSection() {
+            if (currentSectionIndex > 0) {
+                showSection(currentSectionIndex - 1);
+            }
+        }
+        
+        function restartCourse() {
+            showSection(0);
+        }
+        
+        // Quiz functions
+        function checkAnswer(button, correctAnswer) {
+            const options = button.parentElement.querySelectorAll('.quiz-option');
+            
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.disabled = true;
+            });
+            
+            if (button.textContent === correctAnswer) {
+                button.classList.add('correct');
+            } else {
+                button.classList.add('incorrect');
+                
+                // Highlight the correct answer
+                options.forEach(option => {
+                    if (option.textContent === correctAnswer) {
+                        option.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Re-enable after 2 seconds
+            setTimeout(() => {
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                    option.disabled = false;
+                });
+            }, 2000);
+        }
+        
+        function checkNumberAnswer(inputId, correctAnswer) {
+            const input = document.getElementById(inputId);
+            const result = document.getElementById(`${inputId}-result`);
+            
+            if (input.value.toLowerCase().trim() === correctAnswer.toLowerCase()) {
+                result.textContent = "✓ Correct!";
+                result.className = "ml-2 text-sm text-green-600";
+            } else {
+                result.textContent = `✗ La réponse correcte est: ${correctAnswer}`;
+                result.className = "ml-2 text-sm text-red-600";
+            }
+        }
+        
+        function generateIntroduction() {
+            const name = document.getElementById('name-input').value || "[Votre nom]";
+            const origin = document.getElementById('origin-input').value || "[Votre ville/pays]";
+            const job = document.getElementById('job-input').value || "[Votre profession]";
+            const adjectives = document.getElementById('adj-input').value || "organized, friendly, hardworking";
+            
+            const introduction = `
+                <p class="text-blue-800 mb-4">
+                    <strong>Hello, my name is ${name}. I am from ${origin}. I work as a/an ${job}. I am ${adjectives}.</strong>
+                </p>
+                <p class="text-gray-600 italic">
+                    (Bonjour, je m'appelle ${name}. Je viens de ${origin}. Je travaille comme ${job}. Je suis ${adjectives}.)
+                </p>
+            `;
+            
+            const resultDiv = document.getElementById('introduction-result');
+            resultDiv.innerHTML = introduction;
+            resultDiv.classList.remove('hidden');
+        }
+        
+        function downloadCertificate() {
+            const name = document.getElementById('name-input').value || "Student";
+            document.getElementById('certificate-name').textContent = name;
+            document.getElementById('certificate').classList.remove('hidden');
+            
+            // Scroll to certificate
+            document.getElementById('certificate').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection(0);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93f9e1f74708cbc2',t:'MTc0NzIyMDMzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+</body>
