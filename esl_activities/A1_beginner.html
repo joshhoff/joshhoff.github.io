@@ -1,0 +1,995 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Aprende Inglés! - English for Spanish Speakers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f9fafb;
+        }
+        .game-card {
+            transition: all 0.3s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+        .number-card, .clothes-card {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .number-card:hover .card-inner, .clothes-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        .speaking-bubble {
+            position: relative;
+        }
+        .speaking-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+            border-top-color: #60a5fa;
+            border-bottom: 0;
+            margin-left: -15px;
+            margin-bottom: -15px;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .drop-target {
+            border: 2px dashed #ccc;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .drop-target.highlight {
+            border-color: #60a5fa;
+            background-color: rgba(96, 165, 250, 0.1);
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.absolute{position:absolute}.relative{position:relative}.-top-10{top:-2.5rem}.bottom-10{bottom:2.5rem}.bottom-20{bottom:5rem}.left-1\/2{left:50%}.left-10{left:2.5rem}.left-20{left:5rem}.left-40{left:10rem}.right-0{right:0px}.right-20{right:5rem}.top-0{top:0px}.top-10{top:2.5rem}.top-20{top:5rem}.top-40{top:10rem}.top-5{top:1.25rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-24{height:6rem}.h-32{height:8rem}.h-40{height:10rem}.h-60{height:15rem}.h-80{height:20rem}.min-h-screen{min-height:100vh}.w-24{width:6rem}.w-32{width:8rem}.w-40{width:10rem}.w-full{width:100%}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-400{--tw-bg-opacity:1;background-color:rgb(96 165 250 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-400{--tw-bg-opacity:1;background-color:rgb(248 113 113 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-red-700{--tw-bg-opacity:1;background-color:rgb(185 28 28 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-purple-300{--tw-bg-opacity:1;background-color:rgb(216 180 254 / var(--tw-bg-opacity, 1))}.bg-red-300{--tw-bg-opacity:1;background-color:rgb(252 165 165 / var(--tw-bg-opacity, 1))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-blue-400{--tw-gradient-from:#60a5fa var(--tw-gradient-from-position);--tw-gradient-to:rgb(96 165 250 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-400{--tw-gradient-from:#c084fc var(--tw-gradient-from-position);--tw-gradient-to:rgb(192 132 252 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-red-400{--tw-gradient-from:#f87171 var(--tw-gradient-from-position);--tw-gradient-to:rgb(248 113 113 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-red-50{--tw-gradient-from:#fef2f2 var(--tw-gradient-from-position);--tw-gradient-to:rgb(254 242 242 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-50{--tw-gradient-to:#eff6ff var(--tw-gradient-to-position)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-purple-500{--tw-gradient-to:#a855f7 var(--tw-gradient-to-position)}.to-red-500{--tw-gradient-to:#ef4444 var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-6xl{font-size:3.75rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.opacity-50{opacity:0.5}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-300:hover{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-100:hover{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-200:hover{--tw-bg-opacity:1;background-color:rgb(233 213 255 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-600:hover{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.hover\:bg-red-100:hover{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.hover\:bg-red-500:hover{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.hover\:bg-red-600:hover{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.hover\:bg-red-700:hover{--tw-bg-opacity:1;background-color:rgb(185 28 28 / var(--tw-bg-opacity, 1))}.hover\:bg-red-800:hover{--tw-bg-opacity:1;background-color:rgb(153 27 27 / var(--tw-bg-opacity, 1))}.hover\:bg-red-200:hover{--tw-bg-opacity:1;background-color:rgb(254 202 202 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:w-1\/2{width:50%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="" data-new-gr-c-s-loaded="8.931.0">
+    <div class="min-h-screen bg-gradient-to-b from-red-50 to-blue-50">
+        <!-- Header -->
+        <header class="bg-red-500 text-white p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="text-3xl mr-2">🇬🇧</span>
+                    <h1 class="text-2xl md:text-3xl font-bold">¡Aprende Inglés!</h1>
+                </div>
+                <div class="hidden md:flex space-x-4">
+                    <button id="home-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full font-semibold transition">Inicio</button>
+                    <button id="progress-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full font-semibold transition">Mi Progreso</button>
+                </div>
+                <button id="menu-toggle" class="md:hidden text-2xl">☰</button>
+            </div>
+        </header>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden bg-red-600 text-white p-4">
+            <div class="flex flex-col space-y-2">
+                <button class="px-4 py-2 bg-red-700 hover:bg-red-800 rounded-full font-semibold transition">Inicio</button>
+                <button class="px-4 py-2 bg-red-700 hover:bg-red-800 rounded-full font-semibold transition">Mi Progreso</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="container mx-auto p-4">
+            <!-- Welcome Section -->
+            <section id="welcome-section" class="py-8 hidden">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-red-600 mb-4">¡Bienvenidos, amigos!</h2>
+                    <p class="text-lg text-gray-700 mb-8">¡Vamos a aprender inglés con juegos divertidos!</p>
+                    <div class="flex justify-center">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='90' fill='%23FFD700'/%3E%3Ccircle cx='70' cy='80' r='10' fill='%23000'/%3E%3Ccircle cx='130' cy='80' r='10' fill='%23000'/%3E%3Cpath d='M65,120 Q100,150 135,120' stroke='%23000' stroke-width='5' fill='none'/%3E%3C/svg%3E" alt="Happy face" class="w-32 h-32 bounce">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Game Selection -->
+            <section id="game-selection" class="py-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-center text-blue-600 mb-8">Elige un Juego</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Numbers Game -->
+                    <div id="numbers-game-card" class="game-card bg-gradient-to-br from-red-400 to-red-500 rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6 text-center">
+                            <div class="text-4xl mb-4">🔢</div>
+                            <h3 class="text-xl font-bold text-white mb-2">Numbers</h3>
+                            <p class="text-white mb-4">Aprende números del 1 al 20</p>
+                            <button class="px-6 py-2 bg-white text-red-500 rounded-full font-bold hover:bg-red-100 transition">Jugar</button>
+                        </div>
+                    </div>
+
+                    <!-- Clothes Game -->
+                    <div id="clothes-game-card" class="game-card bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6 text-center">
+                            <div class="text-4xl mb-4">👕</div>
+                            <h3 class="text-xl font-bold text-white mb-2">Clothes</h3>
+                            <p class="text-white mb-4">Aprende palabras para la ropa</p>
+                            <button class="px-6 py-2 bg-white text-blue-500 rounded-full font-bold hover:bg-blue-100 transition">Jugar</button>
+                        </div>
+                    </div>
+
+                    <!-- There is/are Game -->
+                    <div id="there-is-game-card" class="game-card bg-gradient-to-br from-purple-400 to-purple-500 rounded-xl shadow-lg overflow-hidden">
+                        <div class="p-6 text-center">
+                            <div class="text-4xl mb-4">🏠</div>
+                            <h3 class="text-xl font-bold text-white mb-2">There is/are</h3>
+                            <p class="text-white mb-4">Aprende a usar "there is/are"</p>
+                            <button class="px-6 py-2 bg-white text-purple-500 rounded-full font-bold hover:bg-purple-100 transition">Jugar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Numbers Game Section -->
+            <section id="numbers-game" class="py-8 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-red-500">Numbers</h2>
+                    <button id="back-from-numbers" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full font-semibold transition">Volver</button>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Aprende los Números (1-20)</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <!-- Number cards -->
+                        <div class="number-card">
+                            <div class="card-inner h-32">
+                                <div class="card-front bg-red-100 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-4xl font-bold text-red-600">1</span>
+                                </div>
+                                <div class="card-back bg-red-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">one</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="number-card">
+                            <div class="card-inner h-32">
+                                <div class="card-front bg-red-100 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-4xl font-bold text-red-600">5</span>
+                                </div>
+                                <div class="card-back bg-red-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">five</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="number-card">
+                            <div class="card-inner h-32">
+                                <div class="card-front bg-red-100 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-4xl font-bold text-red-600">10</span>
+                                </div>
+                                <div class="card-back bg-red-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">ten</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="number-card">
+                            <div class="card-inner h-32">
+                                <div class="card-front bg-red-100 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-4xl font-bold text-red-600">15</span>
+                                </div>
+                                <div class="card-back bg-red-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">fifteen</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="number-card">
+                            <div class="card-inner h-32">
+                                <div class="card-front bg-red-100 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-4xl font-bold text-red-600">20</span>
+                                </div>
+                                <div class="card-back bg-red-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">twenty</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Juego de Contar</h3>
+                    <p class="mb-4">Cuenta los objetos y selecciona el número correcto en inglés.</p>
+                    
+                    <div class="flex justify-center mb-6">
+                        <div id="counting-objects" class="flex items-center justify-center h-40 w-full bg-red-50 rounded-lg">
+                            <div id="objects-container" class="flex flex-wrap justify-center gap-2 p-4"><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span><span class="text-3xl">🍎</span></div>
+                        </div>
+                    </div>
+                    
+                    <div id="number-options" class="grid grid-cols-2 md:grid-cols-4 gap-3"><button class="number-option p-3 bg-red-100 hover:bg-red-200 rounded-lg font-semibold">eight</button><button class="number-option p-3 bg-red-100 hover:bg-red-200 rounded-lg font-semibold">ten</button><button class="number-option p-3 bg-red-100 hover:bg-red-200 rounded-lg font-semibold">three</button><button class="number-option p-3 bg-red-100 hover:bg-red-200 rounded-lg font-semibold">eighteen</button></div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Operaciones Matemáticas</h3>
+                    <p class="mb-4">Resuelve estas operaciones y escribe la respuesta en inglés.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <div id="math-problem-1" class="text-center text-2xl font-bold mb-4">8 + 3 = ?</div>
+                            <input id="math-answer-1" type="text" placeholder="Escribe la respuesta en inglés" class="w-full p-3 border border-red-300 rounded-lg">
+                            <button id="check-math-1" class="mt-3 w-full p-2 bg-red-400 hover:bg-red-500 text-white rounded-lg font-semibold">Comprobar</button>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <div id="math-problem-2" class="text-center text-2xl font-bold mb-4">10 - 5 = ?</div>
+                            <input id="math-answer-2" type="text" placeholder="Escribe la respuesta en inglés" class="w-full p-3 border border-red-300 rounded-lg">
+                            <button id="check-math-2" class="mt-3 w-full p-2 bg-red-400 hover:bg-red-500 text-white rounded-lg font-semibold">Comprobar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Práctica de Pronunciación</h3>
+                    <p class="mb-4">¡Di los números en inglés cuando aparezcan!</p>
+                    
+                    <div class="flex justify-center mb-6">
+                        <div id="speaking-number" class="flex items-center justify-center h-40 w-40 bg-red-400 rounded-full">
+                            <span class="text-6xl font-bold text-white">18</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button id="next-number-btn" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-full font-bold transition">Siguiente Número</button>
+                        <p id="pronunciation-guide" class="mt-3 text-sm text-gray-600">Pronunciación correcta: "eighteen"</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Clothes Game Section -->
+            <section id="clothes-game" class="py-8 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-blue-500">Clothes</h2>
+                    <button id="back-from-clothes" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full font-semibold transition">Volver</button>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Aprende Vocabulario de Ropa</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="clothes-card">
+                            <div class="card-inner h-40">
+                                <div class="card-front bg-blue-100 rounded-lg shadow flex flex-col items-center justify-center p-4">
+                                    <div class="text-5xl mb-2">👕</div>
+                                    <span class="text-lg font-semibold text-blue-600">camiseta</span>
+                                </div>
+                                <div class="card-back bg-blue-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">T-shirt</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clothes-card">
+                            <div class="card-inner h-40">
+                                <div class="card-front bg-blue-100 rounded-lg shadow flex flex-col items-center justify-center p-4">
+                                    <div class="text-5xl mb-2">👖</div>
+                                    <span class="text-lg font-semibold text-blue-600">pantalones</span>
+                                </div>
+                                <div class="card-back bg-blue-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">pants/trousers</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clothes-card">
+                            <div class="card-inner h-40">
+                                <div class="card-front bg-blue-100 rounded-lg shadow flex flex-col items-center justify-center p-4">
+                                    <div class="text-5xl mb-2">👟</div>
+                                    <span class="text-lg font-semibold text-blue-600">zapatos</span>
+                                </div>
+                                <div class="card-back bg-blue-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">shoes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clothes-card">
+                            <div class="card-inner h-40">
+                                <div class="card-front bg-blue-100 rounded-lg shadow flex flex-col items-center justify-center p-4">
+                                    <div class="text-5xl mb-2">🧥</div>
+                                    <span class="text-lg font-semibold text-blue-600">abrigo</span>
+                                </div>
+                                <div class="card-back bg-blue-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">coat</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clothes-card">
+                            <div class="card-inner h-40">
+                                <div class="card-front bg-blue-100 rounded-lg shadow flex flex-col items-center justify-center p-4">
+                                    <div class="text-5xl mb-2">👒</div>
+                                    <span class="text-lg font-semibold text-blue-600">sombrero</span>
+                                </div>
+                                <div class="card-back bg-blue-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">hat</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clothes-card">
+                            <div class="card-inner h-40">
+                                <div class="card-front bg-blue-100 rounded-lg shadow flex flex-col items-center justify-center p-4">
+                                    <div class="text-5xl mb-2">🧦</div>
+                                    <span class="text-lg font-semibold text-blue-600">calcetines</span>
+                                </div>
+                                <div class="card-back bg-blue-400 rounded-lg shadow flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-white">socks</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Juego de Vestir</h3>
+                    <p class="mb-4">Arrastra la ropa a las áreas correctas y aprende sus nombres en inglés.</p>
+                    
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-1/2 p-4">
+                            <div class="h-80 bg-blue-50 rounded-lg flex flex-col items-center justify-center relative">
+                                <svg width="120" height="200" viewBox="0 0 120 200">
+                                    <circle cx="60" cy="40" r="30" fill="#FFD1B0"></circle>
+                                    <rect x="45" y="70" width="30" height="60" fill="#FFD1B0"></rect>
+                                    <rect x="45" y="130" width="30" height="50" fill="#FFD1B0"></rect>
+                                </svg>
+                                
+                                <div id="hat-target" class="drop-target absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full flex items-center justify-center"><span class="text-gray-400">hat</span></div>
+                                
+                                <div id="shirt-target" class="drop-target absolute top-20 left-1/2 transform -translate-x-1/2 w-32 h-24 rounded-lg flex items-center justify-center"><span class="text-gray-400">shirt</span></div>
+                                
+                                <div id="pants-target" class="drop-target absolute bottom-10 left-1/2 transform -translate-x-1/2 w-24 h-32 rounded-lg flex items-center justify-center"><span class="text-gray-400">pants</span></div>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div id="hat-item" class="draggable bg-blue-100 p-4 rounded-lg text-center cursor-move" draggable="true">
+                                    <div class="text-3xl">👒</div>
+                                    <p class="text-sm font-semibold">hat</p>
+                                </div>
+                                <div id="shirt-item" class="draggable bg-blue-100 p-4 rounded-lg text-center cursor-move" draggable="true">
+                                    <div class="text-3xl">👕</div>
+                                    <p class="text-sm font-semibold">T-shirt</p>
+                                </div>
+                                <div id="pants-item" class="draggable bg-blue-100 p-4 rounded-lg text-center cursor-move" draggable="true">
+                                    <div class="text-3xl">👖</div>
+                                    <p class="text-sm font-semibold">pants</p>
+                                </div>
+                                <div id="reset-clothes" class="bg-blue-500 p-4 rounded-lg text-center text-white cursor-pointer">
+                                    <div class="text-xl">🔄</div>
+                                    <p class="text-sm font-semibold">Reset</p>
+                                </div>
+                            </div>
+                            <div id="clothes-feedback" class="mt-4 p-3 rounded-lg text-center bg-green-100 text-green-700 hidden">¡Excelente! Has vestido correctamente al personaje.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Práctica de Conversación</h3>
+                    <p class="mb-4">¿Qué está usando esta persona? Describe la ropa en inglés.</p>
+                    
+                    <div class="flex justify-center mb-6">
+                        <div class="relative">
+                            <svg width="200" height="300" viewBox="0 0 200 300">
+                                <circle cx="100" cy="60" r="40" fill="#FFD1B0"></circle>
+                                <rect x="80" y="100" width="40" height="80" fill="#FFD1B0"></rect>
+                                <rect x="80" y="180" width="40" height="70" fill="#FFD1B0"></rect>
+                                <rect x="60" y="100" width="80" height="60" fill="#FF6B6B"></rect>
+                                <rect x="80" y="180" width="40" height="70" fill="#5D9CEC"></rect>
+                                <rect x="80" y="250" width="40" height="20" fill="#333"></rect>
+                                <circle cx="100" cy="30" r="20" fill="#F5A623"></circle>
+                            </svg>
+                            <div class="speaking-bubble absolute -top-10 right-0 bg-blue-400 text-white p-3 rounded-lg">
+                                <p>What am I wearing?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <textarea id="clothes-description" class="w-full p-3 border border-blue-300 rounded-lg mb-4" rows="3" placeholder="Describe la ropa en inglés..."></textarea>
+                        <button id="check-clothes-btn" class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-bold transition">Comprobar Respuesta</button>
+                        <div id="clothes-description-feedback" class="mt-4 p-3 rounded-lg text-center text-red-700 bg-green-100 text-green-700">¡Excelente! Has descrito correctamente la ropa.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- There is/are Game Section -->
+            <section id="there-is-game" class="py-8 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl md:text-3xl font-bold text-purple-500">There is/are</h2>
+                    <button id="back-from-there-is" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-full font-semibold transition">Volver</button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Aprende a usar "There is/are"</h3>
+                    <p class="mb-4">En inglés usamos "there is" (singular) y "there are" (plural).</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-purple-600 mb-2">Singular (Hay uno)</h4>
+                            <div class="flex items-center mb-3">
+                                <div class="text-3xl mr-3">🍎</div>
+                                <p><span class="font-bold">There is</span> an apple.</p>
+                            </div>
+                            <p class="text-sm text-gray-600">Hay una manzana.</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-purple-600 mb-2">Plural (Hay varios)</h4>
+                            <div class="flex items-center mb-3">
+                                <div class="text-3xl mr-3">🍎🍎🍎</div>
+                                <p><span class="font-bold">There are</span> three apples.</p>
+                            </div>
+                            <p class="text-sm text-gray-600">Hay tres manzanas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Juego del Aula</h3>
+                    <p class="mb-4">Mira el aula y responde las preguntas usando "there is/are".</p>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg mb-6">
+                        <div id="classroom-scene" class="h-60 relative">
+                            <div class="absolute top-5 left-10">📚📚</div>
+                            <div class="absolute top-20 left-40">✏️✏️✏️</div>
+                            <div class="absolute top-40 left-20">📝</div>
+                            <div class="absolute top-10 right-20">🖌️🖌️</div>
+                            <div class="absolute bottom-10 right-30">📏</div>
+                        </div>
+                    </div>
+                    
+                    <div id="there-question" class="mb-4 text-center font-semibold">¿Cuántos marcadores hay en el aula? (How many markers are there in the classroom?)</div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <button class="there-option p-3 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold">There is one marker.</button>
+                        <button class="there-option p-3 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold">There are two markers.</button>
+                        <button class="there-option p-3 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold">There are three markers.</button>
+                    </div>
+                    <div id="there-feedback" class="mt-4 p-3 rounded-lg text-center bg-green-100 text-green-700 hidden">¡Correcto! Hay tres lápices en el aula.</div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Completa las Frases</h3>
+                    <p class="mb-4">Elige la opción correcta para completar cada frase.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <div class="flex items-center mb-3">
+                                <div class="text-3xl mr-3">🐱</div>
+                                <p>__________ a cat on the sofa.</p>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button class="complete-option p-2 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold" data-correct="true" data-sentence="cat">There is</button>
+                                <button class="complete-option p-2 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold" data-correct="false" data-sentence="cat">There are</button>
+                            </div>
+                            <div class="feedback-message mt-3 bg-green-100 text-green-700">¡Correcto! "There is a cat on the sofa" es correcto porque "cat" es singular.</div>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <div class="flex items-center mb-3">
+                                <div class="text-3xl mr-3">🍕🍕🍕</div>
+                                <p>__________ three pizzas on the table.</p>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button class="complete-option p-2 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold" data-correct="false" data-sentence="pizzas">There is</button>
+                                <button class="complete-option p-2 bg-purple-100 hover:bg-purple-200 rounded-lg font-semibold" data-correct="true" data-sentence="pizzas">There are</button>
+                            </div>
+                            <div class="feedback-message mt-3 bg-green-100 text-green-700">¡Correcto! "There are three pizzas on the table" es correcto porque "pizzas" es plural.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Práctica de Conversación</h3>
+                    <p class="mb-4">Mira la habitación y describe lo que ves usando "there is/are" en inglés.</p>
+                    
+                    <div class="bg-purple-50 p-6 rounded-lg mb-6">
+                        <div id="room-scene" class="h-60 relative">
+                            <div class="absolute top-10 left-10">🛋️</div>
+                            <div class="absolute top-40 left-20">🪑🪑</div>
+                            <div class="absolute top-10 right-20">📺</div>
+                            <div class="absolute bottom-10 right-30">🪴🪴🪴</div>
+                            <div class="absolute top-30 left-40">📱</div>
+                            <div class="absolute bottom-20 left-10">🐶</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <textarea id="there-description" class="w-full p-3 border border-purple-300 rounded-lg mb-4" rows="4" placeholder="Describe la habitación usando 'there is/are'..."></textarea>
+                        <button id="check-there-btn" class="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full font-bold transition">
+                            Comprobar Respuesta
+                        </button>
+                        <div id="there-description-feedback" class="mt-4 p-3 rounded-lg text-center hidden"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-red-500 text-white p-4 mt-8">
+            <div class="container mx-auto text-center">
+                <p>¡Aprende Inglés! - Aplicación de Aprendizaje de Inglés</p>
+                <div class="mt-2 flex justify-center space-x-4">
+                    <span>🇬🇧</span>
+                    <span>👕</span>
+                    <span>🔢</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Game navigation
+        const sections = {
+            welcome: document.getElementById('welcome-section'),
+            gameSelection: document.getElementById('game-selection'),
+            numbersGame: document.getElementById('numbers-game'),
+            clothesGame: document.getElementById('clothes-game'),
+            thereIsGame: document.getElementById('there-is-game')
+        };
+
+        function showSection(sectionId) {
+            Object.keys(sections).forEach(key => {
+                sections[key].classList.add('hidden');
+            });
+            sections[sectionId].classList.remove('hidden');
+        }
+
+        // Numbers Game
+        document.getElementById('numbers-game-card').addEventListener('click', function() {
+            showSection('numbersGame');
+            setupCountingGame();
+        });
+
+        document.getElementById('back-from-numbers').addEventListener('click', function() {
+            showSection('gameSelection');
+        });
+
+        // Clothes Game
+        document.getElementById('clothes-game-card').addEventListener('click', function() {
+            showSection('clothesGame');
+            setupDragAndDrop();
+        });
+
+        document.getElementById('back-from-clothes').addEventListener('click', function() {
+            showSection('gameSelection');
+        });
+
+        // There is/are Game
+        document.getElementById('there-is-game-card').addEventListener('click', function() {
+            showSection('thereIsGame');
+        });
+
+        document.getElementById('back-from-there-is').addEventListener('click', function() {
+            showSection('gameSelection');
+        });
+
+        // Home button
+        document.getElementById('home-btn').addEventListener('click', function() {
+            showSection('welcome');
+            setTimeout(() => showSection('gameSelection'), 1000);
+        });
+
+        // ===== NUMBERS GAME FUNCTIONALITY =====
+        
+        // Counting Game
+        function setupCountingGame() {
+            const objectsContainer = document.getElementById('objects-container');
+            const numberOptions = document.getElementById('number-options');
+            
+            // Clear previous content
+            objectsContainer.innerHTML = '';
+            numberOptions.innerHTML = '';
+            
+            // Generate random number of objects (between 1 and 20)
+            const count = Math.floor(Math.random() * 10) + 1;
+            const emojis = ['🍎', '🍌', '🍊', '🍓', '🍇'];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Add objects
+            for (let i = 0; i < count; i++) {
+                const span = document.createElement('span');
+                span.className = 'text-3xl';
+                span.textContent = emoji;
+                objectsContainer.appendChild(span);
+            }
+            
+            // Create number options
+            const correctAnswer = numberToWord(count);
+            const options = [correctAnswer];
+            
+            // Add 3 more random options
+            while (options.length < 4) {
+                const randomNum = Math.floor(Math.random() * 20) + 1;
+                const word = numberToWord(randomNum);
+                if (!options.includes(word) && randomNum !== count) {
+                    options.push(word);
+                }
+            }
+            
+            // Shuffle options
+            const shuffledOptions = options.sort(() => Math.random() - 0.5);
+            
+            // Add options to the container
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'number-option p-3 bg-red-100 hover:bg-red-200 rounded-lg font-semibold';
+                button.textContent = option;
+                button.addEventListener('click', function() {
+                    // Remove highlight from all options
+                    document.querySelectorAll('.number-option').forEach(opt => {
+                        opt.classList.remove('bg-red-300');
+                    });
+                    
+                    // Highlight selected option
+                    this.classList.add('bg-red-300');
+                    
+                    // Check if correct
+                    if (this.textContent === correctAnswer) {
+                        setTimeout(() => {
+                            alert('¡Correcto! That\'s right!');
+                            setupCountingGame(); // Reset game with new objects
+                        }, 500);
+                    } else {
+                        setTimeout(() => {
+                            alert('Inténtalo de nuevo. Cuenta los objetos.');
+                            this.classList.remove('bg-red-300');
+                        }, 500);
+                    }
+                });
+                numberOptions.appendChild(button);
+            });
+        }
+        
+        // Convert number to word
+        function numberToWord(num) {
+            const words = [
+                'zero', 'one', 'two', 'three', 'four', 'five', 
+                'six', 'seven', 'eight', 'nine', 'ten', 
+                'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+                'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'
+            ];
+            return words[num];
+        }
+        
+        // Math problems
+        document.getElementById('check-math-1').addEventListener('click', function() {
+            const answer = document.getElementById('math-answer-1').value.toLowerCase().trim();
+            const problem = document.getElementById('math-problem-1').textContent;
+            
+            if (problem.includes('7 + 5')) {
+                if (answer === 'twelve' || answer === '12') {
+                    alert('¡Correcto! 7 + 5 = 12 (twelve)');
+                    document.getElementById('math-answer-1').value = '';
+                    // Generate new problem
+                    generateMathProblem(1);
+                } else {
+                    alert('Inténtalo de nuevo. La respuesta es "twelve".');
+                }
+            }
+        });
+        
+        document.getElementById('check-math-2').addEventListener('click', function() {
+            const answer = document.getElementById('math-answer-2').value.toLowerCase().trim();
+            const problem = document.getElementById('math-problem-2').textContent;
+            
+            if (problem.includes('12 - 4')) {
+                if (answer === 'eight' || answer === '8') {
+                    alert('¡Correcto! 12 - 4 = 8 (eight)');
+                    document.getElementById('math-answer-2').value = '';
+                    // Generate new problem
+                    generateMathProblem(2);
+                } else {
+                    alert('Inténtalo de nuevo. La respuesta es "eight".');
+                }
+            }
+        });
+        
+        function generateMathProblem(id) {
+            // Generate random numbers between 1 and 20
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            
+            // For subtraction, ensure num1 > num2
+            if (id === 2) {
+                const max = Math.max(num1, num2);
+                const min = Math.min(num1, num2);
+                document.getElementById(`math-problem-${id}`).textContent = `${max} - ${min} = ?`;
+            } else {
+                document.getElementById(`math-problem-${id}`).textContent = `${num1} + ${num2} = ?`;
+            }
+        }
+        
+        // Next number button
+        document.getElementById('next-number-btn').addEventListener('click', function() {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+            const randomNumber = numbers[Math.floor(Math.random() * numbers.length)];
+            document.querySelector('#speaking-number span').textContent = randomNumber;
+            
+            // Update pronunciation guide
+            document.getElementById('pronunciation-guide').textContent = `Pronunciación correcta: "${numberToWord(randomNumber)}"`;
+        });
+        
+        // ===== CLOTHES GAME FUNCTIONALITY =====
+        
+        // Drag and Drop functionality
+        function setupDragAndDrop() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropTargets = document.querySelectorAll('.drop-target');
+            
+            // Reset the drop targets
+            dropTargets.forEach(target => {
+                target.innerHTML = `<span class="text-gray-400">${target.id.replace('-target', '')}</span>`;
+                target.classList.remove('highlight');
+            });
+            
+            // Reset the feedback
+            const feedback = document.getElementById('clothes-feedback');
+            feedback.classList.add('hidden');
+            
+            // Make items draggable
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.id);
+                    setTimeout(() => {
+                        this.classList.add('opacity-50');
+                    }, 0);
+                });
+                
+                draggable.addEventListener('dragend', function() {
+                    this.classList.remove('opacity-50');
+                });
+                
+                // Make items draggable
+                draggable.setAttribute('draggable', 'true');
+            });
+            
+            // Setup drop targets
+            dropTargets.forEach(target => {
+                target.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('highlight');
+                });
+                
+                target.addEventListener('dragleave', function() {
+                    this.classList.remove('highlight');
+                });
+                
+                target.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('highlight');
+                    
+                    const id = e.dataTransfer.getData('text/plain');
+                    const draggable = document.getElementById(id);
+                    
+                    // Check if correct match
+                    const itemType = id.replace('-item', '');
+                    const targetType = this.id.replace('-target', '');
+                    
+                    if (itemType === targetType) {
+                        // Correct match
+                        this.innerHTML = draggable.innerHTML;
+                        draggable.classList.add('opacity-50');
+                        
+                        // Check if all items are placed correctly
+                        checkAllClothesPlaced();
+                    } else {
+                        // Incorrect match
+                        showClothesFeedback('Inténtalo de nuevo. Coloca cada prenda en su lugar correcto.', 'error');
+                    }
+                });
+            });
+            
+            // Reset button
+            document.getElementById('reset-clothes').addEventListener('click', function() {
+                setupDragAndDrop();
+            });
+        }
+        
+        function checkAllClothesPlaced() {
+            const hatTarget = document.getElementById('hat-target');
+            const shirtTarget = document.getElementById('shirt-target');
+            const pantsTarget = document.getElementById('pants-target');
+            
+            if (hatTarget.innerHTML.includes('👒') && 
+                shirtTarget.innerHTML.includes('👕') && 
+                pantsTarget.innerHTML.includes('👖')) {
+                showClothesFeedback('¡Excelente! Has vestido correctamente al personaje.', 'success');
+            }
+        }
+        
+        function showClothesFeedback(message, type) {
+            const feedback = document.getElementById('clothes-feedback');
+            feedback.textContent = message;
+            feedback.classList.remove('hidden', 'bg-red-100', 'bg-green-100');
+            
+            if (type === 'error') {
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            } else {
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            }
+        }
+        
+        // Clothes description check
+        document.getElementById('check-clothes-btn').addEventListener('click', function() {
+            const description = document.getElementById('clothes-description').value.toLowerCase().trim();
+            const feedback = document.getElementById('clothes-description-feedback');
+            
+            if (description === '') {
+                alert('Por favor, escribe tu respuesta antes de comprobar.');
+                return;
+            }
+            
+            // Check if description contains key clothing items
+            const requiredWords = ['red', 't-shirt', 'blue', 'pants', 'yellow', 'hat'];
+            const matches = requiredWords.filter(word => description.includes(word));
+            
+            feedback.classList.remove('hidden', 'bg-red-100', 'bg-green-100', 'bg-yellow-100');
+            
+            if (matches.length >= 5) {
+                feedback.textContent = '¡Excelente! Has descrito correctamente la ropa.';
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            } else if (matches.length >= 3) {
+                feedback.textContent = '¡Buen intento! La persona está usando: a red T-shirt (una camiseta roja), blue pants (pantalones azules), black shoes (zapatos negros), and a yellow hat (un sombrero amarillo).';
+                feedback.classList.add('bg-yellow-100', 'text-yellow-700');
+            } else {
+                feedback.textContent = 'Inténtalo de nuevo. La persona está usando: a red T-shirt (una camiseta roja), blue pants (pantalones azules), black shoes (zapatos negros), and a yellow hat (un sombrero amarillo).';
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+        });
+        
+        // ===== THERE IS/ARE GAME FUNCTIONALITY =====
+        
+        // There is/are options
+        document.querySelectorAll('.there-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const feedback = document.getElementById('there-feedback');
+                
+                // Remove highlight from all options
+                document.querySelectorAll('.there-option').forEach(opt => {
+                    opt.classList.remove('bg-purple-300');
+                });
+                
+                // Highlight selected option
+                this.classList.add('bg-purple-300');
+                
+                feedback.classList.remove('hidden', 'bg-red-100', 'bg-green-100');
+                
+                if (this.textContent === 'There are three pencils.') {
+                    feedback.textContent = '¡Correcto! Hay tres lápices en el aula.';
+                    feedback.classList.add('bg-green-100', 'text-green-700');
+                    
+                    // Change question after a delay
+                    setTimeout(() => {
+                        changeClassroomQuestion();
+                    }, 2000);
+                } else {
+                    feedback.textContent = 'Inténtalo de nuevo. Cuenta los lápices (✏️).';
+                    feedback.classList.add('bg-red-100', 'text-red-700');
+                }
+            });
+        });
+        
+        function changeClassroomQuestion() {
+            const questions = [
+                {
+                    question: '¿Cuántos libros hay en el aula? (How many books are there in the classroom?)',
+                    options: ['There is one book.', 'There are two books.', 'There are three books.'],
+                    correct: 'There are two books.'
+                },
+                {
+                    question: '¿Cuántos marcadores hay en el aula? (How many markers are there in the classroom?)',
+                    options: ['There is one marker.', 'There are two markers.', 'There are three markers.'],
+                    correct: 'There are two markers.'
+                }
+            ];
+            
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            
+            document.getElementById('there-question').textContent = randomQuestion.question;
+            
+            const options = document.querySelectorAll('.there-option');
+            options.forEach((option, index) => {
+                option.textContent = randomQuestion.options[index];
+                option.classList.remove('bg-purple-300');
+            });
+            
+            document.getElementById('there-feedback').classList.add('hidden');
+        }
+        
+        // Complete the sentence
+        document.querySelectorAll('.complete-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.getAttribute('data-correct') === 'true';
+                const sentence = this.getAttribute('data-sentence');
+                const feedbackDiv = this.parentElement.nextElementSibling;
+                
+                feedbackDiv.classList.remove('hidden', 'bg-red-100', 'bg-green-100');
+                
+                if (isCorrect) {
+                    if (sentence === 'cat') {
+                        feedbackDiv.textContent = '¡Correcto! "There is a cat on the sofa" es correcto porque "cat" es singular.';
+                    } else {
+                        feedbackDiv.textContent = '¡Correcto! "There are three pizzas on the table" es correcto porque "pizzas" es plural.';
+                    }
+                    feedbackDiv.classList.add('bg-green-100', 'text-green-700');
+                } else {
+                    if (sentence === 'cat') {
+                        feedbackDiv.textContent = 'Incorrecto. Usamos "There is" con sustantivos singulares como "a cat".';
+                    } else {
+                        feedbackDiv.textContent = 'Incorrecto. Usamos "There are" con sustantivos plurales como "three pizzas".';
+                    }
+                    feedbackDiv.classList.add('bg-red-100', 'text-red-700');
+                }
+            });
+        });
+        
+        // Check there is/are description
+        document.getElementById('check-there-btn').addEventListener('click', function() {
+            const description = document.getElementById('there-description').value.toLowerCase().trim();
+            const feedback = document.getElementById('there-description-feedback');
+            
+            if (description === '') {
+                alert('Por favor, escribe tu respuesta antes de comprobar.');
+                return;
+            }
+            
+            // Check if description contains key phrases
+            const requiredPhrases = ['there is a sofa', 'there are two chairs', 'there is a tv', 'there are three plants'];
+            const matches = requiredPhrases.filter(phrase => description.includes(phrase));
+            
+            feedback.classList.remove('hidden', 'bg-red-100', 'bg-green-100', 'bg-yellow-100');
+            
+            if (matches.length >= 3) {
+                feedback.textContent = '¡Excelente! Has descrito correctamente la habitación usando "there is/are".';
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            } else if (matches.length >= 1) {
+                feedback.textContent = '¡Buen intento! Recuerda describir todos los objetos: "There is a sofa. There are two chairs. There is a TV. There are three plants. There is a phone. There is a dog."';
+                feedback.classList.add('bg-yellow-100', 'text-yellow-700');
+            } else {
+                feedback.textContent = 'Inténtalo de nuevo. Usa "there is" para objetos singulares y "there are" para objetos plurales.';
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+        });
+        
+        // Initialize the first math problems
+        generateMathProblem(1);
+        generateMathProblem(2);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9432c2bcc58bc90d',t:'MTc0NzgxNjczOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
