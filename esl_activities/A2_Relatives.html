@@ -1,0 +1,823 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relative Clause Speaking Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+        }
+        .game-card {
+            transition: all 0.3s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        .example-card {
+            transition: all 0.3s ease;
+        }
+        .example-card:hover {
+            transform: scale(1.02);
+        }
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+        }
+        .team-row:nth-child(even) {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        .team-row:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .pronoun-tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.25rem;
+        }
+        /* Smartboard optimizations */
+        .btn {
+            min-height: 44px;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .btn:active {
+            transform: translateY(2px);
+        }
+        input[type="text"] {
+            min-height: 44px;
+            font-size: 1.1rem;
+        }
+        .team-btn {
+            min-width: 44px;
+            min-height: 44px;
+            margin: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .timer-preset {
+            min-height: 44px;
+            font-size: 1rem;
+        }
+        /* Focus styles for accessibility */
+        button:focus, input:focus {
+            outline: 2px solid #4f46e5;
+            outline-offset: 2px;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-4{margin-left:1rem}.ml-5{margin-left:1.25rem}.ml-6{margin-left:1.5rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.mr-2{margin-right:0.5rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-8{height:2rem}.min-h-screen{min-height:100vh}.w-8{width:2rem}.w-full{width:100%}.min-w-full{min-width:100%}.max-w-6xl{max-width:72rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.list-disc{list-style-type:disc}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-gray-200 > :not([hidden]) ~ :not([hidden]){--tw-divide-opacity:1;border-color:rgb(229 231 235 / var(--tw-divide-opacity, 1))}.overflow-hidden{overflow:hidden}.whitespace-nowrap{white-space:nowrap}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-l-md{border-top-left-radius:0.375rem;border-bottom-left-radius:0.375rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.rounded-r-md{border-top-right-radius:0.375rem;border-bottom-right-radius:0.375rem}.border{border-width:1px}.border-l-4{border-left-width:4px}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138 / var(--tw-border-opacity, 1))}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-pink-200{--tw-border-opacity:1;border-color:rgb(251 207 232 / var(--tw-border-opacity, 1))}.border-purple-200{--tw-border-opacity:1;border-color:rgb(233 213 255 / var(--tw-border-opacity, 1))}.border-teal-200{--tw-border-opacity:1;border-color:rgb(153 246 228 / var(--tw-border-opacity, 1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235 / var(--tw-bg-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-600{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-pink-100{--tw-bg-opacity:1;background-color:rgb(252 231 243 / var(--tw-bg-opacity, 1))}.bg-pink-50{--tw-bg-opacity:1;background-color:rgb(253 242 248 / var(--tw-bg-opacity, 1))}.bg-pink-600{--tw-bg-opacity:1;background-color:rgb(219 39 119 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-teal-50{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-600{--tw-bg-opacity:1;background-color:rgb(202 138 4 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-indigo-50{--tw-gradient-from:#eef2ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(238 242 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-pink-50{--tw-gradient-from:#fdf2f8 var(--tw-gradient-from-position);--tw-gradient-to:rgb(253 242 248 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-50{--tw-gradient-from:#faf5ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(250 245 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-100{--tw-gradient-to:#dbeafe var(--tw-gradient-to-position)}.to-blue-50{--tw-gradient-to:#eff6ff var(--tw-gradient-to-position)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.to-pink-100{--tw-gradient-to:#fce7f3 var(--tw-gradient-to-position)}.to-purple-100{--tw-gradient-to:#f3e8ff var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-5xl{font-size:3rem;line-height:1}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tracking-wider{letter-spacing:0.05em}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-pink-600{--tw-text-opacity:1;color:rgb(219 39 119 / var(--tw-text-opacity, 1))}.text-pink-700{--tw-text-opacity:1;color:rgb(190 24 93 / var(--tw-text-opacity, 1))}.text-pink-800{--tw-text-opacity:1;color:rgb(157 23 77 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-800{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.text-teal-700{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-700:hover{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-red-700:hover{--tw-bg-opacity:1;background-color:rgb(185 28 28 / var(--tw-bg-opacity, 1))}.hover\:bg-yellow-700:hover{--tw-bg-opacity:1;background-color:rgb(161 98 7 / var(--tw-bg-opacity, 1))}.hover\:bg-green-200:hover{--tw-bg-opacity:1;background-color:rgb(187 247 208 / var(--tw-bg-opacity, 1))}.hover\:bg-red-200:hover{--tw-bg-opacity:1;background-color:rgb(254 202 202 / var(--tw-bg-opacity, 1))}.focus\:border-indigo-500:focus{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:p-8{padding:2rem}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-8 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">Guess Who, Where &amp; What?</h1>
+                <p class="text-xl md:text-2xl opacity-90">A fun speaking game with relative clauses for ESL students</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Game Introduction -->
+            <section class="mb-12">
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">What is this game?</h2>
+                    <p class="text-gray-700 mb-4">This is a speaking game for A2 level English students to practice using relative clauses while having fun with classmates!</p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                        <p class="font-medium text-blue-700">Relative clauses help us give more information about people, places, and things using relative pronouns:</p>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="pronoun-tag bg-pink-100 text-pink-800">who</span>
+                            <span class="pronoun-tag bg-purple-100 text-purple-800">which</span>
+                            <span class="pronoun-tag bg-blue-100 text-blue-800">that</span>
+                            <span class="pronoun-tag bg-green-100 text-green-800">where</span>
+                            <span class="pronoun-tag bg-yellow-100 text-yellow-800">whose</span>
+                            <span class="pronoun-tag bg-red-100 text-red-800">whom</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="game-card bg-gradient-to-br from-pink-50 to-pink-100 p-5 rounded-lg border border-pink-200">
+                            <h3 class="font-semibold text-pink-700 mb-2">Person</h3>
+                            <p class="text-gray-700">Choose a famous person that your classmates might know.</p>
+                        </div>
+                        <div class="game-card bg-gradient-to-br from-purple-50 to-purple-100 p-5 rounded-lg border border-purple-200">
+                            <h3 class="font-semibold text-purple-700 mb-2">Place</h3>
+                            <p class="text-gray-700">Choose an interesting place in the world.</p>
+                        </div>
+                        <div class="game-card bg-gradient-to-br from-blue-50 to-blue-100 p-5 rounded-lg border border-blue-200">
+                            <h3 class="font-semibold text-blue-700 mb-2">Activity</h3>
+                            <p class="text-gray-700">Choose a fun or common activity.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Game Rules -->
+            <section class="mb-12">
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">How to Play</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">1</div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-gray-800">Form pairs</h3>
+                                <p class="text-gray-700">Work with a partner to choose:</p>
+                                <ul class="list-disc ml-6 mt-2 text-gray-700">
+                                    <li>A person (real or fictional)</li>
+                                    <li>A place (city, country, or specific location)</li>
+                                    <li>An activity (sport, hobby, etc.)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">2</div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-gray-800">Create clues with relative clauses</h3>
+                                <p class="text-gray-700">Make 2-3 sentences about each item using relative clauses with <span class="font-semibold">who</span>, <span class="font-semibold">which</span>, <span class="font-semibold">that</span>, <span class="font-semibold">where</span>, <span class="font-semibold">whose</span>, or <span class="font-semibold">whom</span>.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">3</div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-gray-800">Challenge other pairs</h3>
+                                <p class="text-gray-700">Take turns sharing your clues with other pairs in the class. They must guess what your person, place, or activity is.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">4</div>
+                            <div class="ml-4">
+                                <h3 class="font-semibold text-lg text-gray-800">Score points</h3>
+                                <p class="text-gray-700">If a team guesses correctly within two tries, they get a point!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Relative Pronouns Guide -->
+            <section class="mb-12">
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Relative Pronouns Guide</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-pink-600 text-white py-2 px-4">
+                                <h3 class="font-semibold">WHO</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-2">Used for people</p>
+                                <p class="italic text-gray-600">Example: The woman <span class="font-bold text-pink-600">who</span> lives next door is a doctor.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-purple-600 text-white py-2 px-4">
+                                <h3 class="font-semibold">WHICH</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-2">Used for things and animals</p>
+                                <p class="italic text-gray-600">Example: The book <span class="font-bold text-purple-600">which</span> I bought yesterday is interesting.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-blue-600 text-white py-2 px-4">
+                                <h3 class="font-semibold">THAT</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-2">Used for people or things</p>
+                                <p class="italic text-gray-600">Example: The movie <span class="font-bold text-blue-600">that</span> we watched was exciting.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-green-600 text-white py-2 px-4">
+                                <h3 class="font-semibold">WHERE</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-2">Used for places</p>
+                                <p class="italic text-gray-600">Example: The restaurant <span class="font-bold text-green-600">where</span> we had dinner was excellent.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-yellow-600 text-white py-2 px-4">
+                                <h3 class="font-semibold">WHOSE</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-2">Used to show possession</p>
+                                <p class="italic text-gray-600">Example: The boy <span class="font-bold text-yellow-600">whose</span> bicycle was stolen is my neighbor.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div class="bg-red-600 text-white py-2 px-4">
+                                <h3 class="font-semibold">WHOM</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-2">Used for people as objects (formal)</p>
+                                <p class="italic text-gray-600">Example: The professor <span class="font-bold text-red-600">whom</span> I admire most teaches history.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Examples Section -->
+            <section class="mb-12">
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Examples of Clues</h2>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Person Example -->
+                        <div class="example-card bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
+                            <div class="bg-pink-600 text-white py-3 px-4">
+                                <h3 class="font-semibold text-lg">Person Example</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-3">Clues:</p>
+                                <ul class="list-disc ml-5 text-gray-700 mb-4">
+                                    <li>This is a person <span class="font-semibold text-pink-600">who</span> founded a major tech company.</li>
+                                    <li>He is someone <span class="font-semibold text-yellow-600">whose</span> products are used by billions of people.</li>
+                                    <li>He is the entrepreneur <span class="font-semibold text-red-600">whom</span> many young business students admire.</li>
+                                </ul>
+                                <div class="bg-pink-50 p-3 rounded-lg">
+                                    <p class="font-medium text-pink-700">Answer: Steve Jobs</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Place Example -->
+                        <div class="example-card bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
+                            <div class="bg-purple-600 text-white py-3 px-4">
+                                <h3 class="font-semibold text-lg">Place Example</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-3">Clues:</p>
+                                <ul class="list-disc ml-5 text-gray-700 mb-4">
+                                    <li>This is a place <span class="font-semibold text-green-600">where</span> ancient gladiators once fought.</li>
+                                    <li>It's a structure <span class="font-semibold text-purple-600">which</span> was built almost 2000 years ago.</li>
+                                    <li>It's a famous landmark <span class="font-semibold text-blue-600">that</span> attracts millions of tourists every year.</li>
+                                </ul>
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <p class="font-medium text-purple-700">Answer: The Colosseum</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Activity Example -->
+                        <div class="example-card bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
+                            <div class="bg-blue-600 text-white py-3 px-4">
+                                <h3 class="font-semibold text-lg">Activity Example</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-3">Clues:</p>
+                                <ul class="list-disc ml-5 text-gray-700 mb-4">
+                                    <li>This is an activity <span class="font-semibold text-blue-600">that</span> involves creating images on paper or canvas.</li>
+                                    <li>It's a form of expression <span class="font-semibold text-purple-600">which</span> has existed since prehistoric times.</li>
+                                    <li>It's a skill <span class="font-semibold text-yellow-600">whose</span> masters include Leonardo da Vinci and Picasso.</li>
+                                </ul>
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <p class="font-medium text-blue-700">Answer: Painting</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More Challenging Examples -->
+                    <h3 class="text-xl font-bold text-gray-800 mt-8 mb-4">More Challenging Examples</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Challenging Example 1 -->
+                        <div class="example-card bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
+                            <div class="bg-indigo-600 text-white py-3 px-4">
+                                <h3 class="font-semibold text-lg">Challenging Example 1</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-3">Clues:</p>
+                                <ul class="list-disc ml-5 text-gray-700 mb-4">
+                                    <li>This is a person <span class="font-semibold text-pink-600">who</span> developed a theory <span class="font-semibold text-blue-600">that</span> changed our understanding of the universe.</li>
+                                    <li>He was a scientist <span class="font-semibold text-yellow-600">whose</span> equation E=mc² is known worldwide.</li>
+                                    <li>He was someone <span class="font-semibold text-red-600">whom</span> the Nobel committee recognized for his work on the photoelectric effect, not relativity.</li>
+                                </ul>
+                                <div class="bg-indigo-50 p-3 rounded-lg">
+                                    <p class="font-medium text-indigo-700">Answer: Albert Einstein</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Challenging Example 2 -->
+                        <div class="example-card bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
+                            <div class="bg-emerald-600 text-white py-3 px-4">
+                                <h3 class="font-semibold text-lg">Challenging Example 2</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-gray-700 mb-3">Clues:</p>
+                                <ul class="list-disc ml-5 text-gray-700 mb-4">
+                                    <li>This is a place <span class="font-semibold text-green-600">where</span> you can find the world's largest collection of mummies.</li>
+                                    <li>It's a building <span class="font-semibold text-purple-600">which</span> houses artifacts <span class="font-semibold text-blue-600">that</span> are over 4,000 years old.</li>
+                                    <li>It's an institution <span class="font-semibold text-yellow-600">whose</span> most famous exhibit is the Rosetta Stone.</li>
+                                </ul>
+                                <div class="bg-emerald-50 p-3 rounded-lg">
+                                    <p class="font-medium text-emerald-700">Answer: The British Museum</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Game Timer and Scoreboard -->
+            <section class="mb-12">
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Game Timer &amp; Scoreboard</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Timer -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-indigo-800 mb-4">Game Timer</h3>
+                            
+                            <div class="flex items-center justify-center mb-6">
+                                <div class="bg-white rounded-lg shadow-md p-4 w-full text-center">
+                                    <div id="timer" class="text-5xl font-bold text-indigo-700 timer-display">00:00</div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4">
+                                <button id="startTimer" class="btn bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors text-lg font-medium">Start</button>
+                                <button id="pauseTimer" class="btn bg-yellow-600 text-white py-3 px-4 rounded-md hover:bg-yellow-700 transition-colors text-lg font-medium">Pause</button>
+                                <button id="resetTimer" class="btn bg-red-600 text-white py-3 px-4 rounded-md hover:bg-red-700 transition-colors text-lg font-medium">Reset</button>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <label for="timerPreset" class="block text-lg font-medium text-gray-700 mb-2">Quick set:</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button class="timer-preset btn bg-indigo-100 text-indigo-700 py-2 px-3 rounded-md hover:bg-indigo-200 transition-colors font-medium" data-time="60">1 min</button>
+                                    <button class="timer-preset btn bg-indigo-100 text-indigo-700 py-2 px-3 rounded-md hover:bg-indigo-200 transition-colors font-medium" data-time="120">2 min</button>
+                                    <button class="timer-preset btn bg-indigo-100 text-indigo-700 py-2 px-3 rounded-md hover:bg-indigo-200 transition-colors font-medium" data-time="300">5 min</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scoreboard -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-indigo-800 mb-4">Team Scoreboard</h3>
+                            
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Team</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200" id="scoreboardBody"><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 1</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="1">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="1">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 2</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="2">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="2">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 3</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="3">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="3">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 4</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="4">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="4">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 5</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="5">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="5">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 6</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="6">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="6">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 7</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="7">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="7">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 8</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="8">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="8">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 9</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="9">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="9">-1</button>
+                        </td>
+                    </tr><tr class="team-row">
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">Team 10</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">0</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="10">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="10">-1</button>
+                        </td>
+                    </tr></tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4 flex justify-end">
+                                <button id="resetScores" class="btn bg-gray-600 text-white py-2 px-4 rounded-md text-base hover:bg-gray-700 transition-colors">Reset All Scores</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Demo -->
+            <section class="mb-12">
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Try It Yourself!</h2>
+                    <p class="text-gray-700 mb-6">Here's a practice game. Read the clues and try to guess the person, place, or activity.</p>
+                    
+                    <div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-6 mb-6">
+                        <h3 class="text-xl font-semibold text-indigo-800 mb-4">Mystery Item</h3>
+                        <div id="clues" class="mb-6">
+                            <p class="text-gray-700 mb-2 text-lg">Clue 1: This is a place <span class="font-semibold text-green-600">where</span> people go to see performances.</p>
+                            <p class="text-gray-700 mb-2 text-lg">Clue 2: It's a building <span class="font-semibold text-purple-600">which</span> has a stage and many seats arranged in rows.</p>
+                            <p class="text-gray-700 mb-2 text-lg">Clue 3: It's a venue <span class="font-semibold text-yellow-600">whose</span> history dates back to ancient Greece.</p>
+                            <p class="text-gray-700 text-lg">Clue 4: It's somewhere <span class="font-semibold text-blue-600">that</span> actors and actresses showcase their talents.</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="guess" class="block text-lg font-medium text-gray-700 mb-2">Your guess:</label>
+                            <div class="flex">
+                                <input type="text" id="guess" class="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 border text-lg" placeholder="Type your answer...">
+                                <button id="checkBtn" class="btn bg-indigo-600 text-white px-6 py-3 rounded-r-md hover:bg-indigo-700 transition-colors text-lg font-medium">Check</button>
+                            </div>
+                        </div>
+                        
+                        <div id="result" class="hidden rounded-md p-5 text-lg"></div>
+                        <div id="attempts" class="text-base text-gray-600 mt-2">Attempts: <span id="attemptCount">0</span>/2</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tips for Teachers -->
+            <section>
+                <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Tips for Teachers</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-amber-50 rounded-lg p-5 border border-amber-200">
+                            <h3 class="font-semibold text-amber-700 text-lg mb-3">Before the Game</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-2">
+                                <li>Review all relative pronouns with students</li>
+                                <li>Practice forming different types of relative clauses</li>
+                                <li>Provide vocabulary that might be useful</li>
+                                <li>Show examples of good clues using various pronouns</li>
+                                <li>Explain the difference between defining and non-defining relative clauses</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-teal-50 rounded-lg p-5 border border-teal-200">
+                            <h3 class="font-semibold text-teal-700 text-lg mb-3">During the Game</h3>
+                            <ul class="list-disc ml-5 text-gray-700 space-y-2">
+                                <li>Monitor pairs to ensure they're using relative clauses correctly</li>
+                                <li>Encourage students to use a variety of relative pronouns</li>
+                                <li>Award bonus points for using more complex structures</li>
+                                <li>Use the timer to keep the game moving at a good pace</li>
+                                <li>Keep track of points on the scoreboard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-6 px-4 sm:px-6 lg:px-8 mt-12">
+            <div class="max-w-6xl mx-auto text-center">
+                <p>Created for ESL teachers and students to practice relative clauses in a fun, interactive way.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add touch event support for all interactive elements
+            function addTouchSupport() {
+                const allButtons = document.querySelectorAll('button');
+                
+                allButtons.forEach(button => {
+                    // Add touch feedback
+                    button.addEventListener('touchstart', function(e) {
+                        this.classList.add('active');
+                    }, {passive: true});
+                    
+                    button.addEventListener('touchend', function(e) {
+                        this.classList.remove('active');
+                    }, {passive: true});
+                });
+            }
+            
+            // Call the function to add touch support
+            addTouchSupport();
+            
+            // Interactive Demo
+            const checkBtn = document.getElementById('checkBtn');
+            const guessInput = document.getElementById('guess');
+            const resultDiv = document.getElementById('result');
+            const attemptCountSpan = document.getElementById('attemptCount');
+            
+            let attempts = 0;
+            const correctAnswer = 'theater';
+            const acceptableAnswers = ['theater', 'theatre', 'playhouse'];
+            
+            // Add both click and touch events
+            checkBtn.addEventListener('click', checkAnswer);
+            checkBtn.addEventListener('touchend', function(e) {
+                e.preventDefault(); // Prevent double firing with click
+                checkAnswer();
+            }, {passive: false});
+            
+            guessInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+            
+            function checkAnswer() {
+                const userGuess = guessInput.value.trim().toLowerCase();
+                
+                if (userGuess === '') {
+                    return;
+                }
+                
+                attempts++;
+                attemptCountSpan.textContent = attempts;
+                
+                resultDiv.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'bg-yellow-100');
+                
+                if (acceptableAnswers.includes(userGuess)) {
+                    resultDiv.classList.add('bg-green-100');
+                    resultDiv.innerHTML = '<p class="text-green-700 font-medium">Correct! The answer is "theater". Great job!</p>';
+                    checkBtn.disabled = true;
+                    guessInput.disabled = true;
+                } else if (attempts >= 2) {
+                    resultDiv.classList.add('bg-red-100');
+                    resultDiv.innerHTML = `<p class="text-red-700 font-medium">Sorry, you've used all your attempts. The answer was "theater".</p>`;
+                    checkBtn.disabled = true;
+                    guessInput.disabled = true;
+                } else {
+                    resultDiv.classList.add('bg-yellow-100');
+                    resultDiv.innerHTML = `<p class="text-yellow-700 font-medium">Not quite! Try again. You have ${2-attempts} attempt left.</p>`;
+                }
+                
+                resultDiv.classList.remove('hidden');
+                guessInput.value = '';
+            }
+            
+            // Timer functionality
+            let timerInterval;
+            let seconds = 0;
+            const timerDisplay = document.getElementById('timer');
+            const startTimerBtn = document.getElementById('startTimer');
+            const pauseTimerBtn = document.getElementById('pauseTimer');
+            const resetTimerBtn = document.getElementById('resetTimer');
+            const timerPresetBtns = document.querySelectorAll('.timer-preset');
+            
+            // Add both click and touch events for timer buttons
+            startTimerBtn.addEventListener('click', startTimer);
+            startTimerBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                startTimer();
+            }, {passive: false});
+            
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            pauseTimerBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                pauseTimer();
+            }, {passive: false});
+            
+            resetTimerBtn.addEventListener('click', resetTimer);
+            resetTimerBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                resetTimer();
+            }, {passive: false});
+            
+            timerPresetBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const presetTime = parseInt(this.dataset.time);
+                    seconds = presetTime;
+                    updateTimerDisplay();
+                });
+                
+                btn.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    const presetTime = parseInt(this.dataset.time);
+                    seconds = presetTime;
+                    updateTimerDisplay();
+                }, {passive: false});
+            });
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(function() {
+                    if (seconds > 0) {
+                        seconds--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        timerDisplay.classList.add('text-red-600');
+                        setTimeout(() => {
+                            timerDisplay.classList.remove('text-red-600');
+                        }, 1000);
+                    }
+                }, 1000);
+            }
+            
+            function pauseTimer() {
+                clearInterval(timerInterval);
+            }
+            
+            function resetTimer() {
+                clearInterval(timerInterval);
+                seconds = 0;
+                updateTimerDisplay();
+            }
+            
+            function updateTimerDisplay() {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Scoreboard functionality
+            const scoreboardBody = document.getElementById('scoreboardBody');
+            const resetScoresBtn = document.getElementById('resetScores');
+            
+            // Initialize teams
+            const teams = [];
+            for (let i = 1; i <= 10; i++) {
+                teams.push({
+                    id: i,
+                    name: `Team ${i}`,
+                    score: 0
+                });
+            }
+            
+            // Render scoreboard
+            function renderScoreboard() {
+                scoreboardBody.innerHTML = '';
+                teams.forEach(team => {
+                    const row = document.createElement('tr');
+                    row.className = 'team-row';
+                    row.innerHTML = `
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-base font-medium text-gray-900">${team.name}</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="text-xl font-medium text-gray-900">${team.score}</div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <button class="add-point team-btn bg-green-100 text-green-700 py-2 px-3 rounded-md mr-2 hover:bg-green-200 text-lg font-medium" data-team="${team.id}">+1</button>
+                            <button class="subtract-point team-btn bg-red-100 text-red-700 py-2 px-3 rounded-md hover:bg-red-200 text-lg font-medium" data-team="${team.id}">-1</button>
+                        </td>
+                    `;
+                    scoreboardBody.appendChild(row);
+                });
+                
+                // Add event listeners to buttons with both click and touch support
+                document.querySelectorAll('.add-point').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const teamId = parseInt(this.dataset.team);
+                        const team = teams.find(t => t.id === teamId);
+                        team.score++;
+                        renderScoreboard();
+                    });
+                    
+                    btn.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        const teamId = parseInt(this.dataset.team);
+                        const team = teams.find(t => t.id === teamId);
+                        team.score++;
+                        renderScoreboard();
+                    }, {passive: false});
+                });
+                
+                document.querySelectorAll('.subtract-point').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const teamId = parseInt(this.dataset.team);
+                        const team = teams.find(t => t.id === teamId);
+                        if (team.score > 0) {
+                            team.score--;
+                            renderScoreboard();
+                        }
+                    });
+                    
+                    btn.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        const teamId = parseInt(this.dataset.team);
+                        const team = teams.find(t => t.id === teamId);
+                        if (team.score > 0) {
+                            team.score--;
+                            renderScoreboard();
+                        }
+                    }, {passive: false});
+                });
+            }
+            
+            resetScoresBtn.addEventListener('click', function() {
+                teams.forEach(team => {
+                    team.score = 0;
+                });
+                renderScoreboard();
+            });
+            
+            resetScoresBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                teams.forEach(team => {
+                    team.score = 0;
+                });
+                renderScoreboard();
+            }, {passive: false});
+            
+            // Initial render
+            renderScoreboard();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9443b79be1def775',t:'MTc0Nzk5NDU0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+</body>
