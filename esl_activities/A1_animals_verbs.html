@@ -1,0 +1,1308 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Friends English</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #f0f9ff;
+            overflow-x: hidden;
+        }
+        
+        .character {
+            transition: transform 0.3s ease;
+        }
+        
+        .character:hover {
+            transform: scale(1.1);
+        }
+        
+        .btn-primary {
+            background-color: #4ade80;
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 0 #22c55e;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #22c55e;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #22c55e;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #fef3c7;
+            color: #92400e;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 2px solid #f59e0b;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 4px solid #60a5fa;
+        }
+        
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 10px 10px 0 0;
+            background-color: #bfdbfe;
+            color: #1e40af;
+            font-weight: bold;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: #60a5fa;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            border-radius: 0 10px 10px 10px;
+            border: 4px solid #60a5fa;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .wave {
+            animation: wave 2s infinite;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(20deg);
+            }
+            50% {
+                transform: rotate(0deg);
+            }
+            75% {
+                transform: rotate(-20deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        
+        .speech-bubble {
+            position: relative;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
+            border: 3px solid #60a5fa;
+        }
+        
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 20px solid transparent;
+            border-top-color: #60a5fa;
+            border-bottom: 0;
+            margin-left: -20px;
+            margin-bottom: -20px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #4ade80;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .star {
+            display: inline-block;
+            font-size: 30px;
+            color: #d1d5db;
+            cursor: pointer;
+        }
+        
+        .star.active {
+            color: #fbbf24;
+            animation: pulse 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .animal-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .animal-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .animal-card.selected {
+            border-color: #4ade80;
+            background-color: #d1fae5;
+        }
+        
+        .verb-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .verb-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .verb-card.selected {
+            border-color: #60a5fa;
+            background-color: #dbeafe;
+        }
+        
+        .adjective-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .adjective-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .adjective-card.selected {
+            border-color: #f472b6;
+            background-color: #fce7f3;
+        }
+        
+        .draggable {
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .draggable:active {
+            cursor: grabbing;
+        }
+        
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .drop-zone.highlight {
+            border-color: #4ade80;
+            background-color: #d1fae5;
+        }
+        
+        .animal-animation {
+            animation: move 5s infinite alternate;
+        }
+        
+        @keyframes move {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(100px);
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.bottom-4{bottom:1rem}.left-4{left:1rem}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-4{margin-left:1rem}.mr-2{margin-right:0.5rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-16{height:4rem}.h-48{height:12rem}.h-full{height:100%}.w-16{width:4rem}.w-48{width:12rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.max-w-md{max-width:28rem}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-6{gap:1.5rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.border-2{border-width:2px}.border-blue-300{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(165 180 252 / var(--tw-border-opacity, 1))}.border-indigo-400{--tw-border-opacity:1;border-color:rgb(129 140 248 / var(--tw-border-opacity, 1))}.border-pink-300{--tw-border-opacity:1;border-color:rgb(249 168 212 / var(--tw-border-opacity, 1))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(250 204 21 / var(--tw-border-opacity, 1))}.border-indigo-500{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.border-pink-500{--tw-border-opacity:1;border-color:rgb(236 72 153 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-pink-50{--tw-bg-opacity:1;background-color:rgb(253 242 248 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-indigo-200{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.bg-pink-200{--tw-bg-opacity:1;background-color:rgb(251 207 232 / var(--tw-bg-opacity, 1))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-6xl{font-size:3.75rem;line-height:1}.text-7xl{font-size:4.5rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-pink-800{--tw-text-opacity:1;color:rgb(157 23 77 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-pink-100:hover{--tw-bg-opacity:1;background-color:rgb(252 231 243 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:mr-8{margin-right:2rem}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBmaWxsPSIjZmNkMzRkIi8+PGNpcmNsZSBjeD0iNjAiIGN5PSI4MCIgcj0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iNjAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjE0MCIgY3k9IjgwIiByPSIxMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxNDAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik03MCAxMzBjMTAgMTUgNTAgMTUgNjAgMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNjAgNjBDMTgwIDQwIDE4MCA4MCAxNjAgMTAwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTQwIDYwQzIwIDQwIDIwIDgwIDQwIDEwMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" alt="Logo" class="w-16 h-16">
+                <h1 class="text-4xl font-bold text-blue-600 ml-4">Animal Friends English</h1>
+            </div>
+            <div class="flex items-center">
+                <button id="spanish-toggle" class="flex items-center bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full border-2 border-yellow-400">
+                    <span class="mr-2">🇪🇸</span> Español
+                </button>
+            </div>
+        </header>
+        
+        <!-- Navigation -->
+        <nav class="flex justify-center mb-8">
+            <div class="flex flex-wrap space-x-2">
+                <button class="tab active" data-tab="animals">
+                    <span class="text-2xl">🐶</span>
+                    <span class="tooltip">Animales
+                        <span class="tooltiptext">Animals</span>
+                    </span>
+                </button>
+                <button class="tab" data-tab="verbs">
+                    <span class="text-2xl">🏃</span>
+                    <span class="tooltip">Verbos
+                        <span class="tooltiptext">Verbs</span>
+                    </span>
+                </button>
+                <button class="tab" data-tab="adjectives">
+                    <span class="text-2xl">🌈</span>
+                    <span class="tooltip">Adjetivos
+                        <span class="tooltiptext">Adjectives</span>
+                    </span>
+                </button>
+                <button class="tab" data-tab="practice">
+                    <span class="text-2xl">🎮</span>
+                    <span class="tooltip">Practicar
+                        <span class="tooltiptext">Practice</span>
+                    </span>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main>
+            <!-- Animals Tab -->
+            <div id="animals-content" class="tab-content active">
+                <div class="flex flex-col md:flex-row items-center justify-center mb-8">
+                    <div class="character w-48 h-48 relative mb-4 md:mb-0 md:mr-8">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBmaWxsPSIjZmNkMzRkIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjEzMCIgY3k9IjgwIiByPSIxMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxMzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik03MCAxMzBjMTAgMTUgNTAgMTUgNjAgMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" alt="Character" class="w-full h-full">
+                    </div>
+                    <div class="speech-bubble max-w-md">
+                        <h2 class="text-3xl font-bold text-blue-600 mb-4">Animals! ¡Animales!</h2>
+                        <p class="text-xl mb-4">
+                            <span class="tooltip">Let's learn about animals in English!
+                                <span class="tooltiptext">¡Aprendamos sobre animales en inglés!</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="animal-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐶</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Dog</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Perro
+                                <span class="tooltiptext">Dog</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="dog">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="animal-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐱</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Cat</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Gato
+                                <span class="tooltiptext">Cat</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="cat">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="animal-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐭</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Mouse</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Ratón
+                                <span class="tooltiptext">Mouse</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="mouse">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="animal-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐦</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Bird</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Pájaro
+                                <span class="tooltiptext">Bird</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="bird">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="animal-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐢</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Turtle</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Tortuga
+                                <span class="tooltiptext">Turtle</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="turtle">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="animal-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐸</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Frog</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Rana
+                                <span class="tooltiptext">Frog</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="frog">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-8 card">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
+                        <span class="tooltip">Match the animals with their names!
+                            <span class="tooltiptext">¡Empareja los animales con sus nombres!</span>
+                        </span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-xl font-bold text-blue-800 mb-2">Animals</h3>
+                            <div id="animal-images" class="grid grid-cols-3 gap-2">
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item text-center text-5xl bg-green-100" data-match="dog">🐶</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item text-center text-5xl" data-match="cat">🐱</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item text-center text-5xl" data-match="mouse">🐭</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item text-center text-5xl" data-match="bird">🐦</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item text-center text-5xl" data-match="turtle">🐢</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item text-center text-5xl" data-match="frog">🐸</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="text-xl font-bold text-green-800 mb-2">Names</h3>
+                            <div id="animal-names" class="space-y-2">
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone bg-green-100 matched" data-match="dog">Dog</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone" data-match="cat">Cat</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone" data-match="mouse">Mouse</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone" data-match="bird">Bird</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone" data-match="turtle">Turtle</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone" data-match="frog">Frog</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <div class="progress-bar">
+                            <div id="animal-match-progress" class="progress" style="width: 16.6667%;"></div>
+                        </div>
+                        <p class="text-center text-lg font-bold" id="animal-match-score">1/6 matched</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Verbs Tab -->
+            <div id="verbs-content" class="tab-content">
+                <div class="flex flex-col md:flex-row items-center justify-center mb-8">
+                    <div class="character w-48 h-48 relative mb-4 md:mb-0 md:mr-8">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBmaWxsPSIjNjBhNWZhIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjEzMCIgY3k9IjgwIiByPSIxMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxMzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik03MCAxMzBjMTAgMTUgNTAgMTUgNjAgMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" alt="Character" class="w-full h-full">
+                    </div>
+                    <div class="speech-bubble max-w-md">
+                        <h2 class="text-3xl font-bold text-blue-600 mb-4">Verbs! ¡Verbos!</h2>
+                        <p class="text-xl mb-4">
+                            <span class="tooltip">Let's learn action words in English!
+                                <span class="tooltiptext">¡Aprendamos palabras de acción en inglés!</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="verb-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🏃</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Run</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Correr
+                                <span class="tooltiptext">Run</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="run">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="verb-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🚶</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Walk</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Caminar
+                                <span class="tooltiptext">Walk</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="walk">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="verb-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🦘</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Jump</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Saltar
+                                <span class="tooltiptext">Jump</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="jump">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="verb-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">😴</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Sleep</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Dormir
+                                <span class="tooltiptext">Sleep</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="sleep">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="verb-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🍽️</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Eat</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Comer
+                                <span class="tooltiptext">Eat</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="eat">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="verb-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🎮</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Play</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Jugar
+                                <span class="tooltiptext">Play</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="play">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-8 card">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
+                        <span class="tooltip">What are they doing?
+                            <span class="tooltiptext">¿Qué están haciendo?</span>
+                        </span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 p-6 rounded-lg">
+                            <div class="text-center mb-4">
+                                <div class="text-7xl">🏃</div>
+                                <p class="text-xl mt-2">The dog is...</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button class="btn-primary verb-option" data-correct="true">Running</button>
+                                <button class="btn-primary verb-option" data-correct="false">Sleeping</button>
+                                <button class="btn-primary verb-option" data-correct="false">Eating</button>
+                                <button class="btn-primary verb-option" data-correct="false">Playing</button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-6 rounded-lg">
+                            <div class="text-center mb-4">
+                                <div class="text-7xl">😴</div>
+                                <p class="text-xl mt-2">The cat is...</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button class="btn-primary verb-option-2" data-correct="false">Running</button>
+                                <button class="btn-primary verb-option-2" data-correct="true">Sleeping</button>
+                                <button class="btn-primary verb-option-2" data-correct="false">Jumping</button>
+                                <button class="btn-primary verb-option-2" data-correct="false">Walking</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Adjectives Tab -->
+            <div id="adjectives-content" class="tab-content">
+                <div class="flex flex-col md:flex-row items-center justify-center mb-8">
+                    <div class="character w-48 h-48 relative mb-4 md:mb-0 md:mr-8">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBmaWxsPSIjZjQ3MmI2Ii8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjEzMCIgY3k9IjgwIiByPSIxMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxMzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik03MCAxMzBjMTAgMTUgNTAgMTUgNjAgMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" alt="Character" class="w-full h-full">
+                    </div>
+                    <div class="speech-bubble max-w-md">
+                        <h2 class="text-3xl font-bold text-blue-600 mb-4">Adjectives! ¡Adjetivos!</h2>
+                        <p class="text-xl mb-4">
+                            <span class="tooltip">Let's learn describing words in English!
+                                <span class="tooltiptext">¡Aprendamos palabras descriptivas en inglés!</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="adjective-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🔴</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Big</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Grande
+                                <span class="tooltiptext">Big</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="big">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="adjective-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🔵</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Small</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Pequeño
+                                <span class="tooltiptext">Small</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="small">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="adjective-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐢</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Slow</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Lento
+                                <span class="tooltiptext">Slow</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="slow">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="adjective-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">🐆</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Fast</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Rápido
+                                <span class="tooltiptext">Fast</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="fast">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="adjective-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">😊</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Happy</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Feliz
+                                <span class="tooltiptext">Happy</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="happy">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                    
+                    <div class="adjective-card p-4 bg-white rounded-lg shadow-md text-center">
+                        <div class="text-6xl mb-2">😢</div>
+                        <h3 class="text-2xl font-bold text-blue-600">Sad</h3>
+                        <p class="text-gray-600">
+                            <span class="tooltip">Triste
+                                <span class="tooltiptext">Sad</span>
+                            </span>
+                        </p>
+                        <button class="mt-2 btn-primary w-full flex justify-center items-center" data-audio="sad">
+                            <span class="text-xl mr-2">🔊</span> Listen
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-8 card">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
+                        <span class="tooltip">Match the opposites!
+                            <span class="tooltiptext">¡Empareja los opuestos!</span>
+                        </span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-pink-50 p-4 rounded-lg">
+                            <h3 class="text-xl font-bold text-pink-800 mb-2">Adjectives</h3>
+                            <div id="adjective-group-1" class="space-y-2">
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item-adj" data-match="small">Big</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item-adj" data-match="fast">Slow</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drag-item-adj" data-match="sad">Happy</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h3 class="text-xl font-bold text-purple-800 mb-2">Opposites</h3>
+                            <div id="adjective-group-2" class="space-y-2">
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone-adj" data-match="small">Small</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone-adj" data-match="fast">Fast</div>
+                                <div class="bg-white p-3 rounded-lg shadow cursor-pointer drop-zone-adj" data-match="sad">Sad</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <div class="progress-bar">
+                            <div id="adjective-match-progress" class="progress"></div>
+                        </div>
+                        <p class="text-center text-lg font-bold" id="adjective-match-score">0/3 matched</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Tab -->
+            <div id="practice-content" class="tab-content">
+                <div class="flex flex-col md:flex-row items-center justify-center mb-8">
+                    <div class="character w-48 h-48 relative mb-4 md:mb-0 md:mr-8">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBmaWxsPSIjNGFkZTgwIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iMTIiIGZpbGw9IndoaXRlIi8+PGNpcmNsZSBjeD0iNzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxjaXJjbGUgY3g9IjEzMCIgY3k9IjgwIiByPSIxMiIgZmlsbD0id2hpdGUiLz48Y2lyY2xlIGN4PSIxMzAiIGN5PSI4MCIgcj0iNiIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik03MCAxMzBjMTAgMTUgNTAgMTUgNjAgMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==" alt="Character" class="w-full h-full">
+                    </div>
+                    <div class="speech-bubble max-w-md">
+                        <h2 class="text-3xl font-bold text-blue-600 mb-4">Let's Practice! ¡Practiquemos!</h2>
+                        <p class="text-xl mb-4">
+                            <span class="tooltip">Now let's use everything we learned!
+                                <span class="tooltiptext">¡Ahora usemos todo lo que aprendimos!</span>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card mb-8">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
+                        <span class="tooltip">Complete the sentences!
+                            <span class="tooltiptext">¡Completa las oraciones!</span>
+                        </span>
+                    </h2>
+                    
+                    <div class="bg-yellow-50 p-6 rounded-lg mb-6">
+                        <div class="text-center mb-6">
+                            <div class="text-7xl">🐱</div>
+                            <p class="text-xl mt-2">The _____ is sleeping.</p>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <button class="btn-primary sentence-option" data-correct="false" disabled="">dog</button>
+                            <button class="sentence-option bg-green-500" data-correct="true" disabled="">cat</button>
+                            <button class="btn-primary sentence-option" data-correct="false" disabled="">bird</button>
+                            <button class="btn-primary sentence-option" data-correct="false" disabled="">frog</button>
+                        </div>
+                    </div>
+                    
+                    <div id="sentence-2" class="bg-blue-50 p-6 rounded-lg mb-6">
+                        <div class="text-center mb-6">
+                            <div class="text-7xl">🐢</div>
+                            <p class="text-xl mt-2">The turtle is _____.</p>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <button class="btn-primary sentence-option-2" data-correct="false" disabled="">fast</button>
+                            <button class="sentence-option-2 bg-green-500" data-correct="true" disabled="">slow</button>
+                            <button class="btn-primary sentence-option-2" data-correct="false" disabled="">big</button>
+                            <button class="btn-primary sentence-option-2" data-correct="false" disabled="">sad</button>
+                        </div>
+                    </div>
+                    
+                    <div id="sentence-3" class="bg-green-50 p-6 rounded-lg">
+                        <div class="text-center mb-6">
+                            <div class="text-7xl">🐶</div>
+                            <p class="text-xl mt-2">The _____ dog is _____.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button class="sentence-option-3a bg-green-500" data-correct="true" disabled="">big</button>
+                            <button class="btn-primary sentence-option-3a" data-correct="false" disabled="">small</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="btn-primary sentence-option-3b" data-correct="false" disabled="">sleeping</button>
+                            <button class="sentence-option-3b bg-green-500" data-correct="true" disabled="">running</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
+                        <span class="tooltip">Create a story!
+                            <span class="tooltiptext">¡Crea una historia!</span>
+                        </span>
+                    </h2>
+                    
+                    <div class="bg-indigo-50 p-6 rounded-lg">
+                        <p class="text-xl mb-4">
+                            <span class="tooltip">Choose words to make a story!
+                                <span class="tooltiptext">¡Elige palabras para crear una historia!</span>
+                            </span>
+                        </p>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold mb-2">Choose an animal:</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-indigo-300 hover:bg-indigo-100 story-animal" data-value="dog">🐶 Dog</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-indigo-300 hover:bg-indigo-100 story-animal" data-value="cat">🐱 Cat</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-indigo-300 hover:bg-indigo-100 story-animal" data-value="bird">🐦 Bird</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-indigo-300 hover:bg-indigo-100 story-animal bg-indigo-200 border-indigo-500" data-value="frog">🐸 Frog</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold mb-2">Choose an adjective:</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-pink-300 hover:bg-pink-100 story-adjective" data-value="big">Big</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-pink-300 hover:bg-pink-100 story-adjective bg-pink-200 border-pink-500" data-value="small">Small</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-pink-300 hover:bg-pink-100 story-adjective" data-value="happy">Happy</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-pink-300 hover:bg-pink-100 story-adjective" data-value="fast">Fast</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold mb-2">Choose a verb:</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-blue-300 hover:bg-blue-100 story-verb" data-value="runs">Runs</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-blue-300 hover:bg-blue-100 story-verb" data-value="jumps">Jumps</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-blue-300 hover:bg-blue-100 story-verb" data-value="sleeps">Sleeps</button>
+                                <button class="px-4 py-2 bg-white rounded-lg border-2 border-blue-300 hover:bg-blue-100 story-verb bg-blue-200 border-blue-500" data-value="plays">Plays</button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-lg border-2 border-indigo-400">
+                            <h3 class="text-xl font-bold mb-4">Your Story:</h3>
+                            <div id="story-result" class="text-xl">
+                                <p>The <span id="story-adjective-display">small</span> <span id="story-animal-display">frog</span> <span id="story-verb-display">plays</span>.</p>
+                            </div>
+                            <div id="story-image" class="mt-4 text-center text-7xl"><div class="animal-animation">🐸</div></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 card">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">
+                        <span class="tooltip">Animal Actions Game
+                            <span class="tooltiptext">Juego de Acciones de Animales</span>
+                        </span>
+                    </h2>
+                    
+                    <div class="bg-purple-50 p-6 rounded-lg">
+                        <div class="text-center mb-6">
+                            <p class="text-xl">
+                                <span class="tooltip">Match the animal with what it's doing!
+                                    <span class="tooltiptext">¡Empareja el animal con lo que está haciendo!</span>
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="text-center">
+                                    <div class="text-7xl mb-2">🐱</div>
+                                    <h3 class="text-xl font-bold">Cat</h3>
+                                </div>
+                                <div class="mt-4 grid grid-cols-2 gap-2">
+                                    <button class="btn-primary animal-action" data-animal="cat" data-correct="false">Jumps</button>
+                                    <button class="btn-primary animal-action" data-animal="cat" data-correct="true">Sleeps</button>
+                                    <button class="btn-primary animal-action" data-animal="cat" data-correct="false">Runs</button>
+                                    <button class="btn-primary animal-action" data-animal="cat" data-correct="false">Eats</button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="text-center">
+                                    <div class="text-7xl mb-2">🐶</div>
+                                    <h3 class="text-xl font-bold">Dog</h3>
+                                </div>
+                                <div class="mt-4 grid grid-cols-2 gap-2">
+                                    <button class="btn-primary animal-action" data-animal="dog" data-correct="true">Runs</button>
+                                    <button class="btn-primary animal-action" data-animal="dog" data-correct="false">Sleeps</button>
+                                    <button class="btn-primary animal-action" data-animal="dog" data-correct="false">Flies</button>
+                                    <button class="btn-primary animal-action" data-animal="dog" data-correct="false">Swims</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="animal-action-result" class="mt-6 text-center hidden">
+                            <div class="text-7xl mb-2">🎉</div>
+                            <h3 class="text-2xl font-bold text-purple-600">Great job!</h3>
+                            <p class="text-xl">You matched all the animals with their actions!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="mt-12 text-center">
+            <p class="text-gray-600">
+                <span class="tooltip">Made with ❤️ for young English learners
+                    <span class="tooltiptext">Hecho con ❤️ para jóvenes estudiantes de inglés</span>
+                </span>
+            </p>
+        </footer>
+    </div>
+    
+    <!-- Sample Audio Notification -->
+    <div id="audio-notification" class="fixed bottom-4 left-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg hidden">
+        <p class="flex items-center">
+            <span class="text-2xl mr-2">🔊</span>
+            <span>This is a sample app. Audio would play here!</span>
+        </p>
+    </div>
+    
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full">
+            <div class="text-center">
+                <div id="feedback-emoji" class="text-7xl mb-4">🎉</div>
+                <h3 id="feedback-title" class="text-2xl font-bold mb-2">Great job!</h3>
+                <p id="feedback-message" class="text-xl mb-4">You completed all the sentences!</p>
+                <button id="close-feedback" class="btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab Navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                // Show the corresponding tab content
+                document.getElementById(tab.dataset.tab + '-content').classList.add('active');
+            });
+        });
+        
+        // Audio buttons
+        document.querySelectorAll('[data-audio]').forEach(button => {
+            button.addEventListener('click', () => {
+                const audioNotification = document.getElementById('audio-notification');
+                audioNotification.classList.remove('hidden');
+                setTimeout(() => {
+                    audioNotification.classList.add('hidden');
+                }, 2000);
+            });
+        });
+        
+        // Animal matching game
+        let animalMatchedCount = 0;
+        const totalAnimalMatches = 6;
+        
+        document.querySelectorAll('.drag-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const match = this.dataset.match;
+                const dropZones = document.querySelectorAll('.drop-zone');
+                
+                dropZones.forEach(zone => {
+                    if (zone.dataset.match === match && !zone.classList.contains('matched')) {
+                        // Mark as matched
+                        this.classList.add('bg-green-100');
+                        zone.classList.add('bg-green-100', 'matched');
+                        
+                        // Update progress
+                        animalMatchedCount++;
+                        updateAnimalMatchProgress();
+                        
+                        // If all matched
+                        if (animalMatchedCount === totalAnimalMatches) {
+                            setTimeout(() => {
+                                showFeedback('🎉', '¡Excelente!', 'You matched all the animals correctly!');
+                            }, 500);
+                        }
+                    }
+                });
+            });
+        });
+        
+        function updateAnimalMatchProgress() {
+            const progress = document.getElementById('animal-match-progress');
+            const score = document.getElementById('animal-match-score');
+            
+            const percentage = (animalMatchedCount / totalAnimalMatches) * 100;
+            progress.style.width = percentage + '%';
+            score.textContent = `${animalMatchedCount}/${totalAnimalMatches} matched`;
+        }
+        
+        // Adjective matching game
+        let adjectiveMatchedCount = 0;
+        const totalAdjectiveMatches = 3;
+        
+        document.querySelectorAll('.drag-item-adj').forEach(item => {
+            item.addEventListener('click', function() {
+                const match = this.dataset.match;
+                const dropZones = document.querySelectorAll('.drop-zone-adj');
+                
+                dropZones.forEach(zone => {
+                    if (zone.dataset.match === match && !zone.classList.contains('matched')) {
+                        // Mark as matched
+                        this.classList.add('bg-pink-100');
+                        zone.classList.add('bg-pink-100', 'matched');
+                        
+                        // Update progress
+                        adjectiveMatchedCount++;
+                        updateAdjectiveMatchProgress();
+                        
+                        // If all matched
+                        if (adjectiveMatchedCount === totalAdjectiveMatches) {
+                            setTimeout(() => {
+                                showFeedback('🎉', '¡Excelente!', 'You matched all the opposites correctly!');
+                            }, 500);
+                        }
+                    }
+                });
+            });
+        });
+        
+        function updateAdjectiveMatchProgress() {
+            const progress = document.getElementById('adjective-match-progress');
+            const score = document.getElementById('adjective-match-score');
+            
+            const percentage = (adjectiveMatchedCount / totalAdjectiveMatches) * 100;
+            progress.style.width = percentage + '%';
+            score.textContent = `${adjectiveMatchedCount}/${totalAdjectiveMatches} matched`;
+        }
+        
+        // Verb options
+        document.querySelectorAll('.verb-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll('.verb-option').forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                }
+            });
+        });
+        
+        document.querySelectorAll('.verb-option-2').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll('.verb-option-2').forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                }
+                
+                if (isCorrect) {
+                    setTimeout(() => {
+                        showFeedback('👍', 'Good job!', 'You identified the correct verbs!');
+                    }, 1000);
+                }
+            });
+        });
+        
+        // Sentence completion
+        document.querySelectorAll('.sentence-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll('.sentence-option').forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('sentence-2').classList.remove('hidden');
+                    }, 1000);
+                }
+            });
+        });
+        
+        document.querySelectorAll('.sentence-option-2').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll('.sentence-option-2').forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('sentence-3').classList.remove('hidden');
+                    }, 1000);
+                }
+            });
+        });
+        
+        // Third sentence with two parts
+        let sentence3aPicked = false;
+        let sentence3bPicked = false;
+        
+        document.querySelectorAll('.sentence-option-3a').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll('.sentence-option-3a').forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                }
+                
+                sentence3aPicked = true;
+                checkSentence3Complete();
+            });
+        });
+        
+        document.querySelectorAll('.sentence-option-3b').forEach(option => {
+            option.addEventListener('click', function() {
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll('.sentence-option-3b').forEach(opt => {
+                    opt.disabled = true;
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.remove('btn-primary');
+                        opt.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                }
+                
+                sentence3bPicked = true;
+                checkSentence3Complete();
+            });
+        });
+        
+        function checkSentence3Complete() {
+            if (sentence3aPicked && sentence3bPicked) {
+                setTimeout(() => {
+                    showFeedback('🎉', 'Great job!', 'You completed all the sentences!');
+                }, 1000);
+            }
+        }
+        
+        // Story creation
+        let storyAnimal = '';
+        let storyAdjective = '';
+        let storyVerb = '';
+        
+        document.querySelectorAll('.story-animal').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.story-animal').forEach(btn => {
+                    btn.classList.remove('bg-indigo-200', 'border-indigo-500');
+                });
+                this.classList.add('bg-indigo-200', 'border-indigo-500');
+                storyAnimal = this.dataset.value;
+                document.getElementById('story-animal-display').textContent = storyAnimal;
+                updateStoryImage();
+            });
+        });
+        
+        document.querySelectorAll('.story-adjective').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.story-adjective').forEach(btn => {
+                    btn.classList.remove('bg-pink-200', 'border-pink-500');
+                });
+                this.classList.add('bg-pink-200', 'border-pink-500');
+                storyAdjective = this.dataset.value;
+                document.getElementById('story-adjective-display').textContent = storyAdjective;
+                updateStoryImage();
+            });
+        });
+        
+        document.querySelectorAll('.story-verb').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.story-verb').forEach(btn => {
+                    btn.classList.remove('bg-blue-200', 'border-blue-500');
+                });
+                this.classList.add('bg-blue-200', 'border-blue-500');
+                storyVerb = this.dataset.value;
+                document.getElementById('story-verb-display').textContent = storyVerb;
+                updateStoryImage();
+            });
+        });
+        
+        function updateStoryImage() {
+            if (storyAnimal && storyAdjective && storyVerb) {
+                let emoji = '';
+                
+                // Choose emoji based on animal
+                if (storyAnimal === 'dog') emoji = '🐶';
+                else if (storyAnimal === 'cat') emoji = '🐱';
+                else if (storyAnimal === 'bird') emoji = '🐦';
+                else if (storyAnimal === 'frog') emoji = '🐸';
+                
+                document.getElementById('story-image').innerHTML = `<div class="animal-animation">${emoji}</div>`;
+                
+                setTimeout(() => {
+                    showFeedback('📚', 'Great story!', `The ${storyAdjective} ${storyAnimal} ${storyVerb}!`);
+                }, 1000);
+            }
+        }
+        
+        // Animal actions game
+        let catActionSelected = false;
+        let dogActionSelected = false;
+        
+        document.querySelectorAll('.animal-action').forEach(button => {
+            button.addEventListener('click', function() {
+                const animal = this.dataset.animal;
+                const isCorrect = this.dataset.correct === 'true';
+                
+                document.querySelectorAll(`.animal-action[data-animal="${animal}"]`).forEach(btn => {
+                    btn.disabled = true;
+                    if (btn.dataset.correct === 'true') {
+                        btn.classList.remove('btn-primary');
+                        btn.classList.add('bg-green-500');
+                    }
+                });
+                
+                if (!isCorrect) {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('bg-red-500');
+                }
+                
+                if (animal === 'cat') catActionSelected = true;
+                if (animal === 'dog') dogActionSelected = true;
+                
+                if (catActionSelected && dogActionSelected) {
+                    setTimeout(() => {
+                        document.getElementById('animal-action-result').classList.remove('hidden');
+                    }, 1000);
+                }
+            });
+        });
+        
+        // Feedback modal
+        function showFeedback(emoji, title, message) {
+            document.getElementById('feedback-emoji').textContent = emoji;
+            document.getElementById('feedback-title').textContent = title;
+            document.getElementById('feedback-message').textContent = message;
+            document.getElementById('feedback-modal').classList.remove('hidden');
+        }
+        
+        document.getElementById('close-feedback').addEventListener('click', function() {
+            document.getElementById('feedback-modal').classList.add('hidden');
+        });
+        
+        // Spanish toggle
+        document.getElementById('spanish-toggle').addEventListener('click', function() {
+            document.querySelectorAll('.tooltip').forEach(tooltip => {
+                tooltip.classList.toggle('active-tooltip');
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94669c5d970f77f5',t:'MTc0ODM2MDQyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
