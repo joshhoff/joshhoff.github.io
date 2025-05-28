@@ -1,0 +1,1048 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Jeopardy: American Culture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+            touch-action: manipulation;
+        }
+        
+        .game-board {
+            background-color: #0c4a6e;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .category {
+            background-color: #0369a1;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .question-card {
+            background-color: #0284c7;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        
+        .question-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .question-card.completed {
+            visibility: hidden;
+        }
+        
+        .modal {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-content {
+            background-color: #0ea5e9;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .btn {
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 3s ease-in-out forwards;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .bounce-animation {
+            animation: bounce 0.5s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        
+        .scoreboard {
+            background-color: #0ea5e9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-score {
+            background-color: #0284c7;
+            border-radius: 6px;
+        }
+        
+        .spin-animation {
+            animation: spin 1s ease-in-out;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .zoom-animation {
+            animation: zoom 0.5s ease-in-out;
+        }
+        
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        
+        .rainbow-text {
+            background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 2s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        .surprise-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .surprise-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .team-setup-container {
+            background-color: #0ea5e9;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.min-h-screen{min-height:100vh}.w-11\/12{width:91.666667%}.w-16{width:4rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-6xl{max-width:72rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-l{border-top-left-radius:0.25rem;border-bottom-left-radius:0.25rem}.rounded-r{border-top-right-radius:0.25rem;border-bottom-right-radius:0.25rem}.bg-blue-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 64 175 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-green-700{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.bg-purple-700{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:bg-blue-800:hover{--tw-bg-opacity:1;background-color:rgb(30 64 175 / var(--tw-bg-opacity, 1))}.hover\:bg-green-600:hover{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-red-700:hover{--tw-bg-opacity:1;background-color:rgb(185 28 28 / var(--tw-bg-opacity, 1))}.hover\:bg-yellow-600:hover{--tw-bg-opacity:1;background-color:rgb(202 138 4 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:p-8{padding:2rem}.md\:text-5xl{font-size:3rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+<body class="min-h-screen p-4 md:p-8" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto max-w-6xl">
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-800 mb-2">ESL Jeopardy!</h1>
+            <p class="text-xl text-blue-600">Learn About American Culture</p>
+        </header>
+        
+        <!-- Team Setup Screen -->
+        <div id="team-setup" class="team-setup-container p-6 mb-6">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">Team Setup</h2>
+            <div class="mb-4">
+                <label for="team-count" class="block text-white text-lg mb-2">How many teams are playing?</label>
+                <div class="flex items-center justify-center">
+                    <button id="decrease-teams" class="btn bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-l">
+                        -
+                    </button>
+                    <input type="number" id="team-count" class="w-16 text-center py-2 text-xl font-bold" value="2" min="1" max="6">
+                    <button id="increase-teams" class="btn bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-r">
+                        +
+                    </button>
+                </div>
+            </div>
+            
+            <div id="team-names-container" class="mb-6"><div class="team-name-input mb-2">
+                        <label class="block text-white">Team 1 Name:</label>
+                        <input type="text" class="team-name-field w-full p-2 rounded" value="Team 1">
+                    </div><div class="team-name-input mb-2">
+                        <label class="block text-white">Team 2 Name:</label>
+                        <input type="text" class="team-name-field w-full p-2 rounded" value="Team 2">
+                    </div></div>
+            
+            <div class="text-center">
+                <button id="start-game-btn" class="btn bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-xl">
+                    Start Game!
+                </button>
+            </div>
+        </div>
+        
+        <!-- Game Container (initially hidden) -->
+        <div id="game-container" class="hidden">
+            <!-- Game Board -->
+            <div class="game-board p-4 mb-6">
+                <div class="grid grid-cols-5 gap-3">
+                    <!-- Categories -->
+                    <div class="category p-3 text-center text-white font-bold">
+                        <h2 class="text-lg md:text-xl">USA Holidays</h2>
+                    </div>
+                    <div class="category p-3 text-center text-white font-bold">
+                        <h2 class="text-lg md:text-xl">Expressions</h2>
+                    </div>
+                    <div class="category p-3 text-center text-white font-bold">
+                        <h2 class="text-lg md:text-xl">American Food</h2>
+                    </div>
+                    <div class="category p-3 text-center text-white font-bold">
+                        <h2 class="text-lg md:text-xl">U.S. Cities</h2>
+                    </div>
+                    <div class="category p-3 text-center text-white font-bold">
+                        <h2 class="text-lg md:text-xl">Sports</h2>
+                    </div>
+                    
+                    <!-- Questions: 100 points -->
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="holidays" data-points="100">
+                        <p>100</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="expressions" data-points="100">
+                        <p>100</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="food" data-points="100">
+                        <p>100</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="cities" data-points="100">
+                        <p>100</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="sports" data-points="100">
+                        <p>100</p>
+                    </div>
+                    
+                    <!-- Questions: 200 points -->
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="holidays" data-points="200">
+                        <p>200</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl surprise-card" data-category="expressions" data-points="200">
+                        <p>200</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="food" data-points="200">
+                        <p>200</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="cities" data-points="200">
+                        <p>200</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="sports" data-points="200">
+                        <p>200</p>
+                    </div>
+                    
+                    <!-- Questions: 300 points -->
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="holidays" data-points="300">
+                        <p>300</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="expressions" data-points="300">
+                        <p>300</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl surprise-card" data-category="food" data-points="300">
+                        <p>300</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="cities" data-points="300">
+                        <p>300</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="sports" data-points="300">
+                        <p>300</p>
+                    </div>
+                    
+                    <!-- Questions: 400 points -->
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="holidays" data-points="400">
+                        <p>400</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="expressions" data-points="400">
+                        <p>400</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="food" data-points="400">
+                        <p>400</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl surprise-card" data-category="cities" data-points="400">
+                        <p>400</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="sports" data-points="400">
+                        <p>400</p>
+                    </div>
+                    
+                    <!-- Questions: 500 points -->
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="holidays" data-points="500">
+                        <p>500</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="expressions" data-points="500">
+                        <p>500</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="food" data-points="500">
+                        <p>500</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl" data-category="cities" data-points="500">
+                        <p>500</p>
+                    </div>
+                    <div class="question-card p-4 text-center text-white font-bold text-2xl surprise-card" data-category="sports" data-points="500">
+                        <p>500</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scoreboard -->
+            <div id="scoreboard" class="scoreboard p-4">
+                <h3 class="text-white text-xl font-bold mb-3 text-center">Scoreboard</h3>
+                <div id="teams-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Team scores will be dynamically added here -->
+                </div>
+                
+                <div class="mt-4 flex flex-wrap justify-center gap-2">
+                    <div id="team-buttons" class="flex flex-wrap justify-center gap-2">
+                        <!-- Team buttons will be dynamically added here -->
+                    </div>
+                    <button id="wrong-btn" class="btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Incorrect
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Reset Button -->
+            <div class="text-center mt-6">
+                <button id="reset-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Reset Game
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Question Modal -->
+    <div id="question-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-content w-11/12 max-w-2xl p-6 text-center">
+            <h2 id="modal-category" class="text-2xl font-bold text-white mb-2">Category</h2>
+            <p id="modal-points" class="text-xl text-white mb-6">Points: 100</p>
+            <div id="modal-question" class="text-3xl font-bold text-white mb-8 p-4 bg-blue-800 rounded-lg">
+                Question goes here
+            </div>
+            <div id="modal-answer" class="text-2xl font-bold text-white mb-8 p-4 bg-green-700 rounded-lg hidden">
+                Answer goes here
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="show-answer-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Show Answer
+                </button>
+                <button id="close-modal-btn" class="btn bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Surprise Modal -->
+    <div id="surprise-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-content w-11/12 max-w-2xl p-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4 rainbow-text">SURPRISE CHALLENGE!</h2>
+            <div id="surprise-content" class="text-2xl font-bold text-white mb-8 p-4 bg-purple-700 rounded-lg">
+                Surprise content goes here
+            </div>
+            <div id="surprise-timer-display" class="text-4xl font-bold text-white mb-6">10</div>
+            <div class="flex justify-center space-x-4">
+                <button id="complete-surprise-btn" class="btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Complete Challenge
+                </button>
+                <button id="close-surprise-btn" class="btn bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg">
+                    Skip Challenge
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Final Jeopardy Modal -->
+    <div id="final-jeopardy-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50">
+        <div class="modal-content w-11/12 max-w-2xl p-6 text-center">
+            <h2 class="text-3xl font-bold text-white mb-4">FINAL JEOPARDY!</h2>
+            <p class="text-xl text-white mb-6">Category: American Culture</p>
+            <div id="final-question" class="text-2xl font-bold text-white mb-8 p-4 bg-blue-800 rounded-lg">
+                This iconic American symbol was a gift from France in 1886.
+            </div>
+            <div id="final-answer" class="text-2xl font-bold text-white mb-8 p-4 bg-green-700 rounded-lg hidden">
+                What is the Statue of Liberty?
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="show-final-answer-btn" class="btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg">
+                    Show Answer
+                </button>
+                <button id="close-final-btn" class="btn bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game data
+            const gameData = {
+                holidays: {
+                    100: {
+                        question: "This holiday is celebrated on July 4th with fireworks.",
+                        answer: "What is Independence Day?"
+                    },
+                    200: {
+                        question: "On this holiday, people dress up in costumes and say 'Trick or Treat!'",
+                        answer: "What is Halloween?"
+                    },
+                    300: {
+                        question: "Americans eat turkey and give thanks on this November holiday.",
+                        answer: "What is Thanksgiving?"
+                    },
+                    400: {
+                        question: "This holiday honors Martin Luther King Jr., who fought for civil rights.",
+                        answer: "What is Martin Luther King Jr. Day?"
+                    },
+                    500: {
+                        question: "This holiday celebrates love on February 14th with cards and chocolates.",
+                        answer: "What is Valentine's Day?"
+                    }
+                },
+                expressions: {
+                    100: {
+                        question: "When something is very easy, Americans say it's 'a piece of ___'.",
+                        answer: "What is cake?"
+                    },
+                    200: {
+                        question: "SURPRISE! 🎉 Everyone must say 'Break a leg' and do a little dance to earn 400 points!",
+                        answer: "Break a leg! (It means 'good luck')",
+                        isSurprise: true,
+                        surpriseType: "dance"
+                    },
+                    300: {
+                        question: "If something costs a lot of money, it costs 'an arm and a ___'.",
+                        answer: "What is leg?"
+                    },
+                    400: {
+                        question: "When someone is very happy, they are 'on cloud ___'.",
+                        answer: "What is nine?"
+                    },
+                    500: {
+                        question: "When you completely forget what you were going to say, your mind goes ___.",
+                        answer: "What is blank?"
+                    }
+                },
+                food: {
+                    100: {
+                        question: "This round food with a hole in the middle is popular for breakfast in New York.",
+                        answer: "What is a bagel?"
+                    },
+                    200: {
+                        question: "This sandwich has peanut butter and fruit jam or jelly.",
+                        answer: "What is a PB&J (Peanut Butter and Jelly)?"
+                    },
+                    300: {
+                        question: "SURPRISE! 🍔 Everyone must name an American food in 5 seconds to earn 600 points!",
+                        answer: "Examples: hamburger, hot dog, apple pie, mac and cheese, etc.",
+                        isSurprise: true,
+                        surpriseType: "quickAnswer"
+                    },
+                    400: {
+                        question: "This food is grilled outdoors and served on a bun, often with ketchup and mustard.",
+                        answer: "What is a hamburger?"
+                    },
+                    500: {
+                        question: "This Thanksgiving side dish is made from sweet potatoes topped with marshmallows.",
+                        answer: "What is sweet potato casserole?"
+                    }
+                },
+                cities: {
+                    100: {
+                        question: "This city is known as the 'Big Apple'.",
+                        answer: "What is New York City?"
+                    },
+                    200: {
+                        question: "The Golden Gate Bridge is in this California city.",
+                        answer: "What is San Francisco?"
+                    },
+                    300: {
+                        question: "This city is the capital of the United States.",
+                        answer: "What is Washington D.C.?"
+                    },
+                    400: {
+                        question: "SURPRISE! 🌆 Everyone must name 3 U.S. states in 10 seconds to earn 800 points!",
+                        answer: "Examples: California, Texas, New York, Florida, etc.",
+                        isSurprise: true,
+                        surpriseType: "multipleAnswers"
+                    },
+                    500: {
+                        question: "This Texas city is known for NASA's Space Center.",
+                        answer: "What is Houston?"
+                    }
+                },
+                sports: {
+                    100: {
+                        question: "This sport is called 'America's favorite pastime' and uses a bat and ball.",
+                        answer: "What is baseball?"
+                    },
+                    200: {
+                        question: "The Super Bowl is the championship game for this sport.",
+                        answer: "What is American football?"
+                    },
+                    300: {
+                        question: "Michael Jordan is a legend in this sport played with a hoop and an orange ball.",
+                        answer: "What is basketball?"
+                    },
+                    400: {
+                        question: "This winter sport involves sliding on ice with brooms and stones.",
+                        answer: "What is curling?"
+                    },
+                    500: {
+                        question: "SURPRISE CHALLENGE! 🎉 Everyone do the chicken dance for 10 seconds to earn 1000 points!",
+                        answer: "Do the chicken dance! 🐔",
+                        isSurprise: true,
+                        surpriseType: "chickenDance"
+                    }
+                }
+            };
+            
+            // Surprise challenges
+            const surpriseChallenges = {
+                dance: {
+                    instruction: "Everyone do a silly dance for 10 seconds!",
+                    reward: 400,
+                    time: 10
+                },
+                quickAnswer: {
+                    instruction: "Quickly name an American food in 5 seconds!",
+                    reward: 600,
+                    time: 5
+                },
+                multipleAnswers: {
+                    instruction: "Name 3 U.S. states in 10 seconds!",
+                    reward: 800,
+                    time: 10
+                },
+                chickenDance: {
+                    instruction: "Do the chicken dance! Flap your arms like wings, wiggle down, clap 4 times, then spin!",
+                    reward: 1000,
+                    time: 10
+                }
+            };
+            
+            // Game variables
+            let currentQuestion = null;
+            let teams = [];
+            let completedQuestions = 0;
+            let totalQuestions = 25;
+            let timerInterval = null;
+            
+            // DOM elements
+            const teamSetup = document.getElementById('team-setup');
+            const gameContainer = document.getElementById('game-container');
+            const teamCount = document.getElementById('team-count');
+            const decreaseTeams = document.getElementById('decrease-teams');
+            const increaseTeams = document.getElementById('increase-teams');
+            const teamNamesContainer = document.getElementById('team-names-container');
+            const startGameBtn = document.getElementById('start-game-btn');
+            const questionCards = document.querySelectorAll('.question-card');
+            const questionModal = document.getElementById('question-modal');
+            const modalCategory = document.getElementById('modal-category');
+            const modalPoints = document.getElementById('modal-points');
+            const modalQuestion = document.getElementById('modal-question');
+            const modalAnswer = document.getElementById('modal-answer');
+            const showAnswerBtn = document.getElementById('show-answer-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const wrongBtn = document.getElementById('wrong-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const teamsContainer = document.getElementById('teams-container');
+            const teamButtons = document.getElementById('team-buttons');
+            const surpriseModal = document.getElementById('surprise-modal');
+            const surpriseContent = document.getElementById('surprise-content');
+            const surpriseTimerDisplay = document.getElementById('surprise-timer-display');
+            const completeSurpriseBtn = document.getElementById('complete-surprise-btn');
+            const closeSurpriseBtn = document.getElementById('close-surprise-btn');
+            const finalJeopardyModal = document.getElementById('final-jeopardy-modal');
+            const finalQuestion = document.getElementById('final-question');
+            const finalAnswer = document.getElementById('final-answer');
+            const showFinalAnswerBtn = document.getElementById('show-final-answer-btn');
+            const closeFinalBtn = document.getElementById('close-final-btn');
+            
+            // Team setup event listeners
+            decreaseTeams.addEventListener('click', () => {
+                if (parseInt(teamCount.value) > 1) {
+                    teamCount.value = parseInt(teamCount.value) - 1;
+                    updateTeamInputs();
+                }
+            });
+            
+            increaseTeams.addEventListener('click', () => {
+                if (parseInt(teamCount.value) < 6) {
+                    teamCount.value = parseInt(teamCount.value) + 1;
+                    updateTeamInputs();
+                }
+            });
+            
+            teamCount.addEventListener('change', () => {
+                if (parseInt(teamCount.value) < 1) teamCount.value = 1;
+                if (parseInt(teamCount.value) > 6) teamCount.value = 6;
+                updateTeamInputs();
+            });
+            
+            startGameBtn.addEventListener('click', startGame);
+            
+            // Game event listeners
+            questionCards.forEach(card => {
+                card.addEventListener('click', handleCardClick);
+            });
+            
+            showAnswerBtn.addEventListener('click', showAnswer);
+            closeModalBtn.addEventListener('click', closeModal);
+            wrongBtn.addEventListener('click', handleWrongAnswer);
+            resetBtn.addEventListener('click', resetGame);
+            completeSurpriseBtn.addEventListener('click', completeSurpriseChallenge);
+            closeSurpriseBtn.addEventListener('click', closeSurpriseModal);
+            showFinalAnswerBtn.addEventListener('click', showFinalAnswer);
+            closeFinalBtn.addEventListener('click', closeFinalJeopardy);
+            
+            // Functions
+            function updateTeamInputs() {
+                const count = parseInt(teamCount.value);
+                teamNamesContainer.innerHTML = '';
+                
+                for (let i = 1; i <= count; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'team-name-input mb-2';
+                    div.innerHTML = `
+                        <label class="block text-white">Team ${i} Name:</label>
+                        <input type="text" class="team-name-field w-full p-2 rounded" value="Team ${i}">
+                    `;
+                    teamNamesContainer.appendChild(div);
+                }
+            }
+            
+            function startGame() {
+                // Create teams
+                teams = [];
+                const teamInputs = document.querySelectorAll('.team-name-field');
+                teamInputs.forEach((input, index) => {
+                    teams.push({
+                        name: input.value || `Team ${index + 1}`,
+                        score: 0
+                    });
+                });
+                
+                // Hide setup, show game
+                teamSetup.classList.add('hidden');
+                gameContainer.classList.remove('hidden');
+                
+                // Update scoreboard
+                updateScoreboard();
+                
+                // Add special styling to surprise cards
+                const surpriseCards = document.querySelectorAll('.surprise-card');
+                surpriseCards.forEach(card => {
+                    card.style.background = 'linear-gradient(135deg, #0284c7, #4f46e5)';
+                    const sparkleEmoji = document.createElement('span');
+                    sparkleEmoji.textContent = '';
+                    sparkleEmoji.style.fontSize = '0.8em';
+                    card.querySelector('p').appendChild(sparkleEmoji);
+                });
+                
+                // Add emoji to categories
+                addEmojisToCategories();
+                
+                // Create confetti for game start
+                createConfetti();
+            }
+            
+            function updateScoreboard() {
+                // Update team scores display
+                teamsContainer.innerHTML = '';
+                teams.forEach(team => {
+                    const div = document.createElement('div');
+                    div.className = 'team-score p-3 text-center';
+                    div.innerHTML = `
+                        <h3 class="text-white text-lg font-bold">${team.name}: <span class="team-score-value">${team.score}</span> points</h3>
+                    `;
+                    teamsContainer.appendChild(div);
+                });
+                
+                // Update team buttons
+                teamButtons.innerHTML = '';
+                teams.forEach((team, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'btn bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded';
+                    button.textContent = `${team.name} Correct`;
+                    button.addEventListener('click', () => awardPoints(index));
+                    teamButtons.appendChild(button);
+                });
+            }
+            
+            function handleCardClick(event) {
+                const card = event.currentTarget;
+                if (card.classList.contains('completed')) return;
+                
+                const category = card.dataset.category;
+                const points = card.dataset.points;
+                
+                currentQuestion = {
+                    category,
+                    points: parseInt(points),
+                    element: card
+                };
+                
+                const questionData = gameData[category][points];
+                
+                if (questionData.isSurprise) {
+                    // Show surprise modal
+                    const surpriseType = questionData.surpriseType;
+                    const challenge = surpriseChallenges[surpriseType];
+                    
+                    surpriseContent.textContent = challenge.instruction;
+                    surpriseTimerDisplay.textContent = challenge.time;
+                    
+                    surpriseModal.classList.remove('hidden');
+                    
+                    // Create confetti for surprise
+                    createConfetti();
+                    
+                    // Start timer
+                    let timeLeft = challenge.time;
+                    clearInterval(timerInterval); // Clear any existing timer
+                    
+                    timerInterval = setInterval(() => {
+                        timeLeft--;
+                        surpriseTimerDisplay.textContent = timeLeft;
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(timerInterval);
+                            surpriseTimerDisplay.textContent = "Time's up!";
+                        }
+                    }, 1000);
+                } else {
+                    // Show regular question modal
+                    modalCategory.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                    modalPoints.textContent = `Points: ${points}`;
+                    modalQuestion.textContent = questionData.question;
+                    modalAnswer.textContent = questionData.answer;
+                    modalAnswer.classList.add('hidden');
+                    
+                    questionModal.classList.remove('hidden');
+                }
+            }
+            
+            function showAnswer() {
+                modalAnswer.classList.remove('hidden');
+                modalAnswer.classList.add('zoom-animation');
+                setTimeout(() => {
+                    modalAnswer.classList.remove('zoom-animation');
+                }, 500);
+            }
+            
+            function closeModal() {
+                questionModal.classList.add('hidden');
+                if (currentQuestion) {
+                    currentQuestion.element.classList.add('completed');
+                    completedQuestions++;
+                    
+                    // Check if all questions are completed
+                    if (completedQuestions === totalQuestions) {
+                        setTimeout(showFinalJeopardy, 1000);
+                    }
+                    
+                    currentQuestion = null;
+                }
+            }
+            
+            function awardPoints(teamIndex) {
+                if (!currentQuestion) return;
+                
+                const points = currentQuestion.points;
+                
+                // Check if it's a surprise question
+                const questionData = gameData[currentQuestion.category][currentQuestion.points];
+                if (questionData.isSurprise) {
+                    const surpriseType = questionData.surpriseType;
+                    const challenge = surpriseChallenges[surpriseType];
+                    teams[teamIndex].score += challenge.reward;
+                } else {
+                    teams[teamIndex].score += points;
+                }
+                
+                updateScoreboard();
+                closeModal();
+                
+                // Animate the team score that changed
+                const teamScoreElements = document.querySelectorAll('.team-score');
+                if (teamScoreElements[teamIndex]) {
+                    teamScoreElements[teamIndex].classList.add('bounce-animation');
+                    setTimeout(() => {
+                        teamScoreElements[teamIndex].classList.remove('bounce-animation');
+                    }, 500);
+                }
+                
+                // Create confetti for correct answer
+                createConfetti();
+            }
+            
+            function handleWrongAnswer() {
+                if (!currentQuestion) return;
+                
+                // Shake the question display
+                modalQuestion.classList.add('shake-animation');
+                setTimeout(() => {
+                    modalQuestion.classList.remove('shake-animation');
+                }, 500);
+                
+                // Show the correct answer
+                modalAnswer.classList.remove('hidden');
+            }
+            
+            function completeSurpriseChallenge() {
+                // Clear timer if it's running
+                clearInterval(timerInterval);
+                
+                // Mark question as completed
+                if (currentQuestion) {
+                    currentQuestion.element.classList.add('completed');
+                    completedQuestions++;
+                    
+                    // Check if all questions are completed
+                    if (completedQuestions === totalQuestions) {
+                        setTimeout(showFinalJeopardy, 1000);
+                    }
+                }
+                
+                // Close surprise modal
+                surpriseModal.classList.add('hidden');
+                
+                // Create confetti
+                createConfetti();
+                
+                // Show which team gets points
+                if (currentQuestion) {
+                    const questionData = gameData[currentQuestion.category][currentQuestion.points];
+                    const surpriseType = questionData.surpriseType;
+                    const challenge = surpriseChallenges[surpriseType];
+                    
+                    // Create a temporary floating message
+                    const message = document.createElement('div');
+                    message.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-600 text-white p-4 rounded-lg text-2xl font-bold z-50 floating';
+                    message.textContent = `Challenge completed! Who gets ${challenge.reward} points?`;
+                    document.body.appendChild(message);
+                    
+                    setTimeout(() => {
+                        message.remove();
+                    }, 2000);
+                }
+                
+                currentQuestion = null;
+            }
+            
+            function closeSurpriseModal() {
+                // Clear timer if it's running
+                clearInterval(timerInterval);
+                
+                // Mark question as completed
+                if (currentQuestion) {
+                    currentQuestion.element.classList.add('completed');
+                    completedQuestions++;
+                    
+                    // Check if all questions are completed
+                    if (completedQuestions === totalQuestions) {
+                        setTimeout(showFinalJeopardy, 1000);
+                    }
+                }
+                
+                // Close surprise modal
+                surpriseModal.classList.add('hidden');
+                currentQuestion = null;
+            }
+            
+            function showFinalJeopardy() {
+                finalJeopardyModal.classList.remove('hidden');
+                finalAnswer.classList.add('hidden');
+                
+                // Create confetti for final jeopardy
+                createConfetti();
+                
+                // Add dramatic music effect (visual only)
+                const finalTitle = finalJeopardyModal.querySelector('h2');
+                finalTitle.classList.add('rainbow-text');
+            }
+            
+            function showFinalAnswer() {
+                finalAnswer.classList.remove('hidden');
+                finalAnswer.classList.add('zoom-animation');
+                setTimeout(() => {
+                    finalAnswer.classList.remove('zoom-animation');
+                }, 500);
+                
+                // Create confetti
+                createConfetti();
+            }
+            
+            function closeFinalJeopardy() {
+                finalJeopardyModal.classList.add('hidden');
+                
+                // Show winner
+                let winnerIndex = 0;
+                let highestScore = teams[0].score;
+                
+                for (let i = 1; i < teams.length; i++) {
+                    if (teams[i].score > highestScore) {
+                        highestScore = teams[i].score;
+                        winnerIndex = i;
+                    }
+                }
+                
+                // Create winner announcement
+                const winnerMessage = document.createElement('div');
+                winnerMessage.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-500 text-white p-6 rounded-lg text-3xl font-bold z-50';
+                winnerMessage.innerHTML = `
+                    <h2 class="mb-4">🏆 WINNER! 🏆</h2>
+                    <p>${teams[winnerIndex].name} wins with ${teams[winnerIndex].score} points!</p>
+                `;
+                document.body.appendChild(winnerMessage);
+                
+                // Create lots of confetti
+                createConfetti();
+                setTimeout(createConfetti, 500);
+                setTimeout(createConfetti, 1000);
+                
+                // Remove winner message after a few seconds
+                setTimeout(() => {
+                    winnerMessage.classList.add('zoom-animation');
+                    setTimeout(() => {
+                        winnerMessage.remove();
+                    }, 500);
+                }, 5000);
+            }
+            
+            function resetGame() {
+                // Reset scores
+                teams.forEach(team => {
+                    team.score = 0;
+                });
+                
+                // Reset question cards
+                questionCards.forEach(card => {
+                    card.classList.remove('completed');
+                });
+                
+                // Reset completed questions counter
+                completedQuestions = 0;
+                
+                // Update scoreboard
+                updateScoreboard();
+                
+                // Close modals if open
+                questionModal.classList.add('hidden');
+                surpriseModal.classList.add('hidden');
+                finalJeopardyModal.classList.add('hidden');
+                
+                // Clear any running timers
+                clearInterval(timerInterval);
+                
+                // Reset current question
+                currentQuestion = null;
+                
+                // Create confetti for fun
+                createConfetti();
+            }
+            
+            function createConfetti() {
+                const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8800', '#8800ff'];
+                
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+            
+            function addEmojisToCategories() {
+                // Add emojis to category headers
+                const categoryHeaders = document.querySelectorAll('.category h2');
+                
+                categoryHeaders[0].innerHTML += ' 🎉'; // Holidays
+                categoryHeaders[1].innerHTML += ' 💬'; // Expressions
+                categoryHeaders[2].innerHTML += ' 🍔'; // Food
+                categoryHeaders[3].innerHTML += ' 🌆'; // Cities
+                categoryHeaders[4].innerHTML += ' 🏈'; // Sports
+                
+                // Add random emojis to some question cards for fun
+                const foodCards = document.querySelectorAll('[data-category="food"]');
+                const foodEmojis = ['', '', '', '', ''];
+                foodCards.forEach((card, index) => {
+                    if (!card.classList.contains('surprise-card')) {
+                        const emoji = document.createElement('span');
+                        emoji.textContent = ' ' + foodEmojis[index % foodEmojis.length];
+                        emoji.style.fontSize = '0.8em';
+                        card.querySelector('p').appendChild(emoji);
+                    }
+                });
+                
+                const holidayCards = document.querySelectorAll('[data-category="holidays"]');
+                const holidayEmojis = ['', '', '', '', ''];
+                holidayCards.forEach((card, index) => {
+                    if (!card.classList.contains('surprise-card')) {
+                        const emoji = document.createElement('span');
+                        emoji.textContent = ' ' + holidayEmojis[index % holidayEmojis.length];
+                        emoji.style.fontSize = '0.8em';
+                        card.querySelector('p').appendChild(emoji);
+                    }
+                });
+            }
+            
+            // Initialize team inputs
+            updateTeamInputs();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'946bc03a40e10328',t:'MTc0ODQxNDMyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
