@@ -716,18 +716,28 @@
             function handleCardClick(event) {
                 const card = event.currentTarget;
                 if (card.classList.contains('completed')) return;
-                
+
                 const category = card.dataset.category;
                 const points = card.dataset.points;
-                
+
                 currentQuestion = {
                     category,
                     points: parseInt(points),
                     element: card
                 };
-                
+
                 const questionData = gameData[category][points];
-                
+
+                // Show image if present
+                const modalImage = document.getElementById('modal-image');
+                if (questionData.Image) {
+                    modalImage.src = questionData.Image;
+                    modalImage.classList.remove('hidden');
+                } else {
+                    modalImage.src = '';
+                    modalImage.classList.add('hidden');
+                }
+
                 if (questionData.isSurprise) {
                     // Show surprise modal
                     const surpriseType = questionData.surpriseType;
@@ -761,7 +771,7 @@
                     modalQuestion.textContent = questionData.question;
                     modalAnswer.textContent = questionData.answer;
                     modalAnswer.classList.add('hidden');
-                    
+
                     questionModal.classList.remove('hidden');
                 }
             }
