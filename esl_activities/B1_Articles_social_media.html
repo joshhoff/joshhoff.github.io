@@ -1,0 +1,902 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Galaxy: Social Media Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f9;
+        }
+        .social-card {
+            transition: transform 0.3s ease;
+        }
+        .social-card:hover {
+            transform: translateY(-5px);
+        }
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover:not(.selected) {
+            transform: scale(1.05);
+        }
+        .option-btn.selected {
+            transform: scale(1.05);
+        }
+        .option-btn.correct {
+            background-color: #4ade80;
+            color: white;
+        }
+        .option-btn.incorrect {
+            background-color: #f87171;
+            color: white;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 3s ease-in infinite;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        @media (min-width: 1024px) {
+            .smartboard-mode {
+                font-size: 1.2rem;
+            }
+            .smartboard-mode .text-sm {
+                font-size: 1rem;
+            }
+            .smartboard-mode .text-lg {
+                font-size: 1.5rem;
+            }
+            .smartboard-mode .text-xl {
+                font-size: 1.75rem;
+            }
+            .smartboard-mode .text-2xl {
+                font-size: 2rem;
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.ml-3{margin-left:0.75rem}.mr-1{margin-right:0.25rem}.mt-4{margin-top:1rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-5{height:1.25rem}.h-64{height:16rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-5{width:1.25rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.max-w-md{max-width:28rem}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.gap-2{gap:0.5rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-200{--tw-bg-opacity:1;background-color:rgb(254 240 138 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-purple-500{--tw-gradient-from:#a855f7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(168 85 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-indigo-600{--tw-gradient-to:#4f46e5 var(--tw-gradient-to-position)}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-amber-600:hover{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}</style></head>
+<body class="min-h-screen" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div id="app" class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-2">Grammar Galaxy</h1>
+            <p class="text-lg text-gray-600">Practice articles and prepositions with fun social media posts!</p>
+            
+            <div class="flex flex-wrap justify-center gap-3 mt-4">
+                <button id="articleBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">Articles</button>
+                <button id="prepositionBtn" class="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full hover:bg-indigo-200 transition">Prepositions</button>
+                <button id="smartboardMode" class="px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-amber-600 transition ml-2">
+                    <span id="smartboardModeText">Smartboard Mode: Off</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex flex-col items-center">
+            <div class="stats-bar w-full max-w-md flex justify-between items-center mb-6 bg-white rounded-full px-6 py-3 shadow-md">
+                <div>
+                    <span class="font-semibold text-indigo-700">Score:</span>
+                    <span id="score" class="text-indigo-700">0</span>
+                </div>
+                <div>
+                    <span class="font-semibold text-indigo-700">Streak:</span>
+                    <span id="streak" class="text-indigo-700">0</span>
+                </div>
+                <div>
+                    <span class="font-semibold text-indigo-700">Question:</span>
+                    <span id="questionNumber" class="text-indigo-700">1</span>/<span id="totalQuestions" class="text-indigo-700">10</span>
+                </div>
+            </div>
+
+            <div id="socialPost" class="social-card w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden mb-6">
+                <div class="p-4 border-b border-gray-200">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white text-xl font-bold">G</div>
+                        <div class="ml-3">
+                            <p class="font-semibold">GrammarGalaxy</p>
+                            <p class="text-gray-500 text-sm">@grammargalaxy</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="postContent" class="p-4"><p class="text-lg mb-4">I saw <span class="blank-0 px-1 py-0.5 bg-yellow-200 rounded">____</span> amazing sunset at <span class="blank-1 px-1 py-0.5 bg-yellow-200 rounded">____</span> beach yesterday.</p></div>
+                
+                <div id="postImage" class="w-full h-64 bg-gray-200 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB"></rect>
+                <rect width="800" height="200" y="400" fill="#F5DEB3"></rect>
+                <circle cx="400" cy="400" r="80" fill="#FF7F50"></circle>
+                <path d="M0,400 Q200,350 400,400 T800,400" fill="#1E90FF"></path>
+                <path d="M0,420 Q200,380 400,420 T800,420" fill="#4169E1"></path>
+                <path d="M0,440 Q200,410 400,440 T800,440" fill="#0000CD"></path>
+            </svg></div>
+                
+                <div class="p-4 border-t border-gray-200">
+                    <div class="flex justify-between text-gray-500">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            <span>42</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <span>12</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                            </svg>
+                            <span>7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="options" class="w-full max-w-md grid grid-cols-2 gap-3 mb-6"><div class="mb-4 w-full">
+                    <p class="text-sm font-medium text-gray-700 mb-2">Blank 1:</p>
+                    <div class="grid grid-cols-2 gap-2 blank-options" data-blank="0"><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="a" data-blank="0">a</button><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="an" data-blank="0">an</button><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="the" data-blank="0">the</button><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="" data-blank="0">(none)</button></div>
+                </div><div class="mb-4 w-full">
+                    <p class="text-sm font-medium text-gray-700 mb-2">Blank 2:</p>
+                    <div class="grid grid-cols-2 gap-2 blank-options" data-blank="1"><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="a" data-blank="1">a</button><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="an" data-blank="1">an</button><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="the" data-blank="1">the</button><button class="option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50" data-value="" data-blank="1">(none)</button></div>
+                </div></div>
+
+            <div id="feedback" class="w-full max-w-md mb-6 p-4 rounded-lg text-center hidden"></div>
+
+            <button id="nextBtn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition hidden">
+                Next Question
+            </button>
+        </div>
+    </div>
+
+    <div id="confettiContainer" class="fixed inset-0 pointer-events-none z-50"></div>
+
+    <script>
+        // Game state
+        const state = {
+            mode: 'articles', // 'articles' or 'prepositions'
+            score: 0,
+            streak: 0,
+            currentQuestion: 0,
+            totalQuestions: 10,
+            smartboardMode: false,
+            questions: {
+                articles: [
+                    {
+                        text: "I saw ____ amazing sunset at ____ beach yesterday.",
+                        blanks: ["an", "the"],
+                        options: ["a", "an", "the", ""],
+                        image: "sunset-beach"
+                    },
+                    {
+                        text: "My friend bought ____ new car. It's ____ blue Toyota.",
+                        blanks: ["a", "a"],
+                        options: ["a", "an", "the", ""],
+                        image: "blue-car"
+                    },
+                    {
+                        text: "____ elephant at ____ zoo was eating peanuts.",
+                        blanks: ["The", "the"],
+                        options: ["A", "An", "The", ""],
+                        image: "elephant-zoo"
+                    },
+                    {
+                        text: "I need to buy ____ umbrella because it's ____ rainy day.",
+                        blanks: ["an", "a"],
+                        options: ["a", "an", "the", ""],
+                        image: "rainy-day"
+                    },
+                    {
+                        text: "____ moon was bright in ____ night sky.",
+                        blanks: ["The", "the"],
+                        options: ["A", "An", "The", ""],
+                        image: "night-moon"
+                    },
+                    {
+                        text: "She's ____ university student studying ____ biology.",
+                        blanks: ["a", ""],
+                        options: ["a", "an", "the", ""],
+                        image: "student-studying"
+                    },
+                    {
+                        text: "We had ____ amazing time at ____ party last night.",
+                        blanks: ["an", "the"],
+                        options: ["a", "an", "the", ""],
+                        image: "party-fun"
+                    },
+                    {
+                        text: "____ dog chased ____ cat up ____ tree.",
+                        blanks: ["The", "a", "a"],
+                        options: ["A", "An", "The", ""],
+                        image: "dog-cat-tree"
+                    },
+                    {
+                        text: "I ate ____ apple for ____ breakfast this morning.",
+                        blanks: ["an", ""],
+                        options: ["a", "an", "the", ""],
+                        image: "apple-breakfast"
+                    },
+                    {
+                        text: "____ Eiffel Tower is in ____ Paris, which is ____ capital of France.",
+                        blanks: ["The", "", "the"],
+                        options: ["A", "An", "The", ""],
+                        image: "eiffel-tower"
+                    }
+                ],
+                prepositions: [
+                    {
+                        text: "The cat is hiding ____ the couch.",
+                        blanks: ["under"],
+                        options: ["in", "on", "under", "between"],
+                        image: "cat-couch"
+                    },
+                    {
+                        text: "We're meeting ____ 7 PM ____ Friday.",
+                        blanks: ["at", "on"],
+                        options: ["at", "in", "on", "during"],
+                        image: "meeting-calendar"
+                    },
+                    {
+                        text: "The book is ____ the table, right ____ the lamp.",
+                        blanks: ["on", "next to"],
+                        options: ["on", "in", "under", "next to"],
+                        image: "book-table"
+                    },
+                    {
+                        text: "I'll see you ____ the morning, ____ breakfast.",
+                        blanks: ["in", "at"],
+                        options: ["in", "on", "at", "during"],
+                        image: "breakfast-morning"
+                    },
+                    {
+                        text: "The bird flew ____ the trees and landed ____ a branch.",
+                        blanks: ["through", "on"],
+                        options: ["through", "over", "under", "on"],
+                        image: "bird-tree"
+                    },
+                    {
+                        text: "We're going on vacation ____ July, ____ the summer.",
+                        blanks: ["in", "during"],
+                        options: ["in", "on", "at", "during"],
+                        image: "summer-vacation"
+                    },
+                    {
+                        text: "The keys are ____ the drawer, ____ your wallet.",
+                        blanks: ["in", "beside"],
+                        options: ["in", "on", "under", "beside"],
+                        image: "keys-drawer"
+                    },
+                    {
+                        text: "The movie starts ____ 10 minutes, ____ 8:30.",
+                        blanks: ["in", "at"],
+                        options: ["in", "on", "at", "during"],
+                        image: "movie-time"
+                    },
+                    {
+                        text: "The dog jumped ____ the fence and ran ____ the park.",
+                        blanks: ["over", "through"],
+                        options: ["over", "under", "through", "around"],
+                        image: "dog-fence"
+                    },
+                    {
+                        text: "I was born ____ 1995, ____ the 20th century.",
+                        blanks: ["in", "in"],
+                        options: ["in", "on", "at", "during"],
+                        image: "birthday-calendar"
+                    }
+                ]
+            }
+        };
+
+        // SVG images for the posts
+        const svgImages = {
+            "sunset-beach": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB" />
+                <rect width="800" height="200" y="400" fill="#F5DEB3" />
+                <circle cx="400" cy="400" r="80" fill="#FF7F50" />
+                <path d="M0,400 Q200,350 400,400 T800,400" fill="#1E90FF" />
+                <path d="M0,420 Q200,380 400,420 T800,420" fill="#4169E1" />
+                <path d="M0,440 Q200,410 400,440 T800,440" fill="#0000CD" />
+            </svg>`,
+            "blue-car": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#E0E0E0" />
+                <rect width="800" height="200" y="400" fill="#A9A9A9" />
+                <rect x="150" y="320" width="500" height="100" rx="20" fill="#1E90FF" />
+                <rect x="200" y="270" width="350" height="100" rx="40" fill="#1E90FF" />
+                <circle cx="250" cy="420" r="40" fill="#000" />
+                <circle cx="250" cy="420" r="20" fill="#FFF" />
+                <circle cx="550" cy="420" r="40" fill="#000" />
+                <circle cx="550" cy="420" r="20" fill="#FFF" />
+                <rect x="220" y="300" width="80" height="60" fill="#ADD8E6" />
+                <rect x="350" y="300" width="80" height="60" fill="#ADD8E6" />
+                <rect x="480" y="300" width="80" height="60" fill="#ADD8E6" />
+            </svg>`,
+            "elephant-zoo": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F0F0F0" />
+                <rect width="800" height="200" y="400" fill="#8B4513" />
+                <rect x="600" y="200" width="150" height="200" fill="#A9A9A9" />
+                <rect x="650" y="300" width="50" height="100" fill="#696969" />
+                <ellipse cx="300" cy="400" rx="150" ry="100" fill="#A9A9A9" />
+                <ellipse cx="300" cy="300" rx="80" ry="70" fill="#A9A9A9" />
+                <path d="M380,300 Q450,200 500,300" stroke="#A9A9A9" stroke-width="20" fill="none" />
+                <path d="M380,300 Q450,400 500,300" stroke="#A9A9A9" stroke-width="20" fill="none" />
+                <circle cx="260" cy="280" r="10" fill="#000" />
+                <circle cx="340" cy="280" r="10" fill="#000" />
+                <ellipse cx="300" cy="450" rx="20" ry="10" fill="#FFA500" />
+            </svg>`,
+            "rainy-day": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#708090" />
+                <circle cx="150" cy="150" r="80" fill="#C0C0C0" />
+                <circle cx="200" cy="120" r="60" fill="#C0C0C0" />
+                <circle cx="250" cy="150" r="70" fill="#C0C0C0" />
+                <circle cx="550" cy="180" r="70" fill="#C0C0C0" />
+                <circle cx="600" cy="150" r="60" fill="#C0C0C0" />
+                <circle cx="650" cy="180" r="80" fill="#C0C0C0" />
+                <!-- Rain drops -->
+                <line x1="200" y1="250" x2="180" y2="350" stroke="#4682B4" stroke-width="5" />
+                <line x1="300" y1="250" x2="280" y2="350" stroke="#4682B4" stroke-width="5" />
+                <line x1="400" y1="250" x2="380" y2="350" stroke="#4682B4" stroke-width="5" />
+                <line x1="500" y1="250" x2="480" y2="350" stroke="#4682B4" stroke-width="5" />
+                <line x1="600" y1="250" x2="580" y2="350" stroke="#4682B4" stroke-width="5" />
+                <line x1="250" y1="300" x2="230" y2="400" stroke="#4682B4" stroke-width="5" />
+                <line x1="350" y1="300" x2="330" y2="400" stroke="#4682B4" stroke-width="5" />
+                <line x1="450" y1="300" x2="430" y2="400" stroke="#4682B4" stroke-width="5" />
+                <line x1="550" y1="300" x2="530" y2="400" stroke="#4682B4" stroke-width="5" />
+                <!-- Umbrella -->
+                <path d="M400,500 Q300,400 200,500" fill="#FF0000" />
+                <path d="M400,500 Q500,400 600,500" fill="#FF0000" />
+                <line x1="400" y1="500" x2="400" y2="600" stroke="#8B4513" stroke-width="10" />
+            </svg>`,
+            "night-moon": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#191970" />
+                <circle cx="600" cy="150" r="80" fill="#FFFACD" />
+                <circle cx="570" cy="130" r="20" fill="#191970" />
+                <circle cx="150" cy="100" r="3" fill="#FFF" />
+                <circle cx="250" cy="150" r="2" fill="#FFF" />
+                <circle cx="350" cy="200" r="3" fill="#FFF" />
+                <circle cx="450" cy="120" r="2" fill="#FFF" />
+                <circle cx="550" cy="250" r="3" fill="#FFF" />
+                <circle cx="650" cy="300" r="2" fill="#FFF" />
+                <circle cx="750" cy="180" r="3" fill="#FFF" />
+                <circle cx="200" cy="250" r="2" fill="#FFF" />
+                <circle cx="300" cy="300" r="3" fill="#FFF" />
+                <circle cx="400" cy="350" r="2" fill="#FFF" />
+                <circle cx="500" cy="400" r="3" fill="#FFF" />
+                <circle cx="600" cy="450" r="2" fill="#FFF" />
+                <circle cx="700" cy="500" r="3" fill="#FFF" />
+                <path d="M0,450 Q100,430 200,450 T400,450 T600,450 T800,450" fill="#2F4F4F" />
+            </svg>`,
+            "student-studying": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5F5" />
+                <rect x="150" y="200" width="500" height="300" fill="#8B4513" />
+                <rect x="200" y="150" width="400" height="50" fill="#D2B48C" />
+                <rect x="250" y="100" width="300" height="50" fill="#D2B48C" />
+                <rect x="200" y="250" width="150" height="200" fill="#FFF" />
+                <rect x="400" y="250" width="200" height="150" fill="#FFF" />
+                <circle cx="300" cy="350" r="50" fill="#FFD700" />
+                <rect x="280" cy="400" width="40" height="100" fill="#4682B4" />
+                <circle cx="300" cy="330" r="20" fill="#FFF" />
+                <circle cx="290" cy="325" r="5" fill="#000" />
+                <circle cx="310" cy="325" r="5" fill="#000" />
+                <path d="M290,345 Q300,355 310,345" stroke="#000" stroke-width="2" fill="none" />
+                <rect x="450" y="300" width="100" height="50" fill="#32CD32" />
+                <rect x="450" y="300" width="100" height="10" fill="#006400" />
+                <rect x="450" y="320" width="100" height="2" fill="#000" />
+                <rect x="450" y="330" width="100" height="2" fill="#000" />
+                <rect x="450" y="340" width="100" height="2" fill="#000" />
+            </svg>`,
+            "party-fun": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#6A5ACD" />
+                <circle cx="100" cy="100" r="30" fill="#FF0000" />
+                <circle cx="200" cy="150" r="40" fill="#00FF00" />
+                <circle cx="300" cy="100" r="35" fill="#0000FF" />
+                <circle cx="400" cy="150" r="45" fill="#FFFF00" />
+                <circle cx="500" cy="100" r="30" fill="#FF00FF" />
+                <circle cx="600" cy="150" r="40" fill="#00FFFF" />
+                <circle cx="700" cy="100" r="35" fill="#FFA500" />
+                <rect x="150" y="300" width="500" height="200" fill="#8B4513" />
+                <rect x="200" y="350" width="100" height="150" fill="#A0522D" />
+                <circle cx="250" cy="425" r="10" fill="#FFD700" />
+                <rect x="500" y="350" width="100" height="150" fill="#A0522D" />
+                <circle cx="550" cy="425" r="10" fill="#FFD700" />
+                <circle cx="400" cy="250" r="80" fill="#FFD700" />
+                <circle cx="370" cy="230" r="10" fill="#000" />
+                <circle cx="430" cy="230" r="10" fill="#000" />
+                <path d="M370,270 Q400,300 430,270" stroke="#000" stroke-width="5" fill="none" />
+            </svg>`,
+            "dog-cat-tree": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB" />
+                <rect width="800" height="200" y="400" fill="#7CFC00" />
+                <rect x="400" y="100" width="100" height="300" fill="#8B4513" />
+                <circle cx="450" cy="100" r="100" fill="#228B22" />
+                <circle cx="400" cy="150" r="50" fill="#228B22" />
+                <circle cx="500" cy="150" r="50" fill="#228B22" />
+                <circle cx="450" cy="50" r="50" fill="#228B22" />
+                <ellipse cx="200" cy="450" rx="70" ry="40" fill="#CD853F" />
+                <circle cx="150" cy="430" r="30" fill="#CD853F" />
+                <circle cx="140" cy="420" r="5" fill="#000" />
+                <circle cx="160" cy="420" r="5" fill="#000" />
+                <path d="M140,440 Q150,450 160,440" stroke="#000" stroke-width="2" fill="none" />
+                <ellipse cx="450" cy="200" rx="30" ry="20" fill="#808080" />
+                <circle cx="430" cy="190" r="5" fill="#000" />
+                <circle cx="470" cy="190" r="5" fill="#000" />
+                <path d="M430,210 Q450,220 470,210" stroke="#000" stroke-width="2" fill="none" />
+                <path d="M480,200 L500,180" stroke="#808080" stroke-width="5" fill="none" />
+            </svg>`,
+            "apple-breakfast": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5DC" />
+                <rect x="150" y="250" width="500" height="200" rx="10" fill="#8B4513" />
+                <rect x="200" y="300" width="150" height="100" rx="10" fill="#FFF" />
+                <circle cx="275" cy="350" r="40" fill="#FF0000" />
+                <path d="M275,310 Q275,290 290,290" stroke="#8B4513" stroke-width="5" fill="none" />
+                <rect x="400" y="300" width="200" height="100" rx="10" fill="#FFF8DC" />
+                <rect x="425" y="325" width="150" height="50" rx="5" fill="#FFD700" />
+                <circle cx="650" cy="150" r="80" fill="#FFD700" />
+                <path d="M650,70 L650,50" stroke="#8B4513" stroke-width="5" fill="none" />
+                <path d="M600,100 Q650,150 700,100" stroke="#8B4513" stroke-width="5" fill="none" />
+            </svg>`,
+            "eiffel-tower": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB" />
+                <rect width="800" height="100" y="500" fill="#7CFC00" />
+                <path d="M400,100 L350,500 L450,500 Z" fill="#A9A9A9" />
+                <path d="M400,100 L300,300 L500,300 Z" fill="#A9A9A9" />
+                <path d="M400,100 L350,200 L450,200 Z" fill="#A9A9A9" />
+                <line x1="300" y1="300" x2="500" y2="300" stroke="#696969" stroke-width="5" />
+                <line x1="350" y1="200" x2="450" y2="200" stroke="#696969" stroke-width="5" />
+                <line x1="350" y1="400" x2="450" y2="400" stroke="#696969" stroke-width="5" />
+                <circle cx="150" cy="150" r="50" fill="#FFF" />
+                <circle cx="170" cy="150" r="40" fill="#87CEEB" />
+                <circle cx="650" cy="100" r="40" fill="#FFF" />
+                <circle cx="670" cy="100" r="30" fill="#87CEEB" />
+                <text x="400" y="550" font-family="Arial" font-size="30" text-anchor="middle" fill="#000">PARIS</text>
+            </svg>`,
+            "cat-couch": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5F5" />
+                <rect x="150" y="300" width="500" height="150" rx="20" fill="#8B4513" />
+                <rect x="150" y="450" width="500" height="50" fill="#A0522D" />
+                <rect x="200" y="450" width="50" height="50" fill="#8B4513" />
+                <rect x="550" y="450" width="50" height="50" fill="#8B4513" />
+                <rect x="150" y="250" width="500" height="50" rx="10" fill="#A0522D" />
+                <ellipse cx="300" cy="500" rx="40" ry="20" fill="#808080" />
+                <circle cx="280" cy="490" r="10" fill="#000" />
+                <circle cx="320" cy="490" r="10" fill="#000" />
+                <path d="M280,510 Q300,520 320,510" stroke="#000" stroke-width="2" fill="none" />
+                <path d="M260,480 L270,470" stroke="#808080" stroke-width="5" fill="none" />
+                <path d="M340,480 L330,470" stroke="#808080" stroke-width="5" fill="none" />
+            </svg>`,
+            "meeting-calendar": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5F5" />
+                <rect x="200" y="100" width="400" height="400" fill="#FFF" stroke="#000" stroke-width="5" />
+                <line x1="200" y1="150" x2="600" y2="150" stroke="#000" stroke-width="5" />
+                <line x1="300" y1="100" x2="300" y2="500" stroke="#000" stroke-width="2" />
+                <line x1="400" y1="100" x2="400" y2="500" stroke="#000" stroke-width="2" />
+                <line x1="500" y1="100" x2="500" y2="500" stroke="#000" stroke-width="2" />
+                <line x1="200" y1="200" x2="600" y2="200" stroke="#000" stroke-width="2" />
+                <line x1="200" y1="300" x2="600" y2="300" stroke="#000" stroke-width="2" />
+                <line x1="200" y1="400" x2="600" y2="400" stroke="#000" stroke-width="2" />
+                <text x="250" y="130" font-family="Arial" font-size="20" text-anchor="middle" fill="#000">M</text>
+                <text x="350" y="130" font-family="Arial" font-size="20" text-anchor="middle" fill="#000">T</text>
+                <text x="450" y="130" font-family="Arial" font-size="20" text-anchor="middle" fill="#000">W</text>
+                <text x="550" y="130" font-family="Arial" font-size="20" text-anchor="middle" fill="#000">F</text>
+                <circle cx="450" cy="350" r="40" fill="#FF0000" />
+                <text x="450" y="360" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#FFF">7</text>
+                <text x="450" y="550" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#000">FRIDAY 7PM</text>
+            </svg>`,
+            "book-table": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5F5" />
+                <rect x="100" y="300" width="600" height="20" fill="#8B4513" />
+                <rect x="150" y="320" width="20" height="200" fill="#8B4513" />
+                <rect x="630" y="320" width="20" height="200" fill="#8B4513" />
+                <rect x="200" y="250" width="100" height="50" fill="#0000FF" />
+                <rect x="200" y="200" width="100" height="50" fill="#FF0000" />
+                <rect x="200" y="150" width="100" height="50" fill="#00FF00" />
+                <rect x="500" y="200" width="50" height="100" fill="#FFD700" />
+                <circle cx="525" cy="200" r="25" fill="#FFA500" />
+            </svg>`,
+            "breakfast-morning": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5DC" />
+                <circle cx="700" cy="100" r="80" fill="#FFD700" />
+                <rect x="200" y="300" width="400" height="200" rx="10" fill="#8B4513" />
+                <ellipse cx="400" cy="300" rx="200" ry="50" fill="#8B4513" />
+                <ellipse cx="400" cy="300" rx="180" ry="40" fill="#FFF" />
+                <rect x="300" y="350" width="200" height="100" rx="10" fill="#FFF" />
+                <circle cx="400" cy="400" r="40" fill="#FFFF00" />
+                <circle cx="400" cy="400" r="10" fill="#FFA500" />
+                <rect x="250" y="380" width="100" height="20" fill="#8B4513" />
+                <rect x="450" y="380" width="100" height="20" fill="#8B4513" />
+                <text x="400" y="550" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#000">BREAKFAST TIME</text>
+            </svg>`,
+            "bird-tree": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB" />
+                <rect width="800" height="100" y="500" fill="#7CFC00" />
+                <rect x="350" y="200" width="100" height="300" fill="#8B4513" />
+                <circle cx="400" cy="200" r="150" fill="#228B22" />
+                <circle cx="300" cy="150" r="80" fill="#228B22" />
+                <circle cx="500" cy="150" r="80" fill="#228B22" />
+                <circle cx="400" cy="100" r="80" fill="#228B22" />
+                <path d="M400,250 L500,200" stroke="#8B4513" stroke-width="10" fill="none" />
+                <path d="M400,300 L300,250" stroke="#8B4513" stroke-width="10" fill="none" />
+                <path d="M400,350 L500,300" stroke="#8B4513" stroke-width="10" fill="none" />
+                <ellipse cx="600" cy="200" rx="30" ry="15" fill="#A52A2A" />
+                <path d="M570,200 L550,200" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <path d="M630,200 L650,200" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <path d="M600,185 L600,170" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <path d="M600,215 L600,230" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <circle cx="200" cy="150" r="20" fill="#A52A2A" />
+                <path d="M180,150 L160,150" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <path d="M220,150 L240,150" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <path d="M200,130 L200,110" stroke="#A52A2A" stroke-width="5" fill="none" />
+                <path d="M200,170 L200,190" stroke="#A52A2A" stroke-width="5" fill="none" />
+            </svg>`,
+            "summer-vacation": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB" />
+                <rect width="800" height="200" y="400" fill="#F5DEB3" />
+                <circle cx="700" cy="100" r="80" fill="#FFD700" />
+                <path d="M400,400 Q300,350 200,400" fill="#008000" />
+                <path d="M400,400 Q500,350 600,400" fill="#008000" />
+                <path d="M400,350 Q300,300 200,350" fill="#008000" />
+                <path d="M400,350 Q500,300 600,350" fill="#008000" />
+                <path d="M400,300 Q300,250 200,300" fill="#008000" />
+                <path d="M400,300 Q500,250 600,300" fill="#008000" />
+                <rect x="390" y="400" width="20" height="100" fill="#8B4513" />
+                <path d="M0,400 Q200,350 400,400 T800,400" fill="#1E90FF" />
+                <path d="M0,420 Q200,380 400,420 T800,420" fill="#4169E1" />
+                <path d="M0,440 Q200,410 400,440 T800,440" fill="#0000CD" />
+                <text x="400" y="550" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#000">JULY VACATION</text>
+            </svg>`,
+            "keys-drawer": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5F5" />
+                <rect x="200" y="200" width="400" height="200" fill="#8B4513" />
+                <rect x="220" y="220" width="360" height="160" fill="#A0522D" />
+                <rect x="250" y="250" width="100" height="50" fill="#C0C0C0" />
+                <circle cx="270" cy="270" r="10" fill="#FFD700" />
+                <path d="M270,270 L290,270" stroke="#FFD700" stroke-width="5" fill="none" />
+                <path d="M290,270 L290,280" stroke="#FFD700" stroke-width="5" fill="none" />
+                <path d="M290,280 L280,280" stroke="#FFD700" stroke-width="5" fill="none" />
+                <rect x="400" y="250" width="150" height="100" fill="#000" />
+                <rect x="410" y="260" width="130" height="80" fill="#8B4513" />
+            </svg>`,
+            "movie-time": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#000" />
+                <rect x="100" y="100" width="600" height="400" fill="#FFF" />
+                <rect x="150" y="150" width="500" height="300" fill="#000" />
+                <circle cx="400" cy="300" r="100" fill="#FFF" />
+                <circle cx="400" cy="300" r="90" fill="#000" />
+                <path d="M400,300 L400,220" stroke="#FFF" stroke-width="5" fill="none" />
+                <path d="M400,300 L450,300" stroke="#FFF" stroke-width="5" fill="none" />
+                <text x="400" y="500" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#FFF">MOVIE STARTS AT 8:30</text>
+                <text x="400" y="550" font-family="Arial" font-size="20" text-anchor="middle" fill="#FFF">10 MINUTES REMAINING</text>
+            </svg>`,
+            "dog-fence": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#87CEEB" />
+                <rect width="800" height="300" y="300" fill="#7CFC00" />
+                <rect x="100" y="250" width="600" height="20" fill="#8B4513" />
+                <rect x="150" y="200" width="20" height="100" fill="#8B4513" />
+                <rect x="250" y="200" width="20" height="100" fill="#8B4513" />
+                <rect x="350" y="200" width="20" height="100" fill="#8B4513" />
+                <rect x="450" y="200" width="20" height="100" fill="#8B4513" />
+                <rect x="550" y="200" width="20" height="100" fill="#8B4513" />
+                <rect x="650" y="200" width="20" height="100" fill="#8B4513" />
+                <ellipse cx="200" cy="400" rx="70" ry="40" fill="#CD853F" />
+                <circle cx="150" cy="380" r="30" fill="#CD853F" />
+                <circle cx="140" cy="370" r="5" fill="#000" />
+                <circle cx="160" cy="370" r="5" fill="#000" />
+                <path d="M140,390 Q150,400 160,390" stroke="#000" stroke-width="2" fill="none" />
+                <path d="M270,400 L250,380" stroke="#CD853F" stroke-width="10" fill="none" />
+                <path d="M270,400 L290,380" stroke="#CD853F" stroke-width="10" fill="none" />
+                <path d="M270,400 L270,420" stroke="#CD853F" stroke-width="10" fill="none" />
+                <path d="M270,420 L250,440" stroke="#CD853F" stroke-width="10" fill="none" />
+                <path d="M270,420 L290,440" stroke="#CD853F" stroke-width="10" fill="none" />
+                <rect x="400" y="100" width="300" height="100" fill="#228B22" />
+                <text x="550" y="150" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#FFF">PARK</text>
+            </svg>`,
+            "birthday-calendar": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                <rect width="800" height="600" fill="#F5F5F5" />
+                <rect x="200" y="100" width="400" height="400" fill="#FFF" stroke="#000" stroke-width="5" />
+                <line x1="200" y1="150" x2="600" y2="150" stroke="#000" stroke-width="5" />
+                <text x="400" y="130" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#000">1995</text>
+                <text x="400" y="350" font-family="Arial" font-size="100" font-weight="bold" text-anchor="middle" fill="#FF0000">1995</text>
+                <text x="400" y="550" font-family="Arial" font-size="30" font-weight="bold" text-anchor="middle" fill="#000">20th CENTURY</text>
+            </svg>`
+        };
+
+        // DOM elements
+        const elements = {
+            app: document.getElementById('app'),
+            articleBtn: document.getElementById('articleBtn'),
+            prepositionBtn: document.getElementById('prepositionBtn'),
+            smartboardMode: document.getElementById('smartboardMode'),
+            smartboardModeText: document.getElementById('smartboardModeText'),
+            score: document.getElementById('score'),
+            streak: document.getElementById('streak'),
+            questionNumber: document.getElementById('questionNumber'),
+            totalQuestions: document.getElementById('totalQuestions'),
+            postContent: document.getElementById('postContent'),
+            postImage: document.getElementById('postImage'),
+            options: document.getElementById('options'),
+            feedback: document.getElementById('feedback'),
+            nextBtn: document.getElementById('nextBtn'),
+            confettiContainer: document.getElementById('confettiContainer')
+        };
+
+        // Initialize the game
+        function initGame() {
+            // Set up event listeners
+            elements.articleBtn.addEventListener('click', () => switchMode('articles'));
+            elements.prepositionBtn.addEventListener('click', () => switchMode('prepositions'));
+            elements.smartboardMode.addEventListener('click', toggleSmartboardMode);
+            elements.nextBtn.addEventListener('click', nextQuestion);
+
+            // Set initial values
+            elements.totalQuestions.textContent = state.totalQuestions;
+            
+            // Start the game
+            loadQuestion();
+        }
+
+        // Switch between articles and prepositions mode
+        function switchMode(mode) {
+            state.mode = mode;
+            state.currentQuestion = 0;
+            state.score = 0;
+            state.streak = 0;
+            
+            // Update UI
+            elements.score.textContent = state.score;
+            elements.streak.textContent = state.streak;
+            elements.questionNumber.textContent = 1;
+            
+            if (mode === 'articles') {
+                elements.articleBtn.classList.remove('bg-indigo-100', 'text-indigo-700');
+                elements.articleBtn.classList.add('bg-indigo-600', 'text-white');
+                elements.prepositionBtn.classList.remove('bg-indigo-600', 'text-white');
+                elements.prepositionBtn.classList.add('bg-indigo-100', 'text-indigo-700');
+            } else {
+                elements.prepositionBtn.classList.remove('bg-indigo-100', 'text-indigo-700');
+                elements.prepositionBtn.classList.add('bg-indigo-600', 'text-white');
+                elements.articleBtn.classList.remove('bg-indigo-600', 'text-white');
+                elements.articleBtn.classList.add('bg-indigo-100', 'text-indigo-700');
+            }
+            
+            loadQuestion();
+        }
+
+        // Toggle smartboard mode
+        function toggleSmartboardMode() {
+            state.smartboardMode = !state.smartboardMode;
+            elements.smartboardModeText.textContent = `Smartboard Mode: ${state.smartboardMode ? 'On' : 'Off'}`;
+            
+            if (state.smartboardMode) {
+                document.body.classList.add('smartboard-mode');
+            } else {
+                document.body.classList.remove('smartboard-mode');
+            }
+        }
+
+        // Load a question
+        function loadQuestion() {
+            // Hide feedback and next button
+            elements.feedback.classList.add('hidden');
+            elements.nextBtn.classList.add('hidden');
+            
+            // Get the current question
+            const questions = state.questions[state.mode];
+            const question = questions[state.currentQuestion];
+            
+            // Update question number
+            elements.questionNumber.textContent = state.currentQuestion + 1;
+            
+            // Create the post content with blanks
+            let text = question.text;
+            const blanks = question.blanks;
+            let blankIndex = 0;
+            
+            text = text.replace(/__+/g, () => {
+                return `<span class="blank-${blankIndex++} px-1 py-0.5 bg-yellow-200 rounded">____</span>`;
+            });
+            
+            elements.postContent.innerHTML = `<p class="text-lg mb-4">${text}</p>`;
+            
+            // Set the post image
+            elements.postImage.innerHTML = svgImages[question.image] || '';
+            
+            // Create the options
+            elements.options.innerHTML = '';
+            
+            // For each blank, create a set of options
+            for (let i = 0; i < blanks.length; i++) {
+                const optionContainer = document.createElement('div');
+                optionContainer.className = 'mb-4 w-full';
+                optionContainer.innerHTML = `
+                    <p class="text-sm font-medium text-gray-700 mb-2">Blank ${i + 1}:</p>
+                    <div class="grid grid-cols-2 gap-2 blank-options" data-blank="${i}"></div>
+                `;
+                
+                const optionsGrid = optionContainer.querySelector('.blank-options');
+                
+                // Add options for this blank
+                question.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option-btn px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50';
+                    button.textContent = option || '(none)';
+                    button.dataset.value = option;
+                    button.dataset.blank = i;
+                    button.addEventListener('click', () => selectOption(button, i, option, blanks[i]));
+                    optionsGrid.appendChild(button);
+                });
+                
+                elements.options.appendChild(optionContainer);
+            }
+        }
+
+        // Handle option selection
+        function selectOption(button, blankIndex, selectedOption, correctOption) {
+            // Get all options for this blank
+            const blankOptions = document.querySelectorAll(`.blank-options[data-blank="${blankIndex}"] .option-btn`);
+            
+            // Remove selected class from all options
+            blankOptions.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selected class to the clicked option
+            button.classList.add('selected');
+            
+            // Check if the answer is correct
+            const isCorrect = selectedOption === correctOption;
+            
+            if (isCorrect) {
+                button.classList.add('correct');
+                
+                // Update the blank in the post
+                const blank = document.querySelector(`.blank-${blankIndex}`);
+                blank.textContent = selectedOption || '(none)';
+                blank.classList.add('bg-green-200');
+                blank.classList.remove('bg-yellow-200');
+                
+                // Check if all blanks are filled correctly
+                const allBlanks = document.querySelectorAll('[class^="blank-"]');
+                const allFilled = Array.from(allBlanks).every(blank => blank.classList.contains('bg-green-200'));
+                
+                if (allFilled) {
+                    // Show success feedback
+                    showFeedback(true);
+                    
+                    // Update score and streak
+                    state.score++;
+                    state.streak++;
+                    elements.score.textContent = state.score;
+                    elements.streak.textContent = state.streak;
+                    
+                    // Show confetti
+                    createConfetti();
+                }
+            } else {
+                button.classList.add('incorrect');
+                
+                // Reset streak
+                state.streak = 0;
+                elements.streak.textContent = state.streak;
+                
+                // Show error feedback
+                showFeedback(false, correctOption);
+            }
+        }
+
+        // Show feedback
+        function showFeedback(isCorrect, correctOption = null) {
+            elements.feedback.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+            
+            if (isCorrect) {
+                elements.feedback.classList.add('bg-green-100', 'text-green-800');
+                elements.feedback.innerHTML = `
+                    <p class="font-medium">Great job! 🎉</p>
+                    <p>That's correct!</p>
+                `;
+                
+                // Show next button
+                elements.nextBtn.classList.remove('hidden');
+            } else {
+                elements.feedback.classList.add('bg-red-100', 'text-red-800');
+                elements.feedback.innerHTML = `
+                    <p class="font-medium">Not quite right.</p>
+                    <p>The correct answer is: "${correctOption || '(none)'}"</p>
+                `;
+            }
+            
+            elements.feedback.classList.remove('hidden');
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                confetti.style.animationDuration = `${Math.random() * 2 + 2}s`;
+                confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+                
+                elements.confettiContainer.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        // Move to the next question
+        function nextQuestion() {
+            state.currentQuestion++;
+            
+            // Check if we've reached the end of the questions
+            if (state.currentQuestion >= state.totalQuestions) {
+                // Show end of game
+                showEndOfGame();
+            } else {
+                // Load the next question
+                loadQuestion();
+            }
+        }
+
+        // Show end of game
+        function showEndOfGame() {
+            elements.postContent.innerHTML = `
+                <div class="text-center py-8">
+                    <h2 class="text-2xl font-bold text-indigo-700 mb-4">Great job!</h2>
+                    <p class="text-lg mb-4">You scored ${state.score} out of ${state.totalQuestions}!</p>
+                    <button id="playAgainBtn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Play Again
+                    </button>
+                </div>
+            `;
+            
+            elements.postImage.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" class="w-full h-full">
+                    <rect width="800" height="600" fill="#F5F5F5" />
+                    <circle cx="400" cy="300" r="200" fill="#FFD700" />
+                    <circle cx="320" cy="230" r="30" fill="#FFF" />
+                    <circle cx="480" cy="230" r="30" fill="#FFF" />
+                    <circle cx="320" cy="230" r="15" fill="#000" />
+                    <circle cx="480" cy="230" r="15" fill="#000" />
+                    <path d="M320,350 Q400,420 480,350" stroke="#000" stroke-width="15" fill="none" />
+                </svg>
+            `;
+            
+            elements.options.innerHTML = '';
+            elements.feedback.classList.add('hidden');
+            elements.nextBtn.classList.add('hidden');
+            
+            // Add event listener to play again button
+            document.getElementById('playAgainBtn').addEventListener('click', () => {
+                state.currentQuestion = 0;
+                state.score = 0;
+                state.streak = 0;
+                elements.score.textContent = state.score;
+                elements.streak.textContent = state.streak;
+                elements.questionNumber.textContent = 1;
+                loadQuestion();
+            });
+        }
+
+        // Initialize the game
+        initGame();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9486424511dd981f',t:'MTc0ODY5MjI4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
