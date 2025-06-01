@@ -1,0 +1,846 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhrasalWeb | Learn Website &amp; Workplace Phrasal Verbs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .phrasal-verb {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .phrasal-verb:hover {
+            color: #4f46e5;
+        }
+        .phrasal-verb.found {
+            color: #047857;
+            font-weight: 500;
+        }
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-content {
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #4f46e5;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .hint-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 40;
+        }
+        .hint-mode .phrasal-verb {
+            background-color: rgba(79, 70, 229, 0.1);
+            border-radius: 4px;
+            padding: 0 2px;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            z-index: 100;
+            pointer-events: none;
+            animation: fall 3s ease-in forwards;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.inset-0{inset:0px}.right-4{right:1rem}.top-4{top:1rem}.z-40{z-index:40}.z-50{z-index:50}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:0.25rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mr-4{margin-right:1rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-16{height:4rem}.h-2\.5{height:0.625rem}.h-20{height:5rem}.h-24{height:6rem}.h-48{height:12rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-64{height:16rem}.h-8{height:2rem}.w-12{width:3rem}.w-2{width:0.5rem}.w-20{width:5rem}.w-24{width:6rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-64{width:16rem}.w-8{width:2rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-md{max-width:28rem}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-8 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(2rem * var(--tw-space-x-reverse));margin-left:calc(2rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-b-xl{border-bottom-right-radius:0.75rem;border-bottom-left-radius:0.75rem}.rounded-l-lg{border-top-left-radius:0.5rem;border-bottom-left-radius:0.5rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.border{border-width:1px}.border-t{border-top-width:1px}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.border-indigo-600{--tw-border-opacity:1;border-color:rgb(79 70 229 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-200{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-purple-200{--tw-bg-opacity:1;background-color:rgb(233 213 255 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-opacity-70{--tw-bg-opacity:0.7}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-indigo-600{--tw-gradient-from:#4f46e5 var(--tw-gradient-from-position);--tw-gradient-to:rgb(79 70 229 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-purple-600{--tw-gradient-to:#9333ea var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pt-8{padding-top:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-indigo-400{--tw-text-opacity:1;color:rgb(129 140 248 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-50:hover{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:bg-opacity-10:hover{--tw-bg-opacity:0.1}.hover\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.hover\:text-indigo-600:hover{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.hover\:text-indigo-800:hover{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0px * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0px * var(--tw-space-y-reverse))}}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:flex{display:flex}.md\:w-1\/2{width:50%}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                </svg>
+                <span class="font-bold text-xl text-gray-800">PhrasalWeb</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="nav-link text-gray-600 hover:text-indigo-600">Home</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-indigo-600">About</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-indigo-600">Courses</a>
+                <a href="#" class="nav-link text-gray-600 hover:text-indigo-600">Contact</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition duration-300">
+                    <span class="phrasal-verb" data-verb="sign up">Sign up</span>
+                </button>
+                <button class="border border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg transition duration-300">
+                    <span class="phrasal-verb" data-verb="log in">Log in</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Master Phrasal Verbs for Work &amp; Web</h1>
+                <p class="text-xl mb-6">Interactive learning designed for Portuguese speakers at B2 level. Our students <span class="phrasal-verb" data-verb="pick up">pick up</span> essential expressions used in websites and workplaces much faster.</p>
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                    <button class="bg-white text-indigo-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition duration-300">
+                        Let's <span class="phrasal-verb" data-verb="get started">get started</span>
+                    </button>
+                    <button class="border border-white text-white hover:bg-white hover:bg-opacity-10 px-6 py-3 rounded-lg font-medium transition duration-300">
+                        <span class="phrasal-verb" data-verb="find out">Find out</span> more about our methods
+                    </button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-64 w-64" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">How Our Platform Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+                    <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Interactive Learning</h3>
+                    <p class="text-gray-600">
+                        You'll need to <span class="phrasal-verb" data-verb="look for">look for</span> phrasal verbs throughout the website and <span class="phrasal-verb" data-verb="click on">click on</span> them to learn their meaning and usage in context.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+                    <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Real-World Context</h3>
+                    <p class="text-gray-600">
+                        Our lessons <span class="phrasal-verb" data-verb="focus on">focus on</span> common expressions you'll encounter on websites and in professional settings every day.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+                    <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Track Progress</h3>
+                    <p class="text-gray-600">
+                        Our system helps you <span class="phrasal-verb" data-verb="keep track of">keep track of</span> your learning and <span class="phrasal-verb" data-verb="build up">build up</span> your vocabulary over time with personalized reviews.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Popular Courses</h2>
+                <button class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+                    <span class="phrasal-verb" data-verb="check out">Check out</span> all courses
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                    <div class="h-48 bg-indigo-200 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Workplace Communication</h3>
+                        <p class="text-gray-600 mb-4">Learn expressions that will help you <span class="phrasal-verb" data-verb="get ahead">get ahead</span> in your career and make your presentations <span class="phrasal-verb" data-verb="stand out">stand out</span> in meetings.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">24 lessons</span>
+                            <button class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                You can <span class="phrasal-verb" data-verb="sign up for">sign up for</span> this course today
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                    <div class="h-48 bg-purple-200 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Website Navigation</h3>
+                        <p class="text-gray-600 mb-4">Learn how to easily <span class="phrasal-verb" data-verb="navigate through">navigate through</span> websites and <span class="phrasal-verb" data-verb="set up">set up</span> accounts on various platforms.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">18 lessons</span>
+                            <button class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                <span class="phrasal-verb" data-verb="try out">Try out</span> our free sample lesson
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                    <div class="h-48 bg-blue-200 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Email Communication</h3>
+                        <p class="text-gray-600 mb-4">Learn how to professionally <span class="phrasal-verb" data-verb="reach out">reach out</span> to colleagues and <span class="phrasal-verb" data-verb="follow up">follow up</span> effectively via email.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">20 lessons</span>
+                            <button class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                <span class="phrasal-verb" data-verb="look into">Look into</span> the course details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">What Our Students Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <span class="font-bold text-lg">MR</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Mariana Ribeiro</h4>
+                            <p class="text-gray-500 text-sm">São Paulo, Brazil</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "This platform helped me <span class="phrasal-verb" data-verb="figure out">figure out</span> many expressions I was struggling with. Now I can confidently <span class="phrasal-verb" data-verb="fill out">fill out</span> forms and <span class="phrasal-verb" data-verb="carry out">carry out</span> tasks in English at my workplace!"
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-indigo-100 text-indigo-600 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                            <span class="font-bold text-lg">JC</span>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">João Costa</h4>
+                            <p class="text-gray-500 text-sm">Lisbon, Portugal</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "I used to <span class="phrasal-verb" data-verb="give up">give up</span> when reading emails with complex expressions. Now I can <span class="phrasal-verb" data-verb="deal with">deal with</span> them easily and even <span class="phrasal-verb" data-verb="point out">point out</span> mistakes to my English-speaking colleagues!"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-indigo-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready to Master Phrasal Verbs?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                When you <span class="phrasal-verb" data-verb="sign up">sign up</span> today, your English skills will <span class="phrasal-verb" data-verb="take off">take off</span> faster than you ever imagined!
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium transition duration-300">
+                    Let's <span class="phrasal-verb" data-verb="get started">get started</span> for free
+                </button>
+                <button class="border border-white text-white hover:bg-white hover:bg-opacity-10 px-8 py-3 rounded-lg font-medium transition duration-300">
+                    <span class="phrasal-verb" data-verb="find out">Find out</span> about our pricing plans
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                        </svg>
+                        <span class="font-bold text-xl">PhrasalWeb</span>
+                    </div>
+                    <p class="text-gray-400">
+                        We help ESL learners <span class="phrasal-verb" data-verb="break down">break down</span> the barriers of complex English expressions.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Courses</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">
+                        <span class="phrasal-verb" data-verb="stay up to date">Stay up to date</span> with our latest courses and language tips.
+                    </p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800">
+                        <button class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-r-lg transition duration-300">
+                            <span class="phrasal-verb" data-verb="sign up">Sign up</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2023 PhrasalWeb. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Hint Button -->
+    <button id="hintButton" class="hint-button bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+    </button>
+
+    <!-- Progress Indicator -->
+    <div class="fixed top-4 right-4 bg-white p-3 rounded-lg shadow-md z-40 flex items-center">
+        <div class="mr-3">
+            <div class="text-xs text-gray-500 mb-1">Phrasal Verbs Found:</div>
+            <div class="flex items-center">
+                <span id="foundCount" class="font-bold text-lg text-indigo-600 mr-1">0</span>
+                <span class="text-gray-500">/ <span id="totalCount">29</span></span>
+            </div>
+        </div>
+        <div class="w-2 h-16 bg-gray-200 rounded-full">
+            <div id="progressIndicator" class="bg-indigo-600 rounded-full transition-all duration-500" style="height: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- Phrasal Verb Modal -->
+    <div id="phrasalVerbModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal">
+        <div class="bg-white rounded-xl max-w-md w-full mx-4 modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-bold text-gray-800" id="modalTitle">Phrasal Verb Found!</h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <div class="flex items-center mb-2">
+                        <span class="text-lg font-medium text-gray-800 mr-2" id="verbText">Phrasal Verb</span>
+                        <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">B2 Level</span>
+                    </div>
+                    <div class="text-gray-500 italic mb-4" id="pronunciation">
+                        /pronunciation/
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-medium text-gray-800 mb-1">Definition:</h4>
+                        <p id="definition" class="text-gray-600">Definition will appear here.</p>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-medium text-gray-800 mb-1">Example:</h4>
+                        <p id="example" class="text-gray-600">Example will appear here.</p>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-medium text-gray-800 mb-1">Portuguese Translation:</h4>
+                        <p id="translation" class="text-gray-600">Translation will appear here.</p>
+                    </div>
+                </div>
+                <div class="flex justify-between">
+                    <button id="markLearned" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition duration-300 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        Mark as learned
+                    </button>
+                    <button id="nextVerb" class="border border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg transition duration-300">
+                        Continue hunting
+                    </button>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-6 py-3 rounded-b-xl">
+                <div class="flex items-center">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                        <div class="bg-indigo-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500" id="progressText">0/29 learned</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden modal">
+        <div class="bg-white rounded-xl max-w-md w-full mx-4 modal-content text-center p-8">
+            <div class="mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-green-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Congratulations!</h3>
+            <p class="text-gray-600 mb-6">You've found all the phrasal verbs on this page! Your English is improving with every discovery.</p>
+            <div class="flex justify-center">
+                <button id="closeCelebration" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition duration-300">
+                    Continue Learning
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Phrasal verb data
+        const phrasalVerbs = {
+            "sign up": {
+                pronunciation: "/saɪn ʌp/",
+                definition: "To register or enroll for a service, course, or activity.",
+                example: "I need to sign up for the new online course before registration closes.",
+                translation: "inscrever-se"
+            },
+            "log in": {
+                pronunciation: "/lɒɡ ɪn/",
+                definition: "To enter your username and password to access a computer system or website.",
+                example: "You need to log in to your account to access your settings.",
+                translation: "iniciar sessão, entrar"
+            },
+            "pick up": {
+                pronunciation: "/pɪk ʌp/",
+                definition: "To learn or acquire a skill or knowledge easily or casually.",
+                example: "She picked up Spanish quickly while living in Madrid.",
+                translation: "aprender facilmente, adquirir"
+            },
+            "get started": {
+                pronunciation: "/ɡet ˈstɑːtɪd/",
+                definition: "To begin doing something or using something.",
+                example: "Let's get started with the presentation before we run out of time.",
+                translation: "começar, iniciar"
+            },
+            "find out": {
+                pronunciation: "/faɪnd aʊt/",
+                definition: "To discover or learn something by study, observation, or inquiry.",
+                example: "I need to find out when the next train leaves.",
+                translation: "descobrir, apurar"
+            },
+            "check out": {
+                pronunciation: "/tʃek aʊt/",
+                definition: "To look at something to see what it is like or to examine it.",
+                example: "You should check out the new restaurant that opened downtown.",
+                translation: "dar uma olhada, conferir"
+            },
+            "look for": {
+                pronunciation: "/lʊk fɔː/",
+                definition: "To try to find something by searching for it.",
+                example: "I'm looking for my keys. Have you seen them?",
+                translation: "procurar"
+            },
+            "click on": {
+                pronunciation: "/klɪk ɒn/",
+                definition: "To press a button on a computer mouse to select something on a screen.",
+                example: "Click on the link to download the file.",
+                translation: "clicar em"
+            },
+            "focus on": {
+                pronunciation: "/ˈfəʊkəs ɒn/",
+                definition: "To concentrate on something specific.",
+                example: "We need to focus on completing this project by Friday.",
+                translation: "concentrar-se em, focar em"
+            },
+            "keep track of": {
+                pronunciation: "/kiːp træk əv/",
+                definition: "To maintain a record of something or stay informed about something.",
+                example: "Use this spreadsheet to keep track of your expenses.",
+                translation: "manter um registro de, acompanhar"
+            },
+            "build up": {
+                pronunciation: "/bɪld ʌp/",
+                definition: "To gradually increase or improve something over time.",
+                example: "It takes time to build up a good vocabulary in a new language.",
+                translation: "desenvolver, construir gradualmente"
+            },
+            "get ahead": {
+                pronunciation: "/ɡet əˈhed/",
+                definition: "To make progress or be successful, especially in your career.",
+                example: "Working overtime helped her get ahead in the company.",
+                translation: "progredir, avançar"
+            },
+            "stand out": {
+                pronunciation: "/stænd aʊt/",
+                definition: "To be noticeably better or more significant than others.",
+                example: "His presentation really stood out from the others.",
+                translation: "destacar-se, sobressair"
+            },
+            "sign up for": {
+                pronunciation: "/saɪn ʌp fɔː/",
+                definition: "To register or enroll for a specific service, course, or activity.",
+                example: "I signed up for the advanced English course last week.",
+                translation: "inscrever-se em"
+            },
+            "navigate through": {
+                pronunciation: "/ˈnævɪɡeɪt θruː/",
+                definition: "To find your way through a website, system, or complex information.",
+                example: "The new design makes it easier to navigate through the website.",
+                translation: "navegar por"
+            },
+            "set up": {
+                pronunciation: "/set ʌp/",
+                definition: "To establish or arrange something so that it is ready for use.",
+                example: "I need to set up my new email account before I can use it.",
+                translation: "configurar, estabelecer"
+            },
+            "try out": {
+                pronunciation: "/traɪ aʊt/",
+                definition: "To test something to see if it works or if you like it.",
+                example: "Why don't you try out the free version before buying the full software?",
+                translation: "experimentar, testar"
+            },
+            "reach out": {
+                pronunciation: "/riːtʃ aʊt/",
+                definition: "To contact someone, especially to offer help or ask for something.",
+                example: "Feel free to reach out if you have any questions about the project.",
+                translation: "entrar em contato, contactar"
+            },
+            "follow up": {
+                pronunciation: "/ˈfɒləʊ ʌp/",
+                definition: "To pursue or investigate further, or to contact someone again about something.",
+                example: "I'll follow up with you next week about the proposal.",
+                translation: "dar seguimento, acompanhar"
+            },
+            "look into": {
+                pronunciation: "/lʊk ˈɪntuː/",
+                definition: "To investigate or examine something.",
+                example: "We're looking into the cause of the website crash.",
+                translation: "investigar, averiguar"
+            },
+            "figure out": {
+                pronunciation: "/ˈfɪɡər aʊt/",
+                definition: "To understand or solve something after thinking about it.",
+                example: "It took me a while to figure out how to use the new software.",
+                translation: "descobrir, entender"
+            },
+            "fill out": {
+                pronunciation: "/fɪl aʊt/",
+                definition: "To complete a form by entering the required information.",
+                example: "Please fill out this application form with your details.",
+                translation: "preencher"
+            },
+            "carry out": {
+                pronunciation: "/ˈkæri aʊt/",
+                definition: "To perform or complete a task or duty.",
+                example: "The team carried out the research over a six-month period.",
+                translation: "realizar, executar"
+            },
+            "give up": {
+                pronunciation: "/ɡɪv ʌp/",
+                definition: "To stop trying to do something because it seems too difficult.",
+                example: "Don't give up on learning English – it gets easier with practice.",
+                translation: "desistir"
+            },
+            "deal with": {
+                pronunciation: "/diːl wɪð/",
+                definition: "To take action to solve a problem or manage a situation.",
+                example: "The IT department is dealing with the network issues.",
+                translation: "lidar com, tratar de"
+            },
+            "point out": {
+                pronunciation: "/pɔɪnt aʊt/",
+                definition: "To draw attention to something or someone.",
+                example: "My colleague pointed out a mistake in my report.",
+                translation: "apontar, indicar"
+            },
+            "take off": {
+                pronunciation: "/teɪk ɒf/",
+                definition: "To start to be successful or popular very quickly.",
+                example: "His career really took off after he published his first book.",
+                translation: "decolar, ter sucesso rapidamente"
+            },
+            "break down": {
+                pronunciation: "/breɪk daʊn/",
+                definition: "To separate something into smaller parts to make it easier to understand.",
+                example: "The teacher broke down the complex grammar rules into simple steps.",
+                translation: "decompor, simplificar"
+            },
+            "stay up to date": {
+                pronunciation: "/steɪ ʌp tə deɪt/",
+                definition: "To continue to have the most recent information about something.",
+                example: "It's important to stay up to date with the latest industry trends.",
+                translation: "manter-se atualizado"
+            }
+        };
+
+        // Track learned phrasal verbs
+        let learnedVerbs = [];
+        const totalVerbs = Object.keys(phrasalVerbs).length;
+        let currentVerb = "";
+        let hintMode = false;
+
+        // DOM elements
+        const modal = document.getElementById('phrasalVerbModal');
+        const celebrationModal = document.getElementById('celebrationModal');
+        const closeModal = document.getElementById('closeModal');
+        const closeCelebration = document.getElementById('closeCelebration');
+        const markLearned = document.getElementById('markLearned');
+        const nextVerb = document.getElementById('nextVerb');
+        const progressBar = document.querySelector('.progress-bar');
+        const progressText = document.getElementById('progressText');
+        const hintButton = document.getElementById('hintButton');
+        const foundCount = document.getElementById('foundCount');
+        const totalCount = document.getElementById('totalCount');
+        const progressIndicator = document.getElementById('progressIndicator');
+
+        // Initialize
+        totalCount.textContent = totalVerbs;
+        updateProgress();
+
+        // Add click event to all phrasal verbs
+        document.querySelectorAll('.phrasal-verb').forEach(verb => {
+            verb.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const verbText = this.dataset.verb;
+                showModal(verbText);
+                this.classList.add('found');
+                createConfetti(e.clientX, e.clientY);
+            });
+        });
+
+        // Show modal with phrasal verb info
+        function showModal(verbText) {
+            currentVerb = verbText;
+            const verb = phrasalVerbs[verbText];
+            
+            document.getElementById('modalTitle').textContent = 'Phrasal Verb Found!';
+            document.getElementById('verbText').textContent = verbText;
+            document.getElementById('pronunciation').textContent = verb.pronunciation;
+            document.getElementById('definition').textContent = verb.definition;
+            document.getElementById('example').textContent = verb.example;
+            document.getElementById('translation').textContent = verb.translation;
+            
+            // Update mark as learned button
+            if (learnedVerbs.includes(verbText)) {
+                markLearned.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                markLearned.classList.add('bg-green-600', 'hover:bg-green-700');
+                markLearned.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Learned!
+                `;
+            } else {
+                markLearned.classList.remove('bg-green-600', 'hover:bg-green-700');
+                markLearned.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                markLearned.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Mark as learned
+                `;
+            }
+            
+            updateProgress();
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+        }
+
+        // Close modal
+        closeModal.addEventListener('click', function() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        });
+
+        // Close celebration modal
+        closeCelebration.addEventListener('click', function() {
+            celebrationModal.classList.remove('show');
+            setTimeout(() => {
+                celebrationModal.classList.add('hidden');
+            }, 300);
+        });
+
+        // Mark verb as learned
+        markLearned.addEventListener('click', function() {
+            if (!learnedVerbs.includes(currentVerb)) {
+                learnedVerbs.push(currentVerb);
+                this.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                this.classList.add('bg-green-600', 'hover:bg-green-700');
+                this.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Learned!
+                `;
+                
+                // Highlight the verb on the page
+                document.querySelectorAll(`.phrasal-verb[data-verb="${currentVerb}"]`).forEach(el => {
+                    el.classList.add('found');
+                });
+                
+                updateProgress();
+                
+                // Check if all verbs are learned
+                if (learnedVerbs.length === totalVerbs) {
+                    setTimeout(() => {
+                        showCelebration();
+                    }, 1000);
+                }
+            }
+        });
+
+        // Next verb button
+        nextVerb.addEventListener('click', function() {
+            closeModal.click();
+        });
+
+        // Toggle hint mode
+        hintButton.addEventListener('click', function() {
+            hintMode = !hintMode;
+            if (hintMode) {
+                document.body.classList.add('hint-mode');
+                this.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                this.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+            } else {
+                document.body.classList.remove('hint-mode');
+                this.classList.remove('bg-yellow-600', 'hover:bg-yellow-700');
+                this.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            }
+        });
+
+        // Update progress bar
+        function updateProgress() {
+            const percentage = (learnedVerbs.length / totalVerbs) * 100;
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${learnedVerbs.length}/${totalVerbs} learned`;
+            foundCount.textContent = learnedVerbs.length;
+            progressIndicator.style.height = `${percentage}%`;
+        }
+
+        // Show celebration modal
+        function showCelebration() {
+            modal.classList.remove('show');
+            modal.classList.add('hidden');
+            
+            celebrationModal.classList.remove('hidden');
+            celebrationModal.classList.add('show');
+            
+            // Create lots of confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * 100;
+                    createConfetti(x, y);
+                }, i * 50);
+            }
+        }
+
+        // Create confetti effect
+        function createConfetti(x, y) {
+            const colors = ['#4f46e5', '#7c3aed', '#ec4899', '#f59e0b', '#10b981'];
+            
+            for (let i = 0; i < 10; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${x}px`;
+                confetti.style.top = `${y}px`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                confetti.style.opacity = Math.random() + 0.5;
+                
+                // Random animation duration and delay
+                confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                
+                // Random horizontal movement
+                const randomX = (Math.random() - 0.5) * 200;
+                confetti.style.transform = `translateX(${randomX}px)`;
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal.click();
+            }
+            if (e.target === celebrationModal) {
+                closeCelebration.click();
+            }
+        });
+
+        // Escape key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (!modal.classList.contains('hidden')) {
+                    closeModal.click();
+                }
+                if (!celebrationModal.classList.contains('hidden')) {
+                    closeCelebration.click();
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'948e2e10f4129a49',t:'MTc0ODc3NTMzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
