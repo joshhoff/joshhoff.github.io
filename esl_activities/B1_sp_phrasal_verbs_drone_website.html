@@ -1,0 +1,439 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyHigh Drones - Phrasal Verb Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f7ff;
+        }
+        .phrasal-verb {
+            cursor: pointer;
+            /* Removed distinct styling to make phrasal verbs blend in */
+        }
+        .phrasal-verb:hover {
+            background-color: #e6f0ff;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+        }
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s;
+        }
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .drone-svg {
+            animation: hover 3s infinite ease-in-out;
+        }
+        @keyframes hover {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-2{margin-right:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-48{height:12rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-48{width:12rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-full{width:100%}.flex-grow{flex-grow:1}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-blue-100{--tw-border-opacity:1;border-color:rgb(219 234 254 / var(--tw-border-opacity, 1))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:text-blue-200:hover{--tw-text-opacity:1;color:rgb(191 219 254 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}@media (min-width: 768px){.md\:col-span-1{grid-column:span 1 / span 1}.md\:col-span-2{grid-column:span 2 / span 2}.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 px-6 shadow-lg">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 4L8 8H16L12 4Z" fill="white"></path>
+                        <path d="M8 8V16H16V8H8Z" fill="white"></path>
+                        <path d="M5 11H8V13H5V11Z" fill="white"></path>
+                        <path d="M16 11H19V13H16V11Z" fill="white"></path>
+                    </svg>
+                    <h1 class="text-2xl font-bold">SkyHigh Drones</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-blue-200">Home</a>
+                    <a href="#" class="hover:text-blue-200">Products</a>
+                    <a href="#" class="hover:text-blue-200">Services</a>
+                    <a href="#" class="hover:text-blue-200">About Us</a>
+                    <a href="#" class="hover:text-blue-200">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Instructions -->
+        <div class="bg-blue-50 p-4 border-b border-blue-100">
+            <div class="container mx-auto">
+                <div class="bg-white p-4 rounded-lg shadow-sm">
+                    <h2 class="text-xl font-semibold text-blue-800 mb-2">English Practice: Find the Phrasal Verbs!</h2>
+                    <p class="text-gray-700">Click on the phrasal verbs hidden in the text below to learn their meanings. Can you find all 15 phrasal verbs?</p>
+                    <div class="mt-3">
+                        <div class="progress-container">
+                            <div id="progress-bar" class="progress-bar"></div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>Progress: <span id="found-count">0</span>/15</span>
+                            <span id="completion-message" class="text-green-600 font-medium hidden">Great job! You found all the phrasal verbs!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Left Column -->
+                <div class="md:col-span-2">
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to SkyHigh Drones</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Are you ready to <span class="phrasal-verb" data-verb="take off">take off</span> into the exciting world of drones? At SkyHigh Drones, we <span class="phrasal-verb" data-verb="set up">set up</span> our company in 2015 with one mission: to help customers <span class="phrasal-verb" data-verb="carry out">carry out</span> amazing aerial photography and videography projects.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            When you <span class="phrasal-verb" data-verb="look into">look into</span> our product range, you'll discover drones that can <span class="phrasal-verb" data-verb="put up with">put up with</span> challenging weather conditions. Our engineers <span class="phrasal-verb" data-verb="come up with">come up with</span> innovative solutions to make flying easier for beginners and professionals alike.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Our Services</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            We <span class="phrasal-verb" data-verb="reach out">reach out</span> to customers across the country with our drone training programs. If you want to <span class="phrasal-verb" data-verb="sign up">sign up</span> for a course, just contact our team. We'll <span class="phrasal-verb" data-verb="walk you through">walk you through</span> everything you need to know about drone operation.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            Many businesses <span class="phrasal-verb" data-verb="rely on">rely on</span> our drones for inspections and surveys. We can help you <span class="phrasal-verb" data-verb="figure out">figure out</span> which drone model best suits your needs. Our experts will <span class="phrasal-verb" data-verb="point out">point out</span> the features that matter most for your specific application.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">Customer Support</h2>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            If you ever <span class="phrasal-verb" data-verb="run into">run into</span> problems with your drone, don't worry! Our support team will <span class="phrasal-verb" data-verb="get back to">get back to</span> you within 24 hours. We always <span class="phrasal-verb" data-verb="stand by">stand by</span> our products and offer comprehensive warranties.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            We encourage customers to <span class="phrasal-verb" data-verb="keep up with">keep up with</span> the latest drone regulations. Our monthly newsletter will help you <span class="phrasal-verb" data-verb="stay ahead of">stay ahead of</span> important changes in drone laws and technology.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="md:col-span-1">
+                    <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Featured Drone</h3>
+                        <div class="flex justify-center mb-4">
+                            <svg class="w-48 h-48 drone-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="80" y="80" width="40" height="40" fill="#333333"></rect>
+                                <circle cx="50" cy="50" r="20" fill="#555555"></circle>
+                                <circle cx="150" cy="50" r="20" fill="#555555"></circle>
+                                <circle cx="50" cy="150" r="20" fill="#555555"></circle>
+                                <circle cx="150" cy="150" r="20" fill="#555555"></circle>
+                                <line x1="50" y1="50" x2="80" y2="80" stroke="#333333" stroke-width="5"></line>
+                                <line x1="150" y1="50" x2="120" y2="80" stroke="#333333" stroke-width="5"></line>
+                                <line x1="50" y1="150" x2="80" y2="120" stroke="#333333" stroke-width="5"></line>
+                                <line x1="150" y1="150" x2="120" y2="120" stroke="#333333" stroke-width="5"></line>
+                                <circle cx="50" cy="50" r="30" stroke="#333333" stroke-width="2" stroke-dasharray="5 5" fill="none"></circle>
+                                <circle cx="150" cy="50" r="30" stroke="#333333" stroke-width="2" stroke-dasharray="5 5" fill="none"></circle>
+                                <circle cx="50" cy="150" r="30" stroke="#333333" stroke-width="2" stroke-dasharray="5 5" fill="none"></circle>
+                                <circle cx="150" cy="150" r="30" stroke="#333333" stroke-width="2" stroke-dasharray="5 5" fill="none"></circle>
+                                <circle cx="100" cy="100" r="10" fill="#3B82F6"></circle>
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-800">SkyHigh Explorer X2</h4>
+                        <ul class="mt-3 space-y-2 text-gray-700">
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                4K Camera
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                30-minute flight time
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Wind-resistant design
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Obstacle avoidance
+                            </li>
+                        </ul>
+                        <button class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg w-full transition duration-300">
+                            Learn More
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Phrasal Verbs Found</h3>
+                        <div id="found-verbs-list" class="space-y-2 text-gray-700">
+                            <p class="text-gray-500 italic">Click on phrasal verbs in the text to see them appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 px-6">
+            <div class="container mx-auto">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">SkyHigh Drones</h3>
+                        <p class="text-gray-400">Elevating your aerial photography and videography experience since 2015.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-white">Home</a></li>
+                            <li><a href="#" class="hover:text-white">Products</a></li>
+                            <li><a href="#" class="hover:text-white">Services</a></li>
+                            <li><a href="#" class="hover:text-white">Support</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>123 Drone Street</li>
+                            <li>Skyview, CA 90210</li>
+                            <li>info@skyhighdrones.com</li>
+                            <li>(555) 123-4567</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-700 text-center text-gray-400">
+                    <p>© 2023 SkyHigh Drones. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h2 id="modal-title" class="text-xl font-bold text-blue-700 mb-2"></h2>
+            <p id="modal-definition" class="text-gray-700 mb-4"></p>
+            <div class="bg-blue-50 p-3 rounded-lg">
+                <h3 class="font-semibold text-blue-800 mb-1">Example:</h3>
+                <p id="modal-example" class="text-gray-700 italic"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Phrasal verb definitions
+        const phrasalVerbs = {
+            "take off": {
+                definition: "To begin to fly or leave the ground.",
+                example: "The plane will take off in 10 minutes."
+            },
+            "set up": {
+                definition: "To establish or start a business or organization.",
+                example: "They set up a new office in the city center."
+            },
+            "carry out": {
+                definition: "To perform or conduct (a task, action, or operation).",
+                example: "The team carried out the research project successfully."
+            },
+            "look into": {
+                definition: "To investigate or examine something.",
+                example: "The police are looking into the cause of the accident."
+            },
+            "put up with": {
+                definition: "To tolerate or endure something difficult or unpleasant.",
+                example: "I can't put up with this noise anymore."
+            },
+            "come up with": {
+                definition: "To think of or produce an idea, solution, etc.",
+                example: "She came up with a brilliant solution to the problem."
+            },
+            "reach out": {
+                definition: "To contact or communicate with someone.",
+                example: "Feel free to reach out if you have any questions."
+            },
+            "sign up": {
+                definition: "To register or enroll for something.",
+                example: "I signed up for the cooking class yesterday."
+            },
+            "walk through": {
+                definition: "To explain or demonstrate something step by step.",
+                example: "The instructor walked us through the installation process."
+            },
+            "rely on": {
+                definition: "To depend on someone or something with confidence.",
+                example: "You can rely on me to help you move this weekend."
+            },
+            "figure out": {
+                definition: "To understand or solve something after thinking about it.",
+                example: "I can't figure out how to use this new software."
+            },
+            "point out": {
+                definition: "To direct attention to something or someone; to show.",
+                example: "She pointed out the mistake in my calculation."
+            },
+            "run into": {
+                definition: "To meet someone by chance; to encounter a problem.",
+                example: "I ran into my old friend at the supermarket yesterday."
+            },
+            "get back to": {
+                definition: "To return to someone with information or a response.",
+                example: "I'll get back to you with the price details tomorrow."
+            },
+            "stand by": {
+                definition: "To support or remain loyal to someone or something.",
+                example: "He always stands by his friends in difficult times."
+            },
+            "keep up with": {
+                definition: "To stay informed about or maintain the same level as something.",
+                example: "It's hard to keep up with all the changes in technology."
+            },
+            "stay ahead of": {
+                definition: "To be more advanced or informed than others.",
+                example: "Reading industry news helps you stay ahead of the competition."
+            }
+        };
+
+        // Game variables
+        let foundVerbs = [];
+        const totalVerbs = Object.keys(phrasalVerbs).length;
+
+        // DOM elements
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalDefinition = document.getElementById("modal-definition");
+        const modalExample = document.getElementById("modal-example");
+        const closeButton = document.querySelector(".close-button");
+        const foundVerbsList = document.getElementById("found-verbs-list");
+        const foundCount = document.getElementById("found-count");
+        const progressBar = document.getElementById("progress-bar");
+        const completionMessage = document.getElementById("completion-message");
+
+        // Add click event to all phrasal verbs
+        document.querySelectorAll(".phrasal-verb").forEach(verb => {
+            verb.addEventListener("click", function() {
+                const verbText = this.dataset.verb;
+                
+                // Check if already found
+                if (!foundVerbs.includes(verbText)) {
+                    foundVerbs.push(verbText);
+                    
+                    // Update found verbs list
+                    if (foundVerbs.length === 1) {
+                        foundVerbsList.innerHTML = ""; // Clear the initial message
+                    }
+                    
+                    const verbItem = document.createElement("div");
+                    verbItem.className = "flex items-center";
+                    verbItem.innerHTML = `
+                        <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="font-medium">${verbText}</span>
+                    `;
+                    foundVerbsList.appendChild(verbItem);
+                    
+                    // Update progress
+                    foundCount.textContent = foundVerbs.length;
+                    const progress = (foundVerbs.length / 15) * 100; // Using 15 as the total count
+                    progressBar.style.width = `${progress}%`;
+                    
+                    // Check if all verbs found
+                    if (foundVerbs.length === 15) { // Using 15 as the total count
+                        completionMessage.classList.remove("hidden");
+                    }
+                }
+                
+                // Show modal with definition
+                modalTitle.textContent = verbText;
+                modalDefinition.textContent = phrasalVerbs[verbText].definition;
+                modalExample.textContent = phrasalVerbs[verbText].example;
+                modal.style.display = "block";
+            });
+        });
+
+        // Close modal when clicking the close button
+        closeButton.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        // Close modal when clicking outside of it
+        window.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'949da75b31ed589a',t:'MTc0ODkzNzU5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
