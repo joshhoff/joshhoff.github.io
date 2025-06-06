@@ -1,0 +1,952 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phrasal Verb Adventure: Office Drama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        
+        .email-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        
+        .email-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .email-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .email-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        .email {
+            border-left: 4px solid transparent;
+        }
+        
+        .email.sent {
+            border-left-color: #3b82f6;
+        }
+        
+        .email.received {
+            border-left-color: #10b981;
+        }
+        
+        .option-card {
+            transition: all 0.2s ease;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .definition-tooltip {
+            visibility: hidden;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #334155;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 220px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        
+        .definition-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #334155 transparent transparent transparent;
+        }
+        
+        .phrasal-verb:hover .definition-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 3s ease-in infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .progress-bar {
+            height: 8px;
+            transition: width 0.5s ease;
+        }
+        
+        .feedback-animation {
+            animation: pulse 1s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mb-6{margin-bottom:1.5rem}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2{height:0.5rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.max-w-4xl{max-width:56rem}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.overflow-hidden{overflow:hidden}.whitespace-pre-line{white-space:pre-line}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-t{border-top-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-blue-200{--tw-bg-opacity:1;background-color:rgb(191 219 254 / var(--tw-bg-opacity, 1))}.bg-blue-800{--tw-bg-opacity:1;background-color:rgb(30 64 175 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(250 204 21 / var(--tw-bg-opacity, 1))}.bg-yellow-200{--tw-bg-opacity:1;background-color:rgb(254 240 138 / var(--tw-bg-opacity, 1))}.bg-opacity-30{--tw-bg-opacity:0.3}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.opacity-100{opacity:1}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-500{transition-duration:500ms}.hover\:border-blue-500:hover{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}</style></head>
+<body class="min-h-screen" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
+                <h1 class="text-3xl font-bold text-white">Phrasal Verb Adventure</h1>
+                <p class="text-blue-100 mt-2">Navigate office drama through email conversations</p>
+                
+                <!-- Progress bar -->
+                <div class="mt-4 bg-blue-200 rounded-full h-2 overflow-hidden">
+                    <div id="progress-bar" class="progress-bar bg-yellow-400 h-full" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-blue-100 mt-1">
+                    <span>Start</span>
+                    <span>Progress: <span id="progress-text">0%</span></span>
+                </div>
+                
+                <!-- Stats -->
+                <div class="flex mt-3 space-x-4">
+                    <div class="bg-blue-800 bg-opacity-30 rounded-lg px-3 py-1 text-blue-100">
+                        <span class="font-medium">Score: </span>
+                        <span id="score-display" class="">0</span>
+                    </div>
+                    <div class="bg-blue-800 bg-opacity-30 rounded-lg px-3 py-1 text-blue-100">
+                        <span class="font-medium">Streak: </span>
+                        <span id="streak-display" class="">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Thread Container -->
+            <div id="email-container" class="email-container p-6 bg-gray-50"><div class="email received mb-6 p-4 bg-white rounded-lg shadow-sm transition-opacity duration-500 opacity-100"><div class="mb-2"><div class="font-semibold text-gray-800">Alex Chen (Manager)</div><div class="text-sm text-gray-600">Subject: Welcome to Your First Day</div></div><div class="text-gray-700 whitespace-pre-line">Hi there,
+
+Welcome to your first day at TechCorp! I hope you're excited to join our team. Before our orientation meeting at 10 AM, could you please <span class="bg-yellow-200 px-1 rounded">____</span> the new employee forms I sent yesterday? We need them before HR can process your access badge.
+
+Best regards,
+Alex</div></div></div>
+            
+            <!-- Options Container -->
+            <div id="options-container" class="p-6 bg-white border-t border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">How will you respond?</h2>
+                <div id="options" class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="option-card bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 hover:shadow-md transition"><span class="phrasal-verb inline-block relative font-medium text-blue-600 mb-2">fill in<span class="definition-tooltip">To complete a form with information</span></span><p class="text-gray-700">I'll fill in those forms right away and have them ready before the meeting. Looking forward to meeting everyone!</p></div><div class="option-card bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 hover:shadow-md transition"><span class="phrasal-verb inline-block relative font-medium text-blue-600 mb-2">cross out<span class="definition-tooltip">To draw a line through written text to delete it</span></span><p class="text-gray-700">I'll cross out those forms right away. I assume you mean I should delete some sections?</p></div><div class="option-card bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 hover:shadow-md transition"><span class="phrasal-verb inline-block relative font-medium text-blue-600 mb-2">hand in<span class="definition-tooltip">To submit something officially</span></span><p class="text-gray-700">I'll hand in those forms, but I don't have them yet. Could you send them again?</p></div></div>
+            </div>
+            
+            <!-- Feedback Container -->
+            <div id="feedback-container" class="hidden p-6 bg-gray-100 border-t border-gray-200">
+                <div id="feedback-content" class="rounded-lg p-4"></div>
+            </div>
+        </div>
+        
+        <!-- Help and Info -->
+        <div class="mt-6 bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">How to Play</h3>
+            <p class="text-gray-600">
+                You're navigating a day at the office through email conversations. At each step, choose the correct phrasal verb to continue the story. Hover over any phrasal verb to see its definition!
+            </p>
+            <div class="mt-4 flex justify-between">
+                <button id="restart-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
+                    Restart Game
+                </button>
+                <button id="hint-btn" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition">
+                    Get a Hint
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            currentScenario: 0,
+            score: 0,
+            streak: 0,
+            maxStreak: 0,
+            progress: 0,
+            phrasalVerbsLearned: new Set(),
+            phrasalVerbsUsed: new Set(),
+            history: [],
+            hintUsed: false
+        };
+        
+        // Phrasal verbs with definitions
+        const phrasalVerbs = {
+            "give in": "To surrender or yield to someone or something",
+            "work out": "To exercise or to find a solution to a problem",
+            "deal with": "To handle a situation or problem",
+            "mess up": "To make a mistake or ruin something",
+            "go over": "To review or examine something carefully",
+            "make up": "To invent a story or to reconcile after a disagreement",
+            "let down": "To disappoint someone who was counting on you",
+            "hang on": "To wait or hold on for a short time",
+            "take in": "To absorb or understand information",
+            "fall out": "To argue and stop being friendly with someone",
+            "put away": "To store something in its proper place",
+            "dropped out": "To quit a course, school, or competition",
+            "drop by": "To visit informally or without prior arrangement",
+            "lie down": "To move into a horizontal position",
+            "get along with": "To have a good relationship with someone",
+            "speak up": "To express your opinion clearly and loudly",
+            "broke up": "To end a relationship",
+            "carry out": "To complete a task or fulfill a plan",
+            "hand in": "To submit something officially",
+            "fill in": "To complete a form with information",
+            "cross out": "To draw a line through written text to delete it",
+            "take over": "To assume control or responsibility",
+            "call off": "To cancel a planned event",
+            "brought up": "To raise a child or mention a topic",
+            "talked over": "To discuss something thoroughly",
+            "speed up": "To increase the pace or rate",
+            "put up with": "To tolerate something annoying",
+            "going over": "To review or examine something",
+            "came up with": "To think of an idea or plan",
+            "looking up": "To improve or get better",
+            "thinking over": "To consider something carefully before deciding",
+            "catching up": "To reach the same level or to update on news",
+            "show up": "To arrive or appear somewhere",
+            "run out of": "To use all of something and have none left",
+            "getting ahead": "To make progress or be successful",
+            "working towards": "To make an effort to achieve something",
+            "pull it off": "To succeed in doing something difficult",
+            "follow through": "To complete something you've started",
+            "carry on": "To continue doing something",
+            "knuckle down": "To apply oneself seriously to work",
+            "sticking to": "To continue doing or using something as planned",
+            "use up": "To consume all of something",
+            "look out for": "To be careful or to watch for danger",
+            "narrow down": "To reduce options to a smaller number",
+            "slip up": "To make a careless mistake",
+            "call for": "To require or demand something",
+            "go after": "To pursue or chase something"
+        };
+        
+        // Game scenarios
+        const scenarios = [
+            {
+                email: {
+                    from: "Alex Chen (Manager)",
+                    subject: "Welcome to Your First Day",
+                    body: "Hi there,\n\nWelcome to your first day at TechCorp! I hope you're excited to join our team. Before our orientation meeting at 10 AM, could you please ____ the new employee forms I sent yesterday? We need them before HR can process your access badge.\n\nBest regards,\nAlex"
+                },
+                options: [
+                    {
+                        verb: "fill in",
+                        response: "I'll fill in those forms right away and have them ready before the meeting. Looking forward to meeting everyone!",
+                        correct: true,
+                        next: 1
+                    },
+                    {
+                        verb: "cross out",
+                        response: "I'll cross out those forms right away. I assume you mean I should delete some sections?",
+                        correct: false,
+                        feedback: "Not quite! 'Cross out' means to draw a line through text to delete it. Your manager wants you to complete the forms, not delete parts of them."
+                    },
+                    {
+                        verb: "hand in",
+                        response: "I'll hand in those forms, but I don't have them yet. Could you send them again?",
+                        correct: false,
+                        feedback: "Close! 'Hand in' means to submit something, but the email mentions the forms were already sent to you. You need to complete them first."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Jordan Lee (IT Department)",
+                    subject: "Computer Setup",
+                    body: "Hello,\n\nI'm from the IT department. I need to ____ your computer setup this morning. Could you let me know when you'll be away from your desk for lunch so I can install the necessary software?\n\nThanks,\nJordan"
+                },
+                options: [
+                    {
+                        verb: "take over",
+                        response: "Hi Jordan, I'll be going to lunch around 12:30. Feel free to take over my computer then to install everything needed.",
+                        correct: true,
+                        next: 2
+                    },
+                    {
+                        verb: "mess up",
+                        response: "Hi Jordan, please don't mess up my computer setup. I'm very particular about my settings.",
+                        correct: false,
+                        feedback: "Oops! 'Mess up' means to make a mistake or ruin something. Jordan is trying to help set up your computer, not damage it!"
+                    },
+                    {
+                        verb: "work out",
+                        response: "Hi Jordan, I'll work out my computer later. I'm comfortable setting it up myself.",
+                        correct: false,
+                        feedback: "Not quite right. 'Work out' means to exercise or find a solution to a problem. Jordan needs to configure your computer as part of their IT responsibilities."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Taylor Wong (Colleague)",
+                    subject: "Team Lunch",
+                    body: "Hey there!\n\nA few of us are going to ____ the new café down the street for lunch today. Would you like to join us? It would be a great chance to meet some of the team informally.\n\nCheers,\nTaylor"
+                },
+                options: [
+                    {
+                        verb: "drop by",
+                        response: "Hi Taylor, I'd love to drop by the new café with you all! What time are you planning to go?",
+                        correct: false,
+                        feedback: "Not quite! 'Drop by' means to visit informally without prior arrangement. The team is planning to go to the café together, not just visit it briefly."
+                    },
+                    {
+                        verb: "look out for",
+                        response: "Hi Taylor, I'll look out for the new café down the street. See you at lunch!",
+                        correct: false,
+                        feedback: "That's not quite right. 'Look out for' means to be careful or watch for danger. Taylor is inviting you to join them for lunch, not asking you to be cautious."
+                    },
+                    {
+                        verb: "try out",
+                        response: "Hi Taylor, I'd love to try out the new café with everyone! Count me in for lunch today.",
+                        correct: true,
+                        next: 3
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Morgan Smith (Project Lead)",
+                    subject: "Upcoming Project",
+                    body: "Hello,\n\nI'd like to ____ the details of our upcoming project with you this afternoon. It's a major client and I think you'd be perfect for the team. Can you meet at 3 PM in Conference Room B?\n\nRegards,\nMorgan"
+                },
+                options: [
+                    {
+                        verb: "talk over",
+                        response: "Hi Morgan, I'd be happy to talk over the project details with you. I'll see you at 3 PM in Conference Room B.",
+                        correct: true,
+                        next: 4
+                    },
+                    {
+                        verb: "go over",
+                        response: "Hi Morgan, I'd be happy to go over the project details with you. I'll see you at 3 PM in Conference Room B.",
+                        correct: true,
+                        next: 4
+                    },
+                    {
+                        verb: "make up",
+                        response: "Hi Morgan, I'd be happy to make up the project details with you at 3 PM. I have some creative ideas!",
+                        correct: false,
+                        feedback: "Not quite right! 'Make up' means to invent a story or reconcile after a disagreement. Morgan wants to discuss the actual project details, not create fictional ones."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Casey Johnson (HR)",
+                    subject: "Training Session Rescheduled",
+                    body: "Dear Team,\n\nDue to an unexpected conflict with the trainer's schedule, we need to ____ tomorrow's compliance training session. We'll reschedule for next week and send out a calendar invite once confirmed.\n\nSorry for any inconvenience,\nCasey from HR"
+                },
+                options: [
+                    {
+                        verb: "put away",
+                        response: "Hi Casey, thanks for letting us know you need to put away the training session. I'll wait for the new invite.",
+                        correct: false,
+                        feedback: "That's not quite right. 'Put away' means to store something in its proper place. Casey is informing you that the training session won't happen tomorrow."
+                    },
+                    {
+                        verb: "call off",
+                        response: "Hi Casey, I understand you need to call off tomorrow's training. Thanks for the heads up, and I'll look out for the rescheduled date.",
+                        correct: true,
+                        next: 5
+                    },
+                    {
+                        verb: "give in",
+                        response: "Hi Casey, I see you had to give in about tomorrow's training. No problem, next week works for me.",
+                        correct: false,
+                        feedback: "Not the right choice. 'Give in' means to surrender or yield to someone or something. Casey is canceling the training due to a scheduling conflict, not surrendering to pressure."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Alex Chen (Manager)",
+                    subject: "First Week Check-in",
+                    body: "Hi there,\n\nHow are you ____ with your first week? I'd love to hear about your experience so far. Do you have time for a quick chat tomorrow morning?\n\nBest,\nAlex"
+                },
+                options: [
+                    {
+                        verb: "getting ahead",
+                        response: "Hi Alex, I'm getting ahead with my first week! I've already completed all my onboarding tasks. Tomorrow morning works great for a chat.",
+                        correct: false,
+                        feedback: "Not quite right. 'Getting ahead' means making progress or being successful beyond expectations. Alex is asking about how you're managing or experiencing your first week."
+                    },
+                    {
+                        verb: "dealing with",
+                        response: "Hi Alex, I'm dealing with my first week pretty well! I'm learning a lot and everyone's been helpful. Tomorrow morning works perfectly for a chat.",
+                        correct: true,
+                        next: 6
+                    },
+                    {
+                        verb: "putting up with",
+                        response: "Hi Alex, I'm putting up with my first week as best I can. Tomorrow morning works for a chat.",
+                        correct: false,
+                        feedback: "That doesn't sound positive! 'Putting up with' means tolerating something annoying. This response suggests you're not enjoying your first week, which isn't the impression you want to give your manager."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Jamie Rivera (Team Member)",
+                    subject: "Help with Presentation",
+                    body: "Hey,\n\nI'm working on a presentation for next week's client meeting, but I'm struggling with the data analysis section. Could you help me ____ some ideas for presenting these complex statistics in a more visual way?\n\nThanks in advance,\nJamie"
+                },
+                options: [
+                    {
+                        verb: "come up with",
+                        response: "Hi Jamie, I'd be happy to help you come up with some ideas for visualizing those statistics. When would be a good time to discuss this?",
+                        correct: true,
+                        next: 7
+                    },
+                    {
+                        verb: "carry out",
+                        response: "Hi Jamie, I'd be happy to help you carry out some ideas for the presentation. Just let me know what you need me to do.",
+                        correct: false,
+                        feedback: "Not quite right. 'Carry out' means to complete a task or fulfill a plan. Jamie is asking for help generating ideas, not implementing existing ones."
+                    },
+                    {
+                        verb: "look up",
+                        response: "Hi Jamie, I'd be happy to help you look up some ideas for the presentation. I can search for examples online.",
+                        correct: false,
+                        feedback: "Close, but not quite. 'Look up' means to search for information. Jamie needs help creating new visualization ideas, not just researching existing ones."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Pat Kim (Project Coordinator)",
+                    subject: "Project Deadline",
+                    body: "Team,\n\nJust a reminder that we need to ____ the client deliverables by Friday. We're running behind schedule, so please prioritize these tasks. Let me know if you foresee any issues meeting this deadline.\n\nThanks,\nPat"
+                },
+                options: [
+                    {
+                        verb: "hand in",
+                        response: "Hi Pat, thanks for the reminder. I'll make sure to hand in my part of the deliverables by Friday without fail.",
+                        correct: true,
+                        next: 8
+                    },
+                    {
+                        verb: "take in",
+                        response: "Hi Pat, I'll take in the client deliverables by Friday. I'm processing everything as quickly as possible.",
+                        correct: false,
+                        feedback: "Not quite right. 'Take in' means to absorb or understand information. Pat is reminding you about submitting work to the client, not absorbing information."
+                    },
+                    {
+                        verb: "think over",
+                        response: "Hi Pat, I'll think over the client deliverables by Friday and let you know my thoughts.",
+                        correct: false,
+                        feedback: "That's not correct. 'Think over' means to consider something carefully before deciding. Pat needs the team to complete and submit the work, not just consider it."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Morgan Smith (Project Lead)",
+                    subject: "Team Conflict",
+                    body: "Hello,\n\nI've noticed some tension between team members lately. I think Jamie and Taylor have ____ over the project direction. Could you help mediate? You seem to get along well with both of them.\n\nThanks,\nMorgan"
+                },
+                options: [
+                    {
+                        verb: "fallen out",
+                        response: "Hi Morgan, I've noticed Jamie and Taylor have fallen out over the project direction too. I'd be happy to help mediate and get them working together again.",
+                        correct: true,
+                        next: 9
+                    },
+                    {
+                        verb: "worked out",
+                        response: "Hi Morgan, I think Jamie and Taylor have worked out over the project direction. They seem to be exercising their disagreement quite vigorously.",
+                        correct: false,
+                        feedback: "That's not right. 'Work out' in this context would mean to exercise or find a solution. Morgan is describing a conflict between team members, not them solving a problem or exercising."
+                    },
+                    {
+                        verb: "broken up",
+                        response: "Hi Morgan, it's unfortunate that Jamie and Taylor have broken up over the project direction. I didn't realize they were in a relationship.",
+                        correct: false,
+                        feedback: "Oops! 'Break up' typically refers to ending a romantic relationship. Morgan is talking about a professional disagreement between colleagues, not a romantic split."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Alex Chen (Manager)",
+                    subject: "Quarterly Review",
+                    body: "Hi there,\n\nI'm impressed with how quickly you've integrated into the team. For your quarterly review next week, please prepare a summary of the projects you've ____ so far and your goals for the next quarter.\n\nBest regards,\nAlex"
+                },
+                options: [
+                    {
+                        verb: "carried out",
+                        response: "Hi Alex, I'll prepare a summary of the projects I've carried out so far and my goals for next quarter. Looking forward to the review!",
+                        correct: true,
+                        next: 10
+                    },
+                    {
+                        verb: "put away",
+                        response: "Hi Alex, I'll prepare a summary of the projects I've put away so far and my goals for next quarter.",
+                        correct: false,
+                        feedback: "That's not right. 'Put away' means to store something in its proper place. Alex wants to know about the projects you've completed or worked on, not stored away."
+                    },
+                    {
+                        verb: "given in",
+                        response: "Hi Alex, I'll prepare a summary of the projects I've given in to so far and my goals for next quarter.",
+                        correct: false,
+                        feedback: "Not correct. 'Give in' means to surrender or yield to someone or something. Alex wants to know about the projects you've completed, not projects you've surrendered to."
+                    }
+                ]
+            },
+            {
+                email: {
+                    from: "Leadership Team",
+                    subject: "Congratulations!",
+                    body: "Dear Team Member,\n\nCongratulations on successfully completing your probation period! We're impressed with how you've ____ the challenges of your new role and become a valuable team member.\n\nWe look forward to your continued contributions.\n\nBest regards,\nThe Leadership Team"
+                },
+                options: [
+                    {
+                        verb: "dealt with",
+                        response: "Thank you so much! I'm thrilled to have successfully completed my probation period. I've enjoyed dealing with the challenges of my new role and am excited to continue growing with the team.",
+                        correct: true,
+                        next: "end"
+                    },
+                    {
+                        verb: "messed up",
+                        response: "Thank you! I'm glad I haven't messed up the challenges of my new role too badly. I'll try to do even better now that my probation is over.",
+                        correct: false,
+                        feedback: "That's not right! 'Mess up' means to make a mistake or ruin something. The leadership team is complimenting you on handling challenges well, not making mistakes."
+                    },
+                    {
+                        verb: "run out of",
+                        response: "Thank you! I'm glad I haven't run out of the challenges in my new role. I'm looking forward to facing more obstacles ahead!",
+                        correct: false,
+                        feedback: "Not quite right. 'Run out of' means to use all of something and have none left. The leadership team is praising how you've handled challenges, not that you've exhausted them."
+                    }
+                ]
+            }
+        ];
+        
+        // DOM elements
+        const emailContainer = document.getElementById('email-container');
+        const optionsContainer = document.getElementById('options');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackContent = document.getElementById('feedback-content');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const scoreDisplay = document.getElementById('score-display');
+        const streakDisplay = document.getElementById('streak-display');
+        const restartBtn = document.getElementById('restart-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        
+        // Initialize game
+        function initGame() {
+            // Reset game state
+            gameState.currentScenario = 0;
+            gameState.score = 0;
+            gameState.streak = 0;
+            gameState.maxStreak = 0;
+            gameState.progress = 0;
+            gameState.phrasalVerbsLearned = new Set();
+            gameState.phrasalVerbsUsed = new Set();
+            gameState.history = [];
+            gameState.hintUsed = false;
+            
+            // Clear containers
+            emailContainer.innerHTML = '';
+            optionsContainer.innerHTML = '';
+            feedbackContainer.classList.add('hidden');
+            
+            // Update displays
+            updateProgress();
+            updateScore();
+            
+            // Load first scenario
+            loadScenario(0);
+        }
+        
+        // Load a scenario
+        function loadScenario(index) {
+            if (index === "end") {
+                showEndGame();
+                return;
+            }
+            
+            const scenario = scenarios[index];
+            gameState.currentScenario = index;
+            
+            // Add email to thread
+            addEmail(scenario.email, 'received');
+            
+            // Create options
+            createOptions(scenario.options);
+            
+            // Update progress
+            gameState.progress = Math.round((index / (scenarios.length - 1)) * 100);
+            updateProgress();
+        }
+        
+        // Add email to thread
+        function addEmail(email, type) {
+            const emailDiv = document.createElement('div');
+            emailDiv.className = `email ${type} mb-6 p-4 bg-white rounded-lg shadow-sm`;
+            
+            const header = document.createElement('div');
+            header.className = 'mb-2';
+            
+            const fromText = document.createElement('div');
+            fromText.className = 'font-semibold text-gray-800';
+            fromText.textContent = email.from;
+            
+            const subjectText = document.createElement('div');
+            subjectText.className = 'text-sm text-gray-600';
+            subjectText.textContent = `Subject: ${email.subject}`;
+            
+            const body = document.createElement('div');
+            body.className = 'text-gray-700 whitespace-pre-line';
+            
+            // Process body to highlight phrasal verb placeholder
+            const bodyText = email.body;
+            if (bodyText.includes('____')) {
+                const parts = bodyText.split('____');
+                body.appendChild(document.createTextNode(parts[0]));
+                
+                const placeholder = document.createElement('span');
+                placeholder.className = 'bg-yellow-200 px-1 rounded';
+                placeholder.textContent = '____';
+                body.appendChild(placeholder);
+                
+                if (parts.length > 1) {
+                    body.appendChild(document.createTextNode(parts[1]));
+                }
+            } else {
+                body.textContent = bodyText;
+            }
+            
+            header.appendChild(fromText);
+            header.appendChild(subjectText);
+            emailDiv.appendChild(header);
+            emailDiv.appendChild(body);
+            
+            // Add animation
+            emailDiv.classList.add('opacity-0');
+            emailContainer.appendChild(emailDiv);
+            
+            // Trigger animation
+            setTimeout(() => {
+                emailDiv.classList.remove('opacity-0');
+                emailDiv.classList.add('transition-opacity', 'duration-500', 'opacity-100');
+                emailContainer.scrollTop = emailContainer.scrollHeight;
+            }, 100);
+        }
+        
+        // Create response options
+        function createOptions(options) {
+            optionsContainer.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const optionCard = document.createElement('div');
+                optionCard.className = 'option-card bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 hover:shadow-md transition';
+                
+                const verbSpan = document.createElement('span');
+                verbSpan.className = 'phrasal-verb inline-block relative font-medium text-blue-600 mb-2';
+                verbSpan.textContent = option.verb;
+                
+                // Add tooltip with definition
+                const tooltip = document.createElement('span');
+                tooltip.className = 'definition-tooltip';
+                tooltip.textContent = phrasalVerbs[option.verb] || `To ${option.verb}`;
+                verbSpan.appendChild(tooltip);
+                
+                const responseText = document.createElement('p');
+                responseText.className = 'text-gray-700';
+                responseText.textContent = option.response;
+                
+                optionCard.appendChild(verbSpan);
+                optionCard.appendChild(responseText);
+                
+                optionCard.addEventListener('click', () => handleOptionClick(option, index));
+                
+                optionsContainer.appendChild(optionCard);
+            });
+        }
+        
+        // Handle option click
+        function handleOptionClick(option, optionIndex) {
+            // Add the selected response to the email thread
+            addEmail({
+                from: "You",
+                subject: "Re: " + scenarios[gameState.currentScenario].email.subject,
+                body: option.response
+            }, 'sent');
+            
+            // Track the phrasal verb used
+            gameState.phrasalVerbsUsed.add(option.verb);
+            
+            // Disable all options
+            const optionCards = document.querySelectorAll('.option-card');
+            optionCards.forEach(card => {
+                card.classList.remove('cursor-pointer', 'hover:border-blue-500', 'hover:shadow-md');
+                card.classList.add('opacity-50');
+                card.style.pointerEvents = 'none';
+            });
+            
+            // Highlight selected option
+            optionCards[optionIndex].classList.remove('opacity-50');
+            optionCards[optionIndex].classList.add('ring-2', 'ring-blue-500');
+            
+            // Process result
+            setTimeout(() => {
+                if (option.correct) {
+                    handleCorrectAnswer(option);
+                } else {
+                    handleIncorrectAnswer(option);
+                }
+            }, 1000);
+        }
+        
+        // Handle correct answer
+        function handleCorrectAnswer(option) {
+            // Update score and streak
+            gameState.score += 10 + (gameState.streak * 2);
+            gameState.streak++;
+            gameState.maxStreak = Math.max(gameState.maxStreak, gameState.streak);
+            gameState.phrasalVerbsLearned.add(option.verb);
+            updateScore();
+            
+            // Show success feedback
+            showFeedback('success', `
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="font-medium text-green-700">Excellent choice!</span>
+                </div>
+                <p class="mt-2 text-gray-700">
+                    "${option.verb}" was the perfect phrasal verb for this situation.
+                    <span class="block mt-1 text-sm text-gray-600">
+                        Definition: ${phrasalVerbs[option.verb]}
+                    </span>
+                </p>
+            `);
+            
+            // Create confetti effect for correct answers
+            createConfetti();
+            
+            // Load next scenario after delay
+            setTimeout(() => {
+                feedbackContainer.classList.add('hidden');
+                loadScenario(option.next);
+            }, 2500);
+        }
+        
+        // Handle incorrect answer
+        function handleIncorrectAnswer(option) {
+            // Reset streak
+            gameState.streak = 0;
+            updateScore();
+            
+            // Show error feedback
+            showFeedback('error', `
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span class="font-medium text-red-700">Not quite right</span>
+                </div>
+                <p class="mt-2 text-gray-700">
+                    ${option.feedback}
+                </p>
+                <p class="mt-2 text-gray-700">
+                    <span class="font-medium">"${option.verb}"</span> means: ${phrasalVerbs[option.verb]}
+                </p>
+                <button id="try-again" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                    Try Again
+                </button>
+            `);
+            
+            // Add event listener to try again button
+            document.getElementById('try-again').addEventListener('click', () => {
+                feedbackContainer.classList.add('hidden');
+                createOptions(scenarios[gameState.currentScenario].options);
+            });
+        }
+        
+        // Show feedback
+        function showFeedback(type, content) {
+            feedbackContainer.classList.remove('hidden', 'bg-green-50', 'bg-red-50');
+            feedbackContainer.classList.add(type === 'success' ? 'bg-green-50' : 'bg-red-50');
+            
+            feedbackContent.innerHTML = content;
+            feedbackContent.classList.add('feedback-animation');
+            
+            setTimeout(() => {
+                feedbackContent.classList.remove('feedback-animation');
+            }, 1000);
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.opacity = Math.random() + 0.5;
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Update progress display
+        function updateProgress() {
+            progressBar.style.width = gameState.progress + '%';
+            progressText.textContent = gameState.progress + '%';
+        }
+        
+        // Update score display
+        function updateScore() {
+            scoreDisplay.textContent = gameState.score;
+            streakDisplay.textContent = gameState.streak;
+            
+            // Animate score change
+            scoreDisplay.classList.add('feedback-animation');
+            streakDisplay.classList.add('feedback-animation');
+            
+            setTimeout(() => {
+                scoreDisplay.classList.remove('feedback-animation');
+                streakDisplay.classList.remove('feedback-animation');
+            }, 1000);
+        }
+        
+        // Show end game screen
+        function showEndGame() {
+            emailContainer.innerHTML = '';
+            optionsContainer.innerHTML = '';
+            
+            const endGameDiv = document.createElement('div');
+            endGameDiv.className = 'text-center py-8';
+            
+            const title = document.createElement('h2');
+            title.className = 'text-2xl font-bold text-gray-800 mb-4';
+            title.textContent = 'Congratulations! You completed the game!';
+            
+            const stats = document.createElement('div');
+            stats.className = 'bg-blue-50 rounded-lg p-6 mb-6 inline-block';
+            stats.innerHTML = `
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <div class="text-3xl font-bold text-blue-700">${gameState.score}</div>
+                        <div class="text-sm text-gray-600">Final Score</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-blue-700">${gameState.maxStreak}</div>
+                        <div class="text-sm text-gray-600">Max Streak</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-blue-700">${gameState.phrasalVerbsLearned.size}</div>
+                        <div class="text-sm text-gray-600">Phrasal Verbs Learned</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-blue-700">${gameState.phrasalVerbsUsed.size}</div>
+                        <div class="text-sm text-gray-600">Phrasal Verbs Used</div>
+                    </div>
+                </div>
+            `;
+            
+            const message = document.createElement('p');
+            message.className = 'text-gray-700 mb-6';
+            message.textContent = 'You\'ve successfully navigated the office email drama while mastering phrasal verbs! Great job!';
+            
+            const restartButton = document.createElement('button');
+            restartButton.className = 'px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition';
+            restartButton.textContent = 'Play Again';
+            restartButton.addEventListener('click', initGame);
+            
+            endGameDiv.appendChild(title);
+            endGameDiv.appendChild(stats);
+            endGameDiv.appendChild(message);
+            endGameDiv.appendChild(restartButton);
+            
+            emailContainer.appendChild(endGameDiv);
+            
+            // Create celebratory confetti
+            createConfetti();
+        }
+        
+        // Get hint
+        function getHint() {
+            if (gameState.hintUsed) return;
+            
+            const currentScenario = scenarios[gameState.currentScenario];
+            const correctOption = currentScenario.options.find(option => option.correct);
+            
+            if (correctOption) {
+                showFeedback('success', `
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-medium text-blue-700">Hint</span>
+                    </div>
+                    <p class="mt-2 text-gray-700">
+                        Look for a phrasal verb that means: "${phrasalVerbs[correctOption.verb]}"
+                    </p>
+                `);
+                
+                gameState.hintUsed = true;
+                hintBtn.classList.add('opacity-50');
+                hintBtn.disabled = true;
+                
+                // Hide hint after 5 seconds
+                setTimeout(() => {
+                    feedbackContainer.classList.add('hidden');
+                }, 5000);
+            }
+        }
+        
+        // Event listeners
+        restartBtn.addEventListener('click', initGame);
+        hintBtn.addEventListener('click', getHint);
+        
+        // Start the game
+        initGame();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94b6e32ce15dd8be',t:'MTc0OTIwMjE4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body>
