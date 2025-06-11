@@ -1,0 +1,621 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixed Conditionals: Advanced Speaking Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .prompt-card {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .prompt-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .feedback-box {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+        
+        .feedback-box.show {
+            height: auto;
+            padding: 1rem;
+        }
+        
+        .comparison-table td, .comparison-table th {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .highlight {
+            background-color: #fef3c7;
+            padding: 0 3px;
+            border-radius: 2px;
+        }
+        
+        .flash-card {
+            perspective: 1000px;
+            height: 200px;
+        }
+        
+        .flash-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flash-card.flipped .flash-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flash-card-front, .flash-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+        
+        .flash-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-4{margin-left:1rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-24{height:6rem}.min-h-screen{min-height:100vh}.w-full{width:100%}.border-collapse{border-collapse:collapse}.cursor-pointer{cursor:pointer}.list-inside{list-style-position:inside}.list-disc{list-style-type:disc}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-l-4{border-left-width:4px}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-blue-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-indigo-100{--tw-border-opacity:1;border-color:rgb(224 231 255 / var(--tw-border-opacity, 1))}.border-purple-100{--tw-border-opacity:1;border-color:rgb(243 232 255 / var(--tw-border-opacity, 1))}.border-teal-100{--tw-border-opacity:1;border-color:rgb(204 251 241 / var(--tw-border-opacity, 1))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(250 204 21 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-teal-50{--tw-bg-opacity:1;background-color:rgb(240 253 250 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:text-blue-600:hover{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-6">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl font-bold">Mixed Conditionals</h1>
+                <p class="text-lg opacity-90">Advanced Speaking Practice for C1 English Learners</p>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-8">
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap mb-6 border-b border-gray-200">
+                <button class="tab-btn px-6 py-3 font-medium text-lg border-b-2 border-blue-600 text-blue-600" data-tab="introduction">Introduction</button>
+                <button class="tab-btn px-6 py-3 font-medium text-lg hover:text-blue-600 text-gray-600" data-tab="guided-practice">Guided Practice</button>
+                <button class="tab-btn px-6 py-3 font-medium text-lg hover:text-blue-600 text-gray-600" data-tab="interactive">Interactive Practice</button>
+                <button class="tab-btn px-6 py-3 font-medium text-lg hover:text-blue-600 text-gray-600" data-tab="quick-mix">Quick Mix</button>
+            </div>
+            
+            <!-- Introduction Tab -->
+            <div id="introduction" class="tab-content active">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">What are Mixed Conditionals?</h2>
+                    <p class="mb-4">Mixed conditionals combine different time references in the if-clause and result-clause. They express complex relationships between past and present situations.</p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-6">
+                        <h3 class="font-semibold text-lg mb-2">The Two Most Common Types:</h3>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-medium text-blue-700">1. Past Condition → Present Result</h4>
+                            <p class="italic mb-1">If + Past Perfect, would/could/might + Base Verb</p>
+                            <p>Example: <span class="highlight">If I had studied</span> medicine, <span class="highlight">I would be</span> a doctor now.</p>
+                            <p class="text-sm text-gray-600 mt-1">This expresses how a past action affects a current situation.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-blue-700">2. Present Condition → Past Result</h4>
+                            <p class="italic mb-1">If + Past Simple, would/could/might + have + Past Participle</p>
+                            <p>Example: <span class="highlight">If I were</span> more organized, <span class="highlight">I wouldn't have missed</span> the meeting yesterday.</p>
+                            <p class="text-sm text-gray-600 mt-1">This expresses how a current state affects a past event.</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Comparison with Standard Conditionals</h3>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="comparison-table w-full border-collapse">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>If-Clause</th>
+                                    <th>Result Clause</th>
+                                    <th>Example</th>
+                                    <th>Time Reference</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Second Conditional</td>
+                                    <td>Past Simple</td>
+                                    <td>would + base verb</td>
+                                    <td>If I won the lottery, I would travel the world.</td>
+                                    <td>Present/Future hypothetical</td>
+                                </tr>
+                                <tr>
+                                    <td>Third Conditional</td>
+                                    <td>Past Perfect</td>
+                                    <td>would have + past participle</td>
+                                    <td>If I had known, I would have told you.</td>
+                                    <td>Past hypothetical</td>
+                                </tr>
+                                <tr class="bg-blue-50">
+                                    <td>Mixed (Past→Present)</td>
+                                    <td>Past Perfect</td>
+                                    <td>would + base verb</td>
+                                    <td>If I had saved money, I would be rich now.</td>
+                                    <td>Past condition, Present result</td>
+                                </tr>
+                                <tr class="bg-blue-50">
+                                    <td>Mixed (Present→Past)</td>
+                                    <td>Past Simple</td>
+                                    <td>would have + past participle</td>
+                                    <td>If I were taller, I would have become a basketball player.</td>
+                                    <td>Present condition, Past result</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Analyze These Examples</h3>
+                    <div class="space-y-4 mb-6">
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <p class="font-medium">1. If I had taken that job offer in 2015, I would be living in Paris now.</p>
+                            <div class="mt-2 flex items-center">
+                                <button class="text-blue-600 hover:underline analyze-btn" data-target="analysis1">Analyze</button>
+                                <div id="analysis1" class="hidden ml-4 text-gray-600">
+                                    Past action (not taking the job) → Present consequence (not living in Paris)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <p class="font-medium">2. If she spoke Spanish fluently, she wouldn't have had problems during her trip to Mexico last month.</p>
+                            <div class="mt-2 flex items-center">
+                                <button class="text-blue-600 hover:underline analyze-btn" data-target="analysis2">Analyze</button>
+                                <div id="analysis2" class="hidden ml-4 text-gray-600">
+                                    Present state (not speaking Spanish) → Past consequence (having problems during the trip)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <p class="font-medium">3. If I hadn't broken my leg last year, I would be competing in the marathon tomorrow.</p>
+                            <div class="mt-2 flex items-center">
+                                <button class="text-blue-600 hover:underline analyze-btn" data-target="analysis3">Analyze</button>
+                                <div id="analysis3" class="hidden ml-4 text-gray-600">
+                                    Past event (breaking leg) → Present/Future consequence (not being able to compete)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <p class="font-medium">4. If I weren't so busy with my current project, I would have attended the conference last week.</p>
+                            <div class="mt-2 flex items-center">
+                                <button class="text-blue-600 hover:underline analyze-btn" data-target="analysis4">Analyze</button>
+                                <div id="analysis4" class="hidden ml-4 text-gray-600">
+                                    Present state (being busy) → Past consequence (not attending the conference)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                        <h3 class="font-medium">Key Takeaway:</h3>
+                        <p>Mixed conditionals allow you to express complex cause-and-effect relationships across different time periods. They're particularly useful for reflection, regret, and discussing how past actions affect present situations (or vice versa).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Guided Practice Tab -->
+            <div id="guided-practice" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">Guided Speaking Practice</h2>
+                    <p class="mb-6">Complete these sentences using mixed conditionals. Think about your answers, then speak them aloud. Try to extend your answers with additional context or explanation.</p>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Structured Prompts</h3>
+                    <div class="grid md:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                            <p class="font-medium mb-2">1. If I had grown up in a different country, I ______.</p>
+                            <div class="text-sm text-gray-600 mt-1">
+                                <p class="font-medium">Structure needed:</p>
+                                <p>If + Past Perfect, would/could/might + Base Verb</p>
+                            </div>
+                            <button class="mt-3 text-indigo-600 hover:underline example-btn" data-target="example1">See example</button>
+                            <p id="example1" class="hidden mt-2 text-gray-700 italic">"If I had grown up in a different country, I would speak another language fluently now."</p>
+                        </div>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                            <p class="font-medium mb-2">2. If I were more confident, I wouldn't have ______.</p>
+                            <div class="text-sm text-gray-600 mt-1">
+                                <p class="font-medium">Structure needed:</p>
+                                <p>If + Past Simple, would/could/might + have + Past Participle</p>
+                            </div>
+                            <button class="mt-3 text-indigo-600 hover:underline example-btn" data-target="example2">See example</button>
+                            <p id="example2" class="hidden mt-2 text-gray-700 italic">"If I were more confident, I wouldn't have missed that job opportunity last month."</p>
+                        </div>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                            <p class="font-medium mb-2">3. If I had learned to play an instrument as a child, I ______.</p>
+                            <div class="text-sm text-gray-600 mt-1">
+                                <p class="font-medium">Structure needed:</p>
+                                <p>If + Past Perfect, would/could/might + Base Verb</p>
+                            </div>
+                            <button class="mt-3 text-indigo-600 hover:underline example-btn" data-target="example3">See example</button>
+                            <p id="example3" class="hidden mt-2 text-gray-700 italic">"If I had learned to play an instrument as a child, I would be able to join my friends' band now."</p>
+                        </div>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                            <p class="font-medium mb-2">4. If I weren't afraid of heights, I would have ______.</p>
+                            <div class="text-sm text-gray-600 mt-1">
+                                <p class="font-medium">Structure needed:</p>
+                                <p>If + Past Simple, would/could/might + have + Past Participle</p>
+                            </div>
+                            <button class="mt-3 text-indigo-600 hover:underline example-btn" data-target="example4">See example</button>
+                            <p id="example4" class="hidden mt-2 text-gray-700 italic">"If I weren't afraid of heights, I would have gone skydiving during my vacation last summer."</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Personal Reflection Prompts</h3>
+                    <div class="space-y-4 mb-8">
+                        <div class="bg-purple-50 p-5 rounded-lg border border-purple-100">
+                            <h4 class="font-medium text-lg mb-2">Talk about a time when your present situation was affected by a past decision.</h4>
+                            <p class="text-gray-600 mb-3">Use a mixed conditional to explain how things would be different now if you had made a different choice in the past.</p>
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <p class="font-medium text-sm text-gray-500 mb-1">Example structure:</p>
+                                <p class="italic">"If I had [past action], I would [present situation]."</p>
+                            </div>
+                            <button class="mt-3 text-purple-600 hover:underline example-btn" data-target="reflection1">See example response</button>
+                            <div id="reflection1" class="hidden mt-3 bg-white p-3 rounded border border-gray-200">
+                                <p>"If I had accepted that job offer abroad five years ago, I would be in a completely different career path now. At the time, I was afraid of moving so far from my family, but now I realize it might have given me more opportunities for growth. I wouldn't be struggling with the limited options in my current field if I had taken that risk back then."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-5 rounded-lg border border-purple-100">
+                            <h4 class="font-medium text-lg mb-2">Imagine how one personal trait could have changed a past experience.</h4>
+                            <p class="text-gray-600 mb-3">Choose a trait (being more creative, disciplined, outgoing, etc.) and explain how it would have affected a specific past event.</p>
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <p class="font-medium text-sm text-gray-500 mb-1">Example structure:</p>
+                                <p class="italic">"If I were more [trait], I would have [past result]."</p>
+                            </div>
+                            <button class="mt-3 text-purple-600 hover:underline example-btn" data-target="reflection2">See example response</button>
+                            <div id="reflection2" class="hidden mt-3 bg-white p-3 rounded border border-gray-200">
+                                <p>"If I were more outgoing, I would have made more connections at the industry conference last year. I tend to stay in my comfort zone at networking events, and as a result, I missed several opportunities to meet potential clients. I remember standing alone during the reception while others were actively exchanging business cards and building relationships."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-3">Debate &amp; Ethical Prompts</h3>
+                    <div class="space-y-4">
+                        <div class="bg-teal-50 p-5 rounded-lg border border-teal-100">
+                            <h4 class="font-medium text-lg mb-2">If world leaders had acted sooner on climate change, how would the world be different now?</h4>
+                            <p class="text-gray-600 mb-3">Discuss using mixed conditionals to connect past actions with present realities.</p>
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <p class="font-medium text-sm text-gray-500 mb-1">Useful phrases:</p>
+                                <ul class="list-disc list-inside text-sm">
+                                    <li>"If they had implemented stricter regulations earlier, we would now have..."</li>
+                                    <li>"We wouldn't be facing such severe weather patterns today if governments had..."</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-teal-50 p-5 rounded-lg border border-teal-100">
+                            <h4 class="font-medium text-lg mb-2">If people were more empathetic today, what problems might not have happened in the past?</h4>
+                            <p class="text-gray-600 mb-3">Consider how current human traits might have altered historical events.</p>
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <p class="font-medium text-sm text-gray-500 mb-1">Useful phrases:</p>
+                                <ul class="list-disc list-inside text-sm">
+                                    <li>"If society were more compassionate now, certain conflicts wouldn't have escalated in the past."</li>
+                                    <li>"Many historical injustices wouldn't have occurred if people today valued diversity more."</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interactive Practice Tab -->
+            <div id="interactive" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">Interactive Correction &amp; Reflection</h2>
+                    <p class="mb-6">Practice forming mixed conditionals and receive feedback. Record your responses to these prompts, then check your grammar and structure.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 p-4">
+                                <h3 class="font-medium text-lg">Prompt 1: Career Choices</h3>
+                                <p>If you had chosen a different career path, how would your life be different now?</p>
+                            </div>
+                            <div class="p-4">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">Your response:</label>
+                                    <textarea class="w-full border border-gray-300 rounded p-2 h-24" placeholder="Type your response here..."></textarea>
+                                </div>
+                                <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" data-feedback="feedback1">Check Grammar</button>
+                                <div id="feedback1" class="feedback-box mt-4 bg-blue-50 rounded border border-blue-200">
+                                    <h4 class="font-medium mb-2">Feedback:</h4>
+                                    <div class="space-y-2">
+                                        <p>Look for this structure: <span class="font-medium">If + Past Perfect, would/could/might + Base Verb</span></p>
+                                        <p>Example: "If I <span class="highlight">had become</span> a doctor, I <span class="highlight">would be</span> working in a hospital now."</p>
+                                        <p class="text-gray-600">Remember to use the past perfect in the if-clause to talk about a past decision, and would + base verb in the result clause to talk about the present consequence.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h4 class="font-medium mb-2">Try rephrasing using the alternative structure:</h4>
+                                        <p>"If I <span class="italic">were</span> [something different now], I <span class="italic">wouldn't have</span> [past result]."</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 p-4">
+                                <h3 class="font-medium text-lg">Prompt 2: Language Skills</h3>
+                                <p>If you were fluent in another language, how might your past experiences have been different?</p>
+                            </div>
+                            <div class="p-4">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">Your response:</label>
+                                    <textarea class="w-full border border-gray-300 rounded p-2 h-24" placeholder="Type your response here..."></textarea>
+                                </div>
+                                <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" data-feedback="feedback2">Check Grammar</button>
+                                <div id="feedback2" class="feedback-box mt-4 bg-blue-50 rounded border border-blue-200">
+                                    <h4 class="font-medium mb-2">Feedback:</h4>
+                                    <div class="space-y-2">
+                                        <p>Look for this structure: <span class="font-medium">If + Past Simple, would/could/might + have + Past Participle</span></p>
+                                        <p>Example: "If I <span class="highlight">were</span> fluent in Chinese, I <span class="highlight">would have enjoyed</span> my trip to Beijing more last year."</p>
+                                        <p class="text-gray-600">Remember to use the past simple in the if-clause to talk about a present state, and would have + past participle in the result clause to talk about the past consequence.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h4 class="font-medium mb-2">Try rephrasing using the alternative structure:</h4>
+                                        <p>"If I <span class="italic">had learned</span> [language] earlier, I <span class="italic">would be</span> [present result]."</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 p-4">
+                                <h3 class="font-medium text-lg">Prompt 3: Technology Impact</h3>
+                                <p>If smartphones had never been invented, how would your daily life be different now?</p>
+                            </div>
+                            <div class="p-4">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">Your response:</label>
+                                    <textarea class="w-full border border-gray-300 rounded p-2 h-24" placeholder="Type your response here..."></textarea>
+                                </div>
+                                <button class="check-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" data-feedback="feedback3">Check Grammar</button>
+                                <div id="feedback3" class="feedback-box mt-4 bg-blue-50 rounded border border-blue-200">
+                                    <h4 class="font-medium mb-2">Feedback:</h4>
+                                    <div class="space-y-2">
+                                        <p>Look for this structure: <span class="font-medium">If + Past Perfect, would/could/might + Base Verb</span></p>
+                                        <p>Example: "If smartphones <span class="highlight">had never been</span> invented, people <span class="highlight">would communicate</span> differently today."</p>
+                                        <p class="text-gray-600">Remember to use the past perfect in the if-clause to talk about a past event that didn't happen, and would + base verb in the result clause to talk about the present consequence.</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h4 class="font-medium mb-2">Extension question:</h4>
+                                        <p>How would your education or career have developed differently without smartphone technology?</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Mix Tab -->
+            <div id="quick-mix" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">Quick Mix Flashcards</h2>
+                    <p class="mb-6">Click on each card to see a suggested completion. Practice saying the full sentence aloud, then try creating your own ending.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Past → Present Cards -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700">Past → Present Cards</h3>
+                            <div class="space-y-4">
+                                <div class="flash-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                                    <div class="flash-card-inner">
+                                        <div class="flash-card-front bg-indigo-100 p-6">
+                                            <p class="text-lg font-medium">If I had studied harder in school...</p>
+                                        </div>
+                                        <div class="flash-card-back bg-indigo-600 text-white p-6">
+                                            <p class="text-lg">...I would have better career options now.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flash-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                                    <div class="flash-card-inner">
+                                        <div class="flash-card-front bg-indigo-100 p-6">
+                                            <p class="text-lg font-medium">If we had invested in that company...</p>
+                                        </div>
+                                        <div class="flash-card-back bg-indigo-600 text-white p-6">
+                                            <p class="text-lg">...we would be millionaires today.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flash-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                                    <div class="flash-card-inner">
+                                        <div class="flash-card-front bg-indigo-100 p-6">
+                                            <p class="text-lg font-medium">If I hadn't moved to this city...</p>
+                                        </div>
+                                        <div class="flash-card-back bg-indigo-600 text-white p-6">
+                                            <p class="text-lg">...I wouldn't know all the amazing friends I have now.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Present → Past Cards -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 text-purple-700">Present → Past Cards</h3>
+                            <div class="space-y-4">
+                                <div class="flash-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                                    <div class="flash-card-inner">
+                                        <div class="flash-card-front bg-purple-100 p-6">
+                                            <p class="text-lg font-medium">If I weren't so busy with work...</p>
+                                        </div>
+                                        <div class="flash-card-back bg-purple-600 text-white p-6">
+                                            <p class="text-lg">...I would have attended the concert last weekend.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flash-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                                    <div class="flash-card-inner">
+                                        <div class="flash-card-front bg-purple-100 p-6">
+                                            <p class="text-lg font-medium">If she were more experienced...</p>
+                                        </div>
+                                        <div class="flash-card-back bg-purple-600 text-white p-6">
+                                            <p class="text-lg">...she wouldn't have made that mistake during the presentation.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flash-card cursor-pointer" onclick="this.classList.toggle('flipped')">
+                                    <div class="flash-card-inner">
+                                        <div class="flash-card-front bg-purple-100 p-6">
+                                            <p class="text-lg font-medium">If we weren't afraid of change...</p>
+                                        </div>
+                                        <div class="flash-card-back bg-purple-600 text-white p-6">
+                                            <p class="text-lg">...we would have taken that opportunity last year.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-5 bg-gray-50 rounded-lg border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-3">Create Your Own</h3>
+                        <p class="mb-4">Practice creating your own mixed conditionals using these stems:</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-medium text-indigo-700 mb-2">Past → Present</h4>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li>If I had learned to cook earlier...</li>
+                                    <li>If we had met under different circumstances...</li>
+                                    <li>If technology hadn't advanced so quickly...</li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-purple-700 mb-2">Present → Past</h4>
+                                <ul class="list-disc list-inside space-y-2">
+                                    <li>If I weren't so passionate about languages...</li>
+                                    <li>If the weather were better today...</li>
+                                    <li>If people weren't so dependent on technology...</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all tabs and buttons
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('border-blue-600', 'text-blue-600');
+                    btn.classList.add('text-gray-600');
+                });
+                
+                // Add active class to selected tab and button
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                button.classList.remove('text-gray-600');
+                button.classList.add('border-blue-600', 'text-blue-600');
+            });
+        });
+        
+        // Analysis button functionality
+        document.querySelectorAll('.analyze-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement.classList.contains('hidden')) {
+                    targetElement.classList.remove('hidden');
+                    button.textContent = 'Hide Analysis';
+                } else {
+                    targetElement.classList.add('hidden');
+                    button.textContent = 'Analyze';
+                }
+            });
+        });
+        
+        // Example button functionality
+        document.querySelectorAll('.example-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement.classList.contains('hidden')) {
+                    targetElement.classList.remove('hidden');
+                    button.textContent = 'Hide example';
+                } else {
+                    targetElement.classList.add('hidden');
+                    button.textContent = 'See example';
+                }
+            });
+        });
+        
+        // Feedback button functionality
+        document.querySelectorAll('.check-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const feedbackId = button.getAttribute('data-feedback');
+                const feedbackElement = document.getElementById(feedbackId);
+                
+                feedbackElement.classList.toggle('show');
+                
+                if (feedbackElement.classList.contains('show')) {
+                    button.textContent = 'Hide Feedback';
+                } else {
+                    button.textContent = 'Check Grammar';
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94e2516e90486d90',t:'MTc0OTY1NzU5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
