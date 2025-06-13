@@ -1,0 +1,724 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjective Adventure: Compare &amp; Conquer!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 3s ease-in infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .feedback-animation {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .product-highlight {
+            animation: highlight 1s ease-in-out;
+        }
+        
+        @keyframes highlight {
+            0% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+            50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.8); }
+            100% { box-shadow: 0 0 0 rgba(99, 102, 241, 0); }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-3{height:0.75rem}.h-full{height:100%}.w-32{width:8rem}.max-w-4xl{max-width:56rem}.max-w-md{max-width:28rem}.flex-grow{flex-grow:1}.cursor-pointer{cursor:pointer}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-50{--tw-gradient-from:#f0fdf4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(240 253 244 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-600{--tw-gradient-from:#9333ea var(--tw-gradient-from-position);--tw-gradient-to:rgb(147 51 234 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-yellow-50{--tw-gradient-from:#fefce8 var(--tw-gradient-from-position);--tw-gradient-to:rgb(254 252 232 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-100{--tw-gradient-to:#dbeafe var(--tw-gradient-to-position)}.to-green-100{--tw-gradient-to:#dcfce7 var(--tw-gradient-to-position)}.to-indigo-600{--tw-gradient-to:#4f46e5 var(--tw-gradient-to-position)}.to-yellow-100{--tw-gradient-to:#fef9c3 var(--tw-gradient-to-position)}.p-4{padding:1rem}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.hover\:bg-yellow-600:hover{--tw-bg-opacity:1;background-color:rgb(202 138 4 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}</style></head>
+<body class="p-4" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div id="app" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white">
+            <h1 class="text-3xl font-bold text-center">Adjective Adventure: Compare &amp; Conquer!</h1>
+            <p class="text-center mt-2">Master comparative and superlative adjectives while comparing products</p>
+        </div>
+        
+        <!-- Main Content -->
+        <div id="main-content" class="p-6">
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="text-center py-8">
+                <div class="text-5xl mb-6">🎮 🎯 🏆</div>
+                <h2 class="text-2xl font-bold mb-4">Welcome to Adjective Adventure!</h2>
+                <p class="mb-6 text-gray-600">Learn to use comparative and superlative adjectives while comparing different products. Choose a category to begin!</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="product-card bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg shadow cursor-pointer" onclick="selectCategory('electronics')">
+                        <div class="text-4xl mb-2">📱</div>
+                        <h3 class="font-bold">Electronics</h3>
+                        <p class="text-sm text-gray-600">Phones, laptops, cameras</p>
+                    </div>
+                    <div class="product-card bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg shadow cursor-pointer" onclick="selectCategory('transportation')">
+                        <div class="text-4xl mb-2">🚗</div>
+                        <h3 class="font-bold">Transportation</h3>
+                        <p class="text-sm text-gray-600">Cars, bikes, scooters</p>
+                    </div>
+                    <div class="product-card bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-lg shadow cursor-pointer" onclick="selectCategory('kitchen')">
+                        <div class="text-4xl mb-2">🍳</div>
+                        <h3 class="font-bold">Kitchen Appliances</h3>
+                        <p class="text-sm text-gray-600">Blenders, toasters, mixers</p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-gray-600">
+                    <h3 class="font-bold mb-2">How to Play:</h3>
+                    <ul class="text-left max-w-md mx-auto">
+                        <li class="mb-2">1. Choose a product category</li>
+                        <li class="mb-2">2. Fill in the blanks with the correct form of the adjective</li>
+                        <li class="mb-2">3. Complete all challenges to become an adjective master!</li>
+                    </ul>
+                </div>
+                
+                <div class="mt-8 bg-indigo-50 p-4 rounded-lg max-w-md mx-auto">
+                    <h3 class="font-bold mb-2">Quick Grammar Refresher:</h3>
+                    <ul class="text-left text-sm">
+                        <li class="mb-1"><strong>Comparative:</strong> Compares two things (bigger, more expensive)</li>
+                        <li class="mb-1"><strong>Superlative:</strong> Compares three or more things (biggest, most expensive)</li>
+                        <li class="mb-1"><strong>Short adjectives:</strong> Add -er/-est (fast → faster → fastest)</li>
+                        <li><strong>Long adjectives:</strong> Use more/most (expensive → more expensive → most expensive)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Game Screen (Hidden initially) -->
+            <div id="game-screen" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 id="category-title" class="text-2xl font-bold"></h2>
+                        <p class="text-gray-600">Fill in the blanks with the correct form of the adjective</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-600">Progress</p>
+                        <div class="w-32 h-3 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="progress-bar h-full bg-green-500 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-xs mt-1"><span id="current-question">0</span>/<span id="total-questions">0</span></p>
+                    </div>
+                </div>
+                
+                <div id="product-comparison" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Products will be inserted here -->
+                </div>
+                
+                <div id="question-container" class="bg-indigo-50 p-6 rounded-lg mb-6">
+                    <p id="question-text" class="text-lg mb-4"></p>
+                    
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <input type="text" id="user-answer" class="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Type your answer...">
+                        <button id="check-answer" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                            Check Answer
+                        </button>
+                    </div>
+                    
+                    <div id="feedback" class="mt-4 p-4 rounded-lg hidden"></div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="hint-button" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                        Show Hint
+                    </button>
+                    <button id="next-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors hidden">
+                        Next Question
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Results Screen (Hidden initially) -->
+            <div id="results-screen" class="text-center py-8 hidden">
+                <div id="confetti-container"></div>
+                <div class="text-5xl mb-6">🎉</div>
+                <h2 class="text-2xl font-bold mb-4">Congratulations!</h2>
+                <p class="mb-2">You've completed the <span id="final-category"></span> challenge!</p>
+                <p class="mb-6">Your score: <span id="final-score" class="font-bold text-xl"></span></p>
+                
+                <div id="adjective-summary" class="bg-indigo-50 p-6 rounded-lg mb-6 text-left">
+                    <h3 class="font-bold mb-2">Adjectives you've mastered:</h3>
+                    <ul id="adjective-list" class="list-disc pl-5 grid grid-cols-2 md:grid-cols-3 gap-2"></ul>
+                </div>
+                
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <button id="try-again" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        Try Again
+                    </button>
+                    <button id="new-category" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        Choose New Category
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="bg-gray-100 p-4 text-center text-gray-600 text-sm">
+            <p>Created to help you master comparative and superlative adjectives</p>
+        </div>
+    </div>
+
+    <script>
+        // Game data
+        const gameData = {
+            electronics: {
+                title: "Electronics Comparison",
+                products: [
+                    { name: "SmartPhone X", image: "📱", specs: { price: 899, weight: 180, battery: 4000, camera: 12, storage: 128 } },
+                    { name: "SmartPhone Y", image: "📱", specs: { price: 1099, weight: 160, battery: 4500, camera: 48, storage: 256 } },
+                    { name: "Laptop Pro", image: "💻", specs: { price: 1299, weight: 1800, battery: 8000, screen: 15, storage: 512 } },
+                    { name: "Tablet Ultra", image: "📟", specs: { price: 799, weight: 450, battery: 6000, screen: 11, storage: 256 } },
+                    { name: "Smart Watch", image: "⌚", specs: { price: 349, weight: 40, battery: 500, storage: 32 } }
+                ],
+                questions: [
+                    { 
+                        text: "SmartPhone Y is (expensive) than SmartPhone X.",
+                        adjective: "expensive",
+                        answer: "more expensive",
+                        type: "comparative",
+                        hint: "Use 'more' with longer adjectives.",
+                        products: ["SmartPhone X", "SmartPhone Y"]
+                    },
+                    { 
+                        text: "SmartPhone Y is (light) than SmartPhone X.",
+                        adjective: "light",
+                        answer: "lighter",
+                        type: "comparative",
+                        hint: "Add '-er' to short adjectives.",
+                        products: ["SmartPhone X", "SmartPhone Y"]
+                    },
+                    { 
+                        text: "Laptop Pro is the (heavy) device of all.",
+                        adjective: "heavy",
+                        answer: "heaviest",
+                        type: "superlative",
+                        hint: "Add '-est' to short adjectives for superlatives.",
+                        products: ["SmartPhone X", "SmartPhone Y", "Laptop Pro", "Tablet Ultra", "Smart Watch"]
+                    },
+                    { 
+                        text: "Laptop Pro has the (powerful) battery.",
+                        adjective: "powerful",
+                        answer: "most powerful",
+                        type: "superlative",
+                        hint: "Use 'most' with longer adjectives for superlatives.",
+                        products: ["SmartPhone X", "SmartPhone Y", "Laptop Pro", "Tablet Ultra", "Smart Watch"]
+                    },
+                    { 
+                        text: "The Smart Watch is (small) than the Tablet Ultra.",
+                        adjective: "small",
+                        answer: "smaller",
+                        type: "comparative",
+                        hint: "Add '-er' to short adjectives.",
+                        products: ["Tablet Ultra", "Smart Watch"]
+                    },
+                    { 
+                        text: "SmartPhone Y has a (good) camera than SmartPhone X.",
+                        adjective: "good",
+                        answer: "better",
+                        type: "comparative",
+                        hint: "Some adjectives have irregular forms (good, better, best).",
+                        products: ["SmartPhone X", "SmartPhone Y"]
+                    },
+                    { 
+                        text: "The Tablet Ultra is (thin) than the Laptop Pro but (thick) than the Smart Watch.",
+                        adjective: "thin, thick",
+                        answer: "thinner, thicker",
+                        type: "comparative",
+                        hint: "Add '-er' to both short adjectives.",
+                        products: ["Laptop Pro", "Tablet Ultra", "Smart Watch"]
+                    },
+                    { 
+                        text: "The Laptop Pro has the (large) storage capacity of all devices.",
+                        adjective: "large",
+                        answer: "largest",
+                        type: "superlative",
+                        hint: "Add '-est' to short adjectives for superlatives.",
+                        products: ["SmartPhone X", "SmartPhone Y", "Laptop Pro", "Tablet Ultra", "Smart Watch"]
+                    }
+                ]
+            },
+            transportation: {
+                title: "Transportation Comparison",
+                products: [
+                    { name: "City Car", image: "🚗", specs: { price: 18000, speed: 180, fuel: 15, seats: 5, weight: 1200 } },
+                    { name: "Electric Bike", image: "🚲", specs: { price: 2500, speed: 45, range: 80, seats: 1, weight: 25 } },
+                    { name: "Luxury SUV", image: "🚙", specs: { price: 45000, speed: 220, fuel: 10, seats: 7, weight: 2100 } },
+                    { name: "Scooter", image: "🛴", specs: { price: 800, speed: 25, range: 30, seats: 1, weight: 12 } },
+                    { name: "Sports Car", image: "🏎️", specs: { price: 65000, speed: 280, fuel: 8, seats: 2, weight: 1500 } }
+                ],
+                questions: [
+                    { 
+                        text: "The Luxury SUV is (expensive) than the City Car.",
+                        adjective: "expensive",
+                        answer: "more expensive",
+                        type: "comparative",
+                        hint: "Use 'more' with longer adjectives.",
+                        products: ["City Car", "Luxury SUV"]
+                    },
+                    { 
+                        text: "The Electric Bike is the (cheap) option.",
+                        adjective: "cheap",
+                        answer: "cheapest",
+                        type: "superlative",
+                        hint: "Add '-est' to short adjectives for superlatives.",
+                        products: ["City Car", "Electric Bike", "Luxury SUV", "Scooter", "Sports Car"]
+                    },
+                    { 
+                        text: "The Luxury SUV is (fast) than the Electric Bike.",
+                        adjective: "fast",
+                        answer: "faster",
+                        type: "comparative",
+                        hint: "Add '-er' to short adjectives.",
+                        products: ["Electric Bike", "Luxury SUV"]
+                    },
+                    { 
+                        text: "The Luxury SUV is the (efficient) vehicle in terms of fuel consumption.",
+                        adjective: "efficient",
+                        answer: "least efficient",
+                        type: "superlative",
+                        hint: "Use 'least' for negative superlatives with longer adjectives.",
+                        products: ["City Car", "Luxury SUV", "Sports Car"]
+                    },
+                    { 
+                        text: "The Sports Car is the (fast) vehicle of all.",
+                        adjective: "fast",
+                        answer: "fastest",
+                        type: "superlative",
+                        hint: "Add '-est' to short adjectives for superlatives.",
+                        products: ["City Car", "Electric Bike", "Luxury SUV", "Scooter", "Sports Car"]
+                    },
+                    { 
+                        text: "The Scooter is (light) than the Electric Bike.",
+                        adjective: "light",
+                        answer: "lighter",
+                        type: "comparative",
+                        hint: "Add '-er' to short adjectives.",
+                        products: ["Electric Bike", "Scooter"]
+                    },
+                    { 
+                        text: "The Luxury SUV can carry (many) passengers than the Sports Car.",
+                        adjective: "many",
+                        answer: "more",
+                        type: "comparative",
+                        hint: "Some adjectives have irregular forms (many, more, most).",
+                        products: ["Luxury SUV", "Sports Car"]
+                    },
+                    { 
+                        text: "The City Car is (practical) for daily commuting than the Sports Car but (practical) than the Electric Bike.",
+                        adjective: "practical",
+                        answer: "more practical, less practical",
+                        type: "comparative",
+                        hint: "Use 'more' and 'less' with longer adjectives.",
+                        products: ["City Car", "Electric Bike", "Sports Car"]
+                    }
+                ]
+            },
+            kitchen: {
+                title: "Kitchen Appliances Comparison",
+                products: [
+                    { name: "Basic Blender", image: "🍹", specs: { price: 49, power: 300, capacity: 1, weight: 2, programs: 3 } },
+                    { name: "Pro Mixer", image: "🥣", specs: { price: 199, power: 800, capacity: 3, weight: 5, programs: 8 } },
+                    { name: "Smart Cooker", image: "🍲", specs: { price: 299, power: 1200, capacity: 5, weight: 8, programs: 12 } },
+                    { name: "Coffee Maker", image: "☕", specs: { price: 129, power: 1000, capacity: 1.5, weight: 3, programs: 5 } },
+                    { name: "Toaster Oven", image: "🍞", specs: { price: 89, power: 1500, capacity: 0.8, weight: 4, programs: 6 } }
+                ],
+                questions: [
+                    { 
+                        text: "The Pro Mixer is (powerful) than the Basic Blender.",
+                        adjective: "powerful",
+                        answer: "more powerful",
+                        type: "comparative",
+                        hint: "Use 'more' with longer adjectives.",
+                        products: ["Basic Blender", "Pro Mixer"]
+                    },
+                    { 
+                        text: "The Basic Blender is the (affordable) option.",
+                        adjective: "affordable",
+                        answer: "most affordable",
+                        type: "superlative",
+                        hint: "Use 'most' with longer adjectives for superlatives.",
+                        products: ["Basic Blender", "Pro Mixer", "Smart Cooker", "Coffee Maker", "Toaster Oven"]
+                    },
+                    { 
+                        text: "The Smart Cooker has a (large) capacity than the Pro Mixer.",
+                        adjective: "large",
+                        answer: "larger",
+                        type: "comparative",
+                        hint: "Add '-er' to short adjectives.",
+                        products: ["Pro Mixer", "Smart Cooker"]
+                    },
+                    { 
+                        text: "The Smart Cooker is the (good) appliance for cooking large meals.",
+                        adjective: "good",
+                        answer: "best",
+                        type: "superlative",
+                        hint: "Some adjectives have irregular forms (good, better, best).",
+                        products: ["Basic Blender", "Pro Mixer", "Smart Cooker", "Coffee Maker", "Toaster Oven"]
+                    },
+                    { 
+                        text: "The Toaster Oven is (hot) than the Coffee Maker.",
+                        adjective: "hot",
+                        answer: "hotter",
+                        type: "comparative",
+                        hint: "For adjectives ending in consonant + vowel + consonant, double the final consonant and add '-er'.",
+                        products: ["Coffee Maker", "Toaster Oven"]
+                    },
+                    { 
+                        text: "The Smart Cooker has the (many) cooking programs.",
+                        adjective: "many",
+                        answer: "most",
+                        type: "superlative",
+                        hint: "Some adjectives have irregular forms (many, more, most).",
+                        products: ["Basic Blender", "Pro Mixer", "Smart Cooker", "Coffee Maker", "Toaster Oven"]
+                    },
+                    { 
+                        text: "The Coffee Maker is (efficient) than the Basic Blender but (efficient) than the Smart Cooker.",
+                        adjective: "efficient",
+                        answer: "more efficient, less efficient",
+                        type: "comparative",
+                        hint: "Use 'more' and 'less' with longer adjectives.",
+                        products: ["Basic Blender", "Coffee Maker", "Smart Cooker"]
+                    },
+                    { 
+                        text: "The Basic Blender is the (light) appliance, while the Smart Cooker is the (heavy) one.",
+                        adjective: "light, heavy",
+                        answer: "lightest, heaviest",
+                        type: "superlative",
+                        hint: "Add '-est' to both short adjectives for superlatives.",
+                        products: ["Basic Blender", "Pro Mixer", "Smart Cooker", "Coffee Maker", "Toaster Oven"]
+                    }
+                ]
+            }
+        };
+        
+        // Game state
+        let currentCategory = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let usedAdjectives = [];
+        
+        // DOM elements
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const categoryTitle = document.getElementById('category-title');
+        const productComparison = document.getElementById('product-comparison');
+        const questionText = document.getElementById('question-text');
+        const userAnswer = document.getElementById('user-answer');
+        const checkAnswerBtn = document.getElementById('check-answer');
+        const nextButton = document.getElementById('next-button');
+        const hintButton = document.getElementById('hint-button');
+        const feedback = document.getElementById('feedback');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const finalCategory = document.getElementById('final-category');
+        const finalScore = document.getElementById('final-score');
+        const adjectiveList = document.getElementById('adjective-list');
+        const tryAgainBtn = document.getElementById('try-again');
+        const newCategoryBtn = document.getElementById('new-category');
+        
+        // Select category and start game
+        function selectCategory(category) {
+            currentCategory = category;
+            currentQuestionIndex = 0;
+            score = 0;
+            usedAdjectives = [];
+            
+            // Update UI
+            welcomeScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            
+            // Set category title
+            categoryTitle.textContent = gameData[category].title;
+            
+            // Update progress
+            totalQuestionsEl.textContent = gameData[category].questions.length;
+            currentQuestionEl.textContent = currentQuestionIndex + 1;
+            progressBar.style.width = `${((currentQuestionIndex + 1) / gameData[category].questions.length) * 100}%`;
+            
+            // Display first question
+            displayQuestion();
+        }
+        
+        // Display products for comparison based on current question
+        function displayProducts() {
+            productComparison.innerHTML = '';
+            
+            const question = gameData[currentCategory].questions[currentQuestionIndex];
+            const allProducts = gameData[currentCategory].products;
+            
+            // If question specifies which products to show, use those
+            const productsToShow = question.products ? 
+                allProducts.filter(p => question.products.includes(p.name)) : 
+                allProducts;
+            
+            productsToShow.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white p-4 rounded-lg shadow-md';
+                productCard.id = `product-${product.name.replace(/\s+/g, '-').toLowerCase()}`;
+                
+                let specsHTML = '';
+                for (const [key, value] of Object.entries(product.specs)) {
+                    let unit = '';
+                    if (key === 'price') unit = '$';
+                    else if (key === 'weight') unit = 'g';
+                    else if (key === 'battery' || key === 'power') unit = 'mAh';
+                    else if (key === 'speed') unit = 'km/h';
+                    else if (key === 'fuel') unit = 'km/L';
+                    else if (key === 'range') unit = 'km';
+                    else if (key === 'capacity') unit = 'L';
+                    else if (key === 'screen') unit = '"';
+                    else if (key === 'storage') unit = 'GB';
+                    else if (key === 'camera') unit = 'MP';
+                    
+                    specsHTML += `
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">${key.charAt(0).toUpperCase() + key.slice(1)}:</span>
+                            <span class="font-semibold">${value}${unit}</span>
+                        </div>
+                    `;
+                }
+                
+                productCard.innerHTML = `
+                    <div class="text-center mb-4">
+                        <div class="text-5xl mb-2">${product.image}</div>
+                        <h3 class="font-bold text-lg">${product.name}</h3>
+                    </div>
+                    <div class="space-y-2">
+                        ${specsHTML}
+                    </div>
+                `;
+                
+                productComparison.appendChild(productCard);
+            });
+        }
+        
+        // Display current question
+        function displayQuestion() {
+            const question = gameData[currentCategory].questions[currentQuestionIndex];
+            
+            // Display relevant products
+            displayProducts();
+            
+            // Format question text
+            questionText.innerHTML = question.text.replace(/\(([^)]+)\)/g, (match, p1) => {
+                return `<strong class="text-indigo-600">(${p1})</strong>`;
+            });
+            
+            userAnswer.value = '';
+            userAnswer.disabled = false;
+            userAnswer.focus();
+            
+            feedback.classList.add('hidden');
+            nextButton.classList.add('hidden');
+            checkAnswerBtn.disabled = false;
+            
+            // Highlight products mentioned in the question
+            if (question.products) {
+                setTimeout(() => {
+                    question.products.forEach(productName => {
+                        const productId = `product-${productName.replace(/\s+/g, '-').toLowerCase()}`;
+                        const productElement = document.getElementById(productId);
+                        if (productElement) {
+                            productElement.classList.add('product-highlight');
+                        }
+                    });
+                }, 300);
+            }
+        }
+        
+        // Check user's answer
+        function checkAnswer() {
+            const question = gameData[currentCategory].questions[currentQuestionIndex];
+            const userInput = userAnswer.value.trim().toLowerCase();
+            const correctAnswer = question.answer.toLowerCase();
+            
+            feedback.classList.remove('hidden');
+            feedback.classList.add('feedback-animation');
+            
+            if (userInput === correctAnswer) {
+                // Correct answer
+                feedback.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-800';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">✅</span>
+                        <div>
+                            <p class="font-bold">Correct!</p>
+                            <p>Great job using the ${question.type} form of "${question.adjective}".</p>
+                        </div>
+                    </div>
+                `;
+                score++;
+                
+                // Add to used adjectives if not already there
+                const adjectives = question.adjective.split(', ');
+                adjectives.forEach(adj => {
+                    if (!usedAdjectives.includes(adj)) {
+                        usedAdjectives.push(adj);
+                    }
+                });
+                
+                // Show confetti for correct answers
+                createConfetti();
+            } else {
+                // Incorrect answer
+                feedback.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-800';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">❌</span>
+                        <div>
+                            <p class="font-bold">Not quite right.</p>
+                            <p>The correct answer is: "${question.answer}"</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Disable input and check button
+            userAnswer.disabled = true;
+            checkAnswerBtn.disabled = true;
+            
+            // Show next button
+            nextButton.classList.remove('hidden');
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                feedback.classList.remove('feedback-animation');
+            }, 500);
+        }
+        
+        // Move to next question or show results
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            // Update progress
+            currentQuestionEl.textContent = currentQuestionIndex + 1;
+            progressBar.style.width = `${((currentQuestionIndex + 1) / gameData[currentCategory].questions.length) * 100}%`;
+            
+            if (currentQuestionIndex < gameData[currentCategory].questions.length) {
+                // Show next question
+                displayQuestion();
+            } else {
+                // Show results
+                showResults();
+            }
+        }
+        
+        // Show hint
+        function showHint() {
+            const question = gameData[currentCategory].questions[currentQuestionIndex];
+            
+            feedback.classList.remove('hidden');
+            feedback.className = 'mt-4 p-4 rounded-lg bg-yellow-100 text-yellow-800';
+            feedback.innerHTML = `
+                <div class="flex items-center">
+                    <span class="text-2xl mr-2">💡</span>
+                    <div>
+                        <p class="font-bold">Hint:</p>
+                        <p>${question.hint}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Show results screen
+        function showResults() {
+            gameScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            
+            finalCategory.textContent = gameData[currentCategory].title;
+            finalScore.textContent = `${score}/${gameData[currentCategory].questions.length}`;
+            
+            // Display used adjectives
+            adjectiveList.innerHTML = '';
+            usedAdjectives.forEach(adj => {
+                const li = document.createElement('li');
+                li.textContent = adj;
+                adjectiveList.appendChild(li);
+            });
+            
+            // Show lots of confetti for completion
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    createConfetti();
+                }, i * 100);
+            }
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti-container');
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                confettiContainer.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Event listeners
+        checkAnswerBtn.addEventListener('click', checkAnswer);
+        nextButton.addEventListener('click', nextQuestion);
+        hintButton.addEventListener('click', showHint);
+        tryAgainBtn.addEventListener('click', () => selectCategory(currentCategory));
+        newCategoryBtn.addEventListener('click', () => {
+            welcomeScreen.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+        });
+        
+        // Allow pressing Enter to submit answer
+        userAnswer.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !userAnswer.disabled) {
+                checkAnswer();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94f2fc71a77e6d90',t:'MTc0OTgzMjM2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
