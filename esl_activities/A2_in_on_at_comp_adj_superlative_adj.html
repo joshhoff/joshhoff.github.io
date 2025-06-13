@@ -1,0 +1,957 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive English Grammar Lesson</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .answer-feedback {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+        
+        .answer-feedback.show {
+            height: auto;
+            padding: 0.75rem;
+        }
+        
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option {
+            transition: all 0.2s ease;
+        }
+        
+        .correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+        }
+        
+        .incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.mr-2{margin-right:0.5rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2\.5{height:0.625rem}.h-20{height:5rem}.h-32{height:8rem}.w-32{width:8rem}.w-40{width:10rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.cursor-not-allowed{cursor:not-allowed}.list-disc{list-style-type:disc}.list-decimal{list-style-type:decimal}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-3{gap:0.75rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-t-lg{border-top-left-radius:0.5rem;border-top-right-radius:0.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.opacity-50{opacity:0.5}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-400:hover{--tw-bg-opacity:1;background-color:rgb(156 163 175 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-800 mb-2">Interactive English Grammar Lesson</h1>
+            <p class="text-gray-600 text-lg">A2-B1 Level</p>
+        </header>
+        
+        <!-- Tab Navigation -->
+        <div class="flex flex-wrap mb-6 border-b border-gray-200">
+            <button id="tab1-btn" class="tab-btn px-6 py-3 font-medium text-lg rounded-t-lg bg-blue-600 text-white">
+                Prepositions of Place
+            </button>
+            <button id="tab2-btn" class="tab-btn px-6 py-3 font-medium text-lg rounded-t-lg ml-2 bg-gray-200 text-gray-700">
+                Comparative Adjectives
+            </button>
+            <button id="tab3-btn" class="tab-btn px-6 py-3 font-medium text-lg rounded-t-lg ml-2 bg-gray-200 text-gray-700">
+                Superlative Adjectives
+            </button>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+            <div id="progress-bar" class="progress-bar bg-blue-600 h-2.5 rounded-full" style="width: 33.3333%;"></div>
+        </div>
+        
+        <!-- Tab 1: Prepositions of Place -->
+        <div id="tab1" class="tab-content active">
+            <section class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Prepositions of Place: in / on / at</h2>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">Explanation</h3>
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-800 mb-2">IN</h4>
+                            <p class="mb-2">Use <span class="font-semibold">in</span> for enclosed spaces and larger areas.</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>in a room</li>
+                                <li>in London</li>
+                                <li>in a box</li>
+                                <li>in the garden</li>
+                                <li>in the morning</li>
+                                <li>in summer</li>
+                            </ul>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-green-800 mb-2">ON</h4>
+                            <p class="mb-2">Use <span class="font-semibold">on</span> for surfaces and specific days.</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>on the table</li>
+                                <li>on the wall</li>
+                                <li>on the floor</li>
+                                <li>on the bus</li>
+                                <li>on Monday</li>
+                                <li>on Christmas Day</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-purple-800 mb-2">AT</h4>
+                            <p class="mb-2">Use <span class="font-semibold">at</span> for specific points and times.</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>at the bus stop</li>
+                                <li>at the door</li>
+                                <li>at the top</li>
+                                <li>at 3 o'clock</li>
+                                <li>at night</li>
+                                <li>at lunchtime</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">Practice Activities</h3>
+                    
+                    <!-- Fill in the blanks -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">1. Fill in the blanks with in, on, or at:</h4>
+                        <div class="space-y-4" id="fill-blanks">
+                            <div class="flex flex-wrap items-center">
+                                <p class="mr-2">1. The book is</p>
+                                <select class="border rounded px-2 py-1 preposition-select" data-answer="on">
+                                    <option value="">Choose</option>
+                                    <option value="in">in</option>
+                                    <option value="on">on</option>
+                                    <option value="at">at</option>
+                                </select>
+                                <p class="ml-2">the table.</p>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <p class="mr-2">2. We're meeting</p>
+                                <select class="border rounded px-2 py-1 preposition-select" data-answer="at">
+                                    <option value="">Choose</option>
+                                    <option value="in">in</option>
+                                    <option value="on">on</option>
+                                    <option value="at">at</option>
+                                </select>
+                                <p class="ml-2">the train station.</p>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <p class="mr-2">3. She lives</p>
+                                <select class="border rounded px-2 py-1 preposition-select" data-answer="in">
+                                    <option value="">Choose</option>
+                                    <option value="in">in</option>
+                                    <option value="on">on</option>
+                                    <option value="at">at</option>
+                                </select>
+                                <p class="ml-2">Paris.</p>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <p class="mr-2">4. The class starts</p>
+                                <select class="border rounded px-2 py-1 preposition-select" data-answer="at">
+                                    <option value="">Choose</option>
+                                    <option value="in">in</option>
+                                    <option value="on">on</option>
+                                    <option value="at">at</option>
+                                </select>
+                                <p class="ml-2">9 o'clock.</p>
+                            </div>
+                            <div class="flex flex-wrap items-center">
+                                <p class="mr-2">5. My birthday is</p>
+                                <select class="border rounded px-2 py-1 preposition-select" data-answer="on">
+                                    <option value="">Choose</option>
+                                    <option value="in">in</option>
+                                    <option value="on">on</option>
+                                    <option value="at">at</option>
+                                </select>
+                                <p class="ml-2">May 15th.</p>
+                            </div>
+                            <button id="check-blanks" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Check Answers</button>
+                            <div id="blanks-feedback" class="answer-feedback mt-3 rounded-lg"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Picture-based matching -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">2. Match the preposition to the picture description:</h4>
+                        <div class="grid md:grid-cols-2 gap-4" id="picture-matching">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="20" y="50" width="160" height="100" fill="#f0f0f0" stroke="#333" stroke-width="2"></rect>
+                                        <rect x="60" y="80" width="80" height="40" fill="#a7c7e7" stroke="#333" stroke-width="2"></rect>
+                                        <circle cx="100" cy="100" r="10" fill="#ff6b6b"></circle>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">The red dot is...</p>
+                                <div class="flex justify-center space-x-2">
+                                    <button class="option border px-3 py-1 rounded" data-correct="true" data-preposition="in">in the box</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="on">on the box</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="at">at the box</button>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="40" y="120" width="120" height="10" fill="#8b4513" stroke="#333" stroke-width="2"></rect>
+                                        <rect x="70" y="70" width="60" height="50" fill="#f0f0f0" stroke="#333" stroke-width="2"></rect>
+                                        <circle cx="100" cy="60" r="10" fill="#ff6b6b"></circle>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">The red dot is...</p>
+                                <div class="flex justify-center space-x-2">
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="in">in the table</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="true" data-preposition="on">on the table</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="at">at the table</button>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="60" y="80" width="80" height="100" fill="#f0f0f0" stroke="#333" stroke-width="2"></rect>
+                                        <rect x="90" y="140" width="20" height="40" fill="#8b4513" stroke="#333" stroke-width="2"></rect>
+                                        <circle cx="100" cy="140" r="10" fill="#ff6b6b"></circle>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">The red dot is...</p>
+                                <div class="flex justify-center space-x-2">
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="in">in the door</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="on">on the door</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="true" data-preposition="at">at the door</button>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="100" cy="100" r="60" fill="#a7c7e7" stroke="#333" stroke-width="2"></circle>
+                                        <circle cx="100" cy="100" r="10" fill="#ff6b6b"></circle>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">The red dot is...</p>
+                                <div class="flex justify-center space-x-2">
+                                    <button class="option border px-3 py-1 rounded" data-correct="true" data-preposition="in">in the circle</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="on">on the circle</button>
+                                    <button class="option border px-3 py-1 rounded" data-correct="false" data-preposition="at">at the circle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversation prompts -->
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3">3. Conversation Practice:</h4>
+                        <p class="mb-4">Choose the correct preposition and explain why:</p>
+                        <div class="space-y-6">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="mb-2 font-medium">Situation 1: Describing where you live</p>
+                                <p class="mb-3">Complete: "I live _____ a small apartment _____ the third floor _____ the city center."</p>
+                                <div class="mb-2">
+                                    <button class="conversation-reveal bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Show Answer</button>
+                                </div>
+                                <div class="conversation-answer hidden bg-blue-50 p-3 rounded-lg">
+                                    <p><strong>Answer:</strong> "I live <span class="font-bold text-blue-700">in</span> a small apartment <span class="font-bold text-green-700">on</span> the third floor <span class="font-bold text-purple-700">in</span> the city center."</p>
+                                    <p class="mt-2"><strong>Explanation:</strong></p>
+                                    <ul class="list-disc pl-5">
+                                        <li><span class="font-bold text-blue-700">in</span> a small apartment - apartments are enclosed spaces</li>
+                                        <li><span class="font-bold text-green-700">on</span> the third floor - floors are surfaces/levels</li>
+                                        <li><span class="font-bold text-purple-700">in</span> the city center - city center is a larger area</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="mb-2 font-medium">Situation 2: Meeting a friend</p>
+                                <p class="mb-3">Complete: "Let's meet _____ the café _____ Main Street _____ 5 o'clock."</p>
+                                <div class="mb-2">
+                                    <button class="conversation-reveal bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Show Answer</button>
+                                </div>
+                                <div class="conversation-answer hidden bg-blue-50 p-3 rounded-lg">
+                                    <p><strong>Answer:</strong> "Let's meet <span class="font-bold text-purple-700">at</span> the café <span class="font-bold text-green-700">on</span> Main Street <span class="font-bold text-purple-700">at</span> 5 o'clock."</p>
+                                    <p class="mt-2"><strong>Explanation:</strong></p>
+                                    <ul class="list-disc pl-5">
+                                        <li><span class="font-bold text-purple-700">at</span> the café - specific location/point</li>
+                                        <li><span class="font-bold text-green-700">on</span> Main Street - streets are treated as surfaces</li>
+                                        <li><span class="font-bold text-purple-700">at</span> 5 o'clock - specific time</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="mb-2 font-medium">Situation 3: Describing a photo</p>
+                                <p class="mb-3">Complete: "_____ this photo, my family is sitting _____ a bench _____ the park."</p>
+                                <div class="mb-2">
+                                    <button class="conversation-reveal bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Show Answer</button>
+                                </div>
+                                <div class="conversation-answer hidden bg-blue-50 p-3 rounded-lg">
+                                    <p><strong>Answer:</strong> "<span class="font-bold text-blue-700">In</span> this photo, my family is sitting <span class="font-bold text-green-700">on</span> a bench <span class="font-bold text-blue-700">in</span> the park."</p>
+                                    <p class="mt-2"><strong>Explanation:</strong></p>
+                                    <ul class="list-disc pl-5">
+                                        <li><span class="font-bold text-blue-700">In</span> this photo - photos are treated as containers</li>
+                                        <li><span class="font-bold text-green-700">on</span> a bench - benches are surfaces</li>
+                                        <li><span class="font-bold text-blue-700">in</span> the park - parks are larger areas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded opacity-50 cursor-not-allowed">Previous</button>
+                    <button id="next-to-tab2" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Next: Comparative Adjectives</button>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Tab 2: Comparative Adjectives -->
+        <div id="tab2" class="tab-content">
+            <section class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Comparative Adjectives</h2>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">Explanation</h3>
+                    <p class="mb-4">We use comparative adjectives to compare two things and show differences between them.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-800 mb-2">One-syllable adjectives</h4>
+                            <p class="mb-2">Add <span class="font-semibold">-er</span> to the adjective</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>tall → <span class="font-bold">taller</span></li>
+                                <li>small → <span class="font-bold">smaller</span></li>
+                                <li>cheap → <span class="font-bold">cheaper</span></li>
+                                <li>fast → <span class="font-bold">faster</span></li>
+                            </ul>
+                            <p class="mt-2 text-sm text-gray-600">Note: For adjectives ending in e, just add -r (nice → nicer)</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-green-800 mb-2">Two-syllable (and longer)</h4>
+                            <p class="mb-2">Use <span class="font-semibold">more + adjective</span></p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>careful → <span class="font-bold">more careful</span></li>
+                                <li>expensive → <span class="font-bold">more expensive</span></li>
+                                <li>interesting → <span class="font-bold">more interesting</span></li>
+                                <li>beautiful → <span class="font-bold">more beautiful</span></li>
+                            </ul>
+                            <p class="mt-2 text-sm text-gray-600">Note: Some two-syllable adjectives can take -er (e.g., clever → cleverer)</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-purple-800 mb-2">Irregular forms</h4>
+                            <p class="mb-2">Some adjectives have special comparative forms</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>good → <span class="font-bold">better</span></li>
+                                <li>bad → <span class="font-bold">worse</span></li>
+                                <li>far → <span class="font-bold">farther/further</span></li>
+                                <li>little → <span class="font-bold">less</span></li>
+                                <li>many/much → <span class="font-bold">more</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yellow-800 mb-2">Spelling Rules</h4>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li>For adjectives ending in consonant + single vowel + consonant, double the final consonant: <br>big → <span class="font-bold">bigger</span>, hot → <span class="font-bold">hotter</span></li>
+                            <li>For adjectives ending in y, change y to i and add -er: <br>happy → <span class="font-bold">happier</span>, easy → <span class="font-bold">easier</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">Practice Activities</h3>
+                    
+                    <!-- Sentence transformation -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">1. Sentence Transformation:</h4>
+                        <p class="mb-3">Rewrite each sentence using the comparative form of the adjective in brackets.</p>
+                        
+                        <div class="space-y-4" id="sentence-transformation">
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="mb-2">1. This book is (interesting) than the one I read last week.</p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <p>Answer: This book is</p>
+                                    <input type="text" class="border rounded px-2 py-1 w-40 comparative-answer" data-answer="more interesting">
+                                    <p>than the one I read last week.</p>
+                                </div>
+                                <div class="answer-feedback mt-2 rounded-lg"></div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="mb-2">2. My brother is (tall) than me.</p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <p>Answer: My brother is</p>
+                                    <input type="text" class="border rounded px-2 py-1 w-40 comparative-answer" data-answer="taller">
+                                    <p>than me.</p>
+                                </div>
+                                <div class="answer-feedback mt-2 rounded-lg"></div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="mb-2">3. Learning English is (good) than learning no language at all.</p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <p>Answer: Learning English is</p>
+                                    <input type="text" class="border rounded px-2 py-1 w-40 comparative-answer" data-answer="better">
+                                    <p>than learning no language at all.</p>
+                                </div>
+                                <div class="answer-feedback mt-2 rounded-lg"></div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="mb-2">4. The weather today is (bad) than yesterday.</p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <p>Answer: The weather today is</p>
+                                    <input type="text" class="border rounded px-2 py-1 w-40 comparative-answer" data-answer="worse">
+                                    <p>than yesterday.</p>
+                                </div>
+                                <div class="answer-feedback mt-2 rounded-lg"></div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg border">
+                                <p class="mb-2">5. This exercise is (easy) than the previous one.</p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <p>Answer: This exercise is</p>
+                                    <input type="text" class="border rounded px-2 py-1 w-40 comparative-answer" data-answer="easier">
+                                    <p>than the previous one.</p>
+                                </div>
+                                <div class="answer-feedback mt-2 rounded-lg"></div>
+                            </div>
+                            
+                            <button id="check-comparatives" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Check Answers</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Picture/scenario prompts -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">2. Comparison Scenarios:</h4>
+                        <p class="mb-3">Look at each scenario and write a comparison using the given adjective.</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4" id="comparison-scenarios">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="20" y="120" width="60" height="60" fill="#a7c7e7" stroke="#333" stroke-width="2"></rect>
+                                        <rect x="120" y="80" width="60" height="100" fill="#a7c7e7" stroke="#333" stroke-width="2"></rect>
+                                        <text x="50" y="160" font-size="12" text-anchor="middle">Building A</text>
+                                        <text x="150" y="130" font-size="12" text-anchor="middle">Building B</text>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">Use: <strong>tall</strong></p>
+                                <textarea class="w-full border rounded p-2 h-20 scenario-answer" placeholder="Write your comparison here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="scenario-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="scenario-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> Building B is taller than Building A.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="60" cy="100" r="30" fill="#ff9999" stroke="#333" stroke-width="2"></circle>
+                                        <circle cx="140" cy="100" r="40" fill="#ff9999" stroke="#333" stroke-width="2"></circle>
+                                        <text x="60" y="100" font-size="12" text-anchor="middle">$5</text>
+                                        <text x="140" y="100" font-size="12" text-anchor="middle">$8</text>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">Use: <strong>expensive</strong></p>
+                                <textarea class="w-full border rounded p-2 h-20 scenario-answer" placeholder="Write your comparison here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="scenario-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="scenario-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> The right pizza is more expensive than the left pizza.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="30" y="70" width="60" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2"></rect>
+                                        <rect x="110" y="70" width="60" height="80" fill="#f0f0f0" stroke="#333" stroke-width="2"></rect>
+                                        <text x="60" y="110" font-size="10" text-anchor="middle">★★★</text>
+                                        <text x="140" y="110" font-size="10" text-anchor="middle">★★★★★</text>
+                                        <text x="60" y="160" font-size="12" text-anchor="middle">Movie A</text>
+                                        <text x="140" y="160" font-size="12" text-anchor="middle">Movie B</text>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">Use: <strong>good</strong></p>
+                                <textarea class="w-full border rounded p-2 h-20 scenario-answer" placeholder="Write your comparison here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="scenario-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="scenario-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> Movie B is better than Movie A.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <div class="flex justify-center mb-3">
+                                    <svg class="w-32 h-32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M40,140 C40,80 80,80 100,80 C120,80 160,80 160,140" fill="none" stroke="#333" stroke-width="2"></path>
+                                        <path d="M60,140 C60,100 80,100 100,100 C120,100 140,100 140,140" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="5,5"></path>
+                                        <text x="100" y="70" font-size="12" text-anchor="middle">Route A</text>
+                                        <text x="100" y="160" font-size="12" text-anchor="middle">Route B</text>
+                                    </svg>
+                                </div>
+                                <p class="text-center mb-2">Use: <strong>short</strong></p>
+                                <textarea class="w-full border rounded p-2 h-20 scenario-answer" placeholder="Write your comparison here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="scenario-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="scenario-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> Route B is shorter than Route A.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversation starters -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">3. Conversation Practice:</h4>
+                        <p class="mb-3">Use these conversation starters to practice comparative adjectives. Think about your answers and use comparatives in your responses.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="font-medium mb-2">Which do you prefer and why?</p>
+                                <ul class="list-disc pl-5 space-y-3">
+                                    <li>Living in a city or living in the countryside?</li>
+                                    <li>Watching movies at home or going to the cinema?</li>
+                                    <li>Summer or winter?</li>
+                                </ul>
+                                <div class="mt-3 bg-blue-50 p-3 rounded-lg">
+                                    <p class="font-medium">Example answers:</p>
+                                    <ul class="list-disc pl-5">
+                                        <li>"I prefer living in the city because it's <strong>more convenient</strong> than the countryside."</li>
+                                        <li>"I prefer watching movies at home because it's <strong>cheaper</strong> and <strong>more comfortable</strong> than going to the cinema."</li>
+                                        <li>"I prefer summer because the days are <strong>longer</strong> and the weather is <strong>warmer</strong> than in winter."</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Written task -->
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3">4. Writing Task:</h4>
+                        <p class="mb-3">Write 5 sentences comparing two friends or places using comparative adjectives.</p>
+                        
+                        <textarea id="writing-task" class="w-full border rounded p-3 h-32" placeholder="Write your sentences here..."></textarea>
+                        
+                        <div class="mt-4 bg-blue-50 p-3 rounded-lg">
+                            <p class="font-medium">Example:</p>
+                            <p class="mb-2">Comparing two friends, Maria and John:</p>
+                            <ol class="list-decimal pl-5">
+                                <li>Maria is <strong>taller</strong> than John.</li>
+                                <li>John is <strong>more outgoing</strong> than Maria.</li>
+                                <li>Maria is <strong>better</strong> at math than John.</li>
+                                <li>John's hair is <strong>darker</strong> than Maria's.</li>
+                                <li>Maria is <strong>more organized</strong> than John.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button id="back-to-tab1" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition">Previous: Prepositions of Place</button>
+                    <button id="next-to-tab3" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Next: Superlative Adjectives</button>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Tab 3: Superlative Adjectives -->
+        <div id="tab3" class="tab-content">
+            <section class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Superlative Adjectives</h2>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">Explanation</h3>
+                    <p class="mb-4">We use superlative adjectives to compare one thing with all others in the same group. Superlatives show the highest degree of a quality among three or more items.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-blue-800 mb-2">One-syllable adjectives</h4>
+                            <p class="mb-2">Add <span class="font-semibold">the + -est</span> to the adjective</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>tall → <span class="font-bold">the tallest</span></li>
+                                <li>small → <span class="font-bold">the smallest</span></li>
+                                <li>cheap → <span class="font-bold">the cheapest</span></li>
+                                <li>fast → <span class="font-bold">the fastest</span></li>
+                            </ul>
+                            <p class="mt-2 text-sm text-gray-600">Note: For adjectives ending in e, just add -st (nice → the nicest)</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-green-800 mb-2">Two-syllable (and longer)</h4>
+                            <p class="mb-2">Use <span class="font-semibold">the most + adjective</span></p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>careful → <span class="font-bold">the most careful</span></li>
+                                <li>expensive → <span class="font-bold">the most expensive</span></li>
+                                <li>interesting → <span class="font-bold">the most interesting</span></li>
+                                <li>beautiful → <span class="font-bold">the most beautiful</span></li>
+                            </ul>
+                            <p class="mt-2 text-sm text-gray-600">Note: Some two-syllable adjectives can take -est (e.g., clever → the cleverest)</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h4 class="font-bold text-purple-800 mb-2">Irregular forms</h4>
+                            <p class="mb-2">Some adjectives have special superlative forms</p>
+                            <ul class="list-disc pl-5 text-gray-700">
+                                <li>good → <span class="font-bold">the best</span></li>
+                                <li>bad → <span class="font-bold">the worst</span></li>
+                                <li>far → <span class="font-bold">the farthest/furthest</span></li>
+                                <li>little → <span class="font-bold">the least</span></li>
+                                <li>many/much → <span class="font-bold">the most</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-yellow-800 mb-2">Spelling Rules</h4>
+                        <ul class="list-disc pl-5 text-gray-700">
+                            <li>For adjectives ending in consonant + single vowel + consonant, double the final consonant: <br>big → <span class="font-bold">the biggest</span>, hot → <span class="font-bold">the hottest</span></li>
+                            <li>For adjectives ending in y, change y to i and add -est: <br>happy → <span class="font-bold">the happiest</span>, easy → <span class="font-bold">the easiest</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-blue-700 mb-3">Practice Activities</h3>
+                    
+                    <!-- Ranking tasks -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">1. Ranking Task:</h4>
+                        <p class="mb-3">Rank these 5 foods from healthiest to least healthy using superlative adjectives.</p>
+                        
+                        <div class="bg-white p-4 rounded-lg border mb-4">
+                            <div class="flex flex-wrap gap-3 mb-4">
+                                <div class="p-2 bg-blue-100 rounded-lg">🍔 Hamburger</div>
+                                <div class="p-2 bg-green-100 rounded-lg">🥗 Salad</div>
+                                <div class="p-2 bg-yellow-100 rounded-lg">🍎 Apple</div>
+                                <div class="p-2 bg-red-100 rounded-lg">🍕 Pizza</div>
+                                <div class="p-2 bg-purple-100 rounded-lg">🥦 Broccoli</div>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold">1.</span>
+                                    <input type="text" class="border rounded px-2 py-1 w-full ranking-answer" placeholder="the healthiest food is...">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold">2.</span>
+                                    <input type="text" class="border rounded px-2 py-1 w-full ranking-answer" placeholder="the second healthiest food is...">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold">3.</span>
+                                    <input type="text" class="border rounded px-2 py-1 w-full ranking-answer" placeholder="...">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold">4.</span>
+                                    <input type="text" class="border rounded px-2 py-1 w-full ranking-answer" placeholder="...">
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold">5.</span>
+                                    <input type="text" class="border rounded px-2 py-1 w-full ranking-answer" placeholder="the least healthy food is...">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button class="ranking-reveal bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Show Example Answer</button>
+                            </div>
+                            <div class="ranking-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                <p class="font-medium">Example answer:</p>
+                                <ol class="list-decimal pl-5">
+                                    <li>Broccoli is <strong>the healthiest</strong> food.</li>
+                                    <li>The apple is <strong>the second healthiest</strong> food.</li>
+                                    <li>The salad is <strong>the third healthiest</strong> food.</li>
+                                    <li>Pizza is <strong>the fourth healthiest</strong> food.</li>
+                                    <li>The hamburger is <strong>the least healthy</strong> food.</li>
+                                </ol>
+                                <p class="mt-2 text-sm text-gray-600">Note: This is just one possible ranking. Your answers may be different based on your opinion!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversation prompts -->
+                    <div class="bg-gray-50 p-5 rounded-lg mb-6">
+                        <h4 class="font-bold text-lg mb-3">2. Conversation Practice:</h4>
+                        <p class="mb-3">Answer these questions using superlative adjectives in your responses.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="font-medium mb-2">1. What is the best trip you have ever taken?</p>
+                                <textarea class="w-full border rounded p-2 h-20 conversation-answer" placeholder="Write your answer here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="conversation-example-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="conversation-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> The best trip I've ever taken was to Japan. It was the most interesting country I've visited because it has the most unique culture. The food was the tastiest I've ever had, and the people were the friendliest.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="font-medium mb-2">2. Who is the most important person in your life?</p>
+                                <textarea class="w-full border rounded p-2 h-20 conversation-answer" placeholder="Write your answer here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="conversation-example-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="conversation-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> My grandmother is the most important person in my life. She is the wisest person I know and gives me the best advice. She's also the most supportive when I face the hardest challenges.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <p class="font-medium mb-2">3. What is the most difficult thing about learning English?</p>
+                                <textarea class="w-full border rounded p-2 h-20 conversation-answer" placeholder="Write your answer here..."></textarea>
+                                <div class="mt-2">
+                                    <button class="conversation-example-reveal bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition text-sm">Show Example Answer</button>
+                                </div>
+                                <div class="conversation-example hidden bg-blue-50 p-3 rounded-lg mt-2">
+                                    <p><strong>Example answer:</strong> For me, pronunciation is the most difficult thing about learning English. Irregular verbs are the most confusing, and phrasal verbs are the hardest to remember. However, grammar is becoming the easiest part with practice.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Writing activity -->
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h4 class="font-bold text-lg mb-3">3. Writing Activity:</h4>
+                        <p class="mb-3">Write a short paragraph about the best day of your life using at least 3 superlative adjectives.</p>
+                        
+                        <textarea id="superlative-writing" class="w-full border rounded p-3 h-32" placeholder="Write your paragraph here..."></textarea>
+                        
+                        <div class="mt-4 bg-blue-50 p-3 rounded-lg">
+                            <p class="font-medium">Example:</p>
+                            <p>The best day of my life was my 18th birthday. It was the happiest I've ever felt because my family organized the biggest surprise party for me. My friends gave me the most beautiful gifts, and we ate the tastiest cake I've ever had. We played the funniest games and took the silliest photos. It was definitely the most memorable day of my life so far.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button id="back-to-tab2" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition">Previous: Comparative Adjectives</button>
+                    <button id="finish-lesson" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Finish Lesson</button>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Completion Modal -->
+        <div id="completion-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">Congratulations!</h2>
+                <p class="mb-4">You've completed the English grammar lesson covering:</p>
+                <ul class="list-disc pl-5 mb-6">
+                    <li>Prepositions of Place (in/on/at)</li>
+                    <li>Comparative Adjectives</li>
+                    <li>Superlative Adjectives</li>
+                </ul>
+                <p class="mb-6">Keep practicing these grammar points in your everyday English!</p>
+                <div class="flex justify-center">
+                    <button id="close-modal" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = ['tab1', 'tab2', 'tab3'];
+            const tabBtns = ['tab1-btn', 'tab2-btn', 'tab3-btn'];
+            let currentTabIndex = 0;
+            
+            function switchTab(tabIndex) {
+                // Hide all tabs
+                tabs.forEach(tab => {
+                    document.getElementById(tab).classList.remove('active');
+                });
+                
+                // Reset all tab buttons
+                tabBtns.forEach(btn => {
+                    document.getElementById(btn).classList.remove('bg-blue-600', 'text-white');
+                    document.getElementById(btn).classList.add('bg-gray-200', 'text-gray-700');
+                });
+                
+                // Show selected tab
+                document.getElementById(tabs[tabIndex]).classList.add('active');
+                
+                // Highlight selected tab button
+                document.getElementById(tabBtns[tabIndex]).classList.remove('bg-gray-200', 'text-gray-700');
+                document.getElementById(tabBtns[tabIndex]).classList.add('bg-blue-600', 'text-white');
+                
+                // Update current tab index
+                currentTabIndex = tabIndex;
+                
+                // Update progress bar
+                const progressPercentage = ((tabIndex + 1) / tabs.length) * 100;
+                document.getElementById('progress-bar').style.width = `${progressPercentage}%`;
+            }
+            
+            // Tab button event listeners
+            tabBtns.forEach((btn, index) => {
+                document.getElementById(btn).addEventListener('click', () => switchTab(index));
+            });
+            
+            // Next and previous button event listeners
+            document.getElementById('next-to-tab2').addEventListener('click', () => switchTab(1));
+            document.getElementById('back-to-tab1').addEventListener('click', () => switchTab(0));
+            document.getElementById('next-to-tab3').addEventListener('click', () => switchTab(2));
+            document.getElementById('back-to-tab2').addEventListener('click', () => switchTab(1));
+            
+            // Prepositions practice - Fill in the blanks
+            document.getElementById('check-blanks').addEventListener('click', function() {
+                let correctCount = 0;
+                const selects = document.querySelectorAll('.preposition-select');
+                
+                selects.forEach(select => {
+                    const selectedValue = select.value;
+                    const correctValue = select.dataset.answer;
+                    
+                    if (selectedValue === correctValue) {
+                        correctCount++;
+                    }
+                });
+                
+                const feedback = document.getElementById('blanks-feedback');
+                feedback.classList.add('show');
+                
+                if (correctCount === selects.length) {
+                    feedback.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+                    feedback.innerHTML = `<p>Great job! You got all ${selects.length} answers correct!</p>`;
+                } else {
+                    feedback.classList.add('bg-yellow-100', 'text-yellow-800', 'border-yellow-300');
+                    feedback.innerHTML = `<p>You got ${correctCount} out of ${selects.length} correct. Try again!</p>`;
+                }
+            });
+            
+            // Picture matching
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const isCorrect = this.dataset.correct === 'true';
+                    const parentDiv = this.closest('div');
+                    
+                    // Reset all options in this group
+                    parentDiv.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('correct', 'incorrect');
+                    });
+                    
+                    // Mark this option
+                    if (isCorrect) {
+                        this.classList.add('correct');
+                    } else {
+                        this.classList.add('incorrect');
+                    }
+                });
+            });
+            
+            // Conversation practice reveal
+            const conversationButtons = document.querySelectorAll('.conversation-reveal');
+            conversationButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const answer = this.closest('div').nextElementSibling;
+                    answer.classList.toggle('hidden');
+                    
+                    if (answer.classList.contains('hidden')) {
+                        this.textContent = 'Show Answer';
+                    } else {
+                        this.textContent = 'Hide Answer';
+                    }
+                });
+            });
+            
+            // Comparative adjectives - Check answers
+            document.getElementById('check-comparatives').addEventListener('click', function() {
+                const inputs = document.querySelectorAll('.comparative-answer');
+                
+                inputs.forEach(input => {
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer.toLowerCase();
+                    const feedback = input.closest('div').nextElementSibling;
+                    
+                    if (userAnswer === correctAnswer) {
+                        feedback.classList.add('show', 'bg-green-100', 'text-green-800', 'border-green-300');
+                        feedback.innerHTML = '<p>Correct! ✓</p>';
+                    } else {
+                        feedback.classList.add('show', 'bg-red-100', 'text-red-800', 'border-red-300');
+                        feedback.innerHTML = `<p>Not quite. The correct answer is: ${correctAnswer}</p>`;
+                    }
+                });
+            });
+            
+            // Scenario reveals
+            const scenarioButtons = document.querySelectorAll('.scenario-reveal');
+            scenarioButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const example = this.closest('div').nextElementSibling;
+                    example.classList.toggle('hidden');
+                    
+                    if (example.classList.contains('hidden')) {
+                        this.textContent = 'Show Example Answer';
+                    } else {
+                        this.textContent = 'Hide Example Answer';
+                    }
+                });
+            });
+            
+            // Conversation example reveals
+            const conversationExampleButtons = document.querySelectorAll('.conversation-example-reveal');
+            conversationExampleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const example = this.closest('div').nextElementSibling;
+                    example.classList.toggle('hidden');
+                    
+                    if (example.classList.contains('hidden')) {
+                        this.textContent = 'Show Example Answer';
+                    } else {
+                        this.textContent = 'Hide Example Answer';
+                    }
+                });
+            });
+            
+            // Ranking reveal
+            document.querySelector('.ranking-reveal').addEventListener('click', function() {
+                const example = document.querySelector('.ranking-example');
+                example.classList.toggle('hidden');
+                
+                if (example.classList.contains('hidden')) {
+                    this.textContent = 'Show Example Answer';
+                } else {
+                    this.textContent = 'Hide Example Answer';
+                }
+            });
+            
+            // Finish lesson
+            document.getElementById('finish-lesson').addEventListener('click', function() {
+                document.getElementById('completion-modal').classList.remove('hidden');
+            });
+            
+            // Close modal
+            document.getElementById('close-modal').addEventListener('click', function() {
+                document.getElementById('completion-modal').classList.add('hidden');
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94f2d62cd1bd6d90',t:'MTc0OTgzMDgwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
