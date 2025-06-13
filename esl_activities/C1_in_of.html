@@ -1,0 +1,841 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced ESL Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #3b82f6;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #3b82f6;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .activity-card {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .answer-feedback {
+            transition: all 0.3s ease;
+        }
+        
+        .waveform {
+            height: 60px;
+            background: linear-gradient(to bottom, #dbeafe 50%, transparent 50%);
+            background-size: 100% 20px;
+            position: relative;
+        }
+        
+        .waveform::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #93c5fd;
+        }
+        
+        .waveform-native {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 Q50,10 100,30 T200,30 T300,30 T400,10 T500,50 T600,30 T700,10 T800,30 T900,50 T1000,30 T1100,10 T1200,30' stroke='%233b82f6' fill='none' stroke-width='2'/%3E%3C/svg%3E");
+            background-size: 100% 100%;
+        }
+        
+        .waveform-learner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,30 Q50,20 100,30 T200,40 T300,20 T400,30 T500,40 T600,30 T700,20 T800,30 T900,40 T1000,30 T1100,20 T1200,30' stroke='%23ef4444' fill='none' stroke-width='2' stroke-dasharray='5,5'/%3E%3C/svg%3E");
+            background-size: 100% 100%;
+            opacity: 0.7;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.relative{position:relative}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:0.25rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mr-4{margin-right:1rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-5{height:1.25rem}.h-6{height:1.5rem}.min-h-\[60px\]{min-height:60px}.w-5{width:1.25rem}.w-6{width:1.5rem}.max-w-5xl{max-width:64rem}.flex-1{flex:1 1 0%}.cursor-move{cursor:move}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-l-4{border-left-width:4px}.border-dashed{border-style:dashed}.border-blue-100{--tw-border-opacity:1;border-color:rgb(219 234 254 / var(--tw-border-opacity, 1))}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-green-100{--tw-border-opacity:1;border-color:rgb(220 252 231 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-amber-500{--tw-text-opacity:1;color:rgb(245 158 11 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-red-600:hover{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.hover\:text-blue-600:hover{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.hover\:text-blue-800:hover{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.hover\:text-red-800:hover{--tw-text-opacity:1;color:rgb(153 27 27 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Advanced ESL Practice</h1>
+            <p class="text-gray-600">C1-Level English Learning Modules</p>
+        </header>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-800">Your Learning Progress</h2>
+                <div class="flex items-center">
+                    <div class="mr-4">
+                        <span class="text-sm text-gray-500">Completed:</span>
+                        <span class="ml-1 font-medium text-gray-800">0/2 modules</span>
+                    </div>
+                    <div class="relative">
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            My Profile
+                        </button>
+                        <div class="badge">2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-bar mb-6">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                    <h3 class="font-medium text-blue-800 mb-2">Today's Goal</h3>
+                    <p class="text-blue-700">Complete Module 1: "of" vs. "in"</p>
+                </div>
+                <div class="bg-green-50 rounded-lg p-4 border border-green-100">
+                    <h3 class="font-medium text-green-800 mb-2">Streak</h3>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path>
+                        </svg>
+                        <span class="text-lg font-semibold text-green-800">1 day</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="flex border-b">
+                <button class="tab-button px-6 py-3 font-medium flex-1 focus:outline-none text-blue-600 border-b-2 border-blue-500" data-tab="module1">
+                    Module 1: "of" vs. "in"
+                </button>
+                <button class="tab-button px-6 py-3 font-medium hover:text-blue-600 flex-1 focus:outline-none text-gray-500" data-tab="module2">
+                    Module 2: /əˈʧiv/ Pronunciation
+                </button>
+            </div>
+            
+            <!-- Module 1 Content -->
+            <div id="module1" class="tab-content p-6 active">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Understanding the Use of "of" vs. "in"</h2>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <h3 class="font-semibold text-blue-800 mb-2">Introduction</h3>
+                        <p class="text-gray-700">Welcome! At the C1 level, mastering prepositions like "of" and "in" is essential for fluency. These small words carry big meaning. This lesson will help you distinguish between subtle but important differences in how and when to use them.</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-800 mb-3">Explanation</h3>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-medium text-gray-700 mb-2">"Of" is often used to show:</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+                                <li>Possession: The color <span class="font-medium text-blue-600">of</span> the sky</li>
+                                <li>Composition: A piece <span class="font-medium text-blue-600">of</span> cake</li>
+                                <li>Connection: The University <span class="font-medium text-blue-600">of</span> Oxford</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-2">"In" shows:</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+                                <li>Location (physical or abstract): The keys are <span class="font-medium text-blue-600">in</span> the drawer.</li>
+                                <li>Time periods: She was born <span class="font-medium text-blue-600">in</span> 1995.</li>
+                                <li>Conditions: He's <span class="font-medium text-blue-600">in</span> trouble.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 1: Fill-in-the-blank Sentences</h3>
+                        <div class="space-y-4">
+                            <div class="fill-blank-item">
+                                <p class="mb-2">The center <select class="border rounded px-2 py-1 fill-blank-answer">
+                                    <option value="">Select...</option>
+                                    <option value="of">of</option>
+                                    <option value="in">in</option>
+                                </select> the city is always crowded.</p>
+                                <div class="answer-feedback hidden"></div>
+                            </div>
+                            
+                            <div class="fill-blank-item">
+                                <p class="mb-2">A bowl <select class="border rounded px-2 py-1 fill-blank-answer">
+                                    <option value="">Select...</option>
+                                    <option value="of">of</option>
+                                    <option value="in">in</option>
+                                </select> soup.</p>
+                                <div class="answer-feedback hidden"></div>
+                            </div>
+                            
+                            <div class="fill-blank-item">
+                                <p class="mb-2">She has confidence <select class="border rounded px-2 py-1 fill-blank-answer">
+                                    <option value="">Select...</option>
+                                    <option value="of">of</option>
+                                    <option value="in">in</option>
+                                </select> her skills.</p>
+                                <div class="answer-feedback hidden"></div>
+                            </div>
+                            
+                            <div class="fill-blank-item">
+                                <p class="mb-2">He lives <select class="border rounded px-2 py-1 fill-blank-answer">
+                                    <option value="">Select...</option>
+                                    <option value="of">of</option>
+                                    <option value="in">in</option>
+                                </select> the moment.</p>
+                                <div class="answer-feedback hidden"></div>
+                            </div>
+                            
+                            <button id="check-fill-blank" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Check Answers</button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 2: Choose the Right Preposition</h3>
+                        <div class="space-y-4">
+                            <div class="choose-prep-item">
+                                <p class="mb-2">He is interested 
+                                    <label class="inline-flex items-center mr-4">
+                                        <input type="radio" name="question1" value="in" class="mr-1">
+                                        <span>in</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="question1" value="of" class="mr-1">
+                                        <span>of</span>
+                                    </label>
+                                    learning new languages.
+                                </p>
+                                <div class="answer-feedback hidden"></div>
+                            </div>
+                            
+                            <div class="choose-prep-item">
+                                <p class="mb-2">The meaning 
+                                    <label class="inline-flex items-center mr-4">
+                                        <input type="radio" name="question2" value="in" class="mr-1">
+                                        <span>in</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="question2" value="of" class="mr-1">
+                                        <span>of</span>
+                                    </label>
+                                    this poem is deep.
+                                </p>
+                                <div class="answer-feedback hidden"></div>
+                            </div>
+                            
+                            <button id="check-choose-prep" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Check Answers</button>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 3: Sentence Builder</h3>
+                        <p class="text-gray-600 mb-4">Rearrange the phrases to create correct sentences using "of" or "in".</p>
+                        
+                        <div class="sentence-builder mb-6">
+                            <div class="bg-white p-3 border rounded-lg mb-3">
+                                <p class="text-gray-700 mb-2">Drag these phrases to form a correct sentence:</p>
+                                <div class="flex flex-wrap gap-2 phrase-container">
+                                    <div class="phrase bg-blue-100 px-3 py-1 rounded cursor-move" draggable="true">the quality</div>
+                                    <div class="phrase bg-blue-100 px-3 py-1 rounded cursor-move" draggable="true">the products</div>
+                                    <div class="phrase bg-blue-100 px-3 py-1 rounded cursor-move" draggable="true">of</div>
+                                    <div class="phrase bg-blue-100 px-3 py-1 rounded cursor-move" draggable="true">is excellent</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-100 p-3 border border-dashed rounded-lg min-h-[60px]">
+                                <p class="text-gray-500 mb-2">Drop phrases here to build your sentence:</p>
+                                <div class="flex flex-wrap gap-2 sentence-container"></div>
+                            </div>
+                            
+                            <button id="check-sentence" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Check Sentence</button>
+                            <div class="sentence-feedback mt-2 hidden"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 4: Speaking Prompts</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="font-medium text-gray-800 mb-2">Prompt 1:</h4>
+                                <p class="text-gray-700 mb-3">Describe a famous piece of art using "of" and "in".</p>
+                                <button class="record-button flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                    </svg>
+                                    Record Answer
+                                </button>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="font-medium text-gray-800 mb-2">Prompt 2:</h4>
+                                <p class="text-gray-700 mb-3">Talk about a situation you were "in" and how you felt.</p>
+                                <button class="record-button flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                    </svg>
+                                    Record Answer
+                                </button>
+                            </div>
+                            
+                            <div class="text-sm text-gray-500 italic">
+                                Note: This is a demo version. In a real application, you would be able to record and analyze your speech.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 2 Content -->
+            <div id="module2" class="tab-content p-6">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Pronouncing /əˈʧiv/ ("achieve") in American English</h2>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <h3 class="font-semibold text-blue-800 mb-2">Introduction</h3>
+                        <p class="text-gray-700">Welcome to your pronunciation practice! This lesson focuses on mastering the American English pronunciation of words containing the /əˈʧiv/ sound—like "achieve," "retrieve," and "perceive." These words are key for academic and professional communication.</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-800 mb-3">Explanation</h3>
+                        
+                        <div class="mb-4">
+                            <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                <li><span class="font-medium text-blue-600">/ə/</span> is the "schwa" sound, the most common vowel in English. It's unstressed and sounds like "uh".</li>
+                                <li><span class="font-medium text-blue-600">/ʧ/</span> is the "ch" sound as in "chess."</li>
+                                <li>So, achieve = <span class="font-medium text-blue-600">/əˈʧiv/</span>: uh-CHEEV.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-700 mb-2">Breakdown of "achieve":</h4>
+                            <ul class="space-y-1 text-gray-600">
+                                <li><span class="font-medium text-blue-600">/ə/</span> = unstressed "a"</li>
+                                <li><span class="font-medium text-blue-600">/ʧ/</span> = "ch"</li>
+                                <li><span class="font-medium text-blue-600">/iː/</span> = long "ee" vowel</li>
+                                <li><span class="font-medium text-blue-600">/v/</span> = voiced "v"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 1: Audio Practice</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-medium text-gray-700 mb-2">Listen and repeat:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                                        <span class="text-gray-800">achieve</span>
+                                        <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                                        <span class="text-gray-800">retrieve</span>
+                                        <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                                        <span class="text-gray-800">deceive</span>
+                                        <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                                        <span class="text-gray-800">perceive</span>
+                                        <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                                        <span class="text-gray-800">believe</span>
+                                        <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-700 mb-2">Minimal pairs:</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-3 rounded-lg border">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-gray-800">achieve</span>
+                                            <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-800">cheap</span>
+                                            <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg border">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-gray-800">receive</span>
+                                            <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-800">reef</span>
+                                            <button class="play-audio flex items-center text-blue-600 hover:text-blue-800">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-sm text-gray-500 italic">
+                                Note: This is a demo version. In a real application, you would be able to hear the audio examples.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 2: Pronunciation Guide with Visual Waveforms</h3>
+                        
+                        <div class="bg-white p-4 rounded-lg border mb-4">
+                            <h4 class="font-medium text-gray-800 mb-3">Word: "achieve" /əˈʧiv/</h4>
+                            
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-1">Native speaker:</p>
+                                <div class="flex items-center">
+                                    <button class="play-audio flex items-center text-blue-600 hover:text-blue-800 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </button>
+                                    <div class="waveform flex-1 relative">
+                                        <div class="waveform-native"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-1">Your pronunciation:</p>
+                                <div class="flex items-center">
+                                    <button class="record-pronunciation flex items-center text-red-600 hover:text-red-800 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                        </svg>
+                                    </button>
+                                    <div class="waveform flex-1 relative">
+                                        <div class="waveform-learner"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-blue-800 mb-1">Feedback:</h5>
+                                <p class="text-gray-700">Try to make the first syllable shorter and unstressed. The stress should be on the second syllable.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-sm text-gray-500 italic">
+                            Note: This is a demo version. In a real application, you would be able to record your voice and see a comparison of your pronunciation with a native speaker.
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card bg-gray-50 p-5 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-4">Activity 3: Speaking Prompts</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="font-medium text-gray-800 mb-2">Prompt 1:</h4>
+                                <p class="text-gray-700 mb-3">"Describe a personal goal you hope to <span class="font-medium text-blue-600">achieve</span>."</p>
+                                <button class="record-button flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                    </svg>
+                                    Record Answer
+                                </button>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg border">
+                                <h4 class="font-medium text-gray-800 mb-2">Prompt 2:</h4>
+                                <p class="text-gray-700 mb-3">"What do you <span class="font-medium text-blue-600">believe</span> is necessary to succeed?"</p>
+                                <button class="record-button flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                    </svg>
+                                    Record Answer
+                                </button>
+                            </div>
+                            
+                            <div class="text-sm text-gray-500 italic">
+                                Note: This is a demo version. In a real application, you would be able to record and analyze your speech.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Vocabulary</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="tooltip">
+                    <span class="font-medium text-blue-600">fluency</span>
+                    <span class="tooltiptext">The ability to speak or write a language easily, smoothly, and expressively.</span>
+                </div>
+                
+                <div class="tooltip">
+                    <span class="font-medium text-blue-600">composition</span>
+                    <span class="tooltiptext">The parts or elements that something consists of.</span>
+                </div>
+                
+                <div class="tooltip">
+                    <span class="font-medium text-blue-600">schwa</span>
+                    <span class="tooltiptext">The most common vowel sound in English, represented as /ə/ and pronounced as an unstressed "uh".</span>
+                </div>
+                
+                <div class="tooltip">
+                    <span class="font-medium text-blue-600">minimal pairs</span>
+                    <span class="tooltiptext">Two words that differ in only one sound, used to practice pronunciation distinctions.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabButtons.forEach(btn => {
+                        if (btn.getAttribute('data-tab') === tabId) {
+                            btn.classList.add('text-blue-600', 'border-b-2', 'border-blue-500');
+                            btn.classList.remove('text-gray-500');
+                        } else {
+                            btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-500');
+                            btn.classList.add('text-gray-500');
+                        }
+                    });
+                    
+                    // Show active tab content
+                    tabContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            // Fill-in-the-blank activity
+            const checkFillBlankBtn = document.getElementById('check-fill-blank');
+            if (checkFillBlankBtn) {
+                checkFillBlankBtn.addEventListener('click', () => {
+                    const answers = document.querySelectorAll('.fill-blank-answer');
+                    const correctAnswers = ['of', 'of', 'in', 'in'];
+                    
+                    answers.forEach((answer, index) => {
+                        const feedback = answer.nextElementSibling;
+                        feedback.classList.remove('hidden');
+                        
+                        if (answer.value === correctAnswers[index]) {
+                            feedback.textContent = 'Correct!';
+                            feedback.className = 'answer-feedback text-green-600';
+                        } else {
+                            feedback.textContent = `Incorrect. The correct answer is "${correctAnswers[index]}".`;
+                            feedback.className = 'answer-feedback text-red-600';
+                        }
+                    });
+                    
+                    // Update progress
+                    updateProgress(25);
+                });
+            }
+            
+            // Choose the right preposition activity
+            const checkChoosePrepBtn = document.getElementById('check-choose-prep');
+            if (checkChoosePrepBtn) {
+                checkChoosePrepBtn.addEventListener('click', () => {
+                    const question1 = document.querySelector('input[name="question1"]:checked');
+                    const question2 = document.querySelector('input[name="question2"]:checked');
+                    const feedback1 = document.querySelectorAll('.choose-prep-item .answer-feedback')[0];
+                    const feedback2 = document.querySelectorAll('.choose-prep-item .answer-feedback')[1];
+                    
+                    feedback1.classList.remove('hidden');
+                    feedback2.classList.remove('hidden');
+                    
+                    if (question1 && question1.value === 'in') {
+                        feedback1.textContent = 'Correct!';
+                        feedback1.className = 'answer-feedback text-green-600';
+                    } else {
+                        feedback1.textContent = 'Incorrect. The correct answer is "in".';
+                        feedback1.className = 'answer-feedback text-red-600';
+                    }
+                    
+                    if (question2 && question2.value === 'of') {
+                        feedback2.textContent = 'Correct!';
+                        feedback2.className = 'answer-feedback text-green-600';
+                    } else {
+                        feedback2.textContent = 'Incorrect. The correct answer is "of".';
+                        feedback2.className = 'answer-feedback text-red-600';
+                    }
+                    
+                    // Update progress
+                    updateProgress(50);
+                });
+            }
+            
+            // Sentence builder activity
+            const phrases = document.querySelectorAll('.phrase');
+            const phraseContainer = document.querySelector('.phrase-container');
+            const sentenceContainer = document.querySelector('.sentence-container');
+            const checkSentenceBtn = document.getElementById('check-sentence');
+            const sentenceFeedback = document.querySelector('.sentence-feedback');
+            
+            if (phrases.length > 0) {
+                let draggedPhrase = null;
+                
+                phrases.forEach(phrase => {
+                    phrase.addEventListener('dragstart', function() {
+                        draggedPhrase = this;
+                        setTimeout(() => this.style.display = 'none', 0);
+                    });
+                    
+                    phrase.addEventListener('dragend', function() {
+                        setTimeout(() => this.style.display = 'block', 0);
+                        draggedPhrase = null;
+                    });
+                });
+                
+                [phraseContainer, sentenceContainer].forEach(container => {
+                    container.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                    });
+                    
+                    container.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        if (draggedPhrase) {
+                            this.appendChild(draggedPhrase);
+                        }
+                    });
+                });
+                
+                if (checkSentenceBtn) {
+                    checkSentenceBtn.addEventListener('click', () => {
+                        const sentencePhrases = Array.from(sentenceContainer.children).map(p => p.textContent);
+                        const correctSentence = ['the quality', 'of', 'the products', 'is excellent'];
+                        const isCorrect = JSON.stringify(sentencePhrases) === JSON.stringify(correctSentence);
+                        
+                        sentenceFeedback.classList.remove('hidden');
+                        
+                        if (isCorrect) {
+                            sentenceFeedback.textContent = 'Correct! "The quality of the products is excellent" is a proper sentence.';
+                            sentenceFeedback.className = 'sentence-feedback text-green-600';
+                        } else {
+                            sentenceFeedback.textContent = 'Not quite right. Try again to form: "The quality of the products is excellent".';
+                            sentenceFeedback.className = 'sentence-feedback text-red-600';
+                        }
+                        
+                        // Update progress
+                        updateProgress(75);
+                    });
+                }
+            }
+            
+            // Record buttons
+            const recordButtons = document.querySelectorAll('.record-button');
+            recordButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('bg-red-500')) {
+                        this.classList.remove('bg-red-500', 'hover:bg-red-600');
+                        this.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                        this.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5v14" />
+                            </svg>
+                            Stop Recording
+                        `;
+                        
+                        // Simulate recording for 3 seconds
+                        setTimeout(() => {
+                            this.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                            this.classList.add('bg-green-500', 'hover:bg-green-600');
+                            this.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Recorded
+                            `;
+                            
+                            // Update progress
+                            updateProgress(100);
+                        }, 3000);
+                    }
+                });
+            });
+            
+            // Play audio buttons
+            const playButtons = document.querySelectorAll('.play-audio');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const icon = this.querySelector('svg');
+                    
+                    // Change to pause icon
+                    icon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    `;
+                    
+                    // Simulate playing for 2 seconds
+                    setTimeout(() => {
+                        icon.innerHTML = `
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        `;
+                    }, 2000);
+                });
+            });
+            
+            // Record pronunciation buttons
+            const recordPronunciationButtons = document.querySelectorAll('.record-pronunciation');
+            recordPronunciationButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('text-red-600')) {
+                        this.classList.remove('text-red-600', 'hover:text-red-800');
+                        this.classList.add('text-gray-600', 'hover:text-gray-800');
+                        
+                        // Simulate recording for 2 seconds
+                        setTimeout(() => {
+                            this.classList.remove('text-gray-600', 'hover:text-gray-800');
+                            this.classList.add('text-green-600', 'hover:text-green-800');
+                            
+                            // Update progress
+                            updateProgress(100);
+                        }, 2000);
+                    }
+                });
+            });
+            
+            // Function to update progress bar
+            function updateProgress(percentage) {
+                const progressFill = document.querySelector('.progress-fill');
+                if (progressFill) {
+                    progressFill.style.width = `${percentage}%`;
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94ef4bd231eff134',t:'MTc0OTc5MzY3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body>
