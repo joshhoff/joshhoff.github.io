@@ -1,0 +1,448 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the Hole in the Story</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .story-text {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .story-sentence {
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+        
+        .story-sentence:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        .story-sentence.highlighted {
+            background-color: rgba(239, 68, 68, 0.15);
+            border-bottom: 2px solid #ef4444;
+        }
+        
+        .feedback-animation {
+            animation: fadeInOut 2s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+        
+        .dark {
+            background-color: #1f2937;
+            color: #f3f4f6;
+        }
+        
+        .dark .story-sentence:hover {
+            background-color: rgba(96, 165, 250, 0.2);
+        }
+        
+        .dark .bg-white {
+            background-color: #374151 !important;
+            color: #f3f4f6;
+        }
+        
+        .dark .bg-blue-50 {
+            background-color: #1e3a5f !important;
+        }
+        
+        .dark .text-gray-700 {
+            color: #d1d5db !important;
+        }
+        
+        .dark .text-gray-600 {
+            color: #e5e7eb !important;
+        }
+        
+        .dark .border-gray-300 {
+            border-color: #4b5563 !important;
+        }
+        
+        .dark .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.mr-3{margin-right:0.75rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.hidden{display:none}.h-10{height:2.5rem}.h-6{height:1.5rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-6{width:1.5rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-t-2{border-top-width:2px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-yellow-200{--tw-border-opacity:1;border-color:rgb(254 240 138 / var(--tw-border-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-indigo-100{--tw-gradient-to:#e0e7ff var(--tw-gradient-to-position)}.p-4{padding:1rem}.p-3{padding:0.75rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-yellow-300{--tw-text-opacity:1;color:rgb(253 224 71 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}@media (min-width: 768px){.md\:mt-0{margin-top:0px}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}.md\:p-6{padding:1.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}</style></head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto max-w-4xl">
+        <!-- Header -->
+        <header class="mb-8 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold text-blue-800">Find the Hole in the Story</h1>
+                <p class="text-gray-600 mt-2">Practice English logic with positive and negative statements.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center">
+                <button id="darkModeToggle" class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                <button id="tutorModeToggle" class="px-4 py-2 rounded-lg shadow-md hover:bg-blue-50 transition-colors bg-white text-blue-700">Tutor Mode</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <!-- Story Section -->
+            <section class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800">Story</h2>
+                    <button id="newStoryBtn" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm">
+                        New Story
+                    </button>
+                </div>
+                <div id="storyContainer" class="story-text bg-blue-50 rounded-lg p-4 md:p-6"><span class="story-sentence" data-index="0">The teacher asked a difficult question. </span><span class="story-sentence" data-index="1">Nobody in the class didn't know the answer. </span><span class="story-sentence" data-index="2">So she had to explain it again. </span></div>
+            </section>
+
+            <!-- Task 1: Spot the Issue -->
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Task 1: Spot the Issue</h2>
+                <p class="text-gray-600 mb-4">Click on the sentence(s) that contain logical inconsistencies or double negatives.</p>
+                <div id="feedbackSpot" class="hidden bg-green-100 text-green-800 p-4 rounded-lg mb-4">
+                    <!-- Feedback will appear here -->
+                </div>
+            </section>
+
+            <!-- Task 2: Rewrite It -->
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Task 2: Rewrite It</h2>
+                <p class="text-gray-600 mb-4">Rewrite the problematic sentence to fix the logical issue:</p>
+                <div class="mb-4">
+                    <label for="selectedSentence" class="block text-sm font-medium text-gray-700 mb-2">Selected Sentence:</label>
+                    <div id="selectedSentence" class="bg-yellow-50 border border-yellow-200 p-3 rounded-md text-gray-700 italic">Click on a sentence in the story first</div>
+                </div>
+                <div class="mb-4">
+                    <label for="rewriteInput" class="block text-sm font-medium text-gray-700 mb-2">Your Rewrite:</label>
+                    <textarea id="rewriteInput" rows="3" class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your corrected version here..."></textarea>
+                </div>
+                <div class="flex justify-between items-center">
+                    <button id="hintBtn" class="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors">
+                        Get a Hint
+                    </button>
+                    <button id="checkBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        Check My Answer
+                    </button>
+                </div>
+                <div id="feedbackRewrite" class="hidden mt-4 p-4 rounded-lg">
+                    <!-- Feedback will appear here -->
+                </div>
+                <div id="hintBox" class="hidden mt-4 bg-indigo-50 p-4 rounded-lg text-indigo-700">
+                    <!-- Hint will appear here -->
+                </div>
+            </section>
+
+            <!-- Tutor Mode Panel (Hidden by default) -->
+            <section id="tutorPanel" class="border-t-2 border-gray-200 pt-6 mt-8 hidden">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Tutor Mode</h2>
+                <div class="mb-4">
+                    <label for="customStory" class="block text-sm font-medium text-gray-700 mb-2">Create a Custom Story:</label>
+                    <textarea id="customStory" rows="5" class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter a short story with logical inconsistencies..."></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="problemSentences" class="block text-sm font-medium text-gray-700 mb-2">Problem Sentence Numbers (comma-separated):</label>
+                    <input type="text" id="problemSentences" class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2,4">
+                </div>
+                <button id="submitCustomStory" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Submit Custom Story
+                </button>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center text-gray-600 text-sm">
+            <p>Designed for C1 English learners from Romance language backgrounds</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Story database
+            const stories = [
+                {
+                    text: "I was home alone yesterday evening. I didn't see nobody for hours. But then someone called me on the phone and we talked for a while.",
+                    problemSentences: [1],
+                    hints: ["Look for a double negative in the second sentence."],
+                    solutions: ["I didn't see anybody for hours.", "I saw nobody for hours."]
+                },
+                {
+                    text: "The restaurant was empty when we arrived. There wasn't no customers inside. The waiter told us we could sit anywhere.",
+                    problemSentences: [1],
+                    hints: ["The double negative 'wasn't no' creates a logical contradiction."],
+                    solutions: ["There weren't any customers inside.", "There were no customers inside."]
+                },
+                {
+                    text: "John searched everywhere for his keys. He couldn't find nothing in the living room. Finally, he found them in his jacket pocket.",
+                    problemSentences: [1],
+                    hints: ["'Couldn't find nothing' is a double negative that means he found something."],
+                    solutions: ["He couldn't find anything in the living room.", "He found nothing in the living room."]
+                },
+                {
+                    text: "The teacher asked a difficult question. Nobody in the class didn't know the answer. So she had to explain it again.",
+                    problemSentences: [1],
+                    hints: ["'Nobody didn't know' means everyone knew the answer, which contradicts the next sentence."],
+                    solutions: ["Nobody in the class knew the answer.", "Everybody in the class didn't know the answer."]
+                },
+                {
+                    text: "The movie was so boring. I don't remember nothing about the plot. My friend fell asleep halfway through.",
+                    problemSentences: [1],
+                    hints: ["'Don't remember nothing' is a double negative that means you remember something."],
+                    solutions: ["I don't remember anything about the plot.", "I remember nothing about the plot."]
+                }
+            ];
+            
+            // App state
+            let currentStory = null;
+            let selectedSentenceIndex = null;
+            let tutorMode = false;
+            let darkMode = false;
+            
+            // DOM elements
+            const storyContainer = document.getElementById('storyContainer');
+            const selectedSentenceEl = document.getElementById('selectedSentence');
+            const rewriteInput = document.getElementById('rewriteInput');
+            const checkBtn = document.getElementById('checkBtn');
+            const hintBtn = document.getElementById('hintBtn');
+            const feedbackSpot = document.getElementById('feedbackSpot');
+            const feedbackRewrite = document.getElementById('feedbackRewrite');
+            const hintBox = document.getElementById('hintBox');
+            const newStoryBtn = document.getElementById('newStoryBtn');
+            const tutorModeToggle = document.getElementById('tutorModeToggle');
+            const tutorPanel = document.getElementById('tutorPanel');
+            const customStoryInput = document.getElementById('customStory');
+            const problemSentencesInput = document.getElementById('problemSentences');
+            const submitCustomStoryBtn = document.getElementById('submitCustomStory');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            
+            // Initialize the app
+            loadRandomStory();
+            
+            // Event listeners
+            newStoryBtn.addEventListener('click', loadRandomStory);
+            checkBtn.addEventListener('click', checkRewrite);
+            hintBtn.addEventListener('click', showHint);
+            tutorModeToggle.addEventListener('click', toggleTutorMode);
+            submitCustomStoryBtn.addEventListener('click', submitCustomStory);
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+            
+            // Functions
+            function loadRandomStory() {
+                const randomIndex = Math.floor(Math.random() * stories.length);
+                currentStory = stories[randomIndex];
+                displayStory(currentStory);
+                resetUI();
+            }
+            
+            function displayStory(story) {
+                storyContainer.innerHTML = '';
+                const sentences = story.text.split('. ').map(s => s.trim() + (s.endsWith('.') ? '' : '.'));
+                
+                sentences.forEach((sentence, index) => {
+                    const sentenceEl = document.createElement('span');
+                    sentenceEl.classList.add('story-sentence');
+                    sentenceEl.textContent = sentence + ' ';
+                    sentenceEl.dataset.index = index;
+                    
+                    sentenceEl.addEventListener('click', () => {
+                        selectSentence(index, sentenceEl);
+                    });
+                    
+                    storyContainer.appendChild(sentenceEl);
+                });
+            }
+            
+            function selectSentence(index, element) {
+                // Clear previous selection
+                document.querySelectorAll('.story-sentence').forEach(el => {
+                    el.classList.remove('highlighted');
+                });
+                
+                // Set new selection
+                element.classList.add('highlighted');
+                selectedSentenceIndex = index;
+                
+                // Update the selected sentence display
+                const sentences = currentStory.text.split('. ').map(s => s.trim() + (s.endsWith('.') ? '' : '.'));
+                selectedSentenceEl.textContent = sentences[index];
+                
+                // Check if this is a problem sentence
+                if (currentStory.problemSentences.includes(index)) {
+                    showFeedback(feedbackSpot, '✅ Good job! You identified a sentence with a logical issue.', 'bg-green-100 text-green-800');
+                } else {
+                    showFeedback(feedbackSpot, '❌ This sentence doesn\'t contain a logical issue. Try again!', 'bg-red-100 text-red-800');
+                }
+                
+                // Clear previous rewrite and feedback
+                rewriteInput.value = '';
+                feedbackRewrite.classList.add('hidden');
+                hintBox.classList.add('hidden');
+            }
+            
+            function checkRewrite() {
+                if (selectedSentenceIndex === null) {
+                    showFeedback(feedbackRewrite, '⚠️ Please select a sentence from the story first.', 'bg-yellow-100 text-yellow-800');
+                    return;
+                }
+                
+                const userRewrite = rewriteInput.value.trim();
+                if (!userRewrite) {
+                    showFeedback(feedbackRewrite, '⚠️ Please enter your rewritten sentence.', 'bg-yellow-100 text-yellow-800');
+                    return;
+                }
+                
+                // Check if the selected sentence is a problem sentence
+                if (currentStory.problemSentences.includes(selectedSentenceIndex)) {
+                    // Simple check for double negatives
+                    const hasDoubleNegative = /n['o]t\s+\w+\s+no|n['o]t\s+nobody|n['o]t\s+nothing|n['o]t\s+never|nobody\s+\w+\s+n['o]t|nothing\s+\w+\s+n['o]t|never\s+\w+\s+n['o]t/i.test(userRewrite);
+                    
+                    if (hasDoubleNegative) {
+                        showFeedback(feedbackRewrite, '❌ Your rewrite still contains a double negative or logical inconsistency.', 'bg-red-100 text-red-800');
+                    } else {
+                        // Check against solution patterns
+                        const solutions = currentStory.solutions;
+                        let closeMatch = false;
+                        
+                        for (const solution of solutions) {
+                            // Simple similarity check (could be improved)
+                            if (userRewrite.toLowerCase().includes(solution.toLowerCase().substring(0, 10))) {
+                                closeMatch = true;
+                                break;
+                            }
+                        }
+                        
+                        if (closeMatch) {
+                            showFeedback(feedbackRewrite, '✅ Great job! Your rewrite correctly fixes the logical issue.', 'bg-green-100 text-green-800');
+                        } else {
+                            showFeedback(feedbackRewrite, '⚠️ Your rewrite might be correct, but it\'s different from our expected solutions. Make sure you\'ve fixed the logical issue.', 'bg-yellow-100 text-yellow-800');
+                        }
+                    }
+                } else {
+                    showFeedback(feedbackRewrite, '⚠️ This sentence doesn\'t contain a logical issue that needs fixing.', 'bg-yellow-100 text-yellow-800');
+                }
+            }
+            
+            function showHint() {
+                if (selectedSentenceIndex === null) {
+                    showFeedback(hintBox, '⚠️ Please select a sentence from the story first.', '');
+                    return;
+                }
+                
+                if (currentStory.problemSentences.includes(selectedSentenceIndex)) {
+                    const hintIndex = currentStory.problemSentences.indexOf(selectedSentenceIndex);
+                    const hint = currentStory.hints[hintIndex];
+                    hintBox.textContent = '💡 Hint: ' + hint;
+                    hintBox.classList.remove('hidden');
+                } else {
+                    hintBox.textContent = '💡 Hint: This sentence doesn\'t contain a logical issue that needs fixing.';
+                    hintBox.classList.remove('hidden');
+                }
+            }
+            
+            function showFeedback(element, message, classes) {
+                element.textContent = message;
+                element.className = 'p-4 rounded-lg mt-4 feedback-animation ' + classes;
+                element.classList.remove('hidden');
+                
+                // Auto-hide feedback after 5 seconds
+                setTimeout(() => {
+                    element.classList.add('hidden');
+                }, 5000);
+            }
+            
+            function resetUI() {
+                selectedSentenceIndex = null;
+                selectedSentenceEl.textContent = 'Click on a sentence in the story first';
+                rewriteInput.value = '';
+                feedbackSpot.classList.add('hidden');
+                feedbackRewrite.classList.add('hidden');
+                hintBox.classList.add('hidden');
+            }
+            
+            function toggleTutorMode() {
+                tutorMode = !tutorMode;
+                if (tutorMode) {
+                    tutorPanel.classList.remove('hidden');
+                    tutorModeToggle.textContent = 'Exit Tutor Mode';
+                    tutorModeToggle.classList.add('bg-red-100', 'text-red-700');
+                    tutorModeToggle.classList.remove('bg-white', 'text-blue-700');
+                } else {
+                    tutorPanel.classList.add('hidden');
+                    tutorModeToggle.textContent = 'Tutor Mode';
+                    tutorModeToggle.classList.remove('bg-red-100', 'text-red-700');
+                    tutorModeToggle.classList.add('bg-white', 'text-blue-700');
+                }
+            }
+            
+            function submitCustomStory() {
+                const storyText = customStoryInput.value.trim();
+                const problemSentencesText = problemSentencesInput.value.trim();
+                
+                if (!storyText) {
+                    alert('Please enter a custom story.');
+                    return;
+                }
+                
+                if (!problemSentencesText) {
+                    alert('Please specify which sentences contain problems (e.g., 1,3).');
+                    return;
+                }
+                
+                // Parse problem sentences
+                const problemSentences = problemSentencesText.split(',')
+                    .map(num => parseInt(num.trim()) - 1) // Convert to 0-based index
+                    .filter(num => !isNaN(num) && num >= 0);
+                
+                if (problemSentences.length === 0) {
+                    alert('Please enter valid sentence numbers (e.g., 1,3).');
+                    return;
+                }
+                
+                // Create custom story object
+                currentStory = {
+                    text: storyText,
+                    problemSentences: problemSentences,
+                    hints: Array(problemSentences.length).fill("Try to identify any double negatives or logical contradictions."),
+                    solutions: Array(problemSentences.length).fill("A corrected version without logical issues.")
+                };
+                
+                displayStory(currentStory);
+                resetUI();
+            }
+            
+            function toggleDarkMode() {
+                darkMode = !darkMode;
+                if (darkMode) {
+                    document.body.classList.add('dark');
+                    darkModeToggle.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    `;
+                } else {
+                    document.body.classList.remove('dark');
+                    darkModeToggle.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    `;
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94fae29d051d6e11',t:'MTc0OTkxNTE5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
