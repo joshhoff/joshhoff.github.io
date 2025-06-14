@@ -1,0 +1,540 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parts of Speech Explorer | Explorador de Partes del Habla</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+        }
+        
+        .speech-part {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .speech-part:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            pointer-events: none;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .info-card.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            max-height: 1000px;
+        }
+        
+        .example-sentence span {
+            display: inline-block;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:0.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.min-h-screen{min-height:100vh}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-6{gap:1.5rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border-l-4{border-left-width:4px}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.border-indigo-500{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.border-orange-500{--tw-border-opacity:1;border-color:rgb(249 115 22 / var(--tw-border-opacity, 1))}.border-pink-500{--tw-border-opacity:1;border-color:rgb(236 72 153 / var(--tw-border-opacity, 1))}.border-purple-500{--tw-border-opacity:1;border-color:rgb(168 85 247 / var(--tw-border-opacity, 1))}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.border-teal-500{--tw-border-opacity:1;border-color:rgb(20 184 166 / var(--tw-border-opacity, 1))}.border-yellow-500{--tw-border-opacity:1;border-color:rgb(234 179 8 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-orange-100{--tw-bg-opacity:1;background-color:rgb(255 237 213 / var(--tw-bg-opacity, 1))}.bg-pink-100{--tw-bg-opacity:1;background-color:rgb(252 231 243 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-teal-100{--tw-bg-opacity:1;background-color:rgb(204 251 241 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-purple-600{--tw-gradient-to:#9333ea var(--tw-gradient-to-position)}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12 / var(--tw-text-opacity, 1))}.text-orange-700{--tw-text-opacity:1;color:rgb(194 65 12 / var(--tw-text-opacity, 1))}.text-pink-600{--tw-text-opacity:1;color:rgb(219 39 119 / var(--tw-text-opacity, 1))}.text-pink-700{--tw-text-opacity:1;color:rgb(190 24 93 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-teal-600{--tw-text-opacity:1;color:rgb(13 148 136 / var(--tw-text-opacity, 1))}.text-teal-700{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.text-yellow-700{--tw-text-opacity:1;color:rgb(161 98 7 / var(--tw-text-opacity, 1))}.opacity-75{opacity:0.75}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen">
+        <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-6">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-center">Parts of Speech Explorer</h1>
+                <h2 class="text-xl md:text-2xl font-medium text-center mt-2">Explorador de Partes del Habla</h2>
+            </div>
+        </header>
+        
+        <div class="container mx-auto px-4 py-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold">Language / Idioma</h3>
+                    <div class="flex space-x-4">
+                        <button id="en-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md font-medium active">English</button>
+                        <button id="es-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-medium">Español</button>
+                    </div>
+                </div>
+                
+                <p id="instruction-en" class="text-gray-700 mb-4">Click on any part of speech below to learn more about it.</p>
+                <p id="instruction-es" class="text-gray-700 mb-4 hidden">Haz clic en cualquier parte del habla a continuación para aprender más sobre ella.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Noun / Sustantivo -->
+                <div class="speech-part bg-red-100 rounded-lg p-6 border-l-4 border-red-500" data-type="noun">
+                    <h3 class="text-xl font-semibold text-red-700 en">Noun</h3>
+                    <h3 class="text-xl font-semibold text-red-700 es hidden">Sustantivo</h3>
+                    <div class="mt-2 text-red-600 opacity-75 en">Names a person, place, thing, or idea</div>
+                    <div class="mt-2 text-red-600 opacity-75 es hidden">Nombra a una persona, lugar, cosa o idea</div>
+                </div>
+                
+                <!-- Verb / Verbo -->
+                <div class="speech-part bg-green-100 rounded-lg p-6 border-l-4 border-green-500" data-type="verb">
+                    <h3 class="text-xl font-semibold text-green-700 en">Verb</h3>
+                    <h3 class="text-xl font-semibold text-green-700 es hidden">Verbo</h3>
+                    <div class="mt-2 text-green-600 opacity-75 en">Shows action or state of being</div>
+                    <div class="mt-2 text-green-600 opacity-75 es hidden">Muestra acción o estado del ser</div>
+                </div>
+                
+                <!-- Adjective / Adjetivo -->
+                <div class="speech-part bg-blue-100 rounded-lg p-6 border-l-4 border-blue-500" data-type="adjective">
+                    <h3 class="text-xl font-semibold text-blue-700 en">Adjective</h3>
+                    <h3 class="text-xl font-semibold text-blue-700 es hidden">Adjetivo</h3>
+                    <div class="mt-2 text-blue-600 opacity-75 en">Describes or modifies a noun</div>
+                    <div class="mt-2 text-blue-600 opacity-75 es hidden">Describe o modifica un sustantivo</div>
+                </div>
+                
+                <!-- Adverb / Adverbio -->
+                <div class="speech-part bg-purple-100 rounded-lg p-6 border-l-4 border-purple-500" data-type="adverb">
+                    <h3 class="text-xl font-semibold text-purple-700 en">Adverb</h3>
+                    <h3 class="text-xl font-semibold text-purple-700 es hidden">Adverbio</h3>
+                    <div class="mt-2 text-purple-600 opacity-75 en">Modifies a verb, adjective, or another adverb</div>
+                    <div class="mt-2 text-purple-600 opacity-75 es hidden">Modifica un verbo, adjetivo u otro adverbio</div>
+                </div>
+                
+                <!-- Pronoun / Pronombre -->
+                <div class="speech-part bg-yellow-100 rounded-lg p-6 border-l-4 border-yellow-500" data-type="pronoun">
+                    <h3 class="text-xl font-semibold text-yellow-700 en">Pronoun</h3>
+                    <h3 class="text-xl font-semibold text-yellow-700 es hidden">Pronombre</h3>
+                    <div class="mt-2 text-yellow-600 opacity-75 en">Replaces a noun</div>
+                    <div class="mt-2 text-yellow-600 opacity-75 es hidden">Reemplaza a un sustantivo</div>
+                </div>
+                
+                <!-- Preposition / Preposición -->
+                <div class="speech-part bg-pink-100 rounded-lg p-6 border-l-4 border-pink-500" data-type="preposition">
+                    <h3 class="text-xl font-semibold text-pink-700 en">Preposition</h3>
+                    <h3 class="text-xl font-semibold text-pink-700 es hidden">Preposición</h3>
+                    <div class="mt-2 text-pink-600 opacity-75 en">Shows relationship between words</div>
+                    <div class="mt-2 text-pink-600 opacity-75 es hidden">Muestra relación entre palabras</div>
+                </div>
+                
+                <!-- Conjunction / Conjunción -->
+                <div class="speech-part bg-indigo-100 rounded-lg p-6 border-l-4 border-indigo-500" data-type="conjunction">
+                    <h3 class="text-xl font-semibold text-indigo-700 en">Conjunction</h3>
+                    <h3 class="text-xl font-semibold text-indigo-700 es hidden">Conjunción</h3>
+                    <div class="mt-2 text-indigo-600 opacity-75 en">Connects words or groups of words</div>
+                    <div class="mt-2 text-indigo-600 opacity-75 es hidden">Conecta palabras o grupos de palabras</div>
+                </div>
+                
+                <!-- Interjection / Interjección -->
+                <div class="speech-part bg-orange-100 rounded-lg p-6 border-l-4 border-orange-500" data-type="interjection">
+                    <h3 class="text-xl font-semibold text-orange-700 en">Interjection</h3>
+                    <h3 class="text-xl font-semibold text-orange-700 es hidden">Interjección</h3>
+                    <div class="mt-2 text-orange-600 opacity-75 en">Expresses emotion</div>
+                    <div class="mt-2 text-orange-600 opacity-75 es hidden">Expresa emoción</div>
+                </div>
+                
+                <!-- Article / Artículo -->
+                <div class="speech-part bg-teal-100 rounded-lg p-6 border-l-4 border-teal-500" data-type="article">
+                    <h3 class="text-xl font-semibold text-teal-700 en">Article</h3>
+                    <h3 class="text-xl font-semibold text-teal-700 es hidden">Artículo</h3>
+                    <div class="mt-2 text-teal-600 opacity-75 en">Points to a noun</div>
+                    <div class="mt-2 text-teal-600 opacity-75 es hidden">Señala a un sustantivo</div>
+                </div>
+            </div>
+            
+            <!-- Detailed Information Cards -->
+            <div id="info-container" class="mt-10">
+                <!-- Noun Info -->
+                <div id="noun-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-red-700 mb-4">Noun</h3>
+                        <p class="mb-4">A noun is a word that names a person, place, thing, or idea. Nouns can be common (general) or proper (specific).</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Person: <span class="bg-red-100 px-2 rounded">teacher</span>, <span class="bg-red-100 px-2 rounded">doctor</span>, <span class="bg-red-100 px-2 rounded">Maria</span></li>
+                                <li>Place: <span class="bg-red-100 px-2 rounded">school</span>, <span class="bg-red-100 px-2 rounded">park</span>, <span class="bg-red-100 px-2 rounded">New York</span></li>
+                                <li>Thing: <span class="bg-red-100 px-2 rounded">book</span>, <span class="bg-red-100 px-2 rounded">computer</span>, <span class="bg-red-100 px-2 rounded">tree</span></li>
+                                <li>Idea: <span class="bg-red-100 px-2 rounded">love</span>, <span class="bg-red-100 px-2 rounded">freedom</span>, <span class="bg-red-100 px-2 rounded">happiness</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>The <span class="bg-red-100">teacher</span> gave the <span class="bg-red-100">students</span> a <span class="bg-red-100">book</span> about <span class="bg-red-100">history</span>.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-red-700 mb-4">Sustantivo</h3>
+                        <p class="mb-4">Un sustantivo es una palabra que nombra a una persona, lugar, cosa o idea. Los sustantivos pueden ser comunes (generales) o propios (específicos).</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Persona: <span class="bg-red-100 px-2 rounded">maestro</span>, <span class="bg-red-100 px-2 rounded">doctor</span>, <span class="bg-red-100 px-2 rounded">María</span></li>
+                                <li>Lugar: <span class="bg-red-100 px-2 rounded">escuela</span>, <span class="bg-red-100 px-2 rounded">parque</span>, <span class="bg-red-100 px-2 rounded">Nueva York</span></li>
+                                <li>Cosa: <span class="bg-red-100 px-2 rounded">libro</span>, <span class="bg-red-100 px-2 rounded">computadora</span>, <span class="bg-red-100 px-2 rounded">árbol</span></li>
+                                <li>Idea: <span class="bg-red-100 px-2 rounded">amor</span>, <span class="bg-red-100 px-2 rounded">libertad</span>, <span class="bg-red-100 px-2 rounded">felicidad</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>El <span class="bg-red-100">maestro</span> dio a los <span class="bg-red-100">estudiantes</span> un <span class="bg-red-100">libro</span> sobre <span class="bg-red-100">historia</span>.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Verb Info -->
+                <div id="verb-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-green-700 mb-4">Verb</h3>
+                        <p class="mb-4">A verb is a word that shows action or a state of being. Verbs tell what the subject of a sentence is doing or being.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Action verbs: <span class="bg-green-100 px-2 rounded">run</span>, <span class="bg-green-100 px-2 rounded">jump</span>, <span class="bg-green-100 px-2 rounded">eat</span>, <span class="bg-green-100 px-2 rounded">write</span></li>
+                                <li>Linking verbs: <span class="bg-green-100 px-2 rounded">is</span>, <span class="bg-green-100 px-2 rounded">are</span>, <span class="bg-green-100 px-2 rounded">seem</span>, <span class="bg-green-100 px-2 rounded">become</span></li>
+                                <li>Helping verbs: <span class="bg-green-100 px-2 rounded">can</span>, <span class="bg-green-100 px-2 rounded">will</span>, <span class="bg-green-100 px-2 rounded">should</span>, <span class="bg-green-100 px-2 rounded">might</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>The children <span class="bg-green-100">played</span> in the park and <span class="bg-green-100">were</span> happy.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-green-700 mb-4">Verbo</h3>
+                        <p class="mb-4">Un verbo es una palabra que muestra acción o un estado del ser. Los verbos indican lo que el sujeto de una oración está haciendo o siendo.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Verbos de acción: <span class="bg-green-100 px-2 rounded">correr</span>, <span class="bg-green-100 px-2 rounded">saltar</span>, <span class="bg-green-100 px-2 rounded">comer</span>, <span class="bg-green-100 px-2 rounded">escribir</span></li>
+                                <li>Verbos copulativos: <span class="bg-green-100 px-2 rounded">es</span>, <span class="bg-green-100 px-2 rounded">son</span>, <span class="bg-green-100 px-2 rounded">parece</span>, <span class="bg-green-100 px-2 rounded">volverse</span></li>
+                                <li>Verbos auxiliares: <span class="bg-green-100 px-2 rounded">puede</span>, <span class="bg-green-100 px-2 rounded">va</span>, <span class="bg-green-100 px-2 rounded">debería</span>, <span class="bg-green-100 px-2 rounded">podría</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>Los niños <span class="bg-green-100">jugaron</span> en el parque y <span class="bg-green-100">estaban</span> felices.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Adjective Info -->
+                <div id="adjective-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-blue-700 mb-4">Adjective</h3>
+                        <p class="mb-4">An adjective is a word that describes or modifies a noun or pronoun. Adjectives provide more information about people, places, and things.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Descriptive: <span class="bg-blue-100 px-2 rounded">beautiful</span>, <span class="bg-blue-100 px-2 rounded">tall</span>, <span class="bg-blue-100 px-2 rounded">red</span>, <span class="bg-blue-100 px-2 rounded">delicious</span></li>
+                                <li>Quantitative: <span class="bg-blue-100 px-2 rounded">many</span>, <span class="bg-blue-100 px-2 rounded">few</span>, <span class="bg-blue-100 px-2 rounded">several</span></li>
+                                <li>Demonstrative: <span class="bg-blue-100 px-2 rounded">this</span>, <span class="bg-blue-100 px-2 rounded">that</span>, <span class="bg-blue-100 px-2 rounded">these</span>, <span class="bg-blue-100 px-2 rounded">those</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>The <span class="bg-blue-100">tall</span> boy ate a <span class="bg-blue-100">delicious</span> apple from <span class="bg-blue-100">that</span> tree.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-blue-700 mb-4">Adjetivo</h3>
+                        <p class="mb-4">Un adjetivo es una palabra que describe o modifica un sustantivo o pronombre. Los adjetivos proporcionan más información sobre personas, lugares y cosas.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Descriptivos: <span class="bg-blue-100 px-2 rounded">hermoso</span>, <span class="bg-blue-100 px-2 rounded">alto</span>, <span class="bg-blue-100 px-2 rounded">rojo</span>, <span class="bg-blue-100 px-2 rounded">delicioso</span></li>
+                                <li>Cuantitativos: <span class="bg-blue-100 px-2 rounded">muchos</span>, <span class="bg-blue-100 px-2 rounded">pocos</span>, <span class="bg-blue-100 px-2 rounded">varios</span></li>
+                                <li>Demostrativos: <span class="bg-blue-100 px-2 rounded">este</span>, <span class="bg-blue-100 px-2 rounded">ese</span>, <span class="bg-blue-100 px-2 rounded">estos</span>, <span class="bg-blue-100 px-2 rounded">esos</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>El niño <span class="bg-blue-100">alto</span> comió una manzana <span class="bg-blue-100">deliciosa</span> de <span class="bg-blue-100">ese</span> árbol.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Adverb Info -->
+                <div id="adverb-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">Adverb</h3>
+                        <p class="mb-4">An adverb is a word that modifies a verb, an adjective, or another adverb. Adverbs often answer questions like how, when, where, why, or to what extent.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Manner: <span class="bg-purple-100 px-2 rounded">quickly</span>, <span class="bg-purple-100 px-2 rounded">carefully</span>, <span class="bg-purple-100 px-2 rounded">well</span></li>
+                                <li>Time: <span class="bg-purple-100 px-2 rounded">yesterday</span>, <span class="bg-purple-100 px-2 rounded">soon</span>, <span class="bg-purple-100 px-2 rounded">now</span></li>
+                                <li>Place: <span class="bg-purple-100 px-2 rounded">here</span>, <span class="bg-purple-100 px-2 rounded">everywhere</span>, <span class="bg-purple-100 px-2 rounded">outside</span></li>
+                                <li>Degree: <span class="bg-purple-100 px-2 rounded">very</span>, <span class="bg-purple-100 px-2 rounded">too</span>, <span class="bg-purple-100 px-2 rounded">extremely</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>She <span class="bg-purple-100">quickly</span> finished her homework and played <span class="bg-purple-100">outside</span>.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-purple-700 mb-4">Adverbio</h3>
+                        <p class="mb-4">Un adverbio es una palabra que modifica un verbo, un adjetivo u otro adverbio. Los adverbios a menudo responden preguntas como cómo, cuándo, dónde, por qué o en qué medida.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Modo: <span class="bg-purple-100 px-2 rounded">rápidamente</span>, <span class="bg-purple-100 px-2 rounded">cuidadosamente</span>, <span class="bg-purple-100 px-2 rounded">bien</span></li>
+                                <li>Tiempo: <span class="bg-purple-100 px-2 rounded">ayer</span>, <span class="bg-purple-100 px-2 rounded">pronto</span>, <span class="bg-purple-100 px-2 rounded">ahora</span></li>
+                                <li>Lugar: <span class="bg-purple-100 px-2 rounded">aquí</span>, <span class="bg-purple-100 px-2 rounded">en todas partes</span>, <span class="bg-purple-100 px-2 rounded">afuera</span></li>
+                                <li>Grado: <span class="bg-purple-100 px-2 rounded">muy</span>, <span class="bg-purple-100 px-2 rounded">demasiado</span>, <span class="bg-purple-100 px-2 rounded">extremadamente</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>Ella terminó <span class="bg-purple-100">rápidamente</span> su tarea y jugó <span class="bg-purple-100">afuera</span>.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pronoun Info -->
+                <div id="pronoun-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-yellow-700 mb-4">Pronoun</h3>
+                        <p class="mb-4">A pronoun is a word that replaces a noun. Pronouns help avoid repetition and make sentences clearer.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Personal: <span class="bg-yellow-100 px-2 rounded">I</span>, <span class="bg-yellow-100 px-2 rounded">you</span>, <span class="bg-yellow-100 px-2 rounded">he</span>, <span class="bg-yellow-100 px-2 rounded">she</span>, <span class="bg-yellow-100 px-2 rounded">it</span>, <span class="bg-yellow-100 px-2 rounded">we</span>, <span class="bg-yellow-100 px-2 rounded">they</span></li>
+                                <li>Possessive: <span class="bg-yellow-100 px-2 rounded">mine</span>, <span class="bg-yellow-100 px-2 rounded">yours</span>, <span class="bg-yellow-100 px-2 rounded">his</span>, <span class="bg-yellow-100 px-2 rounded">hers</span>, <span class="bg-yellow-100 px-2 rounded">ours</span></li>
+                                <li>Reflexive: <span class="bg-yellow-100 px-2 rounded">myself</span>, <span class="bg-yellow-100 px-2 rounded">yourself</span>, <span class="bg-yellow-100 px-2 rounded">himself</span></li>
+                                <li>Demonstrative: <span class="bg-yellow-100 px-2 rounded">this</span>, <span class="bg-yellow-100 px-2 rounded">that</span>, <span class="bg-yellow-100 px-2 rounded">these</span>, <span class="bg-yellow-100 px-2 rounded">those</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>John gave the book to Mary, and <span class="bg-yellow-100">she</span> thanked <span class="bg-yellow-100">him</span> for <span class="bg-yellow-100">it</span>.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-yellow-700 mb-4">Pronombre</h3>
+                        <p class="mb-4">Un pronombre es una palabra que reemplaza a un sustantivo. Los pronombres ayudan a evitar la repetición y hacen que las oraciones sean más claras.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Personales: <span class="bg-yellow-100 px-2 rounded">yo</span>, <span class="bg-yellow-100 px-2 rounded">tú</span>, <span class="bg-yellow-100 px-2 rounded">él</span>, <span class="bg-yellow-100 px-2 rounded">ella</span>, <span class="bg-yellow-100 px-2 rounded">nosotros</span>, <span class="bg-yellow-100 px-2 rounded">ellos</span></li>
+                                <li>Posesivos: <span class="bg-yellow-100 px-2 rounded">mío</span>, <span class="bg-yellow-100 px-2 rounded">tuyo</span>, <span class="bg-yellow-100 px-2 rounded">suyo</span>, <span class="bg-yellow-100 px-2 rounded">nuestro</span></li>
+                                <li>Reflexivos: <span class="bg-yellow-100 px-2 rounded">me</span>, <span class="bg-yellow-100 px-2 rounded">te</span>, <span class="bg-yellow-100 px-2 rounded">se</span>, <span class="bg-yellow-100 px-2 rounded">nos</span></li>
+                                <li>Demostrativos: <span class="bg-yellow-100 px-2 rounded">este</span>, <span class="bg-yellow-100 px-2 rounded">ese</span>, <span class="bg-yellow-100 px-2 rounded">estos</span>, <span class="bg-yellow-100 px-2 rounded">esos</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>Juan le dio el libro a María, y <span class="bg-yellow-100">ella</span> le dio las gracias a <span class="bg-yellow-100">él</span> por <span class="bg-yellow-100">ello</span>.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preposition Info -->
+                <div id="preposition-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-pink-700 mb-4">Preposition</h3>
+                        <p class="mb-4">A preposition is a word that shows the relationship between a noun or pronoun and other words in a sentence. They often indicate location, direction, time, or manner.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Location: <span class="bg-pink-100 px-2 rounded">in</span>, <span class="bg-pink-100 px-2 rounded">on</span>, <span class="bg-pink-100 px-2 rounded">at</span>, <span class="bg-pink-100 px-2 rounded">under</span></li>
+                                <li>Direction: <span class="bg-pink-100 px-2 rounded">to</span>, <span class="bg-pink-100 px-2 rounded">from</span>, <span class="bg-pink-100 px-2 rounded">toward</span></li>
+                                <li>Time: <span class="bg-pink-100 px-2 rounded">before</span>, <span class="bg-pink-100 px-2 rounded">after</span>, <span class="bg-pink-100 px-2 rounded">during</span></li>
+                                <li>Manner: <span class="bg-pink-100 px-2 rounded">with</span>, <span class="bg-pink-100 px-2 rounded">by</span>, <span class="bg-pink-100 px-2 rounded">like</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>The cat is hiding <span class="bg-pink-100">under</span> the table <span class="bg-pink-100">with</span> its toy.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-pink-700 mb-4">Preposición</h3>
+                        <p class="mb-4">Una preposición es una palabra que muestra la relación entre un sustantivo o pronombre y otras palabras en una oración. A menudo indican ubicación, dirección, tiempo o manera.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Ubicación: <span class="bg-pink-100 px-2 rounded">en</span>, <span class="bg-pink-100 px-2 rounded">sobre</span>, <span class="bg-pink-100 px-2 rounded">bajo</span>, <span class="bg-pink-100 px-2 rounded">dentro</span></li>
+                                <li>Dirección: <span class="bg-pink-100 px-2 rounded">a</span>, <span class="bg-pink-100 px-2 rounded">desde</span>, <span class="bg-pink-100 px-2 rounded">hacia</span></li>
+                                <li>Tiempo: <span class="bg-pink-100 px-2 rounded">antes</span>, <span class="bg-pink-100 px-2 rounded">después</span>, <span class="bg-pink-100 px-2 rounded">durante</span></li>
+                                <li>Manera: <span class="bg-pink-100 px-2 rounded">con</span>, <span class="bg-pink-100 px-2 rounded">por</span>, <span class="bg-pink-100 px-2 rounded">como</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>El gato está escondido <span class="bg-pink-100">debajo</span> de la mesa <span class="bg-pink-100">con</span> su juguete.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Conjunction Info -->
+                <div id="conjunction-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-4">Conjunction</h3>
+                        <p class="mb-4">A conjunction is a word that connects words, phrases, or clauses. Conjunctions help create more complex sentences by joining ideas together.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Coordinating: <span class="bg-indigo-100 px-2 rounded">and</span>, <span class="bg-indigo-100 px-2 rounded">but</span>, <span class="bg-indigo-100 px-2 rounded">or</span>, <span class="bg-indigo-100 px-2 rounded">so</span>, <span class="bg-indigo-100 px-2 rounded">yet</span></li>
+                                <li>Subordinating: <span class="bg-indigo-100 px-2 rounded">because</span>, <span class="bg-indigo-100 px-2 rounded">although</span>, <span class="bg-indigo-100 px-2 rounded">if</span>, <span class="bg-indigo-100 px-2 rounded">when</span></li>
+                                <li>Correlative: <span class="bg-indigo-100 px-2 rounded">either...or</span>, <span class="bg-indigo-100 px-2 rounded">neither...nor</span>, <span class="bg-indigo-100 px-2 rounded">both...and</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>I wanted to go to the park, <span class="bg-indigo-100">but</span> it started to rain, <span class="bg-indigo-100">so</span> I stayed home.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-4">Conjunción</h3>
+                        <p class="mb-4">Una conjunción es una palabra que conecta palabras, frases o cláusulas. Las conjunciones ayudan a crear oraciones más complejas uniendo ideas.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Coordinantes: <span class="bg-indigo-100 px-2 rounded">y</span>, <span class="bg-indigo-100 px-2 rounded">pero</span>, <span class="bg-indigo-100 px-2 rounded">o</span>, <span class="bg-indigo-100 px-2 rounded">así que</span></li>
+                                <li>Subordinantes: <span class="bg-indigo-100 px-2 rounded">porque</span>, <span class="bg-indigo-100 px-2 rounded">aunque</span>, <span class="bg-indigo-100 px-2 rounded">si</span>, <span class="bg-indigo-100 px-2 rounded">cuando</span></li>
+                                <li>Correlativas: <span class="bg-indigo-100 px-2 rounded">o...o</span>, <span class="bg-indigo-100 px-2 rounded">ni...ni</span>, <span class="bg-indigo-100 px-2 rounded">tanto...como</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>Quería ir al parque, <span class="bg-indigo-100">pero</span> empezó a llover, <span class="bg-indigo-100">así que</span> me quedé en casa.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interjection Info -->
+                <div id="interjection-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6 active">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-orange-700 mb-4">Interjection</h3>
+                        <p class="mb-4">An interjection is a word or phrase that expresses strong emotion or surprise. It often stands alone and is usually followed by an exclamation point.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Excitement: <span class="bg-orange-100 px-2 rounded">Wow!</span>, <span class="bg-orange-100 px-2 rounded">Yay!</span>, <span class="bg-orange-100 px-2 rounded">Hurray!</span></li>
+                                <li>Surprise: <span class="bg-orange-100 px-2 rounded">Oh!</span>, <span class="bg-orange-100 px-2 rounded">Oops!</span>, <span class="bg-orange-100 px-2 rounded">Ah!</span></li>
+                                <li>Pain: <span class="bg-orange-100 px-2 rounded">Ouch!</span>, <span class="bg-orange-100 px-2 rounded">Ow!</span></li>
+                                <li>Greeting: <span class="bg-orange-100 px-2 rounded">Hello!</span>, <span class="bg-orange-100 px-2 rounded">Hi!</span>, <span class="bg-orange-100 px-2 rounded">Hey!</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p><span class="bg-orange-100">Wow!</span> That was an amazing performance. <span class="bg-orange-100">Oh!</span> I didn't see you there.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-orange-700 mb-4">Interjección</h3>
+                        <p class="mb-4">Una interjección es una palabra o frase que expresa una emoción fuerte o sorpresa. A menudo se presenta sola y generalmente va seguida de un signo de exclamación.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Emoción: <span class="bg-orange-100 px-2 rounded">¡Guau!</span>, <span class="bg-orange-100 px-2 rounded">¡Yupi!</span>, <span class="bg-orange-100 px-2 rounded">¡Hurra!</span></li>
+                                <li>Sorpresa: <span class="bg-orange-100 px-2 rounded">¡Oh!</span>, <span class="bg-orange-100 px-2 rounded">¡Ups!</span>, <span class="bg-orange-100 px-2 rounded">¡Ah!</span></li>
+                                <li>Dolor: <span class="bg-orange-100 px-2 rounded">¡Ay!</span>, <span class="bg-orange-100 px-2 rounded">¡Auch!</span></li>
+                                <li>Saludo: <span class="bg-orange-100 px-2 rounded">¡Hola!</span>, <span class="bg-orange-100 px-2 rounded">¡Ey!</span></li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p><span class="bg-orange-100">¡Guau!</span> Esa fue una actuación increíble. <span class="bg-orange-100">¡Oh!</span> No te vi ahí.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Article Info -->
+                <div id="article-info" class="info-card bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="en">
+                        <h3 class="text-2xl font-bold text-teal-700 mb-4">Article</h3>
+                        <p class="mb-4">An article is a word that comes before a noun to indicate whether the noun is specific or general. There are only three articles in English.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Examples:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Definite article: <span class="bg-teal-100 px-2 rounded">the</span> (refers to specific nouns)</li>
+                                <li>Indefinite articles: <span class="bg-teal-100 px-2 rounded">a</span>, <span class="bg-teal-100 px-2 rounded">an</span> (refer to general nouns)</li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Example Sentence:</p>
+                            <p>I saw <span class="bg-teal-100">a</span> dog in <span class="bg-teal-100">the</span> park. <span class="bg-teal-100">The</span> dog was playing with <span class="bg-teal-100">an</span> orange ball.</p>
+                        </div>
+                    </div>
+                    <div class="es hidden">
+                        <h3 class="text-2xl font-bold text-teal-700 mb-4">Artículo</h3>
+                        <p class="mb-4">Un artículo es una palabra que viene antes de un sustantivo para indicar si el sustantivo es específico o general.</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Ejemplos:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Artículos definidos: <span class="bg-teal-100 px-2 rounded">el</span>, <span class="bg-teal-100 px-2 rounded">la</span>, <span class="bg-teal-100 px-2 rounded">los</span>, <span class="bg-teal-100 px-2 rounded">las</span> (se refieren a sustantivos específicos)</li>
+                                <li>Artículos indefinidos: <span class="bg-teal-100 px-2 rounded">un</span>, <span class="bg-teal-100 px-2 rounded">una</span>, <span class="bg-teal-100 px-2 rounded">unos</span>, <span class="bg-teal-100 px-2 rounded">unas</span> (se refieren a sustantivos generales)</li>
+                            </ul>
+                        </div>
+                        <div class="example-sentence bg-gray-100 p-4 rounded-lg">
+                            <p class="font-medium mb-2">Oración de ejemplo:</p>
+                            <p>Vi <span class="bg-teal-100">un</span> perro en <span class="bg-teal-100">el</span> parque. <span class="bg-teal-100">El</span> perro estaba jugando con <span class="bg-teal-100">una</span> pelota naranja.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 text-center">
+                <p class="text-gray-500 text-sm en">Click on any part of speech above to learn more about it.</p>
+                <p class="text-gray-500 text-sm es hidden">Haz clic en cualquier parte del habla arriba para aprender más sobre ella.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language switcher
+            const enBtn = document.getElementById('en-btn');
+            const esBtn = document.getElementById('es-btn');
+            const enElements = document.querySelectorAll('.en');
+            const esElements = document.querySelectorAll('.es');
+            
+            enBtn.addEventListener('click', function() {
+                enBtn.classList.add('bg-blue-600', 'text-white');
+                enBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                esBtn.classList.add('bg-gray-200', 'text-gray-700');
+                esBtn.classList.remove('bg-blue-600', 'text-white');
+                
+                enElements.forEach(el => el.classList.remove('hidden'));
+                esElements.forEach(el => el.classList.add('hidden'));
+            });
+            
+            esBtn.addEventListener('click', function() {
+                esBtn.classList.add('bg-blue-600', 'text-white');
+                esBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                enBtn.classList.add('bg-gray-200', 'text-gray-700');
+                enBtn.classList.remove('bg-blue-600', 'text-white');
+                
+                esElements.forEach(el => el.classList.remove('hidden'));
+                enElements.forEach(el => el.classList.add('hidden'));
+            });
+            
+            // Parts of speech interaction
+            const speechParts = document.querySelectorAll('.speech-part');
+            const infoCards = document.querySelectorAll('.info-card');
+            
+            speechParts.forEach(part => {
+                part.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    
+                    // Hide all info cards
+                    infoCards.forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    
+                    // Show the selected info card
+                    const infoCard = document.getElementById(`${type}-info`);
+                    infoCard.classList.add('active');
+                    
+                    // Scroll to the info card
+                    infoCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94fa01a0059b3ed8',t:'MTc0OTkwNTk4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
