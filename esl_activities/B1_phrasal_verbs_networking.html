@@ -1,0 +1,1336 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetVerbs - Phrasal Verbs for Network Engineers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+        }
+        
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        .chat-message {
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .highlight {
+            background-color: rgba(255, 255, 0, 0.3);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.col-span-1{grid-column:span 1 / span 1}.col-span-2{grid-column:span 2 / span 2}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.ml-4{margin-left:1rem}.mr-3{margin-right:0.75rem}.mr-4{margin-right:1rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-5{height:1.25rem}.h-64{height:16rem}.h-8{height:2rem}.h-full{height:100%}.w-5{width:1.25rem}.w-8{width:2rem}.w-full{width:100%}.max-w-lg{max-width:32rem}.flex-grow{flex-grow:1}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-6{gap:1.5rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-l-lg{border-top-left-radius:0.5rem;border-bottom-left-radius:0.5rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.border{border-width:1px}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6 / var(--tw-text-opacity, 1))}.text-blue-100{--tw-text-opacity:1;color:rgb(219 234 254 / var(--tw-text-opacity, 1))}.text-blue-200{--tw-text-opacity:1;color:rgb(191 219 254 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-amber-700:hover{--tw-bg-opacity:1;background-color:rgb(180 83 9 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.hover\:text-blue-800:hover{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-white">NetVerbs</h1>
+                    <p id="subtitle" class="text-blue-200">Phrasal Verbs for Network Engineers</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="langToggle" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors flex items-center">
+                        <span id="currentLang">English</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Learning Modes -->
+            <div class="mb-8">
+                <h2 id="modesTitle" class="text-2xl font-bold text-white mb-4">Learning Modes</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="card bg-white rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <h3 id="flashcardsTitle" class="text-xl font-semibold text-gray-800 ml-4">Flashcards</h3>
+                        </div>
+                        <p id="flashcardsDesc" class="text-gray-600 mb-4">Learn phrasal verbs with interactive flashcards. Test your knowledge by flipping cards.</p>
+                        <button id="flashcardsBtn" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">Start Learning</button>
+                    </div>
+                    
+                    <div class="card bg-white rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                </svg>
+                            </div>
+                            <h3 id="quizTitle" class="text-xl font-semibold text-gray-800 ml-4">Quiz</h3>
+                        </div>
+                        <p id="quizDesc" class="text-gray-600 mb-4">Test your knowledge with multiple-choice questions about network engineering phrasal verbs.</p>
+                        <button id="quizBtn" class="w-full bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">Start Quiz</button>
+                    </div>
+                    
+                    <div class="card bg-white rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
+                                </svg>
+                            </div>
+                            <h3 id="contextTitle" class="text-xl font-semibold text-gray-800 ml-4">Context Examples</h3>
+                        </div>
+                        <p id="contextDesc" class="text-gray-600 mb-4">See phrasal verbs used in real network engineering scenarios and conversations.</p>
+                        <button id="contextBtn" class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition-colors">View Examples</button>
+                    </div>
+
+                    <div class="card bg-white rounded-xl p-6 shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-amber-100 p-3 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                            </div>
+                            <h3 id="practiceTitle" class="text-xl font-semibold text-gray-800 ml-4">Conversation Practice</h3>
+                        </div>
+                        <p id="practiceDesc" class="text-gray-600 mb-4">Practice using phrasal verbs in simulated network engineering conversations.</p>
+                        <button id="practiceBtn" class="w-full bg-amber-600 text-white py-2 rounded-lg font-medium hover:bg-amber-700 transition-colors">Start Practice</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flashcards Section -->
+            <div id="flashcardsSection" class="hidden mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="flashcardsHeader" class="text-2xl font-bold text-white">Flashcards</h2>
+                    <div class="flex items-center">
+                        <span id="cardCounter" class="text-white mr-4">1/30</span>
+                        <button id="backToModes" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                            <span id="backBtn">Back</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <div class="flip-card w-full max-w-lg h-64">
+                        <div class="flip-card-inner w-full h-full">
+                            <div class="flip-card-front bg-white rounded-xl p-6 shadow-lg flex flex-col justify-center items-center">
+                                <h3 id="cardFront" class="text-2xl font-bold text-gray-800 mb-2">Set up</h3>
+                                <p id="cardHint" class="text-gray-500">Click to see definition</p>
+                            </div>
+                            <div class="flip-card-back bg-blue-600 text-white rounded-xl p-6 shadow-lg flex flex-col justify-center items-center">
+                                <h3 id="cardBack" class="text-2xl font-bold mb-4">To install and configure a network device or system</h3>
+                                <p id="cardExample" class="text-blue-100 text-center">"We need to set up the new router before connecting it to the network."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button id="prevCard" class="bg-white text-blue-800 px-6 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                        <span id="prevBtn">Previous</span>
+                    </button>
+                    <button id="nextCard" class="bg-white text-blue-800 px-6 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                        <span id="nextBtn">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div id="quizSection" class="hidden mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="quizHeader" class="text-2xl font-bold text-white">Quiz</h2>
+                    <div class="flex items-center">
+                        <span id="questionCounter" class="text-white mr-4">1/10</span>
+                        <button id="backToModesQuiz" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                            <span id="backBtnQuiz">Back</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 id="questionText" class="text-xl font-semibold text-gray-800 mb-4">What does "troubleshoot" mean in network engineering?</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="option bg-gray-100 p-4 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="answer" value="0" class="mr-3">
+                                <span id="option0" class="text-gray-800">To identify and solve problems in a network</span>
+                            </label>
+                        </div>
+                        <div class="option bg-gray-100 p-4 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="answer" value="1" class="mr-3">
+                                <span id="option1" class="text-gray-800">To shoot at trouble-causing devices</span>
+                            </label>
+                        </div>
+                        <div class="option bg-gray-100 p-4 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="answer" value="2" class="mr-3">
+                                <span id="option2" class="text-gray-800">To install new software</span>
+                            </label>
+                        </div>
+                        <div class="option bg-gray-100 p-4 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="answer" value="3" class="mr-3">
+                                <span id="option3" class="text-gray-800">To create network documentation</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-between">
+                        <button id="submitAnswer" class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                            <span id="submitBtn">Submit Answer</span>
+                        </button>
+                        <button id="nextQuestion" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors hidden">
+                            <span id="nextQuestionBtn">Next Question</span>
+                        </button>
+                    </div>
+                    
+                    <div id="feedback" class="mt-4 p-4 rounded-lg hidden"></div>
+                </div>
+            </div>
+
+            <!-- Context Examples Section -->
+            <div id="contextSection" class="hidden mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="contextHeader" class="text-2xl font-bold text-white">Context Examples</h2>
+                    <button id="backToModesContext" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                        <span id="backBtnContext">Back</span>
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-lg mb-6">
+                    <h3 id="contextTitle1" class="text-xl font-semibold text-gray-800 mb-2">Network Troubleshooting Conversation</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <p id="contextDialog1" class="text-gray-800">
+                            <strong>Engineer 1:</strong> "We need to <span class="text-blue-600 font-medium">look into</span> why the server keeps dropping connections."<br><br>
+                            <strong>Engineer 2:</strong> "I already <span class="text-blue-600 font-medium">checked out</span> the logs and found some unusual traffic patterns."<br><br>
+                            <strong>Engineer 1:</strong> "Great, let's <span class="text-blue-600 font-medium">set up</span> a packet capture to see what's happening."<br><br>
+                            <strong>Engineer 2:</strong> "I'll <span class="text-blue-600 font-medium">hook up</span> the analyzer to the switch port and <span class="text-blue-600 font-medium">figure out</span> what's causing the issue."
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-lg mb-6">
+                    <h3 id="contextTitle2" class="text-xl font-semibold text-gray-800 mb-2">Network Implementation Email</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <p id="contextDialog2" class="text-gray-800">
+                            <strong>Subject:</strong> Network Upgrade Project Update<br><br>
+                            <strong>Body:</strong><br>
+                            Team,<br><br>
+                            We need to <span class="text-blue-600 font-medium">roll out</span> the new firewall configuration by Friday. Please <span class="text-blue-600 font-medium">back up</span> all current settings before we <span class="text-blue-600 font-medium">cut over</span> to the new system.<br><br>
+                            We'll <span class="text-blue-600 font-medium">go through</span> the migration checklist during tomorrow's meeting. If anyone needs to <span class="text-blue-600 font-medium">brush up on</span> the new security protocols, the documentation is available on the shared drive.<br><br>
+                            Let's <span class="text-blue-600 font-medium">wrap up</span> any pending tasks by Thursday afternoon.<br><br>
+                            Regards,<br>
+                            Network Team Lead
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <h3 id="contextTitle3" class="text-xl font-semibold text-gray-800 mb-2">Network Maintenance Procedure</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <p id="contextDialog3" class="text-gray-800">
+                            <strong>Network Maintenance Procedure:</strong><br><br>
+                            1. <span class="text-blue-600 font-medium">Log in</span> to all affected devices and verify their status.<br>
+                            2. <span class="text-blue-600 font-medium">Back up</span> the current configurations to the backup server.<br>
+                            3. <span class="text-blue-600 font-medium">Reach out</span> to the on-call team to confirm maintenance window.<br>
+                            4. <span class="text-blue-600 font-medium">Shut down</span> non-essential services according to the schedule.<br>
+                            5. <span class="text-blue-600 font-medium">Carry out</span> the planned upgrades on each device.<br>
+                            6. <span class="text-blue-600 font-medium">Boot up</span> all systems and verify connectivity.<br>
+                            7. <span class="text-blue-600 font-medium">Look out for</span> any error messages or anomalies.<br>
+                            8. <span class="text-blue-600 font-medium">Sign off</span> on the maintenance completion document.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversation Practice Section -->
+            <div id="practiceSection" class="hidden mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="practiceHeader" class="text-2xl font-bold text-white">Conversation Practice</h2>
+                    <div class="flex items-center space-x-4">
+                        <select id="scenarioSelect" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-medium">
+                            <option value="0" id="scenario0">Network Troubleshooting</option>
+                            <option value="1" id="scenario1">System Upgrade</option>
+                            <option value="2" id="scenario2">Security Incident</option>
+                        </select>
+                        <button id="backToModesPractice" class="bg-white text-blue-800 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 transition-colors">
+                            <span id="backBtnPractice">Back</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="col-span-1 bg-white rounded-xl p-6 shadow-lg">
+                        <h3 id="suggestedVerbsTitle" class="text-xl font-semibold text-gray-800 mb-4">Suggested Phrasal Verbs</h3>
+                        <div id="suggestedVerbs" class="space-y-2">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <span class="font-medium">look into</span> - investigate
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <span class="font-medium">set up</span> - install and configure
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <span class="font-medium">figure out</span> - determine, solve
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <span class="font-medium">shut down</span> - turn off completely
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <span class="font-medium">boot up</span> - start a system
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-2 bg-white rounded-xl p-6 shadow-lg">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 id="conversationTitle" class="text-xl font-semibold text-gray-800">Network Troubleshooting Conversation</h3>
+                            <button id="resetConversation" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                <span id="resetBtn">Reset</span>
+                            </button>
+                        </div>
+                        
+                        <div id="conversationContainer" class="bg-gray-100 p-4 rounded-lg h-64 overflow-y-auto mb-4">
+                            <div class="chat-message bg-blue-100 p-3 rounded-lg mb-3 max-w-3/4">
+                                <strong id="colleagueLabel">Colleague:</strong> <span id="initialPrompt">Hi there! We're having some connectivity issues with the new server. Can you help me troubleshoot this?</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <input type="text" id="userInput" class="flex-grow bg-gray-100 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your response...">
+                            <button id="sendResponse" class="bg-blue-600 text-white px-6 py-2 rounded-r-lg font-medium hover:bg-blue-700 transition-colors">
+                                <span id="sendBtn">Send</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Data
+        const phrasalVerbs = [
+            {
+                phrase: "set up",
+                phraseIT: "installare e configurare",
+                definition: "To install and configure a network device or system",
+                definitionIT: "Installare e configurare un dispositivo o sistema di rete",
+                example: "We need to set up the new router before connecting it to the network.",
+                exampleIT: "Dobbiamo installare e configurare il nuovo router prima di collegarlo alla rete."
+            },
+            {
+                phrase: "shut down",
+                phraseIT: "spegnere",
+                definition: "To turn off a device or system completely",
+                definitionIT: "Spegnere completamente un dispositivo o sistema",
+                example: "Please shut down all servers before the power maintenance.",
+                exampleIT: "Si prega di spegnere tutti i server prima della manutenzione elettrica."
+            },
+            {
+                phrase: "log in",
+                phraseIT: "accedere",
+                definition: "To access a system by entering authentication credentials",
+                definitionIT: "Accedere a un sistema inserendo le credenziali di autenticazione",
+                example: "You need to log in with administrator privileges to change those settings.",
+                exampleIT: "Devi accedere con privilegi di amministratore per modificare quelle impostazioni."
+            },
+            {
+                phrase: "back up",
+                phraseIT: "fare un backup",
+                definition: "To create a copy of data for safekeeping",
+                definitionIT: "Creare una copia dei dati per sicurezza",
+                example: "Always back up the configuration before making major changes.",
+                exampleIT: "Fai sempre un backup della configurazione prima di apportare modifiche importanti."
+            },
+            {
+                phrase: "troubleshoot",
+                phraseIT: "risolvere problemi",
+                definition: "To identify and solve problems in a network",
+                definitionIT: "Identificare e risolvere problemi in una rete",
+                example: "We need to troubleshoot the connection issues before users arrive tomorrow.",
+                exampleIT: "Dobbiamo risolvere i problemi di connessione prima che gli utenti arrivino domani."
+            },
+            {
+                phrase: "roll out",
+                phraseIT: "implementare",
+                definition: "To implement or deploy a new system or technology",
+                definitionIT: "Implementare o distribuire un nuovo sistema o tecnologia",
+                example: "We'll roll out the new security patches next week.",
+                exampleIT: "Implementeremo le nuove patch di sicurezza la prossima settimana."
+            },
+            {
+                phrase: "boot up",
+                phraseIT: "avviare",
+                definition: "To start a computer or device",
+                definitionIT: "Avviare un computer o dispositivo",
+                example: "Boot up the server after connecting all the cables.",
+                exampleIT: "Avvia il server dopo aver collegato tutti i cavi."
+            },
+            {
+                phrase: "log out",
+                phraseIT: "disconnettersi",
+                definition: "To exit a system by terminating a session",
+                definitionIT: "Uscire da un sistema terminando una sessione",
+                example: "Always log out of the admin panel when you're done.",
+                exampleIT: "Disconnettiti sempre dal pannello di amministrazione quando hai finito."
+            },
+            {
+                phrase: "look into",
+                phraseIT: "indagare",
+                definition: "To investigate or examine a problem",
+                definitionIT: "Indagare o esaminare un problema",
+                example: "I'll look into why the network is running slowly today.",
+                exampleIT: "Indagherò sul perché la rete funziona lentamente oggi."
+            },
+            {
+                phrase: "figure out",
+                phraseIT: "capire",
+                definition: "To solve a problem or understand something complex",
+                definitionIT: "Risolvere un problema o comprendere qualcosa di complesso",
+                example: "Can you figure out why the firewall is blocking legitimate traffic?",
+                exampleIT: "Puoi capire perché il firewall sta bloccando il traffico legittimo?"
+            },
+            {
+                phrase: "cut over",
+                phraseIT: "passare a",
+                definition: "To switch from one system to another",
+                definitionIT: "Passare da un sistema all'altro",
+                example: "We'll cut over to the new network infrastructure this weekend.",
+                exampleIT: "Passeremo alla nuova infrastruttura di rete questo fine settimana."
+            },
+            {
+                phrase: "hook up",
+                phraseIT: "collegare",
+                definition: "To connect devices or systems together",
+                definitionIT: "Collegare dispositivi o sistemi insieme",
+                example: "Hook up the new printer to the network and test it.",
+                exampleIT: "Collega la nuova stampante alla rete e testala."
+            },
+            {
+                phrase: "sign off",
+                phraseIT: "approvare",
+                definition: "To approve or give final authorization",
+                definitionIT: "Approvare o dare l'autorizzazione finale",
+                example: "The IT director needs to sign off on the network changes.",
+                exampleIT: "Il direttore IT deve approvare le modifiche alla rete."
+            },
+            {
+                phrase: "reach out",
+                phraseIT: "contattare",
+                definition: "To contact someone for assistance or information",
+                definitionIT: "Contattare qualcuno per assistenza o informazioni",
+                example: "Reach out to the vendor if you need technical support.",
+                exampleIT: "Contatta il fornitore se hai bisogno di supporto tecnico."
+            },
+            {
+                phrase: "go through",
+                phraseIT: "esaminare",
+                definition: "To examine or review something thoroughly",
+                definitionIT: "Esaminare o rivedere qualcosa in modo approfondito",
+                example: "Let's go through the network logs to find the source of the attack.",
+                exampleIT: "Esaminiamo i log di rete per trovare la fonte dell'attacco."
+            },
+            {
+                phrase: "wrap up",
+                phraseIT: "concludere",
+                definition: "To finish or complete a task",
+                definitionIT: "Finire o completare un'attività",
+                example: "Let's wrap up the server migration before the weekend.",
+                exampleIT: "Concludiamo la migrazione del server prima del fine settimana."
+            },
+            {
+                phrase: "check out",
+                phraseIT: "esaminare",
+                definition: "To examine or investigate something",
+                definitionIT: "Esaminare o investigare qualcosa",
+                example: "Check out the new security features in the latest update.",
+                exampleIT: "Esamina le nuove funzionalità di sicurezza nell'ultimo aggiornamento."
+            },
+            {
+                phrase: "carry out",
+                phraseIT: "eseguire",
+                definition: "To perform or execute a task or plan",
+                definitionIT: "Eseguire o realizzare un compito o un piano",
+                example: "We'll carry out the network assessment next week.",
+                exampleIT: "Eseguiremo la valutazione della rete la prossima settimana."
+            },
+            {
+                phrase: "break down",
+                phraseIT: "guastarsi",
+                definition: "To stop functioning; to fail",
+                definitionIT: "Smettere di funzionare; fallire",
+                example: "The old server broke down again during peak hours.",
+                exampleIT: "Il vecchio server si è guastato di nuovo durante le ore di punta."
+            },
+            {
+                phrase: "build up",
+                phraseIT: "accumulare",
+                definition: "To accumulate or increase gradually",
+                definitionIT: "Accumulare o aumentare gradualmente",
+                example: "Traffic has been building up on the main network segment.",
+                exampleIT: "Il traffico si è accumulato sul segmento principale della rete."
+            },
+            {
+                phrase: "rule out",
+                phraseIT: "escludere",
+                definition: "To eliminate a possibility",
+                definitionIT: "Eliminare una possibilità",
+                example: "We can rule out hardware failure as the cause of the problem.",
+                exampleIT: "Possiamo escludere un guasto hardware come causa del problema."
+            },
+            {
+                phrase: "narrow down",
+                phraseIT: "restringere",
+                definition: "To reduce the number of possibilities",
+                definitionIT: "Ridurre il numero di possibilità",
+                example: "Let's narrow down the potential causes of the network outage.",
+                exampleIT: "Restringiamo le potenziali cause dell'interruzione della rete."
+            },
+            {
+                phrase: "bring up",
+                phraseIT: "avviare",
+                definition: "To start a system or raise a topic",
+                definitionIT: "Avviare un sistema o sollevare un argomento",
+                example: "Bring up the backup server while I troubleshoot the main one.",
+                exampleIT: "Avvia il server di backup mentre risolvo i problemi di quello principale."
+            },
+            {
+                phrase: "take down",
+                phraseIT: "disattivare",
+                definition: "To disable or remove from service",
+                definitionIT: "Disabilitare o rimuovere dal servizio",
+                example: "We need to take down the website for maintenance tonight.",
+                exampleIT: "Dobbiamo disattivare il sito web per manutenzione stasera."
+            },
+            {
+                phrase: "put together",
+                phraseIT: "assemblare",
+                definition: "To assemble or create something from parts",
+                definitionIT: "Assemblare o creare qualcosa da parti",
+                example: "Let's put together a plan for upgrading the network infrastructure.",
+                exampleIT: "Assembliamo un piano per aggiornare l'infrastruttura di rete."
+            },
+            {
+                phrase: "look out for",
+                phraseIT: "fare attenzione a",
+                definition: "To be vigilant about; to watch for",
+                definitionIT: "Essere vigili su; stare attenti a",
+                example: "Look out for any unusual traffic patterns in the logs.",
+                exampleIT: "Fai attenzione a eventuali modelli di traffico insoliti nei log."
+            },
+            {
+                phrase: "turn off",
+                phraseIT: "disattivare",
+                definition: "To deactivate or disable a feature or device",
+                definitionIT: "Disattivare o disabilitare una funzione o un dispositivo",
+                example: "Turn off the firewall temporarily while we test the connection.",
+                exampleIT: "Disattiva temporaneamente il firewall mentre testiamo la connessione."
+            },
+            {
+                phrase: "turn on",
+                phraseIT: "attivare",
+                definition: "To activate or enable a feature or device",
+                definitionIT: "Attivare o abilitare una funzione o un dispositivo",
+                example: "Turn on logging so we can track the issue.",
+                exampleIT: "Attiva la registrazione in modo da poter tracciare il problema."
+            },
+            {
+                phrase: "run into",
+                phraseIT: "imbattersi in",
+                definition: "To encounter or experience (usually problems)",
+                definitionIT: "Incontrare o sperimentare (di solito problemi)",
+                example: "We ran into some issues when upgrading the firmware.",
+                exampleIT: "Ci siamo imbattuti in alcuni problemi durante l'aggiornamento del firmware."
+            },
+            {
+                phrase: "sort out",
+                phraseIT: "risolvere",
+                definition: "To resolve or fix a problem",
+                definitionIT: "Risolvere o sistemare un problema",
+                example: "Let's sort out these configuration conflicts before deployment.",
+                exampleIT: "Risolviamo questi conflitti di configurazione prima dell'implementazione."
+            },
+            {
+                phrase: "point out",
+                phraseIT: "indicare",
+                definition: "To bring attention to something; to highlight",
+                definitionIT: "Richiamare l'attenzione su qualcosa; evidenziare",
+                example: "The security audit pointed out several vulnerabilities in our network.",
+                exampleIT: "L'audit di sicurezza ha indicato diverse vulnerabilità nella nostra rete."
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                question: "What does 'troubleshoot' mean in network engineering?",
+                questionIT: "Cosa significa 'troubleshoot' nell'ingegneria di rete?",
+                options: [
+                    "To identify and solve problems in a network",
+                    "To shoot at trouble-causing devices",
+                    "To install new software",
+                    "To create network documentation"
+                ],
+                optionsIT: [
+                    "Identificare e risolvere problemi in una rete",
+                    "Sparare ai dispositivi che causano problemi",
+                    "Installare nuovo software",
+                    "Creare documentazione di rete"
+                ],
+                correctAnswer: 0
+            },
+            {
+                question: "When you 'set up' a network device, you:",
+                questionIT: "Quando 'set up' (configuri) un dispositivo di rete, tu:",
+                options: [
+                    "Place it in an upright position",
+                    "Install and configure it",
+                    "Turn it off",
+                    "Connect it to power only"
+                ],
+                optionsIT: [
+                    "Lo posizioni in posizione verticale",
+                    "Lo installi e configuri",
+                    "Lo spegni",
+                    "Lo colleghi solo all'alimentazione"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What does it mean to 'back up' configuration data?",
+                questionIT: "Cosa significa 'back up' (fare un backup) dei dati di configurazione?",
+                options: [
+                    "To move it to a secondary location",
+                    "To delete old versions",
+                    "To create a copy for safekeeping",
+                    "To compress the files"
+                ],
+                optionsIT: [
+                    "Spostarli in una posizione secondaria",
+                    "Eliminare le vecchie versioni",
+                    "Creare una copia per sicurezza",
+                    "Comprimere i file"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What does 'roll out' mean in network engineering?",
+                questionIT: "Cosa significa 'roll out' nell'ingegneria di rete?",
+                options: [
+                    "To physically move equipment",
+                    "To implement or deploy a new system",
+                    "To remove old cables",
+                    "To document network changes"
+                ],
+                optionsIT: [
+                    "Spostare fisicamente le apparecchiature",
+                    "Implementare o distribuire un nuovo sistema",
+                    "Rimuovere i vecchi cavi",
+                    "Documentare le modifiche alla rete"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "When you 'look into' a network issue, you:",
+                questionIT: "Quando 'look into' (indaghi) un problema di rete, tu:",
+                options: [
+                    "Physically look inside a device",
+                    "Investigate or examine the problem",
+                    "Ignore the problem",
+                    "Document the issue only"
+                ],
+                optionsIT: [
+                    "Guardi fisicamente all'interno di un dispositivo",
+                    "Indaghi o esamini il problema",
+                    "Ignori il problema",
+                    "Documenti solo il problema"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What does 'cut over' refer to?",
+                questionIT: "A cosa si riferisce 'cut over'?",
+                options: [
+                    "Cutting network cables",
+                    "Switching from one system to another",
+                    "Removing access for users",
+                    "Shortening response times"
+                ],
+                optionsIT: [
+                    "Tagliare i cavi di rete",
+                    "Passare da un sistema all'altro",
+                    "Rimuovere l'accesso per gli utenti",
+                    "Ridurre i tempi di risposta"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "What does it mean to 'hook up' a device?",
+                questionIT: "Cosa significa 'hook up' (collegare) un dispositivo?",
+                options: [
+                    "To hang it on a wall",
+                    "To connect devices or systems together",
+                    "To turn it on",
+                    "To update its software"
+                ],
+                optionsIT: [
+                    "Appenderlo a un muro",
+                    "Collegare dispositivi o sistemi insieme",
+                    "Accenderlo",
+                    "Aggiornare il suo software"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "When you 'sign off' on a network change, you:",
+                questionIT: "Quando 'sign off' (approvi) una modifica alla rete, tu:",
+                options: [
+                    "Log out of the system",
+                    "Reject the proposal",
+                    "Approve or give final authorization",
+                    "Complete documentation"
+                ],
+                optionsIT: [
+                    "Ti disconnetti dal sistema",
+                    "Rifiuti la proposta",
+                    "Approvi o dai l'autorizzazione finale",
+                    "Completi la documentazione"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What does 'break down' mean in a technical context?",
+                questionIT: "Cosa significa 'break down' in un contesto tecnico?",
+                options: [
+                    "To disassemble something",
+                    "To explain in simple terms",
+                    "To stop functioning; to fail",
+                    "To reduce in size"
+                ],
+                optionsIT: [
+                    "Smontare qualcosa",
+                    "Spiegare in termini semplici",
+                    "Smettere di funzionare; guastarsi",
+                    "Ridurre di dimensioni"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "What does it mean to 'rule out' a possibility?",
+                questionIT: "Cosa significa 'rule out' (escludere) una possibilità?",
+                options: [
+                    "To create a new rule",
+                    "To eliminate a possibility",
+                    "To highlight an important factor",
+                    "To document a procedure"
+                ],
+                optionsIT: [
+                    "Creare una nuova regola",
+                    "Eliminare una possibilità",
+                    "Evidenziare un fattore importante",
+                    "Documentare una procedura"
+                ],
+                correctAnswer: 1
+            }
+        ];
+
+        const conversationScenarios = [
+            {
+                title: "Network Troubleshooting",
+                titleIT: "Risoluzione Problemi di Rete",
+                initialPrompt: "Hi there! We're having some connectivity issues with the new server. Can you help me troubleshoot this?",
+                initialPromptIT: "Ciao! Stiamo avendo problemi di connettività con il nuovo server. Puoi aiutarmi a risolvere questo problema?",
+                suggestedVerbs: [
+                    { verb: "look into", meaning: "investigate" },
+                    { verb: "set up", meaning: "install and configure" },
+                    { verb: "figure out", meaning: "determine, solve" },
+                    { verb: "shut down", meaning: "turn off completely" },
+                    { verb: "boot up", meaning: "start a system" }
+                ],
+                suggestedVerbsIT: [
+                    { verb: "indagare", meaning: "look into" },
+                    { verb: "installare e configurare", meaning: "set up" },
+                    { verb: "capire", meaning: "figure out" },
+                    { verb: "spegnere", meaning: "shut down" },
+                    { verb: "avviare", meaning: "boot up" }
+                ],
+                responses: [
+                    "I'll check the logs to see what's happening. Have you tried to reboot the server?",
+                    "Let me look into what might be causing the connectivity issues. When did this start?",
+                    "I'll help you figure out what's wrong. Can you tell me more about the symptoms?"
+                ],
+                followUps: [
+                    "Thanks! The issue started this morning. We can't connect to any of the services running on it.",
+                    "I think we might need to shut down the server and boot it up again after checking the network settings.",
+                    "Could you help me set up a monitoring tool so we can track when this happens again?"
+                ]
+            },
+            {
+                title: "System Upgrade",
+                titleIT: "Aggiornamento del Sistema",
+                initialPrompt: "We need to upgrade our network infrastructure next week. Can you help plan the rollout?",
+                initialPromptIT: "Dobbiamo aggiornare la nostra infrastruttura di rete la prossima settimana. Puoi aiutare a pianificare l'implementazione?",
+                suggestedVerbs: [
+                    { verb: "roll out", meaning: "implement, deploy" },
+                    { verb: "back up", meaning: "create a copy for safekeeping" },
+                    { verb: "cut over", meaning: "switch from one system to another" },
+                    { verb: "put together", meaning: "assemble, create" },
+                    { verb: "sign off", meaning: "approve, authorize" }
+                ],
+                suggestedVerbsIT: [
+                    { verb: "implementare", meaning: "roll out" },
+                    { verb: "fare un backup", meaning: "back up" },
+                    { verb: "passare a", meaning: "cut over" },
+                    { verb: "assemblare", meaning: "put together" },
+                    { verb: "approvare", meaning: "sign off" }
+                ],
+                responses: [
+                    "I'll help put together a plan for the upgrade. First, we should back up all configurations.",
+                    "Before we roll out the new infrastructure, we need to test it thoroughly in a staging environment.",
+                    "Let's schedule the cut over for the weekend when there's minimal user impact."
+                ],
+                followUps: [
+                    "Good idea. Can you create a checklist of all systems we need to back up before the upgrade?",
+                    "The CTO needs to sign off on the final plan by Thursday. Can you have it ready by then?",
+                    "We should also put together a rollback plan in case we encounter any issues during the upgrade."
+                ]
+            },
+            {
+                title: "Security Incident",
+                titleIT: "Incidente di Sicurezza",
+                initialPrompt: "We've detected unusual traffic patterns that might indicate a security breach. How should we proceed?",
+                initialPromptIT: "Abbiamo rilevato modelli di traffico insoliti che potrebbero indicare una violazione della sicurezza. Come dovremmo procedere?",
+                suggestedVerbs: [
+                    { verb: "look out for", meaning: "be vigilant about" },
+                    { verb: "narrow down", meaning: "reduce possibilities" },
+                    { verb: "rule out", meaning: "eliminate a possibility" },
+                    { verb: "carry out", meaning: "perform, execute" },
+                    { verb: "sort out", meaning: "resolve, fix" }
+                ],
+                suggestedVerbsIT: [
+                    { verb: "fare attenzione a", meaning: "look out for" },
+                    { verb: "restringere", meaning: "narrow down" },
+                    { verb: "escludere", meaning: "rule out" },
+                    { verb: "eseguire", meaning: "carry out" },
+                    { verb: "risolvere", meaning: "sort out" }
+                ],
+                responses: [
+                    "Let's carry out a full security audit immediately and look out for any suspicious activities.",
+                    "We need to narrow down the source of the unusual traffic. Can you isolate the affected systems?",
+                    "First, let's rule out any false positives by checking if any authorized maintenance is happening."
+                ],
+                followUps: [
+                    "Good thinking. I've already started to look out for any unusual login attempts or data transfers.",
+                    "We should sort out access controls immediately. Can you review the firewall rules?",
+                    "I've narrowed down the issue to three possible servers. Let's investigate each one systematically."
+                ]
+            }
+        ];
+
+        // Language toggle functionality
+        let currentLanguage = "EN";
+        const translations = {
+            EN: {
+                subtitle: "Phrasal Verbs for Network Engineers",
+                currentLang: "English",
+                modesTitle: "Learning Modes",
+                flashcardsTitle: "Flashcards",
+                flashcardsDesc: "Learn phrasal verbs with interactive flashcards. Test your knowledge by flipping cards.",
+                flashcardsBtn: "Start Learning",
+                quizTitle: "Quiz",
+                quizDesc: "Test your knowledge with multiple-choice questions about network engineering phrasal verbs.",
+                quizBtn: "Start Quiz",
+                contextTitle: "Context Examples",
+                contextDesc: "See phrasal verbs used in real network engineering scenarios and conversations.",
+                contextBtn: "View Examples",
+                practiceTitle: "Conversation Practice",
+                practiceDesc: "Practice using phrasal verbs in simulated network engineering conversations.",
+                practiceBtn: "Start Practice",
+                flashcardsHeader: "Flashcards",
+                backBtn: "Back",
+                cardHint: "Click to see definition",
+                prevBtn: "Previous",
+                nextBtn: "Next",
+                quizHeader: "Quiz",
+                backBtnQuiz: "Back",
+                submitBtn: "Submit Answer",
+                nextQuestionBtn: "Next Question",
+                contextHeader: "Context Examples",
+                backBtnContext: "Back",
+                contextTitle1: "Network Troubleshooting Conversation",
+                contextTitle2: "Network Implementation Email",
+                contextTitle3: "Network Maintenance Procedure",
+                practiceHeader: "Conversation Practice",
+                backBtnPractice: "Back",
+                suggestedVerbsTitle: "Suggested Phrasal Verbs",
+                conversationTitle: "Network Troubleshooting Conversation",
+                colleagueLabel: "Colleague:",
+                resetBtn: "Reset",
+                sendBtn: "Send",
+                scenario0: "Network Troubleshooting",
+                scenario1: "System Upgrade",
+                scenario2: "Security Incident"
+            },
+            IT: {
+                subtitle: "Verbi Frasali per Ingegneri di Rete",
+                currentLang: "Italiano",
+                modesTitle: "Modalità di Apprendimento",
+                flashcardsTitle: "Flashcard",
+                flashcardsDesc: "Impara i verbi frasali con flashcard interattive. Metti alla prova le tue conoscenze girando le carte.",
+                flashcardsBtn: "Inizia ad Imparare",
+                quizTitle: "Quiz",
+                quizDesc: "Metti alla prova le tue conoscenze con domande a scelta multipla sui verbi frasali dell'ingegneria di rete.",
+                quizBtn: "Inizia Quiz",
+                contextTitle: "Esempi Contestuali",
+                contextDesc: "Vedi i verbi frasali utilizzati in scenari e conversazioni reali di ingegneria di rete.",
+                contextBtn: "Visualizza Esempi",
+                practiceTitle: "Pratica di Conversazione",
+                practiceDesc: "Pratica l'uso dei verbi frasali in conversazioni simulate di ingegneria di rete.",
+                practiceBtn: "Inizia Pratica",
+                flashcardsHeader: "Flashcard",
+                backBtn: "Indietro",
+                cardHint: "Clicca per vedere la definizione",
+                prevBtn: "Precedente",
+                nextBtn: "Successivo",
+                quizHeader: "Quiz",
+                backBtnQuiz: "Indietro",
+                submitBtn: "Invia Risposta",
+                nextQuestionBtn: "Prossima Domanda",
+                contextHeader: "Esempi Contestuali",
+                backBtnContext: "Indietro",
+                contextTitle1: "Conversazione sulla Risoluzione dei Problemi di Rete",
+                contextTitle2: "Email di Implementazione della Rete",
+                contextTitle3: "Procedura di Manutenzione della Rete",
+                practiceHeader: "Pratica di Conversazione",
+                backBtnPractice: "Indietro",
+                suggestedVerbsTitle: "Verbi Frasali Suggeriti",
+                conversationTitle: "Conversazione sulla Risoluzione dei Problemi di Rete",
+                colleagueLabel: "Collega:",
+                resetBtn: "Reimposta",
+                sendBtn: "Invia",
+                scenario0: "Risoluzione Problemi di Rete",
+                scenario1: "Aggiornamento del Sistema",
+                scenario2: "Incidente di Sicurezza"
+            }
+        };
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // Update all text elements
+            document.getElementById("subtitle").textContent = t.subtitle;
+            document.getElementById("currentLang").textContent = t.currentLang;
+            document.getElementById("modesTitle").textContent = t.modesTitle;
+            document.getElementById("flashcardsTitle").textContent = t.flashcardsTitle;
+            document.getElementById("flashcardsDesc").textContent = t.flashcardsDesc;
+            document.getElementById("flashcardsBtn").textContent = t.flashcardsBtn;
+            document.getElementById("quizTitle").textContent = t.quizTitle;
+            document.getElementById("quizDesc").textContent = t.quizDesc;
+            document.getElementById("quizBtn").textContent = t.quizBtn;
+            document.getElementById("contextTitle").textContent = t.contextTitle;
+            document.getElementById("contextDesc").textContent = t.contextDesc;
+            document.getElementById("contextBtn").textContent = t.contextBtn;
+            document.getElementById("practiceTitle").textContent = t.practiceTitle;
+            document.getElementById("practiceDesc").textContent = t.practiceDesc;
+            document.getElementById("practiceBtn").textContent = t.practiceBtn;
+            document.getElementById("flashcardsHeader").textContent = t.flashcardsHeader;
+            document.getElementById("backBtn").textContent = t.backBtn;
+            document.getElementById("cardHint").textContent = t.cardHint;
+            document.getElementById("prevBtn").textContent = t.prevBtn;
+            document.getElementById("nextBtn").textContent = t.nextBtn;
+            document.getElementById("quizHeader").textContent = t.quizHeader;
+            document.getElementById("backBtnQuiz").textContent = t.backBtnQuiz;
+            document.getElementById("submitBtn").textContent = t.submitBtn;
+            document.getElementById("nextQuestionBtn").textContent = t.nextQuestionBtn;
+            document.getElementById("contextHeader").textContent = t.contextHeader;
+            document.getElementById("backBtnContext").textContent = t.backBtnContext;
+            document.getElementById("contextTitle1").textContent = t.contextTitle1;
+            document.getElementById("contextTitle2").textContent = t.contextTitle2;
+            document.getElementById("contextTitle3").textContent = t.contextTitle3;
+            document.getElementById("practiceHeader").textContent = t.practiceHeader;
+            document.getElementById("backBtnPractice").textContent = t.backBtnPractice;
+            document.getElementById("suggestedVerbsTitle").textContent = t.suggestedVerbsTitle;
+            document.getElementById("colleagueLabel").textContent = t.colleagueLabel;
+            document.getElementById("resetBtn").textContent = t.resetBtn;
+            document.getElementById("sendBtn").textContent = t.sendBtn;
+            document.getElementById("scenario0").textContent = t.scenario0;
+            document.getElementById("scenario1").textContent = t.scenario1;
+            document.getElementById("scenario2").textContent = t.scenario2;
+            
+            // Update current flashcard
+            updateFlashcard();
+            
+            // Update current quiz question
+            updateQuizQuestion();
+
+            // Update conversation practice
+            updateConversationPractice();
+        }
+
+        // Flashcards functionality
+        let currentCardIndex = 0;
+
+        function updateFlashcard() {
+            const card = phrasalVerbs[currentCardIndex];
+            if (currentLanguage === "EN") {
+                document.getElementById("cardFront").textContent = card.phrase;
+                document.getElementById("cardBack").textContent = card.definition;
+                document.getElementById("cardExample").textContent = `"${card.example}"`;
+            } else {
+                document.getElementById("cardFront").textContent = card.phraseIT;
+                document.getElementById("cardBack").textContent = card.definitionIT;
+                document.getElementById("cardExample").textContent = `"${card.exampleIT}"`;
+            }
+            document.getElementById("cardCounter").textContent = `${currentCardIndex + 1}/${phrasalVerbs.length}`;
+        }
+
+        // Quiz functionality
+        let currentQuestionIndex = 0;
+        
+        function updateQuizQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            
+            if (currentLanguage === "EN") {
+                document.getElementById("questionText").textContent = question.question;
+                for (let i = 0; i < 4; i++) {
+                    document.getElementById(`option${i}`).textContent = question.options[i];
+                }
+            } else {
+                document.getElementById("questionText").textContent = question.questionIT;
+                for (let i = 0; i < 4; i++) {
+                    document.getElementById(`option${i}`).textContent = question.optionsIT[i];
+                }
+            }
+            
+            // Reset radio buttons
+            const radioButtons = document.querySelectorAll('input[name="answer"]');
+            radioButtons.forEach(button => button.checked = false);
+            
+            // Hide feedback and next button
+            document.getElementById("feedback").classList.add("hidden");
+            document.getElementById("submitAnswer").classList.remove("hidden");
+            document.getElementById("nextQuestion").classList.add("hidden");
+
+            document.getElementById("questionCounter").textContent = `${currentQuestionIndex + 1}/${quizQuestions.length}`;
+        }
+
+        // Conversation Practice functionality
+        let currentScenarioIndex = 0;
+        let conversationState = 0; // 0: initial, 1: user responded, 2: follow-up, 3: user responded again
+
+        function updateConversationPractice() {
+            const scenario = conversationScenarios[currentScenarioIndex];
+            
+            // Update title
+            document.getElementById("conversationTitle").textContent = currentLanguage === "EN" ? 
+                scenario.title : scenario.titleIT;
+            
+            // Update suggested verbs
+            const suggestedVerbsContainer = document.getElementById("suggestedVerbs");
+            suggestedVerbsContainer.innerHTML = "";
+            
+            const verbsToUse = currentLanguage === "EN" ? scenario.suggestedVerbs : scenario.suggestedVerbsIT;
+            
+            verbsToUse.forEach(verb => {
+                const verbDiv = document.createElement("div");
+                verbDiv.className = "bg-blue-100 p-3 rounded-lg";
+                verbDiv.innerHTML = `<span class="font-medium">${verb.verb}</span> - ${verb.meaning}`;
+                suggestedVerbsContainer.appendChild(verbDiv);
+            });
+            
+            // Reset conversation if needed
+            if (conversationState === 0) {
+                const conversationContainer = document.getElementById("conversationContainer");
+                conversationContainer.innerHTML = "";
+                
+                const initialMessage = document.createElement("div");
+                initialMessage.className = "chat-message bg-blue-100 p-3 rounded-lg mb-3 max-w-3/4";
+                initialMessage.innerHTML = `<strong id="colleagueLabel">${currentLanguage === "EN" ? "Colleague" : "Collega"}:</strong> <span id="initialPrompt">${currentLanguage === "EN" ? scenario.initialPrompt : scenario.initialPromptIT}</span>`;
+                
+                conversationContainer.appendChild(initialMessage);
+            }
+        }
+
+        function addUserMessage(text) {
+            const conversationContainer = document.getElementById("conversationContainer");
+            
+            const userMessage = document.createElement("div");
+            userMessage.className = "chat-message bg-green-100 p-3 rounded-lg mb-3 ml-auto max-w-3/4 text-right";
+            
+            // Highlight phrasal verbs in user message
+            let highlightedText = text;
+            phrasalVerbs.forEach(verb => {
+                const regex = new RegExp(`\\b${verb.phrase}\\b`, 'gi');
+                highlightedText = highlightedText.replace(regex, `<span class="highlight font-medium">$&</span>`);
+            });
+            
+            userMessage.innerHTML = `<strong>${currentLanguage === "EN" ? "You" : "Tu"}:</strong> ${highlightedText}`;
+            conversationContainer.appendChild(userMessage);
+            
+            // Scroll to bottom
+            conversationContainer.scrollTop = conversationContainer.scrollHeight;
+            
+            // Clear input
+            document.getElementById("userInput").value = "";
+            
+            // Add colleague response after a short delay
+            setTimeout(() => {
+                addColleagueResponse();
+            }, 1000);
+        }
+
+        function addColleagueResponse() {
+            const conversationContainer = document.getElementById("conversationContainer");
+            const scenario = conversationScenarios[currentScenarioIndex];
+            
+            const colleagueMessage = document.createElement("div");
+            colleagueMessage.className = "chat-message bg-blue-100 p-3 rounded-lg mb-3 max-w-3/4";
+            
+            let responseText;
+            if (conversationState === 1) {
+                // Random response from the scenario
+                const randomIndex = Math.floor(Math.random() * scenario.followUps.length);
+                responseText = currentLanguage === "EN" ? scenario.followUps[randomIndex] : scenario.followUps[randomIndex];
+                conversationState = 2;
+            } else {
+                // End of conversation
+                responseText = currentLanguage === "EN" ? 
+                    "Thanks for your help! I think we have a good plan now." : 
+                    "Grazie per il tuo aiuto! Penso che ora abbiamo un buon piano.";
+                conversationState = 0;
+            }
+            
+            // Highlight phrasal verbs in response
+            let highlightedText = responseText;
+            phrasalVerbs.forEach(verb => {
+                const regex = new RegExp(`\\b${verb.phrase}\\b`, 'gi');
+                highlightedText = highlightedText.replace(regex, `<span class="highlight font-medium">$&</span>`);
+            });
+            
+            colleagueMessage.innerHTML = `<strong>${currentLanguage === "EN" ? "Colleague" : "Collega"}:</strong> ${highlightedText}`;
+            conversationContainer.appendChild(colleagueMessage);
+            
+            // Scroll to bottom
+            conversationContainer.scrollTop = conversationContainer.scrollHeight;
+        }
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", function() {
+            // Language toggle
+            document.getElementById("langToggle").addEventListener("click", function() {
+                currentLanguage = currentLanguage === "EN" ? "IT" : "EN";
+                updateLanguage();
+            });
+            
+            // Navigation
+            document.getElementById("flashcardsBtn").addEventListener("click", function() {
+                document.getElementById("flashcardsSection").classList.remove("hidden");
+                document.getElementById("quizSection").classList.add("hidden");
+                document.getElementById("contextSection").classList.add("hidden");
+                document.getElementById("practiceSection").classList.add("hidden");
+                updateFlashcard();
+            });
+            
+            document.getElementById("quizBtn").addEventListener("click", function() {
+                document.getElementById("flashcardsSection").classList.add("hidden");
+                document.getElementById("quizSection").classList.remove("hidden");
+                document.getElementById("contextSection").classList.add("hidden");
+                document.getElementById("practiceSection").classList.add("hidden");
+                updateQuizQuestion();
+            });
+            
+            document.getElementById("contextBtn").addEventListener("click", function() {
+                document.getElementById("flashcardsSection").classList.add("hidden");
+                document.getElementById("quizSection").classList.add("hidden");
+                document.getElementById("contextSection").classList.remove("hidden");
+                document.getElementById("practiceSection").classList.add("hidden");
+            });
+
+            document.getElementById("practiceBtn").addEventListener("click", function() {
+                document.getElementById("flashcardsSection").classList.add("hidden");
+                document.getElementById("quizSection").classList.add("hidden");
+                document.getElementById("contextSection").classList.add("hidden");
+                document.getElementById("practiceSection").classList.remove("hidden");
+                conversationState = 0;
+                updateConversationPractice();
+            });
+            
+            document.getElementById("backToModes").addEventListener("click", function() {
+                document.getElementById("flashcardsSection").classList.add("hidden");
+            });
+            
+            document.getElementById("backToModesQuiz").addEventListener("click", function() {
+                document.getElementById("quizSection").classList.add("hidden");
+            });
+            
+            document.getElementById("backToModesContext").addEventListener("click", function() {
+                document.getElementById("contextSection").classList.add("hidden");
+            });
+
+            document.getElementById("backToModesPractice").addEventListener("click", function() {
+                document.getElementById("practiceSection").classList.add("hidden");
+            });
+            
+            // Flashcard functionality
+            const flipCard = document.querySelector(".flip-card");
+            flipCard.addEventListener("click", function() {
+                this.classList.toggle("flipped");
+            });
+            
+            document.getElementById("prevCard").addEventListener("click", function() {
+                if (currentCardIndex > 0) {
+                    currentCardIndex--;
+                    updateFlashcard();
+                    document.querySelector(".flip-card").classList.remove("flipped");
+                }
+            });
+            
+            document.getElementById("nextCard").addEventListener("click", function() {
+                if (currentCardIndex < phrasalVerbs.length - 1) {
+                    currentCardIndex++;
+                    updateFlashcard();
+                    document.querySelector(".flip-card").classList.remove("flipped");
+                }
+            });
+            
+            // Quiz functionality
+            document.getElementById("submitAnswer").addEventListener("click", function() {
+                const selectedOption = document.querySelector('input[name="answer"]:checked');
+                
+                if (!selectedOption) {
+                    return; // No answer selected
+                }
+                
+                const answer = parseInt(selectedOption.value);
+                const correctAnswer = quizQuestions[currentQuestionIndex].correctAnswer;
+                const feedback = document.getElementById("feedback");
+                
+                if (answer === correctAnswer) {
+                    feedback.textContent = currentLanguage === "EN" ? "Correct! Well done!" : "Corretto! Ben fatto!";
+                    feedback.classList.remove("bg-red-100", "text-red-800");
+                    feedback.classList.add("bg-green-100", "text-green-800");
+                } else {
+                    const correctText = currentLanguage === "EN" ? 
+                        quizQuestions[currentQuestionIndex].options[correctAnswer] : 
+                        quizQuestions[currentQuestionIndex].optionsIT[correctAnswer];
+                    
+                    feedback.textContent = currentLanguage === "EN" ? 
+                        `Incorrect. The correct answer is: ${correctText}` : 
+                        `Sbagliato. La risposta corretta è: ${correctText}`;
+                    
+                    feedback.classList.remove("bg-green-100", "text-green-800");
+                    feedback.classList.add("bg-red-100", "text-red-800");
+                }
+                
+                feedback.classList.remove("hidden");
+                document.getElementById("submitAnswer").classList.add("hidden");
+                document.getElementById("nextQuestion").classList.remove("hidden");
+            });
+            
+            document.getElementById("nextQuestion").addEventListener("click", function() {
+                if (currentQuestionIndex < quizQuestions.length - 1) {
+                    currentQuestionIndex++;
+                    updateQuizQuestion();
+                } else {
+                    // Quiz completed
+                    document.getElementById("questionText").textContent = currentLanguage === "EN" ? 
+                        "Quiz completed! Well done!" : 
+                        "Quiz completato! Ben fatto!";
+                    
+                    const options = document.querySelectorAll(".option");
+                    options.forEach(option => option.classList.add("hidden"));
+                    
+                    document.getElementById("nextQuestion").classList.add("hidden");
+                    document.getElementById("feedback").classList.add("hidden");
+                }
+            });
+            
+            // Make radio button labels clickable
+            const options = document.querySelectorAll(".option");
+            options.forEach(option => {
+                option.addEventListener("click", function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                });
+            });
+
+            // Conversation Practice functionality
+            document.getElementById("scenarioSelect").addEventListener("change", function() {
+                currentScenarioIndex = parseInt(this.value);
+                conversationState = 0;
+                updateConversationPractice();
+            });
+
+            document.getElementById("resetConversation").addEventListener("click", function() {
+                conversationState = 0;
+                updateConversationPractice();
+            });
+
+            document.getElementById("sendResponse").addEventListener("click", function() {
+                const userInput = document.getElementById("userInput").value.trim();
+                if (userInput) {
+                    addUserMessage(userInput);
+                    conversationState = conversationState === 0 ? 1 : 3;
+                }
+            });
+
+            document.getElementById("userInput").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    const userInput = this.value.trim();
+                    if (userInput) {
+                        addUserMessage(userInput);
+                        conversationState = conversationState === 0 ? 1 : 3;
+                    }
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9531a9ed427031ad',t:'MTc1MDQ4OTU5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
