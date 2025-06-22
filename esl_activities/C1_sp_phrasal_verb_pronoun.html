@@ -1,0 +1,929 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhrasalPro: Learn Pronoun Placement in Phrasal Verbs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f7ff;
+        }
+        .separable {
+            background-color: #d1f8ea;
+            border-left: 4px solid #34d399;
+        }
+        .inseparable {
+            background-color: #fee2e2;
+            border-left: 4px solid #f87171;
+        }
+        .drag-item {
+            cursor: grab;
+            user-select: none;
+        }
+        .drag-item:active {
+            cursor: grabbing;
+        }
+        .drop-target {
+            min-height: 2rem;
+            border: 2px dashed #cbd5e1;
+            background-color: #f8fafc;
+        }
+        .drop-target.highlight {
+            border-color: #3b82f6;
+            background-color: #dbeafe;
+        }
+        .drop-target.correct {
+            border-color: #22c55e;
+            background-color: #dcfce7;
+        }
+        .drop-target.incorrect {
+            border-color: #ef4444;
+            background-color: #fee2e2;
+        }
+        .badge {
+            transition: all 0.3s ease;
+        }
+        .badge.earned {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .badge.unearned {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        .language-selector {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        .hint {
+            display: none;
+        }
+        .hint.active {
+            display: block;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-2{margin-left:0.5rem;margin-right:0.5rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mr-1{margin-right:0.25rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-16{height:4rem}.h-20{height:5rem}.h-3{height:0.75rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-8{height:2rem}.w-16{width:4rem}.w-5{width:1.25rem}.w-8{width:2rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.flex-1{flex:1 1 0%}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-l-4{border-left-width:4px}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-yellow-400{--tw-border-opacity:1;border-color:rgb(250 204 21 / var(--tw-border-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-200{--tw-bg-opacity:1;background-color:rgb(187 247 208 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.bg-yellow-500{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.from-indigo-100{--tw-gradient-from:#e0e7ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(224 231 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-purple-100{--tw-gradient-to:#f3e8ff var(--tw-gradient-to-position)}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.italic{font-style:italic}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.line-through{-webkit-text-decoration-line:line-through;text-decoration-line:line-through}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:bg-indigo-200:hover{--tw-bg-opacity:1;background-color:rgb(199 210 254 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-50:hover{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="language-selector">
+        <select id="language-select" class="rounded-md border-gray-300 shadow-sm px-3 py-1 bg-white">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+        </select>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-700 mb-2">PhrasalPro</h1>
+            <p class="text-xl text-gray-600" id="app-subtitle">Master Pronoun Placement in Phrasal Verbs</p>
+        </header>
+
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div class="flex border-b">
+                <button class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:bg-indigo-50 focus:outline-none" data-tab="intro">Introduction</button>
+                <button class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:bg-indigo-50 focus:outline-none" data-tab="learn">Learn</button>
+                <button class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:bg-indigo-50 focus:outline-none" data-tab="practice">Practice</button>
+                <button class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:bg-indigo-50 focus:outline-none" data-tab="activities">Activities</button>
+                <button class="tab-btn px-6 py-3 font-semibold text-gray-600 hover:bg-indigo-50 focus:outline-none active bg-indigo-50 text-indigo-700" data-tab="progress">Progress</button>
+            </div>
+
+            <!-- Introduction Tab -->
+            <div id="intro" class="tab-content p-6">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-4">What are Phrasal Verbs?</h2>
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1">
+                        <p class="mb-4">Phrasal verbs are combinations of a <span class="font-bold text-indigo-600">verb</span> and a <span class="font-bold text-purple-600">particle</span> (usually a preposition or adverb) that create a meaning different from the original verb.</p>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-lg mb-4">
+                            <p class="font-bold mb-2">Examples:</p>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><span class="font-bold text-indigo-600">Turn</span> <span class="font-bold text-purple-600">on</span> the light. (= activate)</li>
+                                <li><span class="font-bold text-indigo-600">Look</span> <span class="font-bold text-purple-600">after</span> the children. (= take care of)</li>
+                                <li><span class="font-bold text-indigo-600">Give</span> <span class="font-bold text-purple-600">up</span> smoking. (= quit)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-gradient-to-br from-indigo-100 to-purple-100 p-5 rounded-lg">
+                            <h3 class="text-xl font-bold text-indigo-700 mb-3">The Pronoun Challenge</h3>
+                            <p class="mb-3">When we replace a noun with a pronoun in a phrasal verb sentence, we need to know where to place the pronoun.</p>
+                            <div class="flex items-center justify-center">
+                                <div class="text-center p-3 bg-white rounded-lg shadow-sm mx-2">
+                                    <p class="font-bold mb-1">Original</p>
+                                    <p>Turn on <span class="bg-yellow-100 px-1">the light</span>.</p>
+                                </div>
+                                <div class="text-2xl">→</div>
+                                <div class="text-center p-3 bg-white rounded-lg shadow-sm mx-2">
+                                    <p class="font-bold mb-1">With Pronoun</p>
+                                    <p>Turn <span class="bg-green-100 px-1">it</span> on.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold text-indigo-700 mb-4">Types of Phrasal Verbs</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="separable p-5 rounded-lg">
+                            <h3 class="text-xl font-bold text-green-700 mb-2">Separable Phrasal Verbs</h3>
+                            <p class="mb-3">The pronoun <strong>must</strong> go between the verb and the particle.</p>
+                            <div class="bg-white p-3 rounded-lg mb-3">
+                                <p class="font-bold">Example:</p>
+                                <p>Turn off the light. → Turn <span class="bg-green-100 px-1">it</span> off.</p>
+                                <p class="text-red-500 line-through mt-1">❌ Turn off it.</p>
+                            </div>
+                        </div>
+                        <div class="inseparable p-5 rounded-lg">
+                            <h3 class="text-xl font-bold text-red-700 mb-2">Inseparable Phrasal Verbs</h3>
+                            <p class="mb-3">The pronoun <strong>must</strong> go after the particle.</p>
+                            <div class="bg-white p-3 rounded-lg mb-3">
+                                <p class="font-bold">Example:</p>
+                                <p>Look after the children. → Look after <span class="bg-green-100 px-1">them</span>.</p>
+                                <p class="text-red-500 line-through mt-1">❌ Look them after.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <button id="start-learning-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105">
+                        Start Learning
+                    </button>
+                </div>
+            </div>
+
+            <!-- Learn Tab -->
+            <div id="learn" class="tab-content p-6">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-4">Understanding Pronoun Placement</h2>
+                
+                <div class="bg-indigo-50 p-5 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-3">The Pronoun Test</h3>
+                    <p class="mb-4">To determine if a phrasal verb is separable or inseparable, try replacing the object with a pronoun:</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-white p-4 rounded-lg">
+                            <p class="font-bold mb-2">If you can put the pronoun between the verb and particle:</p>
+                            <p class="mb-1">Pick up the book. → Pick <span class="bg-green-100 px-1">it</span> up. ✓</p>
+                            <p class="font-bold text-green-600 mt-2">→ The phrasal verb is SEPARABLE</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg">
+                            <p class="font-bold mb-2">If you must put the pronoun after the particle:</p>
+                            <p class="mb-1">Look after the baby. → Look after <span class="bg-green-100 px-1">him</span>. ✓</p>
+                            <p class="font-bold text-red-600 mt-2">→ The phrasal verb is INSEPARABLE</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Common Phrasal Verbs</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-green-700 flex items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Separable Phrasal Verbs
+                            </h4>
+                            <div class="separable p-4 rounded-lg">
+                                <ul class="space-y-2">
+                                    <li><span class="font-bold">Turn on/off</span> - Turn <span class="bg-green-100 px-1">it</span> on/off</li>
+                                    <li><span class="font-bold">Pick up</span> - Pick <span class="bg-green-100 px-1">it</span> up</li>
+                                    <li><span class="font-bold">Throw away</span> - Throw <span class="bg-green-100 px-1">it</span> away</li>
+                                    <li><span class="font-bold">Give back</span> - Give <span class="bg-green-100 px-1">it</span> back</li>
+                                    <li><span class="font-bold">Fill out</span> - Fill <span class="bg-green-100 px-1">it</span> out</li>
+                                    <li><span class="font-bold">Put on</span> - Put <span class="bg-green-100 px-1">it</span> on</li>
+                                    <li><span class="font-bold">Take off</span> - Take <span class="bg-green-100 px-1">it</span> off</li>
+                                    <li><span class="font-bold">Write down</span> - Write <span class="bg-green-100 px-1">it</span> down</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-red-700 flex items-center mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                </svg>
+                                Inseparable Phrasal Verbs
+                            </h4>
+                            <div class="inseparable p-4 rounded-lg">
+                                <ul class="space-y-2">
+                                    <li><span class="font-bold">Look after</span> - Look after <span class="bg-green-100 px-1">them</span></li>
+                                    <li><span class="font-bold">Get over</span> - Get over <span class="bg-green-100 px-1">it</span></li>
+                                    <li><span class="font-bold">Run into</span> - Run into <span class="bg-green-100 px-1">her</span></li>
+                                    <li><span class="font-bold">Look for</span> - Look for <span class="bg-green-100 px-1">it</span></li>
+                                    <li><span class="font-bold">Wait for</span> - Wait for <span class="bg-green-100 px-1">him</span></li>
+                                    <li><span class="font-bold">Agree with</span> - Agree with <span class="bg-green-100 px-1">them</span></li>
+                                    <li><span class="font-bold">Believe in</span> - Believe in <span class="bg-green-100 px-1">it</span></li>
+                                    <li><span class="font-bold">Deal with</span> - Deal with <span class="bg-green-100 px-1">it</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg mb-6">
+                    <h3 class="text-lg font-bold text-yellow-800 mb-2">Special Cases</h3>
+                    <p class="mb-2">Some phrasal verbs can be both separable and inseparable depending on context:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>When the object is a <strong>noun</strong>, you can often choose: "Turn on the light" or "Turn the light on"</li>
+                        <li>When the object is a <strong>pronoun</strong>, you must follow the rules above</li>
+                    </ul>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <button id="start-practice-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105">
+                        Practice Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Practice Tab -->
+            <div id="practice" class="tab-content p-6">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-4">Practice Pronoun Placement</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Drag &amp; Drop Practice</h3>
+                    <p class="mb-4">Drag the pronoun to the correct position in each sentence:</p>
+                    
+                    <div id="drag-drop-container" class="space-y-6">
+                        <!-- Exercise 1 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">Original: Turn off the television.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">Turn</div>
+                                <div class="drop-target w-16 rounded flex items-center justify-center" data-position="middle" data-exercise="1"></div>
+                                <div class="bg-indigo-100 px-3 py-1 rounded">off</div>
+                                <div class="drop-target w-16 rounded flex items-center justify-center" data-position="end" data-exercise="1"></div>
+                                <div class="bg-indigo-100 px-3 py-1 rounded">.</div>
+                            </div>
+                            <div class="flex justify-center">
+                                <div class="drag-item bg-green-200 px-3 py-1 rounded shadow-sm" draggable="true" data-pronoun="it" data-exercise="1">it</div>
+                            </div>
+                            <div class="mt-3 text-center hidden" id="feedback-1"></div>
+                        </div>
+                        
+                        <!-- Exercise 2 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">Original: Look after the baby.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">Look</div>
+                                <div class="drop-target w-16 rounded flex items-center justify-center" data-position="middle" data-exercise="2"></div>
+                                <div class="bg-indigo-100 px-3 py-1 rounded">after</div>
+                                <div class="drop-target w-16 rounded flex items-center justify-center" data-position="end" data-exercise="2"></div>
+                                <div class="bg-indigo-100 px-3 py-1 rounded">.</div>
+                            </div>
+                            <div class="flex justify-center">
+                                <div class="drag-item bg-green-200 px-3 py-1 rounded shadow-sm" draggable="true" data-pronoun="him" data-exercise="2">him</div>
+                            </div>
+                            <div class="mt-3 text-center hidden" id="feedback-2"></div>
+                        </div>
+                        
+                        <!-- Exercise 3 -->
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">Original: Pick up the books.</p>
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">Pick</div>
+                                <div class="drop-target w-16 rounded flex items-center justify-center" data-position="middle" data-exercise="3"></div>
+                                <div class="bg-indigo-100 px-3 py-1 rounded">up</div>
+                                <div class="drop-target w-16 rounded flex items-center justify-center" data-position="end" data-exercise="3"></div>
+                                <div class="bg-indigo-100 px-3 py-1 rounded">.</div>
+                            </div>
+                            <div class="flex justify-center">
+                                <div class="drag-item bg-green-200 px-3 py-1 rounded shadow-sm" draggable="true" data-pronoun="them" data-exercise="3">them</div>
+                            </div>
+                            <div class="mt-3 text-center hidden" id="feedback-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Fill in the Blanks</h3>
+                    <p class="mb-4">Type the pronoun in the correct position:</p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">Original: Give back the money.</p>
+                            <p class="mb-2">Replace "the money" with "it":</p>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">Give</div>
+                                <input type="text" class="fill-blank w-16 border rounded px-2 py-1" data-answer="it" data-exercise="4">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">back</div>
+                                <input type="text" class="fill-blank w-16 border rounded px-2 py-1" data-answer="" data-exercise="4">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">.</div>
+                            </div>
+                            <div class="mt-3 text-center hidden" id="feedback-4"></div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">Original: Wait for your friend.</p>
+                            <p class="mb-2">Replace "your friend" with "her":</p>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">Wait</div>
+                                <input type="text" class="fill-blank w-16 border rounded px-2 py-1" data-answer="" data-exercise="5">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">for</div>
+                                <input type="text" class="fill-blank w-16 border rounded px-2 py-1" data-answer="her" data-exercise="5">
+                                <div class="bg-indigo-100 px-3 py-1 rounded">.</div>
+                            </div>
+                            <div class="mt-3 text-center hidden" id="feedback-5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6">
+                    <button id="check-answers-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full shadow-md transition">
+                        Check Answers
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activities Tab -->
+            <div id="activities" class="tab-content p-6">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-4">Interactive Activities</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Sentence Transformation</h3>
+                    <p class="mb-4">Rewrite each sentence using a pronoun:</p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">1. Pick up the phone.</p>
+                            <div class="flex items-center gap-2">
+                                <input type="text" class="transform-input w-full border rounded px-3 py-2" data-answer="Pick it up." data-exercise="transform-1">
+                                <button class="check-transform-btn bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded" data-exercise="transform-1">Check</button>
+                            </div>
+                            <div class="mt-2 hidden" id="transform-feedback-1"></div>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="es">Pista: Reemplaza "the phone" con "it" y colócalo entre el verbo y la partícula.</div>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="pt">Dica: Substitua "the phone" por "it" e coloque-o entre o verbo e a partícula.</div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">2. Look after the children.</p>
+                            <div class="flex items-center gap-2">
+                                <input type="text" class="transform-input w-full border rounded px-3 py-2" data-answer="Look after them." data-exercise="transform-2">
+                                <button class="check-transform-btn bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded" data-exercise="transform-2">Check</button>
+                            </div>
+                            <div class="mt-2 hidden" id="transform-feedback-2"></div>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="es">Pista: Reemplaza "the children" con "them" y colócalo después de la partícula.</div>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="pt">Dica: Substitua "the children" por "them" e coloque-o após a partícula.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Create Your Own Sentences</h3>
+                    <p class="mb-4">Write sentences using these phrasal verbs and pronouns:</p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">1. Use "turn on" with a pronoun:</p>
+                            <textarea class="w-full border rounded px-3 py-2 h-20" id="creative-1" placeholder="Write your sentence here..."></textarea>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="es">Pista: "Turn on" es separable. Ejemplo: "I need to turn it on."</div>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="pt">Dica: "Turn on" é separável. Exemplo: "I need to turn it on."</div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2">2. Use "look for" with a pronoun:</p>
+                            <textarea class="w-full border rounded px-3 py-2 h-20" id="creative-2" placeholder="Write your sentence here..."></textarea>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="es">Pista: "Look for" es inseparable. Ejemplo: "I'm looking for her."</div>
+                            <div class="mt-2 text-gray-500 italic hint" data-lang="pt">Dica: "Look for" é inseparável. Exemplo: "I'm looking for her."</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Fix the Broken Sentences</h3>
+                    <p class="mb-4">Correct these sentences with incorrect pronoun placement:</p>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2 text-red-500">❌ Turn off it.</p>
+                            <div class="flex items-center gap-2">
+                                <input type="text" class="fix-input w-full border rounded px-3 py-2" data-answer="Turn it off." data-exercise="fix-1">
+                                <button class="check-fix-btn bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded" data-exercise="fix-1">Check</button>
+                            </div>
+                            <div class="mt-2 hidden" id="fix-feedback-1"></div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="font-bold mb-2 text-red-500">❌ Look them after.</p>
+                            <div class="flex items-center gap-2">
+                                <input type="text" class="fix-input w-full border rounded px-3 py-2" data-answer="Look after them." data-exercise="fix-2">
+                                <button class="check-fix-btn bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded" data-exercise="fix-2">Check</button>
+                            </div>
+                            <div class="mt-2 hidden" id="fix-feedback-2"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50 p-5 rounded-lg mb-6">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-3">Conversation Prompts</h3>
+                    <p class="mb-3">Practice with a partner using these prompts:</p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-3 rounded-lg">
+                            <p class="font-bold">1. Ask your partner to turn something on or off using a pronoun.</p>
+                            <p class="text-gray-600 italic mt-1">Example: "Could you turn it on, please?"</p>
+                        </div>
+                        
+                        <div class="bg-white p-3 rounded-lg">
+                            <p class="font-bold">2. Tell a story using at least 3 different phrasal verbs with pronouns.</p>
+                            <p class="text-gray-600 italic mt-1">Example: "I picked it up, turned it on, and then gave it back to her."</p>
+                        </div>
+                        
+                        <div class="bg-white p-3 rounded-lg">
+                            <p class="font-bold">3. Ask your partner to look for something and use a pronoun in the response.</p>
+                            <p class="text-gray-600 italic mt-1">Example: "I can't find my keys." / "I'll help you look for them."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tab -->
+            <div id="progress" class="tab-content p-6 active">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-4">Your Learning Progress</h2>
+                
+                <div class="bg-white p-5 rounded-lg shadow-sm mb-6">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-3">Overall Progress</h3>
+                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                        <div id="overall-progress" class="bg-indigo-600 h-4 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                    <p class="text-right text-sm text-gray-600"><span id="progress-percentage">0</span>% Complete</p>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-4">Your Badges</h3>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="badge unearned text-center p-4 bg-white rounded-lg shadow-sm">
+                            <div class="w-16 h-16 mx-auto mb-2 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-bold text-indigo-700">Beginner</h4>
+                            <p class="text-sm text-gray-600">Complete your first exercise</p>
+                        </div>
+                        
+                        <div class="badge unearned text-center p-4 bg-white rounded-lg shadow-sm">
+                            <div class="w-16 h-16 mx-auto mb-2 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-bold text-green-700">Separable Master</h4>
+                            <p class="text-sm text-gray-600">Master separable phrasal verbs</p>
+                        </div>
+                        
+                        <div class="badge unearned text-center p-4 bg-white rounded-lg shadow-sm">
+                            <div class="w-16 h-16 mx-auto mb-2 bg-red-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-bold text-red-700">Inseparable Pro</h4>
+                            <p class="text-sm text-gray-600">Master inseparable phrasal verbs</p>
+                        </div>
+                        
+                        <div class="badge unearned text-center p-4 bg-white rounded-lg shadow-sm">
+                            <div class="w-16 h-16 mx-auto mb-2 bg-purple-100 rounded-full flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-bold text-purple-700">Phrasal Wizard</h4>
+                            <p class="text-sm text-gray-600">Complete all activities</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-700 mb-3">Activity Completion</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Drag &amp; Drop Exercises</span>
+                                <span class="text-gray-600" id="drag-drop-progress">0/3</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="drag-drop-bar" class="bg-green-500 h-3 rounded-full progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Fill in the Blanks</span>
+                                <span class="text-gray-600" id="fill-blanks-progress">0/2</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="fill-blanks-bar" class="bg-blue-500 h-3 rounded-full progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Sentence Transformation</span>
+                                <span class="text-gray-600" id="transform-progress">0/2</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="transform-bar" class="bg-purple-500 h-3 rounded-full progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-700">Fix Broken Sentences</span>
+                                <span class="text-gray-600" id="fix-progress">0/2</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="fix-bar" class="bg-yellow-500 h-3 rounded-full progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                tabBtns.forEach(b => b.classList.remove('active', 'bg-indigo-50', 'text-indigo-700'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active', 'bg-indigo-50', 'text-indigo-700');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Button Navigation
+        document.getElementById('start-learning-btn').addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active', 'bg-indigo-50', 'text-indigo-700'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            document.querySelector('[data-tab="learn"]').classList.add('active', 'bg-indigo-50', 'text-indigo-700');
+            document.getElementById('learn').classList.add('active');
+        });
+        
+        document.getElementById('start-practice-btn').addEventListener('click', () => {
+            tabBtns.forEach(b => b.classList.remove('active', 'bg-indigo-50', 'text-indigo-700'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            document.querySelector('[data-tab="practice"]').classList.add('active', 'bg-indigo-50', 'text-indigo-700');
+            document.getElementById('practice').classList.add('active');
+        });
+        
+        // Drag and Drop Functionality
+        const dragItems = document.querySelectorAll('.drag-item');
+        const dropTargets = document.querySelectorAll('.drop-target');
+        
+        let draggedItem = null;
+        
+        dragItems.forEach(item => {
+            item.addEventListener('dragstart', function() {
+                draggedItem = this;
+                setTimeout(() => this.style.opacity = '0.5', 0);
+            });
+            
+            item.addEventListener('dragend', function() {
+                setTimeout(() => this.style.opacity = '1', 0);
+                draggedItem = null;
+            });
+        });
+        
+        dropTargets.forEach(target => {
+            target.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('highlight');
+            });
+            
+            target.addEventListener('dragleave', function() {
+                this.classList.remove('highlight');
+            });
+            
+            target.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('highlight');
+                
+                if (draggedItem) {
+                    // Check if the target already has a child
+                    if (this.firstChild) {
+                        // If it does, move that child back to its original position
+                        const existingItem = this.firstChild;
+                        this.removeChild(existingItem);
+                        document.body.appendChild(existingItem);
+                    }
+                    
+                    // Clone the dragged item and append it to the target
+                    const clone = draggedItem.cloneNode(true);
+                    clone.style.opacity = '1';
+                    clone.setAttribute('draggable', 'false');
+                    this.appendChild(clone);
+                    
+                    // Hide the original dragged item
+                    draggedItem.style.display = 'none';
+                }
+            });
+        });
+        
+        // Check Answers Button
+        document.getElementById('check-answers-btn').addEventListener('click', function() {
+            // Check drag and drop exercises
+            checkDragDropExercises();
+            
+            // Check fill in the blanks exercises
+            checkFillBlanksExercises();
+            
+            // Update progress
+            updateProgress();
+        });
+        
+        function checkDragDropExercises() {
+            let correctCount = 0;
+            
+            // Exercise 1: Turn it off (separable)
+            const ex1Middle = document.querySelector('[data-position="middle"][data-exercise="1"]');
+            const ex1End = document.querySelector('[data-position="end"][data-exercise="1"]');
+            const feedback1 = document.getElementById('feedback-1');
+            
+            if (ex1Middle.textContent === 'it' && ex1End.textContent === '') {
+                ex1Middle.classList.add('correct');
+                ex1End.classList.add('correct');
+                feedback1.textContent = '✓ Correct! "Turn it off" is correct because "turn off" is separable.';
+                feedback1.classList.add('text-green-600');
+                correctCount++;
+            } else if (ex1Middle.textContent === '' && ex1End.textContent === 'it') {
+                ex1Middle.classList.add('incorrect');
+                ex1End.classList.add('incorrect');
+                feedback1.textContent = '✗ Incorrect. "Turn off it" is wrong. The pronoun must go between the verb and particle.';
+                feedback1.classList.add('text-red-600');
+            } else {
+                feedback1.textContent = 'Try again. Drag the pronoun to the correct position.';
+                feedback1.classList.add('text-gray-600');
+            }
+            feedback1.classList.remove('hidden');
+            
+            // Exercise 2: Look after him (inseparable)
+            const ex2Middle = document.querySelector('[data-position="middle"][data-exercise="2"]');
+            const ex2End = document.querySelector('[data-position="end"][data-exercise="2"]');
+            const feedback2 = document.getElementById('feedback-2');
+            
+            if (ex2Middle.textContent === '' && ex2End.textContent === 'him') {
+                ex2Middle.classList.add('correct');
+                ex2End.classList.add('correct');
+                feedback2.textContent = '✓ Correct! "Look after him" is correct because "look after" is inseparable.';
+                feedback2.classList.add('text-green-600');
+                correctCount++;
+            } else if (ex2Middle.textContent === 'him' && ex2End.textContent === '') {
+                ex2Middle.classList.add('incorrect');
+                ex2End.classList.add('incorrect');
+                feedback2.textContent = '✗ Incorrect. "Look him after" is wrong. The pronoun must go after the particle.';
+                feedback2.classList.add('text-red-600');
+            } else {
+                feedback2.textContent = 'Try again. Drag the pronoun to the correct position.';
+                feedback2.classList.add('text-gray-600');
+            }
+            feedback2.classList.remove('hidden');
+            
+            // Exercise 3: Pick them up (separable)
+            const ex3Middle = document.querySelector('[data-position="middle"][data-exercise="3"]');
+            const ex3End = document.querySelector('[data-position="end"][data-exercise="3"]');
+            const feedback3 = document.getElementById('feedback-3');
+            
+            if (ex3Middle.textContent === 'them' && ex3End.textContent === '') {
+                ex3Middle.classList.add('correct');
+                ex3End.classList.add('correct');
+                feedback3.textContent = '✓ Correct! "Pick them up" is correct because "pick up" is separable.';
+                feedback3.classList.add('text-green-600');
+                correctCount++;
+            } else if (ex3Middle.textContent === '' && ex3End.textContent === 'them') {
+                ex3Middle.classList.add('incorrect');
+                ex3End.classList.add('incorrect');
+                feedback3.textContent = '✗ Incorrect. "Pick up them" is wrong. The pronoun must go between the verb and particle.';
+                feedback3.classList.add('text-red-600');
+            } else {
+                feedback3.textContent = 'Try again. Drag the pronoun to the correct position.';
+                feedback3.classList.add('text-gray-600');
+            }
+            feedback3.classList.remove('hidden');
+            
+            // Update drag & drop progress
+            document.getElementById('drag-drop-progress').textContent = `${correctCount}/3`;
+            document.getElementById('drag-drop-bar').style.width = `${(correctCount / 3) * 100}%`;
+            
+            // Update badge if all correct
+            if (correctCount === 3) {
+                document.querySelector('.badge:nth-child(1)').classList.remove('unearned');
+                document.querySelector('.badge:nth-child(1)').classList.add('earned');
+            }
+        }
+        
+        function checkFillBlanksExercises() {
+            let correctCount = 0;
+            
+            // Exercise 4: Give it back (separable)
+            const ex4Inputs = document.querySelectorAll('[data-exercise="4"]');
+            const feedback4 = document.getElementById('feedback-4');
+            
+            if (ex4Inputs[0].value.trim().toLowerCase() === 'it' && ex4Inputs[1].value.trim() === '') {
+                ex4Inputs.forEach(input => input.classList.add('bg-green-100', 'border-green-300'));
+                feedback4.textContent = '✓ Correct! "Give it back" is correct because "give back" is separable.';
+                feedback4.classList.add('text-green-600');
+                correctCount++;
+            } else {
+                ex4Inputs.forEach(input => input.classList.add('bg-red-100', 'border-red-300'));
+                feedback4.textContent = '✗ Incorrect. The pronoun should go between the verb and particle.';
+                feedback4.classList.add('text-red-600');
+            }
+            feedback4.classList.remove('hidden');
+            
+            // Exercise 5: Wait for her (inseparable)
+            const ex5Inputs = document.querySelectorAll('[data-exercise="5"]');
+            const feedback5 = document.getElementById('feedback-5');
+            
+            if (ex5Inputs[0].value.trim() === '' && ex5Inputs[1].value.trim().toLowerCase() === 'her') {
+                ex5Inputs.forEach(input => input.classList.add('bg-green-100', 'border-green-300'));
+                feedback5.textContent = '✓ Correct! "Wait for her" is correct because "wait for" is inseparable.';
+                feedback5.classList.add('text-green-600');
+                correctCount++;
+            } else {
+                ex5Inputs.forEach(input => input.classList.add('bg-red-100', 'border-red-300'));
+                feedback5.textContent = '✗ Incorrect. The pronoun should go after the particle.';
+                feedback5.classList.add('text-red-600');
+            }
+            feedback5.classList.remove('hidden');
+            
+            // Update fill blanks progress
+            document.getElementById('fill-blanks-progress').textContent = `${correctCount}/2`;
+            document.getElementById('fill-blanks-bar').style.width = `${(correctCount / 2) * 100}%`;
+        }
+        
+        // Sentence Transformation Check
+        const transformBtns = document.querySelectorAll('.check-transform-btn');
+        transformBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exerciseId = this.getAttribute('data-exercise');
+                const input = document.querySelector(`[data-exercise="${exerciseId}"]`);
+                const feedback = document.getElementById(`${exerciseId}-feedback`);
+                const correctAnswer = input.getAttribute('data-answer');
+                
+                if (input.value.trim().toLowerCase() === correctAnswer.toLowerCase()) {
+                    input.classList.add('bg-green-100', 'border-green-300');
+                    feedback.textContent = '✓ Correct!';
+                    feedback.classList.add('text-green-600');
+                    feedback.classList.remove('hidden');
+                    
+                    // Update transform progress
+                    updateTransformProgress();
+                } else {
+                    input.classList.add('bg-red-100', 'border-red-300');
+                    feedback.textContent = '✗ Incorrect. Try again.';
+                    feedback.classList.add('text-red-600');
+                    feedback.classList.remove('hidden');
+                }
+            });
+        });
+        
+        // Fix Broken Sentences Check
+        const fixBtns = document.querySelectorAll('.check-fix-btn');
+        fixBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exerciseId = this.getAttribute('data-exercise');
+                const input = document.querySelector(`[data-exercise="${exerciseId}"]`);
+                const feedback = document.getElementById(`${exerciseId}-feedback`);
+                const correctAnswer = input.getAttribute('data-answer');
+                
+                if (input.value.trim().toLowerCase() === correctAnswer.toLowerCase()) {
+                    input.classList.add('bg-green-100', 'border-green-300');
+                    feedback.textContent = '✓ Correct!';
+                    feedback.classList.add('text-green-600');
+                    feedback.classList.remove('hidden');
+                    
+                    // Update fix progress
+                    updateFixProgress();
+                } else {
+                    input.classList.add('bg-red-100', 'border-red-300');
+                    feedback.textContent = '✗ Incorrect. Try again.';
+                    feedback.classList.add('text-red-600');
+                    feedback.classList.remove('hidden');
+                }
+            });
+        });
+        
+        function updateTransformProgress() {
+            const totalExercises = document.querySelectorAll('.transform-input').length;
+            let correctCount = 0;
+            
+            document.querySelectorAll('.transform-input').forEach(input => {
+                if (input.classList.contains('bg-green-100')) {
+                    correctCount++;
+                }
+            });
+            
+            document.getElementById('transform-progress').textContent = `${correctCount}/${totalExercises}`;
+            document.getElementById('transform-bar').style.width = `${(correctCount / totalExercises) * 100}%`;
+            
+            // Update badge if all correct
+            if (correctCount === totalExercises) {
+                document.querySelector('.badge:nth-child(2)').classList.remove('unearned');
+                document.querySelector('.badge:nth-child(2)').classList.add('earned');
+            }
+            
+            updateProgress();
+        }
+        
+        function updateFixProgress() {
+            const totalExercises = document.querySelectorAll('.fix-input').length;
+            let correctCount = 0;
+            
+            document.querySelectorAll('.fix-input').forEach(input => {
+                if (input.classList.contains('bg-green-100')) {
+                    correctCount++;
+                }
+            });
+            
+            document.getElementById('fix-progress').textContent = `${correctCount}/${totalExercises}`;
+            document.getElementById('fix-bar').style.width = `${(correctCount / totalExercises) * 100}%`;
+            
+            // Update badge if all correct
+            if (correctCount === totalExercises) {
+                document.querySelector('.badge:nth-child(3)').classList.remove('unearned');
+                document.querySelector('.badge:nth-child(3)').classList.add('earned');
+            }
+            
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            // Calculate overall progress
+            const dragDropTotal = 3;
+            const fillBlanksTotal = 2;
+            const transformTotal = 2;
+            const fixTotal = 2;
+            const totalExercises = dragDropTotal + fillBlanksTotal + transformTotal + fixTotal;
+            
+            let dragDropCorrect = parseInt(document.getElementById('drag-drop-progress').textContent.split('/')[0]) || 0;
+            let fillBlanksCorrect = parseInt(document.getElementById('fill-blanks-progress').textContent.split('/')[0]) || 0;
+            let transformCorrect = parseInt(document.getElementById('transform-progress').textContent.split('/')[0]) || 0;
+            let fixCorrect = parseInt(document.getElementById('fix-progress').textContent.split('/')[0]) || 0;
+            
+            const totalCorrect = dragDropCorrect + fillBlanksCorrect + transformCorrect + fixCorrect;
+            const progressPercentage = Math.round((totalCorrect / totalExercises) * 100);
+            
+            document.getElementById('overall-progress').style.width = `${progressPercentage}%`;
+            document.getElementById('progress-percentage').textContent = progressPercentage;
+            
+            // Update wizard badge if all exercises are correct
+            if (totalCorrect === totalExercises) {
+                document.querySelector('.badge:nth-child(4)').classList.remove('unearned');
+                document.querySelector('.badge:nth-child(4)').classList.add('earned');
+            }
+        }
+        
+        // Language Selector
+        const languageSelect = document.getElementById('language-select');
+        const appSubtitle = document.getElementById('app-subtitle');
+        const hints = document.querySelectorAll('.hint');
+        
+        languageSelect.addEventListener('change', function() {
+            const selectedLang = this.value;
+            
+            // Update subtitle based on language
+            if (selectedLang === 'es') {
+                appSubtitle.textContent = 'Domina la Colocación de Pronombres en Verbos Frasales';
+            } else if (selectedLang === 'pt') {
+                appSubtitle.textContent = 'Domine a Colocação de Pronomes em Verbos Frasais';
+            } else {
+                appSubtitle.textContent = 'Master Pronoun Placement in Phrasal Verbs';
+            }
+            
+            // Show/hide language hints
+            hints.forEach(hint => {
+                hint.classList.remove('active');
+                if (hint.getAttribute('data-lang') === selectedLang && selectedLang !== 'en') {
+                    hint.classList.add('active');
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'953e002fa12ea982',t:'MTc1MDYxODk1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
