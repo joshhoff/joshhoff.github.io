@@ -1,0 +1,990 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Tenses for C1 Learners | English-Italian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .phrasal-verb {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-decoration-color: #4f46e5;
+            font-weight: 500;
+            color: #4f46e5;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .language-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .language-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4f46e5;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 1;
+            background-color: #4f46e5;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .phrasal-verb:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .practice-card {
+            transition: all 0.3s ease;
+        }
+        .practice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mr-4{margin-right:1rem}.mt-2{margin-top:0.5rem}.mr-2{margin-right:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.min-h-screen{min-height:100vh}.min-w-full{min-width:100%}.max-w-2xl{max-width:42rem}.list-decimal{list-style-type:decimal}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-6{gap:1.5rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.whitespace-nowrap{white-space:nowrap}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-b{border-bottom-width:1px}.border-transparent{border-color:transparent}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-green-200{--tw-border-opacity:1;border-color:rgb(187 247 208 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-indigo-600{--tw-gradient-from:#4f46e5 var(--tw-gradient-from-position);--tw-gradient-to:rgb(79 70 229 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-purple-600{--tw-gradient-to:#9333ea var(--tw-gradient-to-position)}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-3{padding:0.75rem}.p-5{padding:1.25rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pl-6{padding-left:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:border-indigo-600:hover{--tw-border-opacity:1;border-color:rgb(79 70 229 / var(--tw-border-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:text-indigo-600:hover{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:px-6{padding-left:1.5rem;padding-right:1.5rem}.md\:text-right{text-align:right}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-6">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <h1 class="text-3xl font-bold mb-4 md:mb-0">Present Tenses Mastery</h1>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm font-medium" id="lang-en">English</span>
+                        <label class="language-toggle">
+                            <input type="checkbox" id="language-toggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="text-sm font-medium" id="lang-it">Italiano</span>
+                    </div>
+                </div>
+                <p class="mt-2 text-lg opacity-90 max-w-2xl" id="header-subtitle-en">Master the present simple and continuous tenses for C1 level English</p>
+                <p class="mt-2 text-lg opacity-90 max-w-2xl hidden" id="header-subtitle-it">Padroneggia i tempi presente semplice e continuo per l'inglese di livello C1</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bg-white shadow-md">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="flex overflow-x-auto py-4 no-scrollbar">
+                    <button class="tab-button px-4 py-2 font-medium text-gray-600 hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-all whitespace-nowrap mr-4 active" data-tab="introduction">
+                        <span class="lang-en">Introduction</span>
+                        <span class="lang-it hidden">Introduzione</span>
+                    </button>
+                    <button class="tab-button px-4 py-2 font-medium text-gray-600 hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-all whitespace-nowrap mr-4" data-tab="present-simple">
+                        <span class="lang-en">Present Simple</span>
+                        <span class="lang-it hidden">Presente Semplice</span>
+                    </button>
+                    <button class="tab-button px-4 py-2 font-medium text-gray-600 hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-all whitespace-nowrap mr-4" data-tab="present-continuous">
+                        <span class="lang-en">Present Continuous</span>
+                        <span class="lang-it hidden">Presente Continuo</span>
+                    </button>
+                    <button class="tab-button px-4 py-2 font-medium text-gray-600 hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-all whitespace-nowrap mr-4" data-tab="comparison">
+                        <span class="lang-en">Comparison</span>
+                        <span class="lang-it hidden">Confronto</span>
+                    </button>
+                    <button class="tab-button px-4 py-2 font-medium text-gray-600 hover:text-indigo-600 border-b-2 border-transparent hover:border-indigo-600 transition-all whitespace-nowrap" data-tab="practice">
+                        <span class="lang-en">Practice</span>
+                        <span class="lang-it hidden">Esercizi</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 md:px-6 py-8">
+            <!-- Introduction Tab -->
+            <div id="introduction" class="tab-content active">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-en">Understanding Present Tenses in Professional Contexts</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-it hidden">Comprendere i Tempi Presenti nei Contesti Professionali</h2>
+                    
+                    <div class="lang-en">
+                        <p class="mb-4">At the C1 level, mastering the nuances between present simple and present continuous tenses is crucial for professional communication. These tenses help you express not just actions and states, but also convey subtle meanings about habits, arrangements, and changing situations.</p>
+                        
+                        <p class="mb-4">In workplace environments, you'll often need to <span class="phrasal-verb">set up<span class="tooltip">Set up: to arrange or organize something</span></span> meetings, <span class="phrasal-verb">deal with<span class="tooltip">Deal with: to handle or manage a situation or problem</span></span> clients, and <span class="phrasal-verb">follow up on<span class="tooltip">Follow up on: to take further action regarding something that was previously discussed</span></span> projects. The correct use of present tenses helps you communicate clearly about:</p>
+                        
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Regular procedures and company policies (present simple)</li>
+                            <li>Ongoing projects and temporary situations (present continuous)</li>
+                            <li>Scheduled future events in a professional calendar (present simple/continuous)</li>
+                            <li>Changing trends and developing situations (present continuous)</li>
+                        </ul>
+                        
+                        <p>This module will help you refine your understanding of these tenses and apply them confidently in professional contexts. You'll learn to <span class="phrasal-verb">carry out<span class="tooltip">Carry out: to perform or conduct (a task)</span></span> complex communications and <span class="phrasal-verb">bring up<span class="tooltip">Bring up: to mention or introduce a topic</span></span> important topics with grammatical precision.</p>
+                    </div>
+                    
+                    <div class="lang-it hidden">
+                        <p class="mb-4">Al livello C1, padroneggiare le sfumature tra il presente semplice e il presente continuo è fondamentale per la comunicazione professionale. Questi tempi verbali ti aiutano a esprimere non solo azioni e stati, ma anche a trasmettere significati sottili su abitudini, accordi e situazioni in evoluzione.</p>
+                        
+                        <p class="mb-4">Negli ambienti di lavoro, spesso avrai bisogno di <span class="phrasal-verb">set up<span class="tooltip">Set up: organizzare o predisporre qualcosa</span></span> riunioni, <span class="phrasal-verb">deal with<span class="tooltip">Deal with: gestire o affrontare una situazione o un problema</span></span> clienti e <span class="phrasal-verb">follow up on<span class="tooltip">Follow up on: dare seguito a qualcosa discusso in precedenza</span></span> progetti. L'uso corretto dei tempi presenti ti aiuta a comunicare chiaramente su:</p>
+                        
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Procedure regolari e politiche aziendali (presente semplice)</li>
+                            <li>Progetti in corso e situazioni temporanee (presente continuo)</li>
+                            <li>Eventi futuri programmati in un calendario professionale (presente semplice/continuo)</li>
+                            <li>Tendenze in evoluzione e situazioni in sviluppo (presente continuo)</li>
+                        </ul>
+                        
+                        <p>Questo modulo ti aiuterà a perfezionare la tua comprensione di questi tempi verbali e ad applicarli con sicurezza in contesti professionali. Imparerai a <span class="phrasal-verb">carry out<span class="tooltip">Carry out: eseguire o condurre (un compito)</span></span> comunicazioni complesse e a <span class="phrasal-verb">bring up<span class="tooltip">Bring up: menzionare o introdurre un argomento</span></span> argomenti importanti con precisione grammaticale.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Present Simple Tab -->
+            <div id="present-simple" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-en">Present Simple: Expressing Facts, Habits &amp; Permanent Situations</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-it hidden">Presente Semplice: Esprimere Fatti, Abitudini e Situazioni Permanenti</h2>
+                    
+                    <div class="lang-en">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Form</h3>
+                        <div class="bg-gray-50 p-4 rounded-md mb-4">
+                            <p class="mb-2"><strong>Positive:</strong> Subject + base form (+ s/es for third person singular)</p>
+                            <p class="mb-2"><strong>Negative:</strong> Subject + do/does + not + base form</p>
+                            <p><strong>Question:</strong> Do/Does + subject + base form</p>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Uses in Professional Contexts</h3>
+                        <ol class="list-decimal pl-6 mb-6 space-y-3">
+                            <li>
+                                <strong>Facts and general truths:</strong>
+                                <p>Our company <span class="phrasal-verb">takes on<span class="tooltip">Take on: to accept or assume a responsibility or challenge</span></span> new clients every quarter.</p>
+                            </li>
+                            <li>
+                                <strong>Regular habits and routines:</strong>
+                                <p>The IT department <span class="phrasal-verb">backs up<span class="tooltip">Back up: to make a copy of computer data for safety</span></span> all systems every night at 2 AM.</p>
+                            </li>
+                            <li>
+                                <strong>Permanent situations:</strong>
+                                <p>Our headquarters <span class="phrasal-verb">looks after<span class="tooltip">Look after: to take care of or be responsible for something</span></span> all European operations.</p>
+                            </li>
+                            <li>
+                                <strong>Scheduled events (timetables):</strong>
+                                <p>The quarterly meeting <span class="phrasal-verb">starts off<span class="tooltip">Start off: to begin something</span></span> at 9 AM every first Monday of the quarter.</p>
+                            </li>
+                            <li>
+                                <strong>Instructions and procedures:</strong>
+                                <p>First, you <span class="phrasal-verb">log in<span class="tooltip">Log in: to enter information to access a computer system</span></span> to the system, then you <span class="phrasal-verb">fill out<span class="tooltip">Fill out: to complete a form with required information</span></span> the request form.</p>
+                            </li>
+                        </ol>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Advanced Usage Notes</h3>
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>With stative verbs (believe, own, understand), we typically use the present simple even when referring to temporary situations.</li>
+                            <li>Present simple can express future events in formal schedules: "The conference begins next Tuesday at 10 AM."</li>
+                            <li>In professional writing, present simple is often used for clarity and directness in reports and documentation.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lang-it hidden">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Forma</h3>
+                        <div class="bg-gray-50 p-4 rounded-md mb-4">
+                            <p class="mb-2"><strong>Positiva:</strong> Soggetto + forma base (+ s/es per terza persona singolare)</p>
+                            <p class="mb-2"><strong>Negativa:</strong> Soggetto + do/does + not + forma base</p>
+                            <p><strong>Domanda:</strong> Do/Does + soggetto + forma base</p>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Usi nei Contesti Professionali</h3>
+                        <ol class="list-decimal pl-6 mb-6 space-y-3">
+                            <li>
+                                <strong>Fatti e verità generali:</strong>
+                                <p>La nostra azienda <span class="phrasal-verb">takes on<span class="tooltip">Take on: accettare o assumere una responsabilità o una sfida</span></span> nuovi clienti ogni trimestre.</p>
+                            </li>
+                            <li>
+                                <strong>Abitudini e routine regolari:</strong>
+                                <p>Il dipartimento IT <span class="phrasal-verb">backs up<span class="tooltip">Back up: fare una copia dei dati informatici per sicurezza</span></span> tutti i sistemi ogni notte alle 2 del mattino.</p>
+                            </li>
+                            <li>
+                                <strong>Situazioni permanenti:</strong>
+                                <p>La nostra sede centrale <span class="phrasal-verb">looks after<span class="tooltip">Look after: prendersi cura o essere responsabile di qualcosa</span></span> tutte le operazioni europee.</p>
+                            </li>
+                            <li>
+                                <strong>Eventi programmati (orari):</strong>
+                                <p>La riunione trimestrale <span class="phrasal-verb">starts off<span class="tooltip">Start off: iniziare qualcosa</span></span> alle 9 del mattino ogni primo lunedì del trimestre.</p>
+                            </li>
+                            <li>
+                                <strong>Istruzioni e procedure:</strong>
+                                <p>Prima, <span class="phrasal-verb">log in<span class="tooltip">Log in: inserire informazioni per accedere a un sistema informatico</span></span> al sistema, poi <span class="phrasal-verb">fill out<span class="tooltip">Fill out: completare un modulo con le informazioni richieste</span></span> il modulo di richiesta.</p>
+                            </li>
+                        </ol>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Note sull'Uso Avanzato</h3>
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Con i verbi stativi (credere, possedere, capire), utilizziamo tipicamente il presente semplice anche quando ci riferiamo a situazioni temporanee.</li>
+                            <li>Il presente semplice può esprimere eventi futuri in programmi formali: "La conferenza inizia martedì prossimo alle 10 del mattino."</li>
+                            <li>Nella scrittura professionale, il presente semplice è spesso utilizzato per chiarezza e direttezza nei rapporti e nella documentazione.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Present Continuous Tab -->
+            <div id="present-continuous" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-en">Present Continuous: Expressing Current Actions &amp; Temporary Situations</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-it hidden">Presente Continuo: Esprimere Azioni Attuali e Situazioni Temporanee</h2>
+                    
+                    <div class="lang-en">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Form</h3>
+                        <div class="bg-gray-50 p-4 rounded-md mb-4">
+                            <p class="mb-2"><strong>Positive:</strong> Subject + am/is/are + verb-ing</p>
+                            <p class="mb-2"><strong>Negative:</strong> Subject + am/is/are + not + verb-ing</p>
+                            <p><strong>Question:</strong> Am/Is/Are + subject + verb-ing</p>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Uses in Professional Contexts</h3>
+                        <ol class="list-decimal pl-6 mb-6 space-y-3">
+                            <li>
+                                <strong>Actions happening now:</strong>
+                                <p>The team is currently <span class="phrasal-verb">working out<span class="tooltip">Work out: to solve or calculate something</span></span> the details of the new proposal.</p>
+                            </li>
+                            <li>
+                                <strong>Temporary situations:</strong>
+                                <p>We're <span class="phrasal-verb">filling in<span class="tooltip">Fill in: to temporarily do someone else's job</span></span> for Sarah while she's on maternity leave.</p>
+                            </li>
+                            <li>
+                                <strong>Developing situations and trends:</strong>
+                                <p>More companies are <span class="phrasal-verb">moving toward<span class="tooltip">Move toward: to make progress in a particular direction</span></span> remote work policies.</p>
+                            </li>
+                            <li>
+                                <strong>Future arrangements:</strong>
+                                <p>The CEO is <span class="phrasal-verb">flying in<span class="tooltip">Fly in: to arrive by plane</span></span> tomorrow for the board meeting.</p>
+                            </li>
+                            <li>
+                                <strong>Temporary or changing habits:</strong>
+                                <p>This quarter, we're <span class="phrasal-verb">focusing on<span class="tooltip">Focus on: to concentrate attention or effort on something</span></span> improving customer retention.</p>
+                            </li>
+                        </ol>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Advanced Usage Notes</h3>
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Present continuous with always/constantly can express irritation or criticism: "She's always <span class="phrasal-verb">putting off<span class="tooltip">Put off: to delay or postpone something</span></span> important decisions."</li>
+                            <li>Some stative verbs can be used in continuous form with a change in meaning: "I think" (opinion) vs. "I'm thinking" (process of consideration).</li>
+                            <li>In business English, present continuous is often used to soften requests: "I'm hoping we could discuss this further."</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lang-it hidden">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Forma</h3>
+                        <div class="bg-gray-50 p-4 rounded-md mb-4">
+                            <p class="mb-2"><strong>Positiva:</strong> Soggetto + am/is/are + verbo-ing</p>
+                            <p class="mb-2"><strong>Negativa:</strong> Soggetto + am/is/are + not + verbo-ing</p>
+                            <p><strong>Domanda:</strong> Am/Is/Are + soggetto + verbo-ing</p>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Usi nei Contesti Professionali</h3>
+                        <ol class="list-decimal pl-6 mb-6 space-y-3">
+                            <li>
+                                <strong>Azioni che accadono ora:</strong>
+                                <p>Il team sta attualmente <span class="phrasal-verb">working out<span class="tooltip">Work out: risolvere o calcolare qualcosa</span></span> i dettagli della nuova proposta.</p>
+                            </li>
+                            <li>
+                                <strong>Situazioni temporanee:</strong>
+                                <p>Stiamo <span class="phrasal-verb">filling in<span class="tooltip">Fill in: svolgere temporaneamente il lavoro di qualcun altro</span></span> per Sarah mentre è in congedo di maternità.</p>
+                            </li>
+                            <li>
+                                <strong>Situazioni in evoluzione e tendenze:</strong>
+                                <p>Sempre più aziende stanno <span class="phrasal-verb">moving toward<span class="tooltip">Move toward: progredire in una particolare direzione</span></span> politiche di lavoro remoto.</p>
+                            </li>
+                            <li>
+                                <strong>Accordi futuri:</strong>
+                                <p>L'amministratore delegato sta <span class="phrasal-verb">flying in<span class="tooltip">Fly in: arrivare in aereo</span></span> domani per la riunione del consiglio.</p>
+                            </li>
+                            <li>
+                                <strong>Abitudini temporanee o in cambiamento:</strong>
+                                <p>Questo trimestre, ci stiamo <span class="phrasal-verb">focusing on<span class="tooltip">Focus on: concentrare l'attenzione o lo sforzo su qualcosa</span></span> migliorare la fidelizzazione dei clienti.</p>
+                            </li>
+                        </ol>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Note sull'Uso Avanzato</h3>
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Il presente continuo con always/constantly può esprimere irritazione o critica: "Sta sempre <span class="phrasal-verb">putting off<span class="tooltip">Put off: ritardare o posticipare qualcosa</span></span> decisioni importanti."</li>
+                            <li>Alcuni verbi stativi possono essere usati in forma continua con un cambiamento di significato: "I think" (opinione) vs. "I'm thinking" (processo di considerazione).</li>
+                            <li>Nell'inglese commerciale, il presente continuo è spesso usato per ammorbidire le richieste: "Spero che potremmo discuterne ulteriormente."</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Tab -->
+            <div id="comparison" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-en">Comparing Present Simple &amp; Present Continuous</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-indigo-700 lang-it hidden">Confronto tra Presente Semplice e Presente Continuo</h2>
+                    
+                    <div class="lang-en">
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full bg-white border border-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 px-4 bg-indigo-50 text-left text-indigo-700 border-b">Aspect</th>
+                                        <th class="py-3 px-4 bg-indigo-50 text-left text-indigo-700 border-b">Present Simple</th>
+                                        <th class="py-3 px-4 bg-indigo-50 text-left text-indigo-700 border-b">Present Continuous</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Time frame</td>
+                                        <td class="py-3 px-4 border-b">General time, habitual</td>
+                                        <td class="py-3 px-4 border-b">Specific time, temporary</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Frequency</td>
+                                        <td class="py-3 px-4 border-b">Regular, repeated actions</td>
+                                        <td class="py-3 px-4 border-b">Actions in progress, not necessarily repeated</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Permanence</td>
+                                        <td class="py-3 px-4 border-b">Permanent situations, facts</td>
+                                        <td class="py-3 px-4 border-b">Temporary situations, changing conditions</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Future reference</td>
+                                        <td class="py-3 px-4 border-b">Fixed schedules, timetables</td>
+                                        <td class="py-3 px-4 border-b">Planned arrangements, intentions</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Key Distinctions in Professional Contexts</h3>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-md">
+                                <h4 class="font-medium text-indigo-700 mb-2">Company Policies vs. Current Initiatives</h4>
+                                <p class="mb-2"><strong>Present Simple:</strong> "Our company <span class="phrasal-verb">turns down<span class="tooltip">Turn down: to reject or refuse an offer or request</span></span> projects that don't align with our ethical guidelines."</p>
+                                <p><strong>Present Continuous:</strong> "This month, we're <span class="phrasal-verb">turning down<span class="tooltip">Turn down: to reject or refuse an offer or request</span></span> new clients to focus on existing projects."</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-md">
+                                <h4 class="font-medium text-indigo-700 mb-2">Regular Procedures vs. Current Activities</h4>
+                                <p class="mb-2"><strong>Present Simple:</strong> "The finance team <span class="phrasal-verb">goes over<span class="tooltip">Go over: to review or examine something carefully</span></span> all expense reports at the end of each month."</p>
+                                <p><strong>Present Continuous:</strong> "The finance team is <span class="phrasal-verb">going over<span class="tooltip">Go over: to review or examine something carefully</span></span> last quarter's figures to prepare for the audit."</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-md">
+                                <h4 class="font-medium text-indigo-700 mb-2">Job Responsibilities vs. Temporary Assignments</h4>
+                                <p class="mb-2"><strong>Present Simple:</strong> "Sarah <span class="phrasal-verb">looks into<span class="tooltip">Look into: to investigate or examine something</span></span> customer complaints as part of her role."</p>
+                                <p><strong>Present Continuous:</strong> "Sarah is <span class="phrasal-verb">looking into<span class="tooltip">Look into: to investigate or examine something</span></span> the recent system failure to determine the cause."</p>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Common Mistakes at C1 Level</h3>
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Using present continuous with stative verbs: "I am knowing the answer" instead of "I know the answer"</li>
+                            <li>Using present simple for temporary actions: "This week I work on the Johnson project" instead of "This week I'm working on the Johnson project"</li>
+                            <li>Mixing tenses inappropriately in a single context: "We implement the new system next month and we're following the standard procedure"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="lang-it hidden">
+                        <div class="overflow-x-auto mb-6">
+                            <table class="min-w-full bg-white border border-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="py-3 px-4 bg-indigo-50 text-left text-indigo-700 border-b">Aspetto</th>
+                                        <th class="py-3 px-4 bg-indigo-50 text-left text-indigo-700 border-b">Presente Semplice</th>
+                                        <th class="py-3 px-4 bg-indigo-50 text-left text-indigo-700 border-b">Presente Continuo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Periodo di tempo</td>
+                                        <td class="py-3 px-4 border-b">Tempo generale, abituale</td>
+                                        <td class="py-3 px-4 border-b">Tempo specifico, temporaneo</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Frequenza</td>
+                                        <td class="py-3 px-4 border-b">Azioni regolari, ripetute</td>
+                                        <td class="py-3 px-4 border-b">Azioni in corso, non necessariamente ripetute</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Permanenza</td>
+                                        <td class="py-3 px-4 border-b">Situazioni permanenti, fatti</td>
+                                        <td class="py-3 px-4 border-b">Situazioni temporanee, condizioni in cambiamento</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 border-b font-medium">Riferimento al futuro</td>
+                                        <td class="py-3 px-4 border-b">Orari fissi, programmi</td>
+                                        <td class="py-3 px-4 border-b">Accordi pianificati, intenzioni</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Distinzioni Chiave nei Contesti Professionali</h3>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-md">
+                                <h4 class="font-medium text-indigo-700 mb-2">Politiche Aziendali vs. Iniziative Attuali</h4>
+                                <p class="mb-2"><strong>Presente Semplice:</strong> "La nostra azienda <span class="phrasal-verb">turns down<span class="tooltip">Turn down: rifiutare un'offerta o una richiesta</span></span> progetti che non si allineano con le nostre linee guida etiche."</p>
+                                <p><strong>Presente Continuo:</strong> "Questo mese, stiamo <span class="phrasal-verb">turning down<span class="tooltip">Turn down: rifiutare un'offerta o una richiesta</span></span> nuovi clienti per concentrarci sui progetti esistenti."</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-md">
+                                <h4 class="font-medium text-indigo-700 mb-2">Procedure Regolari vs. Attività Attuali</h4>
+                                <p class="mb-2"><strong>Presente Semplice:</strong> "Il team finanziario <span class="phrasal-verb">goes over<span class="tooltip">Go over: rivedere o esaminare qualcosa attentamente</span></span> tutti i rapporti di spesa alla fine di ogni mese."</p>
+                                <p><strong>Presente Continuo:</strong> "Il team finanziario sta <span class="phrasal-verb">going over<span class="tooltip">Go over: rivedere o esaminare qualcosa attentamente</span></span> le cifre dell'ultimo trimestre per prepararsi all'audit."</p>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-md">
+                                <h4 class="font-medium text-indigo-700 mb-2">Responsabilità Lavorative vs. Incarichi Temporanei</h4>
+                                <p class="mb-2"><strong>Presente Semplice:</strong> "Sarah <span class="phrasal-verb">looks into<span class="tooltip">Look into: investigare o esaminare qualcosa</span></span> i reclami dei clienti come parte del suo ruolo."</p>
+                                <p><strong>Presente Continuo:</strong> "Sarah sta <span class="phrasal-verb">looking into<span class="tooltip">Look into: investigare o esaminare qualcosa</span></span> il recente guasto del sistema per determinarne la causa."</p>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Errori Comuni al Livello C1</h3>
+                        <ul class="list-disc pl-6 mb-4 space-y-2">
+                            <li>Usare il presente continuo con verbi stativi: "I am knowing the answer" invece di "I know the answer"</li>
+                            <li>Usare il presente semplice per azioni temporanee: "This week I work on the Johnson project" invece di "This week I'm working on the Johnson project"</li>
+                            <li>Mescolare i tempi in modo inappropriato in un singolo contesto: "We implement the new system next month and we're following the standard procedure"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practice Tab -->
+            <div id="practice" class="tab-content">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-2xl font-bold mb-6 text-indigo-700 lang-en">Practice Activities</h2>
+                    <h2 class="text-2xl font-bold mb-6 text-indigo-700 lang-it hidden">Attività di Pratica</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Written Practice -->
+                        <div class="bg-indigo-50 rounded-lg p-5 practice-card">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700 lang-en">Written Practice</h3>
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-700 lang-it hidden">Pratica Scritta</h3>
+                            
+                            <div class="lang-en">
+                                <p class="mb-4">Complete the following email using the correct form of the verbs in brackets:</p>
+                                
+                                <div class="bg-white p-4 rounded-md mb-4">
+                                    <p>Dear Team,</p>
+                                    <p class="my-2">I hope this email finds you well. I (1. write) _______ to update you on the Johnson project. Currently, we (2. work) _______ on the final phase and (3. make) _______ good progress.</p>
+                                    <p class="my-2">As you know, our company always (4. prioritize) _______ client satisfaction. The client (5. expect) _______ the deliverables by the end of this month, and we (6. plan) _______ to meet this deadline.</p>
+                                    <p class="my-2">The development team (7. put together) _______ the final report this week, while marketing (8. prepare) _______ the presentation materials. Our CEO usually (9. review) _______ all major deliverables, but this time she (10. attend) _______ a conference in Singapore, so the COO (11. look over) _______ everything instead.</p>
+                                    <p class="my-2">Please let me know if you (12. need) _______ any additional resources to complete your tasks.</p>
+                                    <p class="mt-2">Best regards,<br>Project Manager</p>
+                                </div>
+                                
+                                <button id="show-answers-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Show Answers</button>
+                                
+                                <div id="answers" class="mt-4 hidden">
+                                    <p class="font-medium">Answers:</p>
+                                    <ol class="list-decimal pl-6 space-y-1">
+                                        <li>am writing (present continuous for action happening now)</li>
+                                        <li>are working (present continuous for temporary situation)</li>
+                                        <li>are making (present continuous for ongoing process)</li>
+                                        <li>prioritizes (present simple for general fact/policy)</li>
+                                        <li>expects (present simple for fact)</li>
+                                        <li>are planning (present continuous for future arrangement)</li>
+                                        <li>is putting together (present continuous for temporary action)</li>
+                                        <li>is preparing (present continuous for ongoing action)</li>
+                                        <li>reviews (present simple for habit)</li>
+                                        <li>is attending (present continuous for temporary situation)</li>
+                                        <li>is looking over (present continuous for temporary replacement)</li>
+                                        <li>need (present simple for state)</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <div class="lang-it hidden">
+                                <p class="mb-4">Completa la seguente email utilizzando la forma corretta dei verbi tra parentesi:</p>
+                                
+                                <div class="bg-white p-4 rounded-md mb-4">
+                                    <p>Caro Team,</p>
+                                    <p class="my-2">Spero che questa email vi trovi bene. (1. write) _______ per aggiornarvi sul progetto Johnson. Attualmente, (2. work) _______ sulla fase finale e (3. make) _______ buoni progressi.</p>
+                                    <p class="my-2">Come sapete, la nostra azienda sempre (4. prioritize) _______ la soddisfazione del cliente. Il cliente (5. expect) _______ i risultati entro la fine di questo mese, e noi (6. plan) _______ di rispettare questa scadenza.</p>
+                                    <p class="my-2">Il team di sviluppo (7. put together) _______ il rapporto finale questa settimana, mentre il marketing (8. prepare) _______ i materiali per la presentazione. Il nostro CEO di solito (9. review) _______ tutti i principali risultati, ma questa volta (10. attend) _______ una conferenza a Singapore, quindi il COO (11. look over) _______ tutto invece.</p>
+                                    <p class="my-2">Vi prego di farmi sapere se (12. need) _______ risorse aggiuntive per completare i vostri compiti.</p>
+                                    <p class="mt-2">Cordiali saluti,<br>Project Manager</p>
+                                </div>
+                                
+                                <button id="show-answers-btn-it" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Mostra Risposte</button>
+                                
+                                <div id="answers-it" class="mt-4 hidden">
+                                    <p class="font-medium">Risposte:</p>
+                                    <ol class="list-decimal pl-6 space-y-1">
+                                        <li>am writing (presente continuo per azione in corso)</li>
+                                        <li>are working (presente continuo per situazione temporanea)</li>
+                                        <li>are making (presente continuo per processo in corso)</li>
+                                        <li>prioritizes (presente semplice per fatto/politica generale)</li>
+                                        <li>expects (presente semplice per fatto)</li>
+                                        <li>are planning (presente continuo per accordo futuro)</li>
+                                        <li>is putting together (presente continuo per azione temporanea)</li>
+                                        <li>is preparing (presente continuo per azione in corso)</li>
+                                        <li>reviews (presente semplice per abitudine)</li>
+                                        <li>is attending (presente continuo per situazione temporanea)</li>
+                                        <li>is looking over (presente continuo per sostituzione temporanea)</li>
+                                        <li>need (presente semplice per stato)</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Conversation Prompts -->
+                        <div class="bg-purple-50 rounded-lg p-5 practice-card">
+                            <h3 class="text-xl font-semibold mb-4 text-purple-700 lang-en">Conversation Prompts</h3>
+                            <h3 class="text-xl font-semibold mb-4 text-purple-700 lang-it hidden">Spunti di Conversazione</h3>
+                            
+                            <div class="lang-en">
+                                <p class="mb-4">Use these prompts to practice speaking, focusing on the correct use of present tenses and workplace phrasal verbs:</p>
+                                
+                                <div class="space-y-4">
+                                    <div class="bg-white p-3 rounded-md">
+                                        <h4 class="font-medium text-purple-700">Scenario 1: Project Update Meeting</h4>
+                                        <p>Describe your current project to a colleague. Include:</p>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>What your team regularly does (present simple)</li>
+                                            <li>What you're working on right now (present continuous)</li>
+                                            <li>Use at least 3 phrasal verbs: <span class="phrasal-verb">look into<span class="tooltip">Look into: to investigate or examine something</span></span>, <span class="phrasal-verb">come up with<span class="tooltip">Come up with: to think of or produce an idea or plan</span></span>, <span class="phrasal-verb">reach out to<span class="tooltip">Reach out to: to contact someone for help or support</span></span></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-md">
+                                        <h4 class="font-medium text-purple-700">Scenario 2: Explaining Company Procedures</h4>
+                                        <p>Explain to a new employee how things work in your department. Include:</p>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>Regular procedures (present simple)</li>
+                                            <li>Current changes or initiatives (present continuous)</li>
+                                            <li>Use at least 3 phrasal verbs: <span class="phrasal-verb">sign off on<span class="tooltip">Sign off on: to approve something officially</span></span>, <span class="phrasal-verb">hand in<span class="tooltip">Hand in: to submit or deliver something</span></span>, <span class="phrasal-verb">set up<span class="tooltip">Set up: to arrange or organize something</span></span></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-md">
+                                        <h4 class="font-medium text-purple-700">Scenario 3: Negotiating with a Client</h4>
+                                        <p>Role-play a negotiation with a client about project scope. Include:</p>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>What your company typically offers (present simple)</li>
+                                            <li>What you're willing to do for this specific project (present continuous)</li>
+                                            <li>Use at least 3 phrasal verbs: <span class="phrasal-verb">go through<span class="tooltip">Go through: to examine or check something carefully</span></span>, <span class="phrasal-verb">work out<span class="tooltip">Work out: to solve or calculate something</span></span>, <span class="phrasal-verb">point out<span class="tooltip">Point out: to draw attention to something</span></span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="lang-it hidden">
+                                <p class="mb-4">Utilizza questi spunti per esercitarti a parlare, concentrandoti sull'uso corretto dei tempi presenti e dei phrasal verb sul posto di lavoro:</p>
+                                
+                                <div class="space-y-4">
+                                    <div class="bg-white p-3 rounded-md">
+                                        <h4 class="font-medium text-purple-700">Scenario 1: Riunione di Aggiornamento del Progetto</h4>
+                                        <p>Descrivi il tuo progetto attuale a un collega. Includi:</p>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>Cosa fa regolarmente il tuo team (presente semplice)</li>
+                                            <li>A cosa stai lavorando in questo momento (presente continuo)</li>
+                                            <li>Usa almeno 3 phrasal verb: <span class="phrasal-verb">look into<span class="tooltip">Look into: investigare o esaminare qualcosa</span></span>, <span class="phrasal-verb">come up with<span class="tooltip">Come up with: pensare o produrre un'idea o un piano</span></span>, <span class="phrasal-verb">reach out to<span class="tooltip">Reach out to: contattare qualcuno per aiuto o supporto</span></span></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-md">
+                                        <h4 class="font-medium text-purple-700">Scenario 2: Spiegare le Procedure Aziendali</h4>
+                                        <p>Spiega a un nuovo dipendente come funzionano le cose nel tuo dipartimento. Includi:</p>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>Procedure regolari (presente semplice)</li>
+                                            <li>Cambiamenti o iniziative attuali (presente continuo)</li>
+                                            <li>Usa almeno 3 phrasal verb: <span class="phrasal-verb">sign off on<span class="tooltip">Sign off on: approvare qualcosa ufficialmente</span></span>, <span class="phrasal-verb">hand in<span class="tooltip">Hand in: presentare o consegnare qualcosa</span></span>, <span class="phrasal-verb">set up<span class="tooltip">Set up: organizzare o predisporre qualcosa</span></span></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-md">
+                                        <h4 class="font-medium text-purple-700">Scenario 3: Negoziare con un Cliente</h4>
+                                        <p>Fai un gioco di ruolo di una negoziazione con un cliente sull'ambito del progetto. Includi:</p>
+                                        <ul class="list-disc pl-6 mt-2">
+                                            <li>Cosa offre tipicamente la tua azienda (presente semplice)</li>
+                                            <li>Cosa sei disposto a fare per questo specifico progetto (presente continuo)</li>
+                                            <li>Usa almeno 3 phrasal verb: <span class="phrasal-verb">go through<span class="tooltip">Go through: esaminare o controllare qualcosa attentamente</span></span>, <span class="phrasal-verb">work out<span class="tooltip">Work out: risolvere o calcolare qualcosa</span></span>, <span class="phrasal-verb">point out<span class="tooltip">Point out: attirare l'attenzione su qualcosa</span></span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Self-Assessment Quiz -->
+                    <div class="mt-8 bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <div class="p-5 border-b">
+                            <h3 class="text-xl font-semibold text-gray-800 lang-en">Self-Assessment Quiz</h3>
+                            <h3 class="text-xl font-semibold text-gray-800 lang-it hidden">Quiz di Autovalutazione</h3>
+                        </div>
+                        
+                        <div class="p-5">
+                            <div class="lang-en">
+                                <p class="mb-4">Test your understanding of present tenses in professional contexts:</p>
+                                
+                                <form id="quiz-form" class="space-y-6">
+                                    <div class="p-4 bg-gray-50 rounded-md">
+                                        <p class="font-medium mb-3">1. Choose the correct form to complete this sentence:</p>
+                                        <p>"Our company _______ a new approach to customer service this quarter."</p>
+                                        <div class="space-y-2 mt-2">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q1" id="q1a" value="a" class="mr-2">
+                                                <label for="q1a">implements</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q1" id="q1b" value="b" class="mr-2">
+                                                <label for="q1b">is implementing</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4 bg-gray-50 rounded-md">
+                                        <p class="font-medium mb-3">2. Identify the incorrect sentence:</p>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q2" id="q2a" value="a" class="mr-2">
+                                                <label for="q2a">I'm believing that we should change our strategy.</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q2" id="q2b" value="b" class="mr-2">
+                                                <label for="q2b">I believe that we should change our strategy.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4 bg-gray-50 rounded-md">
+                                        <p class="font-medium mb-3">3. Which sentence correctly uses a phrasal verb?</p>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q3" id="q3a" value="a" class="mr-2">
+                                                <label for="q3a">We look forward to hear from you soon.</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q3" id="q3b" value="b" class="mr-2">
+                                                <label for="q3b">We look forward to hearing from you soon.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" id="check-answers" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors">Check Answers</button>
+                                </form>
+                                
+                                <div id="quiz-results" class="mt-6 p-4 bg-green-50 border border-green-200 rounded-md hidden">
+                                    <h4 class="font-medium text-green-700 mb-2">Your Results:</h4>
+                                    <p id="score" class="mb-2"></p>
+                                    <div id="feedback" class="space-y-2"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="lang-it hidden">
+                                <p class="mb-4">Verifica la tua comprensione dei tempi presenti nei contesti professionali:</p>
+                                
+                                <form id="quiz-form-it" class="space-y-6">
+                                    <div class="p-4 bg-gray-50 rounded-md">
+                                        <p class="font-medium mb-3">1. Scegli la forma corretta per completare questa frase:</p>
+                                        <p>"La nostra azienda _______ un nuovo approccio al servizio clienti questo trimestre."</p>
+                                        <div class="space-y-2 mt-2">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q1" id="q1a-it" value="a" class="mr-2">
+                                                <label for="q1a-it">implements (implementa)</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q1" id="q1b-it" value="b" class="mr-2">
+                                                <label for="q1b-it">is implementing (sta implementando)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4 bg-gray-50 rounded-md">
+                                        <p class="font-medium mb-3">2. Identifica la frase scorretta:</p>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q2" id="q2a-it" value="a" class="mr-2">
+                                                <label for="q2a-it">I'm believing that we should change our strategy. (Sto credendo che dovremmo cambiare la nostra strategia.)</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q2" id="q2b-it" value="b" class="mr-2">
+                                                <label for="q2b-it">I believe that we should change our strategy. (Credo che dovremmo cambiare la nostra strategia.)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-4 bg-gray-50 rounded-md">
+                                        <p class="font-medium mb-3">3. Quale frase usa correttamente un phrasal verb?</p>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q3" id="q3a-it" value="a" class="mr-2">
+                                                <label for="q3a-it">We look forward to hear from you soon. (Non vediamo l'ora di sentire da te presto.)</label>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <input type="radio" name="q3" id="q3b-it" value="b" class="mr-2">
+                                                <label for="q3b-it">We look forward to hearing from you soon. (Non vediamo l'ora di sentirti presto.)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" id="check-answers-it" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors">Verifica Risposte</button>
+                                </form>
+                                
+                                <div id="quiz-results-it" class="mt-6 p-4 bg-green-50 border border-green-200 rounded-md hidden">
+                                    <h4 class="font-medium text-green-700 mb-2">I Tuoi Risultati:</h4>
+                                    <p id="score-it" class="mb-2"></p>
+                                    <div id="feedback-it" class="space-y-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-6">
+            <div class="container mx-auto px-4 md:px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold mb-2 lang-en">Present Tenses Mastery</h3>
+                        <h3 class="text-xl font-bold mb-2 lang-it hidden">Padronanza dei Tempi Presenti</h3>
+                        <p class="text-gray-300 text-sm lang-en">For C1 level English learners</p>
+                        <p class="text-gray-300 text-sm lang-it hidden">Per studenti di inglese di livello C1</p>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <p class="text-gray-300 text-sm lang-en">© 2023 ESL Advanced Learning</p>
+                        <p class="text-gray-300 text-sm lang-it hidden">© 2023 ESL Apprendimento Avanzato</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Tab Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active', 'text-indigo-600', 'border-indigo-600'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active', 'text-indigo-600', 'border-indigo-600');
+                    
+                    // Show corresponding content
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Language Toggle
+            const languageToggle = document.getElementById('language-toggle');
+            const enElements = document.querySelectorAll('.lang-en');
+            const itElements = document.querySelectorAll('.lang-it');
+            
+            languageToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    // Switch to Italian
+                    enElements.forEach(el => el.classList.add('hidden'));
+                    itElements.forEach(el => el.classList.remove('hidden'));
+                } else {
+                    // Switch to English
+                    enElements.forEach(el => el.classList.remove('hidden'));
+                    itElements.forEach(el => el.classList.add('hidden'));
+                }
+            });
+            
+            // Show Answers Button
+            const showAnswersBtn = document.getElementById('show-answers-btn');
+            const answers = document.getElementById('answers');
+            
+            if (showAnswersBtn) {
+                showAnswersBtn.addEventListener('click', function() {
+                    answers.classList.toggle('hidden');
+                    this.textContent = answers.classList.contains('hidden') ? 'Show Answers' : 'Hide Answers';
+                });
+            }
+            
+            const showAnswersBtnIt = document.getElementById('show-answers-btn-it');
+            const answersIt = document.getElementById('answers-it');
+            
+            if (showAnswersBtnIt) {
+                showAnswersBtnIt.addEventListener('click', function() {
+                    answersIt.classList.toggle('hidden');
+                    this.textContent = answersIt.classList.contains('hidden') ? 'Mostra Risposte' : 'Nascondi Risposte';
+                });
+            }
+            
+            // Quiz Functionality
+            const quizForm = document.getElementById('quiz-form');
+            const quizResults = document.getElementById('quiz-results');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            if (quizForm) {
+                quizForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const answers = {
+                        q1: 'b', // is implementing (temporary action this quarter)
+                        q2: 'a', // I'm believing (incorrect with stative verb)
+                        q3: 'b'  // correct form with gerund after phrasal verb
+                    };
+                    
+                    let score = 0;
+                    let feedback = [];
+                    
+                    // Check Q1
+                    const q1Answer = document.querySelector('input[name="q1"]:checked');
+                    if (q1Answer) {
+                        if (q1Answer.value === answers.q1) {
+                            score++;
+                            feedback.push('<p class="text-green-600">✓ Question 1: Correct! "Is implementing" is the right choice as it describes a temporary action happening this quarter.</p>');
+                        } else {
+                            feedback.push('<p class="text-red-600">✗ Question 1: Incorrect. "Is implementing" is the right choice as it describes a temporary action happening this quarter.</p>');
+                        }
+                    } else {
+                        feedback.push('<p class="text-red-600">✗ Question 1: No answer selected.</p>');
+                    }
+                    
+                    // Check Q2
+                    const q2Answer = document.querySelector('input[name="q2"]:checked');
+                    if (q2Answer) {
+                        if (q2Answer.value === answers.q2) {
+                            score++;
+                            feedback.push('<p class="text-green-600">✓ Question 2: Correct! "I\'m believing" is incorrect because "believe" is a stative verb typically used in simple form.</p>');
+                        } else {
+                            feedback.push('<p class="text-red-600">✗ Question 2: Incorrect. "I\'m believing" is incorrect because "believe" is a stative verb typically used in simple form.</p>');
+                        }
+                    } else {
+                        feedback.push('<p class="text-red-600">✗ Question 2: No answer selected.</p>');
+                    }
+                    
+                    // Check Q3
+                    const q3Answer = document.querySelector('input[name="q3"]:checked');
+                    if (q3Answer) {
+                        if (q3Answer.value === answers.q3) {
+                            score++;
+                            feedback.push('<p class="text-green-600">✓ Question 3: Correct! "Look forward to hearing" is correct as the phrasal verb "look forward to" should be followed by a gerund.</p>');
+                        } else {
+                            feedback.push('<p class="text-red-600">✗ Question 3: Incorrect. "Look forward to hearing" is correct as the phrasal verb "look forward to" should be followed by a gerund.</p>');
+                        }
+                    } else {
+                        feedback.push('<p class="text-red-600">✗ Question 3: No answer selected.</p>');
+                    }
+                    
+                    // Display results
+                    scoreElement.textContent = `You scored ${score} out of 3`;
+                    feedbackElement.innerHTML = feedback.join('');
+                    quizResults.classList.remove('hidden');
+                });
+            }
+            
+            // Italian Quiz Functionality
+            const quizFormIt = document.getElementById('quiz-form-it');
+            const quizResultsIt = document.getElementById('quiz-results-it');
+            const scoreElementIt = document.getElementById('score-it');
+            const feedbackElementIt = document.getElementById('feedback-it');
+            
+            if (quizFormIt) {
+                quizFormIt.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const answers = {
+                        q1: 'b', // is implementing (temporary action this quarter)
+                        q2: 'a', // I'm believing (incorrect with stative verb)
+                        q3: 'b'  // correct form with gerund after phrasal verb
+                    };
+                    
+                    let score = 0;
+                    let feedback = [];
+                    
+                    // Check Q1
+                    const q1Answer = document.querySelector('input[name="q1"]:checked');
+                    if (q1Answer) {
+                        if (q1Answer.value === answers.q1) {
+                            score++;
+                            feedback.push('<p class="text-green-600">✓ Domanda 1: Corretto! "Is implementing" è la scelta giusta poiché descrive un\'azione temporanea che avviene questo trimestre.</p>');
+                        } else {
+                            feedback.push('<p class="text-red-600">✗ Domanda 1: Sbagliato. "Is implementing" è la scelta giusta poiché descrive un\'azione temporanea che avviene questo trimestre.</p>');
+                        }
+                    } else {
+                        feedback.push('<p class="text-red-600">✗ Domanda 1: Nessuna risposta selezionata.</p>');
+                    }
+                    
+                    // Check Q2
+                    const q2Answer = document.querySelector('input[name="q2"]:checked');
+                    if (q2Answer) {
+                        if (q2Answer.value === answers.q2) {
+                            score++;
+                            feedback.push('<p class="text-green-600">✓ Domanda 2: Corretto! "I\'m believing" è sbagliato perché "believe" è un verbo stativo tipicamente usato nella forma semplice.</p>');
+                        } else {
+                            feedback.push('<p class="text-red-600">✗ Domanda 2: Sbagliato. "I\'m believing" è sbagliato perché "believe" è un verbo stativo tipicamente usato nella forma semplice.</p>');
+                        }
+                    } else {
+                        feedback.push('<p class="text-red-600">✗ Domanda 2: Nessuna risposta selezionata.</p>');
+                    }
+                    
+                    // Check Q3
+                    const q3Answer = document.querySelector('input[name="q3"]:checked');
+                    if (q3Answer) {
+                        if (q3Answer.value === answers.q3) {
+                            score++;
+                            feedback.push('<p class="text-green-600">✓ Domanda 3: Corretto! "Look forward to hearing" è corretto poiché il phrasal verb "look forward to" deve essere seguito da un gerundio.</p>');
+                        } else {
+                            feedback.push('<p class="text-red-600">✗ Domanda 3: Sbagliato. "Look forward to hearing" è corretto poiché il phrasal verb "look forward to" deve essere seguito da un gerundio.</p>');
+                        }
+                    } else {
+                        feedback.push('<p class="text-red-600">✗ Domanda 3: Nessuna risposta selezionata.</p>');
+                    }
+                    
+                    // Display results
+                    scoreElementIt.textContent = `Hai totalizzato ${score} su 3`;
+                    feedbackElementIt.innerHTML = feedback.join('');
+                    quizResultsIt.classList.remove('hidden');
+                });
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'954dc64ec00ab7c1',t:'MTc1MDc4NDM1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
