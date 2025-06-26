@@ -1,0 +1,967 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Speech for Advanced ESL Learners</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .highlight-word {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dashed #6366f1;
+            color: #4f46e5;
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 10;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            width: max-content;
+            max-width: 300px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            opacity: 0;
+            transition: opacity 0.3s;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .highlight-word:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #d1d5db transparent transparent transparent;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-1{margin-left:0.25rem;margin-right:0.25rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-6{height:1.5rem}.h-2\.5{height:0.625rem}.h-24{height:6rem}.min-h-screen{min-height:100vh}.w-6{width:1.5rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.flex-shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.list-disc{list-style-type:disc}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-l-4{border-left-width:4px}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.border-indigo-500{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-indigo-100{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-indigo-50{--tw-gradient-from:#eef2ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(238 242 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-purple-100{--tw-gradient-to:#f3e8ff var(--tw-gradient-to-position)}.to-purple-50{--tw-gradient-to:#faf5ff var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-6{padding-left:1.5rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.italic{font-style:italic}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-50:hover{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Header -->
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Connected Speech Master</h1>
+            <p class="text-xl text-indigo-600">
+                <span class="highlight-word">Elevate<span class="tooltip">To raise something to a higher level or more important position</span></span> your English fluency to native-like 
+                <span class="highlight-word">proficiency<span class="tooltip">A high degree of skill or expertise</span></span>
+            </p>
+        </header>
+
+        <!-- Main Navigation -->
+        <nav class="bg-white rounded-xl shadow-lg p-4 mb-8">
+            <ul class="flex flex-wrap justify-center gap-4 text-indigo-700">
+                <li><button class="nav-btn px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors active bg-indigo-100" data-section="introduction">Introduction</button></li>
+                <li><button class="nav-btn px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors" data-section="types">Types &amp; Examples</button></li>
+                <li><button class="nav-btn px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors" data-section="practice">Practice Exercises</button></li>
+                <li><button class="nav-btn px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors" data-section="conversation">Conversation Prompts</button></li>
+                <li><button class="nav-btn px-4 py-2 rounded-lg font-medium hover:bg-indigo-100 transition-colors" data-section="vocabulary">Advanced Vocabulary</button></li>
+            </ul>
+        </nav>
+
+        <!-- Content Sections -->
+        <div class="content-sections">
+            <!-- Introduction Section -->
+            <section id="introduction" class="content-section bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-4">What is Connected Speech?</h2>
+                <div class="mb-6">
+                    <p class="mb-4">Connected speech refers to the natural way words flow together in spoken language, often resulting in sounds that differ from when words are pronounced in isolation. Native speakers unconsciously 
+                    <span class="highlight-word">modify<span class="tooltip">To change something slightly, especially to improve it</span></span> sounds between words to create smoother, more efficient speech patterns.</p>
+                    
+                    <p class="mb-4">For C1 learners like you, <span class="highlight-word">mastering<span class="tooltip">Acquiring complete knowledge or skill in something</span></span> connected speech is crucial for:</p>
+                    
+                    <ul class="list-disc pl-6 mb-4 space-y-2">
+                        <li>Achieving native-like fluency and <span class="highlight-word">prosody<span class="tooltip">The patterns of stress and intonation in a language</span></span></li>
+                        <li><span class="highlight-word">Delving into<span class="tooltip">[Phrasal Verb] To examine, study, or investigate something thoroughly</span></span> the nuances of authentic listening comprehension</li>
+                        <li><span class="highlight-word">Enhancing<span class="tooltip">Increasing or improving the quality, value, or extent of something</span></span> the natural rhythm and cadence of your speech</li>
+                        <li><span class="highlight-word">Cutting down on<span class="tooltip">[Phrasal Verb] To reduce or decrease something</span></span> the cognitive load when speaking at length</li>
+                    </ul>
+                    
+                    <p>This application will <span class="highlight-word">walk you through<span class="tooltip">[Phrasal Verb] To guide someone through a process step by step</span></span> the various phenomena of connected speech with sophisticated examples and targeted practice opportunities.</p>
+                </div>
+                
+                <div class="bg-indigo-50 rounded-lg p-4 border-l-4 border-indigo-500">
+                    <h3 class="font-semibold text-indigo-800 mb-2">Did you know?</h3>
+                    <p>Connected speech is sometimes called "<span class="highlight-word">sandhi<span class="tooltip">A Sanskrit term meaning "joining" used in linguistics</span></span>" in linguistics, from the Sanskrit word meaning "joining." The term <span class="highlight-word">encompasses<span class="tooltip">To include or cover a broad range of items</span></span> all the phonological processes that <span class="highlight-word">come about<span class="tooltip">[Phrasal Verb] To happen or occur, especially as a result of something</span></span> at word boundaries.</p>
+                </div>
+            </section>
+
+            <!-- Types Section -->
+            <section id="types" class="content-section bg-white rounded-xl shadow-lg p-6 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-4">Types of Connected Speech</h2>
+                
+                <div class="space-y-6">
+                    <!-- Assimilation -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">1. Assimilation</h3>
+                        <p class="mb-3">When one sound <span class="highlight-word">influences<span class="tooltip">To have an effect on someone or something</span></span> and changes a neighboring sound. This process <span class="highlight-word">brings about<span class="tooltip">[Phrasal Verb] To cause something to happen</span></span> smoother transitions between words.</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mt-4">
+                            <div class="bg-white rounded-lg p-4 shadow-sm">
+                                <h4 class="font-medium text-indigo-600 mb-2">Regressive Assimilation</h4>
+                                <p class="mb-2">When a sound changes because of the sound that follows it. This <span class="highlight-word">phenomenon<span class="tooltip">A fact or situation that is observed to exist or happen</span></span> is <span class="highlight-word">ubiquitous<span class="tooltip">Present, appearing, or found everywhere</span></span> in natural speech.</p>
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <p class="font-medium">Example:</p>
+                                    <p>"<span class="text-indigo-600">in case</span>" → "<span class="text-indigo-600">iŋ case</span>"</p>
+                                    <p class="text-sm text-gray-600 mt-1">The 'n' sound becomes 'ŋ' (ng) before the 'k' sound.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-lg p-4 shadow-sm">
+                                <h4 class="font-medium text-indigo-600 mb-2">Progressive Assimilation</h4>
+                                <p class="mb-2">When a sound changes because of the sound that precedes it. Speakers often <span class="highlight-word">carry out<span class="tooltip">[Phrasal Verb] To perform or conduct a particular task or action</span></span> this process unconsciously.</p>
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <p class="font-medium">Example:</p>
+                                    <p>"<span class="text-indigo-600">used to</span>" → "<span class="text-indigo-600">useto</span>"</p>
+                                    <p class="text-sm text-gray-600 mt-1">The 'd' sound is influenced by the voiceless 't' that follows.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Elision -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">2. Elision</h3>
+                        <p class="mb-3">The <span class="highlight-word">omission<span class="tooltip">The action of excluding or leaving out someone or something</span></span> of sounds in connected speech for efficiency. Native speakers <span class="highlight-word">dispense with<span class="tooltip">[Phrasal Verb] To get rid of something as unnecessary</span></span> certain sounds to maintain speech rhythm.</p>
+                        
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <h4 class="font-medium text-indigo-600 mb-2">Common Patterns</h4>
+                            <ul class="space-y-3">
+                                <li>
+                                    <p class="font-medium">Consonant Cluster Reduction:</p>
+                                    <p>"<span class="text-indigo-600">next day</span>" → "<span class="text-indigo-600">nex day</span>"</p>
+                                    <p class="text-sm text-gray-600">The 't' is often <span class="highlight-word">dropped off<span class="tooltip">[Phrasal Verb] To remove or eliminate something</span></span> between 'x' and 'd'.</p>
+                                </li>
+                                <li>
+                                    <p class="font-medium">Weak Form Elision:</p>
+                                    <p>"<span class="text-indigo-600">comfortable</span>" → "<span class="text-indigo-600">comf-ta-ble</span>"</p>
+                                    <p class="text-sm text-gray-600">The 'or' syllable is often <span class="highlight-word">truncated<span class="tooltip">Cut short or reduced in length</span></span> in rapid speech.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Linking -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">3. Linking</h3>
+                        <p class="mb-3">Connecting words smoothly without pauses between them. This <span class="highlight-word">facilitates<span class="tooltip">To make an action or process easier</span></span> the natural flow of speech and helps speakers <span class="highlight-word">get across<span class="tooltip">[Phrasal Verb] To communicate or express an idea successfully</span></span> their message more effectively.</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mt-4">
+                            <div class="bg-white rounded-lg p-4 shadow-sm">
+                                <h4 class="font-medium text-indigo-600 mb-2">Consonant to Vowel Linking</h4>
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <p>"<span class="text-indigo-600">keep_it</span>" → "<span class="text-indigo-600">kee-pit</span>"</p>
+                                    <p class="text-sm text-gray-600 mt-1">The final consonant <span class="highlight-word">shifts over<span class="tooltip">[Phrasal Verb] To move from one position to another</span></span> to start the next syllable.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-lg p-4 shadow-sm">
+                                <h4 class="font-medium text-indigo-600 mb-2">Intrusive 'r'</h4>
+                                <div class="bg-gray-50 p-3 rounded">
+                                    <p>"<span class="text-indigo-600">The idea_of it</span>" → "<span class="text-indigo-600">The idea-r-of it</span>"</p>
+                                    <p class="text-sm text-gray-600 mt-1">An 'r' sound is <span class="highlight-word">inserted<span class="tooltip">Put or introduced into something</span></span> between vowels, a feature particularly <span class="highlight-word">prevalent<span class="tooltip">Widespread in a particular area or at a particular time</span></span> in British English.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weak Forms -->
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">4. Weak Forms</h3>
+                        <p class="mb-3">Reduction of function words in connected speech. Speakers <span class="highlight-word">tone down<span class="tooltip">[Phrasal Verb] To make something less forceful, intense, or extreme</span></span> the pronunciation of non-essential words to <span class="highlight-word">accentuate<span class="tooltip">To make more noticeable or prominent</span></span> the content words.</p>
+                        
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <h4 class="font-medium text-indigo-600 mb-2">Common Weak Forms</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <p>"<span class="text-indigo-600">and</span>" → "<span class="text-indigo-600">ənd/ən</span>"</p>
+                                    <p>"<span class="text-indigo-600">can</span>" → "<span class="text-indigo-600">kən</span>"</p>
+                                    <p>"<span class="text-indigo-600">have</span>" → "<span class="text-indigo-600">həv/əv</span>"</p>
+                                </div>
+                                <div>
+                                    <p>"<span class="text-indigo-600">for</span>" → "<span class="text-indigo-600">fə</span>"</p>
+                                    <p>"<span class="text-indigo-600">was</span>" → "<span class="text-indigo-600">wəz</span>"</p>
+                                    <p>"<span class="text-indigo-600">would</span>" → "<span class="text-indigo-600">wəd</span>"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practice Section -->
+            <section id="practice" class="content-section bg-white rounded-xl shadow-lg p-6 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-6">Practice Exercises</h2>
+                
+                <div class="space-y-8">
+                    <!-- Exercise 1 -->
+                    <div class="bg-indigo-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">Exercise 1: Identify the Connected Speech</h3>
+                        <p class="mb-4"><span class="highlight-word">Scrutinize<span class="tooltip">To examine or inspect closely and thoroughly</span></span> the following sentences and identify the type of connected speech <span class="highlight-word">phenomenon<span class="tooltip">A fact or situation that is observed to exist or happen</span></span> in each underlined part.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">1. "I <span class="underline text-indigo-600">need to</span> <span class="highlight-word">figure out<span class="tooltip">[Phrasal Verb] To find the solution to a problem by thinking</span></span> how to <span class="highlight-word">ameliorate<span class="tooltip">To make something bad or unsatisfactory better</span></span> this situation."</p>
+                                <div class="flex items-center gap-3 mt-3">
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Elision</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="true">Assimilation</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Linking</button>
+                                </div>
+                                <p class="feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">2. "The <span class="underline text-indigo-600">last time</span> I <span class="highlight-word">came across<span class="tooltip">[Phrasal Verb] To find something or meet someone by chance</span></span> such a <span class="highlight-word">paradigm<span class="tooltip">A typical example or pattern of something; a model</span></span> shift was at the conference."</p>
+                                <div class="flex items-center gap-3 mt-3">
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="true">Elision</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Weak Form</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Intrusion</button>
+                                </div>
+                                <p class="feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">3. "She <span class="underline text-indigo-600">could have</span> <span class="highlight-word">looked into<span class="tooltip">[Phrasal Verb] To investigate or examine something</span></span> ways to <span class="highlight-word">mitigate<span class="tooltip">To make something less severe, serious, or painful</span></span> the risks."</p>
+                                <div class="flex items-center gap-3 mt-3">
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Linking</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Assimilation</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="true">Weak Form</button>
+                                </div>
+                                <p class="feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">4. "We need to <span class="highlight-word">look up to<span class="tooltip">[Phrasal Verb] To admire or respect someone</span></span> leaders who <span class="underline text-indigo-600">stand for</span> <span class="highlight-word">ethical<span class="tooltip">Relating to moral principles or the branch of knowledge dealing with these</span></span> governance."</p>
+                                <div class="flex items-center gap-3 mt-3">
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Elision</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="true">Linking</button>
+                                    <button class="answer-btn px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm" data-correct="false">Assimilation</button>
+                                </div>
+                                <p class="feedback hidden mt-2 text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 2 -->
+                    <div class="bg-indigo-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">Exercise 2: Transcribe the Connected Speech</h3>
+                        <p class="mb-4">Write how these phrases would sound in connected speech. <span class="highlight-word">Take into account<span class="tooltip">[Phrasal Verb] To consider or include particular facts when making a decision</span></span> all the connected speech phenomena we've covered. Click "Check" to see the answer.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">1. "Did you <span class="highlight-word">eat out<span class="tooltip">[Phrasal Verb] To have a meal in a restaurant</span></span> yesterday?"</p>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
+                                    <input type="text" class="transcribe-input border rounded px-3 py-2 flex-grow" placeholder="Type your answer...">
+                                    <button class="check-btn px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" data-answer="Didja eat out yesterday?">Check</button>
+                                </div>
+                                <p class="transcribe-feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">2. "I should have <span class="highlight-word">asked for<span class="tooltip">[Phrasal Verb] To request something</span></span> more <span class="highlight-word">comprehensive<span class="tooltip">Including or dealing with all or nearly all aspects of something</span></span> information."</p>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
+                                    <input type="text" class="transcribe-input border rounded px-3 py-2 flex-grow" placeholder="Type your answer...">
+                                    <button class="check-btn px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" data-answer="I shoulda asked for more comprehensive information.">Check</button>
+                                </div>
+                                <p class="transcribe-feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">3. "We need to <span class="highlight-word">find out<span class="tooltip">[Phrasal Verb] To discover a fact or piece of information</span></span> how to <span class="highlight-word">exacerbate<span class="tooltip">To make a problem, bad situation, or negative feeling worse</span></span> the situation."</p>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
+                                    <input type="text" class="transcribe-input border rounded px-3 py-2 flex-grow" placeholder="Type your answer...">
+                                    <button class="check-btn px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" data-answer="We needta find out how tex-acerbate the situation.">Check</button>
+                                </div>
+                                <p class="transcribe-feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-2">4. "The <span class="highlight-word">juxtaposition<span class="tooltip">The act of placing things side by side, especially for comparison or contrast</span></span> of ideas can <span class="highlight-word">bring about<span class="tooltip">[Phrasal Verb] To cause something to happen</span></span> innovation."</p>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
+                                    <input type="text" class="transcribe-input border rounded px-3 py-2 flex-grow" placeholder="Type your answer...">
+                                    <button class="check-btn px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" data-answer="The jux-taposi-shun of ideas can bring abou-tinnovation.">Check</button>
+                                </div>
+                                <p class="transcribe-feedback hidden mt-2 text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exercise 3 -->
+                    <div class="bg-indigo-50 rounded-lg p-5">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-3">Exercise 3: Complete the Sentences</h3>
+                        <p class="mb-4">Complete these sentences using the appropriate phrasal verb and advanced vocabulary. Then identify the connected speech patterns that would occur.</p>
+                        
+                        <div class="space-y-5">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-3">1. The researchers needed to __________ (investigate) the __________ (widespread) effects of climate change.</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="phrasal" data-word="look into">look into</button>
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="phrasal" data-word="figure out">figure out</button>
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="vocab" data-word="ubiquitous">ubiquitous</button>
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="vocab" data-word="pervasive">pervasive</button>
+                                </div>
+                                <div class="sentence-result mb-3 text-indigo-700 font-medium"></div>
+                                <div class="mt-3">
+                                    <p class="font-medium text-sm">Connected speech patterns:</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="linking">Linking</button>
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="assimilation">Assimilation</button>
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="elision">Elision</button>
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="weak">Weak Forms</button>
+                                    </div>
+                                </div>
+                                <p class="pattern-feedback hidden mt-2 text-sm"></p>
+                            </div>
+                            
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="mb-3">2. The government should __________ (reduce) regulations that __________ (make worse) economic inequality.</p>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="phrasal" data-word="cut down on">cut down on</button>
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="phrasal" data-word="do away with">do away with</button>
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="vocab" data-word="exacerbate">exacerbate</button>
+                                    <button class="vocab-option px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 text-sm" data-type="vocab" data-word="ameliorate">ameliorate</button>
+                                </div>
+                                <div class="sentence-result mb-3 text-indigo-700 font-medium"></div>
+                                <div class="mt-3">
+                                    <p class="font-medium text-sm">Connected speech patterns:</p>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="linking">Linking</button>
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="assimilation">Assimilation</button>
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="elision">Elision</button>
+                                        <button class="pattern-btn px-2 py-1 border border-indigo-200 rounded-full text-xs hover:bg-indigo-50" data-pattern="weak">Weak Forms</button>
+                                    </div>
+                                </div>
+                                <p class="pattern-feedback hidden mt-2 text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conversation Section -->
+            <section id="conversation" class="content-section bg-white rounded-xl shadow-lg p-6 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-6">Conversation Prompts</h2>
+                
+                <div class="space-y-6">
+                    <p class="text-gray-700"><span class="highlight-word">Make use of<span class="tooltip">[Phrasal Verb] To utilize something for a purpose</span></span> these conversation prompts to practice connected speech with a partner or for self-practice. Focus on <span class="highlight-word">maintaining<span class="tooltip">Causing or enabling a condition to continue</span></span> natural connected speech throughout your responses.</p>
+                    
+                    <!-- Prompt Cards -->
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <!-- Prompt 1 -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5 shadow-sm">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-3">Environmental Policies</h3>
+                            <p class="mb-4">Discuss the <span class="highlight-word">efficacy<span class="tooltip">The ability to produce a desired or intended result</span></span> of current environmental policies in <span class="highlight-word">addressing<span class="tooltip">To deal with or discuss a topic, issue, or problem</span></span> climate change. <span class="highlight-word">Take into account<span class="tooltip">[Phrasal Verb] To consider or include particular facts when making a decision</span></span> both international agreements and local initiatives.</p>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-indigo-600">Key phrases to practice:</p>
+                                <ul class="text-sm space-y-1">
+                                    <li>• "international agreements" (linking)</li>
+                                    <li>• "should have been implemented" (weak forms)</li>
+                                    <li>• "government accountability" (assimilation)</li>
+                                    <li>• "<span class="highlight-word">look into<span class="tooltip">[Phrasal Verb] To investigate or examine something</span></span> sustainable options" (linking)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Prompt 2 -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5 shadow-sm">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-3">Technological Innovation</h3>
+                            <p class="mb-4"><span class="highlight-word">Evaluate<span class="tooltip">To form an idea of the amount, value, or quality of something</span></span> how technological advancements have <span class="highlight-word">transformed<span class="tooltip">Changed in form, appearance, or structure</span></span> interpersonal communication in the last decade. Consider both benefits and drawbacks.</p>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-indigo-600">Key phrases to practice:</p>
+                                <ul class="text-sm space-y-1">
+                                    <li>• "next generation" (elision)</li>
+                                    <li>• "could have <span class="highlight-word">anticipated<span class="tooltip">Expected or predicted something</span></span>" (weak forms)</li>
+                                    <li>• "social interaction" (linking)</li>
+                                    <li>• "<span class="highlight-word">bring about<span class="tooltip">[Phrasal Verb] To cause something to happen</span></span> significant changes" (assimilation)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Prompt 3 -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5 shadow-sm">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-3">Cultural Heritage</h3>
+                            <p class="mb-4">Discuss the importance of <span class="highlight-word">preserving<span class="tooltip">Maintaining something in its original or existing state</span></span> cultural heritage in an increasingly <span class="highlight-word">globalized<span class="tooltip">Made global or worldwide in scope or application</span></span> world. Consider tangible and intangible cultural elements.</p>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-indigo-600">Key phrases to practice:</p>
+                                <ul class="text-sm space-y-1">
+                                    <li>• "must have been" (weak forms)</li>
+                                    <li>• "cultural identity" (linking)</li>
+                                    <li>• "indigenous knowledge" (assimilation)</li>
+                                    <li>• "<span class="highlight-word">pass down<span class="tooltip">[Phrasal Verb] To transmit or transfer something to someone of a younger generation</span></span> traditions" (elision)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Prompt 4 -->
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-5 shadow-sm">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-3">Economic Inequality</h3>
+                            <p class="mb-4"><span class="highlight-word">Analyze<span class="tooltip">To examine methodically and in detail</span></span> the factors <span class="highlight-word">contributing<span class="tooltip">Giving something as part of a larger whole</span></span> to economic inequality and propose potential solutions. <span class="highlight-word">Look into<span class="tooltip">[Phrasal Verb] To investigate or examine something</span></span> both systemic and individual perspectives.</p>
+                            <div class="space-y-2">
+                                <p class="text-sm font-medium text-indigo-600">Key phrases to practice:</p>
+                                <ul class="text-sm space-y-1">
+                                    <li>• "wealth distribution" (assimilation)</li>
+                                    <li>• "ought to have considered" (weak forms)</li>
+                                    <li>• "next decade" (elision)</li>
+                                    <li>• "<span class="highlight-word">come up with<span class="tooltip">[Phrasal Verb] To produce or suggest an idea or plan</span></span> solutions" (linking)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversation Structure -->
+                    <div class="mt-8 bg-indigo-50 rounded-lg p-5">
+                        <h3 class="text-lg font-semibold text-indigo-700 mb-3">Suggested Conversation Structure</h3>
+                        <ol class="space-y-3">
+                            <li class="flex gap-3">
+                                <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">1</span>
+                                <div>
+                                    <p class="font-medium">Introduction (2-3 minutes)</p>
+                                    <p class="text-sm text-gray-600">Present your initial thoughts on the topic, <span class="highlight-word">incorporating<span class="tooltip">Including something as part of a whole</span></span> at least 3 instances of connected speech.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">2</span>
+                                <div>
+                                    <p class="font-medium">Discussion (5-7 minutes)</p>
+                                    <p class="text-sm text-gray-600"><span class="highlight-word">Engage in<span class="tooltip">[Phrasal Verb] To participate or become involved in</span></span> a back-and-forth exchange, focusing on maintaining natural rhythm and connected speech patterns.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">3</span>
+                                <div>
+                                    <p class="font-medium">Conclusion (2-3 minutes)</p>
+                                    <p class="text-sm text-gray-600"><span class="highlight-word">Sum up<span class="tooltip">[Phrasal Verb] To give a brief statement of the main points</span></span> key points discussed, consciously <span class="highlight-word">incorporating<span class="tooltip">Including something as part of a whole</span></span> different types of connected speech.</p>
+                                </div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0">4</span>
+                                <div>
+                                    <p class="font-medium">Reflection (2 minutes)</p>
+                                    <p class="text-sm text-gray-600">Discuss which connected speech patterns felt natural and which were <span class="highlight-word">challenging<span class="tooltip">Testing one's abilities; demanding</span></span>.</p>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vocabulary Section -->
+            <section id="vocabulary" class="content-section bg-white rounded-xl shadow-lg p-6 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-6">Advanced Vocabulary</h2>
+                
+                <div class="space-y-6">
+                    <p class="text-gray-700"><span class="highlight-word">Expand on<span class="tooltip">[Phrasal Verb] To develop or present something in greater detail</span></span> your vocabulary with these advanced terms. Practice using them in sentences with proper connected speech.</p>
+                    
+                    <!-- Vocabulary Categories -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Academic Vocabulary -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-indigo-700 mb-4">Academic Discourse</h3>
+                            <div class="space-y-4">
+                                <div class="bg-indigo-50 rounded-lg p-4">
+                                    <p class="font-medium text-indigo-800">Paradigm</p>
+                                    <p class="text-sm text-gray-700 mb-1">A typical example or pattern of something; a model.</p>
+                                    <p class="text-sm italic">"The discovery led to a paradigm shift in scientific thinking."</p>
+                                    <div class="mt-2 bg-white p-2 rounded text-xs">
+                                        <p class="font-medium">Connected Speech:</p>
+                                        <p>"paradigm shift" → "para-dime shift" (linking)</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs font-medium">Related Phrasal Verbs:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <span class="highlight-word text-xs">break away from<span class="tooltip">[Phrasal Verb] To separate from something, especially a traditional method</span></span>
+                                            <span class="text-gray-500 text-xs mx-1">•</span>
+                                            <span class="highlight-word text-xs">move beyond<span class="tooltip">[Phrasal Verb] To progress past a certain point or level</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-indigo-50 rounded-lg p-4">
+                                    <p class="font-medium text-indigo-800">Ubiquitous</p>
+                                    <p class="text-sm text-gray-700 mb-1">Present, appearing, or found everywhere.</p>
+                                    <p class="text-sm italic">"Mobile phones have become ubiquitous in modern society."</p>
+                                    <div class="mt-2 bg-white p-2 rounded text-xs">
+                                        <p class="font-medium">Connected Speech:</p>
+                                        <p>"become ubiquitous" → "becom-yubiquitous" (linking)</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs font-medium">Related Phrasal Verbs:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <span class="highlight-word text-xs">spread out<span class="tooltip">[Phrasal Verb] To distribute over a large area</span></span>
+                                            <span class="text-gray-500 text-xs mx-1">•</span>
+                                            <span class="highlight-word text-xs">crop up<span class="tooltip">[Phrasal Verb] To appear or occur suddenly and unexpectedly</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-indigo-50 rounded-lg p-4">
+                                    <p class="font-medium text-indigo-800">Juxtaposition</p>
+                                    <p class="text-sm text-gray-700 mb-1">The act of placing things side by side, especially for comparison or contrast.</p>
+                                    <p class="text-sm italic">"The juxtaposition of these contrasting ideas creates a powerful effect."</p>
+                                    <div class="mt-2 bg-white p-2 rounded text-xs">
+                                        <p class="font-medium">Connected Speech:</p>
+                                        <p>"The juxtaposition of" → "The jux-taposi-shun-nof" (assimilation)</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs font-medium">Related Phrasal Verbs:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <span class="highlight-word text-xs">set against<span class="tooltip">[Phrasal Verb] To place in opposition or contrast to</span></span>
+                                            <span class="text-gray-500 text-xs mx-1">•</span>
+                                            <span class="highlight-word text-xs">put together<span class="tooltip">[Phrasal Verb] To assemble or combine different elements</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Business Vocabulary -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-indigo-700 mb-4">Business &amp; Economics</h3>
+                            <div class="space-y-4">
+                                <div class="bg-indigo-50 rounded-lg p-4">
+                                    <p class="font-medium text-indigo-800">Ameliorate</p>
+                                    <p class="text-sm text-gray-700 mb-1">To make something bad or unsatisfactory better.</p>
+                                    <p class="text-sm italic">"The new policies should ameliorate the economic situation."</p>
+                                    <div class="mt-2 bg-white p-2 rounded text-xs">
+                                        <p class="font-medium">Connected Speech:</p>
+                                        <p>"should ameliorate" → "shu-damelliorate" (assimilation + weak form)</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs font-medium">Related Phrasal Verbs:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <span class="highlight-word text-xs">iron out<span class="tooltip">[Phrasal Verb] To resolve or eliminate problems or difficulties</span></span>
+                                            <span class="text-gray-500 text-xs mx-1">•</span>
+                                            <span class="highlight-word text-xs">sort out<span class="tooltip">[Phrasal Verb] To resolve a problem or difficulty</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-indigo-50 rounded-lg p-4">
+                                    <p class="font-medium text-indigo-800">Exacerbate</p>
+                                    <p class="text-sm text-gray-700 mb-1">To make a problem, bad situation, or negative feeling worse.</p>
+                                    <p class="text-sm italic">"The trade war will exacerbate existing economic tensions."</p>
+                                    <div class="mt-2 bg-white p-2 rounded text-xs">
+                                        <p class="font-medium">Connected Speech:</p>
+                                        <p>"will exacerbate" → "will-lexacerbate" (linking)</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs font-medium">Related Phrasal Verbs:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <span class="highlight-word text-xs">add to<span class="tooltip">[Phrasal Verb] To increase or intensify something</span></span>
+                                            <span class="text-gray-500 text-xs mx-1">•</span>
+                                            <span class="highlight-word text-xs">pile on<span class="tooltip">[Phrasal Verb] To add more pressure or problems to an already difficult situation</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-indigo-50 rounded-lg p-4">
+                                    <p class="font-medium text-indigo-800">Mitigate</p>
+                                    <p class="text-sm text-gray-700 mb-1">To make something less severe, serious, or painful.</p>
+                                    <p class="text-sm italic">"The company took steps to mitigate the environmental impact."</p>
+                                    <div class="mt-2 bg-white p-2 rounded text-xs">
+                                        <p class="font-medium">Connected Speech:</p>
+                                        <p>"steps to mitigate" → "steps-ta mitigate" (weak form)</p>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p class="text-xs font-medium">Related Phrasal Verbs:</p>
+                                        <div class="flex flex-wrap gap-1 mt-1">
+                                            <span class="highlight-word text-xs">cut down on<span class="tooltip">[Phrasal Verb] To reduce the amount or number of something</span></span>
+                                            <span class="text-gray-500 text-xs mx-1">•</span>
+                                            <span class="highlight-word text-xs">tone down<span class="tooltip">[Phrasal Verb] To make something less forceful, intense, or extreme</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Phrasal Verbs Section -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold text-indigo-700 mb-4">Essential Phrasal Verbs for Advanced Speakers</h3>
+                        
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-indigo-50 rounded-lg p-4">
+                                <p class="font-medium text-indigo-800">Look into</p>
+                                <p class="text-sm text-gray-700 mb-1">To investigate or examine something.</p>
+                                <p class="text-sm italic">"We should look into alternative energy sources."</p>
+                                <div class="mt-2 bg-white p-2 rounded text-xs">
+                                    <p class="font-medium">Connected Speech:</p>
+                                    <p>"look into" → "loo-kinto" (linking)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-indigo-50 rounded-lg p-4">
+                                <p class="font-medium text-indigo-800">Bring about</p>
+                                <p class="text-sm text-gray-700 mb-1">To cause something to happen.</p>
+                                <p class="text-sm italic">"The new legislation will bring about significant changes."</p>
+                                <div class="mt-2 bg-white p-2 rounded text-xs">
+                                    <p class="font-medium">Connected Speech:</p>
+                                    <p>"bring about" → "bring-gabout" (linking + assimilation)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-indigo-50 rounded-lg p-4">
+                                <p class="font-medium text-indigo-800">Cut down on</p>
+                                <p class="text-sm text-gray-700 mb-1">To reduce the amount or number of something.</p>
+                                <p class="text-sm italic">"We need to cut down on our expenses."</p>
+                                <div class="mt-2 bg-white p-2 rounded text-xs">
+                                    <p class="font-medium">Connected Speech:</p>
+                                    <p>"cut down on" → "cu-down-non" (elision + linking)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-indigo-50 rounded-lg p-4">
+                                <p class="font-medium text-indigo-800">Figure out</p>
+                                <p class="text-sm text-gray-700 mb-1">To find the solution to a problem by thinking.</p>
+                                <p class="text-sm italic">"I can't figure out how to solve this equation."</p>
+                                <div class="mt-2 bg-white p-2 rounded text-xs">
+                                    <p class="font-medium">Connected Speech:</p>
+                                    <p>"figure out" → "figger-rout" (linking)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-indigo-50 rounded-lg p-4">
+                                <p class="font-medium text-indigo-800">Come up with</p>
+                                <p class="text-sm text-gray-700 mb-1">To produce or suggest an idea or plan.</p>
+                                <p class="text-sm italic">"We need to come up with a solution quickly."</p>
+                                <div class="mt-2 bg-white p-2 rounded text-xs">
+                                    <p class="font-medium">Connected Speech:</p>
+                                    <p>"come up with" → "co-mup-with" (linking)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-indigo-50 rounded-lg p-4">
+                                <p class="font-medium text-indigo-800">Take into account</p>
+                                <p class="text-sm text-gray-700 mb-1">To consider or include particular facts when making a decision.</p>
+                                <p class="text-sm italic">"You must take into account all the variables."</p>
+                                <div class="mt-2 bg-white p-2 rounded text-xs">
+                                    <p class="font-medium">Connected Speech:</p>
+                                    <p>"take into account" → "tay-kin-taccoun" (linking + elision)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vocabulary Practice -->
+                    <div class="mt-8 bg-indigo-100 rounded-lg p-5">
+                        <h3 class="text-lg font-semibold text-indigo-700 mb-3">Vocabulary Practice</h3>
+                        <p class="mb-4">Create sentences using these advanced vocabulary words while focusing on connected speech. Try to <span class="highlight-word">incorporate<span class="tooltip">To include something as part of a whole</span></span> at least two vocabulary words in each sentence.</p>
+                        
+                        <div class="bg-white rounded-lg p-4 shadow-sm">
+                            <h4 class="font-medium text-indigo-600 mb-3">Sentence Builder</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Select vocabulary words:</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button class="vocab-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Paradigm</button>
+                                        <button class="vocab-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Ubiquitous</button>
+                                        <button class="vocab-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Juxtaposition</button>
+                                        <button class="vocab-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Ameliorate</button>
+                                        <button class="vocab-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Exacerbate</button>
+                                        <button class="vocab-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Mitigate</button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Select phrasal verbs:</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button class="phrasal-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Look into</button>
+                                        <button class="phrasal-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Bring about</button>
+                                        <button class="phrasal-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Cut down on</button>
+                                        <button class="phrasal-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Figure out</button>
+                                        <button class="phrasal-select px-2 py-1 border border-indigo-200 rounded-full text-sm hover:bg-indigo-50">Come up with</button>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Write your sentence:</label>
+                                    <textarea class="w-full border rounded-lg p-3 h-24" placeholder="Write a sentence using the selected vocabulary words and phrasal verbs..."></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Identify connected speech in your sentence:</label>
+                                    <textarea class="w-full border rounded-lg p-3 h-24" placeholder="Describe how connected speech would affect the pronunciation of your sentence..."></textarea>
+                                </div>
+                                
+                                <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Save to My Collection</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Progress Tracker -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-indigo-800 mb-4">Your Progress</h2>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-indigo-700">Introduction</span>
+                        <span class="text-sm font-medium text-indigo-700">100%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-indigo-700">Types &amp; Examples</span>
+                        <span class="text-sm font-medium text-indigo-700">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-indigo-700">Practice Exercises</span>
+                        <span class="text-sm font-medium text-indigo-700">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-indigo-700">Overall Progress</span>
+                        <span class="text-sm font-medium text-indigo-700">20%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Update active button
+                    navButtons.forEach(btn => btn.classList.remove('active', 'bg-indigo-100'));
+                    this.classList.add('active', 'bg-indigo-100');
+                    
+                    // Show selected section, hide others
+                    contentSections.forEach(section => {
+                        if (section.id === sectionId) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Update progress
+                    updateProgress(sectionId);
+                });
+            });
+            
+            // Exercise 1: Answer buttons
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            answerButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    const feedbackEl = this.closest('div').nextElementSibling;
+                    
+                    // Reset all buttons in this group
+                    const buttonGroup = this.parentElement;
+                    buttonGroup.querySelectorAll('.answer-btn').forEach(btn => {
+                        btn.classList.remove('bg-green-100', 'bg-red-100', 'text-green-800', 'text-red-800');
+                        btn.classList.add('bg-gray-100');
+                    });
+                    
+                    // Style this button based on correctness
+                    if (isCorrect) {
+                        this.classList.remove('bg-gray-100');
+                        this.classList.add('bg-green-100', 'text-green-800');
+                        feedbackEl.textContent = "Correct! Well done.";
+                        feedbackEl.classList.remove('hidden', 'text-red-600');
+                        feedbackEl.classList.add('text-green-600');
+                    } else {
+                        this.classList.remove('bg-gray-100');
+                        this.classList.add('bg-red-100', 'text-red-800');
+                        feedbackEl.textContent = "Not quite. Try again!";
+                        feedbackEl.classList.remove('hidden', 'text-green-600');
+                        feedbackEl.classList.add('text-red-600');
+                    }
+                    
+                    feedbackEl.classList.remove('hidden');
+                });
+            });
+            
+            // Exercise 2: Check buttons
+            const checkButtons = document.querySelectorAll('.check-btn');
+            checkButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const answer = this.getAttribute('data-answer');
+                    const inputEl = this.closest('div').querySelector('.transcribe-input');
+                    const feedbackEl = this.closest('div').nextElementSibling;
+                    
+                    const userAnswer = inputEl.value.trim();
+                    
+                    if (userAnswer.toLowerCase() === answer.toLowerCase()) {
+                        feedbackEl.textContent = "Correct! Perfect transcription.";
+                        feedbackEl.classList.remove('hidden', 'text-red-600');
+                        feedbackEl.classList.add('text-green-600');
+                    } else {
+                        feedbackEl.innerHTML = `Not quite. The correct transcription is: <strong>${answer}</strong>`;
+                        feedbackEl.classList.remove('hidden', 'text-green-600');
+                        feedbackEl.classList.add('text-red-600');
+                    }
+                    
+                    feedbackEl.classList.remove('hidden');
+                });
+            });
+            
+            // Exercise 3: Vocabulary options
+            const vocabOptions = document.querySelectorAll('.vocab-option');
+            vocabOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    const word = this.getAttribute('data-word');
+                    const container = this.closest('.bg-white');
+                    const resultEl = container.querySelector('.sentence-result');
+                    
+                    // Reset all buttons of the same type in this group
+                    const buttonGroup = this.parentElement;
+                    buttonGroup.querySelectorAll(`.vocab-option[data-type="${type}"]`).forEach(btn => {
+                        btn.classList.remove('bg-indigo-100', 'text-indigo-800');
+                        btn.classList.add('bg-gray-100');
+                    });
+                    
+                    // Style this button
+                    this.classList.remove('bg-gray-100');
+                    this.classList.add('bg-indigo-100', 'text-indigo-800');
+                    
+                    // Update the sentence
+                    const sentence = container.querySelector('p').textContent;
+                    if (type === 'phrasal') {
+                        resultEl.innerHTML = sentence.replace('__________', `<span class="highlight-word">${word}<span class="tooltip">[Phrasal Verb] ${getPhrasalVerbDefinition(word)}</span></span>`);
+                    } else {
+                        resultEl.innerHTML = resultEl.innerHTML.replace('__________', `<span class="highlight-word">${word}<span class="tooltip">${getVocabDefinition(word)}</span></span>`);
+                    }
+                });
+            });
+            
+            // Exercise 3: Pattern buttons
+            const patternButtons = document.querySelectorAll('.pattern-btn');
+            patternButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('bg-indigo-100');
+                    this.classList.toggle('border-indigo-500');
+                    
+                    const container = this.closest('.bg-white');
+                    const feedbackEl = container.querySelector('.pattern-feedback');
+                    const selectedPatterns = Array.from(container.querySelectorAll('.pattern-btn.bg-indigo-100')).map(btn => btn.getAttribute('data-pattern'));
+                    
+                    if (selectedPatterns.length > 0) {
+                        feedbackEl.innerHTML = `You've identified: <strong>${selectedPatterns.join(', ')}</strong>. Good observation!`;
+                        feedbackEl.classList.remove('hidden');
+                    } else {
+                        feedbackEl.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Vocabulary selection
+            const vocabSelectButtons = document.querySelectorAll('.vocab-select, .phrasal-select');
+            vocabSelectButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('bg-indigo-100');
+                    this.classList.toggle('border-indigo-500');
+                });
+            });
+            
+            // Function to update progress
+            function updateProgress(sectionId) {
+                // In a real app, this would save progress to a database
+                // For demo purposes, we'll just update the UI
+                const progressBars = {
+                    'introduction': 100,
+                    'types': 100,
+                    'practice': 100,
+                    'conversation': 100,
+                    'vocabulary': 100
+                };
+                
+                // Update section progress
+                Object.keys(progressBars).forEach(section => {
+                    const progressBar = document.querySelector(`[class*="text-sm font-medium text-indigo-700"]:contains("${section.charAt(0).toUpperCase() + section.slice(1)}")`);
+                    if (progressBar) {
+                        const percentage = section === sectionId ? progressBars[section] : 0;
+                        progressBar.nextElementSibling.textContent = `${percentage}%`;
+                        progressBar.parentElement.nextElementSibling.querySelector('div').style.width = `${percentage}%`;
+                    }
+                });
+                
+                // Update overall progress
+                const visitedSections = Object.keys(progressBars).filter(section => {
+                    return document.getElementById(section) && !document.getElementById(section).classList.contains('hidden');
+                });
+                
+                const overallPercentage = Math.round((visitedSections.length / Object.keys(progressBars).length) * 100);
+                const overallProgressText = document.querySelector('[class*="text-sm font-medium text-indigo-700"]:contains("Overall Progress")').nextElementSibling;
+                overallProgressText.textContent = `${overallPercentage}%`;
+                overallProgressText.parentElement.nextElementSibling.querySelector('div').style.width = `${overallPercentage}%`;
+            }
+            
+            // Helper functions for definitions
+            function getPhrasalVerbDefinition(verb) {
+                const definitions = {
+                    'look into': 'To investigate or examine something',
+                    'figure out': 'To find the solution to a problem by thinking',
+                    'bring about': 'To cause something to happen',
+                    'cut down on': 'To reduce the amount or number of something',
+                    'do away with': 'To get rid of something',
+                    'come up with': 'To produce or suggest an idea or plan'
+                };
+                return definitions[verb.toLowerCase()] || 'To perform this action';
+            }
+            
+            function getVocabDefinition(word) {
+                const definitions = {
+                    'ubiquitous': 'Present, appearing, or found everywhere',
+                    'pervasive': 'Spreading widely throughout an area or group of people',
+                    'exacerbate': 'To make a problem, bad situation, or negative feeling worse',
+                    'ameliorate': 'To make something bad or unsatisfactory better'
+                };
+                return definitions[word.toLowerCase()] || 'Advanced vocabulary term';
+            }
+            
+            // Polyfill for :contains selector
+            jQuery.expr[':'].contains = function(a, i, m) {
+                return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+            };
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'955fb60496f2da94',t:'MTc1MDk3MjQzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
