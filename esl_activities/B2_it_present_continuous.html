@@ -1,0 +1,515 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naval Architecture English Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e0f2fe;
+        }
+        .conversation-bubble {
+            position: relative;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            max-width: 80%;
+        }
+        .conversation-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            width: 20px;
+            height: 20px;
+        }
+        .assistant-bubble {
+            background-color: #0369a1;
+            color: white;
+            border-top-left-radius: 0;
+        }
+        .assistant-bubble::after {
+            left: -10px;
+            border-right: 15px solid #0369a1;
+            border-bottom: 15px solid transparent;
+        }
+        .user-bubble {
+            background-color: white;
+            color: #0f172a;
+            border-top-right-radius: 0;
+            margin-left: auto;
+        }
+        .user-bubble::after {
+            right: -10px;
+            border-left: 15px solid white;
+            border-bottom: 15px solid transparent;
+        }
+        .option-btn {
+            transition: all 0.3s ease;
+        }
+        .option-btn:hover {
+            transform: translateY(-3px);
+        }
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        .feedback-correct {
+            background-color: #10b981;
+            color: white;
+        }
+        .feedback-incorrect {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.inset-0{inset:0px}.z-50{z-index:50}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-1{margin-left:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-2{margin-top:0.5rem}.mt-5{margin-top:1.25rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-3{height:0.75rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-full{height:100%}.max-h-96{max-height:24rem}.min-h-screen{min-height:100vh}.w-48{width:12rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.max-w-md{max-width:28rem}.flex-grow{flex-grow:1}.list-disc{list-style-type:disc}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-t{border-top-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-300{--tw-bg-opacity:1;background-color:rgb(147 197 253 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-blue-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.bg-blue-900{--tw-bg-opacity:1;background-color:rgb(30 58 138 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-700{--tw-gradient-from:#1d4ed8 var(--tw-gradient-from-position);--tw-gradient-to:rgb(29 78 216 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-800{--tw-gradient-from:#1e40af var(--tw-gradient-from-position);--tw-gradient-to:rgb(30 64 175 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.p-2{padding:0.5rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pl-5{padding-left:1.25rem}.text-left{text-align:left}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-200{--tw-text-opacity:1;color:rgb(191 219 254 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:border-blue-300:hover{--tw-border-opacity:1;border-color:rgb(147 197 253 / var(--tw-border-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-900:hover{--tw-bg-opacity:1;background-color:rgb(30 58 138 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}@media (min-width: 768px){.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:px-6{padding-left:1.5rem;padding-right:1.5rem}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-4 px-6 shadow-lg">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                    </svg>
+                    <h1 class="text-2xl font-bold">Naval English</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center">
+                        <span class="mr-2">Progress:</span>
+                        <div class="w-48 bg-blue-300 rounded-full h-3 overflow-hidden">
+                            <div id="progress-bar" class="progress-bar bg-white h-full rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <button id="info-btn" class="bg-blue-700 hover:bg-blue-900 text-white px-3 py-1 rounded-full flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1">Help</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow container mx-auto px-4 py-6 md:px-6">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-600 text-white rounded-full p-2 mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Grammar Focus</h2>
+                        <p class="text-gray-600">Present Simple vs. Present Continuous with Naval Architecture Terms</p>
+                    </div>
+                </div>
+                
+                <div class="mb-4 p-4 bg-blue-50 rounded-lg">
+                    <h3 class="font-medium text-blue-800 mb-2">Quick Reference:</h3>
+                    <ul class="text-sm text-gray-700 space-y-1">
+                        <li><span class="font-medium">Present Simple:</span> Facts, routines, permanent situations (The vessel weighs 5000 tons)</li>
+                        <li><span class="font-medium">Present Continuous:</span> Actions happening now, temporary situations (The shipyard is building three vessels)</li>
+                        <li><span class="font-medium">Status Verbs:</span> Verbs not usually used in continuous forms (know, believe, contain, belong)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-700 to-blue-500 py-3 px-6">
+                    <h2 class="text-white font-semibold">Conversation Practice</h2>
+                </div>
+                
+                <div id="conversation-container" class="p-6 max-h-96 overflow-y-auto"><div class="conversation-bubble assistant-bubble">Naval Architect: What can you tell me about this vessel's design?</div></div>
+                
+                <div id="feedback-container" class="px-6 py-3 hidden"></div>
+                
+                <div id="options-container" class="p-6 bg-gray-50 border-t border-gray-200">
+                    <p id="instruction" class="text-gray-700 mb-4">Choose the correct response:</p>
+                    <div id="options" class="grid grid-cols-1 md:grid-cols-2 gap-3"><button class="option-btn bg-white border border-gray-300 rounded-lg py-3 px-4 text-left shadow-sm hover:bg-blue-50 hover:border-blue-300 transition-colors" data-index="0">The hull contains three watertight compartments.</button><button class="option-btn bg-white border border-gray-300 rounded-lg py-3 px-4 text-left shadow-sm hover:bg-blue-50 hover:border-blue-300 transition-colors" data-index="1">The hull is containing three watertight compartments.</button></div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-blue-900 text-blue-200 py-4 px-6">
+            <div class="container mx-auto text-center text-sm">
+                <p>Naval Architecture English Grammar Practice | Present Simple &amp; Continuous Tenses</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">How to Use This Practice Tool</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="text-gray-600 space-y-3">
+                <p>This tool helps you practice the difference between Present Simple and Present Continuous tenses using naval architecture vocabulary.</p>
+                
+                <h4 class="font-semibold text-gray-800">Present Simple:</h4>
+                <ul class="list-disc pl-5 text-sm">
+                    <li>Used for facts, routines, and permanent situations</li>
+                    <li>Example: "The hull contains watertight compartments."</li>
+                    <li>Example: "Naval architects design ships for specific purposes."</li>
+                </ul>
+                
+                <h4 class="font-semibold text-gray-800 mt-2">Present Continuous:</h4>
+                <ul class="list-disc pl-5 text-sm">
+                    <li>Used for actions happening now or temporary situations</li>
+                    <li>Example: "The shipyard is building three vessels this month."</li>
+                    <li>Example: "They are testing the propulsion system today."</li>
+                </ul>
+                
+                <h4 class="font-semibold text-gray-800 mt-2">Status Verbs:</h4>
+                <ul class="list-disc pl-5 text-sm">
+                    <li>Verbs that express states rather than actions</li>
+                    <li>Usually not used in continuous forms</li>
+                    <li>Examples: know, understand, believe, contain, belong, consist</li>
+                </ul>
+            </div>
+            <button id="start-practice" class="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                Start Practice
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Questions and scenarios data
+        const scenarios = [
+            {
+                question: "Naval Architect: What can you tell me about this vessel's design?",
+                options: [
+                    {
+                        text: "The hull contains three watertight compartments.",
+                        correct: true,
+                        explanation: "Correct! 'Contains' is a status verb describing a permanent feature, so we use present simple."
+                    },
+                    {
+                        text: "The hull is containing three watertight compartments.",
+                        correct: false,
+                        explanation: "'Contain' is a status verb that describes a permanent state, so we don't use the continuous form."
+                    }
+                ]
+            },
+            {
+                question: "Shipyard Manager: What's happening with the new project?",
+                options: [
+                    {
+                        text: "The engineers test the propulsion system this week.",
+                        correct: false,
+                        explanation: "Incorrect. For a temporary action happening around the present time, we need the present continuous."
+                    },
+                    {
+                        text: "The engineers are testing the propulsion system this week.",
+                        correct: true,
+                        explanation: "Correct! We use present continuous for temporary actions happening around now."
+                    }
+                ]
+            },
+            {
+                question: "Student: How does displacement work in ship design?",
+                options: [
+                    {
+                        text: "The weight of water that a ship displaces equals the weight of the ship.",
+                        correct: true,
+                        explanation: "Correct! This is a scientific fact, so we use present simple."
+                    },
+                    {
+                        text: "The weight of water that a ship is displacing equals the weight of the ship.",
+                        correct: false,
+                        explanation: "Incorrect. For scientific facts and general truths, we use present simple, not continuous."
+                    }
+                ]
+            },
+            {
+                question: "Project Manager: What's the current status of our design team?",
+                options: [
+                    {
+                        text: "They work on the stability calculations for the new ferry.",
+                        correct: false,
+                        explanation: "Incorrect. For an activity in progress right now, we need the present continuous."
+                    },
+                    {
+                        text: "They are working on the stability calculations for the new ferry.",
+                        correct: true,
+                        explanation: "Correct! We use present continuous for activities in progress at the moment."
+                    }
+                ]
+            },
+            {
+                question: "Naval Engineer: Why is this material important?",
+                options: [
+                    {
+                        text: "This composite material is belonging to a new generation of marine materials.",
+                        correct: false,
+                        explanation: "Incorrect. 'Belong' is a status verb that isn't normally used in continuous forms."
+                    },
+                    {
+                        text: "This composite material belongs to a new generation of marine materials.",
+                        correct: true,
+                        explanation: "Correct! 'Belong' is a status verb, so we use present simple."
+                    }
+                ]
+            },
+            {
+                question: "Client: Tell me about your company's expertise.",
+                options: [
+                    {
+                        text: "Our firm specializes in offshore platform design.",
+                        correct: true,
+                        explanation: "Correct! This describes a permanent characteristic of the firm, so we use present simple."
+                    },
+                    {
+                        text: "Our firm is specializing in offshore platform design.",
+                        correct: false,
+                        explanation: "Incorrect. For permanent characteristics or states, we use present simple, not continuous."
+                    }
+                ]
+            },
+            {
+                question: "Supervisor: What's the situation with the hull design?",
+                options: [
+                    {
+                        text: "I think we need to recalculate the stress factors.",
+                        correct: true,
+                        explanation: "Correct! 'Think' expressing an opinion is a status verb, so we use present simple."
+                    },
+                    {
+                        text: "I am thinking we need to recalculate the stress factors.",
+                        correct: false,
+                        explanation: "Incorrect. When 'think' expresses an opinion (not the process of thinking), it's a status verb and should be in present simple."
+                    }
+                ]
+            },
+            {
+                question: "Shipyard Tour Guide: What's happening in this area?",
+                options: [
+                    {
+                        text: "The workers install the propeller shaft in this section.",
+                        correct: false,
+                        explanation: "Incorrect. For an activity currently in progress that we can observe, we need present continuous."
+                    },
+                    {
+                        text: "The workers are installing the propeller shaft in this section.",
+                        correct: true,
+                        explanation: "Correct! We use present continuous for activities currently in progress."
+                    }
+                ]
+            },
+            {
+                question: "Professor: How do modern ships navigate?",
+                options: [
+                    {
+                        text: "Most vessels are using GPS and radar systems for navigation.",
+                        correct: false,
+                        explanation: "Incorrect. For general facts about what happens regularly, we use present simple."
+                    },
+                    {
+                        text: "Most vessels use GPS and radar systems for navigation.",
+                        correct: true,
+                        explanation: "Correct! This is a general fact about what happens regularly, so we use present simple."
+                    }
+                ]
+            },
+            {
+                question: "Safety Inspector: What about the vessel's safety features?",
+                options: [
+                    {
+                        text: "The design includes six emergency evacuation routes.",
+                        correct: true,
+                        explanation: "Correct! 'Includes' describes a permanent feature of the design, so we use present simple."
+                    },
+                    {
+                        text: "The design is including six emergency evacuation routes.",
+                        correct: false,
+                        explanation: "Incorrect. 'Include' in this context describes a permanent feature, so we use present simple, not continuous."
+                    }
+                ]
+            }
+        ];
+
+        // App state
+        let currentScenarioIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        // DOM elements
+        const conversationContainer = document.getElementById('conversation-container');
+        const optionsContainer = document.getElementById('options');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const progressBar = document.getElementById('progress-bar');
+        const infoBtn = document.getElementById('info-btn');
+        const infoModal = document.getElementById('info-modal');
+        const closeModal = document.getElementById('close-modal');
+        const startPractice = document.getElementById('start-practice');
+
+        // Show info modal on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            infoModal.classList.remove('hidden');
+        });
+
+        // Modal controls
+        infoBtn.addEventListener('click', () => {
+            infoModal.classList.remove('hidden');
+        });
+
+        closeModal.addEventListener('click', () => {
+            infoModal.classList.add('hidden');
+        });
+
+        startPractice.addEventListener('click', () => {
+            infoModal.classList.add('hidden');
+            if (conversationContainer.children.length === 0) {
+                startScenario();
+            }
+        });
+
+        // Start a new scenario
+        function startScenario() {
+            const scenario = scenarios[currentScenarioIndex];
+            
+            // Clear previous content
+            conversationContainer.innerHTML = '';
+            optionsContainer.innerHTML = '';
+            feedbackContainer.innerHTML = '';
+            feedbackContainer.classList.add('hidden');
+            
+            // Add the question bubble
+            addMessageBubble(scenario.question, 'assistant');
+            
+            // Add the options
+            scenario.options.forEach((option, index) => {
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn bg-white border border-gray-300 rounded-lg py-3 px-4 text-left shadow-sm hover:bg-blue-50 hover:border-blue-300 transition-colors';
+                optionBtn.innerHTML = option.text;
+                optionBtn.dataset.index = index;
+                
+                optionBtn.addEventListener('click', () => selectOption(index));
+                
+                optionsContainer.appendChild(optionBtn);
+            });
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Add a message bubble to the conversation
+        function addMessageBubble(message, sender) {
+            const bubble = document.createElement('div');
+            bubble.className = sender === 'assistant' ? 
+                'conversation-bubble assistant-bubble' : 
+                'conversation-bubble user-bubble';
+            bubble.innerHTML = message;
+            conversationContainer.appendChild(bubble);
+            conversationContainer.scrollTop = conversationContainer.scrollHeight;
+        }
+
+        // Handle option selection
+        function selectOption(index) {
+            const scenario = scenarios[currentScenarioIndex];
+            const selectedOption = scenario.options[index];
+            
+            // Add user response to conversation
+            addMessageBubble(selectedOption.text, 'user');
+            
+            // Show feedback
+            feedbackContainer.innerHTML = `
+                <div class="p-4 rounded-lg ${selectedOption.correct ? 'feedback-correct' : 'feedback-incorrect'}">
+                    <p class="font-medium">${selectedOption.correct ? '✓ Correct!' : '✗ Incorrect'}</p>
+                    <p>${selectedOption.explanation}</p>
+                </div>
+            `;
+            feedbackContainer.classList.remove('hidden');
+            
+            // Update score
+            if (selectedOption.correct) {
+                score++;
+            }
+            
+            // Disable all option buttons
+            const optionButtons = optionsContainer.querySelectorAll('.option-btn');
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                if (parseInt(btn.dataset.index) === index) {
+                    btn.classList.add(selectedOption.correct ? 'ring-2 ring-green-500' : 'ring-2 ring-red-500');
+                }
+            });
+            
+            // Add next button
+            const nextButton = document.createElement('button');
+            nextButton.className = 'mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors';
+            nextButton.innerHTML = currentScenarioIndex < scenarios.length - 1 ? 'Next Question' : 'See Results';
+            nextButton.addEventListener('click', nextQuestion);
+            optionsContainer.appendChild(nextButton);
+        }
+
+        // Move to the next question or show results
+        function nextQuestion() {
+            currentScenarioIndex++;
+            
+            if (currentScenarioIndex < scenarios.length) {
+                startScenario();
+            } else {
+                showResults();
+            }
+        }
+
+        // Show final results
+        function showResults() {
+            conversationContainer.innerHTML = '';
+            optionsContainer.innerHTML = '';
+            feedbackContainer.innerHTML = '';
+            
+            const percentage = Math.round((score / scenarios.length) * 100);
+            
+            conversationContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-blue-100 mb-4">
+                        <span class="text-3xl font-bold text-blue-600">${percentage}%</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Practice Complete!</h2>
+                    <p class="text-gray-600 mb-4">You scored ${score} out of ${scenarios.length} questions correctly.</p>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4 text-left mb-6">
+                        <h3 class="font-semibold text-blue-800 mb-2">Remember:</h3>
+                        <ul class="text-sm text-gray-700 space-y-1">
+                            <li>• Use <span class="font-medium">Present Simple</span> for facts, routines, and permanent situations</li>
+                            <li>• Use <span class="font-medium">Present Continuous</span> for actions happening now or temporary situations</li>
+                            <li>• <span class="font-medium">Status verbs</span> (know, believe, contain) are usually not used in continuous forms</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            const restartButton = document.createElement('button');
+            restartButton.className = 'w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors';
+            restartButton.innerHTML = 'Practice Again';
+            restartButton.addEventListener('click', restartPractice);
+            optionsContainer.appendChild(restartButton);
+            
+            // Update progress to 100%
+            progressBar.style.width = '100%';
+        }
+
+        // Restart the practice
+        function restartPractice() {
+            currentScenarioIndex = 0;
+            score = 0;
+            startScenario();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentScenarioIndex) / scenarios.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'955db1abd4240ad7',t:'MTc1MDk1MTI4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
