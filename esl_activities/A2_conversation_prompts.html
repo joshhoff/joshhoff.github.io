@@ -1,0 +1,720 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Conversation Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f9ff;
+        }
+        
+        .scenario-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .vocabulary-item {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .vocabulary-item:hover {
+            background-color: #e0f2fe;
+        }
+        
+        .conversation-bubble {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .btn-next {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-next:hover {
+            transform: translateX(3px);
+        }
+        
+        .btn-speak {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-10{margin-bottom:2.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:0.5rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mt-2{margin-top:0.5rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mr-12{margin-right:3rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-20{height:5rem}.h-40{height:10rem}.h-5{height:1.25rem}.max-h-96{max-height:24rem}.min-h-screen{min-height:100vh}.w-20{width:5rem}.w-5{width:1.25rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-5xl{max-width:64rem}.flex-grow{flex-grow:1}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.gap-6{gap:1.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-md{border-radius:0.375rem}.border-t{border-top-width:1px}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-blue-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-red-100{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-100{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-blue-600{--tw-gradient-from:#2563eb var(--tw-gradient-from-position);--tw-gradient-to:rgb(37 99 235 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-800{--tw-gradient-to:#1e40af var(--tw-gradient-to-position)}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-2{padding:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pt-4{padding-top:1rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-600{--tw-text-opacity:1;color:rgb(202 138 4 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-gray-200:hover{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.hover\:text-blue-800:hover{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}}@media (min-width: 768px){.md\:w-80{width:20rem}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:p-6{padding:1.5rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4 px-6 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">ConversePractice</h1>
+                <p class="text-sm bg-blue-700 px-3 py-1 rounded-full">ESL Conversation Practice</p>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto p-4 md:p-6">
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="flex flex-col items-center justify-center py-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-blue-800 mb-4">Welcome to ConversePractice!</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Practice your English conversation skills in everyday situations. 
+                        Choose a scenario below to start practicing.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+                    <!-- Restaurant Scenario -->
+                    <div class="scenario-card bg-white rounded-xl shadow-md overflow-hidden" onclick="startScenario('restaurant')">
+                        <div class="h-40 bg-yellow-100 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-gray-800">At the Restaurant</h3>
+                            <p class="text-gray-600 mt-2">Practice ordering food, making special requests, and paying the bill.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Hospital/Clinic Scenario -->
+                    <div class="scenario-card bg-white rounded-xl shadow-md overflow-hidden" onclick="startScenario('hospital')">
+                        <div class="h-40 bg-red-100 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-gray-800">At the Hospital/Clinic</h3>
+                            <p class="text-gray-600 mt-2">Learn how to describe symptoms, understand medical advice, and schedule appointments.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Coffee Shop Scenario -->
+                    <div class="scenario-card bg-white rounded-xl shadow-md overflow-hidden" onclick="startScenario('coffee')">
+                        <div class="h-40 bg-amber-100 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-amber-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-gray-800">At the Coffee Shop</h3>
+                            <p class="text-gray-600 mt-2">Practice ordering drinks, asking for recommendations, and casual conversation.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- National Park Scenario -->
+                    <div class="scenario-card bg-white rounded-xl shadow-md overflow-hidden" onclick="startScenario('park')">
+                        <div class="h-40 bg-green-100 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9v10H3V9m2 0h10.5a3.5 3.5 0 013.5 3.5V13m-7 7h10v-4.5a3.5 3.5 0 00-3.5-3.5H13"></path>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-gray-800">At the National Park</h3>
+                            <p class="text-gray-600 mt-2">Learn to ask for directions, discuss nature, and talk about outdoor activities.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Pool Scenario -->
+                    <div class="scenario-card bg-white rounded-xl shadow-md overflow-hidden" onclick="startScenario('pool')">
+                        <div class="h-40 bg-blue-100 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-gray-800">At the Pool</h3>
+                            <p class="text-gray-600 mt-2">Practice conversations about swimming, water safety, and recreational activities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conversation Practice Screen (Hidden initially) -->
+            <div id="conversation-screen" class="hidden">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Main Conversation Area -->
+                    <div class="flex-grow bg-white rounded-xl shadow-md p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 id="scenario-title" class="text-2xl font-bold text-blue-800">At the Pool</h2>
+                            <button onclick="returnToHome()" class="text-blue-600 hover:text-blue-800 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                Back to Scenarios
+                            </button>
+                        </div>
+                        
+                        <div id="conversation-context" class="mb-6 p-4 bg-blue-50 rounded-lg text-gray-700">You're at a public swimming pool. Practice conversations about swimming, water safety, and recreational activities.</div>
+                        
+                        <div id="conversation-container" class="space-y-4 mb-6 max-h-96 overflow-y-auto"><div class="conversation-bubble p-4 rounded-lg bg-green-100 mr-12"><p class="font-semibold text-sm mb-1">attendant</p><p>Welcome to the community pool. Have you been here before?</p></div><div class="conversation-bubble p-4 rounded-lg bg-green-100 mr-12"><p class="font-semibold text-sm mb-1">attendant</p><p>The changing rooms are over there, and the lockers require a quarter to use. Do you need anything else?</p></div><div class="conversation-bubble p-4 rounded-lg bg-green-100 mr-12"><p class="font-semibold text-sm mb-1">lifeguard</p><p>Just a reminder that there's no running around the pool area, and children under 12 need adult supervision.</p></div><div class="conversation-bubble p-4 rounded-lg bg-green-100 mr-12"><p class="font-semibold text-sm mb-1">swimmer</p><p>Excuse me, do you know if they offer swimming lessons here?</p></div></div>
+                        
+                        <div id="user-response-area" class="border-t pt-4">
+                            <div id="prompt-container" class="mb-4">
+                    <p class="text-gray-700 mb-2">How would you respond to another swimmer?</p>
+                    <div class="text-sm text-gray-500 mb-2">Suggested responses (or create your own):</div>
+                    <div class="space-y-2">
+                        <div class="bg-gray-100 p-2 rounded-md cursor-pointer hover:bg-gray-200" onclick="selectResponse('I\'m not sure, you should ask the lifeguard.')">I'm not sure, you should ask the lifeguard.</div><div class="bg-gray-100 p-2 rounded-md cursor-pointer hover:bg-gray-200" onclick="selectResponse('Yes, I think they have classes on weekends.')">Yes, I think they have classes on weekends.</div><div class="bg-gray-100 p-2 rounded-md cursor-pointer hover:bg-gray-200" onclick="selectResponse('I don\'t know, I\'m new here too.')">I don't know, I'm new here too.</div>
+                    </div>
+                </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button id="btn-speak" class="btn-speak bg-blue-600 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center" style="display: block;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Practice Speaking
+                                </button>
+                                <button id="btn-next" class="btn-next bg-green-600 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center">Skip</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vocabulary Sidebar -->
+                    <div class="w-full md:w-80 bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Vocabulary</h3>
+                        <div id="vocabulary-container" class="space-y-2"><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">lifeguard</p>
+                    <p class="text-gray-600 text-sm hidden">A person who supervises swimmers and is trained to rescue people in danger of drowning</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">shallow end</p>
+                    <p class="text-gray-600 text-sm hidden">The part of a swimming pool where the water is not deep</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">deep end</p>
+                    <p class="text-gray-600 text-sm hidden">The part of a swimming pool where the water is deep</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">lane</p>
+                    <p class="text-gray-600 text-sm hidden">A marked section of a pool for swimming laps</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">diving board</p>
+                    <p class="text-gray-600 text-sm hidden">A board from which people jump into water</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">sunscreen</p>
+                    <p class="text-gray-600 text-sm hidden">A lotion that protects skin from the sun</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">float</p>
+                    <p class="text-gray-600 text-sm hidden">To stay on the surface of water without sinking</p>
+                </div><div class="vocabulary-item p-2 rounded-md">
+                    <p class="font-medium text-blue-700">sunbathe</p>
+                    <p class="text-gray-600 text-sm hidden">To sit or lie in the sun to get a tan</p>
+                </div></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-4 px-6">
+            <div class="container mx-auto text-center text-sm">
+                <p>ConversePractice - ESL Conversation Practice Tool</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Scenario data
+        const scenarios = {
+            restaurant: {
+                title: "At the Restaurant",
+                context: "You're visiting a local restaurant for dinner. Practice ordering food, making special requests, and paying the bill.",
+                conversation: [
+                    {
+                        role: "host",
+                        text: "Good evening! Welcome to our restaurant. Do you have a reservation?",
+                        prompt: "How would you respond? You could say you have a reservation or that you don't have one.",
+                        options: ["Yes, I have a reservation for [your name].", "No, I don't have a reservation. Do you have any tables available?"]
+                    },
+                    {
+                        role: "host",
+                        text: "Perfect! Please follow me to your table.",
+                        prompt: "The host is leading you to your table. What might you say?",
+                        options: ["Thank you.", "Is it possible to sit by the window?", "How busy is the restaurant tonight?"]
+                    },
+                    {
+                        role: "waiter",
+                        text: "Hello! My name is Alex and I'll be your server tonight. Can I start you off with something to drink?",
+                        prompt: "What would you like to drink?",
+                        options: ["I'd like a glass of water, please.", "Could I see the wine list?", "What soft drinks do you have?"]
+                    },
+                    {
+                        role: "waiter",
+                        text: "Here are your drinks. Are you ready to order or do you need a few more minutes with the menu?",
+                        prompt: "How would you respond?",
+                        options: ["I think I need a few more minutes, please.", "Yes, I'm ready to order now.", "What do you recommend?"]
+                    },
+                    {
+                        role: "waiter",
+                        text: "What would you like to order?",
+                        prompt: "Order your meal. You can also ask questions about the menu.",
+                        options: ["I'll have the pasta with tomato sauce.", "Is the chicken spicy?", "Does the salad come with dressing?"]
+                    },
+                    {
+                        role: "waiter",
+                        text: "How is everything tasting?",
+                        prompt: "The waiter is checking on your meal. How would you respond?",
+                        options: ["Everything is delicious, thank you!", "My food is a bit cold. Could you heat it up?", "Could I have some more water, please?"]
+                    },
+                    {
+                        role: "waiter",
+                        text: "Would you like to see the dessert menu?",
+                        prompt: "Would you like dessert?",
+                        options: ["Yes, please.", "No thank you, just the check please.", "What desserts do you recommend?"]
+                    },
+                    {
+                        role: "waiter",
+                        text: "Here's your check. How would you like to pay?",
+                        prompt: "How will you pay?",
+                        options: ["I'll pay with credit card.", "Can I pay with cash?", "Could we split the bill?"]
+                    }
+                ],
+                vocabulary: [
+                    { word: "reservation", definition: "An arrangement to have something kept for you, such as a table at a restaurant" },
+                    { word: "server", definition: "A person who serves food at a restaurant; a waiter or waitress" },
+                    { word: "recommend", definition: "To suggest that something would be good or suitable" },
+                    { word: "appetizer", definition: "A small dish of food served before the main course" },
+                    { word: "entrée", definition: "The main course of a meal" },
+                    { word: "check", definition: "A bill at a restaurant" },
+                    { word: "split the bill", definition: "To divide the cost of a meal between two or more people" },
+                    { word: "gratuity", definition: "Money given to someone who has provided a service; a tip" }
+                ]
+            },
+            hospital: {
+                title: "At the Hospital/Clinic",
+                context: "You're visiting a doctor because you're not feeling well. Practice describing symptoms, understanding medical advice, and scheduling follow-up appointments.",
+                conversation: [
+                    {
+                        role: "receptionist",
+                        text: "Good morning. Do you have an appointment?",
+                        prompt: "How would you respond?",
+                        options: ["Yes, I have an appointment with Dr. Smith at 10:00.", "No, I don't have an appointment. Is it possible to see a doctor today?"]
+                    },
+                    {
+                        role: "receptionist",
+                        text: "Could I see your insurance card and ID, please?",
+                        prompt: "How would you respond?",
+                        options: ["Here's my insurance card and ID.", "I don't have insurance. How much will it cost?"]
+                    },
+                    {
+                        role: "nurse",
+                        text: "Hello, I'm Nurse Johnson. What brings you in today?",
+                        prompt: "Explain why you're visiting the doctor.",
+                        options: ["I've had a headache for three days.", "I think I have the flu.", "I need a check-up."]
+                    },
+                    {
+                        role: "nurse",
+                        text: "I'm going to take your temperature and blood pressure. Please roll up your sleeve.",
+                        prompt: "How would you respond?",
+                        options: ["Okay, no problem.", "Is this going to hurt?", "What's my temperature?"]
+                    },
+                    {
+                        role: "doctor",
+                        text: "Hello, I'm Dr. Smith. I understand you're not feeling well. Can you describe your symptoms?",
+                        prompt: "Describe your symptoms in detail.",
+                        options: ["I have a fever and a sore throat.", "My stomach hurts and I feel nauseous.", "I've been coughing a lot and I'm tired."]
+                    },
+                    {
+                        role: "doctor",
+                        text: "How long have you been feeling this way?",
+                        prompt: "Tell the doctor how long you've had these symptoms.",
+                        options: ["Since yesterday.", "For about a week.", "It started three days ago."]
+                    },
+                    {
+                        role: "doctor",
+                        text: "Based on your symptoms, I think you have a viral infection. I'm going to prescribe some medication.",
+                        prompt: "You might want to ask questions about the diagnosis or treatment.",
+                        options: ["How long will it take to recover?", "Are there any side effects from the medication?", "Should I stay home from work?"]
+                    },
+                    {
+                        role: "doctor",
+                        text: "Take this prescription to the pharmacy. I'd like to see you again in two weeks. Please schedule a follow-up appointment at the front desk.",
+                        prompt: "How would you respond?",
+                        options: ["Thank you, doctor.", "Should I call if I don't feel better?", "Do I need to do any tests?"]
+                    }
+                ],
+                vocabulary: [
+                    { word: "symptoms", definition: "Physical or mental signs of illness or injury" },
+                    { word: "prescription", definition: "A written order from a doctor for medicine" },
+                    { word: "diagnosis", definition: "The identification of an illness or problem" },
+                    { word: "follow-up", definition: "A subsequent meeting to check progress" },
+                    { word: "nauseous", definition: "Feeling like you might vomit" },
+                    { word: "fever", definition: "Abnormally high body temperature" },
+                    { word: "pharmacy", definition: "A place where medicines are prepared and sold" },
+                    { word: "insurance", definition: "An arrangement where a company provides health coverage in exchange for regular payments" }
+                ]
+            },
+            coffee: {
+                title: "At the Coffee Shop",
+                context: "You're visiting a local coffee shop. Practice ordering drinks, asking for recommendations, and engaging in casual conversation.",
+                conversation: [
+                    {
+                        role: "barista",
+                        text: "Hi there! What can I get for you today?",
+                        prompt: "How would you order your coffee or drink?",
+                        options: ["I'd like a medium coffee, please.", "What do you recommend?", "Do you have any specialty drinks?"]
+                    },
+                    {
+                        role: "barista",
+                        text: "Would you like room for cream?",
+                        prompt: "How would you respond?",
+                        options: ["Yes, please.", "No, thank you.", "What does 'room for cream' mean?"]
+                    },
+                    {
+                        role: "barista",
+                        text: "Would you like to try our pastries? The blueberry muffins are fresh out of the oven.",
+                        prompt: "Would you like something to eat with your drink?",
+                        options: ["Yes, I'll take a blueberry muffin.", "What other pastries do you have?", "No thanks, just the coffee."]
+                    },
+                    {
+                        role: "barista",
+                        text: "That'll be $5.75. How would you like to pay?",
+                        prompt: "How will you pay?",
+                        options: ["I'll pay with card.", "Do you accept mobile payments?", "Here's cash."]
+                    },
+                    {
+                        role: "customer",
+                        text: "Excuse me, is this seat taken?",
+                        prompt: "Someone wants to sit at your table. How would you respond?",
+                        options: ["No, it's free. Please go ahead.", "I'm saving it for a friend, sorry.", "Yes, you can sit here."]
+                    },
+                    {
+                        role: "customer",
+                        text: "Thanks! It's really busy today. Do you come here often?",
+                        prompt: "The person is making small talk. How would you respond?",
+                        options: ["Yes, I come here almost every day.", "This is my first time here.", "Sometimes. I like their coffee."]
+                    },
+                    {
+                        role: "barista",
+                        text: "Your drink is ready at the counter!",
+                        prompt: "How would you respond?",
+                        options: ["Thank you!", "Is there sugar at the counter?", "Could you bring it to my table?"]
+                    }
+                ],
+                vocabulary: [
+                    { word: "barista", definition: "A person who makes and serves coffee" },
+                    { word: "specialty", definition: "A product that is special or unique to a place" },
+                    { word: "pastry", definition: "A sweet baked good made with dough" },
+                    { word: "brew", definition: "To make coffee by adding hot water" },
+                    { word: "espresso", definition: "Strong black coffee made by forcing steam through ground coffee beans" },
+                    { word: "latte", definition: "Coffee made with espresso and steamed milk" },
+                    { word: "small talk", definition: "Casual conversation about unimportant topics" },
+                    { word: "to-go", definition: "Food or drinks prepared to be taken and consumed elsewhere" }
+                ]
+            },
+            park: {
+                title: "At the National Park",
+                context: "You're visiting a national park. Practice asking for directions, discussing nature, and talking about outdoor activities.",
+                conversation: [
+                    {
+                        role: "ranger",
+                        text: "Welcome to Mountain View National Park! Is this your first visit?",
+                        prompt: "How would you respond?",
+                        options: ["Yes, it's my first time here.", "No, I've been here before.", "Yes, can you recommend some trails?"]
+                    },
+                    {
+                        role: "ranger",
+                        text: "Here's a map of the park. There are several hiking trails. What kind of experience are you looking for today?",
+                        prompt: "What kind of hiking experience would you like?",
+                        options: ["Something easy and short.", "A trail with good views.", "What's your most popular trail?"]
+                    },
+                    {
+                        role: "ranger",
+                        text: "I recommend the Blue Lake Trail. It's a moderate 3-mile hike with beautiful views of the lake and mountains.",
+                        prompt: "How would you respond?",
+                        options: ["That sounds perfect.", "How long does it usually take?", "Are there any wildlife I might see?"]
+                    },
+                    {
+                        role: "ranger",
+                        text: "Make sure you bring plenty of water and wear sunscreen. The weather can change quickly in the mountains.",
+                        prompt: "How would you respond?",
+                        options: ["Thank you for the advice.", "I have water but no sunscreen. Where can I buy some?", "What's the weather forecast for today?"]
+                    },
+                    {
+                        role: "hiker",
+                        text: "Excuse me, have you seen any deer on the trails today?",
+                        prompt: "How would you respond to another hiker?",
+                        options: ["No, I haven't seen any yet.", "I'm not sure, this is my first time here.", "Yes, I saw some near the lake."]
+                    },
+                    {
+                        role: "ranger",
+                        text: "We're having a guided nature walk at 2:00 PM if you're interested in learning more about the local plants and animals.",
+                        prompt: "Are you interested in the guided walk?",
+                        options: ["Yes, that sounds interesting.", "What time does it end?", "No thank you, I prefer to explore on my own."]
+                    },
+                    {
+                        role: "ranger",
+                        text: "Remember to leave no trace and take all trash with you when you leave the park.",
+                        prompt: "How would you respond?",
+                        options: ["Of course, I always clean up after myself.", "Are there recycling bins in the park?", "I understand. Thank you for the reminder."]
+                    }
+                ],
+                vocabulary: [
+                    { word: "trail", definition: "A path through a natural area" },
+                    { word: "ranger", definition: "A person who protects and manages a park" },
+                    { word: "wildlife", definition: "Animals that live in nature, not as pets or on farms" },
+                    { word: "moderate", definition: "Neither easy nor difficult; in the middle" },
+                    { word: "scenic", definition: "Having beautiful natural views" },
+                    { word: "leave no trace", definition: "A principle of outdoor ethics that encourages people to minimize their impact on nature" },
+                    { word: "summit", definition: "The highest point of a mountain" },
+                    { word: "terrain", definition: "The physical features of an area of land" }
+                ]
+            },
+            pool: {
+                title: "At the Pool",
+                context: "You're at a public swimming pool. Practice conversations about swimming, water safety, and recreational activities.",
+                conversation: [
+                    {
+                        role: "attendant",
+                        text: "Welcome to the community pool. Have you been here before?",
+                        prompt: "How would you respond?",
+                        options: ["Yes, I come here often.", "No, this is my first time.", "Do I need to pay an entrance fee?"]
+                    },
+                    {
+                        role: "attendant",
+                        text: "The changing rooms are over there, and the lockers require a quarter to use. Do you need anything else?",
+                        prompt: "What might you ask?",
+                        options: ["What are the pool hours?", "Is there a lifeguard on duty?", "Where can I get a towel?"]
+                    },
+                    {
+                        role: "lifeguard",
+                        text: "Just a reminder that there's no running around the pool area, and children under 12 need adult supervision.",
+                        prompt: "How would you respond?",
+                        options: ["Thank you for the reminder.", "Are there any other rules I should know?", "Is the deep end open today?"]
+                    },
+                    {
+                        role: "swimmer",
+                        text: "Excuse me, do you know if they offer swimming lessons here?",
+                        prompt: "How would you respond to another swimmer?",
+                        options: ["I'm not sure, you should ask the lifeguard.", "Yes, I think they have classes on weekends.", "I don't know, I'm new here too."]
+                    },
+                    {
+                        role: "lifeguard",
+                        text: "The water slide will be opening in 15 minutes. You need to be at least 48 inches tall to use it.",
+                        prompt: "How would you respond?",
+                        options: ["Great! I'll try it later.", "How fast is the water slide?", "Is there a line usually?"]
+                    },
+                    {
+                        role: "attendant",
+                        text: "We're closing the pool for a 15-minute break. All swimmers need to exit the water.",
+                        prompt: "How would you respond?",
+                        options: ["Okay, thank you.", "Why do you need to close the pool?", "When will it reopen?"]
+                    },
+                    {
+                        role: "swimmer",
+                        text: "The water is perfect today! Have you been in yet?",
+                        prompt: "How would you respond to this casual conversation?",
+                        options: ["Yes, it's really nice!", "Not yet, I'm just about to go in.", "I'm actually just here to sunbathe today."]
+                    }
+                ],
+                vocabulary: [
+                    { word: "lifeguard", definition: "A person who supervises swimmers and is trained to rescue people in danger of drowning" },
+                    { word: "shallow end", definition: "The part of a swimming pool where the water is not deep" },
+                    { word: "deep end", definition: "The part of a swimming pool where the water is deep" },
+                    { word: "lane", definition: "A marked section of a pool for swimming laps" },
+                    { word: "diving board", definition: "A board from which people jump into water" },
+                    { word: "sunscreen", definition: "A lotion that protects skin from the sun" },
+                    { word: "float", definition: "To stay on the surface of water without sinking" },
+                    { word: "sunbathe", definition: "To sit or lie in the sun to get a tan" }
+                ]
+            }
+        };
+        
+        let currentScenario = null;
+        let currentStep = 0;
+        let speakingMode = false;
+        
+        // Start a conversation scenario
+        function startScenario(scenarioId) {
+            currentScenario = scenarios[scenarioId];
+            currentStep = 0;
+            
+            // Update UI
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('conversation-screen').classList.remove('hidden');
+            document.getElementById('scenario-title').textContent = currentScenario.title;
+            document.getElementById('conversation-context').textContent = currentScenario.context;
+            
+            // Clear previous conversation
+            document.getElementById('conversation-container').innerHTML = '';
+            
+            // Load vocabulary
+            loadVocabulary();
+            
+            // Start conversation
+            nextStep();
+        }
+        
+        // Load vocabulary for current scenario
+        function loadVocabulary() {
+            const vocabularyContainer = document.getElementById('vocabulary-container');
+            vocabularyContainer.innerHTML = '';
+            
+            currentScenario.vocabulary.forEach(item => {
+                const vocabItem = document.createElement('div');
+                vocabItem.className = 'vocabulary-item p-2 rounded-md';
+                vocabItem.innerHTML = `
+                    <p class="font-medium text-blue-700">${item.word}</p>
+                    <p class="text-gray-600 text-sm hidden">${item.definition}</p>
+                `;
+                vocabItem.addEventListener('click', function() {
+                    const definition = this.querySelector('p:last-child');
+                    definition.classList.toggle('hidden');
+                });
+                vocabularyContainer.appendChild(vocabItem);
+            });
+        }
+        
+        // Proceed to next conversation step
+        function nextStep() {
+            if (currentStep < currentScenario.conversation.length) {
+                const step = currentScenario.conversation[currentStep];
+                
+                // Add other person's message
+                addMessage(step.role, step.text);
+                
+                // Show prompt
+                document.getElementById('prompt-container').innerHTML = `
+                    <p class="text-gray-700 mb-2">${step.prompt}</p>
+                    <div class="text-sm text-gray-500 mb-2">Suggested responses (or create your own):</div>
+                    <div class="space-y-2">
+                        ${step.options.map(option => 
+                            `<div class="bg-gray-100 p-2 rounded-md cursor-pointer hover:bg-gray-200" 
+                                  onclick="selectResponse('${option.replace(/'/g, "\\'")}')">${option}</div>`
+                        ).join('')}
+                    </div>
+                `;
+                
+                // Update buttons
+                document.getElementById('btn-speak').onclick = toggleSpeakingMode;
+                document.getElementById('btn-next').textContent = 'Skip';
+                document.getElementById('btn-next').onclick = () => {
+                    currentStep++;
+                    nextStep();
+                };
+                
+            } else {
+                // Conversation finished
+                addMessage('system', "Conversation practice complete! You've finished this scenario.");
+                
+                document.getElementById('prompt-container').innerHTML = `
+                    <p class="text-gray-700 mb-2">Would you like to practice this scenario again or try a different one?</p>
+                `;
+                
+                document.getElementById('btn-speak').style.display = 'none';
+                document.getElementById('btn-next').textContent = 'Return to Scenarios';
+                document.getElementById('btn-next').onclick = returnToHome;
+            }
+        }
+        
+        // Add a message to the conversation
+        function addMessage(role, text) {
+            const container = document.getElementById('conversation-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'conversation-bubble p-4 rounded-lg ' + 
+                (role === 'user' ? 'bg-blue-100 ml-12' : 
+                 role === 'system' ? 'bg-gray-100 border border-gray-300' : 'bg-green-100 mr-12');
+            
+            let roleName = role;
+            if (role === 'user') roleName = 'You';
+            else if (role === 'system') roleName = '';
+            
+            messageDiv.innerHTML = roleName ? `<p class="font-semibold text-sm mb-1">${roleName}</p>` : '';
+            messageDiv.innerHTML += `<p>${text}</p>`;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        // Select a response
+        function selectResponse(response) {
+            addMessage('user', response);
+            currentStep++;
+            nextStep();
+        }
+        
+        // Toggle speaking mode
+        function toggleSpeakingMode() {
+            speakingMode = !speakingMode;
+            const speakBtn = document.getElementById('btn-speak');
+            
+            if (speakingMode) {
+                speakBtn.classList.add('bg-red-600');
+                speakBtn.classList.remove('bg-blue-600');
+                speakBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clip-rule="evenodd" />
+                    </svg>
+                    Stop Speaking
+                `;
+                
+                document.getElementById('prompt-container').innerHTML = `
+                    <p class="text-gray-700 mb-2">Practice speaking your response out loud!</p>
+                    <p class="text-sm text-gray-500 mb-2">When you're done, click "Stop Speaking" and then "Continue".</p>
+                `;
+                
+                document.getElementById('btn-next').textContent = 'Continue';
+                document.getElementById('btn-next').onclick = () => {
+                    if (speakingMode) {
+                        toggleSpeakingMode();
+                    }
+                    addMessage('user', '(You practiced speaking your response)');
+                    currentStep++;
+                    nextStep();
+                };
+                
+            } else {
+                speakBtn.classList.add('bg-blue-600');
+                speakBtn.classList.remove('bg-red-600');
+                speakBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd" />
+                    </svg>
+                    Practice Speaking
+                `;
+                
+                const step = currentScenario.conversation[currentStep];
+                document.getElementById('prompt-container').innerHTML = `
+                    <p class="text-gray-700 mb-2">${step.prompt}</p>
+                    <div class="text-sm text-gray-500 mb-2">Suggested responses (or create your own):</div>
+                    <div class="space-y-2">
+                        ${step.options.map(option => 
+                            `<div class="bg-gray-100 p-2 rounded-md cursor-pointer hover:bg-gray-200" 
+                                  onclick="selectResponse('${option.replace(/'/g, "\\'")}')">${option}</div>`
+                        ).join('')}
+                    </div>
+                `;
+                
+                document.getElementById('btn-next').textContent = 'Skip';
+                document.getElementById('btn-next').onclick = () => {
+                    currentStep++;
+                    nextStep();
+                };
+            }
+        }
+        
+        // Return to home screen
+        function returnToHome() {
+            document.getElementById('conversation-screen').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('btn-speak').style.display = 'block';
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'956611b1f448cd56',t:'MTc1MTAzOTEwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
