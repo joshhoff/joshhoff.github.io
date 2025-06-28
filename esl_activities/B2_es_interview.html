@@ -1,0 +1,784 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Practice Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        .chat-container {
+            height: calc(100vh - 16rem);
+        }
+        .sidebar-container {
+            height: calc(100vh - 16rem);
+            overflow-y: auto;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        .sidebar-item:hover {
+            transform: translateX(5px);
+        }
+        .sentence-starter {
+            cursor: pointer;
+        }
+        .sentence-starter:hover {
+            background-color: #e0e7ff;
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.mx-auto{margin-left:auto;margin-right:auto}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.mt-4{margin-top:1rem}.mb-2{margin-bottom:0.5rem}.mr-auto{margin-right:auto}.flex{display:flex}.grid{display:grid}.h-5{height:1.25rem}.h-full{height:100%}.w-5{width:1.25rem}.w-full{width:100%}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.gap-6{gap:1.5rem}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-opacity-20{--tw-bg-opacity:0.2}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-3{padding:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-green-100:hover{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-opacity-30:hover{--tw-bg-opacity:0.3}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}@media (min-width: 768px){.md\:mt-0{margin-top:0px}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}@media (min-width: 1024px){.lg\:w-1\/4{width:25%}.lg\:w-3\/4{width:75%}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:flex-row{flex-direction:row}}</style></head>
+<body class="bg-gray-50" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Interview Practice Assistant</h1>
+                <p class="text-gray-600" id="subtitle">Improve your interview skills for professional roles</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center">
+                <button id="language-toggle" class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <span id="language-text">Switch to Spanish</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Main Content -->
+            <div class="w-full lg:w-3/4 bg-white rounded-xl shadow-md overflow-hidden">
+                <!-- Role Selection -->
+                <div class="gradient-bg p-6">
+                    <h2 class="text-xl font-semibold text-white mb-4" id="select-role-text">Select a professional role to practice:</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="marketing">Marketing</button>
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="sales">Sales</button>
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="finance">Finance</button>
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="strategy">Strategy</button>
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="operations">Operations</button>
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="administration">Administration</button>
+                        <button class="role-btn bg-white bg-opacity-20 hover:bg-opacity-30 text-white py-2 px-4 rounded-lg transition" data-role="executive">Executive</button>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="p-6">
+                    <div id="chat-container" class="chat-container overflow-y-auto mb-6 p-4 bg-gray-50 rounded-lg"><div class="chat-bubble mr-auto bg-gray-200 text-gray-800 p-4 rounded-lg mb-4 interviewer-message"><p>Welcome to your Strategy interview practice! I'll ask you some common questions for this role. Please respond as if you were in a real interview.</p></div><div class="chat-bubble mr-auto bg-gray-200 text-gray-800 p-4 rounded-lg mb-4 interviewer-message"><p>How do you approach strategic planning for a business?</p></div></div>
+
+                    <!-- User Input -->
+                    <div class="flex gap-3">
+                        <input type="text" id="user-input" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Type your response...">
+                        <button id="send-btn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="send-text">Send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="w-full lg:w-1/4">
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4" id="sentence-starters-title">Useful Sentence Starters</h3>
+                    <div id="sentence-starters-container" class="sidebar-container mb-4"><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">Thank you for that question. I would...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">That's an excellent question. In my experience...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">I appreciate you asking about that. Let me explain how...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">I'm glad you brought that up. My approach is to...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">Good question. My experience addresses this topic by...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">I've had several opportunities to...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">Based on my background in...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">One relevant example from my experience is...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">I've developed a systematic approach to...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">When faced with this situation, I typically...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">My strategic planning process involves...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">When identifying new opportunities, I look for...</div><div class="sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition">To measure strategic success, I track...</div></div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4" id="terminology-title">Specialized Terminology</h3>
+                    <div id="terminology-container" class="sidebar-container"><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats)</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Competitive Advantage</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Market Penetration</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Diversification</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Strategic Alignment</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Value Chain</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Benchmarking</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Business Model Canvas</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Blue Ocean Strategy</div><div class="sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">Scenario Planning</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language toggle functionality
+        let currentLanguage = 'en';
+        const translations = {
+            en: {
+                title: "Interview Practice Assistant",
+                subtitle: "Improve your interview skills for professional roles",
+                languageToggle: "Switch to Spanish",
+                selectRole: "Select a professional role to practice:",
+                startPrompt: "Select a role above to start the interview practice",
+                terminologyTitle: "Specialized Terminology",
+                terminologyPrompt: "Select a role to see relevant terminology",
+                sentenceStartersTitle: "Useful Sentence Starters",
+                sentenceStartersPrompt: "Select a role to see useful phrases",
+                sendButton: "Send",
+                roles: {
+                    marketing: "Marketing",
+                    sales: "Sales",
+                    finance: "Finance",
+                    strategy: "Strategy",
+                    operations: "Operations",
+                    administration: "Administration",
+                    executive: "Executive"
+                }
+            },
+            es: {
+                title: "Asistente de Práctica de Entrevistas",
+                subtitle: "Mejora tus habilidades para entrevistas profesionales",
+                languageToggle: "Cambiar a Inglés",
+                selectRole: "Selecciona un rol profesional para practicar:",
+                startPrompt: "Selecciona un rol arriba para comenzar la práctica de entrevista",
+                terminologyTitle: "Terminología Especializada",
+                terminologyPrompt: "Selecciona un rol para ver terminología relevante",
+                sentenceStartersTitle: "Frases Útiles para Comenzar",
+                sentenceStartersPrompt: "Selecciona un rol para ver frases útiles",
+                sendButton: "Enviar",
+                roles: {
+                    marketing: "Marketing",
+                    sales: "Ventas",
+                    finance: "Finanzas",
+                    strategy: "Estrategia",
+                    operations: "Operaciones",
+                    administration: "Administración",
+                    executive: "Ejecutivo"
+                }
+            }
+        };
+
+        // Sentence starters
+        const sentenceStarters = {
+            en: [
+                "Thank you for that question. I would...",
+                "That's an excellent question. In my experience...",
+                "I appreciate you asking about that. Let me explain how...",
+                "I'm glad you brought that up. My approach is to...",
+                "Good question. My experience addresses this topic by...",
+                "I've had several opportunities to...",
+                "Based on my background in...",
+                "One relevant example from my experience is...",
+                "I've developed a systematic approach to...",
+                "When faced with this situation, I typically..."
+            ],
+            es: [
+                "Gracias por esa pregunta. Yo...",
+                "Es una excelente pregunta. En mi experiencia...",
+                "Agradezco que pregunte sobre eso. Permítame explicar cómo...",
+                "Me alegra que mencione eso. Mi enfoque es...",
+                "Buena pregunta. Mi experiencia aborda este tema...",
+                "He tenido varias oportunidades para...",
+                "Basado en mi experiencia en...",
+                "Un ejemplo relevante de mi experiencia es...",
+                "He desarrollado un enfoque sistemático para...",
+                "Cuando me enfrento a esta situación, normalmente..."
+            ]
+        };
+
+        // Role-specific sentence starters
+        const roleSpecificStarters = {
+            marketing: {
+                en: [
+                    "In my marketing campaigns, I've found that...",
+                    "When measuring campaign success, I focus on...",
+                    "My approach to digital marketing involves..."
+                ],
+                es: [
+                    "En mis campañas de marketing, he descubierto que...",
+                    "Al medir el éxito de una campaña, me enfoco en...",
+                    "Mi enfoque para el marketing digital implica..."
+                ]
+            },
+            sales: {
+                en: [
+                    "My sales strategy typically begins with...",
+                    "When handling client objections, I...",
+                    "To build strong client relationships, I..."
+                ],
+                es: [
+                    "Mi estrategia de ventas típicamente comienza con...",
+                    "Cuando manejo objeciones de clientes, yo...",
+                    "Para construir relaciones sólidas con clientes, yo..."
+                ]
+            },
+            finance: {
+                en: [
+                    "When analyzing financial data, I prioritize...",
+                    "My approach to budget management includes...",
+                    "For financial forecasting, I rely on..."
+                ],
+                es: [
+                    "Al analizar datos financieros, priorizo...",
+                    "Mi enfoque para la gestión de presupuestos incluye...",
+                    "Para la previsión financiera, confío en..."
+                ]
+            },
+            strategy: {
+                en: [
+                    "My strategic planning process involves...",
+                    "When identifying new opportunities, I look for...",
+                    "To measure strategic success, I track..."
+                ],
+                es: [
+                    "Mi proceso de planificación estratégica implica...",
+                    "Al identificar nuevas oportunidades, busco...",
+                    "Para medir el éxito estratégico, hago seguimiento a..."
+                ]
+            },
+            operations: {
+                en: [
+                    "To optimize operational processes, I...",
+                    "When managing supply chain challenges, my approach is...",
+                    "For quality control, I implement..."
+                ],
+                es: [
+                    "Para optimizar procesos operativos, yo...",
+                    "Al gestionar desafíos de la cadena de suministro, mi enfoque es...",
+                    "Para el control de calidad, implemento..."
+                ]
+            },
+            administration: {
+                en: [
+                    "My system for prioritizing administrative tasks is...",
+                    "When managing confidential information, I ensure...",
+                    "To improve office efficiency, I've implemented..."
+                ],
+                es: [
+                    "Mi sistema para priorizar tareas administrativas es...",
+                    "Al gestionar información confidencial, me aseguro de...",
+                    "Para mejorar la eficiencia de la oficina, he implementado..."
+                ]
+            },
+            executive: {
+                en: [
+                    "My leadership philosophy centers around...",
+                    "When making strategic decisions, I consider...",
+                    "To drive organizational change, I focus on..."
+                ],
+                es: [
+                    "Mi filosofía de liderazgo se centra en...",
+                    "Al tomar decisiones estratégicas, considero...",
+                    "Para impulsar el cambio organizacional, me enfoco en..."
+                ]
+            }
+        };
+
+        // Interview questions and terminology by role
+        const roleData = {
+            marketing: {
+                questions: {
+                    en: [
+                        "Tell me about your experience with digital marketing campaigns.",
+                        "How do you measure the success of a marketing campaign?",
+                        "Describe a marketing strategy you developed that was particularly successful.",
+                        "How do you stay updated with the latest marketing trends?",
+                        "How would you approach launching a new product in a competitive market?"
+                    ],
+                    es: [
+                        "Háblame de tu experiencia con campañas de marketing digital.",
+                        "¿Cómo mides el éxito de una campaña de marketing?",
+                        "Describe una estrategia de marketing que desarrollaste que fue particularmente exitosa.",
+                        "¿Cómo te mantienes actualizado/a con las últimas tendencias de marketing?",
+                        "¿Cómo abordarías el lanzamiento de un nuevo producto en un mercado competitivo?"
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "ROI (Return on Investment)",
+                        "KPI (Key Performance Indicator)",
+                        "CTA (Call to Action)",
+                        "SEO (Search Engine Optimization)",
+                        "PPC (Pay-Per-Click)",
+                        "Conversion Rate",
+                        "Customer Acquisition Cost",
+                        "Brand Awareness",
+                        "Market Segmentation",
+                        "Content Marketing"
+                    ],
+                    es: [
+                        "ROI (Retorno de Inversión)",
+                        "KPI (Indicador Clave de Rendimiento)",
+                        "CTA (Llamada a la Acción)",
+                        "SEO (Optimización para Motores de Búsqueda)",
+                        "PPC (Pago Por Clic)",
+                        "Tasa de Conversión",
+                        "Costo de Adquisición de Cliente",
+                        "Reconocimiento de Marca",
+                        "Segmentación de Mercado",
+                        "Marketing de Contenidos"
+                    ]
+                }
+            },
+            sales: {
+                questions: {
+                    en: [
+                        "Describe your sales process from prospecting to closing.",
+                        "Tell me about a difficult client you won over.",
+                        "How do you handle objections during the sales process?",
+                        "What CRM systems have you worked with?",
+                        "How do you prioritize your sales pipeline?"
+                    ],
+                    es: [
+                        "Describe tu proceso de ventas desde la prospección hasta el cierre.",
+                        "Háblame de un cliente difícil que lograste convencer.",
+                        "¿Cómo manejas las objeciones durante el proceso de ventas?",
+                        "¿Con qué sistemas CRM has trabajado?",
+                        "¿Cómo priorizas tu pipeline de ventas?"
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "B2B (Business to Business)",
+                        "B2C (Business to Consumer)",
+                        "CRM (Customer Relationship Management)",
+                        "Sales Pipeline",
+                        "Lead Generation",
+                        "Conversion Rate",
+                        "Upselling",
+                        "Cross-selling",
+                        "Sales Quota",
+                        "Value Proposition"
+                    ],
+                    es: [
+                        "B2B (Negocio a Negocio)",
+                        "B2C (Negocio a Consumidor)",
+                        "CRM (Gestión de Relaciones con Clientes)",
+                        "Pipeline de Ventas",
+                        "Generación de Leads",
+                        "Tasa de Conversión",
+                        "Venta Adicional",
+                        "Venta Cruzada",
+                        "Cuota de Ventas",
+                        "Propuesta de Valor"
+                    ]
+                }
+            },
+            finance: {
+                questions: {
+                    en: [
+                        "How do you approach financial forecasting?",
+                        "Explain how you would evaluate a potential investment.",
+                        "Describe your experience with budget management.",
+                        "How do you stay updated with financial regulations?",
+                        "Tell me about a time when you identified a financial risk and how you addressed it."
+                    ],
+                    es: [
+                        "¿Cómo abordas la previsión financiera?",
+                        "Explica cómo evaluarías una inversión potencial.",
+                        "Describe tu experiencia con la gestión de presupuestos.",
+                        "¿Cómo te mantienes actualizado/a con las regulaciones financieras?",
+                        "Háblame de una ocasión en la que identificaste un riesgo financiero y cómo lo abordaste."
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "ROI (Return on Investment)",
+                        "P&L (Profit and Loss)",
+                        "EBITDA (Earnings Before Interest, Taxes, Depreciation, and Amortization)",
+                        "Cash Flow",
+                        "Balance Sheet",
+                        "Accounts Receivable/Payable",
+                        "Financial Leverage",
+                        "Liquidity Ratio",
+                        "Capital Expenditure",
+                        "Depreciation"
+                    ],
+                    es: [
+                        "ROI (Retorno de Inversión)",
+                        "P&L (Pérdidas y Ganancias)",
+                        "EBITDA (Beneficio antes de Intereses, Impuestos, Depreciación y Amortización)",
+                        "Flujo de Caja",
+                        "Balance General",
+                        "Cuentas por Cobrar/Pagar",
+                        "Apalancamiento Financiero",
+                        "Ratio de Liquidez",
+                        "Gastos de Capital",
+                        "Depreciación"
+                    ]
+                }
+            },
+            strategy: {
+                questions: {
+                    en: [
+                        "How do you approach strategic planning for a business?",
+                        "Describe a time when you had to pivot a strategy due to market changes.",
+                        "How do you identify new business opportunities?",
+                        "Tell me about a successful strategy you implemented.",
+                        "How do you measure the success of a strategic initiative?"
+                    ],
+                    es: [
+                        "¿Cómo abordas la planificación estratégica para un negocio?",
+                        "Describe una ocasión en la que tuviste que cambiar una estrategia debido a cambios en el mercado.",
+                        "¿Cómo identificas nuevas oportunidades de negocio?",
+                        "Háblame de una estrategia exitosa que implementaste.",
+                        "¿Cómo mides el éxito de una iniciativa estratégica?"
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "SWOT Analysis (Strengths, Weaknesses, Opportunities, Threats)",
+                        "Competitive Advantage",
+                        "Market Penetration",
+                        "Diversification",
+                        "Strategic Alignment",
+                        "Value Chain",
+                        "Benchmarking",
+                        "Business Model Canvas",
+                        "Blue Ocean Strategy",
+                        "Scenario Planning"
+                    ],
+                    es: [
+                        "Análisis FODA (Fortalezas, Oportunidades, Debilidades, Amenazas)",
+                        "Ventaja Competitiva",
+                        "Penetración de Mercado",
+                        "Diversificación",
+                        "Alineación Estratégica",
+                        "Cadena de Valor",
+                        "Benchmarking",
+                        "Lienzo de Modelo de Negocio",
+                        "Estrategia del Océano Azul",
+                        "Planificación de Escenarios"
+                    ]
+                }
+            },
+            operations: {
+                questions: {
+                    en: [
+                        "How do you approach process optimization?",
+                        "Describe a time when you improved operational efficiency.",
+                        "How do you handle supply chain disruptions?",
+                        "Tell me about your experience with project management methodologies.",
+                        "How do you balance quality and efficiency in operations?"
+                    ],
+                    es: [
+                        "¿Cómo abordas la optimización de procesos?",
+                        "Describe una ocasión en la que mejoraste la eficiencia operativa.",
+                        "¿Cómo manejas las interrupciones en la cadena de suministro?",
+                        "Háblame de tu experiencia con metodologías de gestión de proyectos.",
+                        "¿Cómo equilibras la calidad y la eficiencia en las operaciones?"
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "KPI (Key Performance Indicator)",
+                        "Lean Management",
+                        "Six Sigma",
+                        "Supply Chain Management",
+                        "Inventory Turnover",
+                        "Just-in-Time (JIT)",
+                        "Throughput",
+                        "Bottleneck Analysis",
+                        "Capacity Planning",
+                        "Quality Control"
+                    ],
+                    es: [
+                        "KPI (Indicador Clave de Rendimiento)",
+                        "Gestión Lean",
+                        "Seis Sigma",
+                        "Gestión de la Cadena de Suministro",
+                        "Rotación de Inventario",
+                        "Just-in-Time (JIT)",
+                        "Rendimiento",
+                        "Análisis de Cuellos de Botella",
+                        "Planificación de Capacidad",
+                        "Control de Calidad"
+                    ]
+                }
+            },
+            administration: {
+                questions: {
+                    en: [
+                        "How do you prioritize tasks when managing multiple responsibilities?",
+                        "Describe your experience with office management systems.",
+                        "How do you handle confidential information?",
+                        "Tell me about a time when you improved an administrative process.",
+                        "How do you approach document management and organization?"
+                    ],
+                    es: [
+                        "¿Cómo priorizas tareas cuando gestionas múltiples responsabilidades?",
+                        "Describe tu experiencia con sistemas de gestión de oficina.",
+                        "¿Cómo manejas la información confidencial?",
+                        "Háblame de una ocasión en la que mejoraste un proceso administrativo.",
+                        "¿Cómo abordas la gestión y organización de documentos?"
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "SOP (Standard Operating Procedure)",
+                        "CRM (Customer Relationship Management)",
+                        "ERP (Enterprise Resource Planning)",
+                        "Document Management System",
+                        "Workflow Automation",
+                        "Compliance",
+                        "Data Entry",
+                        "Filing System",
+                        "Calendar Management",
+                        "Meeting Minutes"
+                    ],
+                    es: [
+                        "POE (Procedimiento Operativo Estándar)",
+                        "CRM (Gestión de Relaciones con Clientes)",
+                        "ERP (Planificación de Recursos Empresariales)",
+                        "Sistema de Gestión Documental",
+                        "Automatización de Flujos de Trabajo",
+                        "Cumplimiento Normativo",
+                        "Entrada de Datos",
+                        "Sistema de Archivo",
+                        "Gestión de Calendario",
+                        "Actas de Reuniones"
+                    ]
+                }
+            },
+            executive: {
+                questions: {
+                    en: [
+                        "How do you approach setting a vision for an organization?",
+                        "Describe your leadership style and how it has evolved.",
+                        "How do you make difficult decisions that impact the entire organization?",
+                        "Tell me about a time when you had to lead through a significant change.",
+                        "How do you balance short-term results with long-term strategy?"
+                    ],
+                    es: [
+                        "¿Cómo abordas el establecimiento de una visión para una organización?",
+                        "Describe tu estilo de liderazgo y cómo ha evolucionado.",
+                        "¿Cómo tomas decisiones difíciles que impactan a toda la organización?",
+                        "Háblame de una ocasión en la que tuviste que liderar durante un cambio significativo.",
+                        "¿Cómo equilibras los resultados a corto plazo con la estrategia a largo plazo?"
+                    ]
+                },
+                terminology: {
+                    en: [
+                        "C-Suite",
+                        "Corporate Governance",
+                        "Stakeholder Management",
+                        "Strategic Leadership",
+                        "Change Management",
+                        "Executive Dashboard",
+                        "Board of Directors",
+                        "Shareholder Value",
+                        "Corporate Social Responsibility",
+                        "Succession Planning"
+                    ],
+                    es: [
+                        "Alta Dirección",
+                        "Gobierno Corporativo",
+                        "Gestión de Partes Interesadas",
+                        "Liderazgo Estratégico",
+                        "Gestión del Cambio",
+                        "Panel Ejecutivo",
+                        "Junta Directiva",
+                        "Valor para los Accionistas",
+                        "Responsabilidad Social Corporativa",
+                        "Planificación de Sucesión"
+                    ]
+                }
+            }
+        };
+
+        // DOM elements
+        const languageToggle = document.getElementById('language-toggle');
+        const languageText = document.getElementById('language-text');
+        const subtitle = document.getElementById('subtitle');
+        const selectRoleText = document.getElementById('select-role-text');
+        const startPrompt = document.getElementById('start-prompt');
+        const terminologyTitle = document.getElementById('terminology-title');
+        const terminologyPrompt = document.getElementById('terminology-prompt');
+        const sentenceStartersTitle = document.getElementById('sentence-starters-title');
+        const sentenceStartersPrompt = document.getElementById('sentence-starters-prompt');
+        const sendBtn = document.getElementById('send-btn');
+        const sendText = document.getElementById('send-text');
+        const userInput = document.getElementById('user-input');
+        const chatContainer = document.getElementById('chat-container');
+        const terminologyContainer = document.getElementById('terminology-container');
+        const sentenceStartersContainer = document.getElementById('sentence-starters-container');
+        const roleBtns = document.querySelectorAll('.role-btn');
+
+        // Variables for interview state
+        let currentRole = null;
+        let currentQuestionIndex = 0;
+        let interviewActive = false;
+
+        // Update UI text based on language
+        function updateLanguage() {
+            document.title = translations[currentLanguage].title;
+            subtitle.textContent = translations[currentLanguage].subtitle;
+            languageText.textContent = translations[currentLanguage].languageToggle;
+            selectRoleText.textContent = translations[currentLanguage].selectRole;
+            startPrompt.textContent = translations[currentLanguage].startPrompt;
+            terminologyTitle.textContent = translations[currentLanguage].terminologyTitle;
+            terminologyPrompt.textContent = translations[currentLanguage].terminologyPrompt;
+            sentenceStartersTitle.textContent = translations[currentLanguage].sentenceStartersTitle;
+            sentenceStartersPrompt.textContent = translations[currentLanguage].sentenceStartersPrompt;
+            sendText.textContent = translations[currentLanguage].sendButton;
+            
+            // Update role buttons
+            roleBtns.forEach(btn => {
+                const role = btn.getAttribute('data-role');
+                btn.textContent = translations[currentLanguage].roles[role];
+            });
+
+            // If interview is active, update the current question
+            if (interviewActive && currentRole) {
+                updateTerminology(currentRole);
+                updateSentenceStarters(currentRole);
+                if (chatContainer.children.length > 0) {
+                    // Keep the chat history but update the last interviewer question if needed
+                    const lastMessage = chatContainer.lastElementChild;
+                    if (lastMessage.classList.contains('interviewer-message')) {
+                        lastMessage.querySelector('p').textContent = roleData[currentRole].questions[currentLanguage][currentQuestionIndex];
+                    }
+                }
+            }
+        }
+
+        // Toggle language
+        languageToggle.addEventListener('click', () => {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        });
+
+        // Display terminology for selected role
+        function updateTerminology(role) {
+            terminologyContainer.innerHTML = '';
+            
+            const terms = roleData[role].terminology[currentLanguage];
+            terms.forEach(term => {
+                const termElement = document.createElement('div');
+                termElement.className = 'sidebar-item p-3 mb-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition';
+                termElement.textContent = term;
+                terminologyContainer.appendChild(termElement);
+            });
+        }
+
+        // Display sentence starters
+        function updateSentenceStarters(role) {
+            sentenceStartersContainer.innerHTML = '';
+            
+            // Add general sentence starters
+            sentenceStarters[currentLanguage].forEach(starter => {
+                addSentenceStarter(starter);
+            });
+            
+            // Add role-specific starters
+            if (roleSpecificStarters[role]) {
+                roleSpecificStarters[role][currentLanguage].forEach(starter => {
+                    addSentenceStarter(starter);
+                });
+            }
+        }
+        
+        // Helper function to add a sentence starter with click functionality
+        function addSentenceStarter(text) {
+            const starterElement = document.createElement('div');
+            starterElement.className = 'sentence-starter sidebar-item p-3 mb-2 bg-green-50 rounded-lg hover:bg-green-100 transition';
+            starterElement.textContent = text;
+            
+            // Add click functionality to insert text into input
+            starterElement.addEventListener('click', () => {
+                if (!userInput.disabled) {
+                    userInput.value = text + ' ';
+                    userInput.focus();
+                    // Place cursor at the end
+                    const len = userInput.value.length;
+                    userInput.setSelectionRange(len, len);
+                }
+            });
+            
+            sentenceStartersContainer.appendChild(starterElement);
+        }
+
+        // Add a message to the chat
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-bubble ${isUser ? 'ml-auto bg-indigo-600 text-white' : 'mr-auto bg-gray-200 text-gray-800'} p-4 rounded-lg mb-4 ${!isUser ? 'interviewer-message' : ''}`;
+            
+            const messagePara = document.createElement('p');
+            messagePara.textContent = text;
+            messageDiv.appendChild(messagePara);
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Start interview for selected role
+        function startInterview(role) {
+            currentRole = role;
+            currentQuestionIndex = 0;
+            interviewActive = true;
+            
+            // Clear chat and show welcome message
+            chatContainer.innerHTML = '';
+            
+            const welcomeMessage = currentLanguage === 'en' 
+                ? `Welcome to your ${translations[currentLanguage].roles[role]} interview practice! I'll ask you some common questions for this role. Please respond as if you were in a real interview.`
+                : `¡Bienvenido/a a tu práctica de entrevista para ${translations[currentLanguage].roles[role]}! Te haré algunas preguntas comunes para este rol. Por favor, responde como si estuvieras en una entrevista real.`;
+            
+            addMessage(welcomeMessage, false);
+            
+            // Show first question after a short delay
+            setTimeout(() => {
+                addMessage(roleData[role].questions[currentLanguage][currentQuestionIndex], false);
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+            }, 1000);
+            
+            // Update sidebar
+            updateTerminology(role);
+            updateSentenceStarters(role);
+        }
+
+        // Handle role button clicks
+        roleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const role = btn.getAttribute('data-role');
+                startInterview(role);
+            });
+        });
+
+        // Handle user message submission
+        sendBtn.addEventListener('click', () => {
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                addMessage(userMessage, true);
+                userInput.value = '';
+                
+                // Move to next question after a short delay
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    
+                    // Check if we've reached the end of questions
+                    if (currentQuestionIndex < roleData[currentRole].questions[currentLanguage].length) {
+                        addMessage(roleData[currentRole].questions[currentLanguage][currentQuestionIndex], false);
+                    } else {
+                        // End of interview
+                        const endMessage = currentLanguage === 'en'
+                            ? "That concludes our practice interview. You can select another role to continue practicing or refresh the page to start over."
+                            : "Eso concluye nuestra entrevista de práctica. Puedes seleccionar otro rol para seguir practicando o actualizar la página para comenzar de nuevo.";
+                        
+                        addMessage(endMessage, false);
+                        userInput.disabled = true;
+                        sendBtn.disabled = true;
+                        interviewActive = false;
+                    }
+                }, 1000);
+            }
+        });
+
+        // Allow Enter key to send message
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !userInput.disabled) {
+                sendBtn.click();
+            }
+        });
+
+        // Initialize with English
+        updateLanguage();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9569b65e77af09f9',t:'MTc1MTA3NzMwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
