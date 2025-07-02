@@ -1,0 +1,851 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar in Motion - ESL Tutoring App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .timeline-item { position: relative; padding-left: 2rem; }
+        .timeline-item::before { content: ''; position: absolute; left: 0; top: 0.5rem; width: 12px; height: 12px; background: #667eea; border-radius: 50%; }
+        .timeline-item::after { content: ''; position: absolute; left: 5px; top: 1.2rem; width: 2px; height: calc(100% - 0.5rem); background: #e5e7eb; }
+        .timeline-item:last-child::after { display: none; }
+        .quiz-option { transition: all 0.2s ease; cursor: pointer; }
+        .quiz-option:hover { background-color: #f3f4f6; }
+        .quiz-option.correct { background-color: #d1fae5; border-color: #10b981; }
+        .quiz-option.incorrect { background-color: #fee2e2; border-color: #ef4444; }
+        .task-card.selected { border-width: 3px; }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.sticky{position:sticky}.top-0{top:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-16{margin-bottom:4rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-4{margin-left:1rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2{height:0.5rem}.h-24{height:6rem}.h-6{height:1.5rem}.h-64{height:16rem}.w-6{width:1.5rem}.w-full{width:100%}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-6xl{max-width:72rem}.max-w-7xl{max-width:80rem}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.list-inside{list-style-position:inside}.list-disc{list-style-type:disc}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-l-4{border-left-width:4px}.border-blue-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-200{--tw-bg-opacity:1;background-color:rgb(229 231 235 / var(--tw-bg-opacity, 1))}.bg-gray-300{--tw-bg-opacity:1;background-color:rgb(209 213 219 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-500{--tw-bg-opacity:1;background-color:rgb(107 114 128 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-4{padding-bottom:1rem}.pl-6{padding-left:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-800{--tw-text-opacity:1;color:rgb(133 77 14 / var(--tw-text-opacity, 1))}.opacity-90{opacity:0.9}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:border-blue-500:hover{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.hover\:border-green-500:hover{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.hover\:border-purple-500:hover{--tw-border-opacity:1;border-color:rgb(168 85 247 / var(--tw-border-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-400:hover{--tw-bg-opacity:1;background-color:rgb(156 163 175 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.hover\:text-blue-200:hover{--tw-text-opacity:1;color:rgb(191 219 254 / var(--tw-text-opacity, 1))}.focus\:border-transparent:focus{border-color:transparent}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.focus\:ring-green-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(34 197 94 / var(--tw-ring-opacity, 1))}.focus\:ring-purple-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(168 85 247 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-6xl{font-size:3.75rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style></head>
+<body class="bg-gray-50" data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🏃‍♂️</span>
+                    <h1 class="text-xl font-bold">Grammar in Motion</h1>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <button onclick="showPage('home')" class="nav-btn hover:text-blue-200 transition-colors">🏠 Home</button>
+                    <button onclick="showPage('lesson')" class="nav-btn hover:text-blue-200 transition-colors">📚 Lesson</button>
+                    <button onclick="showPage('practice')" class="nav-btn hover:text-blue-200 transition-colors">✏️ Practice</button>
+                    <button onclick="showPage('speaking')" class="nav-btn hover:text-blue-200 transition-colors">🗣️ Speaking</button>
+                    <button onclick="showPage('homework')" class="nav-btn hover:text-blue-200 transition-colors">📝 Homework</button>
+                </div>
+                <button onclick="toggleMobileMenu()" class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="mobileMenu" class="hidden md:hidden pb-4">
+                <button onclick="showPage('home')" class="block w-full text-left py-2 hover:text-blue-200">🏠 Home</button>
+                <button onclick="showPage('lesson')" class="block w-full text-left py-2 hover:text-blue-200">📚 Lesson</button>
+                <button onclick="showPage('practice')" class="block w-full text-left py-2 hover:text-blue-200">✏️ Practice</button>
+                <button onclick="showPage('speaking')" class="block w-full text-left py-2 hover:text-blue-200">🗣️ Speaking</button>
+                <button onclick="showPage('homework')" class="block w-full text-left py-2 hover:text-blue-200">📝 Homework</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="homePage" class="page">
+        <div class="gradient-bg text-white py-16">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Grammar in Motion</h1>
+                <h2 class="text-xl md:text-2xl mb-8 opacity-90">Tense Practice for Marathon Talk</h2>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+                    Master the difference between present perfect and past simple tenses while talking about fitness, exercise, and marathon training. Build fluency and accuracy in your English conversations!
+                </p>
+            </div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto px-4 py-16">
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">🎯 Learning Objectives</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-500 mt-1">✓</span>
+                            <span>Distinguish between present perfect and past simple usage</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-500 mt-1">✓</span>
+                            <span>Use fitness vocabulary in context with correct tenses</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-500 mt-1">✓</span>
+                            <span>Speak confidently about training experiences</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-green-500 mt-1">✓</span>
+                            <span>Write coherent paragraphs using both tenses</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">⏱️ Lesson Duration</h3>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-blue-600 mb-2">60</div>
+                        <div class="text-gray-600 mb-4">Minutes</div>
+                        <div class="text-sm text-gray-500">B2 Level • Interactive • Speaking Focus</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button onclick="showPage('lesson')" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg">
+                    Start Your Lesson Journey 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Breakdown Page -->
+    <div id="lessonPage" class="page hidden">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">📚 Lesson Breakdown</h1>
+            
+            <!-- Grammar Rules Section -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Grammar Rules &amp; Usage</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border-l-4 border-green-500 pl-6">
+                        <h3 class="text-xl font-semibold text-green-700 mb-4">Present Perfect</h3>
+                        <div class="space-y-3 text-gray-600">
+                            <p><strong>Form:</strong> have/has + past participle</p>
+                            <p><strong>Use for:</strong></p>
+                            <ul class="list-disc list-inside space-y-1 ml-4">
+                                <li>Life experiences (no specific time)</li>
+                                <li>Actions with present relevance</li>
+                                <li>Unfinished time periods</li>
+                            </ul>
+                            <div class="bg-green-50 p-4 rounded-lg mt-4">
+                                <p class="font-medium text-green-800">Examples:</p>
+                                <p class="text-green-700">"I <strong>have run</strong> three marathons."</p>
+                                <p class="text-green-700">"She <strong>has trained</strong> for six months."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border-l-4 border-blue-500 pl-6">
+                        <h3 class="text-xl font-semibold text-blue-700 mb-4">Past Simple</h3>
+                        <div class="space-y-3 text-gray-600">
+                            <p><strong>Form:</strong> verb + -ed (or irregular past form)</p>
+                            <p><strong>Use for:</strong></p>
+                            <ul class="list-disc list-inside space-y-1 ml-4">
+                                <li>Completed actions at specific times</li>
+                                <li>Past habits or routines</li>
+                                <li>Sequence of past events</li>
+                            </ul>
+                            <div class="bg-blue-50 p-4 rounded-lg mt-4">
+                                <p class="font-medium text-blue-800">Examples:</p>
+                                <p class="text-blue-700">"I <strong>ran</strong> a marathon last year."</p>
+                                <p class="text-blue-700">"He <strong>trained</strong> every morning in 2022."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Timeline Section -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Lesson Timeline (60 minutes)</h2>
+                
+                <div class="space-y-6">
+                    <div class="timeline-item">
+                        <h3 class="text-lg font-semibold text-gray-800">Warm-Up: "Have You Ever...?" Fitness Edition</h3>
+                        <p class="text-gray-600 mt-2">Duration: 10 minutes</p>
+                        <p class="text-gray-600">Students share fitness experiences using present perfect. Build rapport and activate prior knowledge.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-lg font-semibold text-gray-800">Concept Clarification</h3>
+                        <p class="text-gray-600 mt-2">Duration: 15 minutes</p>
+                        <p class="text-gray-600">Visual timeline explanations, form analysis, and meaning clarification with fitness contexts.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-lg font-semibold text-gray-800">Controlled Practice: "Correct the Coach"</h3>
+                        <p class="text-gray-600 mt-2">Duration: 10 minutes</p>
+                        <p class="text-gray-600">Interactive quiz format where students identify and correct tense errors in training advice.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-lg font-semibold text-gray-800">Guided Conversation Prompts</h3>
+                        <p class="text-gray-600 mt-2">Duration: 15 minutes</p>
+                        <p class="text-gray-600">Structured speaking practice with tutor guidance and immediate feedback.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-lg font-semibold text-gray-800">Fluency Task: Tell Your Training Story</h3>
+                        <p class="text-gray-600 mt-2">Duration: 8 minutes</p>
+                        <p class="text-gray-600">Students narrate their fitness journey using both tenses naturally.</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-lg font-semibold text-gray-800">Wrap-up + Feedback Tips</h3>
+                        <p class="text-gray-600 mt-2">Duration: 2 minutes</p>
+                        <p class="text-gray-600">Summary of key points and homework assignment explanation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Practice Page -->
+    <div id="practicePage" class="page hidden">
+        <div class="max-w-4xl mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">✏️ Interactive Grammar Practice</h1>
+            
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800">Progress</h2>
+                    <div class="text-sm text-gray-600">
+                        Question <span id="currentQuestion">1</span> of <span id="totalQuestions">8</span>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+                    <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 12.5%"></div>
+                </div>
+                
+                <div id="quizContainer">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">I ___ a marathon in 2019.</h3>
+                    <div class="space-y-3">
+                        
+                            <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg" onclick="selectAnswer(0)">
+                                have run
+                            </div>
+                        
+                            <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg" onclick="selectAnswer(1)">
+                                ran
+                            </div>
+                        
+                            <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg" onclick="selectAnswer(2)">
+                                run
+                            </div>
+                        
+                    </div>
+                </div>
+                <div id="explanation" class="hidden p-4 bg-blue-50 rounded-lg">
+                    <p class="text-blue-800"><strong>Explanation:</strong> Use past simple 'ran' because we have a specific time (2019).</p>
+                </div>
+            </div>
+                
+                <div class="flex justify-between mt-6">
+                    <button id="prevBtn" onclick="previousQuestion()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg transition-colors" disabled="">Previous</button>
+                    <button id="nextBtn" onclick="nextQuestion()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">Next</button>
+                </div>
+                
+                <div id="resultsContainer" class="hidden mt-8 p-6 bg-green-50 rounded-lg">
+                    <h3 class="text-xl font-bold text-green-800 mb-4">🎉 Quiz Complete!</h3>
+                    <p class="text-green-700 mb-4">Your Score: <span id="finalScore" class="font-bold"></span></p>
+                    <button onclick="resetQuiz()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">Try Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Speaking Prompts Page -->
+    <div id="speakingPage" class="page hidden">
+        <div class="max-w-4xl mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">🗣️ Speaking Prompts</h1>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h2 class="text-xl font-bold text-green-700 mb-6">Present Perfect Questions</h2>
+                    <p class="text-gray-600 mb-4 text-sm">Use these for life experiences (no specific time mentioned)</p>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800">Have you ever run a marathon?</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800">Have you ever tried rock climbing?</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800">Have you ever joined a gym?</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800">Have you ever injured yourself while exercising?</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800">Have you ever participated in a fitness challenge?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h2 class="text-xl font-bold text-blue-700 mb-6">Past Simple Questions</h2>
+                    <p class="text-gray-600 mb-4 text-sm">Use these for specific memories and times</p>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800">When did you start your fitness journey?</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800">What sport did you play in school?</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800">How did you feel after your first long run?</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800">Where did you exercise last week?</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800">What motivated you to start training?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Writing Practice Section -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mt-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">✍️ Quick Writing Practice</h2>
+                <p class="text-gray-600 mb-6">Choose a question above and write a short response (2-3 sentences). Focus on using the correct tense!</p>
+                
+                <div class="mb-4">
+                    <label for="quickWriting" class="block text-sm font-medium text-gray-700 mb-2">Your Response:</label>
+                    <textarea id="quickWriting" placeholder="Write your response here..." class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <span id="quickWordCount" class="text-sm text-gray-500">0 words</span>
+                        <button onclick="checkQuickWriting()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors">
+                            Check Grammar
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="quickFeedback" class="hidden p-4 bg-blue-50 rounded-lg">
+                    <h4 class="font-semibold text-blue-800 mb-2">Quick Analysis:</h4>
+                    <div id="quickFeedbackContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homework Page -->
+    <div id="homeworkPage" class="page hidden">
+        <div class="max-w-4xl mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">📝 Homework Assignment</h1>
+            
+            <!-- Task Selection -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Choose Your Writing Task</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="task-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 transition-colors" onclick="selectTask(1)">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">📖 Task 1: Training History</h3>
+                        <p class="text-gray-600 text-sm mb-3">Write about your fitness journey using both tenses</p>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">150-200 words</span>
+                    </div>
+                    
+                    <div class="task-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-green-500 transition-colors" onclick="selectTask(2)">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">💭 Task 2: Compare &amp; Contrast</h3>
+                        <p class="text-gray-600 text-sm mb-3">Compare your past and present fitness habits</p>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">100-150 words</span>
+                    </div>
+                    
+                    <div class="task-card p-6 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 transition-colors" onclick="selectTask(3)">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">🎯 Task 3: Goal Setting</h3>
+                        <p class="text-gray-600 text-sm mb-3">Write about fitness goals and achievements</p>
+                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">120-180 words</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Task 1: Training History -->
+            <div id="task1" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">📖 Task 1: Write Your Training History</h2>
+                
+                <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-3">Instructions:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-blue-700">
+                        <li>Write a paragraph (150-200 words) about your fitness and training experiences</li>
+                        <li>Use both present perfect and past simple tenses</li>
+                        <li>Include specific examples and time references where appropriate</li>
+                        <li>Focus on marathon training, gym experiences, or any fitness activities</li>
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Helpful Prompts:</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800 mb-2">Present Perfect Ideas:</p>
+                            <ul class="text-sm text-green-700 space-y-1">
+                                <li>• Life experiences with fitness</li>
+                                <li>• Recent achievements</li>
+                                <li>• Changes you've noticed</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800 mb-2">Past Simple Ideas:</p>
+                            <ul class="text-sm text-blue-700 space-y-1">
+                                <li>• When you started training</li>
+                                <li>• Specific events or races</li>
+                                <li>• Your routine last year</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label for="task1Text" class="block text-lg font-semibold text-gray-800 mb-3">Your Response:</label>
+                    <textarea id="task1Text" placeholder="Start writing your training history here... Remember to use both present perfect and past simple tenses!" class="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <span id="task1WordCount" class="text-sm text-gray-500">0 words</span>
+                        <span class="text-sm text-gray-500">Target: 150-200 words</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="checkTaskGrammar(1)" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        📝 Check My Writing
+                    </button>
+                    <button onclick="clearTask(1)" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        🗑️ Clear Text
+                    </button>
+                </div>
+                
+                <div id="task1Feedback" class="hidden mt-6 p-6 bg-yellow-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-3">✨ Writing Analysis</h3>
+                    <div id="task1FeedbackContent"></div>
+                </div>
+            </div>
+            
+            <!-- Task 2: Compare & Contrast -->
+            <div id="task2" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">💭 Task 2: Compare &amp; Contrast</h2>
+                
+                <div class="bg-green-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-lg font-semibold text-green-800 mb-3">Instructions:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-green-700">
+                        <li>Compare your fitness habits from the past with your current habits (100-150 words)</li>
+                        <li>Use past simple for old habits and present perfect for recent changes</li>
+                        <li>Include time expressions like "used to," "now," "recently," "in the past"</li>
+                        <li>Focus on specific changes in your routine, diet, or exercise preferences</li>
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Helpful Sentence Starters:</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-medium text-green-800 mb-2">Past Habits:</p>
+                            <ul class="text-sm text-green-700 space-y-1">
+                                <li>• "I used to..."</li>
+                                <li>• "In the past, I..."</li>
+                                <li>• "When I was younger, I..."</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-medium text-blue-800 mb-2">Current Changes:</p>
+                            <ul class="text-sm text-blue-700 space-y-1">
+                                <li>• "I have started..."</li>
+                                <li>• "Recently, I have..."</li>
+                                <li>• "I have become..."</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label for="task2Text" class="block text-lg font-semibold text-gray-800 mb-3">Your Response:</label>
+                    <textarea id="task2Text" placeholder="Compare your past and present fitness habits here..." class="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <span id="task2WordCount" class="text-sm text-gray-500">0 words</span>
+                        <span class="text-sm text-gray-500">Target: 100-150 words</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="checkTaskGrammar(2)" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        📝 Check My Writing
+                    </button>
+                    <button onclick="clearTask(2)" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        🗑️ Clear Text
+                    </button>
+                </div>
+                
+                <div id="task2Feedback" class="hidden mt-6 p-6 bg-yellow-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-3">✨ Writing Analysis</h3>
+                    <div id="task2FeedbackContent"></div>
+                </div>
+            </div>
+            
+            <!-- Task 3: Goal Setting -->
+            <div id="task3" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Task 3: Goal Setting</h2>
+                
+                <div class="bg-purple-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-lg font-semibold text-purple-800 mb-3">Instructions:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-purple-700">
+                        <li>Write about your fitness goals and what you have achieved so far (120-180 words)</li>
+                        <li>Use present perfect for achievements and progress made</li>
+                        <li>Use past simple for specific moments when you set goals or completed challenges</li>
+                        <li>Include both short-term and long-term fitness objectives</li>
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Writing Prompts:</h3>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <p class="text-purple-800">💪 <strong>Achievement Focus:</strong> What fitness milestones have you reached? When did you first set these goals?</p>
+                        </div>
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="text-blue-800">🏃‍♂️ <strong>Progress Focus:</strong> How has your fitness improved over time? What specific improvements have you noticed?</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-green-800">🎯 <strong>Future Focus:</strong> What are your current goals? How have your priorities changed since you started?</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label for="task3Text" class="block text-lg font-semibold text-gray-800 mb-3">Your Response:</label>
+                    <textarea id="task3Text" placeholder="Write about your fitness goals and achievements here..." class="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <span id="task3WordCount" class="text-sm text-gray-500">0 words</span>
+                        <span class="text-sm text-gray-500">Target: 120-180 words</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="checkTaskGrammar(3)" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        📝 Check My Writing
+                    </button>
+                    <button onclick="clearTask(3)" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        🗑️ Clear Text
+                    </button>
+                </div>
+                
+                <div id="task3Feedback" class="hidden mt-6 p-6 bg-yellow-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-3">✨ Writing Analysis</h3>
+                    <div id="task3FeedbackContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId + 'Page').classList.remove('hidden');
+            
+            // Update active nav button
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('text-blue-200'));
+            
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.add('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Quiz functionality
+        const quizQuestions = [
+            {
+                question: "I ___ a marathon in 2019.",
+                options: ["have run", "ran", "run"],
+                correct: 1,
+                explanation: "Use past simple 'ran' because we have a specific time (2019)."
+            },
+            {
+                question: "She ___ for six months now.",
+                options: ["trained", "has trained", "trains"],
+                correct: 1,
+                explanation: "Use present perfect 'has trained' for an action continuing to the present."
+            },
+            {
+                question: "Have you ever ___ rock climbing?",
+                options: ["tried", "try", "been trying"],
+                correct: 0,
+                explanation: "Use past participle 'tried' with present perfect for life experiences."
+            },
+            {
+                question: "Last week, I ___ to the gym every day.",
+                options: ["have gone", "went", "go"],
+                correct: 1,
+                explanation: "Use past simple 'went' for completed actions in a finished time period."
+            },
+            {
+                question: "My fitness ___ a lot since January.",
+                options: ["improved", "has improved", "improves"],
+                correct: 1,
+                explanation: "Use present perfect 'has improved' for changes from past to present."
+            },
+            {
+                question: "When ___ you start running?",
+                options: ["have", "did", "do"],
+                correct: 1,
+                explanation: "Use 'did' for past simple questions about specific times."
+            },
+            {
+                question: "I ___ three different gyms in my life.",
+                options: ["joined", "have joined", "join"],
+                correct: 1,
+                explanation: "Use present perfect 'have joined' for life experiences without specific time."
+            },
+            {
+                question: "Yesterday, he ___ 10 kilometers.",
+                options: ["has run", "ran", "runs"],
+                correct: 1,
+                explanation: "Use past simple 'ran' with specific time reference 'yesterday'."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const container = document.getElementById('quizContainer');
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">${question.question}</h3>
+                    <div class="space-y-3">
+                        ${question.options.map((option, index) => `
+                            <div class="quiz-option p-4 border-2 border-gray-200 rounded-lg" onclick="selectAnswer(${index})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div id="explanation" class="hidden p-4 bg-blue-50 rounded-lg">
+                    <p class="text-blue-800"><strong>Explanation:</strong> ${question.explanation}</p>
+                </div>
+            `;
+            
+            // Update progress
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('progressBar').style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+            document.getElementById('nextBtn').textContent = currentQuestionIndex === quizQuestions.length - 1 ? 'Finish' : 'Next';
+            
+            answered = false;
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (answered) return;
+            
+            const question = quizQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options[selectedIndex].classList.add(selectedIndex === question.correct ? 'correct' : 'incorrect');
+            options[question.correct].classList.add('correct');
+            
+            if (selectedIndex === question.correct) {
+                score++;
+            }
+            
+            document.getElementById('explanation').classList.remove('hidden');
+            answered = true;
+        }
+
+        function nextQuestion() {
+            if (!answered) {
+                alert('Please select an answer first!');
+                return;
+            }
+            
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.querySelector('.flex.justify-between').classList.add('hidden');
+            document.getElementById('resultsContainer').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = `${score}/${quizQuestions.length} (${Math.round((score/quizQuestions.length)*100)}%)`;
+        }
+
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.querySelector('.flex.justify-between').classList.remove('hidden');
+            document.getElementById('resultsContainer').classList.add('hidden');
+            loadQuestion();
+        }
+
+        // Quick writing functionality for speaking page
+        function updateQuickWordCount() {
+            const text = document.getElementById('quickWriting').value;
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            document.getElementById('quickWordCount').textContent = `${words.length} words`;
+        }
+
+        function checkQuickWriting() {
+            const text = document.getElementById('quickWriting').value.trim();
+            if (!text) {
+                alert('Please write something first!');
+                return;
+            }
+            
+            const presentPerfectPattern = /\b(have|has)\s+\w+ed\b|\b(have|has)\s+(been|gone|done|run|seen|taken|made|come|given)\b/gi;
+            const pastSimplePattern = /\b\w+ed\b|\b(was|were|went|ran|did|came|saw|took|made|gave)\b/gi;
+            
+            const presentPerfectMatches = text.match(presentPerfectPattern) || [];
+            const pastSimpleMatches = text.match(pastSimplePattern) || [];
+            
+            let feedback = `
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span>Present Perfect:</span>
+                        <span class="font-semibold ${presentPerfectMatches.length > 0 ? 'text-green-600' : 'text-orange-600'}">${presentPerfectMatches.length} found</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Past Simple:</span>
+                        <span class="font-semibold ${pastSimpleMatches.length > 0 ? 'text-green-600' : 'text-orange-600'}">${pastSimpleMatches.length} found</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('quickFeedbackContent').innerHTML = feedback;
+            document.getElementById('quickFeedback').classList.remove('hidden');
+        }
+
+        // Task selection and management
+        let currentTask = 0;
+        
+        function selectTask(taskNumber) {
+            // Hide all tasks
+            document.getElementById('task1').classList.add('hidden');
+            document.getElementById('task2').classList.add('hidden');
+            document.getElementById('task3').classList.add('hidden');
+            
+            // Show selected task
+            document.getElementById(`task${taskNumber}`).classList.remove('hidden');
+            currentTask = taskNumber;
+            
+            // Update task card styling
+            const cards = document.querySelectorAll('.task-card');
+            cards.forEach(card => card.classList.remove('border-blue-500', 'border-green-500', 'border-purple-500'));
+            cards[taskNumber - 1].classList.add(taskNumber === 1 ? 'border-blue-500' : taskNumber === 2 ? 'border-green-500' : 'border-purple-500');
+        }
+
+        // Word count functions for each task
+        function updateTaskWordCount(taskNum) {
+            const text = document.getElementById(`task${taskNum}Text`).value;
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            document.getElementById(`task${taskNum}WordCount`).textContent = `${words.length} words`;
+        }
+
+        function checkTaskGrammar(taskNum) {
+            const text = document.getElementById(`task${taskNum}Text`).value.trim();
+            if (!text) {
+                alert('Please write something first!');
+                return;
+            }
+            
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            const wordCount = words.length;
+            
+            // Define word count ranges for each task
+            const ranges = {
+                1: { min: 150, max: 200 },
+                2: { min: 100, max: 150 },
+                3: { min: 120, max: 180 }
+            };
+            
+            const range = ranges[taskNum];
+            
+            // Simple analysis
+            const presentPerfectPattern = /\b(have|has)\s+\w+ed\b|\b(have|has)\s+(been|gone|done|run|seen|taken|made|come|given)\b/gi;
+            const pastSimplePattern = /\b\w+ed\b|\b(was|were|went|ran|did|came|saw|took|made|gave)\b/gi;
+            
+            const presentPerfectMatches = text.match(presentPerfectPattern) || [];
+            const pastSimpleMatches = text.match(pastSimplePattern) || [];
+            
+            let feedback = `
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span>Word Count:</span>
+                        <span class="font-semibold ${wordCount >= range.min && wordCount <= range.max ? 'text-green-600' : 'text-orange-600'}">${wordCount} words</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Present Perfect Usage:</span>
+                        <span class="font-semibold ${presentPerfectMatches.length > 0 ? 'text-green-600' : 'text-red-600'}">${presentPerfectMatches.length} instances</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Past Simple Usage:</span>
+                        <span class="font-semibold ${pastSimpleMatches.length > 0 ? 'text-green-600' : 'text-red-600'}">${pastSimpleMatches.length} instances</span>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-white rounded border-l-4 border-blue-500">
+                    <h4 class="font-semibold text-gray-800 mb-2">Suggestions:</h4>
+                    <ul class="text-sm text-gray-600 space-y-1">
+            `;
+            
+            if (wordCount < range.min) {
+                feedback += '<li>• Try to add more details and examples</li>';
+            }
+            if (wordCount > range.max) {
+                feedback += '<li>• Consider condensing your writing to stay within the word limit</li>';
+            }
+            if (presentPerfectMatches.length === 0) {
+                feedback += '<li>• Add some present perfect examples (have/has + past participle)</li>';
+            }
+            if (pastSimpleMatches.length === 0) {
+                feedback += '<li>• Include some past simple examples with specific time references</li>';
+            }
+            if (presentPerfectMatches.length > 0 && pastSimpleMatches.length > 0 && wordCount >= range.min && wordCount <= range.max) {
+                feedback += '<li>• Excellent work! You\'ve used both tenses appropriately</li>';
+            }
+            
+            feedback += '</ul></div>';
+            
+            document.getElementById(`task${taskNum}FeedbackContent`).innerHTML = feedback;
+            document.getElementById(`task${taskNum}Feedback`).classList.remove('hidden');
+        }
+
+        function clearTask(taskNum) {
+            document.getElementById(`task${taskNum}Text`).value = '';
+            document.getElementById(`task${taskNum}WordCount`).textContent = '0 words';
+            document.getElementById(`task${taskNum}Feedback`).classList.add('hidden');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuestion();
+            document.getElementById('totalQuestions').textContent = quizQuestions.length;
+            
+            // Add event listeners for all text areas
+            document.getElementById('quickWriting').addEventListener('input', updateQuickWordCount);
+            document.getElementById('task1Text').addEventListener('input', () => updateTaskWordCount(1));
+            document.getElementById('task2Text').addEventListener('input', () => updateTaskWordCount(2));
+            document.getElementById('task3Text').addEventListener('input', () => updateTaskWordCount(3));
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'958f88beb7c92f3a',t:'MTc1MTQ3Mzg5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
