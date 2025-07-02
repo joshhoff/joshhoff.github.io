@@ -1,0 +1,865 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Tenses Master - Maestro de Tiempos Perfectos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #718096;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .language-toggle:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab {
+            background: transparent;
+            border: none;
+            padding: 15px 25px;
+            margin: 0 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+        
+        .tab.active {
+            background: #4299e1;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab:hover:not(.active) {
+            background: #e2e8f0;
+        }
+        
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            min-height: 500px;
+        }
+        
+        .tense-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tense-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .examples {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .example {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+        
+        .conversation-area {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .chat-message {
+            background: #4299e1;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            margin: 10px 0;
+            max-width: 80%;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .chat-message.user {
+            background: #48bb78;
+            margin-left: auto;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .activity-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #4299e1;
+            transform: translateY(-2px);
+        }
+        
+        .option.correct {
+            background: #c6f6d5;
+            border-color: #48bb78;
+        }
+        
+        .option.incorrect {
+            background: #fed7d7;
+            border-color: #f56565;
+        }
+        
+        .btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        
+        .btn.secondary {
+            background: #48bb78;
+        }
+        
+        .btn.secondary:hover {
+            background: #38a169;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4299e1, #48bb78);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .surprise-element {
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradientShift 3s ease infinite;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                margin: 5px;
+                padding: 12px 20px;
+            }
+            
+            .language-toggle {
+                position: static;
+                margin: 10px auto;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <button class="language-toggle" onclick="toggleLanguage()">🌐 Español</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1 id="main-title">Perfect Tenses Master</h1>
+            <p id="subtitle">Master Present Perfect &amp; Past Perfect with Interactive Learning</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('learn')" id="tab-learn">📚 Learn</button>
+            <button class="tab" onclick="showTab('practice')" id="tab-practice">💬 Practice</button>
+            <button class="tab" onclick="showTab('activities')" id="tab-activities">🎯 Activities</button>
+            <button class="tab" onclick="showTab('challenge')" id="tab-challenge">🏆 Challenge</button>
+        </div>
+        
+        <div class="content">
+            <!-- Learn Section -->
+            <div id="learn-section" class="section fade-in">
+                <div class="tense-card">
+                    <h3 id="present-perfect-title">🎯 Present Perfect</h3>
+                    <p id="present-perfect-desc">Used for actions that started in the past and continue to the present, or have relevance now.</p>
+                    <div class="examples">
+                        <div class="example" id="pp-example1">✅ I have lived here for 5 years.</div>
+                        <div class="example" id="pp-example2">✅ She has just finished her homework.</div>
+                        <div class="example" id="pp-example3">✅ We have never been to Japan.</div>
+                    </div>
+                </div>
+                
+                <div class="tense-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <h3 id="past-perfect-title">⏰ Past Perfect</h3>
+                    <p id="past-perfect-desc">Used for actions that were completed before another past action or time.</p>
+                    <div class="examples">
+                        <div class="example" id="pap-example1">✅ I had eaten before you arrived.</div>
+                        <div class="example" id="pap-example2">✅ They had already left when we got there.</div>
+                        <div class="example" id="pap-example3">✅ She had studied English before moving to Canada.</div>
+                    </div>
+                </div>
+                
+                <div class="surprise-element">
+                    <span class="emoji">🎉</span>
+                    <span id="fun-fact">Fun Fact: Perfect tenses help you sound more natural and precise in English!</span>
+                    <span class="emoji">✨</span>
+                </div>
+            </div>
+            
+            <!-- Practice Section -->
+            <div id="practice-section" class="section fade-in hidden">
+                <div class="conversation-area">
+                    <h3 id="conversation-title">💬 Conversation Practice</h3>
+                    <div id="chat-container"><div class="chat-message">Tell me about a place you have visited recently.</div><div class="chat-message user">I have been to the new art museum downtown. It has become very popular!</div><div class="chat-message">What had you done before you started learning English?</div><div class="chat-message user">I had studied French for two years before I began learning English.</div></div>
+                    <button class="btn" onclick="startConversation()" id="start-chat" style="display: none;">Start Conversation</button>
+                    <button class="btn secondary" onclick="nextPrompt()" id="next-prompt" style="display: inline-block;">Next Prompt</button>
+                </div>
+            </div>
+            
+            <!-- Activities Section -->
+            <div id="activities-section" class="section fade-in hidden">
+                <div class="activity-card">
+                    <h3 id="activity-title">🎯 Fill in the Blanks</h3>
+                    <div id="activity-content">
+                    <div class="question">She _____ (finish) her work before the meeting started.</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(0, 1)">has finished</div><div class="option" onclick="selectOption(1, 1)">had finished</div><div class="option" onclick="selectOption(2, 1)">finished</div><div class="option" onclick="selectOption(3, 1)">finishes</div>
+                    </div>
+                </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress" style="width: 20%;"></div>
+                    </div>
+                    <div class="score" id="score">Score: 0/5</div>
+                    <button class="btn" onclick="startActivity()" id="start-activity" style="display: none;">Start Activity</button>
+                </div>
+            </div>
+            
+            <!-- Challenge Section -->
+            <div id="challenge-section" class="section fade-in hidden">
+                <div class="activity-card" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                    <h3 id="challenge-title">🏆 Ultimate Challenge</h3>
+                    <p id="challenge-desc">Test your mastery of both perfect tenses!</p>
+                    <div id="challenge-content"></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="challenge-progress" style="width: 0%"></div>
+                    </div>
+                    <div class="score" id="challenge-score">Score: 0/0</div>
+                    <button class="btn" onclick="startChallenge()" id="start-challenge">Start Challenge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentConversationIndex = 0;
+        let currentActivityIndex = 0;
+        let currentChallengeIndex = 0;
+        let activityScore = 0;
+        let challengeScore = 0;
+        
+        const translations = {
+            en: {
+                mainTitle: "Perfect Tenses Master",
+                subtitle: "Master Present Perfect & Past Perfect with Interactive Learning",
+                langToggle: "🌐 Español",
+                tabLearn: "📚 Learn",
+                tabPractice: "💬 Practice",
+                tabActivities: "🎯 Activities",
+                tabChallenge: "🏆 Challenge",
+                presentPerfectTitle: "🎯 Present Perfect",
+                presentPerfectDesc: "Used for actions that started in the past and continue to the present, or have relevance now.",
+                ppExample1: "✅ I have lived here for 5 years.",
+                ppExample2: "✅ She has just finished her homework.",
+                ppExample3: "✅ We have never been to Japan.",
+                pastPerfectTitle: "⏰ Past Perfect",
+                pastPerfectDesc: "Used for actions that were completed before another past action or time.",
+                papExample1: "✅ I had eaten before you arrived.",
+                papExample2: "✅ They had already left when we got there.",
+                papExample3: "✅ She had studied English before moving to Canada.",
+                funFact: "Fun Fact: Perfect tenses help you sound more natural and precise in English!",
+                conversationTitle: "💬 Conversation Practice",
+                startChat: "Start Conversation",
+                nextPrompt: "Next Prompt",
+                activityTitle: "🎯 Fill in the Blanks",
+                startActivity: "Start Activity",
+                challengeTitle: "🏆 Ultimate Challenge",
+                challengeDesc: "Test your mastery of both perfect tenses!",
+                startChallenge: "Start Challenge"
+            },
+            es: {
+                mainTitle: "Maestro de Tiempos Perfectos",
+                subtitle: "Domina el Presente Perfecto y Pasado Perfecto con Aprendizaje Interactivo",
+                langToggle: "🌐 English",
+                tabLearn: "📚 Aprender",
+                tabPractice: "💬 Practicar",
+                tabActivities: "🎯 Actividades",
+                tabChallenge: "🏆 Desafío",
+                presentPerfectTitle: "🎯 Presente Perfecto",
+                presentPerfectDesc: "Se usa para acciones que comenzaron en el pasado y continúan en el presente, o tienen relevancia ahora.",
+                ppExample1: "✅ He vivido aquí por 5 años.",
+                ppExample2: "✅ Ella acaba de terminar su tarea.",
+                ppExample3: "✅ Nunca hemos estado en Japón.",
+                pastPerfectTitle: "⏰ Pasado Perfecto",
+                pastPerfectDesc: "Se usa para acciones que se completaron antes de otra acción o tiempo pasado.",
+                papExample1: "✅ Había comido antes de que llegaras.",
+                papExample2: "✅ Ya se habían ido cuando llegamos allí.",
+                papExample3: "✅ Había estudiado inglés antes de mudarse a Canadá.",
+                funFact: "Dato Curioso: ¡Los tiempos perfectos te ayudan a sonar más natural y preciso en inglés!",
+                conversationTitle: "💬 Práctica de Conversación",
+                startChat: "Iniciar Conversación",
+                nextPrompt: "Siguiente Pregunta",
+                activityTitle: "🎯 Completar los Espacios",
+                startActivity: "Iniciar Actividad",
+                challengeTitle: "🏆 Desafío Final",
+                challengeDesc: "¡Pon a prueba tu dominio de ambos tiempos perfectos!",
+                startChallenge: "Iniciar Desafío"
+            }
+        };
+        
+        const conversationPrompts = {
+            en: [
+                {
+                    prompt: "Tell me about a place you have visited recently.",
+                    response: "I have been to the new art museum downtown. It has become very popular!"
+                },
+                {
+                    prompt: "What had you done before you started learning English?",
+                    response: "I had studied French for two years before I began learning English."
+                },
+                {
+                    prompt: "Have you ever tried a food that surprised you?",
+                    response: "Yes! I have tried sushi for the first time last month, and I had never expected to love it so much!"
+                },
+                {
+                    prompt: "What is something you have accomplished this year?",
+                    response: "I have learned to play the guitar. I had always wanted to learn an instrument."
+                }
+            ],
+            es: [
+                {
+                    prompt: "Cuéntame sobre un lugar que has visitado recientemente.",
+                    response: "He estado en el nuevo museo de arte del centro. ¡Se ha vuelto muy popular!"
+                },
+                {
+                    prompt: "¿Qué habías hecho antes de empezar a aprender inglés?",
+                    response: "Había estudiado francés por dos años antes de comenzar a aprender inglés."
+                },
+                {
+                    prompt: "¿Has probado alguna vez una comida que te sorprendió?",
+                    response: "¡Sí! He probado sushi por primera vez el mes pasado, ¡y nunca había esperado que me gustara tanto!"
+                },
+                {
+                    prompt: "¿Qué es algo que has logrado este año?",
+                    response: "He aprendido a tocar la guitarra. Siempre había querido aprender un instrumento."
+                }
+            ]
+        };
+        
+        const activities = {
+            en: [
+                {
+                    question: "I _____ (live) in this city for ten years.",
+                    options: ["have lived", "had lived", "live", "lived"],
+                    correct: 0
+                },
+                {
+                    question: "She _____ (finish) her work before the meeting started.",
+                    options: ["has finished", "had finished", "finished", "finishes"],
+                    correct: 1
+                },
+                {
+                    question: "We _____ never _____ (see) such a beautiful sunset.",
+                    options: ["have / seen", "had / seen", "has / saw", "have / saw"],
+                    correct: 0
+                },
+                {
+                    question: "By the time I arrived, they _____ (leave) the party.",
+                    options: ["have left", "had left", "left", "leaving"],
+                    correct: 1
+                },
+                {
+                    question: "I _____ (read) three books this month.",
+                    options: ["have read", "had read", "read", "reading"],
+                    correct: 0
+                }
+            ],
+            es: [
+                {
+                    question: "Yo _____ (vivir) en esta ciudad por diez años.",
+                    options: ["he vivido", "había vivido", "vivo", "viví"],
+                    correct: 0
+                },
+                {
+                    question: "Ella _____ (terminar) su trabajo antes de que comenzara la reunión.",
+                    options: ["ha terminado", "había terminado", "terminó", "termina"],
+                    correct: 1
+                },
+                {
+                    question: "Nosotros nunca _____ (ver) un atardecer tan hermoso.",
+                    options: ["hemos visto", "habíamos visto", "vimos", "vemos"],
+                    correct: 0
+                },
+                {
+                    question: "Para cuando llegué, ellos _____ (irse) de la fiesta.",
+                    options: ["se han ido", "se habían ido", "se fueron", "se van"],
+                    correct: 1
+                },
+                {
+                    question: "Yo _____ (leer) tres libros este mes.",
+                    options: ["he leído", "había leído", "leí", "leo"],
+                    correct: 0
+                }
+            ]
+        };
+        
+        const challenges = {
+            en: [
+                {
+                    question: "Choose the correct sentence:",
+                    options: [
+                        "I have been to Paris last year.",
+                        "I went to Paris last year.",
+                        "I had been to Paris last year.",
+                        "I have gone to Paris last year."
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Which sentence shows the correct sequence of events?",
+                    options: [
+                        "After I have eaten, I went to bed.",
+                        "After I had eaten, I went to bed.",
+                        "After I ate, I have gone to bed.",
+                        "After I eat, I had gone to bed."
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Complete: 'This is the best movie I _____ ever _____.'",
+                    options: ["have / seen", "had / seen", "has / saw", "have / saw"],
+                    correct: 0
+                }
+            ],
+            es: [
+                {
+                    question: "Elige la oración correcta:",
+                    options: [
+                        "He estado en París el año pasado.",
+                        "Fui a París el año pasado.",
+                        "Había estado en París el año pasado.",
+                        "He ido a París el año pasado."
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "¿Qué oración muestra la secuencia correcta de eventos?",
+                    options: [
+                        "Después de que he comido, me fui a la cama.",
+                        "Después de que había comido, me fui a la cama.",
+                        "Después de que comí, me he ido a la cama.",
+                        "Después de que como, me había ido a la cama."
+                    ],
+                    correct: 1
+                },
+                {
+                    question: "Completa: 'Esta es la mejor película que _____ visto.'",
+                    options: ["he", "había", "has", "hemos"],
+                    correct: 0
+                }
+            ]
+        };
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+        
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.querySelector('.language-toggle').textContent = t.langToggle;
+            document.getElementById('tab-learn').textContent = t.tabLearn;
+            document.getElementById('tab-practice').textContent = t.tabPractice;
+            document.getElementById('tab-activities').textContent = t.tabActivities;
+            document.getElementById('tab-challenge').textContent = t.tabChallenge;
+            document.getElementById('present-perfect-title').textContent = t.presentPerfectTitle;
+            document.getElementById('present-perfect-desc').textContent = t.presentPerfectDesc;
+            document.getElementById('pp-example1').textContent = t.ppExample1;
+            document.getElementById('pp-example2').textContent = t.ppExample2;
+            document.getElementById('pp-example3').textContent = t.ppExample3;
+            document.getElementById('past-perfect-title').textContent = t.pastPerfectTitle;
+            document.getElementById('past-perfect-desc').textContent = t.pastPerfectDesc;
+            document.getElementById('pap-example1').textContent = t.papExample1;
+            document.getElementById('pap-example2').textContent = t.papExample2;
+            document.getElementById('pap-example3').textContent = t.papExample3;
+            document.getElementById('fun-fact').textContent = t.funFact;
+            document.getElementById('conversation-title').textContent = t.conversationTitle;
+            document.getElementById('start-chat').textContent = t.startChat;
+            document.getElementById('next-prompt').textContent = t.nextPrompt;
+            document.getElementById('activity-title').textContent = t.activityTitle;
+            document.getElementById('start-activity').textContent = t.startActivity;
+            document.getElementById('challenge-title').textContent = t.challengeTitle;
+            document.getElementById('challenge-desc').textContent = t.challengeDesc;
+            document.getElementById('start-challenge').textContent = t.startChallenge;
+        }
+        
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName + '-section').classList.remove('hidden');
+            document.getElementById(tabName + '-section').classList.add('fade-in');
+            
+            // Add active class to selected tab
+            event.target.classList.add('active');
+        }
+        
+        function startConversation() {
+            currentConversationIndex = 0;
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML = '';
+            showNextPrompt();
+            document.getElementById('start-chat').style.display = 'none';
+            document.getElementById('next-prompt').style.display = 'inline-block';
+        }
+        
+        function showNextPrompt() {
+            const prompts = conversationPrompts[currentLanguage];
+            if (currentConversationIndex < prompts.length) {
+                const chatContainer = document.getElementById('chat-container');
+                const prompt = prompts[currentConversationIndex];
+                
+                // Add prompt
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'chat-message';
+                promptDiv.textContent = prompt.prompt;
+                chatContainer.appendChild(promptDiv);
+                
+                // Add response after delay
+                setTimeout(() => {
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'chat-message user';
+                    responseDiv.textContent = prompt.response;
+                    chatContainer.appendChild(responseDiv);
+                }, 1500);
+                
+                currentConversationIndex++;
+            } else {
+                // Conversation finished
+                const chatContainer = document.getElementById('chat-container');
+                const finishDiv = document.createElement('div');
+                finishDiv.className = 'surprise-element';
+                finishDiv.innerHTML = '<span class="emoji">🎉</span> Great conversation practice! <span class="emoji">👏</span>';
+                chatContainer.appendChild(finishDiv);
+                document.getElementById('next-prompt').style.display = 'none';
+                document.getElementById('start-chat').style.display = 'inline-block';
+            }
+        }
+        
+        function nextPrompt() {
+            showNextPrompt();
+        }
+        
+        function startActivity() {
+            currentActivityIndex = 0;
+            activityScore = 0;
+            showNextActivity();
+            document.getElementById('start-activity').style.display = 'none';
+        }
+        
+        function showNextActivity() {
+            const activityData = activities[currentLanguage];
+            if (currentActivityIndex < activityData.length) {
+                const activity = activityData[currentActivityIndex];
+                const content = document.getElementById('activity-content');
+                
+                content.innerHTML = `
+                    <div class="question">${activity.question}</div>
+                    <div class="options">
+                        ${activity.options.map((option, index) => 
+                            `<div class="option" onclick="selectOption(${index}, ${activity.correct})">${option}</div>`
+                        ).join('')}
+                    </div>
+                `;
+                
+                updateProgress('progress', currentActivityIndex, activityData.length);
+                updateScore('score', activityScore, activityData.length);
+            } else {
+                // Activity finished
+                const content = document.getElementById('activity-content');
+                content.innerHTML = `
+                    <div class="surprise-element">
+                        <span class="emoji">🎊</span>
+                        Activity Complete! Score: ${activityScore}/${activityData.length}
+                        <span class="emoji">🌟</span>
+                    </div>
+                `;
+                document.getElementById('start-activity').style.display = 'inline-block';
+            }
+        }
+        
+        function selectOption(selected, correct) {
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                if (index === correct) {
+                    option.classList.add('correct');
+                } else if (index === selected && selected !== correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (selected === correct) {
+                activityScore++;
+            }
+            
+            setTimeout(() => {
+                currentActivityIndex++;
+                showNextActivity();
+            }, 2000);
+        }
+        
+        function startChallenge() {
+            currentChallengeIndex = 0;
+            challengeScore = 0;
+            showNextChallenge();
+            document.getElementById('start-challenge').style.display = 'none';
+        }
+        
+        function showNextChallenge() {
+            const challengeData = challenges[currentLanguage];
+            if (currentChallengeIndex < challengeData.length) {
+                const challenge = challengeData[currentChallengeIndex];
+                const content = document.getElementById('challenge-content');
+                
+                content.innerHTML = `
+                    <div class="question">${challenge.question}</div>
+                    <div class="options">
+                        ${challenge.options.map((option, index) => 
+                            `<div class="option" onclick="selectChallengeOption(${index}, ${challenge.correct})">${option}</div>`
+                        ).join('')}
+                    </div>
+                `;
+                
+                updateProgress('challenge-progress', currentChallengeIndex, challengeData.length);
+                updateScore('challenge-score', challengeScore, challengeData.length);
+            } else {
+                // Challenge finished
+                const content = document.getElementById('challenge-content');
+                const percentage = Math.round((challengeScore / challengeData.length) * 100);
+                let message = '';
+                let emoji = '';
+                
+                if (percentage >= 80) {
+                    message = 'Perfect Tenses Master!';
+                    emoji = '🏆';
+                } else if (percentage >= 60) {
+                    message = 'Great Job!';
+                    emoji = '🌟';
+                } else {
+                    message = 'Keep Practicing!';
+                    emoji = '💪';
+                }
+                
+                content.innerHTML = `
+                    <div class="surprise-element">
+                        <span class="emoji">${emoji}</span>
+                        ${message} Score: ${challengeScore}/${challengeData.length} (${percentage}%)
+                        <span class="emoji">🎉</span>
+                    </div>
+                `;
+                document.getElementById('start-challenge').style.display = 'inline-block';
+            }
+        }
+        
+        function selectChallengeOption(selected, correct) {
+            const options = document.querySelectorAll('#challenge-content .option');
+            options.forEach((option, index) => {
+                if (index === correct) {
+                    option.classList.add('correct');
+                } else if (index === selected && selected !== correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (selected === correct) {
+                challengeScore++;
+            }
+            
+            setTimeout(() => {
+                currentChallengeIndex++;
+                showNextChallenge();
+            }, 2000);
+        }
+        
+        function updateProgress(elementId, current, total) {
+            const progress = document.getElementById(elementId);
+            const percentage = (current / total) * 100;
+            progress.style.width = percentage + '%';
+        }
+        
+        function updateScore(elementId, score, total) {
+            const scoreElement = document.getElementById(elementId);
+            scoreElement.textContent = `Score: ${score}/${total}`;
+        }
+        
+        // Initialize the app
+        updateLanguage();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'958f364a74a5996a',t:'MTc1MTQ3MDUxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
