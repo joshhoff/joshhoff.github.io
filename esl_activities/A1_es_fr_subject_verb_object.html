@@ -1,0 +1,713 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Galaxy - Subject, Object, Verb</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #4299e1;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .lang-btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: #2d3748;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .grammar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .grammar-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .grammar-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .grammar-card.subject {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .grammar-card.verb {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .grammar-card.object {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .card-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .practice-area {
+            background: #f7fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .sentence-builder {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .word-chip {
+            padding: 10px 20px;
+            background: #e2e8f0;
+            border: 2px solid transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .word-chip:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+        
+        .word-chip.selected {
+            background: #4299e1;
+            color: white;
+            border-color: #2d3748;
+        }
+        
+        .sentence-slot {
+            min-width: 120px;
+            min-height: 50px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .sentence-slot.filled {
+            background: #e6fffa;
+            border-color: #38b2ac;
+            border-style: solid;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            background: #4299e1;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        
+        .btn.success {
+            background: #48bb78;
+        }
+        
+        .btn.danger {
+            background: #f56565;
+        }
+        
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .surprise-animation {
+            animation: bounce 0.6s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .title { font-size: 2rem; }
+            .grammar-grid { grid-template-columns: 1fr; }
+            .sentence-builder { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container">
+        <div class="header">
+            <h1 class="title" id="main-title">🌟 Grammar Galaxy 🌟</h1>
+            <p class="subtitle" id="main-subtitle">Master Subject, Object &amp; Verb with Fun!</p>
+            
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="changeLanguage('en')">🇺🇸 English</button>
+                <button class="lang-btn" onclick="changeLanguage('es')">🇪🇸 Español</button>
+                <button class="lang-btn" onclick="changeLanguage('fr')">🇫🇷 Français</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title" id="learn-title">📚 Learn the Basics</h2>
+            <div class="grammar-grid">
+                <div class="grammar-card subject" onclick="explainConcept('subject')">
+                    <div class="card-title" id="subject-title">SUBJECT</div>
+                    <div class="card-description" id="subject-desc">Who or what does the action</div>
+                </div>
+                <div class="grammar-card verb" onclick="explainConcept('verb')">
+                    <div class="card-title" id="verb-title">VERB</div>
+                    <div class="card-description" id="verb-desc">The action or state</div>
+                </div>
+                <div class="grammar-card object" onclick="explainConcept('object')">
+                    <div class="card-title" id="object-title">OBJECT</div>
+                    <div class="card-description" id="object-desc">Who or what receives the action</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="explanation-section" style="display: none;">
+            <h3 id="explanation-title"></h3>
+            <div id="explanation-content"></div>
+            <div id="examples-content"></div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title" id="practice-title">🎯 Practice Time</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress" style="width: 0%;"></div>
+            </div>
+            <p id="progress-text">Progress: 0/5 sentences completed</p>
+            
+            <div class="practice-area">
+                <h3 id="instruction-text">Build a sentence by clicking the words in the correct order!</h3>
+                
+                <div class="sentence-builder" id="sentence-builder">
+                    <div class="sentence-slot" data-type="subject" id="subject-slot"><span id="subject-label">SUBJECT</span></div>
+                    <div class="sentence-slot" data-type="verb" id="verb-slot"><span id="verb-label">VERB</span></div>
+                    <div class="sentence-slot" data-type="object" id="object-slot"><span id="object-label">OBJECT</span></div>
+                </div>
+                
+                <div class="word-bank" id="word-bank"><div class="word-chip">Maria</div><div class="word-chip">reads</div><div class="word-chip">books</div></div>
+                
+                <div style="text-align: center;">
+                    <button class="btn" onclick="checkSentence()" id="check-btn" style="display: inline-block;">Check Answer</button>
+                    <button class="btn" onclick="nextSentence()" id="next-btn" style="display: none;">Next Sentence</button>
+                    <button class="btn" onclick="resetSentence()" id="reset-btn">Reset</button>
+                </div>
+                
+                <div id="feedback" class="feedback" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentSentenceIndex = 0;
+        let completedSentences = 0;
+        let selectedWords = { subject: null, verb: null, object: null };
+
+        const translations = {
+            en: {
+                title: "🌟 Grammar Galaxy 🌟",
+                subtitle: "Master Subject, Object & Verb with Fun!",
+                learnTitle: "📚 Learn the Basics",
+                practiceTitle: "🎯 Practice Time",
+                subjectTitle: "SUBJECT",
+                verbTitle: "VERB",
+                objectTitle: "OBJECT",
+                subjectDesc: "Who or what does the action",
+                verbDesc: "The action or state",
+                objectDesc: "Who or what receives the action",
+                instruction: "Build a sentence by clicking the words in the correct order!",
+                checkBtn: "Check Answer",
+                nextBtn: "Next Sentence",
+                resetBtn: "Reset",
+                progressText: "Progress: {0}/5 sentences completed",
+                correctFeedback: "🎉 Excellent! That's a perfect sentence!",
+                incorrectFeedback: "🤔 Not quite right. Try again!",
+                completeFeedback: "🏆 Congratulations! You've mastered all sentences!"
+            },
+            es: {
+                title: "🌟 Galaxia Gramatical 🌟",
+                subtitle: "¡Domina Sujeto, Objeto y Verbo con Diversión!",
+                learnTitle: "📚 Aprende lo Básico",
+                practiceTitle: "🎯 Hora de Practicar",
+                subjectTitle: "SUJETO",
+                verbTitle: "VERBO",
+                objectTitle: "OBJETO",
+                subjectDesc: "Quién o qué hace la acción",
+                verbDesc: "La acción o estado",
+                objectDesc: "Quién o qué recibe la acción",
+                instruction: "¡Construye una oración haciendo clic en las palabras en el orden correcto!",
+                checkBtn: "Verificar Respuesta",
+                nextBtn: "Siguiente Oración",
+                resetBtn: "Reiniciar",
+                progressText: "Progreso: {0}/5 oraciones completadas",
+                correctFeedback: "🎉 ¡Excelente! ¡Esa es una oración perfecta!",
+                incorrectFeedback: "🤔 No del todo correcto. ¡Inténtalo de nuevo!",
+                completeFeedback: "🏆 ¡Felicitaciones! ¡Has dominado todas las oraciones!"
+            },
+            fr: {
+                title: "🌟 Galaxie Grammaticale 🌟",
+                subtitle: "Maîtrisez Sujet, Objet et Verbe avec Plaisir!",
+                learnTitle: "📚 Apprendre les Bases",
+                practiceTitle: "🎯 Temps de Pratique",
+                subjectTitle: "SUJET",
+                verbTitle: "VERBE",
+                objectTitle: "OBJET",
+                subjectDesc: "Qui ou quoi fait l'action",
+                verbDesc: "L'action ou l'état",
+                objectDesc: "Qui ou quoi reçoit l'action",
+                instruction: "Construisez une phrase en cliquant sur les mots dans le bon ordre!",
+                checkBtn: "Vérifier la Réponse",
+                nextBtn: "Phrase Suivante",
+                resetBtn: "Réinitialiser",
+                progressText: "Progrès: {0}/5 phrases complétées",
+                correctFeedback: "🎉 Excellent! C'est une phrase parfaite!",
+                incorrectFeedback: "🤔 Pas tout à fait correct. Essayez encore!",
+                completeFeedback: "🏆 Félicitations! Vous avez maîtrisé toutes les phrases!"
+            }
+        };
+
+        const sentences = {
+            en: [
+                { subject: "Maria", verb: "reads", object: "books", translation: "María lee libros / Marie lit des livres" },
+                { subject: "The cat", verb: "catches", object: "mice", translation: "El gato atrapa ratones / Le chat attrape des souris" },
+                { subject: "Students", verb: "study", object: "grammar", translation: "Los estudiantes estudian gramática / Les étudiants étudient la grammaire" },
+                { subject: "Children", verb: "play", object: "games", translation: "Los niños juegan juegos / Les enfants jouent à des jeux" },
+                { subject: "Teachers", verb: "explain", object: "lessons", translation: "Los maestros explican lecciones / Les professeurs expliquent les leçons" }
+            ],
+            es: [
+                { subject: "María", verb: "lee", object: "libros", translation: "Maria reads books / Marie lit des livres" },
+                { subject: "El gato", verb: "atrapa", object: "ratones", translation: "The cat catches mice / Le chat attrape des souris" },
+                { subject: "Estudiantes", verb: "estudian", object: "gramática", translation: "Students study grammar / Les étudiants étudient la grammaire" },
+                { subject: "Niños", verb: "juegan", object: "juegos", translation: "Children play games / Les enfants jouent à des jeux" },
+                { subject: "Maestros", verb: "explican", object: "lecciones", translation: "Teachers explain lessons / Les professeurs expliquent les leçons" }
+            ],
+            fr: [
+                { subject: "Marie", verb: "lit", object: "livres", translation: "Maria reads books / María lee libros" },
+                { subject: "Le chat", verb: "attrape", object: "souris", translation: "The cat catches mice / El gato atrapa ratones" },
+                { subject: "Étudiants", verb: "étudient", object: "grammaire", translation: "Students study grammar / Los estudiantes estudian gramática" },
+                { subject: "Enfants", verb: "jouent", object: "jeux", translation: "Children play games / Los niños juegan juegos" },
+                { subject: "Professeurs", verb: "expliquent", object: "leçons", translation: "Teachers explain lessons / Los maestros explican lecciones" }
+            ]
+        };
+
+        const explanations = {
+            en: {
+                subject: {
+                    title: "🔵 SUBJECT - The Star of the Sentence",
+                    content: "The subject is WHO or WHAT performs the action. It's like the main character in your sentence story!",
+                    examples: "Examples: <strong>Maria</strong> sings. <strong>The dog</strong> barks. <strong>Students</strong> learn."
+                },
+                verb: {
+                    title: "🟢 VERB - The Action Hero",
+                    content: "The verb shows the ACTION or STATE. It tells us what's happening in the sentence!",
+                    examples: "Examples: Maria <strong>sings</strong>. The dog <strong>barks</strong>. Students <strong>learn</strong>."
+                },
+                object: {
+                    title: "🟡 OBJECT - The Receiver",
+                    content: "The object receives the action. It answers 'what?' or 'whom?' after the verb.",
+                    examples: "Examples: Maria sings <strong>songs</strong>. The dog catches <strong>the ball</strong>. Students learn <strong>grammar</strong>."
+                }
+            },
+            es: {
+                subject: {
+                    title: "🔵 SUJETO - La Estrella de la Oración",
+                    content: "El sujeto es QUIÉN o QUÉ realiza la acción. ¡Es como el personaje principal en la historia de tu oración!",
+                    examples: "Ejemplos: <strong>María</strong> canta. <strong>El perro</strong> ladra. <strong>Los estudiantes</strong> aprenden."
+                },
+                verb: {
+                    title: "🟢 VERBO - El Héroe de Acción",
+                    content: "El verbo muestra la ACCIÓN o ESTADO. ¡Nos dice qué está pasando en la oración!",
+                    examples: "Ejemplos: María <strong>canta</strong>. El perro <strong>ladra</strong>. Los estudiantes <strong>aprenden</strong>."
+                },
+                object: {
+                    title: "🟡 OBJETO - El Receptor",
+                    content: "El objeto recibe la acción. Responde '¿qué?' o '¿a quién?' después del verbo.",
+                    examples: "Ejemplos: María canta <strong>canciones</strong>. El perro atrapa <strong>la pelota</strong>. Los estudiantes aprenden <strong>gramática</strong>."
+                }
+            },
+            fr: {
+                subject: {
+                    title: "🔵 SUJET - L'Étoile de la Phrase",
+                    content: "Le sujet est QUI ou QUOI effectue l'action. C'est comme le personnage principal dans l'histoire de votre phrase!",
+                    examples: "Exemples: <strong>Marie</strong> chante. <strong>Le chien</strong> aboie. <strong>Les étudiants</strong> apprennent."
+                },
+                verb: {
+                    title: "🟢 VERBE - Le Héros d'Action",
+                    content: "Le verbe montre l'ACTION ou l'ÉTAT. Il nous dit ce qui se passe dans la phrase!",
+                    examples: "Exemples: Marie <strong>chante</strong>. Le chien <strong>aboie</strong>. Les étudiants <strong>apprennent</strong>."
+                },
+                object: {
+                    title: "🟡 OBJET - Le Récepteur",
+                    content: "L'objet reçoit l'action. Il répond à 'quoi?' ou 'qui?' après le verbe.",
+                    examples: "Exemples: Marie chante des <strong>chansons</strong>. Le chien attrape <strong>la balle</strong>. Les étudiants apprennent la <strong>grammaire</strong>."
+                }
+            }
+        };
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all text content
+            updateText();
+            
+            // Reset practice
+            currentSentenceIndex = 0;
+            completedSentences = 0;
+            loadSentence();
+            updateProgress();
+            
+            // Add surprise animation
+            document.querySelector('.header').classList.add('surprise-animation');
+            setTimeout(() => {
+                document.querySelector('.header').classList.remove('surprise-animation');
+            }, 600);
+        }
+
+        function updateText() {
+            const t = translations[currentLanguage];
+            
+            document.getElementById('main-title').textContent = t.title;
+            document.getElementById('main-subtitle').textContent = t.subtitle;
+            document.getElementById('learn-title').textContent = t.learnTitle;
+            document.getElementById('practice-title').textContent = t.practiceTitle;
+            document.getElementById('subject-title').textContent = t.subjectTitle;
+            document.getElementById('verb-title').textContent = t.verbTitle;
+            document.getElementById('object-title').textContent = t.objectTitle;
+            document.getElementById('subject-desc').textContent = t.subjectDesc;
+            document.getElementById('verb-desc').textContent = t.verbDesc;
+            document.getElementById('object-desc').textContent = t.objectDesc;
+            document.getElementById('instruction-text').textContent = t.instruction;
+            document.getElementById('check-btn').textContent = t.checkBtn;
+            document.getElementById('next-btn').textContent = t.nextBtn;
+            document.getElementById('reset-btn').textContent = t.resetBtn;
+            document.getElementById('subject-label').textContent = t.subjectTitle;
+            document.getElementById('verb-label').textContent = t.verbTitle;
+            document.getElementById('object-label').textContent = t.objectTitle;
+        }
+
+        function explainConcept(type) {
+            const explanation = explanations[currentLanguage][type];
+            const section = document.getElementById('explanation-section');
+            
+            document.getElementById('explanation-title').innerHTML = explanation.title;
+            document.getElementById('explanation-content').innerHTML = `<p style="font-size: 1.1rem; margin: 15px 0;">${explanation.content}</p>`;
+            document.getElementById('examples-content').innerHTML = `<div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin: 15px 0;"><strong>📝 ${explanation.examples}</strong></div>`;
+            
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+            
+            // Add surprise animation
+            section.classList.add('surprise-animation');
+            setTimeout(() => {
+                section.classList.remove('surprise-animation');
+            }, 600);
+        }
+
+        function loadSentence() {
+            const sentence = sentences[currentLanguage][currentSentenceIndex];
+            const words = [sentence.subject, sentence.verb, sentence.object];
+            
+            // Shuffle words for challenge
+            const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+            
+            const wordBank = document.getElementById('word-bank');
+            wordBank.innerHTML = '';
+            
+            shuffledWords.forEach(word => {
+                const chip = document.createElement('div');
+                chip.className = 'word-chip';
+                chip.textContent = word;
+                chip.onclick = () => selectWord(word, chip);
+                wordBank.appendChild(chip);
+            });
+            
+            // Reset slots
+            resetSlots();
+            selectedWords = { subject: null, verb: null, object: null };
+            
+            // Hide feedback and next button
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('check-btn').style.display = 'inline-block';
+        }
+
+        function selectWord(word, chip) {
+            const sentence = sentences[currentLanguage][currentSentenceIndex];
+            let type = null;
+            
+            if (word === sentence.subject) type = 'subject';
+            else if (word === sentence.verb) type = 'verb';
+            else if (word === sentence.object) type = 'object';
+            
+            if (type && !selectedWords[type]) {
+                selectedWords[type] = word;
+                
+                const slot = document.getElementById(`${type}-slot`);
+                slot.innerHTML = word;
+                slot.classList.add('filled');
+                
+                chip.classList.add('selected');
+                chip.onclick = null;
+                
+                // Add surprise animation
+                slot.classList.add('surprise-animation');
+                setTimeout(() => {
+                    slot.classList.remove('surprise-animation');
+                }, 600);
+            }
+        }
+
+        function checkSentence() {
+            const sentence = sentences[currentLanguage][currentSentenceIndex];
+            const isCorrect = selectedWords.subject === sentence.subject &&
+                            selectedWords.verb === sentence.verb &&
+                            selectedWords.object === sentence.object;
+            
+            const feedback = document.getElementById('feedback');
+            const t = translations[currentLanguage];
+            
+            if (isCorrect) {
+                feedback.innerHTML = `${t.correctFeedback}<br><small style="opacity: 0.8; margin-top: 10px; display: block;">Translation: ${sentence.translation}</small>`;
+                feedback.className = 'feedback correct';
+                document.getElementById('check-btn').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'inline-block';
+                
+                completedSentences++;
+                updateProgress();
+                
+                // Celebration animation
+                document.querySelectorAll('.sentence-slot.filled').forEach(slot => {
+                    slot.classList.add('surprise-animation');
+                });
+            } else {
+                feedback.textContent = t.incorrectFeedback;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        function nextSentence() {
+            currentSentenceIndex++;
+            
+            if (currentSentenceIndex >= sentences[currentLanguage].length) {
+                // All sentences completed
+                const feedback = document.getElementById('feedback');
+                feedback.innerHTML = translations[currentLanguage].completeFeedback;
+                feedback.className = 'feedback correct';
+                document.getElementById('next-btn').style.display = 'none';
+                
+                // Reset for replay
+                setTimeout(() => {
+                    currentSentenceIndex = 0;
+                    completedSentences = 0;
+                    updateProgress();
+                    loadSentence();
+                }, 3000);
+            } else {
+                loadSentence();
+            }
+        }
+
+        function resetSentence() {
+            resetSlots();
+            selectedWords = { subject: null, verb: null, object: null };
+            
+            // Reset word chips
+            document.querySelectorAll('.word-chip').forEach(chip => {
+                chip.classList.remove('selected');
+                chip.onclick = () => selectWord(chip.textContent, chip);
+            });
+            
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('check-btn').style.display = 'inline-block';
+        }
+
+        function resetSlots() {
+            const slots = document.querySelectorAll('.sentence-slot');
+            const t = translations[currentLanguage];
+            
+            slots.forEach(slot => {
+                slot.classList.remove('filled');
+                if (slot.id === 'subject-slot') slot.innerHTML = `<span id="subject-label">${t.subjectTitle}</span>`;
+                else if (slot.id === 'verb-slot') slot.innerHTML = `<span id="verb-label">${t.verbTitle}</span>`;
+                else if (slot.id === 'object-slot') slot.innerHTML = `<span id="object-label">${t.objectTitle}</span>`;
+            });
+        }
+
+        function updateProgress() {
+            const progress = (completedSentences / 5) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            const progressText = translations[currentLanguage].progressText.replace('{0}', completedSentences);
+            document.getElementById('progress-text').textContent = progressText;
+        }
+
+        // Initialize the app
+        updateText();
+        loadSentence();
+        updateProgress();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95c8e3d2a0c55808',t:'MTc1MjA3NTMxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
