@@ -1,0 +1,847 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic E Games - Juegos de E Mágica - Ігри Магічної E</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #4299e1;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: #2d3748;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .game-title {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .word-pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .word-pair:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .word {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .short-vowel {
+            color: #e53e3e;
+        }
+        
+        .long-vowel {
+            color: #38a169;
+        }
+        
+        .arrow {
+            font-size: 1.5rem;
+            color: #4299e1;
+        }
+        
+        .game-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #4299e1;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .game-btn:hover {
+            background: #3182ce;
+        }
+        
+        .matching-game {
+            display: none;
+        }
+        
+        .matching-game.active {
+            display: block;
+        }
+        
+        .word-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .word-option {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .word-option:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .word-option.selected {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+        
+        .word-option.correct {
+            background: #38a169;
+            border-color: #38a169;
+            color: white;
+        }
+        
+        .word-option.incorrect {
+            background: #e53e3e;
+            border-color: #e53e3e;
+            color: white;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 15px 0;
+            color: #4a5568;
+        }
+        
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .drag-drop-area {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .drop-zone {
+            min-height: 200px;
+            border: 3px dashed #cbd5e0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .drop-zone h3 {
+            margin-bottom: 15px;
+            color: #4a5568;
+        }
+        
+        .draggable-word {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background: #4299e1;
+            color: white;
+            border-radius: 20px;
+            cursor: grab;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .draggable-word:hover {
+            background: #3182ce;
+            transform: scale(1.05);
+        }
+        
+        .draggable-word.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+        
+        .word-bank {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .language-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container">
+        <div class="header">
+            <h1 class="title" id="main-title">Magic E Games</h1>
+            <p class="subtitle" id="main-subtitle">Learn how adding 'e' changes short vowels to long vowels!</p>
+            
+            <div class="language-selector">
+                <button class="lang-btn" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+                <button class="lang-btn" onclick="setLanguage('uk')">Українська</button>
+            </div>
+        </div>
+        
+        <div class="games-grid">
+            <!-- Game 1: Word Transformation Display -->
+            <div class="game-card">
+                <h2 class="game-title" id="game1-title">Word Transformations</h2>
+                <div id="word-pairs-container"><div class="word-pair">
+                    <span class="word short-vowel">mat</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">mate</span>
+                </div><div class="word-pair">
+                    <span class="word short-vowel">hat</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">hate</span>
+                </div><div class="word-pair">
+                    <span class="word short-vowel">rat</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">rate</span>
+                </div><div class="word-pair">
+                    <span class="word short-vowel">bit</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">bite</span>
+                </div><div class="word-pair">
+                    <span class="word short-vowel">kit</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">kite</span>
+                </div></div>
+                <button class="game-btn" onclick="showNextWordPair()" id="next-pair-btn">Show Next Pair</button>
+            </div>
+            
+            <!-- Game 2: Matching Game -->
+            <div class="game-card">
+                <h2 class="game-title" id="game2-title">Match the Pairs</h2>
+                <div class="score" id="matching-score">Score: 0/0</div>
+                <div id="matching-question">
+                <p style="font-size: 1.2rem; margin: 15px 0; text-align: center;">
+                    Find the Magic E version of: <strong class="short-vowel">tub</strong>
+                </p>
+            </div>
+                <div class="word-options" id="matching-options"><div class="word-option">tube</div><div class="word-option">hope</div><div class="word-option">fine</div><div class="word-option">mate</div></div>
+                <div class="feedback hidden" id="matching-feedback"></div>
+                <button class="game-btn" onclick="startMatchingGame()" id="start-matching-btn">Start Game</button>
+            </div>
+            
+            <!-- Game 3: Drag and Drop -->
+            <div class="game-card">
+                <h2 class="game-title" id="game3-title">Sort Short vs Long Vowels</h2>
+                <div class="score" id="dragdrop-score">Score: 0/0</div>
+                <div class="word-bank" id="word-bank">
+                    <h3 id="word-bank-title">Drag words to the correct category:</h3>
+                    <div id="draggable-words"><span class="draggable-word" draggable="true" data-type="short">cap</span><span class="draggable-word" draggable="true" data-type="long">cape</span><span class="draggable-word" draggable="true" data-type="long">tape</span><span class="draggable-word" draggable="true" data-type="short">tap</span><span class="draggable-word" draggable="true" data-type="long">mate</span><span class="draggable-word" draggable="true" data-type="short">mat</span><span class="draggable-word" draggable="true" data-type="long">hate</span><span class="draggable-word" draggable="true" data-type="short">hat</span><span class="draggable-word" draggable="true" data-type="long">rate</span><span class="draggable-word" draggable="true" data-type="short">rat</span><span class="draggable-word" draggable="true" data-type="short">bit</span><span class="draggable-word" draggable="true" data-type="long">bite</span></div>
+                </div>
+                <div class="drag-drop-area">
+                    <div class="drop-zone" id="short-vowel-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <h3 id="short-vowel-title">Short Vowel Sounds</h3>
+                        <div id="short-vowel-words"></div>
+                    </div>
+                    <div class="drop-zone" id="long-vowel-zone" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <h3 id="long-vowel-title">Long Vowel Sounds (Magic E)</h3>
+                        <div id="long-vowel-words"></div>
+                    </div>
+                </div>
+                <button class="game-btn" onclick="startDragDropGame()" id="start-dragdrop-btn">Start Game</button>
+            </div>
+            
+            <!-- Game 4: Fill in the Blank -->
+            <div class="game-card">
+                <h2 class="game-title" id="game4-title">Complete the Word</h2>
+                <div class="score" id="fillblank-score">Score: 0/0</div>
+                <div id="fillblank-question">
+                <div style="text-align: center; font-size: 1.3rem; margin: 20px 0;">
+                    <p style="margin-bottom: 15px;">Which word completes the transformation?</p>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                        <span class="word long-vowel" style="min-width: 80px;">
+                            ____
+                        </span>
+                        <span class="arrow">←</span>
+                        <span class="word short-vowel" style="min-width: 80px;">
+                            hope
+                        </span>
+                    </div>
+                </div>
+            </div>
+                <div class="word-options" id="fillblank-options"><div class="word-option">rat</div><div class="word-option">win</div><div class="word-option">cub</div><div class="word-option">hop</div></div>
+                <div class="feedback hidden" id="fillblank-feedback"></div>
+                <button class="game-btn" onclick="startFillBlankGame()" id="start-fillblank-btn">Start Game</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language data
+        const translations = {
+            en: {
+                mainTitle: "Magic E Games",
+                mainSubtitle: "Learn how adding 'e' changes short vowels to long vowels!",
+                game1Title: "Word Transformations",
+                game2Title: "Match the Pairs",
+                game3Title: "Sort Short vs Long Vowels",
+                game4Title: "Complete the Word",
+                nextPairBtn: "Show Next Pair",
+                startMatchingBtn: "Start Game",
+                startDragDropBtn: "Start Game",
+                startFillBlankBtn: "Start Game",
+                shortVowelTitle: "Short Vowel Sounds",
+                longVowelTitle: "Long Vowel Sounds (Magic E)",
+                wordBankTitle: "Drag words to the correct category:",
+                score: "Score",
+                correct: "Correct! Great job!",
+                incorrect: "Try again!",
+                findMatch: "Find the Magic E version of:",
+                completeWord: "Which word completes the transformation?"
+            },
+            es: {
+                mainTitle: "Juegos de E Mágica",
+                mainSubtitle: "¡Aprende cómo agregar 'e' cambia las vocales cortas a largas!",
+                game1Title: "Transformaciones de Palabras",
+                game2Title: "Emparejar las Palabras",
+                game3Title: "Clasificar Vocales Cortas vs Largas",
+                game4Title: "Completar la Palabra",
+                nextPairBtn: "Mostrar Siguiente Par",
+                startMatchingBtn: "Comenzar Juego",
+                startDragDropBtn: "Comenzar Juego",
+                startFillBlankBtn: "Comenzar Juego",
+                shortVowelTitle: "Sonidos de Vocales Cortas",
+                longVowelTitle: "Sonidos de Vocales Largas (E Mágica)",
+                wordBankTitle: "Arrastra las palabras a la categoría correcta:",
+                score: "Puntuación",
+                correct: "¡Correcto! ¡Buen trabajo!",
+                incorrect: "¡Inténtalo de nuevo!",
+                findMatch: "Encuentra la versión con E Mágica de:",
+                completeWord: "¿Qué palabra completa la transformación?"
+            },
+            uk: {
+                mainTitle: "Ігри Магічної E",
+                mainSubtitle: "Дізнайтеся, як додавання 'e' змінює короткі голосні на довгі!",
+                game1Title: "Перетворення Слів",
+                game2Title: "Знайти Пари",
+                game3Title: "Сортувати Короткі та Довгі Голосні",
+                game4Title: "Доповнити Слово",
+                nextPairBtn: "Показати Наступну Пару",
+                startMatchingBtn: "Почати Гру",
+                startDragDropBtn: "Почати Гру",
+                startFillBlankBtn: "Почати Гру",
+                shortVowelTitle: "Короткі Голосні Звуки",
+                longVowelTitle: "Довгі Голосні Звуки (Магічна E)",
+                wordBankTitle: "Перетягніть слова до правильної категорії:",
+                score: "Рахунок",
+                correct: "Правильно! Чудова робота!",
+                incorrect: "Спробуйте ще раз!",
+                findMatch: "Знайдіть версію з Магічною E для:",
+                completeWord: "Яке слово завершує перетворення?"
+            }
+        };
+
+        // Word pairs for Magic E concept
+        const wordPairs = [
+            { short: "cap", long: "cape" },
+            { short: "tap", long: "tape" },
+            { short: "mat", long: "mate" },
+            { short: "hat", long: "hate" },
+            { short: "rat", long: "rate" },
+            { short: "bit", long: "bite" },
+            { short: "kit", long: "kite" },
+            { short: "sit", long: "site" },
+            { short: "cut", long: "cute" },
+            { short: "tub", long: "tube" },
+            { short: "cub", long: "cube" },
+            { short: "hop", long: "hope" },
+            { short: "not", long: "note" },
+            { short: "cod", long: "code" },
+            { short: "rod", long: "rode" },
+            { short: "pin", long: "pine" },
+            { short: "win", long: "wine" },
+            { short: "fin", long: "fine" }
+        ];
+
+        let currentLanguage = 'en';
+        let currentPairIndex = 0;
+        let matchingGameData = { score: 0, total: 0, currentQuestion: null };
+        let dragDropGameData = { score: 0, total: 0 };
+        let fillBlankGameData = { score: 0, total: 0, currentQuestion: null };
+
+        // Initialize the application
+        function init() {
+            setLanguage('en');
+            displayWordPairs();
+        }
+
+        // Language switching
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all text content
+            const t = translations[lang];
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('main-subtitle').textContent = t.mainSubtitle;
+            document.getElementById('game1-title').textContent = t.game1Title;
+            document.getElementById('game2-title').textContent = t.game2Title;
+            document.getElementById('game3-title').textContent = t.game3Title;
+            document.getElementById('game4-title').textContent = t.game4Title;
+            document.getElementById('next-pair-btn').textContent = t.nextPairBtn;
+            document.getElementById('start-matching-btn').textContent = t.startMatchingBtn;
+            document.getElementById('start-dragdrop-btn').textContent = t.startDragDropBtn;
+            document.getElementById('start-fillblank-btn').textContent = t.startFillBlankBtn;
+            document.getElementById('short-vowel-title').textContent = t.shortVowelTitle;
+            document.getElementById('long-vowel-title').textContent = t.longVowelTitle;
+            document.getElementById('word-bank-title').textContent = t.wordBankTitle;
+            
+            // Update scores
+            updateScoreDisplays();
+        }
+
+        // Game 1: Word Transformation Display
+        function displayWordPairs() {
+            const container = document.getElementById('word-pairs-container');
+            container.innerHTML = '';
+            
+            // Show first 5 pairs initially
+            for (let i = 0; i < Math.min(5, wordPairs.length); i++) {
+                const pair = wordPairs[i];
+                const pairElement = document.createElement('div');
+                pairElement.className = 'word-pair';
+                pairElement.innerHTML = `
+                    <span class="word short-vowel">${pair.short}</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">${pair.long}</span>
+                `;
+                container.appendChild(pairElement);
+            }
+        }
+
+        function showNextWordPair() {
+            currentPairIndex = (currentPairIndex + 5) % wordPairs.length;
+            const container = document.getElementById('word-pairs-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 5 && (currentPairIndex + i) < wordPairs.length; i++) {
+                const pair = wordPairs[currentPairIndex + i];
+                const pairElement = document.createElement('div');
+                pairElement.className = 'word-pair';
+                pairElement.innerHTML = `
+                    <span class="word short-vowel">${pair.short}</span>
+                    <span class="arrow">→</span>
+                    <span class="word long-vowel">${pair.long}</span>
+                `;
+                container.appendChild(pairElement);
+            }
+        }
+
+        // Game 2: Matching Game
+        function startMatchingGame() {
+            matchingGameData = { score: 0, total: 0, currentQuestion: null };
+            nextMatchingQuestion();
+        }
+
+        function nextMatchingQuestion() {
+            const randomPair = wordPairs[Math.floor(Math.random() * wordPairs.length)];
+            const isShortToLong = Math.random() > 0.5;
+            
+            matchingGameData.currentQuestion = {
+                word: isShortToLong ? randomPair.short : randomPair.long,
+                answer: isShortToLong ? randomPair.long : randomPair.short,
+                isShortToLong: isShortToLong
+            };
+            
+            const questionElement = document.getElementById('matching-question');
+            const t = translations[currentLanguage];
+            questionElement.innerHTML = `
+                <p style="font-size: 1.2rem; margin: 15px 0; text-align: center;">
+                    ${t.findMatch} <strong class="${isShortToLong ? 'short-vowel' : 'long-vowel'}">${matchingGameData.currentQuestion.word}</strong>
+                </p>
+            `;
+            
+            // Generate options
+            const options = [matchingGameData.currentQuestion.answer];
+            while (options.length < 4) {
+                const randomWord = isShortToLong ? 
+                    wordPairs[Math.floor(Math.random() * wordPairs.length)].long :
+                    wordPairs[Math.floor(Math.random() * wordPairs.length)].short;
+                if (!options.includes(randomWord)) {
+                    options.push(randomWord);
+                }
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+            
+            const optionsContainer = document.getElementById('matching-options');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'word-option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => checkMatchingAnswer(option);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('matching-feedback').classList.add('hidden');
+        }
+
+        function checkMatchingAnswer(selectedWord) {
+            const isCorrect = selectedWord === matchingGameData.currentQuestion.answer;
+            const feedback = document.getElementById('matching-feedback');
+            const t = translations[currentLanguage];
+            
+            matchingGameData.total++;
+            if (isCorrect) {
+                matchingGameData.score++;
+                feedback.textContent = t.correct;
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = t.incorrect;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            feedback.classList.remove('hidden');
+            updateScoreDisplays();
+            
+            // Highlight correct/incorrect options
+            document.querySelectorAll('#matching-options .word-option').forEach(option => {
+                if (option.textContent === selectedWord) {
+                    option.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else if (option.textContent === matchingGameData.currentQuestion.answer) {
+                    option.classList.add('correct');
+                }
+                option.onclick = null; // Disable clicking
+            });
+            
+            setTimeout(() => {
+                nextMatchingQuestion();
+            }, 2000);
+        }
+
+        // Game 3: Drag and Drop
+        function startDragDropGame() {
+            dragDropGameData = { score: 0, total: 0 };
+            
+            // Clear drop zones
+            document.getElementById('short-vowel-words').innerHTML = '';
+            document.getElementById('long-vowel-words').innerHTML = '';
+            
+            // Create word bank
+            const wordBank = document.getElementById('draggable-words');
+            wordBank.innerHTML = '';
+            
+            // Select random words
+            const selectedPairs = wordPairs.slice(0, 6);
+            const allWords = [];
+            selectedPairs.forEach(pair => {
+                allWords.push({ word: pair.short, type: 'short' });
+                allWords.push({ word: pair.long, type: 'long' });
+            });
+            
+            // Shuffle words
+            allWords.sort(() => Math.random() - 0.5);
+            
+            allWords.forEach(wordObj => {
+                const wordElement = document.createElement('span');
+                wordElement.className = 'draggable-word';
+                wordElement.textContent = wordObj.word;
+                wordElement.draggable = true;
+                wordElement.dataset.type = wordObj.type;
+                wordElement.ondragstart = drag;
+                wordBank.appendChild(wordElement);
+            });
+            
+            updateScoreDisplays();
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('drag-over');
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.textContent);
+            ev.dataTransfer.setData("type", ev.target.dataset.type);
+            ev.target.classList.add('dragging');
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            
+            const word = ev.dataTransfer.getData("text");
+            const type = ev.dataTransfer.getData("type");
+            const dropZone = ev.target.closest('.drop-zone');
+            
+            if (!dropZone) return;
+            
+            const isCorrectZone = (dropZone.id === 'short-vowel-zone' && type === 'short') ||
+                                 (dropZone.id === 'long-vowel-zone' && type === 'long');
+            
+            dragDropGameData.total++;
+            if (isCorrectZone) {
+                dragDropGameData.score++;
+            }
+            
+            // Move word to drop zone
+            const wordElement = document.querySelector(`[data-type="${type}"]`);
+            if (wordElement && wordElement.textContent === word) {
+                wordElement.remove();
+                
+                const newWordElement = document.createElement('span');
+                newWordElement.className = `draggable-word ${isCorrectZone ? 'correct' : 'incorrect'}`;
+                newWordElement.textContent = word;
+                newWordElement.style.background = isCorrectZone ? '#38a169' : '#e53e3e';
+                
+                const wordsContainer = dropZone.querySelector('div[id$="-words"]');
+                wordsContainer.appendChild(newWordElement);
+            }
+            
+            updateScoreDisplays();
+        }
+
+        // Game 4: Fill in the Blank
+        function startFillBlankGame() {
+            fillBlankGameData = { score: 0, total: 0, currentQuestion: null };
+            nextFillBlankQuestion();
+        }
+
+        function nextFillBlankQuestion() {
+            const randomPair = wordPairs[Math.floor(Math.random() * wordPairs.length)];
+            const isShortToLong = Math.random() > 0.5;
+            
+            fillBlankGameData.currentQuestion = {
+                given: isShortToLong ? randomPair.short : randomPair.long,
+                answer: isShortToLong ? randomPair.long : randomPair.short,
+                isShortToLong: isShortToLong
+            };
+            
+            const questionElement = document.getElementById('fillblank-question');
+            const t = translations[currentLanguage];
+            const arrow = isShortToLong ? '→' : '←';
+            const blankSide = isShortToLong ? 'right' : 'left';
+            
+            questionElement.innerHTML = `
+                <div style="text-align: center; font-size: 1.3rem; margin: 20px 0;">
+                    <p style="margin-bottom: 15px;">${t.completeWord}</p>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                        <span class="word ${isShortToLong ? 'short-vowel' : 'long-vowel'}" style="min-width: 80px;">
+                            ${blankSide === 'left' ? '____' : fillBlankGameData.currentQuestion.given}
+                        </span>
+                        <span class="arrow">${arrow}</span>
+                        <span class="word ${isShortToLong ? 'long-vowel' : 'short-vowel'}" style="min-width: 80px;">
+                            ${blankSide === 'right' ? '____' : fillBlankGameData.currentQuestion.given}
+                        </span>
+                    </div>
+                </div>
+            `;
+            
+            // Generate options
+            const options = [fillBlankGameData.currentQuestion.answer];
+            while (options.length < 4) {
+                const randomWord = isShortToLong ? 
+                    wordPairs[Math.floor(Math.random() * wordPairs.length)].long :
+                    wordPairs[Math.floor(Math.random() * wordPairs.length)].short;
+                if (!options.includes(randomWord)) {
+                    options.push(randomWord);
+                }
+            }
+            
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+            
+            const optionsContainer = document.getElementById('fillblank-options');
+            optionsContainer.innerHTML = '';
+            
+            options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'word-option';
+                optionElement.textContent = option;
+                optionElement.onclick = () => checkFillBlankAnswer(option);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('fillblank-feedback').classList.add('hidden');
+        }
+
+        function checkFillBlankAnswer(selectedWord) {
+            const isCorrect = selectedWord === fillBlankGameData.currentQuestion.answer;
+            const feedback = document.getElementById('fillblank-feedback');
+            const t = translations[currentLanguage];
+            
+            fillBlankGameData.total++;
+            if (isCorrect) {
+                fillBlankGameData.score++;
+                feedback.textContent = t.correct;
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = t.incorrect;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            feedback.classList.remove('hidden');
+            updateScoreDisplays();
+            
+            // Highlight correct/incorrect options
+            document.querySelectorAll('#fillblank-options .word-option').forEach(option => {
+                if (option.textContent === selectedWord) {
+                    option.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else if (option.textContent === fillBlankGameData.currentQuestion.answer) {
+                    option.classList.add('correct');
+                }
+                option.onclick = null; // Disable clicking
+            });
+            
+            setTimeout(() => {
+                nextFillBlankQuestion();
+            }, 2000);
+        }
+
+        // Update score displays
+        function updateScoreDisplays() {
+            const t = translations[currentLanguage];
+            document.getElementById('matching-score').textContent = 
+                `${t.score}: ${matchingGameData.score}/${matchingGameData.total}`;
+            document.getElementById('dragdrop-score').textContent = 
+                `${t.score}: ${dragDropGameData.score}/${dragDropGameData.total}`;
+            document.getElementById('fillblank-score').textContent = 
+                `${t.score}: ${fillBlankGameData.score}/${fillBlankGameData.total}`;
+        }
+
+        // Initialize the application when page loads
+        window.onload = init;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95d8e46e2030da94',t:'MTc1MjI0MzExMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
