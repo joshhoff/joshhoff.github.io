@@ -1,0 +1,860 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indefinite Pronouns Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .language-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tab-btn.active {
+            background: #FF6B6B;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pronoun-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .pronoun-card {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pronoun-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .pronoun-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pronoun-list li {
+            background: rgba(255,255,255,0.7);
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .exercise-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #FF6B6B;
+        }
+        
+        .question {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .option-btn:hover {
+            border-color: #FF6B6B;
+            background: #fff5f5;
+        }
+        
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .prompt-title {
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .score-display {
+            text-align: center;
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .reset-btn {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .language-toggle {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container">
+        <button class="language-toggle" onclick="toggleLanguage()">🌐 Español</button>
+        
+        <div class="header">
+            <h1 id="main-title">Indefinite Pronouns Learning App</h1>
+            <p id="subtitle">Master indefinite pronouns for people, things, and places</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('introduction')">
+                <span class="en">📚 Introduction</span>
+                <span class="es hidden">📚 Introducción</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('explanation')">
+                <span class="en">💡 Explanation</span>
+                <span class="es hidden">💡 Explicación</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('practice')">
+                <span class="en">✏️ Practice</span>
+                <span class="es hidden">✏️ Práctica</span>
+            </button>
+            <button class="tab-btn" onclick="showTab('conversation')">
+                <span class="en">💬 Conversation</span>
+                <span class="es hidden">💬 Conversación</span>
+            </button>
+        </div>
+        
+        <!-- Introduction Section -->
+        <div id="introduction" class="content-section active">
+            <div class="en">
+                <h2>Welcome to Indefinite Pronouns!</h2>
+                <p style="font-size: 1.1em; line-height: 1.6; margin: 20px 0;">
+                    Indefinite pronouns are words that refer to people, things, or places without being specific about exactly who, what, or where. They're essential for everyday communication and help make our speech more natural and efficient.
+                </p>
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>🎯 What you'll learn:</h3>
+                    <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                        <li>Different types of indefinite pronouns</li>
+                        <li>How to use them correctly in sentences</li>
+                        <li>Practice with real-world examples</li>
+                        <li>Conversation skills and prompts</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>🌟 Examples:</h3>
+                    <p><strong>Someone</strong> is at the door. (person)</p>
+                    <p>I need <strong>something</strong> to eat. (thing)</p>
+                    <p>Let's go <strong>somewhere</strong> fun! (place)</p>
+                </div>
+            </div>
+            <div class="es hidden">
+                <h2>¡Bienvenido a los Pronombres Indefinidos!</h2>
+                <p style="font-size: 1.1em; line-height: 1.6; margin: 20px 0;">
+                    Los pronombres indefinidos son palabras que se refieren a personas, cosas o lugares sin ser específicos sobre exactamente quién, qué o dónde. Son esenciales para la comunicación diaria y ayudan a hacer nuestro habla más natural y eficiente.
+                </p>
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>🎯 Lo que aprenderás:</h3>
+                    <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                        <li>Diferentes tipos de pronombres indefinidos</li>
+                        <li>Cómo usarlos correctamente en oraciones</li>
+                        <li>Práctica con ejemplos del mundo real</li>
+                        <li>Habilidades de conversación y sugerencias</li>
+                    </ul>
+                </div>
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>🌟 Ejemplos:</h3>
+                    <p><strong>Someone</strong> is at the door. (persona)</p>
+                    <p>I need <strong>something</strong> to eat. (cosa)</p>
+                    <p>Let's go <strong>somewhere</strong> fun! (lugar)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Explanation Section -->
+        <div id="explanation" class="content-section">
+            <div class="en">
+                <h2>Understanding Indefinite Pronouns</h2>
+                <div class="pronoun-grid">
+                    <div class="pronoun-card">
+                        <h3>👥 For People</h3>
+                        <ul class="pronoun-list">
+                            <li><strong>Someone/Somebody</strong> - any person</li>
+                            <li><strong>Anyone/Anybody</strong> - any person (questions/negatives)</li>
+                            <li><strong>No one/Nobody</strong> - not any person</li>
+                            <li><strong>Everyone/Everybody</strong> - all people</li>
+                        </ul>
+                    </div>
+                    <div class="pronoun-card">
+                        <h3>📦 For Things</h3>
+                        <ul class="pronoun-list">
+                            <li><strong>Something</strong> - any thing</li>
+                            <li><strong>Anything</strong> - any thing (questions/negatives)</li>
+                            <li><strong>Nothing</strong> - not any thing</li>
+                            <li><strong>Everything</strong> - all things</li>
+                        </ul>
+                    </div>
+                    <div class="pronoun-card">
+                        <h3>📍 For Places</h3>
+                        <ul class="pronoun-list">
+                            <li><strong>Somewhere</strong> - any place</li>
+                            <li><strong>Anywhere</strong> - any place (questions/negatives)</li>
+                            <li><strong>Nowhere</strong> - not any place</li>
+                            <li><strong>Everywhere</strong> - all places</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>📝 Usage Rules:</h3>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Positive statements:</strong> Use "some-" words (someone, something, somewhere)</li>
+                        <li><strong>Questions &amp; negatives:</strong> Use "any-" words (anyone, anything, anywhere)</li>
+                        <li><strong>Negative meaning:</strong> Use "no-" words (no one, nothing, nowhere)</li>
+                        <li><strong>All-inclusive:</strong> Use "every-" words (everyone, everything, everywhere)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="es hidden">
+                <h2>Entendiendo los Pronombres Indefinidos</h2>
+                <div class="pronoun-grid">
+                    <div class="pronoun-card">
+                        <h3>👥 Para Personas</h3>
+                        <ul class="pronoun-list">
+                            <li><strong>Someone/Somebody</strong> - cualquier persona</li>
+                            <li><strong>Anyone/Anybody</strong> - cualquier persona (preguntas/negativos)</li>
+                            <li><strong>No one/Nobody</strong> - ninguna persona</li>
+                            <li><strong>Everyone/Everybody</strong> - todas las personas</li>
+                        </ul>
+                    </div>
+                    <div class="pronoun-card">
+                        <h3>📦 Para Cosas</h3>
+                        <ul class="pronoun-list">
+                            <li><strong>Something</strong> - cualquier cosa</li>
+                            <li><strong>Anything</strong> - cualquier cosa (preguntas/negativos)</li>
+                            <li><strong>Nothing</strong> - ninguna cosa</li>
+                            <li><strong>Everything</strong> - todas las cosas</li>
+                        </ul>
+                    </div>
+                    <div class="pronoun-card">
+                        <h3>📍 Para Lugares</h3>
+                        <ul class="pronoun-list">
+                            <li><strong>Somewhere</strong> - cualquier lugar</li>
+                            <li><strong>Anywhere</strong> - cualquier lugar (preguntas/negativos)</li>
+                            <li><strong>Nowhere</strong> - ningún lugar</li>
+                            <li><strong>Everywhere</strong> - todos los lugares</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>📝 Reglas de Uso:</h3>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Declaraciones positivas:</strong> Usa palabras "some-" (someone, something, somewhere)</li>
+                        <li><strong>Preguntas y negativos:</strong> Usa palabras "any-" (anyone, anything, anywhere)</li>
+                        <li><strong>Significado negativo:</strong> Usa palabras "no-" (no one, nothing, nowhere)</li>
+                        <li><strong>Todo-inclusivo:</strong> Usa palabras "every-" (everyone, everything, everywhere)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Practice Section -->
+        <div id="practice" class="content-section">
+            <div class="en">
+                <h2>Practice Exercises</h2>
+                <div class="score-display">
+                    Score: <span id="score">0</span> / <span id="total">8</span>
+                </div>
+            </div>
+            <div class="es hidden">
+                <h2>Ejercicios de Práctica</h2>
+                <div class="score-display">
+                    Puntuación: <span id="score-es">0</span> / <span id="total-es">8</span>
+                </div>
+            </div>
+            
+            <div id="exercise-container"><div class="exercise-container">
+                    <div class="question">1. I need _____ to help me with this project.</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(0, 0)">someone</button><button class="option-btn" onclick="selectAnswer(0, 1)">anyone</button><button class="option-btn" onclick="selectAnswer(0, 2)">no one</button><button class="option-btn" onclick="selectAnswer(0, 3)">everyone</button>
+                    </div>
+                    <div id="explanation-0" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">2. Did you see _____ interesting at the museum?</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(1, 0)">something</button><button class="option-btn" onclick="selectAnswer(1, 1)">anything</button><button class="option-btn" onclick="selectAnswer(1, 2)">nothing</button><button class="option-btn" onclick="selectAnswer(1, 3)">everything</button>
+                    </div>
+                    <div id="explanation-1" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">3. Let's go _____ quiet for dinner.</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(2, 0)">somewhere</button><button class="option-btn" onclick="selectAnswer(2, 1)">anywhere</button><button class="option-btn" onclick="selectAnswer(2, 2)">nowhere</button><button class="option-btn" onclick="selectAnswer(2, 3)">everywhere</button>
+                    </div>
+                    <div id="explanation-2" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">4. I can't find my keys _____.</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(3, 0)">somewhere</button><button class="option-btn" onclick="selectAnswer(3, 1)">anywhere</button><button class="option-btn" onclick="selectAnswer(3, 2)">nowhere</button><button class="option-btn" onclick="selectAnswer(3, 3)">everywhere</button>
+                    </div>
+                    <div id="explanation-3" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">5. _____ knows the answer to this question.</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(4, 0)">Someone</button><button class="option-btn" onclick="selectAnswer(4, 1)">Anyone</button><button class="option-btn" onclick="selectAnswer(4, 2)">No one</button><button class="option-btn" onclick="selectAnswer(4, 3)">Everyone</button>
+                    </div>
+                    <div id="explanation-4" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">6. Is there _____ we can do to help?</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(5, 0)">something</button><button class="option-btn" onclick="selectAnswer(5, 1)">anything</button><button class="option-btn" onclick="selectAnswer(5, 2)">nothing</button><button class="option-btn" onclick="selectAnswer(5, 3)">everything</button>
+                    </div>
+                    <div id="explanation-5" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">7. _____ in the office received the memo.</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(6, 0)">Someone</button><button class="option-btn" onclick="selectAnswer(6, 1)">Anyone</button><button class="option-btn" onclick="selectAnswer(6, 2)">No one</button><button class="option-btn" onclick="selectAnswer(6, 3)">Everyone</button>
+                    </div>
+                    <div id="explanation-6" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div><div class="exercise-container">
+                    <div class="question">8. There's _____ wrong with my computer.</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="selectAnswer(7, 0)">something</button><button class="option-btn" onclick="selectAnswer(7, 1)">anything</button><button class="option-btn" onclick="selectAnswer(7, 2)">nothing</button><button class="option-btn" onclick="selectAnswer(7, 3)">everything</button>
+                    </div>
+                    <div id="explanation-7" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                </div></div>
+            
+            <button class="reset-btn" onclick="resetExercises()">
+                <span class="en">🔄 Reset Exercises</span>
+                <span class="es hidden">🔄 Reiniciar Ejercicios</span>
+            </button>
+        </div>
+        
+        <!-- Conversation Section -->
+        <div id="conversation" class="content-section">
+            <div class="en">
+                <h2>Conversation Practice</h2>
+                <p style="margin-bottom: 20px;">Use these prompts to practice using indefinite pronouns in conversation:</p>
+            </div>
+            <div class="es hidden">
+                <h2>Práctica de Conversación</h2>
+                <p style="margin-bottom: 20px;">Usa estas sugerencias para practicar el uso de pronombres indefinidos en conversación:</p>
+            </div>
+            
+            <div id="conversation-prompts"><div><h3 style="margin-bottom: 15px; color: #2c3e50;">🏠 At Home</h3><div class="conversation-prompt">
+                        <div class="prompt-title">Conversation Starter:</div>
+                        <div>Explain where you like to go when you want to relax somewhere quiet.</div>
+                    </div><div class="conversation-prompt">
+                        <div class="prompt-title">Conversation Starter:</div>
+                        <div>Describe what someone in your family does every morning using indefinite pronouns.</div>
+                    </div></div><div><h3 style="margin-bottom: 15px; color: #2c3e50;">🌍 Travel &amp; Places</h3><div class="conversation-prompt">
+                        <div class="prompt-title">Conversation Starter:</div>
+                        <div>Describe somewhere you've never been but would like to visit.</div>
+                    </div><div class="conversation-prompt">
+                        <div class="prompt-title">Conversation Starter:</div>
+                        <div>Explain what you do when you can't find anything good to eat anywhere.</div>
+                    </div></div></div>
+            
+            <button class="reset-btn" onclick="generateNewPrompts()">
+                <span class="en">🎲 New Prompts</span>
+                <span class="es hidden">🎲 Nuevas Sugerencias</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let score = 0;
+        let totalQuestions = 0;
+        let currentExerciseIndex = 0;
+        
+        const exercises = {
+            en: [
+                {
+                    question: "I need _____ to help me with this project.",
+                    options: ["someone", "anyone", "no one", "everyone"],
+                    correct: 0,
+                    explanation: "Use 'someone' in positive statements when referring to any person."
+                },
+                {
+                    question: "Did you see _____ interesting at the museum?",
+                    options: ["something", "anything", "nothing", "everything"],
+                    correct: 1,
+                    explanation: "Use 'anything' in questions when referring to things."
+                },
+                {
+                    question: "Let's go _____ quiet for dinner.",
+                    options: ["somewhere", "anywhere", "nowhere", "everywhere"],
+                    correct: 0,
+                    explanation: "Use 'somewhere' in positive statements when referring to places."
+                },
+                {
+                    question: "I can't find my keys _____.",
+                    options: ["somewhere", "anywhere", "nowhere", "everywhere"],
+                    correct: 1,
+                    explanation: "Use 'anywhere' in negative statements (can't = cannot)."
+                },
+                {
+                    question: "_____ knows the answer to this question.",
+                    options: ["Someone", "Anyone", "No one", "Everyone"],
+                    correct: 2,
+                    explanation: "Use 'no one' to express that not any person knows."
+                },
+                {
+                    question: "Is there _____ we can do to help?",
+                    options: ["something", "anything", "nothing", "everything"],
+                    correct: 1,
+                    explanation: "Use 'anything' in questions when referring to things."
+                },
+                {
+                    question: "_____ in the office received the memo.",
+                    options: ["Someone", "Anyone", "No one", "Everyone"],
+                    correct: 3,
+                    explanation: "Use 'everyone' to refer to all people in a group."
+                },
+                {
+                    question: "There's _____ wrong with my computer.",
+                    options: ["something", "anything", "nothing", "everything"],
+                    correct: 0,
+                    explanation: "Use 'something' in positive statements when referring to things."
+                }
+            ],
+            es: [
+                {
+                    question: "Necesito que _____ me ayude con este proyecto.",
+                    options: ["someone (alguien)", "anyone (cualquiera)", "no one (nadie)", "everyone (todos)"],
+                    correct: 0,
+                    explanation: "Usa 'someone' en declaraciones positivas cuando te refieres a cualquier persona."
+                },
+                {
+                    question: "¿Viste _____ interesante en el museo?",
+                    options: ["something (algo)", "anything (algo/nada)", "nothing (nada)", "everything (todo)"],
+                    correct: 1,
+                    explanation: "Usa 'anything' en preguntas cuando te refieres a cosas."
+                },
+                {
+                    question: "Vamos _____ tranquilo para cenar.",
+                    options: ["somewhere (a algún lugar)", "anywhere (a cualquier lugar)", "nowhere (a ningún lugar)", "everywhere (a todos lados)"],
+                    correct: 0,
+                    explanation: "Usa 'somewhere' en declaraciones positivas cuando te refieres a lugares."
+                },
+                {
+                    question: "No puedo encontrar mis llaves _____.",
+                    options: ["somewhere (en algún lugar)", "anywhere (en cualquier lugar)", "nowhere (en ningún lugar)", "everywhere (en todos lados)"],
+                    correct: 1,
+                    explanation: "Usa 'anywhere' en declaraciones negativas (can't = cannot)."
+                },
+                {
+                    question: "_____ sabe la respuesta a esta pregunta.",
+                    options: ["Someone (Alguien)", "Anyone (Cualquiera)", "No one (Nadie)", "Everyone (Todos)"],
+                    correct: 2,
+                    explanation: "Usa 'no one' para expresar que ninguna persona sabe."
+                },
+                {
+                    question: "¿Hay _____ que podamos hacer para ayudar?",
+                    options: ["something (algo)", "anything (algo/nada)", "nothing (nada)", "everything (todo)"],
+                    correct: 1,
+                    explanation: "Usa 'anything' en preguntas cuando te refieres a cosas."
+                },
+                {
+                    question: "_____ en la oficina recibió el memo.",
+                    options: ["Someone (Alguien)", "Anyone (Cualquiera)", "No one (Nadie)", "Everyone (Todos)"],
+                    correct: 3,
+                    explanation: "Usa 'everyone' para referirte a todas las personas en un grupo."
+                },
+                {
+                    question: "Hay _____ mal con mi computadora.",
+                    options: ["something (algo)", "anything (algo/nada)", "nothing (nada)", "everything (todo)"],
+                    correct: 0,
+                    explanation: "Usa 'something' en declaraciones positivas cuando te refieres a cosas."
+                }
+            ]
+        };
+        
+        const conversationPrompts = {
+            en: [
+                {
+                    title: "🏠 At Home",
+                    prompts: [
+                        "Describe what someone in your family does every morning using indefinite pronouns.",
+                        "Talk about something you need to buy for your house.",
+                        "Explain where you like to go when you want to relax somewhere quiet."
+                    ]
+                },
+                {
+                    title: "🏢 At Work/School",
+                    prompts: [
+                        "Describe a situation where everyone had to work together on something.",
+                        "Talk about anywhere you go when you need to concentrate.",
+                        "Explain what happens when no one understands the instructions."
+                    ]
+                },
+                {
+                    title: "🌍 Travel & Places",
+                    prompts: [
+                        "Describe somewhere you've never been but would like to visit.",
+                        "Talk about something interesting you saw everywhere you traveled.",
+                        "Explain what you do when you can't find anything good to eat anywhere."
+                    ]
+                },
+                {
+                    title: "👥 Social Situations",
+                    prompts: [
+                        "Describe what happens when someone new joins your friend group.",
+                        "Talk about something everyone in your family enjoys doing together.",
+                        "Explain how you feel when no one understands your jokes."
+                    ]
+                }
+            ],
+            es: [
+                {
+                    title: "🏠 En Casa",
+                    prompts: [
+                        "Describe lo que alguien (someone) en tu familia hace cada mañana usando pronombres indefinidos.",
+                        "Habla sobre algo (something) que necesitas comprar para tu casa.",
+                        "Explica dónde te gusta ir cuando quieres relajarte en algún lugar (somewhere) tranquilo."
+                    ]
+                },
+                {
+                    title: "🏢 En el Trabajo/Escuela",
+                    prompts: [
+                        "Describe una situación donde todos (everyone) tuvieron que trabajar juntos en algo (something).",
+                        "Habla sobre cualquier lugar (anywhere) donde vas cuando necesitas concentrarte.",
+                        "Explica qué pasa cuando nadie (no one) entiende las instrucciones."
+                    ]
+                },
+                {
+                    title: "🌍 Viajes y Lugares",
+                    prompts: [
+                        "Describe algún lugar (somewhere) donde nunca has estado pero te gustaría visitar.",
+                        "Habla sobre algo (something) interesante que viste en todos lados (everywhere) donde viajaste.",
+                        "Explica qué haces cuando no puedes encontrar nada (anything) bueno para comer en ningún lugar (anywhere)."
+                    ]
+                },
+                {
+                    title: "👥 Situaciones Sociales",
+                    prompts: [
+                        "Describe qué pasa cuando alguien (someone) nuevo se une a tu grupo de amigos.",
+                        "Habla sobre algo (something) que todos (everyone) en tu familia disfrutan hacer juntos.",
+                        "Explica cómo te sientes cuando nadie (no one) entiende tus chistes."
+                    ]
+                }
+            ]
+        };
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            
+            // Update language toggle button
+            const toggleBtn = document.querySelector('.language-toggle');
+            toggleBtn.textContent = currentLanguage === 'en' ? '🌐 Español' : '🌐 English';
+            
+            // Update main title and subtitle
+            const mainTitle = document.getElementById('main-title');
+            const subtitle = document.getElementById('subtitle');
+            
+            if (currentLanguage === 'es') {
+                mainTitle.textContent = 'Aplicación de Aprendizaje de Pronombres Indefinidos';
+                subtitle.textContent = 'Domina los pronombres indefinidos para personas, cosas y lugares';
+            } else {
+                mainTitle.textContent = 'Indefinite Pronouns Learning App';
+                subtitle.textContent = 'Master indefinite pronouns for people, things, and places';
+            }
+            
+            // Show/hide language-specific content
+            document.querySelectorAll('.en').forEach(el => {
+                el.classList.toggle('hidden', currentLanguage !== 'en');
+            });
+            document.querySelectorAll('.es').forEach(el => {
+                el.classList.toggle('hidden', currentLanguage !== 'es');
+            });
+            
+            // Regenerate exercises and prompts for new language
+            generateExercises();
+            generateConversationPrompts();
+        }
+        
+        function showTab(tabName) {
+            // Hide all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected content section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+            
+            // Generate content if needed
+            if (tabName === 'practice') {
+                generateExercises();
+            } else if (tabName === 'conversation') {
+                generateConversationPrompts();
+            }
+        }
+        
+        function generateExercises() {
+            const container = document.getElementById('exercise-container');
+            const currentExercises = exercises[currentLanguage];
+            
+            container.innerHTML = '';
+            currentExerciseIndex = 0;
+            score = 0;
+            totalQuestions = currentExercises.length;
+            
+            updateScore();
+            
+            currentExercises.forEach((exercise, index) => {
+                const exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'exercise-container';
+                exerciseDiv.innerHTML = `
+                    <div class="question">${index + 1}. ${exercise.question}</div>
+                    <div class="options">
+                        ${exercise.options.map((option, optIndex) => 
+                            `<button class="option-btn" onclick="selectAnswer(${index}, ${optIndex})">${option}</button>`
+                        ).join('')}
+                    </div>
+                    <div id="explanation-${index}" class="hidden" style="margin-top: 15px; padding: 15px; background: #e8f5e8; border-radius: 8px; font-weight: 500;"></div>
+                `;
+                container.appendChild(exerciseDiv);
+            });
+        }
+        
+        function selectAnswer(exerciseIndex, selectedOption) {
+            const exercise = exercises[currentLanguage][exerciseIndex];
+            const options = document.querySelectorAll(`#exercise-container .exercise-container:nth-child(${exerciseIndex + 1}) .option-btn`);
+            const explanationDiv = document.getElementById(`explanation-${exerciseIndex}`);
+            
+            // Disable all options for this exercise
+            options.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            // Mark correct and incorrect answers
+            options[exercise.correct].classList.add('correct');
+            if (selectedOption !== exercise.correct) {
+                options[selectedOption].classList.add('incorrect');
+            } else {
+                score++;
+            }
+            
+            // Show explanation
+            explanationDiv.textContent = exercise.explanation;
+            explanationDiv.classList.remove('hidden');
+            
+            updateScore();
+        }
+        
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = totalQuestions;
+            document.getElementById('score-es').textContent = score;
+            document.getElementById('total-es').textContent = totalQuestions;
+        }
+        
+        function resetExercises() {
+            generateExercises();
+        }
+        
+        function generateConversationPrompts() {
+            const container = document.getElementById('conversation-prompts');
+            const currentPrompts = conversationPrompts[currentLanguage];
+            
+            container.innerHTML = '';
+            
+            // Select 2 random categories
+            const shuffledCategories = [...currentPrompts].sort(() => Math.random() - 0.5).slice(0, 2);
+            
+            shuffledCategories.forEach(category => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.innerHTML = `<h3 style="margin-bottom: 15px; color: #2c3e50;">${category.title}</h3>`;
+                
+                // Select 2 random prompts from each category
+                const selectedPrompts = [...category.prompts].sort(() => Math.random() - 0.5).slice(0, 2);
+                
+                selectedPrompts.forEach(prompt => {
+                    const promptDiv = document.createElement('div');
+                    promptDiv.className = 'conversation-prompt';
+                    promptDiv.innerHTML = `
+                        <div class="prompt-title">${currentLanguage === 'en' ? 'Conversation Starter:' : 'Iniciador de Conversación:'}</div>
+                        <div>${prompt}</div>
+                    `;
+                    categoryDiv.appendChild(promptDiv);
+                });
+                
+                container.appendChild(categoryDiv);
+            });
+        }
+        
+        function generateNewPrompts() {
+            generateConversationPrompts();
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            generateExercises();
+            generateConversationPrompts();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95e1a79ff7992f39',t:'MTc1MjMzNDk5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
