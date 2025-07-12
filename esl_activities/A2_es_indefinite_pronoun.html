@@ -1,0 +1,908 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indefinite Pronouns Master - ESL Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover, .lang-btn.active {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .content-area {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9ff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+        
+        .activity-item:hover, .activity-item.active {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .activity-content {
+            display: none;
+        }
+        
+        .activity-content.active {
+            display: block;
+        }
+        
+        .question {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option {
+            padding: 12px;
+            background: #e8ecff;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #d4e3ff;
+        }
+        
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .explanation {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .conversation-area {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            min-height: 200px;
+        }
+        
+        .speech-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .speech-btn:hover {
+            background: #218838;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-new-gr-c-s-check-loaded="8.931.0" data-gr-ext-installed="">
+    <div class="container">
+        <div class="header">
+            <h1 id="main-title">Indefinite Pronouns Master</h1>
+            <p id="subtitle">Master indefinite pronouns with interactive exercises</p>
+            
+            <div class="language-selector">
+                <button class="lang-btn active" onclick="setLanguage('en')">🇺🇸 English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">🇪🇸 Español</button>
+                <button class="lang-btn" onclick="setLanguage('it')">🇮🇹 Italiano</button>
+                <button class="lang-btn" onclick="setLanguage('uk')">🇺🇦 Українська</button>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="score" id="score">Score: 0/0</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <h3 id="activities-title">Practice Activities</h3>
+                <ul class="activity-list" id="activity-list"><li class="activity-item">1. Basic Recognition</li><li class="activity-item">2. Fill in the Blanks</li><li class="activity-item">3. Conversation Practice 1</li><li class="activity-item">4. Something vs Anything</li><li class="activity-item">5. Everyone vs No one</li><li class="activity-item">6. Conversation Practice 2</li><li class="activity-item">7. Advanced Usage</li><li class="activity-item">8. Negative Sentences</li><li class="activity-item">9. Conversation Practice 3</li><li class="activity-item">10. Somewhere vs Anywhere</li><li class="activity-item">11. Mixed Practice 1</li><li class="activity-item">12. Conversation Practice 4</li><li class="activity-item">13. Everything vs Nothing</li><li class="activity-item">14. Conversation Practice 5</li><li class="activity-item">15. Final Challenge</li></ul>
+            </div>
+            
+            <div class="content-area" id="content-area">
+                <div id="welcome-content">
+                    <h2 id="welcome-title">Welcome to Indefinite Pronouns Practice!</h2>
+                    <p id="welcome-text">Select an activity from the sidebar to begin practicing indefinite pronouns. Each activity focuses on different aspects of usage and understanding.</p>
+                    
+                    <div class="explanation">
+                        <h4 id="explanation-title">What are Indefinite Pronouns?</h4>
+                        <p id="explanation-text">Indefinite pronouns refer to people, things, or amounts without being specific. Examples include: someone, anyone, everyone, nothing, something, everything, etc.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentActivity = null;
+        let score = 0;
+        let totalQuestions = 0;
+        let currentQuestionIndex = 0;
+        let activityData = {};
+
+        const translations = {
+            en: {
+                mainTitle: "Indefinite Pronouns Master",
+                subtitle: "Master indefinite pronouns with interactive exercises",
+                activitiesTitle: "Practice Activities",
+                welcomeTitle: "Welcome to Indefinite Pronouns Practice!",
+                welcomeText: "Select an activity from the sidebar to begin practicing indefinite pronouns. Each activity focuses on different aspects of usage and understanding.",
+                explanationTitle: "What are Indefinite Pronouns?",
+                explanationText: "Indefinite pronouns refer to people, things, or amounts without being specific. Examples include: someone, anyone, everyone, nothing, something, everything, etc.",
+                checkAnswer: "Check Answer",
+                nextQuestion: "Next Question",
+                tryAgain: "Try Again",
+                complete: "Complete!",
+                correct: "Correct!",
+                incorrect: "Incorrect. Try again!",
+                yourAnswer: "Your answer:",
+                speakText: "🎤 Speak",
+                listenText: "🔊 Listen"
+            },
+            es: {
+                mainTitle: "Maestro de Pronombres Indefinidos",
+                subtitle: "Domina los pronombres indefinidos con ejercicios interactivos",
+                activitiesTitle: "Actividades de Práctica",
+                welcomeTitle: "¡Bienvenido a la Práctica de Pronombres Indefinidos!",
+                welcomeText: "Selecciona una actividad de la barra lateral para comenzar a practicar pronombres indefinidos. Cada actividad se enfoca en diferentes aspectos de uso y comprensión.",
+                explanationTitle: "¿Qué son los Pronombres Indefinidos?",
+                explanationText: "Los pronombres indefinidos se refieren a personas, cosas o cantidades sin ser específicos. Ejemplos incluyen: someone, anyone, everyone, nothing, something, everything, etc.",
+                checkAnswer: "Verificar Respuesta",
+                nextQuestion: "Siguiente Pregunta",
+                tryAgain: "Intentar de Nuevo",
+                complete: "¡Completado!",
+                correct: "¡Correcto!",
+                incorrect: "Incorrecto. ¡Inténtalo de nuevo!",
+                yourAnswer: "Tu respuesta:",
+                speakText: "🎤 Hablar",
+                listenText: "🔊 Escuchar"
+            },
+            it: {
+                mainTitle: "Maestro dei Pronomi Indefiniti",
+                subtitle: "Padroneggia i pronomi indefiniti con esercizi interattivi",
+                activitiesTitle: "Attività di Pratica",
+                welcomeTitle: "Benvenuto alla Pratica dei Pronomi Indefiniti!",
+                welcomeText: "Seleziona un'attività dalla barra laterale per iniziare a praticare i pronomi indefiniti. Ogni attività si concentra su diversi aspetti di uso e comprensione.",
+                explanationTitle: "Cosa sono i Pronomi Indefiniti?",
+                explanationText: "I pronomi indefiniti si riferiscono a persone, cose o quantità senza essere specifici. Esempi includono: someone, anyone, everyone, nothing, something, everything, ecc.",
+                checkAnswer: "Controlla Risposta",
+                nextQuestion: "Prossima Domanda",
+                tryAgain: "Riprova",
+                complete: "Completato!",
+                correct: "Corretto!",
+                incorrect: "Sbagliato. Riprova!",
+                yourAnswer: "La tua risposta:",
+                speakText: "🎤 Parla",
+                listenText: "🔊 Ascolta"
+            },
+            uk: {
+                mainTitle: "Майстер Неозначених Займенників",
+                subtitle: "Опануйте неозначені займенники з інтерактивними вправами",
+                activitiesTitle: "Практичні Вправи",
+                welcomeTitle: "Ласкаво просимо до практики неозначених займенників!",
+                welcomeText: "Виберіть вправу з бічної панелі, щоб почати практикувати неозначені займенники. Кожна вправа зосереджена на різних аспектах використання та розуміння.",
+                explanationTitle: "Що таке неозначені займенники?",
+                explanationText: "Неозначені займенники відносяться до людей, речей або кількостей, не будучи конкретними. Приклади включають: someone, anyone, everyone, nothing, something, everything, тощо.",
+                checkAnswer: "Перевірити Відповідь",
+                nextQuestion: "Наступне Питання",
+                tryAgain: "Спробувати Знову",
+                complete: "Завершено!",
+                correct: "Правильно!",
+                incorrect: "Неправильно. Спробуйте знову!",
+                yourAnswer: "Ваша відповідь:",
+                speakText: "🎤 Говорити",
+                listenText: "🔊 Слухати"
+            }
+        };
+
+        const activities = [
+            {
+                id: 1,
+                title: {
+                    en: "Basic Recognition",
+                    es: "Reconocimiento Básico",
+                    it: "Riconoscimento Base",
+                    uk: "Базове Розпізнавання"
+                },
+                type: "multiple-choice",
+                questions: [
+                    {
+                        question: "_____ is knocking at the door.",
+                        options: ["Someone", "Anyone", "Everyone", "No one"],
+                        correct: 0,
+                        explanation: "Use 'someone' in positive statements when you don't know who the person is."
+                    },
+                    {
+                        question: "I don't see _____ in the room.",
+                        options: ["someone", "anyone", "everyone", "something"],
+                        correct: 1,
+                        explanation: "Use 'anyone' in negative statements and questions."
+                    },
+                    {
+                        question: "_____ loves chocolate ice cream.",
+                        options: ["Someone", "Anyone", "Everyone", "No one"],
+                        correct: 2,
+                        explanation: "Use 'everyone' when referring to all people in a group."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: {
+                    en: "Fill in the Blanks",
+                    es: "Llenar los Espacios",
+                    it: "Riempi gli Spazi",
+                    uk: "Заповніть Пропуски"
+                },
+                type: "fill-blank",
+                questions: [
+                    {
+                        question: "I need _____ to help me with this project.",
+                        answer: "someone",
+                        explanation: "Use 'someone' when you need an unspecified person to help."
+                    },
+                    {
+                        question: "There isn't _____ in the refrigerator.",
+                        answer: "anything",
+                        explanation: "Use 'anything' in negative statements about things."
+                    },
+                    {
+                        question: "_____ can learn English with practice.",
+                        answer: "anyone",
+                        explanation: "Use 'anyone' to mean any person without exception."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: {
+                    en: "Conversation Practice 1",
+                    es: "Práctica de Conversación 1",
+                    it: "Pratica di Conversazione 1",
+                    uk: "Розмовна Практика 1"
+                },
+                type: "conversation",
+                scenario: "At a Restaurant",
+                dialogue: [
+                    { speaker: "Waiter", text: "Would anyone like something to drink?" },
+                    { speaker: "You", text: "Yes, someone at our table would like water." },
+                    { speaker: "Waiter", text: "Is there anything else I can get for you?" },
+                    { speaker: "You", text: "Nothing else for now, thank you." }
+                ]
+            },
+            {
+                id: 4,
+                title: {
+                    en: "Something vs Anything",
+                    es: "Something vs Anything",
+                    it: "Something vs Anything",
+                    uk: "Something vs Anything"
+                },
+                type: "multiple-choice",
+                questions: [
+                    {
+                        question: "Do you have _____ to eat?",
+                        options: ["something", "anything", "nothing", "everything"],
+                        correct: 1,
+                        explanation: "Use 'anything' in questions."
+                    },
+                    {
+                        question: "I bought _____ special for dinner.",
+                        options: ["something", "anything", "nothing", "everything"],
+                        correct: 0,
+                        explanation: "Use 'something' in positive statements."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: {
+                    en: "Everyone vs No one",
+                    es: "Everyone vs No one",
+                    it: "Everyone vs No one",
+                    uk: "Everyone vs No one"
+                },
+                type: "multiple-choice",
+                questions: [
+                    {
+                        question: "_____ came to the party last night.",
+                        options: ["Everyone", "Someone", "Anyone", "No one"],
+                        correct: 0,
+                        explanation: "Use 'everyone' when all people in a group did something."
+                    },
+                    {
+                        question: "_____ was home when I called.",
+                        options: ["Everyone", "Someone", "Anyone", "No one"],
+                        correct: 3,
+                        explanation: "Use 'no one' when nobody was available."
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: {
+                    en: "Conversation Practice 2",
+                    es: "Práctica de Conversación 2",
+                    it: "Pratica di Conversazione 2",
+                    uk: "Розмовна Практика 2"
+                },
+                type: "conversation",
+                scenario: "Shopping",
+                dialogue: [
+                    { speaker: "Clerk", text: "Can I help you find anything?" },
+                    { speaker: "You", text: "Yes, I'm looking for something warm to wear." },
+                    { speaker: "Clerk", text: "Everyone loves our winter collection." },
+                    { speaker: "You", text: "Does anyone have this jacket in a smaller size?" }
+                ]
+            },
+            {
+                id: 7,
+                title: {
+                    en: "Advanced Usage",
+                    es: "Uso Avanzado",
+                    it: "Uso Avanzato",
+                    uk: "Просунуте Використання"
+                },
+                type: "fill-blank",
+                questions: [
+                    {
+                        question: "If _____ calls, tell them I'm busy.",
+                        answer: "anyone",
+                        explanation: "Use 'anyone' in conditional statements."
+                    },
+                    {
+                        question: "_____ who studies hard will succeed.",
+                        answer: "anyone",
+                        explanation: "Use 'anyone' to mean any person who meets the condition."
+                    }
+                ]
+            },
+            {
+                id: 8,
+                title: {
+                    en: "Negative Sentences",
+                    es: "Oraciones Negativas",
+                    it: "Frasi Negative",
+                    uk: "Негативні Речення"
+                },
+                type: "multiple-choice",
+                questions: [
+                    {
+                        question: "I don't want _____ to drink.",
+                        options: ["something", "anything", "nothing", "everything"],
+                        correct: 1,
+                        explanation: "Use 'anything' in negative sentences."
+                    },
+                    {
+                        question: "There isn't _____ here.",
+                        options: ["someone", "anyone", "everyone", "no one"],
+                        correct: 1,
+                        explanation: "Use 'anyone' with negative verbs."
+                    }
+                ]
+            },
+            {
+                id: 9,
+                title: {
+                    en: "Conversation Practice 3",
+                    es: "Práctica de Conversación 3",
+                    it: "Pratica di Conversazione 3",
+                    uk: "Розмовна Практика 3"
+                },
+                type: "conversation",
+                scenario: "At Work",
+                dialogue: [
+                    { speaker: "Boss", text: "Does anyone have questions about the project?" },
+                    { speaker: "You", text: "I have something to ask about the deadline." },
+                    { speaker: "Boss", text: "Everyone should submit their reports by Friday." },
+                    { speaker: "You", text: "Is there anything else we need to prepare?" }
+                ]
+            },
+            {
+                id: 10,
+                title: {
+                    en: "Somewhere vs Anywhere",
+                    es: "Somewhere vs Anywhere",
+                    it: "Somewhere vs Anywhere",
+                    uk: "Somewhere vs Anywhere"
+                },
+                type: "multiple-choice",
+                questions: [
+                    {
+                        question: "Let's go _____ nice for dinner.",
+                        options: ["somewhere", "anywhere", "nowhere", "everywhere"],
+                        correct: 0,
+                        explanation: "Use 'somewhere' in positive statements about places."
+                    },
+                    {
+                        question: "I can't find my keys _____.",
+                        options: ["somewhere", "anywhere", "nowhere", "everywhere"],
+                        correct: 1,
+                        explanation: "Use 'anywhere' in negative statements about places."
+                    }
+                ]
+            },
+            {
+                id: 11,
+                title: {
+                    en: "Mixed Practice 1",
+                    es: "Práctica Mixta 1",
+                    it: "Pratica Mista 1",
+                    uk: "Змішана Практика 1"
+                },
+                type: "fill-blank",
+                questions: [
+                    {
+                        question: "_____ left their umbrella in the classroom.",
+                        answer: "someone",
+                        explanation: "Use 'someone' when an unknown person did something."
+                    },
+                    {
+                        question: "I haven't seen _____ all day.",
+                        answer: "anyone",
+                        explanation: "Use 'anyone' with negative verbs like 'haven't'."
+                    }
+                ]
+            },
+            {
+                id: 12,
+                title: {
+                    en: "Conversation Practice 4",
+                    es: "Práctica de Conversación 4",
+                    it: "Pratica di Conversazione 4",
+                    uk: "Розмовна Практика 4"
+                },
+                type: "conversation",
+                scenario: "Making Plans",
+                dialogue: [
+                    { speaker: "Friend", text: "Does anyone want to go to the movies tonight?" },
+                    { speaker: "You", text: "I'd like to see something funny." },
+                    { speaker: "Friend", text: "Everyone seems busy these days." },
+                    { speaker: "You", text: "Let's find somewhere quiet to talk first." }
+                ]
+            },
+            {
+                id: 13,
+                title: {
+                    en: "Everything vs Nothing",
+                    es: "Everything vs Nothing",
+                    it: "Everything vs Nothing",
+                    uk: "Everything vs Nothing"
+                },
+                type: "multiple-choice",
+                questions: [
+                    {
+                        question: "I understand _____ you explained.",
+                        options: ["everything", "nothing", "something", "anything"],
+                        correct: 0,
+                        explanation: "Use 'everything' to mean all things."
+                    },
+                    {
+                        question: "_____ is wrong with my computer.",
+                        options: ["Everything", "Nothing", "Something", "Anything"],
+                        correct: 2,
+                        explanation: "Use 'something' when there is a problem but you don't know what."
+                    }
+                ]
+            },
+            {
+                id: 14,
+                title: {
+                    en: "Conversation Practice 5",
+                    es: "Práctica de Conversación 5",
+                    it: "Pratica di Conversazione 5",
+                    uk: "Розмовна Практика 5"
+                },
+                type: "conversation",
+                scenario: "Problem Solving",
+                dialogue: [
+                    { speaker: "Teacher", text: "Is there anything you don't understand?" },
+                    { speaker: "You", text: "Everything is clear, but I have something to add." },
+                    { speaker: "Teacher", text: "Everyone should practice these exercises." },
+                    { speaker: "You", text: "Should we do anything special for homework?" }
+                ]
+            },
+            {
+                id: 15,
+                title: {
+                    en: "Final Challenge",
+                    es: "Desafío Final",
+                    it: "Sfida Finale",
+                    uk: "Фінальний Виклик"
+                },
+                type: "mixed",
+                questions: [
+                    {
+                        question: "Complete: I don't know _____ who can help us.",
+                        answer: "anyone",
+                        explanation: "Use 'anyone' in negative statements about people."
+                    },
+                    {
+                        question: "Choose: _____ is possible if you work hard.",
+                        options: ["Something", "Anything", "Nothing", "Everything"],
+                        correct: 1,
+                        explanation: "Use 'anything' to express unlimited possibility."
+                    }
+                ]
+            }
+        ];
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateUI();
+        }
+
+        function updateUI() {
+            const t = translations[currentLanguage];
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('activities-title').textContent = t.activitiesTitle;
+            document.getElementById('welcome-title').textContent = t.welcomeTitle;
+            document.getElementById('welcome-text').textContent = t.welcomeText;
+            document.getElementById('explanation-title').textContent = t.explanationTitle;
+            document.getElementById('explanation-text').textContent = t.explanationText;
+            
+            populateActivities();
+        }
+
+        function populateActivities() {
+            const activityList = document.getElementById('activity-list');
+            activityList.innerHTML = '';
+            
+            activities.forEach(activity => {
+                const li = document.createElement('li');
+                li.className = 'activity-item';
+                li.textContent = `${activity.id}. ${activity.title[currentLanguage]}`;
+                li.onclick = () => startActivity(activity);
+                activityList.appendChild(li);
+            });
+        }
+
+        function startActivity(activity) {
+            currentActivity = activity;
+            currentQuestionIndex = 0;
+            score = 0;
+            totalQuestions = activity.questions ? activity.questions.length : 1;
+            
+            document.querySelectorAll('.activity-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (activity.type === 'conversation') {
+                showConversationActivity(activity);
+            } else {
+                showQuestionActivity(activity);
+            }
+            
+            updateProgress();
+        }
+
+        function showQuestionActivity(activity) {
+            const contentArea = document.getElementById('content-area');
+            const question = activity.questions[currentQuestionIndex];
+            
+            let html = `
+                <h2>${activity.title[currentLanguage]}</h2>
+                <div class="question">
+                    <h3>Question ${currentQuestionIndex + 1} of ${totalQuestions}</h3>
+                    <p><strong>${question.question}</strong></p>
+                </div>
+            `;
+            
+            if (activity.type === 'multiple-choice' || (activity.type === 'mixed' && question.options)) {
+                html += '<div class="options">';
+                question.options.forEach((option, index) => {
+                    html += `<div class="option" onclick="selectOption(${index})">${option}</div>`;
+                });
+                html += '</div>';
+            } else {
+                html += `<input type="text" class="input-field" id="answer-input" placeholder="${translations[currentLanguage].yourAnswer}">`;
+            }
+            
+            html += `
+                <button class="btn" onclick="checkAnswer()">${translations[currentLanguage].checkAnswer}</button>
+                <div id="feedback"></div>
+                <div id="explanation" class="explanation" style="display: none;"></div>
+            `;
+            
+            contentArea.innerHTML = html;
+        }
+
+        function showConversationActivity(activity) {
+            const contentArea = document.getElementById('content-area');
+            
+            let html = `
+                <h2>${activity.title[currentLanguage]}</h2>
+                <h3>Scenario: ${activity.scenario}</h3>
+                <div class="conversation-area">
+            `;
+            
+            activity.dialogue.forEach((line, index) => {
+                html += `
+                    <div style="margin: 15px 0; padding: 10px; background: ${line.speaker === 'You' ? '#e3f2fd' : '#f5f5f5'}; border-radius: 8px;">
+                        <strong>${line.speaker}:</strong> ${line.text}
+                        <button class="speech-btn" onclick="speakText('${line.text}')">${translations[currentLanguage].listenText}</button>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                <div style="margin-top: 20px;">
+                    <h4>Practice Speaking:</h4>
+                    <p>Try to repeat the conversation out loud, focusing on the indefinite pronouns used.</p>
+                    <button class="btn" onclick="completeConversation()">${translations[currentLanguage].complete}</button>
+                </div>
+            `;
+            
+            contentArea.innerHTML = html;
+        }
+
+        function selectOption(index) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            activityData.selectedOption = index;
+        }
+
+        function checkAnswer() {
+            const question = currentActivity.questions[currentQuestionIndex];
+            const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
+            
+            let isCorrect = false;
+            
+            if (currentActivity.type === 'multiple-choice' || (currentActivity.type === 'mixed' && question.options)) {
+                isCorrect = activityData.selectedOption === question.correct;
+                
+                document.querySelectorAll('.option').forEach((opt, index) => {
+                    if (index === question.correct) {
+                        opt.classList.add('correct');
+                    } else if (index === activityData.selectedOption && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+            } else {
+                const userAnswer = document.getElementById('answer-input').value.toLowerCase().trim();
+                isCorrect = userAnswer === question.answer.toLowerCase();
+            }
+            
+            if (isCorrect) {
+                feedback.innerHTML = `<p style="color: green; font-weight: bold;">${translations[currentLanguage].correct}</p>`;
+                score++;
+            } else {
+                feedback.innerHTML = `<p style="color: red; font-weight: bold;">${translations[currentLanguage].incorrect}</p>`;
+            }
+            
+            explanation.innerHTML = `<p><strong>Explanation:</strong> ${question.explanation}</p>`;
+            explanation.style.display = 'block';
+            
+            setTimeout(() => {
+                if (currentQuestionIndex < totalQuestions - 1) {
+                    currentQuestionIndex++;
+                    showQuestionActivity(currentActivity);
+                } else {
+                    showResults();
+                }
+                updateProgress();
+            }, 3000);
+        }
+
+        function completeConversation() {
+            score = 1;
+            totalQuestions = 1;
+            showResults();
+        }
+
+        function showResults() {
+            const contentArea = document.getElementById('content-area');
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            contentArea.innerHTML = `
+                <div style="text-align: center;">
+                    <h2>${translations[currentLanguage].complete}</h2>
+                    <div class="score">Final Score: ${score}/${totalQuestions} (${percentage}%)</div>
+                    <p>${percentage >= 80 ? 'Excellent work!' : percentage >= 60 ? 'Good job! Keep practicing.' : 'Keep practicing to improve!'}</p>
+                    <button class="btn" onclick="location.reload()">Try Another Activity</button>
+                </div>
+            `;
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('score').textContent = `Score: ${score}/${totalQuestions}`;
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Initialize the application
+        updateUI();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95e0b933757809cf',t:'MTc1MjMyNTIyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe>
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
