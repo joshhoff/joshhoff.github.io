@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Learning for French Speakers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .language-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .lesson-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .lesson-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .lesson-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .lesson-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .magic-e-demo {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 15px;
+        }
+        
+        .word-pair {
+            text-align: center;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .word-pair:hover {
+            background: #e8f0fe;
+            transform: scale(1.05);
+        }
+        
+        .word-without-e {
+            font-size: 20px;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .word-with-e {
+            font-size: 20px;
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .magic-e {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        
+        .pronunciation {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .verb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .verb-example {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .verb-example:hover {
+            background: #e8f0fe;
+            transform: translateY(-2px);
+        }
+        
+        .verb-base {
+            font-size: 16px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .conjugation {
+            font-size: 14px;
+            color: #666;
+            margin: 2px 0;
+        }
+        
+        .practice-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        .quiz-question {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .quiz-option {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .quiz-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .quiz-option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .explanation {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .play-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: #45a049;
+        }
+        
+        .conversation-scenarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .scenario-card {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .sample-conversation {
+            margin: 15px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .conversation-line {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .speaker-a {
+            background: #e3f2fd;
+            margin-left: 0;
+            margin-right: 20px;
+        }
+        
+        .speaker-b {
+            background: #f3e5f5;
+            margin-left: 20px;
+            margin-right: 0;
+        }
+        
+        .speaker {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .practice-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .practice-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .practice-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .exercise-card {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .word-builder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .base-word {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .base-word:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        
+        .transformation-result {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .verb-practice-container {
+            margin: 20px 0;
+        }
+        
+        .verb-sentence {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .verb-input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            min-width: 120px;
+        }
+        
+        .verb-input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        .check-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .check-btn:hover {
+            background: #45a049;
+        }
+        
+        .feedback {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media (max-width: 768px) {
+            .lesson-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .magic-e-demo {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .conversation-scenarios {
+                grid-template-columns: 1fr;
+            }
+            
+            .speaker-a, .speaker-b {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .verb-sentence {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .practice-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="language-toggle" onclick="toggleLanguage()">🇫🇷 Français</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1 id="main-title">English Learning for French Speakers</h1>
+            <p id="subtitle">Master the Magic E and Present Tense</p>
+        </div>
+        
+        <div class="lesson-container">
+            <!-- Magic E Lesson -->
+            <div class="lesson-card">
+                <h2 class="lesson-title" id="magic-e-title">The Magic E Rule</h2>
+                <div id="magic-e-explanation">
+                    <p><strong>What is the Magic E?</strong></p>
+                    <p>When you add an 'e' to the end of a word, it changes the vowel sound from short to long. The 'e' is silent but magical!</p>
+                    <br>
+                    <p><strong>Pattern:</strong> Consonant + Vowel + Consonant + E</p>
+                </div>
+                
+                <div class="magic-e-demo">
+                    <div class="word-pair" onclick="playSound('cap')">
+                        <div class="word-without-e">cap</div>
+                        <div class="pronunciation">/kæp/</div>
+                        <button class="play-button">🔊</button>
+                    </div>
+                    <div style="font-size: 24px; align-self: center;">→</div>
+                    <div class="word-pair" onclick="playSound('cape')">
+                        <div class="word-with-e">cap<span class="magic-e">e</span></div>
+                        <div class="pronunciation">/keɪp/</div>
+                        <button class="play-button">🔊</button>
+                    </div>
+                </div>
+                
+                <div class="magic-e-demo">
+                    <div class="word-pair" onclick="playSound('bit')">
+                        <div class="word-without-e">bit</div>
+                        <div class="pronunciation">/bɪt/</div>
+                        <button class="play-button">🔊</button>
+                    </div>
+                    <div style="font-size: 24px; align-self: center;">→</div>
+                    <div class="word-pair" onclick="playSound('bite')">
+                        <div class="word-with-e">bit<span class="magic-e">e</span></div>
+                        <div class="pronunciation">/baɪt/</div>
+                        <button class="play-button">🔊</button>
+                    </div>
+                </div>
+                
+                <div class="magic-e-demo">
+                    <div class="word-pair" onclick="playSound('cut')">
+                        <div class="word-without-e">cut</div>
+                        <div class="pronunciation">/kʌt/</div>
+                        <button class="play-button">🔊</button>
+                    </div>
+                    <div style="font-size: 24px; align-self: center;">→</div>
+                    <div class="word-pair" onclick="playSound('cute')">
+                        <div class="word-with-e">cut<span class="magic-e">e</span></div>
+                        <div class="pronunciation">/kjuːt/</div>
+                        <button class="play-button">🔊</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Present Tense Lesson -->
+            <div class="lesson-card">
+                <h2 class="lesson-title" id="present-tense-title">Present Tense Formation</h2>
+                <div id="present-tense-explanation">
+                    <p><strong>Simple Present Tense Rules:</strong></p>
+                    <p>• I, you, we, they → use base form</p>
+                    <p>• He, she, it → add -s or -es</p>
+                    <br>
+                    <p><strong>Special cases:</strong></p>
+                    <p>• Verbs ending in -s, -sh, -ch, -x, -z → add -es</p>
+                    <p>• Verbs ending in consonant + y → change y to -ies</p>
+                </div>
+                
+                <div class="verb-grid">
+                    <div class="verb-example" onclick="showConjugation('work')">
+                        <div class="verb-base">WORK</div>
+                        <div class="conjugation">I work</div>
+                        <div class="conjugation">He work<strong>s</strong></div>
+                    </div>
+                    
+                    <div class="verb-example" onclick="showConjugation('watch')">
+                        <div class="verb-base">WATCH</div>
+                        <div class="conjugation">I watch</div>
+                        <div class="conjugation">She watch<strong>es</strong></div>
+                    </div>
+                    
+                    <div class="verb-example" onclick="showConjugation('study')">
+                        <div class="verb-base">STUDY</div>
+                        <div class="conjugation">I study</div>
+                        <div class="conjugation">He stud<strong>ies</strong></div>
+                    </div>
+                    
+                    <div class="verb-example" onclick="showConjugation('have')">
+                        <div class="verb-base">HAVE</div>
+                        <div class="conjugation">I have</div>
+                        <div class="conjugation">She <strong>has</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Practice Section -->
+        <div class="practice-section">
+            <h2 class="lesson-title" id="practice-title">Practice Exercises</h2>
+            
+            <div class="quiz-question">
+                <p id="question1"><strong>Question 1:</strong> Which word has the long 'a' sound?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 1)">cat</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 1)">cake</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 1)">cap</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 1)">can</div>
+                </div>
+                <div class="explanation hidden" id="explanation1">
+                    <p id="explanation1-text">Correct! "Cake" has the magic e, which makes the 'a' say its name: /keɪk/</p>
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <p id="question2"><strong>Question 2:</strong> Complete: "She _____ to school every day." (go)</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 2)">go</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 2)">goes</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 2)">going</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 2)">went</div>
+                </div>
+                <div class="explanation hidden" id="explanation2">
+                    <p id="explanation2-text">Correct! With "she" (third person singular), we add -es to "go" because it ends in -o.</p>
+                </div>
+            </div>
+            
+            <div class="quiz-question">
+                <p id="question3"><strong>Question 3:</strong> Which pair shows the magic e rule?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 3)">cat → cats</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 3)">hop → hope</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 3)">run → running</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 3)">big → bigger</div>
+                </div>
+                <div class="explanation hidden" id="explanation3">
+                    <p id="explanation3-text">Correct! "Hop" /hɒp/ becomes "hope" /hoʊp/ - the magic e changes the vowel sound!</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p id="question4"><strong>Question 4:</strong> Complete: "My brother _____ his homework every evening." (do)</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 4)">do</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 4)">does</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 4)">did</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 4)">doing</div>
+                </div>
+                <div class="explanation hidden" id="explanation4">
+                    <p id="explanation4-text">Correct! "Brother" is third person singular (he), so we use "does".</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p id="question5"><strong>Question 5:</strong> Which word has the magic e making the 'i' long?</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 5)">sit</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 5)">big</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 5)">bike</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 5)">pick</div>
+                </div>
+                <div class="explanation hidden" id="explanation5">
+                    <p id="explanation5-text">Correct! "Bike" /baɪk/ has the magic e that makes the 'i' say its name!</p>
+                </div>
+            </div>
+
+            <div class="quiz-question">
+                <p id="question6"><strong>Question 6:</strong> Complete: "They _____ French and English." (speak)</p>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, true, 6)">speak</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 6)">speaks</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 6)">speaking</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false, 6)">spoke</div>
+                </div>
+                <div class="explanation hidden" id="explanation6">
+                    <p id="explanation6-text">Correct! "They" uses the base form of the verb without adding -s.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conversation Practice Section -->
+        <div class="practice-section">
+            <h2 class="lesson-title" id="conversation-title">Conversation Practice</h2>
+            <p id="conversation-intro">Practice these common situations using present tense and magic e words!</p>
+            
+            <div class="conversation-scenarios">
+                <div class="scenario-card">
+                    <h3 id="scenario1-title">🏠 At Home</h3>
+                    <div class="conversation-prompt">
+                        <p id="scenario1-prompt"><strong>Situation:</strong> Describe your daily routine</p>
+                        <div class="sample-conversation">
+                            <div class="conversation-line speaker-a">
+                                <span class="speaker">You:</span>
+                                <span id="conv1-line1">"I wake up at seven. I make breakfast and ride my bike to work."</span>
+                            </div>
+                            <div class="conversation-line speaker-b">
+                                <span class="speaker">Friend:</span>
+                                <span id="conv1-line2">"That's nice! What time do you arrive at work?"</span>
+                            </div>
+                            <div class="conversation-line speaker-a">
+                                <span class="speaker">You:</span>
+                                <span id="conv1-line3">"I arrive at nine. My boss likes when we come on time."</span>
+                            </div>
+                        </div>
+                        <div class="practice-buttons">
+                            <button class="practice-btn" onclick="showVocabulary(1)" id="vocab-btn1">Key Vocabulary</button>
+                            <button class="practice-btn" onclick="showAlternatives(1)" id="alt-btn1">Try Different Words</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <h3 id="scenario2-title">🛒 Shopping</h3>
+                    <div class="conversation-prompt">
+                        <p id="scenario2-prompt"><strong>Situation:</strong> At the grocery store</p>
+                        <div class="sample-conversation">
+                            <div class="conversation-line speaker-a">
+                                <span class="speaker">Cashier:</span>
+                                <span id="conv2-line1">"Do you have a store card?"</span>
+                            </div>
+                            <div class="conversation-line speaker-b">
+                                <span class="speaker">You:</span>
+                                <span id="conv2-line2">"Yes, I use it every time I shop here."</span>
+                            </div>
+                            <div class="conversation-line speaker-a">
+                                <span class="speaker">Cashier:</span>
+                                <span id="conv2-line3">"Great! That saves you five dollars today."</span>
+                            </div>
+                        </div>
+                        <div class="practice-buttons">
+                            <button class="practice-btn" onclick="showVocabulary(2)" id="vocab-btn2">Key Vocabulary</button>
+                            <button class="practice-btn" onclick="showAlternatives(2)" id="alt-btn2">Try Different Words</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scenario-card">
+                    <h3 id="scenario3-title">👥 Meeting People</h3>
+                    <div class="conversation-prompt">
+                        <p id="scenario3-prompt"><strong>Situation:</strong> Introducing yourself</p>
+                        <div class="sample-conversation">
+                            <div class="conversation-line speaker-a">
+                                <span class="speaker">New Person:</span>
+                                <span id="conv3-line1">"Hi! What's your name?"</span>
+                            </div>
+                            <div class="conversation-line speaker-b">
+                                <span class="speaker">You:</span>
+                                <span id="conv3-line2">"I'm Marie. I come from France but I live here now."</span>
+                            </div>
+                            <div class="conversation-line speaker-a">
+                                <span class="speaker">New Person:</span>
+                                <span id="conv3-line3">"Nice to meet you! Do you like it here?"</span>
+                            </div>
+                            <div class="conversation-line speaker-b">
+                                <span class="speaker">You:</span>
+                                <span id="conv3-line4">"Yes! People are nice and I make new friends easily."</span>
+                            </div>
+                        </div>
+                        <div class="practice-buttons">
+                            <button class="practice-btn" onclick="showVocabulary(3)" id="vocab-btn3">Key Vocabulary</button>
+                            <button class="practice-btn" onclick="showAlternatives(3)" id="alt-btn3">Try Different Words</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Exercises Section -->
+        <div class="practice-section">
+            <h2 class="lesson-title" id="interactive-title">Interactive Exercises</h2>
+            
+            <div class="exercise-card">
+                <h3 id="exercise1-title">🎯 Magic E Word Builder</h3>
+                <p id="exercise1-desc">Click on base words to see their magic e transformation!</p>
+                <div class="word-builder-grid">
+                    <div class="base-word" onclick="transformWord('hat', 'hate')">hat</div>
+                    <div class="base-word" onclick="transformWord('kit', 'kite')">kit</div>
+                    <div class="base-word" onclick="transformWord('not', 'note')">not</div>
+                    <div class="base-word" onclick="transformWord('tub', 'tube')">tub</div>
+                    <div class="base-word" onclick="transformWord('pin', 'pine')">pin</div>
+                    <div class="base-word" onclick="transformWord('mad', 'made')">mad</div>
+                </div>
+                <div id="transformation-display" class="transformation-result"></div>
+            </div>
+
+            <div class="exercise-card">
+                <h3 id="exercise2-title">⚡ Quick Verb Practice</h3>
+                <p id="exercise2-desc">Complete the sentences with the correct present tense form!</p>
+                <div class="verb-practice-container">
+                    <div class="verb-sentence">
+                        <span id="sentence1">She _____ (watch) TV every evening.</span>
+                        <input type="text" class="verb-input" id="input1" placeholder="Type here...">
+                        <button onclick="checkVerbAnswer(1, 'watches')" class="check-btn">Check</button>
+                        <span class="feedback" id="feedback1"></span>
+                    </div>
+                    <div class="verb-sentence">
+                        <span id="sentence2">They _____ (study) English together.</span>
+                        <input type="text" class="verb-input" id="input2" placeholder="Type here...">
+                        <button onclick="checkVerbAnswer(2, 'study')" class="check-btn">Check</button>
+                        <span class="feedback" id="feedback2"></span>
+                    </div>
+                    <div class="verb-sentence">
+                        <span id="sentence3">My cat _____ (sleep) on the sofa.</span>
+                        <input type="text" class="verb-input" id="input3" placeholder="Type here...">
+                        <button onclick="checkVerbAnswer(3, 'sleeps')" class="check-btn">Check</button>
+                        <span class="feedback" id="feedback3"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        
+        const translations = {
+            en: {
+                'main-title': 'English Learning for French Speakers',
+                'subtitle': 'Master the Magic E and Present Tense',
+                'magic-e-title': 'The Magic E Rule',
+                'magic-e-explanation': `
+                    <p><strong>What is the Magic E?</strong></p>
+                    <p>When you add an 'e' to the end of a word, it changes the vowel sound from short to long. The 'e' is silent but magical!</p>
+                    <br>
+                    <p><strong>Pattern:</strong> Consonant + Vowel + Consonant + E</p>
+                `,
+                'present-tense-title': 'Present Tense Formation',
+                'present-tense-explanation': `
+                    <p><strong>Simple Present Tense Rules:</strong></p>
+                    <p>• I, you, we, they → use base form</p>
+                    <p>• He, she, it → add -s or -es</p>
+                    <br>
+                    <p><strong>Special cases:</strong></p>
+                    <p>• Verbs ending in -s, -sh, -ch, -x, -z → add -es</p>
+                    <p>• Verbs ending in consonant + y → change y to -ies</p>
+                `,
+                'practice-title': 'Practice Exercises',
+                'question1': '<strong>Question 1:</strong> Which word has the long \'a\' sound?',
+                'question2': '<strong>Question 2:</strong> Complete: "She _____ to school every day." (go)',
+                'question3': '<strong>Question 3:</strong> Which pair shows the magic e rule?',
+                'question4': '<strong>Question 4:</strong> Complete: "My brother _____ his homework every evening." (do)',
+                'question5': '<strong>Question 5:</strong> Which word has the magic e making the \'i\' long?',
+                'question6': '<strong>Question 6:</strong> Complete: "They _____ French and English." (speak)',
+                'explanation1-text': 'Correct! "Cake" has the magic e, which makes the \'a\' say its name: /keɪk/',
+                'explanation2-text': 'Correct! With "she" (third person singular), we add -es to "go" because it ends in -o.',
+                'explanation3-text': 'Correct! "Hop" /hɒp/ becomes "hope" /hoʊp/ - the magic e changes the vowel sound!',
+                'explanation4-text': 'Correct! "Brother" is third person singular (he), so we use "does".',
+                'explanation5-text': 'Correct! "Bike" /baɪk/ has the magic e that makes the \'i\' say its name!',
+                'explanation6-text': 'Correct! "They" uses the base form of the verb without adding -s.',
+                'conversation-title': 'Conversation Practice',
+                'conversation-intro': 'Practice these common situations using present tense and magic e words!',
+                'scenario1-title': '🏠 At Home',
+                'scenario1-prompt': '<strong>Situation:</strong> Describe your daily routine',
+                'scenario2-title': '🛒 Shopping',
+                'scenario2-prompt': '<strong>Situation:</strong> At the grocery store',
+                'scenario3-title': '👥 Meeting People',
+                'scenario3-prompt': '<strong>Situation:</strong> Introducing yourself',
+                'conv1-line1': '"I wake up at seven. I make breakfast and ride my bike to work."',
+                'conv1-line2': '"That\'s nice! What time do you arrive at work?"',
+                'conv1-line3': '"I arrive at nine. My boss likes when we come on time."',
+                'conv2-line1': '"Do you have a store card?"',
+                'conv2-line2': '"Yes, I use it every time I shop here."',
+                'conv2-line3': '"Great! That saves you five dollars today."',
+                'conv3-line1': '"Hi! What\'s your name?"',
+                'conv3-line2': '"I\'m Marie. I come from France but I live here now."',
+                'conv3-line3': '"Nice to meet you! Do you like it here?"',
+                'conv3-line4': '"Yes! People are nice and I make new friends easily."',
+                'vocab-btn1': 'Key Vocabulary',
+                'vocab-btn2': 'Key Vocabulary',
+                'vocab-btn3': 'Key Vocabulary',
+                'alt-btn1': 'Try Different Words',
+                'alt-btn2': 'Try Different Words',
+                'alt-btn3': 'Try Different Words',
+                'interactive-title': 'Interactive Exercises',
+                'exercise1-title': '🎯 Magic E Word Builder',
+                'exercise1-desc': 'Click on base words to see their magic e transformation!',
+                'exercise2-title': '⚡ Quick Verb Practice',
+                'exercise2-desc': 'Complete the sentences with the correct present tense form!',
+                'sentence1': 'She _____ (watch) TV every evening.',
+                'sentence2': 'They _____ (study) English together.',
+                'sentence3': 'My cat _____ (sleep) on the sofa.'
+            },
+            fr: {
+                'main-title': 'Apprentissage de l\'Anglais pour Francophones',
+                'subtitle': 'Maîtrisez le E Magique et le Présent',
+                'magic-e-title': 'La Règle du E Magique',
+                'magic-e-explanation': `
+                    <p><strong>Qu'est-ce que le E Magique ?</strong></p>
+                    <p>Quand vous ajoutez un 'e' à la fin d'un mot, cela change le son de la voyelle de court à long. Le 'e' est silencieux mais magique !</p>
+                    <br>
+                    <p><strong>Modèle :</strong> Consonne + Voyelle + Consonne + E</p>
+                `,
+                'present-tense-title': 'Formation du Présent',
+                'present-tense-explanation': `
+                    <p><strong>Règles du Présent Simple :</strong></p>
+                    <p>• I, you, we, they → utiliser la forme de base</p>
+                    <p>• He, she, it → ajouter -s ou -es</p>
+                    <br>
+                    <p><strong>Cas spéciaux :</strong></p>
+                    <p>• Verbes se terminant par -s, -sh, -ch, -x, -z → ajouter -es</p>
+                    <p>• Verbes se terminant par consonne + y → changer y en -ies</p>
+                `,
+                'practice-title': 'Exercices Pratiques',
+                'question1': '<strong>Question 1 :</strong> Quel mot a le son \'a\' long ?',
+                'question2': '<strong>Question 2 :</strong> Complétez : "She _____ to school every day." (go)',
+                'question3': '<strong>Question 3 :</strong> Quelle paire montre la règle du e magique ?',
+                'question4': '<strong>Question 4 :</strong> Complétez : "My brother _____ his homework every evening." (do)',
+                'question5': '<strong>Question 5 :</strong> Quel mot a le e magique qui rend le \'i\' long ?',
+                'question6': '<strong>Question 6 :</strong> Complétez : "They _____ French and English." (speak)',
+                'explanation1-text': 'Correct ! "Cake" a le e magique, qui fait dire son nom au \'a\' : /keɪk/',
+                'explanation2-text': 'Correct ! Avec "she" (troisième personne du singulier), on ajoute -es à "go" car il se termine par -o.',
+                'explanation3-text': 'Correct ! "Hop" /hɒp/ devient "hope" /hoʊp/ - le e magique change le son de la voyelle !',
+                'explanation4-text': 'Correct ! "Brother" est à la troisième personne du singulier (he), donc on utilise "does".',
+                'explanation5-text': 'Correct ! "Bike" /baɪk/ a le e magique qui fait dire son nom au \'i\' !',
+                'explanation6-text': 'Correct ! "They" utilise la forme de base du verbe sans ajouter -s.',
+                'conversation-title': 'Pratique de Conversation',
+                'conversation-intro': 'Pratiquez ces situations courantes en utilisant le présent et les mots avec e magique !',
+                'scenario1-title': '🏠 À la Maison',
+                'scenario1-prompt': '<strong>Situation :</strong> Décrivez votre routine quotidienne',
+                'scenario2-title': '🛒 Faire les Courses',
+                'scenario2-prompt': '<strong>Situation :</strong> À l\'épicerie',
+                'scenario3-title': '👥 Rencontrer des Gens',
+                'scenario3-prompt': '<strong>Situation :</strong> Se présenter',
+                'conv1-line1': '"Je me réveille à sept heures. Je prépare le petit-déjeuner et vais au travail à vélo."',
+                'conv1-line2': '"C\'est bien ! À quelle heure arrivez-vous au travail ?"',
+                'conv1-line3': '"J\'arrive à neuf heures. Mon patron aime quand nous arrivons à l\'heure."',
+                'conv2-line1': '"Avez-vous une carte de magasin ?"',
+                'conv2-line2': '"Oui, je l\'utilise chaque fois que je fais mes courses ici."',
+                'conv2-line3': '"Parfait ! Cela vous fait économiser cinq dollars aujourd\'hui."',
+                'conv3-line1': '"Salut ! Comment vous appelez-vous ?"',
+                'conv3-line2': '"Je suis Marie. Je viens de France mais je vis ici maintenant."',
+                'conv3-line3': '"Ravi de vous rencontrer ! Aimez-vous vivre ici ?"',
+                'conv3-line4': '"Oui ! Les gens sont gentils et je me fais facilement de nouveaux amis."',
+                'vocab-btn1': 'Vocabulaire Clé',
+                'vocab-btn2': 'Vocabulaire Clé',
+                'vocab-btn3': 'Vocabulaire Clé',
+                'alt-btn1': 'Essayer d\'Autres Mots',
+                'alt-btn2': 'Essayer d\'Autres Mots',
+                'alt-btn3': 'Essayer d\'Autres Mots',
+                'interactive-title': 'Exercices Interactifs',
+                'exercise1-title': '🎯 Constructeur de Mots avec E Magique',
+                'exercise1-desc': 'Cliquez sur les mots de base pour voir leur transformation avec le e magique !',
+                'exercise2-title': '⚡ Pratique Rapide des Verbes',
+                'exercise2-desc': 'Complétez les phrases avec la forme correcte du présent !',
+                'sentence1': 'Elle _____ (watch) la télé chaque soir.',
+                'sentence2': 'Ils _____ (study) l\'anglais ensemble.',
+                'sentence3': 'Mon chat _____ (sleep) sur le canapé.'
+            }
+        };
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'fr' : 'en';
+            const button = document.querySelector('.language-toggle');
+            button.textContent = currentLanguage === 'en' ? '🇫🇷 Français' : '🇬🇧 English';
+            
+            // Update all translatable elements
+            Object.keys(translations[currentLanguage]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.innerHTML = translations[currentLanguage][key];
+                }
+            });
+        }
+        
+        function playSound(word) {
+            // Visual feedback for pronunciation
+            const wordPairs = document.querySelectorAll('.word-pair');
+            wordPairs.forEach(pair => {
+                if (pair.textContent.includes(word)) {
+                    pair.style.background = '#e8f0fe';
+                    setTimeout(() => {
+                        pair.style.background = '';
+                    }, 500);
+                }
+            });
+            
+            // Show pronunciation tip
+            showPronunciationTip(word);
+        }
+        
+        function showPronunciationTip(word) {
+            const tips = {
+                'cap': 'Short \'a\' sound like in French "chat"',
+                'cape': 'Long \'a\' sound like saying the letter A',
+                'bit': 'Short \'i\' sound like in French "si"',
+                'bite': 'Long \'i\' sound like "eye"',
+                'cut': 'Short \'u\' sound',
+                'cute': 'Long \'u\' sound like "you"'
+            };
+            
+            if (currentLanguage === 'fr') {
+                const frenchTips = {
+                    'cap': 'Son \'a\' court comme dans "chat"',
+                    'cape': 'Son \'a\' long comme dire la lettre A',
+                    'bit': 'Son \'i\' court comme dans "si"',
+                    'bite': 'Son \'i\' long comme "eye"',
+                    'cut': 'Son \'u\' court',
+                    'cute': 'Son \'u\' long comme "you"'
+                };
+                alert(frenchTips[word] || tips[word]);
+            } else {
+                alert(tips[word] || 'Click to hear pronunciation');
+            }
+        }
+        
+        function showConjugation(verb) {
+            const conjugations = {
+                'work': 'I work, You work, He/She/It works, We work, They work',
+                'watch': 'I watch, You watch, He/She/It watches, We watch, They watch',
+                'study': 'I study, You study, He/She/It studies, We study, They study',
+                'have': 'I have, You have, He/She/It has, We have, They have'
+            };
+            
+            const frenchConjugations = {
+                'work': 'I work (je travaille), You work (tu travailles), He/She/It works (il/elle travaille), We work (nous travaillons), They work (ils/elles travaillent)',
+                'watch': 'I watch (je regarde), You watch (tu regardes), He/She/It watches (il/elle regarde), We watch (nous regardons), They watch (ils/elles regardent)',
+                'study': 'I study (j\'étudie), You study (tu étudies), He/She/It studies (il/elle étudie), We study (nous étudions), They study (ils/elles étudient)',
+                'have': 'I have (j\'ai), You have (tu as), He/She/It has (il/elle a), We have (nous avons), They have (ils/elles ont)'
+            };
+            
+            const message = currentLanguage === 'fr' ? frenchConjugations[verb] : conjugations[verb];
+            alert(message);
+        }
+        
+        function checkAnswer(element, isCorrect, questionNum) {
+            // Remove previous styling
+            const options = element.parentNode.querySelectorAll('.quiz-option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            // Style the clicked option
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(option => {
+                    if (option !== element) {
+                        // This is a simplified way - in a real app, you'd track correct answers
+                        if ((questionNum === 1 && option.textContent === 'cake') ||
+                            (questionNum === 2 && option.textContent === 'goes') ||
+                            (questionNum === 3 && option.textContent === 'hop → hope')) {
+                            option.classList.add('correct');
+                        }
+                    }
+                });
+            }
+            
+            // Show explanation
+            const explanation = document.getElementById(`explanation${questionNum}`);
+            explanation.classList.remove('hidden');
+            
+            // Disable further clicks
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+        }
+        
+        function showVocabulary(scenarioNum) {
+            const vocabularies = {
+                1: {
+                    en: "Key words: wake up (se réveiller), make (faire/préparer), ride (faire du vélo), arrive (arriver), boss (patron), on time (à l'heure)",
+                    fr: "Mots clés: wake up (se réveiller), make (faire/préparer), ride (faire du vélo), arrive (arriver), boss (patron), on time (à l'heure)"
+                },
+                2: {
+                    en: "Key words: store card (carte de magasin), use (utiliser), every time (chaque fois), shop (faire les courses), save (économiser)",
+                    fr: "Mots clés: store card (carte de magasin), use (utiliser), every time (chaque fois), shop (faire les courses), save (économiser)"
+                },
+                3: {
+                    en: "Key words: name (nom), come from (venir de), live (vivre), like (aimer), people (gens), nice (gentil), friends (amis), easily (facilement)",
+                    fr: "Mots clés: name (nom), come from (venir de), live (vivre), like (aimer), people (gens), nice (gentil), friends (amis), easily (facilement)"
+                }
+            };
+            
+            const vocab = vocabularies[scenarioNum][currentLanguage];
+            alert(vocab);
+        }
+        
+        function showAlternatives(scenarioNum) {
+            const alternatives = {
+                1: {
+                    en: "Try these alternatives:\n• 'I get up at six' instead of 'wake up'\n• 'I take the bus' instead of 'ride my bike'\n• 'I reach work' instead of 'arrive at work'",
+                    fr: "Essayez ces alternatives:\n• 'I get up at six' au lieu de 'wake up'\n• 'I take the bus' au lieu de 'ride my bike'\n• 'I reach work' au lieu de 'arrive at work'"
+                },
+                2: {
+                    en: "Try these alternatives:\n• 'loyalty card' instead of 'store card'\n• 'utilize' instead of 'use'\n• 'purchase' instead of 'shop'",
+                    fr: "Essayez ces alternatives:\n• 'loyalty card' au lieu de 'store card'\n• 'utilize' au lieu de 'use'\n• 'purchase' au lieu de 'shop'"
+                },
+                3: {
+                    en: "Try these alternatives:\n• 'I'm originally from France' instead of 'I come from France'\n• 'I reside here' instead of 'I live here'\n• 'I enjoy it here' instead of 'I like it here'",
+                    fr: "Essayez ces alternatives:\n• 'I'm originally from France' au lieu de 'I come from France'\n• 'I reside here' au lieu de 'I live here'\n• 'I enjoy it here' au lieu de 'I like it here'"
+                }
+            };
+            
+            const alt = alternatives[scenarioNum][currentLanguage];
+            alert(alt);
+        }
+        
+        function transformWord(baseWord, magicWord) {
+            const display = document.getElementById('transformation-display');
+            const transformations = {
+                'hat-hate': { en: 'hat /hæt/ → hate /heɪt/ (The magic e makes the "a" long!)', fr: 'hat /hæt/ → hate /heɪt/ (Le e magique rend le "a" long !)' },
+                'kit-kite': { en: 'kit /kɪt/ → kite /kaɪt/ (The magic e makes the "i" long!)', fr: 'kit /kɪt/ → kite /kaɪt/ (Le e magique rend le "i" long !)' },
+                'not-note': { en: 'not /nɒt/ → note /noʊt/ (The magic e makes the "o" long!)', fr: 'not /nɒt/ → note /noʊt/ (Le e magique rend le "o" long !)' },
+                'tub-tube': { en: 'tub /tʌb/ → tube /tuːb/ (The magic e makes the "u" long!)', fr: 'tub /tʌb/ → tube /tuːb/ (Le e magique rend le "u" long !)' },
+                'pin-pine': { en: 'pin /pɪn/ → pine /paɪn/ (The magic e makes the "i" long!)', fr: 'pin /pɪn/ → pine /paɪn/ (Le e magique rend le "i" long !)' },
+                'mad-made': { en: 'mad /mæd/ → made /meɪd/ (The magic e makes the "a" long!)', fr: 'mad /mæd/ → made /meɪd/ (Le e magique rend le "a" long !)' }
+            };
+            
+            const key = baseWord + '-' + magicWord;
+            const message = transformations[key][currentLanguage];
+            display.innerHTML = `<div style="color: #667eea; font-weight: bold;">${message}</div>`;
+            
+            // Add visual effect
+            display.style.background = '#e8f0fe';
+            setTimeout(() => {
+                display.style.background = 'white';
+            }, 1000);
+        }
+        
+        function checkVerbAnswer(questionNum, correctAnswer) {
+            const input = document.getElementById(`input${questionNum}`);
+            const feedback = document.getElementById(`feedback${questionNum}`);
+            const userAnswer = input.value.trim().toLowerCase();
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                feedback.textContent = currentLanguage === 'en' ? '✓ Correct!' : '✓ Correct !';
+                feedback.className = 'feedback correct';
+                input.style.borderColor = '#28a745';
+            } else {
+                feedback.textContent = currentLanguage === 'en' ? 
+                    `✗ Try again! Answer: ${correctAnswer}` : 
+                    `✗ Essayez encore ! Réponse : ${correctAnswer}`;
+                feedback.className = 'feedback incorrect';
+                input.style.borderColor = '#dc3545';
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9603ca87819bac04',t:'MTc1MjY5MjkzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
