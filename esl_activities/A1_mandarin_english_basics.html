@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Learning Hub - 英语学习中心</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .header .chinese {
+            font-size: 1.8rem;
+            color: #764ba2;
+            margin-bottom: 15px;
+        }
+        
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .lang-btn:not(.active) {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+        
+        .lesson-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .lesson-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .bilingual-text {
+            margin-bottom: 10px;
+        }
+        
+        .english {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .chinese {
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .practice-section {
+            grid-column: 1 / -1;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .practice-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .tab-btn {
+            padding: 15px 25px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .exercise {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option.correct {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .conversation-prompt h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .prompt-text {
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header .chinese {
+                font-size: 1.4rem;
+            }
+            
+            .practice-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ESL Learning Hub</h1>
+            <div class="chinese">英语学习中心</div>
+            <p>Welcome to your English learning journey! 欢迎来到您的英语学习之旅！</p>
+            
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('zh')">中文</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="section">
+                <h2 data-en="Grammar Basics" data-zh="语法基础">Grammar Basics</h2>
+                
+                <div class="lesson-card">
+                    <h3 data-en="Present Tense" data-zh="现在时">Present Tense</h3>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="I eat breakfast every morning." data-zh="我每天早上吃早餐。">I eat breakfast every morning.</div>
+                        <div class="chinese" data-en="我每天早上吃早餐。" data-zh="I eat breakfast every morning.">我每天早上吃早餐。</div>
+                    </div>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="She works at a hospital." data-zh="她在医院工作。">She works at a hospital.</div>
+                        <div class="chinese" data-en="她在医院工作。" data-zh="She works at a hospital.">她在医院工作。</div>
+                    </div>
+                </div>
+                
+                <div class="lesson-card">
+                    <h3 data-en="Question Formation" data-zh="疑问句构成">Question Formation</h3>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="What is your name?" data-zh="你叫什么名字？">What is your name?</div>
+                        <div class="chinese" data-en="你叫什么名字？" data-zh="What is your name?">你叫什么名字？</div>
+                    </div>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="Where do you live?" data-zh="你住在哪里？">Where do you live?</div>
+                        <div class="chinese" data-en="你住在哪里？" data-zh="Where do you live?">你住在哪里？</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 data-en="Common Phrases" data-zh="常用短语">Common Phrases</h2>
+                
+                <div class="lesson-card">
+                    <h3 data-en="Greetings" data-zh="问候语">Greetings</h3>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="Good morning!" data-zh="早上好！">Good morning!</div>
+                        <div class="chinese" data-en="早上好！" data-zh="Good morning!">早上好！</div>
+                    </div>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="How are you?" data-zh="你好吗？">How are you?</div>
+                        <div class="chinese" data-en="你好吗？" data-zh="How are you?">你好吗？</div>
+                    </div>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="Nice to meet you!" data-zh="很高兴见到你！">Nice to meet you!</div>
+                        <div class="chinese" data-en="很高兴见到你！" data-zh="Nice to meet you!">很高兴见到你！</div>
+                    </div>
+                </div>
+                
+                <div class="lesson-card">
+                    <h3 data-en="Polite Expressions" data-zh="礼貌用语">Polite Expressions</h3>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="Please" data-zh="请">Please</div>
+                        <div class="chinese" data-en="请" data-zh="Please">请</div>
+                    </div>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="Thank you" data-zh="谢谢">Thank you</div>
+                        <div class="chinese" data-en="谢谢" data-zh="Thank you">谢谢</div>
+                    </div>
+                    <div class="bilingual-text">
+                        <div class="english" data-en="Excuse me" data-zh="不好意思">Excuse me</div>
+                        <div class="chinese" data-en="不好意思" data-zh="Excuse me">不好意思</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="practice-section">
+            <h2 data-en="Practice Exercises" data-zh="练习题">Practice Exercises</h2>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            
+            <div class="practice-tabs">
+                <button class="tab-btn active" onclick="showTab('written')" data-en="Written Practice" data-zh="书面练习">Written Practice</button>
+                <button class="tab-btn" onclick="showTab('conversation')" data-en="Conversation Prompts" data-zh="对话练习">Conversation Prompts</button>
+            </div>
+            
+            <div id="written" class="tab-content active">
+                <div class="exercise">
+                    <div class="question" data-en="Choose the correct present tense form:" data-zh="选择正确的现在时形式：">Choose the correct present tense form:</div>
+                    <p data-en="She _____ to school every day." data-zh="她每天 _____ 上学。">She _____ to school every day.</p>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="go" data-zh="go">go</div>
+                        <div class="option" onclick="checkAnswer(this, true)" data-en="goes" data-zh="goes">goes</div>
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="going" data-zh="going">going</div>
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="went" data-zh="went">went</div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="question" data-en="What is the correct question form?" data-zh="正确的疑问句形式是什么？">What is the correct question form?</div>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="What you are doing?" data-zh="What you are doing?">What you are doing?</div>
+                        <div class="option" onclick="checkAnswer(this, true)" data-en="What are you doing?" data-zh="What are you doing?">What are you doing?</div>
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="What doing you are?" data-zh="What doing you are?">What doing you are?</div>
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="You are doing what?" data-zh="You are doing what?">You are doing what?</div>
+                    </div>
+                </div>
+                
+                <div class="exercise">
+                    <div class="question" data-en="Choose the polite response:" data-zh="选择礼貌的回应：">Choose the polite response:</div>
+                    <p data-en="Someone says 'Thank you' to you. You respond:" data-zh="有人对你说"谢谢"，你回应：">Someone says "Thank you" to you. You respond:</p>
+                    <div class="options">
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="OK" data-zh="OK">OK</div>
+                        <div class="option" onclick="checkAnswer(this, true)" data-en="You're welcome" data-zh="You're welcome">You're welcome</div>
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="Yes" data-zh="Yes">Yes</div>
+                        <div class="option" onclick="checkAnswer(this, false)" data-en="Good" data-zh="Good">Good</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="conversation" class="tab-content">
+                <div class="conversation-prompt">
+                    <h4 data-en="Scenario 1: Meeting Someone New" data-zh="场景1：初次见面">Scenario 1: Meeting Someone New</h4>
+                    <div class="prompt-text">
+                        <p data-en="You are at a coffee shop and meet someone new. Practice introducing yourself and asking basic questions." data-zh="你在咖啡店遇到了新朋友。练习自我介绍和询问基本问题。">You are at a coffee shop and meet someone new. Practice introducing yourself and asking basic questions.</p>
+                        <br>
+                        <strong data-en="Key phrases to use:" data-zh="要使用的关键短语：">Key phrases to use:</strong>
+                        <ul>
+                            <li data-en="Hi, I'm..." data-zh="你好，我是...">Hi, I'm...</li>
+                            <li data-en="What's your name?" data-zh="你叫什么名字？">What's your name?</li>
+                            <li data-en="Where are you from?" data-zh="你来自哪里？">Where are you from?</li>
+                            <li data-en="Nice to meet you!" data-zh="很高兴见到你！">Nice to meet you!</li>
+                        </ul>
+                    </div>
+                    <button class="btn" onclick="nextPrompt()" data-en="Next Scenario" data-zh="下一个场景">Next Scenario</button>
+                </div>
+                
+                <div class="conversation-prompt" id="prompt2" style="display: none;">
+                    <h4 data-en="Scenario 2: Ordering Food" data-zh="场景2：点餐">Scenario 2: Ordering Food</h4>
+                    <div class="prompt-text">
+                        <p data-en="You are at a restaurant and want to order food. Practice polite ordering and asking questions about the menu." data-zh="你在餐厅想要点餐。练习礼貌地点餐和询问菜单问题。">You are at a restaurant and want to order food. Practice polite ordering and asking questions about the menu.</p>
+                        <br>
+                        <strong data-en="Key phrases to use:" data-zh="要使用的关键短语：">Key phrases to use:</strong>
+                        <ul>
+                            <li data-en="I'd like to order..." data-zh="我想要点...">I'd like to order...</li>
+                            <li data-en="What do you recommend?" data-zh="你推荐什么？">What do you recommend?</li>
+                            <li data-en="Can I have the check, please?" data-zh="请给我账单好吗？">Can I have the check, please?</li>
+                            <li data-en="Thank you very much!" data-zh="非常感谢！">Thank you very much!</li>
+                        </ul>
+                    </div>
+                    <button class="btn" onclick="nextPrompt()" data-en="Next Scenario" data-zh="下一个场景">Next Scenario</button>
+                </div>
+                
+                <div class="conversation-prompt" id="prompt3" style="display: none;">
+                    <h4 data-en="Scenario 3: Asking for Directions" data-zh="场景3：问路">Scenario 3: Asking for Directions</h4>
+                    <div class="prompt-text">
+                        <p data-en="You are lost and need to ask someone for directions to the nearest bank." data-zh="你迷路了，需要向别人询问去最近银行的路。">You are lost and need to ask someone for directions to the nearest bank.</p>
+                        <br>
+                        <strong data-en="Key phrases to use:" data-zh="要使用的关键短语：">Key phrases to use:</strong>
+                        <ul>
+                            <li data-en="Excuse me, can you help me?" data-zh="不好意思，你能帮助我吗？">Excuse me, can you help me?</li>
+                            <li data-en="Where is the nearest...?" data-zh="最近的...在哪里？">Where is the nearest...?</li>
+                            <li data-en="How do I get there?" data-zh="我怎么去那里？">How do I get there?</li>
+                            <li data-en="Thank you for your help!" data-zh="谢谢你的帮助！">Thank you for your help!</li>
+                        </ul>
+                    </div>
+                    <button class="btn" onclick="resetPrompts()" data-en="Start Over" data-zh="重新开始">Start Over</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentPrompt = 1;
+        let correctAnswers = 0;
+        let totalQuestions = 3;
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language toggle buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update all text elements
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (lang === 'en') {
+                    element.textContent = element.getAttribute('data-en');
+                } else {
+                    element.textContent = element.getAttribute('data-zh');
+                }
+            });
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function checkAnswer(option, isCorrect) {
+            // Remove any existing classes
+            option.parentElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                option.classList.add('correct');
+                correctAnswers++;
+            } else {
+                option.classList.add('incorrect');
+                // Show the correct answer
+                option.parentElement.querySelectorAll('.option').forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Update progress bar
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (correctAnswers / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function nextPrompt() {
+            document.getElementById('prompt' + currentPrompt).style.display = 'none';
+            currentPrompt++;
+            if (currentPrompt <= 3) {
+                document.getElementById('prompt' + currentPrompt).style.display = 'block';
+            }
+        }
+
+        function resetPrompts() {
+            currentPrompt = 1;
+            document.querySelectorAll('.conversation-prompt').forEach((prompt, index) => {
+                if (index === 0) {
+                    prompt.style.display = 'block';
+                } else {
+                    prompt.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'960e905f2648a984',t:'MTc1MjgwNTg5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
