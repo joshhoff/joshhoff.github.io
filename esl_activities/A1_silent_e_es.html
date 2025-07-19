@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic E Learning - Aprendiendo la E Mágica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .magic-demo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .word-box {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        .word-box.with-e {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+        
+        .arrow {
+            font-size: 30px;
+            color: #667eea;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .exercise-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .exercise-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .exercise-card.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .exercise-card.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #e17055;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .phonetic {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .magic-demo {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="language-toggle" onclick="toggleLanguage()">🌐 Español</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1 id="main-title">Magic E Learning</h1>
+            <h2 id="subtitle">Understanding CVCE Words</h2>
+            <p id="description">Learn how adding 'e' to the end of words changes their pronunciation</p>
+        </div>
+        
+        <!-- Explanation Section -->
+        <div class="section">
+            <h2 id="explanation-title">🎯 What is Magic E?</h2>
+            <div id="explanation-content">
+                <p>The "Magic E" rule helps you pronounce English words correctly. When you add an 'e' to the end of a word, it makes the vowel say its name (long sound) instead of its short sound.</p>
+                <br>
+                <p><strong>Pattern:</strong> Consonant + Vowel + Consonant + E (CVCE)</p>
+            </div>
+            
+            <div class="magic-demo">
+                <div class="word-box" id="demo-word1">cap</div>
+                <div class="arrow">→</div>
+                <div class="word-box with-e" id="demo-word2">cape</div>
+            </div>
+            
+            <div id="demo-explanation">
+                <p><strong>cap</strong> <span class="phonetic">/kæp/</span> = a hat</p>
+                <p><strong>cape</strong> <span class="phonetic">/keɪp/</span> = a cloak or piece of land</p>
+            </div>
+        </div>
+        
+        <!-- Practice Exercise 1 -->
+        <div class="section">
+            <h2 id="exercise1-title">📝 Exercise 1: Choose the Correct Word</h2>
+            <p id="exercise1-instruction">Click on the word that matches the definition:</p>
+            
+            <div id="exercise1-container">
+                <div class="exercise-question">
+                    <p id="question1"><strong>Definition:</strong> A small stick used to light fires</p>
+                    <div class="exercise-grid">
+                        <div class="exercise-card" onclick="checkAnswer(this, false, 1)">mat</div>
+                        <div class="exercise-card" onclick="checkAnswer(this, true, 1)">mate</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress1"></div>
+            </div>
+        </div>
+        
+        <!-- Practice Exercise 2 -->
+        <div class="section">
+            <h2 id="exercise2-title">🎯 Exercise 2: Transform the Words</h2>
+            <p id="exercise2-instruction">Click on each word to see how adding 'e' changes the meaning:</p>
+            
+            <div class="exercise-grid" id="transform-grid">
+                <div class="exercise-card" onclick="transformWord(this, 'bit', 'bite', 'small piece', 'to use teeth')">
+                    <strong>bit</strong><br><span class="phonetic">/bɪt/</span>
+                </div>
+                <div class="exercise-card" onclick="transformWord(this, 'cut', 'cute', 'to slice', 'adorable')">
+                    <strong>cut</strong><br><span class="phonetic">/kʌt/</span>
+                </div>
+                <div class="exercise-card" onclick="transformWord(this, 'hop', 'hope', 'to jump', 'to wish for')">
+                    <strong>hop</strong><br><span class="phonetic">/hɒp/</span>
+                </div>
+                <div class="exercise-card" onclick="transformWord(this, 'not', 'note', 'negative', 'written message')">
+                    <strong>not</strong><br><span class="phonetic">/nɒt/</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Conversation Practice -->
+        <div class="section">
+            <h2 id="conversation-title">💬 Conversation Practice</h2>
+            <p id="conversation-instruction">Practice these conversation prompts with a partner or by yourself:</p>
+            
+            <div class="conversation-prompt">
+                <h4 id="prompt1-title">Prompt 1: Describing People</h4>
+                <p id="prompt1-text">"My friend is very <strong>cute</strong> and <strong>nice</strong>. She always has <strong>hope</strong> for the future. Can you describe someone you know using CVCE words?"</p>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h4 id="prompt2-title">Prompt 2: Daily Activities</h4>
+                <p id="prompt2-text">"Yesterday I had to <strong>make</strong> dinner and <strong>take</strong> notes for my class. I also wrote a <strong>note</strong> to my family. What did you do yesterday?"</p>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h4 id="prompt3-title">Prompt 3: Storytelling</h4>
+                <p id="prompt3-text">"Once upon a <strong>time</strong>, there was a <strong>brave</strong> person who lived in a <strong>huge</strong> house. They would <strong>ride</strong> their bike every day. Continue this story using more CVCE words!"</p>
+            </div>
+        </div>
+        
+        <!-- Common CVCE Words -->
+        <div class="section">
+            <h2 id="common-words-title">📚 Common CVCE Words to Practice</h2>
+            <div class="exercise-grid" id="common-words-grid">
+                <div class="exercise-card">
+                    <strong>make</strong> <span class="phonetic">/meɪk/</span><br>
+                    <small id="make-meaning">to create</small>
+                </div>
+                <div class="exercise-card">
+                    <strong>take</strong> <span class="phonetic">/teɪk/</span><br>
+                    <small id="take-meaning">to grab</small>
+                </div>
+                <div class="exercise-card">
+                    <strong>time</strong> <span class="phonetic">/taɪm/</span><br>
+                    <small id="time-meaning">hours/minutes</small>
+                </div>
+                <div class="exercise-card">
+                    <strong>home</strong> <span class="phonetic">/hoʊm/</span><br>
+                    <small id="home-meaning">house</small>
+                </div>
+                <div class="exercise-card">
+                    <strong>life</strong> <span class="phonetic">/laɪf/</span><br>
+                    <small id="life-meaning">existence</small>
+                </div>
+                <div class="exercise-card">
+                    <strong>name</strong> <span class="phonetic">/neɪm/</span><br>
+                    <small id="name-meaning">what you're called</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentLanguage = 'en';
+        let exerciseProgress = 0;
+        
+        const translations = {
+            en: {
+                'main-title': 'Magic E Learning',
+                'subtitle': 'Understanding CVCE Words',
+                'description': 'Learn how adding \'e\' to the end of words changes their pronunciation',
+                'explanation-title': '🎯 What is Magic E?',
+                'explanation-content': `
+                    <p>The "Magic E" rule helps you pronounce English words correctly. When you add an 'e' to the end of a word, it makes the vowel say its name (long sound) instead of its short sound.</p>
+                    <br>
+                    <p><strong>Pattern:</strong> Consonant + Vowel + Consonant + E (CVCE)</p>
+                `,
+                'demo-explanation': `
+                    <p><strong>cap</strong> <span class="phonetic">/kæp/</span> = a hat</p>
+                    <p><strong>cape</strong> <span class="phonetic">/keɪp/</span> = a cloak or piece of land</p>
+                `,
+                'exercise1-title': '📝 Exercise 1: Choose the Correct Word',
+                'exercise1-instruction': 'Click on the word that matches the definition:',
+                'question1': '<strong>Definition:</strong> A small stick used to light fires',
+                'exercise2-title': '🎯 Exercise 2: Transform the Words',
+                'exercise2-instruction': 'Click on each word to see how adding \'e\' changes the meaning:',
+                'conversation-title': '💬 Conversation Practice',
+                'conversation-instruction': 'Practice these conversation prompts with a partner or by yourself:',
+                'prompt1-title': 'Prompt 1: Describing People',
+                'prompt1-text': '"My friend is very <strong>cute</strong> and <strong>nice</strong>. She always has <strong>hope</strong> for the future. Can you describe someone you know using CVCE words?"',
+                'prompt2-title': 'Prompt 2: Daily Activities',
+                'prompt2-text': '"Yesterday I had to <strong>make</strong> dinner and <strong>take</strong> notes for my class. I also wrote a <strong>note</strong> to my family. What did you do yesterday?"',
+                'prompt3-title': 'Prompt 3: Storytelling',
+                'prompt3-text': '"Once upon a <strong>time</strong>, there was a <strong>brave</strong> person who lived in a <strong>huge</strong> house. They would <strong>ride</strong> their bike every day. Continue this story using more CVCE words!"',
+                'common-words-title': '📚 Common CVCE Words to Practice',
+                'make-meaning': 'to create',
+                'take-meaning': 'to grab',
+                'time-meaning': 'hours/minutes',
+                'home-meaning': 'house',
+                'life-meaning': 'existence',
+                'name-meaning': 'what you\'re called'
+            },
+            es: {
+                'main-title': 'Aprendiendo la E Mágica',
+                'subtitle': 'Entendiendo las Palabras CVCE',
+                'description': 'Aprende cómo agregar \'e\' al final de las palabras cambia su pronunciación',
+                'explanation-title': '🎯 ¿Qué es la E Mágica?',
+                'explanation-content': `
+                    <p>La regla de la "E Mágica" te ayuda a pronunciar las palabras en inglés correctamente. Cuando agregas una 'e' al final de una palabra, hace que la vocal diga su nombre (sonido largo) en lugar de su sonido corto.</p>
+                    <br>
+                    <p><strong>Patrón:</strong> Consonante + Vocal + Consonante + E (CVCE)</p>
+                `,
+                'demo-explanation': `
+                    <p><strong>cap</strong> <span class="phonetic">/kæp/</span> = una gorra</p>
+                    <p><strong>cape</strong> <span class="phonetic">/keɪp/</span> = una capa o pedazo de tierra</p>
+                `,
+                'exercise1-title': '📝 Ejercicio 1: Elige la Palabra Correcta',
+                'exercise1-instruction': 'Haz clic en la palabra que coincida con la definición:',
+                'question1': '<strong>Definición:</strong> Un palito pequeño usado para encender fuegos',
+                'exercise2-title': '🎯 Ejercicio 2: Transforma las Palabras',
+                'exercise2-instruction': 'Haz clic en cada palabra para ver cómo agregar \'e\' cambia el significado:',
+                'conversation-title': '💬 Práctica de Conversación',
+                'conversation-instruction': 'Practica estas sugerencias de conversación con un compañero o solo:',
+                'prompt1-title': 'Sugerencia 1: Describiendo Personas',
+                'prompt1-text': '"Mi amigo es muy <strong>cute</strong> (lindo) y <strong>nice</strong> (agradable). Siempre tiene <strong>hope</strong> (esperanza) para el futuro. ¿Puedes describir a alguien que conoces usando palabras CVCE?"',
+                'prompt2-title': 'Sugerencia 2: Actividades Diarias',
+                'prompt2-text': '"Ayer tuve que <strong>make</strong> (hacer) la cena y <strong>take</strong> (tomar) notas para mi clase. También escribí una <strong>note</strong> (nota) a mi familia. ¿Qué hiciste ayer?"',
+                'prompt3-title': 'Sugerencia 3: Contar Historias',
+                'prompt3-text': '"Había una vez en el <strong>time</strong> (tiempo), había una persona <strong>brave</strong> (valiente) que vivía en una casa <strong>huge</strong> (enorme). Montaba su bicicleta todos los días. ¡Continúa esta historia usando más palabras CVCE!"',
+                'common-words-title': '📚 Palabras CVCE Comunes para Practicar',
+                'make-meaning': 'crear/hacer',
+                'take-meaning': 'tomar/agarrar',
+                'time-meaning': 'tiempo',
+                'home-meaning': 'casa/hogar',
+                'life-meaning': 'vida',
+                'name-meaning': 'nombre'
+            }
+        };
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            const button = document.querySelector('.language-toggle');
+            button.textContent = currentLanguage === 'en' ? '🌐 Español' : '🌐 English';
+            
+            // Update all translatable elements
+            Object.keys(translations[currentLanguage]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.innerHTML = translations[currentLanguage][key];
+                }
+            });
+            
+            // Update demo words
+            if (currentLanguage === 'es') {
+                document.getElementById('demo-word1').textContent = 'cap';
+                document.getElementById('demo-word2').textContent = 'cape';
+            }
+        }
+        
+        function checkAnswer(element, isCorrect, exerciseNum) {
+            const allCards = element.parentNode.querySelectorAll('.exercise-card');
+            allCards.forEach(card => {
+                card.style.pointerEvents = 'none';
+                if (card === element) {
+                    card.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else {
+                    card.classList.add(isCorrect ? 'incorrect' : 'correct');
+                }
+            });
+            
+            if (isCorrect) {
+                exerciseProgress += 25;
+                document.getElementById('progress1').style.width = exerciseProgress + '%';
+                
+                setTimeout(() => {
+                    if (exerciseProgress < 100) {
+                        loadNextQuestion();
+                    } else {
+                        showCompletionMessage();
+                    }
+                }, 1500);
+            }
+        }
+        
+        function loadNextQuestion() {
+            const questions = [
+                {
+                    en: '<strong>Definition:</strong> A large animal that lives in water',
+                    es: '<strong>Definición:</strong> Un animal grande que vive en el agua',
+                    options: ['whal', 'whale'],
+                    correct: 1
+                },
+                {
+                    en: '<strong>Definition:</strong> To use your voice to create music',
+                    es: '<strong>Definición:</strong> Usar tu voz para crear música',
+                    options: ['sing', 'sine'],
+                    correct: 0
+                },
+                {
+                    en: '<strong>Definition:</strong> A round object used in sports',
+                    es: '<strong>Definición:</strong> Un objeto redondo usado en deportes',
+                    options: ['bal', 'ball'],
+                    correct: 1
+                }
+            ];
+            
+            const currentQ = Math.floor(exerciseProgress / 25) - 1;
+            if (currentQ < questions.length) {
+                const question = questions[currentQ];
+                document.getElementById('question1').innerHTML = question[currentLanguage];
+                
+                const container = document.getElementById('exercise1-container');
+                const grid = container.querySelector('.exercise-grid');
+                grid.innerHTML = '';
+                
+                question.options.forEach((option, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'exercise-card';
+                    card.textContent = option;
+                    card.onclick = () => checkAnswer(card, index === question.correct, 1);
+                    grid.appendChild(card);
+                });
+            }
+        }
+        
+        function showCompletionMessage() {
+            const container = document.getElementById('exercise1-container');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px; background: #d4edda; border-radius: 10px;">
+                    <h3>${currentLanguage === 'en' ? '🎉 Great job! Exercise completed!' : '🎉 ¡Excelente trabajo! ¡Ejercicio completado!'}</h3>
+                    <button class="btn" onclick="resetExercise()">${currentLanguage === 'en' ? 'Try Again' : 'Intentar de Nuevo'}</button>
+                </div>
+            `;
+        }
+        
+        function resetExercise() {
+            exerciseProgress = 0;
+            document.getElementById('progress1').style.width = '0%';
+            
+            const container = document.getElementById('exercise1-container');
+            container.innerHTML = `
+                <div class="exercise-question">
+                    <p id="question1"><strong>${currentLanguage === 'en' ? 'Definition:' : 'Definición:'}</strong> ${currentLanguage === 'en' ? 'A small stick used to light fires' : 'Un palito pequeño usado para encender fuegos'}</p>
+                    <div class="exercise-grid">
+                        <div class="exercise-card" onclick="checkAnswer(this, false, 1)">mat</div>
+                        <div class="exercise-card" onclick="checkAnswer(this, true, 1)">mate</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function transformWord(element, original, transformed, meaning1, meaning2) {
+            if (element.classList.contains('transformed')) {
+                element.innerHTML = `<strong>${original}</strong><br><span class="phonetic">/${getPhonetic(original)}/</span><br><small>${meaning1}</small>`;
+                element.classList.remove('transformed');
+                element.style.background = '#f8f9fa';
+            } else {
+                element.innerHTML = `<strong>${transformed}</strong><br><span class="phonetic">/${getPhonetic(transformed)}/</span><br><small>${meaning2}</small>`;
+                element.classList.add('transformed');
+                element.style.background = '#d4edda';
+            }
+        }
+        
+        function getPhonetic(word) {
+            const phonetics = {
+                'bit': 'bɪt', 'bite': 'baɪt',
+                'cut': 'kʌt', 'cute': 'kjuːt',
+                'hop': 'hɒp', 'hope': 'hoʊp',
+                'not': 'nɒt', 'note': 'noʊt'
+            };
+            return phonetics[word] || word;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'961ac28433f87db6',t:'MTc1MjkzMzc4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
