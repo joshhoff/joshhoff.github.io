@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Vocabulary Practice - Práctica de Vocabulario de Salud</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-green-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-800 mb-2">Health Vocabulary Practice</h1>
+            <h2 class="text-2xl text-green-700 mb-4">Práctica de Vocabulario de Salud</h2>
+            <p class="text-gray-600">Learn essential health and medical vocabulary in English</p>
+            <p class="text-gray-600">Aprende vocabulario esencial de salud y medicina en inglés</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap justify-center mb-8 bg-white rounded-lg shadow-md p-2">
+            <button onclick="showSection('flashcards')" id="flashcards-tab" class="px-6 py-3 mx-1 mb-2 rounded-lg bg-blue-600 text-white font-semibold transition-colors">
+                Flashcards / Tarjetas
+            </button>
+            <button onclick="showSection('sentences')" id="sentences-tab" class="px-6 py-3 mx-1 mb-2 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-colors">
+                Sentences / Oraciones
+            </button>
+            <button onclick="showSection('conversation')" id="conversation-tab" class="px-6 py-3 mx-1 mb-2 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-colors">
+                Conversation / Conversación
+            </button>
+        </div>
+
+        <!-- Flashcards Section -->
+        <div id="flashcards-section" class="section">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-blue-800 mb-2">Vocabulary Flashcards</h3>
+                <p class="text-gray-600 mb-4">Click the card to see the translation / Haz clic en la tarjeta para ver la traducción</p>
+                <div class="flex justify-center items-center gap-4 mb-4">
+                    <button onclick="previousCard()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold">
+                        ← Previous / Anterior
+                    </button>
+                    <span id="card-counter" class="text-lg font-semibold text-gray-700">1 / 15</span>
+                    <button onclick="nextCard()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold">
+                        Next / Siguiente →
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <div class="flip-card w-80 h-64 cursor-pointer" id="flashcard" onclick="flipCard()">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-blue-600 text-white">
+                            <h3 class="text-3xl font-bold mb-4" id="english-word">Doctor</h3>
+                            <p class="text-blue-200">Click to see Spanish / Haz clic para ver en español</p>
+                        </div>
+                        <div class="flip-card-back bg-green-600 text-white">
+                            <h3 class="text-3xl font-bold mb-4" id="spanish-word">Doctor/Médico</h3>
+                            <p class="text-green-200">Click to see English / Haz clic para ver en inglés</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sentences Section -->
+        <div id="sentences-section" class="section hidden">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-blue-800 mb-2">Practice Sentences</h3>
+                <h4 class="text-xl text-green-700 mb-4">Práctica de Oraciones</h4>
+                <p class="text-gray-600">Complete the sentences / Completa las oraciones</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold text-blue-800 mb-3">Fill in the blanks / Llena los espacios:</h4>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="text-lg mb-2">I need to see a <input type="text" id="sentence1" class="border-2 border-blue-300 rounded px-2 py-1 mx-1" placeholder="doctor"> about my headache.</p>
+                            <p class="text-gray-600 text-sm">Necesito ver a un doctor sobre mi dolor de cabeza.</p>
+                            <button onclick="checkSentence(1, 'doctor')" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded">Check / Verificar</button>
+                            <span id="result1" class="ml-2 font-semibold"></span>
+                        </div>
+
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-lg mb-2">The <input type="text" id="sentence2" class="border-2 border-green-300 rounded px-2 py-1 mx-1" placeholder="nurse"> will take your temperature.</p>
+                            <p class="text-gray-600 text-sm">La enfermera tomará tu temperatura.</p>
+                            <button onclick="checkSentence(2, 'nurse')" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded">Check / Verificar</button>
+                            <span id="result2" class="ml-2 font-semibold"></span>
+                        </div>
+
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <p class="text-lg mb-2">I have a <input type="text" id="sentence3" class="border-2 border-purple-300 rounded px-2 py-1 mx-1" placeholder="fever"> and feel sick.</p>
+                            <p class="text-gray-600 text-sm">Tengo fiebre y me siento enfermo.</p>
+                            <button onclick="checkSentence(3, 'fever')" class="mt-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-1 rounded">Check / Verificar</button>
+                            <span id="result3" class="ml-2 font-semibold"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Sentence Patterns -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h4 class="text-lg font-semibold text-blue-800 mb-4">Common Sentence Patterns / Patrones Comunes de Oraciones</h4>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <h5 class="font-semibold text-yellow-800 mb-2">Describing Symptoms / Describir Síntomas</h5>
+                        <ul class="space-y-2 text-sm">
+                            <li><strong>I have a...</strong> → Tengo un/una...</li>
+                            <li><strong>I feel...</strong> → Me siento...</li>
+                            <li><strong>My [body part] hurts</strong> → Me duele [parte del cuerpo]</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-orange-50 rounded-lg">
+                        <h5 class="font-semibold text-orange-800 mb-2">At the Doctor's / En el Doctor</h5>
+                        <ul class="space-y-2 text-sm">
+                            <li><strong>I need to see a doctor</strong> → Necesito ver a un doctor</li>
+                            <li><strong>Can you help me?</strong> → ¿Puede ayudarme?</li>
+                            <li><strong>When is my appointment?</strong> → ¿Cuándo es mi cita?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation-section" class="section hidden">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-blue-800 mb-2">Conversation Practice</h3>
+                <h4 class="text-xl text-green-700 mb-4">Práctica de Conversación</h4>
+                <p class="text-gray-600">Practice common health-related conversations / Practica conversaciones comunes sobre salud</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Scenario 1: At the Doctor's Office -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h4 class="text-lg font-semibold text-blue-800 mb-4">🏥 At the Doctor's Office / En el Consultorio Médico</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-blue-100 rounded-full p-2">
+                                <span class="text-blue-800 font-semibold">Dr:</span>
+                            </div>
+                            <div>
+                                <p class="text-lg">"How are you feeling today?"</p>
+                                <p class="text-gray-600 text-sm">"¿Cómo se siente hoy?"</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-2">
+                                <span class="text-green-800 font-semibold">You:</span>
+                            </div>
+                            <div>
+                                <select class="border-2 border-gray-300 rounded p-2 text-lg" onchange="showResponse(this.value, 'response1')">
+                                    <option value="">Choose your response / Elige tu respuesta</option>
+                                    <option value="sick">I feel sick</option>
+                                    <option value="headache">I have a headache</option>
+                                    <option value="fever">I have a fever</option>
+                                </select>
+                                <div id="response1" class="mt-2 text-gray-600 text-sm"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2: Making an Appointment -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h4 class="text-lg font-semibold text-blue-800 mb-4">📞 Making an Appointment / Hacer una Cita</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-purple-100 rounded-full p-2">
+                                <span class="text-purple-800 font-semibold">Receptionist:</span>
+                            </div>
+                            <div>
+                                <p class="text-lg">"How can I help you?"</p>
+                                <p class="text-gray-600 text-sm">"¿Cómo puedo ayudarle?"</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-green-100 rounded-full p-2">
+                                <span class="text-green-800 font-semibold">You:</span>
+                            </div>
+                            <div>
+                                <select class="border-2 border-gray-300 rounded p-2 text-lg" onchange="showResponse(this.value, 'response2')">
+                                    <option value="">Choose your response / Elige tu respuesta</option>
+                                    <option value="appointment">I need to make an appointment</option>
+                                    <option value="emergency">This is an emergency</option>
+                                    <option value="prescription">I need a prescription refill</option>
+                                </select>
+                                <div id="response2" class="mt-2 text-gray-600 text-sm"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation Prompts -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h4 class="text-lg font-semibold text-blue-800 mb-4">💬 Practice Prompts / Indicaciones de Práctica</h4>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <h5 class="font-semibold text-blue-800 mb-2">Role Play Ideas</h5>
+                            <ul class="space-y-2 text-sm">
+                                <li>• Describe your symptoms to a doctor</li>
+                                <li>• Ask about medication side effects</li>
+                                <li>• Schedule a follow-up appointment</li>
+                                <li>• Explain your medical history</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <h5 class="font-semibold text-green-800 mb-2">Ideas para Juego de Roles</h5>
+                            <ul class="space-y-2 text-sm">
+                                <li>• Describe tus síntomas a un doctor</li>
+                                <li>• Pregunta sobre efectos secundarios</li>
+                                <li>• Programa una cita de seguimiento</li>
+                                <li>• Explica tu historial médico</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            {english: "Doctor", spanish: "Doctor/Médico"},
+            {english: "Nurse", spanish: "Enfermera/Enfermero"},
+            {english: "Hospital", spanish: "Hospital"},
+            {english: "Medicine", spanish: "Medicina"},
+            {english: "Fever", spanish: "Fiebre"},
+            {english: "Headache", spanish: "Dolor de cabeza"},
+            {english: "Cough", spanish: "Tos"},
+            {english: "Cold", spanish: "Resfriado"},
+            {english: "Pain", spanish: "Dolor"},
+            {english: "Sick", spanish: "Enfermo/a"},
+            {english: "Healthy", spanish: "Saludable"},
+            {english: "Appointment", spanish: "Cita"},
+            {english: "Prescription", spanish: "Receta"},
+            {english: "Symptoms", spanish: "Síntomas"},
+            {english: "Emergency", spanish: "Emergencia"}
+        ];
+
+        let currentCard = 0;
+        let isFlipped = false;
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Update tab styles
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => {
+                tab.className = 'px-6 py-3 mx-1 mb-2 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-colors';
+            });
+            
+            document.getElementById(sectionName + '-tab').className = 'px-6 py-3 mx-1 mb-2 rounded-lg bg-blue-600 text-white font-semibold transition-colors';
+        }
+
+        // Flashcard functions
+        function updateCard() {
+            const card = vocabulary[currentCard];
+            document.getElementById('english-word').textContent = card.english;
+            document.getElementById('spanish-word').textContent = card.spanish;
+            document.getElementById('card-counter').textContent = `${currentCard + 1} / ${vocabulary.length}`;
+            
+            // Reset flip state
+            document.getElementById('flashcard').classList.remove('flipped');
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            const flashcard = document.getElementById('flashcard');
+            flashcard.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % vocabulary.length;
+            updateCard();
+        }
+
+        function previousCard() {
+            currentCard = (currentCard - 1 + vocabulary.length) % vocabulary.length;
+            updateCard();
+        }
+
+        // Sentence checking function
+        function checkSentence(sentenceNum, correctAnswer) {
+            const userAnswer = document.getElementById('sentence' + sentenceNum).value.toLowerCase().trim();
+            const resultElement = document.getElementById('result' + sentenceNum);
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                resultElement.textContent = '✓ Correct! / ¡Correcto!';
+                resultElement.className = 'ml-2 font-semibold text-green-600';
+            } else {
+                resultElement.textContent = `✗ Try again. Answer: ${correctAnswer} / Inténtalo de nuevo. Respuesta: ${correctAnswer}`;
+                resultElement.className = 'ml-2 font-semibold text-red-600';
+            }
+        }
+
+        // Conversation response function
+        function showResponse(value, responseId) {
+            const responses = {
+                'sick': 'Me siento enfermo/a',
+                'headache': 'Tengo dolor de cabeza',
+                'fever': 'Tengo fiebre',
+                'appointment': 'Necesito hacer una cita',
+                'emergency': 'Esto es una emergencia',
+                'prescription': 'Necesito renovar una receta'
+            };
+            
+            const responseElement = document.getElementById(responseId);
+            if (value && responses[value]) {
+                responseElement.textContent = `Spanish: "${responses[value]}"`;
+                responseElement.className = 'mt-2 text-green-600 text-sm font-semibold';
+            } else {
+                responseElement.textContent = '';
+            }
+        }
+
+        // Initialize the app
+        updateCard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'962c211fb6ccda94',t:'MTc1MzExNTkxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
