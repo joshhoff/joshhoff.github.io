@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Says - Body Parts / Simón Dice - Partes del Cuerpo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Open+Sans:wght@400;600&display=swap');
+        
+        .game-font {
+            font-family: 'Fredoka One', cursive;
+        }
+        
+        .body-font {
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        .pulse-animation {
+            animation: pulse 0.8s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); background-color: #fbbf24; }
+            100% { transform: scale(1); }
+        }
+        
+        .correct-flash {
+            animation: correctFlash 0.6s ease-in-out;
+        }
+        
+        @keyframes correctFlash {
+            0% { background-color: #10b981; }
+            100% { background-color: #3b82f6; }
+        }
+        
+        .wrong-flash {
+            animation: wrongFlash 0.6s ease-in-out;
+        }
+        
+        @keyframes wrongFlash {
+            0% { background-color: #ef4444; }
+            100% { background-color: #3b82f6; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-400 via-pink-400 to-blue-400 min-h-screen body-font">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="game-font text-4xl md:text-6xl text-white mb-4 drop-shadow-lg">
+                <span id="title-en">Simon Says</span> / <span id="title-es">Simón Dice</span>
+            </h1>
+            <p class="text-white text-lg md:text-xl font-semibold drop-shadow">
+                <span id="subtitle-en">Touch the body parts!</span> / <span id="subtitle-es">¡Toca las partes del cuerpo!</span>
+            </p>
+        </div>
+
+        <!-- Language Toggle -->
+        <div class="flex justify-center mb-6">
+            <button id="langToggle" class="bg-white text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-purple-100 transition-colors shadow-lg">
+                🌐 English / Español
+            </button>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="text-center mb-8">
+            <div class="bg-white rounded-2xl p-6 shadow-xl max-w-md mx-auto mb-6">
+                <div class="text-2xl font-bold text-gray-800 mb-2">
+                    <span id="score-label-en">Score</span><span id="score-label-es" style="display:none">Puntuación</span>: <span id="score">0</span>
+                </div>
+                <div class="text-lg text-gray-600">
+                    <span id="level-label-en">Level</span><span id="level-label-es" style="display:none">Nivel</span>: <span id="level">1</span>
+                </div>
+            </div>
+            
+            <button id="startBtn" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg transition-colors game-font">
+                <span id="start-btn-en">Start Game</span>
+                <span id="start-btn-es" style="display:none">Comenzar Juego</span>
+            </button>
+        </div>
+
+        <!-- Simon Says Instruction -->
+        <div id="instruction" class="text-center mb-8">
+            <div class="bg-white rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                <div id="simon-text" class="text-2xl md:text-3xl font-bold text-gray-800 game-font min-h-[80px] flex items-center justify-center">
+                    <span id="ready-text-en">Press Start to Begin!</span>
+                    <span id="ready-text-es" style="display:none">¡Presiona Comenzar!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body Parts Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <!-- Head -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="head">
+                <div class="text-4xl mb-2">👤</div>
+                <div class="font-semibold">
+                    <div class="en-text">Head</div>
+                    <div class="es-text" style="display:none">Cabeza</div>
+                </div>
+            </button>
+
+            <!-- Eyes -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="eyes">
+                <div class="text-4xl mb-2">👀</div>
+                <div class="font-semibold">
+                    <div class="en-text">Eyes</div>
+                    <div class="es-text" style="display:none">Ojos</div>
+                </div>
+            </button>
+
+            <!-- Nose -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="nose">
+                <div class="text-4xl mb-2">👃</div>
+                <div class="font-semibold">
+                    <div class="en-text">Nose</div>
+                    <div class="es-text" style="display:none">Nariz</div>
+                </div>
+            </button>
+
+            <!-- Mouth -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="mouth">
+                <div class="text-4xl mb-2">👄</div>
+                <div class="font-semibold">
+                    <div class="en-text">Mouth</div>
+                    <div class="es-text" style="display:none">Boca</div>
+                </div>
+            </button>
+
+            <!-- Ears -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="ears">
+                <div class="text-4xl mb-2">👂</div>
+                <div class="font-semibold">
+                    <div class="en-text">Ears</div>
+                    <div class="es-text" style="display:none">Orejas</div>
+                </div>
+            </button>
+
+            <!-- Hands -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="hands">
+                <div class="text-4xl mb-2">🙌</div>
+                <div class="font-semibold">
+                    <div class="en-text">Hands</div>
+                    <div class="es-text" style="display:none">Manos</div>
+                </div>
+            </button>
+
+            <!-- Feet -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="feet">
+                <div class="text-4xl mb-2">🦶</div>
+                <div class="font-semibold">
+                    <div class="en-text">Feet</div>
+                    <div class="es-text" style="display:none">Pies</div>
+                </div>
+            </button>
+
+            <!-- Arms -->
+            <button class="body-part bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg transition-colors" data-part="arms">
+                <div class="text-4xl mb-2">💪</div>
+                <div class="font-semibold">
+                    <div class="en-text">Arms</div>
+                    <div class="es-text" style="display:none">Brazos</div>
+                </div>
+            </button>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div id="gameOverModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display:none">
+            <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 game-font">
+                    <span id="gameover-title-en">Game Over!</span>
+                    <span id="gameover-title-es" style="display:none">¡Juego Terminado!</span>
+                </h2>
+                <p class="text-xl text-gray-600 mb-6">
+                    <span id="final-score-en">Final Score:</span>
+                    <span id="final-score-es" style="display:none">Puntuación Final:</span>
+                    <span id="finalScore" class="font-bold text-purple-600">0</span>
+                </p>
+                <button id="playAgainBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition-colors">
+                    <span id="playagain-en">Play Again</span>
+                    <span id="playagain-es" style="display:none">Jugar de Nuevo</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SimonSaysGame {
+            constructor() {
+                this.currentLanguage = 'en';
+                this.sequence = [];
+                this.playerSequence = [];
+                this.score = 0;
+                this.level = 1;
+                this.isPlaying = false;
+                this.isShowingSequence = false;
+                
+                this.bodyParts = [
+                    'head', 'eyes', 'nose', 'mouth', 'ears', 'hands', 'feet', 'arms'
+                ];
+                
+                this.translations = {
+                    en: {
+                        head: 'Head', eyes: 'Eyes', nose: 'Nose', mouth: 'Mouth',
+                        ears: 'Ears', hands: 'Hands', feet: 'Feet', arms: 'Arms'
+                    },
+                    es: {
+                        head: 'Cabeza', eyes: 'Ojos', nose: 'Nariz', mouth: 'Boca',
+                        ears: 'Orejas', hands: 'Manos', feet: 'Pies', arms: 'Brazos'
+                    }
+                };
+                
+                this.simonSaysTexts = {
+                    en: {
+                        simonSays: "Simon says touch your",
+                        justTouch: "Touch your",
+                        watch: "Watch carefully...",
+                        yourTurn: "Your turn!",
+                        correct: "Correct!",
+                        wrong: "Wrong! Try again.",
+                        shouldNotTouch: "Simon didn't say! Don't touch anything."
+                    },
+                    es: {
+                        simonSays: "Simón dice toca tu",
+                        justTouch: "Toca tu",
+                        watch: "Observa con cuidado...",
+                        yourTurn: "¡Tu turno!",
+                        correct: "¡Correcto!",
+                        wrong: "¡Incorrecto! Inténtalo de nuevo.",
+                        shouldNotTouch: "¡Simón no lo dijo! No toques nada."
+                    }
+                };
+                
+                this.initializeGame();
+            }
+            
+            initializeGame() {
+                this.bindEvents();
+                this.updateLanguage();
+            }
+            
+            bindEvents() {
+                document.getElementById('startBtn').addEventListener('click', () => this.startGame());
+                document.getElementById('langToggle').addEventListener('click', () => this.toggleLanguage());
+                document.getElementById('playAgainBtn').addEventListener('click', () => this.resetGame());
+                
+                document.querySelectorAll('.body-part').forEach(button => {
+                    button.addEventListener('click', (e) => this.handleBodyPartClick(e.target.closest('.body-part')));
+                });
+            }
+            
+            toggleLanguage() {
+                this.currentLanguage = this.currentLanguage === 'en' ? 'es' : 'en';
+                this.updateLanguage();
+            }
+            
+            updateLanguage() {
+                // Toggle visibility of language-specific elements
+                document.querySelectorAll('.en-text').forEach(el => {
+                    el.style.display = this.currentLanguage === 'en' ? 'block' : 'none';
+                });
+                document.querySelectorAll('.es-text').forEach(el => {
+                    el.style.display = this.currentLanguage === 'es' ? 'block' : 'none';
+                });
+                
+                // Update specific elements
+                const elements = [
+                    'score-label', 'level-label', 'start-btn', 'ready-text', 
+                    'gameover-title', 'final-score', 'playagain'
+                ];
+                
+                elements.forEach(id => {
+                    const enEl = document.getElementById(`${id}-en`);
+                    const esEl = document.getElementById(`${id}-es`);
+                    if (enEl && esEl) {
+                        enEl.style.display = this.currentLanguage === 'en' ? 'inline' : 'none';
+                        esEl.style.display = this.currentLanguage === 'es' ? 'inline' : 'none';
+                    }
+                });
+            }
+            
+            startGame() {
+                this.isPlaying = true;
+                this.sequence = [];
+                this.score = 0;
+                this.level = 1;
+                this.updateScore();
+                document.getElementById('startBtn').style.display = 'none';
+                this.nextRound();
+            }
+            
+            nextRound() {
+                this.playerSequence = [];
+                this.addToSequence();
+                this.showSequence();
+            }
+            
+            addToSequence() {
+                const randomPart = this.bodyParts[Math.floor(Math.random() * this.bodyParts.length)];
+                const isSimonSays = Math.random() > 0.3; // 70% chance Simon says it
+                this.sequence.push({ part: randomPart, simonSays: isSimonSays });
+            }
+            
+            async showSequence() {
+                this.isShowingSequence = true;
+                const simonText = document.getElementById('simon-text');
+                
+                simonText.textContent = this.simonSaysTexts[this.currentLanguage].watch;
+                await this.delay(1000);
+                
+                for (let i = 0; i < this.sequence.length; i++) {
+                    const command = this.sequence[i];
+                    const partName = this.translations[this.currentLanguage][command.part];
+                    
+                    if (command.simonSays) {
+                        simonText.textContent = `${this.simonSaysTexts[this.currentLanguage].simonSays} ${partName}!`;
+                    } else {
+                        simonText.textContent = `${this.simonSaysTexts[this.currentLanguage].justTouch} ${partName}!`;
+                    }
+                    
+                    // Highlight the body part
+                    const button = document.querySelector(`[data-part="${command.part}"]`);
+                    button.classList.add('pulse-animation');
+                    
+                    await this.delay(1500);
+                    button.classList.remove('pulse-animation');
+                    await this.delay(500);
+                }
+                
+                simonText.textContent = this.simonSaysTexts[this.currentLanguage].yourTurn;
+                this.isShowingSequence = false;
+            }
+            
+            handleBodyPartClick(button) {
+                if (!this.isPlaying || this.isShowingSequence) return;
+                
+                const part = button.dataset.part;
+                const currentCommand = this.sequence[this.playerSequence.length];
+                
+                if (!currentCommand) return;
+                
+                // Check if player should have clicked
+                if (currentCommand.simonSays && currentCommand.part === part) {
+                    // Correct!
+                    this.playerSequence.push(part);
+                    button.classList.add('correct-flash');
+                    setTimeout(() => button.classList.remove('correct-flash'), 600);
+                    
+                    document.getElementById('simon-text').textContent = this.simonSaysTexts[this.currentLanguage].correct;
+                    
+                    if (this.playerSequence.length === this.sequence.length) {
+                        // Round complete
+                        this.score += 10;
+                        this.updateScore();
+                        setTimeout(() => {
+                            this.level++;
+                            this.nextRound();
+                        }, 1500);
+                    }
+                } else if (!currentCommand.simonSays && currentCommand.part === part) {
+                    // Player clicked when Simon didn't say - wrong!
+                    this.gameOver();
+                } else if (currentCommand.simonSays && currentCommand.part !== part) {
+                    // Wrong body part
+                    this.gameOver();
+                } else if (!currentCommand.simonSays) {
+                    // Player clicked something when Simon didn't say
+                    button.classList.add('wrong-flash');
+                    setTimeout(() => button.classList.remove('wrong-flash'), 600);
+                    document.getElementById('simon-text').textContent = this.simonSaysTexts[this.currentLanguage].shouldNotTouch;
+                    this.gameOver();
+                }
+            }
+            
+            gameOver() {
+                this.isPlaying = false;
+                document.getElementById('finalScore').textContent = this.score;
+                document.getElementById('gameOverModal').style.display = 'flex';
+                document.getElementById('simon-text').textContent = this.simonSaysTexts[this.currentLanguage].wrong;
+            }
+            
+            resetGame() {
+                document.getElementById('gameOverModal').style.display = 'none';
+                document.getElementById('startBtn').style.display = 'inline-block';
+                this.sequence = [];
+                this.playerSequence = [];
+                this.score = 0;
+                this.level = 1;
+                this.isPlaying = false;
+                this.updateScore();
+                
+                const readyText = this.currentLanguage === 'en' ? 'Press Start to Begin!' : '¡Presiona Comenzar!';
+                document.getElementById('simon-text').textContent = readyText;
+            }
+            
+            updateScore() {
+                document.getElementById('score').textContent = this.score;
+                document.getElementById('level').textContent = this.level;
+            }
+            
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+        
+        // Initialize the game when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SimonSaysGame();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'963372d7449f09fb',t:'MTc1MzE5MjY2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
