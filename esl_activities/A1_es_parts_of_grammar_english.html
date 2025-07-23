@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar Fun / Gramática Inglesa Divertida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .language-toggle {
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .lang-btn {
+            background: #48cae4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 0 10px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .lang-btn:hover {
+            background: #0077b6;
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: #023e8a;
+            box-shadow: 0 4px 15px rgba(2, 62, 138, 0.4);
+        }
+        
+        .grammar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .grammar-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 3px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .grammar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .card-subject { border-color: #ff6b6b; }
+        .card-verb { border-color: #4ecdc4; }
+        .card-object { border-color: #45b7d1; }
+        .card-adjective { border-color: #f9ca24; }
+        .card-noun { border-color: #6c5ce7; }
+        .card-sentence { border-color: #fd79a8; }
+        
+        .card-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .example-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+        
+        .example-sentence {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .example-translation {
+            color: #666;
+            font-style: italic;
+        }
+        
+        .interactive-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .interactive-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .highlight {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .highlight-subject { background: #ff6b6b; color: white; }
+        .highlight-verb { background: #4ecdc4; color: white; }
+        .highlight-object { background: #45b7d1; color: white; }
+        .highlight-adjective { background: #f9ca24; color: black; }
+        .highlight-noun { background: #6c5ce7; color: white; }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .practice-section {
+            background: #e8f5e8;
+            margin: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            border: 3px solid #27ae60;
+        }
+        
+        .practice-title {
+            font-size: 1.5rem;
+            color: #27ae60;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .word-option {
+            background: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .word-option:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+        
+        .word-option.used {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .sentence-builder {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 60px;
+            border: 2px dashed #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .feedback {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .grammar-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .card-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 English Grammar Fun! 🎓</h1>
+            <p>¡Aprende gramática inglesa de manera divertida!</p>
+        </div>
+        
+        <div class="language-toggle">
+            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+        </div>
+        
+        <div class="grammar-grid">
+            <!-- Subject Card -->
+            <div class="grammar-card card-subject" onclick="showExample('subject')">
+                <div class="card-icon">👤</div>
+                <div class="card-title" data-en="SUBJECT" data-es="SUJETO">SUBJECT</div>
+                <div class="card-description" data-en="The person or thing that DOES the action in a sentence." data-es="La persona o cosa que HACE la acción en una oración.">
+                    The person or thing that DOES the action in a sentence.
+                </div>
+                <div class="example-box" style="border-left-color: #ff6b6b;">
+                    <div class="example-sentence">
+                        <span class="highlight highlight-subject">Maria</span> eats pizza.
+                    </div>
+                    <div class="example-translation" data-en="Maria is the subject - she does the eating!" data-es="¡Maria es el sujeto - ella hace la acción de comer!">
+                        Maria is the subject - she does the eating!
+                    </div>
+                </div>
+                <button class="interactive-btn" data-en="Click for more examples!" data-es="¡Haz clic para más ejemplos!">Click for more examples!</button>
+            </div>
+            
+            <!-- Verb Card -->
+            <div class="grammar-card card-verb" onclick="showExample('verb')">
+                <div class="card-icon">🏃‍♂️</div>
+                <div class="card-title" data-en="VERB" data-es="VERBO">VERB</div>
+                <div class="card-description" data-en="The ACTION word! What someone or something DOES." data-es="¡La palabra de ACCIÓN! Lo que alguien o algo HACE.">
+                    The ACTION word! What someone or something DOES.
+                </div>
+                <div class="example-box" style="border-left-color: #4ecdc4;">
+                    <div class="example-sentence">
+                        Maria <span class="highlight highlight-verb">eats</span> pizza.
+                    </div>
+                    <div class="example-translation" data-en="'Eats' is the verb - it's the action!" data-es="'Eats' es el verbo - ¡es la acción!">
+                        'Eats' is the verb - it's the action!
+                    </div>
+                </div>
+                <button class="interactive-btn" data-en="Show me more verbs!" data-es="¡Muéstrame más verbos!">Show me more verbs!</button>
+            </div>
+            
+            <!-- Object Card -->
+            <div class="grammar-card card-object" onclick="showExample('object')">
+                <div class="card-icon">🎯</div>
+                <div class="card-title" data-en="OBJECT" data-es="OBJETO">OBJECT</div>
+                <div class="card-description" data-en="The person or thing that RECEIVES the action." data-es="La persona o cosa que RECIBE la acción.">
+                    The person or thing that RECEIVES the action.
+                </div>
+                <div class="example-box" style="border-left-color: #45b7d1;">
+                    <div class="example-sentence">
+                        Maria eats <span class="highlight highlight-object">pizza</span>.
+                    </div>
+                    <div class="example-translation" data-en="Pizza receives the action - it gets eaten!" data-es="¡La pizza recibe la acción - es comida!">
+                        Pizza receives the action - it gets eaten!
+                    </div>
+                </div>
+                <button class="interactive-btn" data-en="Find more objects!" data-es="¡Encuentra más objetos!">Find more objects!</button>
+            </div>
+            
+            <!-- Adjective Card -->
+            <div class="grammar-card card-adjective" onclick="showExample('adjective')">
+                <div class="card-icon">🌈</div>
+                <div class="card-title" data-en="ADJECTIVE" data-es="ADJETIVO">ADJECTIVE</div>
+                <div class="card-description" data-en="Words that DESCRIBE nouns. They tell us HOW something is." data-es="Palabras que DESCRIBEN sustantivos. Nos dicen CÓMO es algo.">
+                    Words that DESCRIBE nouns. They tell us HOW something is.
+                </div>
+                <div class="example-box" style="border-left-color: #f9ca24;">
+                    <div class="example-sentence">
+                        The <span class="highlight highlight-adjective">big</span> dog is <span class="highlight highlight-adjective">happy</span>.
+                    </div>
+                    <div class="example-translation" data-en="'Big' and 'happy' describe the dog!" data-es="¡'Big' y 'happy' describen al perro!">
+                        'Big' and 'happy' describe the dog!
+                    </div>
+                </div>
+                <button class="interactive-btn" data-en="Discover more adjectives!" data-es="¡Descubre más adjetivos!">Discover more adjectives!</button>
+            </div>
+            
+            <!-- Noun Card -->
+            <div class="grammar-card card-noun" onclick="showExample('noun')">
+                <div class="card-icon">🏠</div>
+                <div class="card-title" data-en="NOUN" data-es="SUSTANTIVO">NOUN</div>
+                <div class="card-description" data-en="Names of people, places, animals, or things." data-es="Nombres de personas, lugares, animales o cosas.">
+                    Names of people, places, animals, or things.
+                </div>
+                <div class="example-box" style="border-left-color: #6c5ce7;">
+                    <div class="example-sentence">
+                        <span class="highlight highlight-noun">John</span> lives in <span class="highlight highlight-noun">London</span>.
+                    </div>
+                    <div class="example-translation" data-en="'John' (person) and 'London' (place) are nouns!" data-es="¡'John' (persona) y 'London' (lugar) son sustantivos!">
+                        'John' (person) and 'London' (place) are nouns!
+                    </div>
+                </div>
+                <button class="interactive-btn" data-en="Explore more nouns!" data-es="¡Explora más sustantivos!">Explore more nouns!</button>
+            </div>
+            
+            <!-- Sentence Card -->
+            <div class="grammar-card card-sentence" onclick="showExample('sentence')">
+                <div class="card-icon">📝</div>
+                <div class="card-title" data-en="SENTENCE" data-es="ORACIÓN">SENTENCE</div>
+                <div class="card-description" data-en="A complete thought with a subject and verb." data-es="Un pensamiento completo con sujeto y verbo.">
+                    A complete thought with a subject and verb.
+                </div>
+                <div class="example-box" style="border-left-color: #fd79a8;">
+                    <div class="example-sentence">
+                        <span class="highlight highlight-subject">The cat</span> <span class="highlight highlight-verb">sleeps</span> <span class="highlight highlight-object">on the bed</span>.
+                    </div>
+                    <div class="example-translation" data-en="Subject + Verb + Object = Complete sentence!" data-es="¡Sujeto + Verbo + Objeto = Oración completa!">
+                        Subject + Verb + Object = Complete sentence!
+                    </div>
+                </div>
+                <button class="interactive-btn" data-en="Build sentences!" data-es="¡Construye oraciones!">Build sentences!</button>
+            </div>
+        </div>
+        
+        <!-- Practice Section -->
+        <div class="practice-section">
+            <div class="practice-title" data-en="🎮 Practice Time! Build a Sentence" data-es="🎮 ¡Hora de Practicar! Construye una Oración">
+                🎮 Practice Time! Build a Sentence
+            </div>
+            
+            <div data-en="Drag words to build: 'The happy dog runs fast'" data-es="Arrastra palabras para construir: 'The happy dog runs fast'" style="text-align: center; margin-bottom: 15px; font-size: 1.1rem;">
+                Drag words to build: "The happy dog runs fast"
+            </div>
+            
+            <div class="word-bank">
+                <button class="word-option" onclick="addWord('The')">The</button>
+                <button class="word-option" onclick="addWord('happy')">happy</button>
+                <button class="word-option" onclick="addWord('dog')">dog</button>
+                <button class="word-option" onclick="addWord('runs')">runs</button>
+                <button class="word-option" onclick="addWord('fast')">fast</button>
+                <button class="word-option" onclick="addWord('cat')">cat</button>
+                <button class="word-option" onclick="addWord('slowly')">slowly</button>
+            </div>
+            
+            <div class="sentence-builder" id="sentenceBuilder">
+                <span data-en="Click words above to build your sentence!" data-es="¡Haz clic en las palabras de arriba para construir tu oración!">
+                    Click words above to build your sentence!
+                </span>
+            </div>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <button class="interactive-btn" onclick="checkSentence()" style="width: auto; margin-right: 10px;" data-en="Check Answer" data-es="Verificar Respuesta">Check Answer</button>
+                <button class="interactive-btn" onclick="resetSentence()" style="width: auto; background: #e74c3c;" data-en="Reset" data-es="Reiniciar">Reset</button>
+            </div>
+            
+            <div id="feedback" class="feedback hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let builtSentence = [];
+        
+        const translations = {
+            en: {
+                correctAnswer: "🎉 Excellent! You built the sentence correctly!",
+                incorrectAnswer: "🤔 Not quite right. Try again! The correct order is: The happy dog runs fast",
+                clickWords: "Click words above to build your sentence!"
+            },
+            es: {
+                correctAnswer: "🎉 ¡Excelente! ¡Construiste la oración correctamente!",
+                incorrectAnswer: "🤔 No está del todo bien. ¡Inténtalo de nuevo! El orden correcto es: The happy dog runs fast",
+                clickWords: "¡Haz clic en las palabras de arriba para construir tu oración!"
+            }
+        };
+        
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (element.hasAttribute('data-' + lang)) {
+                    element.textContent = element.getAttribute('data-' + lang);
+                }
+            });
+            
+            // Reset sentence builder text
+            if (builtSentence.length === 0) {
+                document.getElementById('sentenceBuilder').innerHTML = 
+                    `<span>${translations[lang].clickWords}</span>`;
+            }
+        }
+        
+        function showExample(type) {
+            const examples = {
+                subject: {
+                    en: ["I love books", "The teacher explains well", "My friend calls me", "Dogs bark loudly"],
+                    es: ["Yo amo los libros", "El maestro explica bien", "Mi amigo me llama", "Los perros ladran fuerte"]
+                },
+                verb: {
+                    en: ["run, jump, sing, dance", "eat, drink, sleep, work", "read, write, speak, listen"],
+                    es: ["correr, saltar, cantar, bailar", "comer, beber, dormir, trabajar", "leer, escribir, hablar, escuchar"]
+                },
+                object: {
+                    en: ["I read a book", "She drinks water", "We watch TV", "He plays guitar"],
+                    es: ["Yo leo un libro", "Ella bebe agua", "Nosotros vemos TV", "Él toca guitarra"]
+                },
+                adjective: {
+                    en: ["big, small, happy, sad", "red, blue, hot, cold", "fast, slow, new, old"],
+                    es: ["grande, pequeño, feliz, triste", "rojo, azul, caliente, frío", "rápido, lento, nuevo, viejo"]
+                },
+                noun: {
+                    en: ["People: mom, dad, teacher", "Places: school, park, home", "Things: book, car, phone"],
+                    es: ["Personas: mamá, papá, maestro", "Lugares: escuela, parque, casa", "Cosas: libro, carro, teléfono"]
+                },
+                sentence: {
+                    en: ["I am happy", "The sun shines", "Birds fly high", "Children play games"],
+                    es: ["Yo estoy feliz", "El sol brilla", "Los pájaros vuelan alto", "Los niños juegan"]
+                }
+            };
+            
+            const exampleList = examples[type][currentLanguage];
+            const randomExample = exampleList[Math.floor(Math.random() * exampleList.length)];
+            
+            alert(`${currentLanguage === 'en' ? 'Example' : 'Ejemplo'}: ${randomExample}`);
+        }
+        
+        function addWord(word) {
+            const wordButtons = document.querySelectorAll('.word-option');
+            const clickedButton = Array.from(wordButtons).find(btn => btn.textContent === word && !btn.classList.contains('used'));
+            
+            if (clickedButton && !clickedButton.classList.contains('used')) {
+                builtSentence.push(word);
+                clickedButton.classList.add('used');
+                updateSentenceBuilder();
+            }
+        }
+        
+        function updateSentenceBuilder() {
+            const builder = document.getElementById('sentenceBuilder');
+            if (builtSentence.length === 0) {
+                builder.innerHTML = `<span>${translations[currentLanguage].clickWords}</span>`;
+            } else {
+                builder.innerHTML = builtSentence.join(' ');
+            }
+        }
+        
+        function checkSentence() {
+            const correctSentence = "The happy dog runs fast";
+            const userSentence = builtSentence.join(' ');
+            const feedback = document.getElementById('feedback');
+            
+            feedback.classList.remove('hidden');
+            
+            if (userSentence === correctSentence) {
+                feedback.textContent = translations[currentLanguage].correctAnswer;
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = translations[currentLanguage].incorrectAnswer;
+                feedback.className = 'feedback incorrect';
+            }
+        }
+        
+        function resetSentence() {
+            builtSentence = [];
+            document.querySelectorAll('.word-option').forEach(btn => btn.classList.remove('used'));
+            updateSentenceBuilder();
+            document.getElementById('feedback').classList.add('hidden');
+        }
+        
+        // Initialize
+        updateSentenceBuilder();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'963c497c779f0ad5',t:'MTc1MzI4NTMzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
