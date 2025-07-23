@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Reader ESL Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+        
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #b8c5d6;
+            margin-bottom: 20px;
+        }
+        
+        .modal-verbs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .modal-verb {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #ffd700;
+            font-weight: 500;
+        }
+        
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 300px 1fr;
+            gap: 40px;
+            align-items: start;
+            margin-bottom: 40px;
+        }
+        
+        .role-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .role-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .role-description {
+            color: #b8c5d6;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .card-deck {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .deck-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 200px;
+        }
+        
+        .tarot-card {
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(145deg, #2a2a4a, #1a1a3a);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tarot-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            border-color: #ffed4e;
+        }
+        
+        .tarot-card.flipped {
+            background: linear-gradient(145deg, #4a4a6a, #3a3a5a);
+            border-color: #87ceeb;
+        }
+        
+        .selected-card {
+            margin-top: 20px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card-display {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .card-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .card-keywords {
+            color: #87ceeb;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .prediction-area {
+            margin-top: 20px;
+        }
+        
+        .prediction-input {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .prediction-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        
+        .prediction-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #1a1a2e;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .instructions h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-family: 'Cinzel', serif;
+        }
+        
+        .instructions ol {
+            color: #b8c5d6;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .example-predictions {
+            background: rgba(135, 206, 235, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(135, 206, 235, 0.3);
+        }
+        
+        .example-predictions h4 {
+            color: #87ceeb;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .example-predictions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .example-predictions li {
+            color: #b8c5d6;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .example-predictions li:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .modal-verbs {
+                gap: 8px;
+            }
+            
+            .modal-verb {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🔮 Tarot Reader ESL Game</h1>
+            <p class="subtitle">Practice modal verbs while predicting the future!</p>
+            <div class="modal-verbs">
+                <span class="modal-verb">will</span>
+                <span class="modal-verb">may</span>
+                <span class="modal-verb">might</span>
+                <span class="modal-verb">could</span>
+                <span class="modal-verb">would</span>
+                <span class="modal-verb">should</span>
+                <span class="modal-verb">shall</span>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>How to Play:</h3>
+            <ol>
+                <li><strong>Consultant:</strong> Click on a face-down card to reveal your fortune</li>
+                <li><strong>Tarot Reader:</strong> Look at the card and keywords, then create predictions using modal verbs</li>
+                <li>Use words like "will," "may," "might," "could" to make your predictions</li>
+                <li>Be creative and have fun with your fortune telling!</li>
+                <li>Switch roles and play again with a new card</li>
+            </ol>
+        </div>
+        
+        <div class="game-area">
+            <div class="role-section">
+                <h2 class="role-title">👤 Consultant</h2>
+                <p class="role-description">You are seeking guidance about your future. Choose a card from the deck to discover what destiny awaits you!</p>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="resetGame()">New Reading</button>
+                </div>
+            </div>
+            
+            <div class="card-deck">
+                <h3 class="deck-title">Choose Your Card</h3>
+                <div class="cards-container" id="cardDeck">
+                    <!-- Cards will be generated by JavaScript -->
+                </div>
+                
+                <div class="selected-card" id="selectedCard" style="display: none;">
+                    <div class="card-display" id="cardEmoji"></div>
+                    <div class="card-name" id="cardName"></div>
+                    <div class="card-keywords" id="cardKeywords"></div>
+                </div>
+            </div>
+            
+            <div class="role-section">
+                <h2 class="role-title">🔮 Tarot Reader</h2>
+                <p class="role-description">You have the gift of foresight! Use the card and keywords to create predictions about the consultant's future.</p>
+                
+                <div class="prediction-area">
+                    <textarea 
+                        class="prediction-input" 
+                        id="predictionText"
+                        placeholder="Wait for the consultant to choose a card, then write your predictions here using modal verbs like 'will', 'may', 'might', 'could'..."
+                        disabled
+                    ></textarea>
+                    
+                    <div class="example-predictions">
+                        <h4>Example Predictions:</h4>
+                        <ul>
+                            <li>"You <strong>will</strong> find success in your career soon."</li>
+                            <li>"Love <strong>may</strong> come from an unexpected place."</li>
+                            <li>"You <strong>should</strong> be careful with money this month."</li>
+                            <li>"A new opportunity <strong>might</strong> appear next week."</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="sharePrediction()" id="shareBtn" style="display: none;">Share Prediction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tarotCards = [
+            { emoji: "☀️", name: "The Sun", keywords: "success, joy, happiness, positivity, energy" },
+            { emoji: "🌙", name: "The Moon", keywords: "mystery, intuition, dreams, hidden truths" },
+            { emoji: "⭐", name: "The Star", keywords: "hope, inspiration, guidance, wishes" },
+            { emoji: "💖", name: "The Lovers", keywords: "love, relationships, choices, harmony" },
+            { emoji: "👑", name: "The Emperor", keywords: "authority, leadership, power, control" },
+            { emoji: "🌸", name: "The Empress", keywords: "creativity, fertility, nurturing, abundance" },
+            { emoji: "⚖️", name: "Justice", keywords: "fairness, truth, law, balance" },
+            { emoji: "🎭", name: "The Fool", keywords: "new beginnings, adventure, spontaneity" },
+            { emoji: "🗡️", name: "The Magician", keywords: "skill, talent, power, manifestation" },
+            { emoji: "🏰", name: "The Tower", keywords: "change, upheaval, revelation, breakthrough" },
+            { emoji: "🌊", name: "Temperance", keywords: "balance, patience, moderation, healing" },
+            { emoji: "🔥", name: "Strength", keywords: "courage, inner strength, determination" }
+        ];
+
+        let selectedCardData = null;
+
+        function initializeGame() {
+            const cardDeck = document.getElementById('cardDeck');
+            cardDeck.innerHTML = '';
+            
+            // Create shuffled deck
+            const shuffledCards = [...tarotCards].sort(() => Math.random() - 0.5);
+            
+            // Create 8 face-down cards
+            for (let i = 0; i < 8; i++) {
+                const card = document.createElement('div');
+                card.className = 'tarot-card';
+                card.innerHTML = '🔮';
+                card.onclick = () => revealCard(card, shuffledCards[i]);
+                cardDeck.appendChild(card);
+            }
+        }
+
+        function revealCard(cardElement, cardData) {
+            // Prevent multiple selections
+            if (selectedCardData) return;
+            
+            selectedCardData = cardData;
+            
+            // Flip the card
+            cardElement.classList.add('flipped');
+            cardElement.innerHTML = cardData.emoji;
+            cardElement.style.transform = 'scale(1.1)';
+            cardElement.onclick = null;
+            
+            // Show selected card details
+            const selectedCard = document.getElementById('selectedCard');
+            const cardEmoji = document.getElementById('cardEmoji');
+            const cardName = document.getElementById('cardName');
+            const cardKeywords = document.getElementById('cardKeywords');
+            
+            cardEmoji.textContent = cardData.emoji;
+            cardName.textContent = cardData.name;
+            cardKeywords.textContent = `Keywords: ${cardData.keywords}`;
+            
+            selectedCard.style.display = 'flex';
+            
+            // Enable prediction input
+            const predictionInput = document.getElementById('predictionText');
+            predictionInput.disabled = false;
+            predictionInput.placeholder = `The consultant has chosen ${cardData.name}! Create predictions using the keywords: ${cardData.keywords}. Use modal verbs like 'will', 'may', 'might', 'could', 'should'...`;
+            
+            // Show share button
+            document.getElementById('shareBtn').style.display = 'inline-block';
+            
+            // Disable other cards
+            const allCards = document.querySelectorAll('.tarot-card');
+            allCards.forEach(card => {
+                if (card !== cardElement) {
+                    card.style.opacity = '0.3';
+                    card.onclick = null;
+                }
+            });
+        }
+
+        function sharePrediction() {
+            const prediction = document.getElementById('predictionText').value.trim();
+            
+            if (!prediction) {
+                alert('Please write a prediction first!');
+                return;
+            }
+            
+            // Simple modal verb check
+            const modalVerbs = ['will', 'may', 'might', 'could', 'would', 'should', 'shall'];
+            const hasModalVerb = modalVerbs.some(verb => 
+                prediction.toLowerCase().includes(verb.toLowerCase())
+            );
+            
+            if (!hasModalVerb) {
+                alert('Great prediction! Try to include modal verbs like "will", "may", "might", "could", "should" to practice your English!');
+            } else {
+                alert('Excellent prediction! You used modal verbs perfectly. The consultant\'s future looks interesting! 🔮✨');
+            }
+        }
+
+        function resetGame() {
+            selectedCardData = null;
+            document.getElementById('selectedCard').style.display = 'none';
+            document.getElementById('predictionText').value = '';
+            document.getElementById('predictionText').disabled = true;
+            document.getElementById('predictionText').placeholder = 'Wait for the consultant to choose a card, then write your predictions here using modal verbs like \'will\', \'may\', \'might\', \'could\'...';
+            document.getElementById('shareBtn').style.display = 'none';
+            initializeGame();
+        }
+
+        // Initialize the game when page loads
+        initializeGame();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'963bb3cbf4b469e3',t:'MTc1MzI3OTIwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

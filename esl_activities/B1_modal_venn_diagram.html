@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Verbs Interactive Venn Diagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .circle {
+            transition: all 0.3s ease;
+        }
+        .circle:hover {
+            stroke-width: 3;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+        .modal-text {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .modal-text:hover {
+            font-weight: bold;
+            transform: scale(1.1);
+        }
+        .example-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .section-hover:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Modal Verbs Context Guide</h1>
+            <p class="text-lg text-gray-600"></p>
+        </div>
+
+        <!-- Venn Diagram with Modal Verbs -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <svg width="700" height="500" viewBox="0 0 700 500" class="max-w-full h-auto">
+                    <!-- Background circles -->
+                    <circle cx="250" cy="180" r="140" fill="rgba(59, 130, 246, 0.15)" stroke="#3b82f6" stroke-width="2" class="circle section-hover" onclick="showContext('ability')" style="cursor: pointer;"/>
+                    <circle cx="450" cy="180" r="140" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" stroke-width="2" class="circle section-hover" onclick="showContext('possibility')" style="cursor: pointer;"/>
+                    <circle cx="350" cy="320" r="140" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="2" class="circle section-hover" onclick="showContext('obligation')" style="cursor: pointer;"/>
+                    
+                    <!-- Main circle labels -->
+                    <text x="180" y="120" text-anchor="middle" class="text-xl font-bold fill-blue-700">ABILITY</text>
+                    <text x="520" y="120" text-anchor="middle" class="text-xl font-bold fill-green-700">POSSIBILITY</text>
+                    <text x="350" y="420" text-anchor="middle" class="text-xl font-bold fill-purple-700">OBLIGATION</text>
+                    
+                    <!-- Ability section modals -->
+                    <text x="180" y="160" text-anchor="middle" class="text-lg font-semibold fill-blue-800 modal-text" onclick="showModal('can')">CAN</text>
+                    <text x="180" y="185" text-anchor="middle" class="text-sm fill-blue-600">(present ability)</text>
+                    
+                    <!-- Possibility section modals -->
+                    <text x="520" y="160" text-anchor="middle" class="text-lg font-semibold fill-green-800 modal-text" onclick="showModal('may')">MAY</text>
+                    <text x="520" y="180" text-anchor="middle" class="text-lg font-semibold fill-green-800 modal-text" onclick="showModal('might')">MIGHT</text>
+                    <text x="520" y="205" text-anchor="middle" class="text-sm fill-green-600">(uncertainty)</text>
+                    
+                    <!-- Obligation section modals -->
+                    <text x="350" y="360" text-anchor="middle" class="text-lg font-semibold fill-purple-800 modal-text" onclick="showModal('must')">MUST</text>
+                    <text x="350" y="385" text-anchor="middle" class="text-sm fill-purple-600">(strong obligation)</text>
+                    
+                    <!-- Ability + Possibility intersection -->
+                    <text x="350" y="140" text-anchor="middle" class="text-lg font-semibold fill-teal-800 modal-text" onclick="showModal('could')">COULD</text>
+                    <text x="350" y="160" text-anchor="middle" class="text-sm fill-teal-600">(past ability + possibility)</text>
+                    
+                    <!-- Ability + Obligation intersection -->
+                    <text x="280" y="270" text-anchor="middle" class="text-lg font-semibold fill-orange-800 modal-text" onclick="showModal('should')">SHOULD</text>
+                    <text x="280" y="290" text-anchor="middle" class="text-sm fill-orange-600">(advice)</text>
+                    
+                    <!-- Possibility + Obligation intersection -->
+                    <text x="420" y="270" text-anchor="middle" class="text-lg font-semibold fill-indigo-800 modal-text" onclick="showModal('will')">WILL</text>
+                    <text x="420" y="290" text-anchor="middle" class="text-sm fill-indigo-600">(future certainty)</text>
+                    
+                    <!-- Center intersection -->
+                    <text x="350" y="220" text-anchor="middle" class="text-lg font-semibold fill-pink-800 modal-text" onclick="showModal('would')">WOULD</text>
+                    <text x="350" y="240" text-anchor="middle" class="text-sm fill-pink-600">(polite/conditional)</text>
+                    
+                    <!-- Section descriptions -->
+                    <text x="350" y="50" text-anchor="middle" class="text-sm font-medium fill-gray-600">Click on modal verbs or colored areas to learn more</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Quick Reference Guide -->
+        <div class="max-w-6xl mx-auto mb-8">
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Quick Reference Guide</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-700 mb-2">💪 ABILITY</h4>
+                        <p class="text-sm text-gray-600 mb-2">What someone can or cannot do</p>
+                        <div class="text-xs text-blue-600">
+                            <span class="font-semibold">CAN:</span> present ability<br>
+                            <span class="font-semibold">COULD:</span> past ability + polite requests
+                        </div>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-700 mb-2">🤔 POSSIBILITY</h4>
+                        <p class="text-sm text-gray-600 mb-2">What might happen or be true</p>
+                        <div class="text-xs text-green-600">
+                            <span class="font-semibold">MAY:</span> formal possibility<br>
+                            <span class="font-semibold">MIGHT:</span> weak possibility
+                        </div>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-700 mb-2">📋 OBLIGATION</h4>
+                        <p class="text-sm text-gray-600 mb-2">What someone must or should do</p>
+                        <div class="text-xs text-purple-600">
+                            <span class="font-semibold">MUST:</span> strong obligation<br>
+                            <span class="font-semibold">SHOULD:</span> advice/recommendation
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Display Area -->
+        <div id="contentArea" class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to Modal Verbs Learning!</h2>
+                <p class="text-gray-600 mb-6">Click on any modal verb in the diagram above or on the colored sections to see detailed explanations and examples.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+                        <h3 class="font-bold text-blue-700 mb-3">🎯 How to Use This Tool</h3>
+                        <ul class="text-sm text-gray-700 text-left space-y-2">
+                            <li>• Click on modal verbs (CAN, COULD, etc.) for detailed explanations</li>
+                            <li>• Click on colored areas to explore contexts</li>
+                            <li>• Notice how some modals appear in multiple sections</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
+                        <h3 class="font-bold text-green-700 mb-3">📚 Learning Tips</h3>
+                        <ul class="text-sm text-gray-700 text-left space-y-2">
+                            <li>• Start with the basic contexts: ability, possibility, obligation</li>
+                            <li>• Pay attention to overlapping areas for versatile modals</li>
+                            <li>• Practice with the example sentences provided</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modalData = {
+            can: {
+                title: "CAN",
+                color: "blue",
+                contexts: ["Present Ability", "Permission", "General Possibility"],
+                examples: [
+                    "I can speak three languages. (present ability)",
+                    "Can I borrow your pen? (permission)",
+                    "London can be very rainy in winter. (general possibility)"
+                ],
+                usage: "Present ability, asking permission, or stating general possibilities",
+                strength: "Strong for ability, neutral for permission"
+            },
+            could: {
+                title: "COULD",
+                color: "teal",
+                contexts: ["Past Ability", "Polite Requests", "Possibility"],
+                examples: [
+                    "I could swim when I was five. (past ability)",
+                    "Could you help me with this? (polite request)",
+                    "It could rain later today. (possibility)"
+                ],
+                usage: "Past ability, making polite requests, or expressing possibility",
+                strength: "More polite than 'can', less certain than 'will'"
+            },
+            may: {
+                title: "MAY",
+                color: "green",
+                contexts: ["Formal Permission", "Possibility", "Wishes"],
+                examples: [
+                    "May I enter the room? (formal permission)",
+                    "She may arrive late tonight. (possibility)",
+                    "May you have a wonderful day! (wish)"
+                ],
+                usage: "Formal permission, moderate possibility, or expressing wishes",
+                strength: "More formal than 'can', moderate possibility"
+            },
+            might: {
+                title: "MIGHT",
+                color: "green",
+                contexts: ["Weak Possibility", "Suggestions", "Past Possibility"],
+                examples: [
+                    "It might snow tomorrow. (weak possibility)",
+                    "You might want to check your email. (suggestion)",
+                    "He might have forgotten the meeting. (past possibility)"
+                ],
+                usage: "Expressing weak possibility or making gentle suggestions",
+                strength: "Weaker possibility than 'may' or 'could'"
+            },
+            should: {
+                title: "SHOULD",
+                color: "orange",
+                contexts: ["Advice", "Recommendation", "Expectation"],
+                examples: [
+                    "You should eat more vegetables. (advice)",
+                    "Students should arrive on time. (recommendation)",
+                    "The package should arrive tomorrow. (expectation)"
+                ],
+                usage: "Giving advice, making recommendations, or expressing expectations",
+                strength: "Strong advice, moderate obligation"
+            },
+            must: {
+                title: "MUST",
+                color: "purple",
+                contexts: ["Strong Obligation", "Necessity", "Logical Deduction"],
+                examples: [
+                    "You must wear a helmet while cycling. (strong obligation)",
+                    "I must finish this project today. (necessity)",
+                    "She must be very tired after the long journey. (logical deduction)"
+                ],
+                usage: "Strong obligation, necessity, or making logical deductions",
+                strength: "Strongest obligation, very certain deduction"
+            },
+            will: {
+                title: "WILL",
+                color: "indigo",
+                contexts: ["Future Certainty", "Promises", "Predictions"],
+                examples: [
+                    "The sun will rise tomorrow. (future certainty)",
+                    "I will help you with your homework. (promise)",
+                    "Technology will change our lives. (prediction)"
+                ],
+                usage: "Future certainty, making promises, or predictions",
+                strength: "Strong certainty about future events"
+            },
+            would: {
+                title: "WOULD",
+                color: "pink",
+                contexts: ["Conditional", "Polite Requests", "Past Habits"],
+                examples: [
+                    "I would travel more if I had money. (conditional)",
+                    "Would you like some coffee? (polite request)",
+                    "She would always sing in the shower. (past habit)"
+                ],
+                usage: "Conditional situations, polite requests, or describing past habits",
+                strength: "Very polite, hypothetical situations"
+            }
+        };
+
+        const contextData = {
+            ability: {
+                title: "ABILITY Context",
+                description: "Used to express what someone can or cannot do",
+                modals: ["CAN (present)", "COULD (past)", "BE ABLE TO"],
+                examples: [
+                    "She can play the piano beautifully.",
+                    "I could run faster when I was younger.",
+                    "Will you be able to attend the meeting?",
+                    "I haven't been able to contact him."
+                ],
+                color: "blue"
+            },
+            possibility: {
+                title: "POSSIBILITY Context",
+                description: "Used to express what might happen or be true",
+                modals: ["MAY", "MIGHT", "COULD", "CAN"],
+                examples: [
+                    "It may rain this afternoon.",
+                    "She might be running late.",
+                    "This could be the solution we need.",
+                    "Accidents can happen anywhere."
+                ],
+                color: "green"
+            },
+            obligation: {
+                title: "OBLIGATION Context",
+                description: "Used to express what someone must or should do",
+                modals: ["MUST", "SHOULD", "HAVE TO", "OUGHT TO"],
+                examples: [
+                    "Students must submit assignments on time.",
+                    "You should exercise regularly.",
+                    "I have to work late tonight.",
+                    "We ought to respect our elders."
+                ],
+                color: "purple"
+            }
+        };
+
+        function showModal(modal) {
+            const data = modalData[modal];
+            const colorClasses = {
+                blue: 'border-blue-200 bg-blue-50 text-blue-800',
+                green: 'border-green-200 bg-green-50 text-green-800',
+                purple: 'border-purple-200 bg-purple-50 text-purple-800',
+                pink: 'border-pink-200 bg-pink-50 text-pink-800',
+                yellow: 'border-yellow-200 bg-yellow-50 text-yellow-800',
+                red: 'border-red-200 bg-red-50 text-red-800',
+                indigo: 'border-indigo-200 bg-indigo-50 text-indigo-800',
+                teal: 'border-teal-200 bg-teal-50 text-teal-800',
+                orange: 'border-orange-200 bg-orange-50 text-orange-800'
+            };
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="text-center mb-6">
+                        <h2 class="text-4xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                        <p class="text-lg text-gray-600">${data.usage}</p>
+                        <div class="mt-2 inline-block px-4 py-2 ${colorClasses[data.color]} rounded-full text-sm font-semibold">
+                            ${data.strength}
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">📚 Main Uses</h3>
+                            <div class="space-y-3">
+                                ${data.contexts.map((context, index) => `
+                                    <div class="p-4 ${colorClasses[data.color]} border-2 rounded-lg">
+                                        <span class="font-semibold">${index + 1}. ${context}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">💬 Example Sentences</h3>
+                            <div class="space-y-3">
+                                ${data.examples.map(example => `
+                                    <div class="example-card p-4 bg-gray-50 rounded-lg border-l-4 border-${data.color}-500">
+                                        <p class="text-gray-700">"${example}"</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gradient-to-r from-${data.color}-50 to-${data.color}-100 rounded-xl">
+                        <h4 class="font-bold text-${data.color}-800 mb-2">💡 Learning Tip</h4>
+                        <p class="text-${data.color}-700">Notice how "${data.title}" appears in the Venn diagram - this shows you which contexts it can be used in. Practice creating your own sentences for each context!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showContext(context) {
+            const data = contextData[context];
+            const color = data.color;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                        <p class="text-lg text-gray-600">${data.description}</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">🔤 Modal Verbs for ${context.toUpperCase()}</h3>
+                            <div class="space-y-3">
+                                ${data.modals.map(modal => `
+                                    <div class="p-3 bg-${color}-100 text-${color}-800 rounded-lg font-semibold border-2 border-${color}-200">
+                                        ${modal}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">💬 Example Sentences</h3>
+                            <div class="space-y-3">
+                                ${data.examples.map(example => `
+                                    <div class="example-card p-4 bg-gray-50 rounded-lg border-l-4 border-${color}-500">
+                                        <p class="text-gray-700">"${example}"</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gradient-to-r from-${color}-50 to-${color}-100 rounded-xl">
+                        <h4 class="font-bold text-${color}-800 mb-2">🎯 Context Focus</h4>
+                        <p class="text-${color}-700">In the diagram above, you can see which modal verbs belong to the ${context} context. Some modals appear in multiple sections because they have various uses!</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'963bc07f403e5f10',t:'MTc1MzI3OTcyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
