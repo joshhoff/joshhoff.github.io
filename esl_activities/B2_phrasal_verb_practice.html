@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phrasal Verbs Master</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .mode-btn.active {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-height: 400px;
+        }
+        
+        .phrasal-verb-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .phrasal-verb-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .definition {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .example {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 8px;
+            font-style: italic;
+            border-left: 3px solid #2196F3;
+        }
+        
+        .quiz-container {
+            text-align: center;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196F3;
+        }
+        
+        .option.selected {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+        
+        .option.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 8px;
+            color: #2e7d32;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .feedback.correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4CAF50;
+        }
+        
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .mode-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Phrasal Verbs Master</h1>
+            <p>Master 15 essential phrasal verbs through interactive practice and quizzes</p>
+        </div>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="showMode('study')">📖 Study Mode</button>
+            <button class="mode-btn" onclick="showMode('quiz')">🧠 Quiz Mode</button>
+            <button class="mode-btn" onclick="showMode('context')">📝 Context Practice</button>
+        </div>
+        
+        <div class="content-area">
+            <!-- Study Mode -->
+            <div id="study-mode">
+                <h2 style="text-align: center; margin-bottom: 25px; color: #667eea;">Study Your Phrasal Verbs</h2>
+                <div id="phrasal-verbs-list"></div>
+            </div>
+            
+            <!-- Quiz Mode -->
+            <div id="quiz-mode" style="display: none;">
+                <div class="score">Score: <span id="score">0</span>/15 | Question <span id="question-num">1</span> of 15</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="quiz-container">
+                    <div class="question" id="question"></div>
+                    <div class="options" id="options"></div>
+                    <button class="btn" id="submit-btn" onclick="submitAnswer()" disabled>Submit Answer</button>
+                    <button class="btn" id="next-btn" onclick="nextQuestion()" style="display: none;">Next Question</button>
+                    <div class="feedback" id="feedback" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- Context Practice Mode -->
+            <div id="context-mode" style="display: none;">
+                <div class="score">Progress: <span id="context-score">0</span>/15</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="context-progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="quiz-container">
+                    <div class="question" id="context-question"></div>
+                    <div class="options" id="context-options"></div>
+                    <button class="btn" id="context-submit-btn" onclick="submitContextAnswer()" disabled>Submit Answer</button>
+                    <button class="btn" id="context-next-btn" onclick="nextContextQuestion()" style="display: none;">Next Question</button>
+                    <div class="feedback" id="context-feedback" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const phrasalVerbs = [
+            {
+                verb: "Call for",
+                definition: "To demand or require something; to request publicly",
+                example: "The situation calls for immediate action to prevent further damage."
+            },
+            {
+                verb: "Put away",
+                definition: "To store something in its proper place; to save money",
+                example: "Please put away your toys after playing with them."
+            },
+            {
+                verb: "Go after",
+                definition: "To pursue or chase someone/something; to try to achieve",
+                example: "She decided to go after her dream of becoming a doctor."
+            },
+            {
+                verb: "Come up with",
+                definition: "To think of or produce an idea, plan, or solution",
+                example: "We need to come up with a better marketing strategy."
+            },
+            {
+                verb: "Work out",
+                definition: "To exercise; to solve a problem; to develop successfully",
+                example: "I work out at the gym three times a week."
+            },
+            {
+                verb: "Let down",
+                definition: "To disappoint someone; to fail to help or support",
+                example: "I don't want to let down my team by missing the deadline."
+            },
+            {
+                verb: "Fall out",
+                definition: "To have an argument and stop being friends; to happen as a result",
+                example: "They fell out over money and haven't spoken since."
+            },
+            {
+                verb: "Drop out of",
+                definition: "To leave school, university, or a course before finishing",
+                example: "He dropped out of college to start his own business."
+            },
+            {
+                verb: "Drop by",
+                definition: "To visit someone informally and usually briefly",
+                example: "Feel free to drop by my office anytime this afternoon."
+            },
+            {
+                verb: "Get along with",
+                definition: "To have a good relationship with someone",
+                example: "She gets along with all her coworkers very well."
+            },
+            {
+                verb: "Bring up",
+                definition: "To mention a topic; to raise a child",
+                example: "Don't bring up politics at the dinner table tonight."
+            },
+            {
+                verb: "Give in",
+                definition: "To surrender or stop resisting; to agree reluctantly",
+                example: "After hours of negotiation, they finally gave in to our demands."
+            },
+            {
+                verb: "Carry out",
+                definition: "To perform or complete a task, plan, or instruction",
+                example: "The team will carry out the research project next month."
+            },
+            {
+                verb: "Look up",
+                definition: "To search for information; to improve; to visit someone",
+                example: "I need to look up this word in the dictionary."
+            },
+            {
+                verb: "Look out for",
+                definition: "To watch carefully for something; to take care of someone",
+                example: "Look out for suspicious activity in the neighborhood."
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                question: "The emergency situation _____ immediate medical attention.",
+                options: ["calls for", "puts away", "goes after", "comes up with"],
+                correct: 0,
+                verb: "calls for"
+            },
+            {
+                question: "After dinner, the children helped _____ the dishes.",
+                options: ["go after", "put away", "work out", "let down"],
+                correct: 1,
+                verb: "put away"
+            },
+            {
+                question: "The detective decided to _____ the suspect who fled the scene.",
+                options: ["put away", "go after", "fall out", "drop by"],
+                correct: 1,
+                verb: "go after"
+            },
+            {
+                question: "The team needs to _____ a creative solution to this problem.",
+                options: ["come up with", "work out", "let down", "fall out"],
+                correct: 0,
+                verb: "come up with"
+            },
+            {
+                question: "I _____ at the gym every morning before work.",
+                options: ["let down", "fall out", "work out", "drop out of"],
+                correct: 2,
+                verb: "work out"
+            },
+            {
+                question: "I promised to help, and I don't want to _____ my friend.",
+                options: ["let down", "drop by", "get along with", "bring up"],
+                correct: 0,
+                verb: "let down"
+            },
+            {
+                question: "The two business partners _____ over financial disagreements.",
+                options: ["dropped out of", "fell out", "gave in", "carried out"],
+                correct: 1,
+                verb: "fell out"
+            },
+            {
+                question: "Many students _____ university due to financial pressure.",
+                options: ["drop out of", "drop by", "look up", "look out for"],
+                correct: 0,
+                verb: "drop out of"
+            },
+            {
+                question: "Why don't you _____ my office later this afternoon?",
+                options: ["get along with", "drop by", "bring up", "give in"],
+                correct: 1,
+                verb: "drop by"
+            },
+            {
+                question: "Sarah _____ everyone in her new workplace.",
+                options: ["gets along with", "brings up", "gives in", "carries out"],
+                correct: 0,
+                verb: "gets along with"
+            },
+            {
+                question: "Please don't _____ that embarrassing story again.",
+                options: ["carry out", "bring up", "look up", "look out for"],
+                correct: 1,
+                verb: "bring up"
+            },
+            {
+                question: "After hours of arguing, he finally _____ to her demands.",
+                options: ["gave in", "carried out", "looked up", "looked out for"],
+                correct: 0,
+                verb: "gave in"
+            },
+            {
+                question: "The scientists will _____ the experiment next week.",
+                options: ["look up", "carry out", "call for", "put away"],
+                correct: 1,
+                verb: "carry out"
+            },
+            {
+                question: "I need to _____ this information in the encyclopedia.",
+                options: ["look out for", "look up", "call for", "put away"],
+                correct: 1,
+                verb: "look up"
+            },
+            {
+                question: "Parents should _____ signs of bullying in their children.",
+                options: ["call for", "look out for", "go after", "come up with"],
+                correct: 1,
+                verb: "look out for"
+            }
+        ];
+
+        const contextQuestions = [
+            {
+                question: "Complete the sentence: 'The broken bridge _____ urgent repairs before someone gets hurt.'",
+                options: ["calls for", "puts away", "goes after", "works out"],
+                correct: 0
+            },
+            {
+                question: "Choose the best option: 'After the party, we need to _____ all the decorations.'",
+                options: ["drop by", "put away", "fall out", "give in"],
+                correct: 1
+            },
+            {
+                question: "Fill in the blank: 'The police will _____ the criminal who escaped.'",
+                options: ["come up with", "go after", "let down", "drop out of"],
+                correct: 1
+            },
+            {
+                question: "Complete: 'We need to _____ a plan for the school fundraiser.'",
+                options: ["work out", "come up with", "get along with", "bring up"],
+                correct: 1
+            },
+            {
+                question: "Choose: 'I _____ every day to stay healthy and strong.'",
+                options: ["work out", "let down", "fall out", "carry out"],
+                correct: 0
+            },
+            {
+                question: "Fill in: 'I promised to be there, and I won't _____ you.'",
+                options: ["drop by", "let down", "look up", "look out for"],
+                correct: 1
+            },
+            {
+                question: "Complete: 'The friends _____ after arguing about money.'",
+                options: ["gave in", "fell out", "brought up", "carried out"],
+                correct: 1
+            },
+            {
+                question: "Choose: 'He _____ medical school to pursue his music career.'",
+                options: ["dropped out of", "dropped by", "looked up", "called for"],
+                correct: 0
+            },
+            {
+                question: "Fill in: 'Feel free to _____ our house anytime this weekend.'",
+                options: ["put away", "drop by", "go after", "work out"],
+                correct: 1
+            },
+            {
+                question: "Complete: 'She _____ her new roommate very well.'",
+                options: ["brings up", "gets along with", "gives in", "looks out for"],
+                correct: 1
+            },
+            {
+                question: "Choose: 'Don't _____ that topic during the meeting.'",
+                options: ["carry out", "bring up", "call for", "put away"],
+                correct: 1
+            },
+            {
+                question: "Fill in: 'After negotiating for hours, they _____ to our terms.'",
+                options: ["gave in", "fell out", "dropped out of", "looked up"],
+                correct: 0
+            },
+            {
+                question: "Complete: 'The research team will _____ the study next month.'",
+                options: ["look out for", "carry out", "go after", "come up with"],
+                correct: 1
+            },
+            {
+                question: "Choose: 'I need to _____ this word in the dictionary.'",
+                options: ["look up", "look out for", "let down", "drop by"],
+                correct: 0
+            },
+            {
+                question: "Fill in: 'Please _____ any suspicious behavior in the area.'",
+                options: ["bring up", "look out for", "get along with", "give in"],
+                correct: 1
+            }
+        ];
+
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+        let selectedOption = null;
+        let currentContextQuestion = 0;
+        let contextScore = 0;
+        let selectedContextOption = null;
+
+        function showMode(mode) {
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all modes
+            document.getElementById('study-mode').style.display = 'none';
+            document.getElementById('quiz-mode').style.display = 'none';
+            document.getElementById('context-mode').style.display = 'none';
+            
+            // Show selected mode
+            if (mode === 'study') {
+                document.getElementById('study-mode').style.display = 'block';
+                loadStudyMode();
+            } else if (mode === 'quiz') {
+                document.getElementById('quiz-mode').style.display = 'block';
+                resetQuiz();
+            } else if (mode === 'context') {
+                document.getElementById('context-mode').style.display = 'block';
+                resetContextPractice();
+            }
+        }
+
+        function loadStudyMode() {
+            const container = document.getElementById('phrasal-verbs-list');
+            container.innerHTML = '';
+            
+            phrasalVerbs.forEach(verb => {
+                const card = document.createElement('div');
+                card.className = 'phrasal-verb-card';
+                card.innerHTML = `
+                    <h3>${verb.verb}</h3>
+                    <div class="definition">${verb.definition}</div>
+                    <div class="example"><strong>Example:</strong> ${verb.example}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function resetQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            selectedOption = null;
+            updateQuizDisplay();
+            loadQuizQuestion();
+        }
+
+        function updateQuizDisplay() {
+            document.getElementById('score').textContent = quizScore;
+            document.getElementById('question-num').textContent = currentQuizQuestion + 1;
+            document.getElementById('progress-fill').style.width = ((currentQuizQuestion) / 15 * 100) + '%';
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizQuestion >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuizQuestion];
+            document.getElementById('question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectQuizOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('feedback').style.display = 'none';
+            selectedOption = null;
+        }
+
+        function selectQuizOption(index) {
+            selectedOption = index;
+            document.querySelectorAll('#options .option').forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            document.getElementById('submit-btn').disabled = false;
+        }
+
+        function submitAnswer() {
+            const question = quizQuestions[currentQuizQuestion];
+            const options = document.querySelectorAll('#options .option');
+            const feedback = document.getElementById('feedback');
+            
+            options.forEach((opt, i) => {
+                opt.onclick = null;
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                } else if (i === selectedOption && i !== question.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedOption === question.correct) {
+                quizScore++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✅ Correct! Well done!';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Incorrect. The correct answer is "${question.options[question.correct]}".`;
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            updateQuizDisplay();
+        }
+
+        function nextQuestion() {
+            currentQuizQuestion++;
+            loadQuizQuestion();
+        }
+
+        function showQuizResults() {
+            const percentage = Math.round((quizScore / 15) * 100);
+            let message = '';
+            
+            if (percentage >= 90) message = '🏆 Excellent! You\'ve mastered these phrasal verbs!';
+            else if (percentage >= 70) message = '👍 Good job! Keep practicing to improve further.';
+            else if (percentage >= 50) message = '📚 Not bad! Review the study materials and try again.';
+            else message = '💪 Keep studying! Practice makes perfect.';
+            
+            document.getElementById('question').innerHTML = `
+                <h2>Quiz Complete!</h2>
+                <p>Your Score: ${quizScore}/15 (${percentage}%)</p>
+                <p>${message}</p>
+            `;
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').innerHTML = 'Restart Quiz';
+            document.getElementById('next-btn').onclick = resetQuiz;
+            document.getElementById('feedback').style.display = 'none';
+        }
+
+        function resetContextPractice() {
+            currentContextQuestion = 0;
+            contextScore = 0;
+            selectedContextOption = null;
+            updateContextDisplay();
+            loadContextQuestion();
+        }
+
+        function updateContextDisplay() {
+            document.getElementById('context-score').textContent = contextScore;
+            document.getElementById('context-progress-fill').style.width = ((currentContextQuestion) / 15 * 100) + '%';
+        }
+
+        function loadContextQuestion() {
+            if (currentContextQuestion >= contextQuestions.length) {
+                showContextResults();
+                return;
+            }
+            
+            const question = contextQuestions[currentContextQuestion];
+            document.getElementById('context-question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('context-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectContextOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('context-submit-btn').disabled = true;
+            document.getElementById('context-submit-btn').style.display = 'inline-block';
+            document.getElementById('context-next-btn').style.display = 'none';
+            document.getElementById('context-feedback').style.display = 'none';
+            selectedContextOption = null;
+        }
+
+        function selectContextOption(index) {
+            selectedContextOption = index;
+            document.querySelectorAll('#context-options .option').forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) opt.classList.add('selected');
+            });
+            document.getElementById('context-submit-btn').disabled = false;
+        }
+
+        function submitContextAnswer() {
+            const question = contextQuestions[currentContextQuestion];
+            const options = document.querySelectorAll('#context-options .option');
+            const feedback = document.getElementById('context-feedback');
+            
+            options.forEach((opt, i) => {
+                opt.onclick = null;
+                if (i === question.correct) {
+                    opt.classList.add('correct');
+                } else if (i === selectedContextOption && i !== question.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedContextOption === question.correct) {
+                contextScore++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✅ Perfect! You understand the context well!';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Not quite right. The correct answer is "${question.options[question.correct]}".`;
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('context-submit-btn').style.display = 'none';
+            document.getElementById('context-next-btn').style.display = 'inline-block';
+            updateContextDisplay();
+        }
+
+        function nextContextQuestion() {
+            currentContextQuestion++;
+            loadContextQuestion();
+        }
+
+        function showContextResults() {
+            const percentage = Math.round((contextScore / 15) * 100);
+            let message = '';
+            
+            if (percentage >= 90) message = '🌟 Outstanding! You excel at using phrasal verbs in context!';
+            else if (percentage >= 70) message = '✨ Great work! Your contextual understanding is strong.';
+            else if (percentage >= 50) message = '📖 Good effort! Keep practicing with different contexts.';
+            else message = '🎯 Keep going! Context practice will improve your skills.';
+            
+            document.getElementById('context-question').innerHTML = `
+                <h2>Context Practice Complete!</h2>
+                <p>Your Score: ${contextScore}/15 (${percentage}%)</p>
+                <p>${message}</p>
+            `;
+            document.getElementById('context-options').innerHTML = '';
+            document.getElementById('context-submit-btn').style.display = 'none';
+            document.getElementById('context-next-btn').innerHTML = 'Restart Practice';
+            document.getElementById('context-next-btn').onclick = resetContextPractice;
+            document.getElementById('context-feedback').style.display = 'none';
+        }
+
+        // Initialize the app
+        loadStudyMode();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9643ed2bb1030bb7',t:'MTc1MzM2NTQ0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
