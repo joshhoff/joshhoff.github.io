@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Verbs Interactive Venn Diagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .circle {
+            transition: all 0.3s ease;
+        }
+        .circle:hover {
+            stroke-width: 3;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+        .modal-text {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .modal-text:hover {
+            font-weight: bold;
+            transform: scale(1.1);
+        }
+        .example-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .section-hover:hover {
+            opacity: 0.8;
+        }
+        .sunburst-segment {
+            transition: all 0.3s ease;
+        }
+        .sunburst-segment:hover {
+            opacity: 0.8;
+            transform-origin: 300px 300px;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Modal Verbs Context Guide</h1>
+            <p class="text-lg text-gray-600">Click on modal verbs or sections to explore their usage</p>
+        </div>
+
+        <!-- Treemap Chart with Modal Verbs -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Modal Verbs Treemap Chart</h2>
+                    <p class="text-sm text-gray-600">Rectangle size shows popularity in each context • Click any rectangle to explore</p>
+                </div>
+                
+                <!-- Treemap Chart Layout -->
+                <div class="max-w-6xl mx-auto">
+                    <!-- Treemap Chart -->
+                    <div class="flex justify-center mb-6">
+                        <div class="w-full max-w-5xl h-96 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-gray-200 p-4">
+                            <!-- Treemap Grid Layout -->
+                            <div class="grid grid-cols-12 grid-rows-8 gap-2 h-full">
+                                
+                                <!-- ABILITY Section (Left side) -->
+                                <div class="col-span-3 row-span-8 bg-blue-50 rounded-lg border-2 border-blue-200 p-2 relative">
+                                    <div class="text-center mb-2">
+                                        <h3 class="text-sm font-bold text-blue-700">💪 ABILITY</h3>
+                                    </div>
+                                    
+                                    <!-- CAN - Most Popular (Large) -->
+                                    <div class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-3 mb-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-32 flex flex-col justify-center items-center" 
+                                         onclick="showModal('can')" 
+                                         title="CAN - Most Popular for Ability">
+                                        <div class="text-lg font-bold">CAN</div>
+                                        <div class="text-xs opacity-90">Most Popular</div>
+                                    </div>
+                                    
+                                    <!-- COULD - Common (Medium) -->
+                                    <div class="bg-teal-500 hover:bg-teal-600 text-white rounded-lg p-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-20 flex flex-col justify-center items-center" 
+                                         onclick="showModal('could')" 
+                                         title="COULD - Common for Ability">
+                                        <div class="text-sm font-bold">COULD</div>
+                                        <div class="text-xs opacity-90">Common</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- POSSIBILITY Section (Center-left) -->
+                                <div class="col-span-3 row-span-8 bg-green-50 rounded-lg border-2 border-green-200 p-2 relative">
+                                    <div class="text-center mb-2">
+                                        <h3 class="text-sm font-bold text-green-700">🤔 POSSIBILITY</h3>
+                                    </div>
+                                    
+                                    <!-- MIGHT - Most Popular (Large) -->
+                                    <div class="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg p-3 mb-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-28 flex flex-col justify-center items-center" 
+                                         onclick="showModal('might')" 
+                                         title="MIGHT - Most Popular for Possibility">
+                                        <div class="text-lg font-bold">MIGHT</div>
+                                        <div class="text-xs opacity-90">Most Popular</div>
+                                    </div>
+                                    
+                                    <!-- WILL - Very Common (Medium-Large) -->
+                                    <div class="bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg p-2 mb-1 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-24 flex flex-col justify-center items-center" 
+                                         onclick="showModal('will')" 
+                                         title="WILL - Very Common for Possibility">
+                                        <div class="text-sm font-bold">WILL</div>
+                                        <div class="text-xs opacity-90">Very Common</div>
+                                    </div>
+                                    
+                                    <!-- MAY - Common (Small) -->
+                                    <div class="bg-green-500 hover:bg-green-600 text-white rounded-lg p-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-16 flex flex-col justify-center items-center" 
+                                         onclick="showModal('may')" 
+                                         title="MAY - Common for Possibility">
+                                        <div class="text-xs font-bold">MAY</div>
+                                        <div class="text-xs opacity-90">Common</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- OBLIGATION Section (Center-right) -->
+                                <div class="col-span-3 row-span-8 bg-purple-50 rounded-lg border-2 border-purple-200 p-2 relative">
+                                    <div class="text-center mb-2">
+                                        <h3 class="text-sm font-bold text-purple-700">📋 OBLIGATION</h3>
+                                    </div>
+                                    
+                                    <!-- MUST - Most Popular (Large) -->
+                                    <div class="bg-purple-500 hover:bg-purple-600 text-white rounded-lg p-3 mb-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-32 flex flex-col justify-center items-center" 
+                                         onclick="showModal('must')" 
+                                         title="MUST - Most Popular for Obligation">
+                                        <div class="text-lg font-bold">MUST</div>
+                                        <div class="text-xs opacity-90">Most Popular</div>
+                                    </div>
+                                    
+                                    <!-- SHOULD - Very Common (Medium) -->
+                                    <div class="bg-orange-500 hover:bg-orange-600 text-white rounded-lg p-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-20 flex flex-col justify-center items-center" 
+                                         onclick="showModal('should')" 
+                                         title="SHOULD - Very Common for Obligation">
+                                        <div class="text-sm font-bold">SHOULD</div>
+                                        <div class="text-xs opacity-90">Very Common</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- POLITENESS Section (Right side) -->
+                                <div class="col-span-3 row-span-8 bg-pink-50 rounded-lg border-2 border-pink-200 p-2 relative">
+                                    <div class="text-center mb-2">
+                                        <h3 class="text-sm font-bold text-pink-700">🤝 POLITENESS</h3>
+                                    </div>
+                                    
+                                    <!-- WOULD - Most Popular (Large) -->
+                                    <div class="bg-pink-500 hover:bg-pink-600 text-white rounded-lg p-3 mb-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-32 flex flex-col justify-center items-center" 
+                                         onclick="showModal('would')" 
+                                         title="WOULD - Most Popular for Politeness">
+                                        <div class="text-lg font-bold">WOULD</div>
+                                        <div class="text-xs opacity-90">Most Popular</div>
+                                    </div>
+                                    
+                                    <!-- COULD - Common (Small) -->
+                                    <div class="bg-teal-400 hover:bg-teal-500 text-white rounded-lg p-2 cursor-pointer transition-all hover:shadow-lg transform hover:scale-105 h-20 flex flex-col justify-center items-center opacity-80" 
+                                         onclick="showModal('could')" 
+                                         title="COULD - Common for Politeness">
+                                        <div class="text-sm font-bold">COULD</div>
+                                        <div class="text-xs opacity-90">Common</div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Verb Selector -->
+                    <div class="grid grid-cols-4 gap-3 mb-6">
+                        <button onclick="highlightModal('can')" class="p-3 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-lg font-semibold transition-colors">
+                            CAN
+                        </button>
+                        <button onclick="highlightModal('will')" class="p-3 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-lg font-semibold transition-colors">
+                            WILL
+                        </button>
+                        <button onclick="highlightModal('should')" class="p-3 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded-lg font-semibold transition-colors">
+                            SHOULD
+                        </button>
+                        <button onclick="highlightModal('could')" class="p-3 bg-teal-100 hover:bg-teal-200 text-teal-800 rounded-lg font-semibold transition-colors">
+                            COULD
+                        </button>
+                        <button onclick="highlightModal('would')" class="p-3 bg-pink-100 hover:bg-pink-200 text-pink-800 rounded-lg font-semibold transition-colors">
+                            WOULD
+                        </button>
+                        <button onclick="highlightModal('must')" class="p-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg font-semibold transition-colors">
+                            MUST
+                        </button>
+                        <button onclick="highlightModal('may')" class="p-3 bg-green-100 hover:bg-green-200 text-green-800 rounded-lg font-semibold transition-colors">
+                            MAY
+                        </button>
+                        <button onclick="highlightModal('might')" class="p-3 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-lg font-semibold transition-colors">
+                            MIGHT
+                        </button>
+                    </div>
+                    
+                    <!-- Learning Strategy Guide -->
+                    <div class="p-4 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg">
+                        <div class="text-center">
+                            <h3 class="font-bold text-gray-700 mb-2">📚 How to Read the Treemap Chart</h3>
+                            <p class="text-sm text-gray-600">Each section shows a context. Rectangle size shows how popular that modal is in that context. Larger rectangles = more commonly used!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Legend -->
+                <div class="mt-6 flex justify-center">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="text-sm font-semibold text-gray-700 mb-2">Treemap Chart Legend:</div>
+                        <div class="grid grid-cols-2 gap-4 text-xs text-gray-600">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-blue-500 rounded mr-2 opacity-70"></div>
+                                <span>Size = Popularity level</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-green-500 rounded mr-2 opacity-70"></div>
+                                <span>Larger = More commonly used</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-purple-500 rounded mr-2 opacity-70"></div>
+                                <span>Color = Context category</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 bg-pink-500 rounded mr-2 opacity-70"></div>
+                                <span>Click any rectangle to explore</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Reference Guide -->
+        <div class="max-w-6xl mx-auto mb-8">
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Quick Reference Guide</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-700 mb-2">💪 ABILITY</h4>
+                        <p class="text-sm text-gray-600 mb-2">What someone can or cannot do</p>
+                        <div class="text-xs text-blue-600">
+                            <span class="font-semibold">CAN:</span> present ability<br>
+                            <span class="font-semibold">COULD:</span> past ability
+                        </div>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-700 mb-2">🤔 POSSIBILITY</h4>
+                        <p class="text-sm text-gray-600 mb-2">What might happen or be true</p>
+                        <div class="text-xs text-green-600">
+                            <span class="font-semibold">MAY:</span> formal possibility<br>
+                            <span class="font-semibold">MIGHT:</span> weak possibility
+                        </div>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-700 mb-2">📋 OBLIGATION</h4>
+                        <p class="text-sm text-gray-600 mb-2">What someone must or should do</p>
+                        <div class="text-xs text-purple-600">
+                            <span class="font-semibold">MUST:</span> strong obligation<br>
+                            <span class="font-semibold">SHOULD:</span> advice/recommendation
+                        </div>
+                    </div>
+                    <div class="p-4 bg-pink-50 rounded-lg border-l-4 border-pink-500">
+                        <h4 class="font-bold text-pink-700 mb-2">🤝 POLITENESS</h4>
+                        <p class="text-sm text-gray-600 mb-2">Making requests politely</p>
+                        <div class="text-xs text-pink-600">
+                            <span class="font-semibold">WOULD:</span> very polite<br>
+                            <span class="font-semibold">COULD:</span> polite requests
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Display Area -->
+        <div id="contentArea" class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to Modal Verbs Learning!</h2>
+                <p class="text-gray-600 mb-6">Click on any modal verb in the diagram above or on the colored sections to see detailed explanations and examples.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+                        <h3 class="font-bold text-blue-700 mb-3">🎯 How to Use This Tool</h3>
+                        <ul class="text-sm text-gray-700 text-left space-y-2">
+                            <li>• Click on modal verbs (CAN, COULD, etc.) for detailed explanations</li>
+                            <li>• Click on colored context sections to explore categories</li>
+                            <li>• Notice how some modals appear in multiple contexts</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
+                        <h3 class="font-bold text-green-700 mb-3">📚 Learning Tips</h3>
+                        <ul class="text-sm text-gray-700 text-left space-y-2">
+                            <li>• Compare rectangle sizes to see which modals are most popular in each context</li>
+                            <li>• Larger rectangles indicate more commonly used modals</li>
+                            <li>• Notice how COULD appears in both ability and politeness sections</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modalData = {
+            can: {
+                title: "CAN",
+                color: "blue",
+                contexts: ["Present Ability", "Permission", "General Possibility"],
+                examples: [
+                    "I can speak three languages. (present ability)",
+                    "Can I borrow your pen? (permission)",
+                    "London can be very rainy in winter. (general possibility)"
+                ],
+                usage: "Present ability, asking permission, or stating general possibilities",
+                strength: "Strong for ability, neutral for permission"
+            },
+            could: {
+                title: "COULD",
+                color: "teal",
+                contexts: ["Past Ability", "Polite Requests", "Possibility"],
+                examples: [
+                    "I could swim when I was five. (past ability)",
+                    "Could you help me with this? (polite request)",
+                    "It could rain later today. (possibility)"
+                ],
+                usage: "Past ability, making polite requests, or expressing possibility",
+                strength: "More polite than 'can', less certain than 'will'"
+            },
+            may: {
+                title: "MAY",
+                color: "green",
+                contexts: ["Formal Permission", "Possibility", "Wishes"],
+                examples: [
+                    "May I enter the room? (formal permission)",
+                    "She may arrive late tonight. (possibility)",
+                    "May you have a wonderful day! (wish)"
+                ],
+                usage: "Formal permission, moderate possibility, or expressing wishes",
+                strength: "More formal than 'can', moderate possibility"
+            },
+            might: {
+                title: "MIGHT",
+                color: "green",
+                contexts: ["Weak Possibility", "Suggestions", "Past Possibility"],
+                examples: [
+                    "It might snow tomorrow. (weak possibility)",
+                    "You might want to check your email. (suggestion)",
+                    "He might have forgotten the meeting. (past possibility)"
+                ],
+                usage: "Expressing weak possibility or making gentle suggestions",
+                strength: "Weaker possibility than 'may' or 'could'"
+            },
+            should: {
+                title: "SHOULD",
+                color: "orange",
+                contexts: ["Advice", "Recommendation", "Expectation"],
+                examples: [
+                    "You should eat more vegetables. (advice)",
+                    "Students should arrive on time. (recommendation)",
+                    "The package should arrive tomorrow. (expectation)"
+                ],
+                usage: "Giving advice, making recommendations, or expressing expectations",
+                strength: "Strong advice, moderate obligation"
+            },
+            must: {
+                title: "MUST",
+                color: "purple",
+                contexts: ["Strong Obligation", "Necessity", "Logical Deduction"],
+                examples: [
+                    "You must wear a helmet while cycling. (strong obligation)",
+                    "I must finish this project today. (necessity)",
+                    "She must be very tired after the long journey. (logical deduction)"
+                ],
+                usage: "Strong obligation, necessity, or making logical deductions",
+                strength: "Strongest obligation, very certain deduction"
+            },
+            will: {
+                title: "WILL",
+                color: "indigo",
+                contexts: ["Future Certainty", "Promises", "Predictions"],
+                examples: [
+                    "The sun will rise tomorrow. (future certainty)",
+                    "I will help you with your homework. (promise)",
+                    "Technology will change our lives. (prediction)"
+                ],
+                usage: "Future certainty, making promises, or predictions",
+                strength: "Strong certainty about future events"
+            },
+            would: {
+                title: "WOULD",
+                color: "pink",
+                contexts: ["Conditional", "Polite Requests", "Past Habits"],
+                examples: [
+                    "I would travel more if I had money. (conditional)",
+                    "Would you like some coffee? (polite request)",
+                    "She would always sing in the shower. (past habit)"
+                ],
+                usage: "Conditional situations, polite requests, or describing past habits",
+                strength: "Very polite, hypothetical situations"
+            }
+        };
+
+        const contextData = {
+            ability: {
+                title: "ABILITY Context",
+                description: "Used to express what someone can or cannot do",
+                modals: ["CAN (present)", "COULD (past)", "BE ABLE TO"],
+                examples: [
+                    "She can play the piano beautifully.",
+                    "I could run faster when I was younger.",
+                    "Will you be able to attend the meeting?",
+                    "I haven't been able to contact him."
+                ],
+                color: "blue"
+            },
+            possibility: {
+                title: "POSSIBILITY Context",
+                description: "Used to express what might happen or be true",
+                modals: ["MAY", "MIGHT", "COULD", "WILL"],
+                examples: [
+                    "It may rain this afternoon.",
+                    "She might be running late.",
+                    "This could be the solution we need.",
+                    "It will probably be sunny tomorrow."
+                ],
+                color: "green"
+            },
+            obligation: {
+                title: "OBLIGATION Context",
+                description: "Used to express what someone must or should do",
+                modals: ["MUST", "SHOULD", "HAVE TO", "OUGHT TO"],
+                examples: [
+                    "Students must submit assignments on time.",
+                    "You should exercise regularly.",
+                    "I have to work late tonight.",
+                    "We ought to respect our elders."
+                ],
+                color: "purple"
+            },
+            politeness: {
+                title: "POLITENESS Context",
+                description: "Used to make requests and offers more polite",
+                modals: ["WOULD", "COULD", "MIGHT", "MAY"],
+                examples: [
+                    "Would you like some coffee?",
+                    "Could you please help me?",
+                    "Might I suggest an alternative?",
+                    "May I have your attention?"
+                ],
+                color: "pink"
+            }
+        };
+
+        function showModal(modal) {
+            const data = modalData[modal];
+            const colorClasses = {
+                blue: 'border-blue-200 bg-blue-50 text-blue-800',
+                green: 'border-green-200 bg-green-50 text-green-800',
+                purple: 'border-purple-200 bg-purple-50 text-purple-800',
+                pink: 'border-pink-200 bg-pink-50 text-pink-800',
+                yellow: 'border-yellow-200 bg-yellow-50 text-yellow-800',
+                red: 'border-red-200 bg-red-50 text-red-800',
+                indigo: 'border-indigo-200 bg-indigo-50 text-indigo-800',
+                teal: 'border-teal-200 bg-teal-50 text-teal-800',
+                orange: 'border-orange-200 bg-orange-50 text-orange-800'
+            };
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="text-center mb-6">
+                        <h2 class="text-4xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                        <p class="text-lg text-gray-600">${data.usage}</p>
+                        <div class="mt-2 inline-block px-4 py-2 ${colorClasses[data.color]} rounded-full text-sm font-semibold">
+                            ${data.strength}
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">📚 Main Uses</h3>
+                            <div class="space-y-3">
+                                ${data.contexts.map((context, index) => `
+                                    <div class="p-4 ${colorClasses[data.color]} border-2 rounded-lg">
+                                        <span class="font-semibold">${index + 1}. ${context}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">💬 Example Sentences</h3>
+                            <div class="space-y-3">
+                                ${data.examples.map(example => `
+                                    <div class="example-card p-4 bg-gray-50 rounded-lg border-l-4 border-${data.color}-500">
+                                        <p class="text-gray-700">"${example}"</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gradient-to-r from-${data.color}-50 to-${data.color}-100 rounded-xl">
+                        <h4 class="font-bold text-${data.color}-800 mb-2">💡 Learning Tip</h4>
+                        <p class="text-${data.color}-700">Notice where "${data.title}" appears in the treemap chart - the rectangle size shows its popularity in each context. Larger rectangles indicate more common usage!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showContext(context) {
+            const data = contextData[context];
+            const color = data.color;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                        <p class="text-lg text-gray-600">${data.description}</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">🔤 Modal Verbs for ${context.toUpperCase()}</h3>
+                            <div class="space-y-3">
+                                ${data.modals.map(modal => `
+                                    <div class="p-3 bg-${color}-100 text-${color}-800 rounded-lg font-semibold border-2 border-${color}-200">
+                                        ${modal}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">💬 Example Sentences</h3>
+                            <div class="space-y-3">
+                                ${data.examples.map(example => `
+                                    <div class="example-card p-4 bg-gray-50 rounded-lg border-l-4 border-${color}-500">
+                                        <p class="text-gray-700">"${example}"</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 bg-gradient-to-r from-${color}-50 to-${color}-100 rounded-xl">
+                        <h4 class="font-bold text-${color}-800 mb-2">🎯 Context Focus</h4>
+                        <p class="text-${color}-700">In the treemap chart above, this context has its own section. The size of each rectangle shows how commonly each modal verb is used in this context!</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function highlightModal(modal) {
+            // Reset all circles to normal size and opacity
+            const circles = document.querySelectorAll('circle[onclick*="showModal"]');
+            circles.forEach(circle => {
+                circle.style.opacity = '0.4';
+                circle.style.transform = 'scale(1)';
+            });
+            
+            // Highlight circles containing the selected modal
+            circles.forEach(circle => {
+                if (circle.getAttribute('onclick') === `showModal('${modal}')`) {
+                    circle.style.opacity = '1';
+                    circle.style.transform = 'scale(1.2)';
+                }
+            });
+            
+            // Show modal details
+            showModal(modal);
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                circles.forEach(circle => {
+                    circle.style.opacity = '1';
+                    circle.style.transform = 'scale(1)';
+                });
+            }, 3000);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9640c76121cd1010',t:'MTc1MzMzMjQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
