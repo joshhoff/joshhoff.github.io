@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced ESL: Adverbs of Quantity in Diplomacy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #1e3c72;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e3c72;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-btn:hover {
+            background: #1e3c72;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .adverb-highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .adverb-highlight:hover {
+            background: linear-gradient(120deg, #ffed4e 0%, #ffd700 100%);
+            transform: scale(1.05);
+        }
+        
+        .clickable-term {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            border-bottom: 1px dotted transparent;
+        }
+        
+        .clickable-term:hover {
+            color: #1e3c72;
+            background: rgba(30, 60, 114, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+            border-bottom: 1px dotted #1e3c72;
+            font-weight: 600;
+        }
+        
+
+        
+        .definition-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .definition-popup h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .definition-popup p {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .exercise-card {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #1e3c72;
+        }
+        
+        .exercise-card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+        
+        .question {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option {
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background: #e0e0e0;
+            border-color: #1e3c72;
+        }
+        
+        .option.selected {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        .option.correct {
+            background: #28a745;
+            color: white;
+        }
+        
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .check-btn, .next-btn {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .check-btn:hover, .next-btn:hover {
+            background: #2a5298;
+            transform: translateY(-2px);
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .conversation-prompt h4 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .prompt-questions {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .prompt-questions li {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Advanced ESL: Quantifiers & Adverbs of Quantity</h1>
+            <p>Master diplomatic discourse through precise quantification</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('introduction')">Introduction</button>
+            <button class="tab-btn" onclick="showTab('examples')">Examples</button>
+            <button class="tab-btn" onclick="showTab('practice')">Practice</button>
+            <button class="tab-btn" onclick="showTab('conversation')">Conversation</button>
+        </div>
+        
+        <div id="introduction" class="tab-content active">
+            <h2>Quantifiers & Adverbs of Quantity in Diplomatic Context</h2>
+            <p>In diplomatic discourse, precision in quantification is paramount. Both quantifiers and adverbs of quantity allow diplomats to express degrees, frequencies, and amounts with nuanced accuracy, avoiding absolute statements that might compromise <span class="clickable-term" onclick="showDefinition('negotiations', 'The formal process of discussion between parties to reach an agreement, particularly in international relations.')">negotiations</span>.</p>
+            
+            <h3>Essential Quantifiers</h3>
+            <div class="exercise-card">
+                <h4>Countable Nouns (with plural forms)</h4>
+                <ul>
+                    <li><strong>Many:</strong> <span class="adverb-highlight">Many</span> <span class="clickable-term" onclick="showDefinition('delegates', 'Representatives appointed to attend a conference or assembly.')">delegates</span> expressed concerns about the proposed <span class="clickable-term" onclick="showDefinition('amendments', 'Changes or additions proposed to a treaty or agreement.')">amendments</span>.</li>
+                    <li><strong>Several:</strong> <span class="adverb-highlight">Several</span> nations have withdrawn from the <span class="clickable-term" onclick="showDefinition('coalition', 'A temporary alliance of distinct parties or groups.')">coalition</span>.</li>
+                    <li><strong>A few:</strong> Only <span class="adverb-highlight">a few</span> countries opposed the <span class="clickable-term" onclick="showDefinition('resolution', 'A formal decision or statement agreed upon by an assembly.')">resolution</span>.</li>
+                    <li><strong>Few:</strong> <span class="adverb-highlight">Few</span> <span class="clickable-term" onclick="showDefinition('ambassadors', 'Senior diplomats representing their countries in foreign nations.')">ambassadors</span> were willing to discuss the sensitive topic publicly.</li>
+                </ul>
+                
+                <h4>Uncountable Nouns (with singular forms)</h4>
+                <ul>
+                    <li><strong>Much:</strong> There isn't <span class="adverb-highlight">much</span> optimism about reaching a swift agreement.</li>
+                    <li><strong>A lot of:</strong> <span class="adverb-highlight">A lot of</span> diplomatic effort has been invested in these <span class="clickable-term" onclick="showDefinition('negotiations', 'The formal process of discussion between parties to reach an agreement, particularly in international relations.')">negotiations</span>.</li>
+                    <li><strong>A little:</strong> <span class="adverb-highlight">A little</span> progress has been made on the <span class="clickable-term" onclick="showDefinition('humanitarian', 'Concerned with human welfare and the alleviation of suffering.')">humanitarian</span> front.</li>
+                    <li><strong>Little:</strong> <span class="adverb-highlight">Little</span> attention has been paid to the economic implications.</li>
+                </ul>
+                
+                <h4>Both Countable and Uncountable</h4>
+                <ul>
+                    <li><strong>Some:</strong> <span class="adverb-highlight">Some</span> <span class="clickable-term" onclick="showDefinition('concessions', 'Things given up or granted, typically to reach an agreement.')">concessions</span> will be necessary for progress.</li>
+                    <li><strong>Any:</strong> We haven't received <span class="adverb-highlight">any</span> confirmation from the opposing delegation.</li>
+                    <li><strong>Most:</strong> <span class="adverb-highlight">Most</span> member states support the proposed <span class="clickable-term" onclick="showDefinition('sanctions', 'Economic or political penalties imposed by one country on another to influence behavior.')">sanctions</span>.</li>
+                    <li><strong>All:</strong> <span class="adverb-highlight">All</span> parties must commit to the <span class="clickable-term" onclick="showDefinition('ceasefire', 'A temporary suspension of fighting, typically as a prelude to peace negotiations.')">ceasefire</span> terms.</li>
+                </ul>
+            </div>
+            
+            <h3>Key Adverbs of Quantity</h3>
+            <div class="exercise-card">
+                <h4>Degree and Intensity</h4>
+                <ul>
+                    <li><strong>Considerably:</strong> The <span class="clickable-term" onclick="showDefinition('sanctions', 'Economic or political penalties imposed by one country on another to influence behavior.')">sanctions</span> have <span class="adverb-highlight">considerably</span> weakened their economy.</li>
+                    <li><strong>Substantially:</strong> Trade relations have improved <span class="adverb-highlight">substantially</span> since the <span class="clickable-term" onclick="showDefinition('accord', 'A formal agreement between countries or parties.')">accord</span>.</li>
+                    <li><strong>Marginally:</strong> The <span class="clickable-term" onclick="showDefinition('ceasefire', 'A temporary suspension of fighting, typically as a prelude to peace negotiations.')">ceasefire</span> has only <span class="adverb-highlight">marginally</span> reduced tensions.</li>
+                </ul>
+                
+                <h4>Frequency and Occurrence</h4>
+                <ul>
+                    <li><strong>Frequently:</strong> <span class="clickable-term" onclick="showDefinition('bilateral', 'Involving two parties, especially countries.')">Bilateral</span> meetings occur <span class="adverb-highlight">frequently</span> during crisis periods.</li>
+                    <li><strong>Occasionally:</strong> The <span class="clickable-term" onclick="showDefinition('ambassador', 'A senior diplomat representing their country in a foreign nation.')">ambassador</span> <span class="adverb-highlight">occasionally</span> addresses controversial topics.</li>
+                    <li><strong>Rarely:</strong> Such <span class="clickable-term" onclick="showDefinition('concessions', 'Things given up or granted, typically to reach an agreement.')">concessions</span> are <span class="adverb-highlight">rarely</span> offered without reciprocity.</li>
+                </ul>
+                
+                <h4>Approximation and Estimation</h4>
+                <ul>
+                    <li><strong>Approximately:</strong> <span class="adverb-highlight">Approximately</span> fifty nations signed the <span class="clickable-term" onclick="showDefinition('treaty', 'A formal written agreement between countries.')">treaty</span>.</li>
+                    <li><strong>Nearly:</strong> The <span class="clickable-term" onclick="showDefinition('coalition', 'A temporary alliance of distinct parties or groups.')">coalition</span> has <span class="adverb-highlight">nearly</span> achieved consensus.</li>
+                    <li><strong>Barely:</strong> The resolution <span class="adverb-highlight">barely</span> passed in the <span class="clickable-term" onclick="showDefinition('assembly', 'A gathering of representatives, especially in international organizations.')">assembly</span>.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="examples" class="tab-content">
+            <h2>Contextual Examples</h2>
+            
+            <div class="exercise-card">
+                <h3>Diplomatic Statements</h3>
+                <p><strong>Press Release:</strong> "The <span class="clickable-term" onclick="showDefinition('delegation', 'A group of representatives sent to negotiate or participate in discussions.')">delegation</span> has <span class="adverb-highlight">thoroughly</span> reviewed the proposed amendments and finds them <span class="adverb-highlight">largely</span> acceptable. However, <span class="adverb-highlight">several</span> provisions require <span class="adverb-highlight">substantially</span> more discussion before we can reach a <span class="clickable-term" onclick="showDefinition('consensus', 'General agreement among all parties involved.')">consensus</span>."</p>
+                
+                <p><strong>Diplomatic Note:</strong> "While we <span class="adverb-highlight">greatly</span> appreciate the efforts toward <span class="clickable-term" onclick="showDefinition('reconciliation', 'The restoration of friendly relations between conflicting parties.')">reconciliation</span>, <span class="adverb-highlight">little</span> progress has been <span class="adverb-highlight">disappointingly</span> slow. We <span class="adverb-highlight">strongly</span> urge <span class="adverb-highlight">all</span> parties to <span class="adverb-highlight">more actively</span> engage in constructive dialogue."</p>
+            </div>
+            
+            <div class="exercise-card">
+                <h3>Quantifier Usage in Context</h3>
+                <p><strong>Security Council Address:</strong> "<span class="adverb-highlight">Many</span> nations have expressed concern, but <span class="adverb-highlight">few</span> have offered concrete solutions. We need <span class="adverb-highlight">much</span> more cooperation and <span class="adverb-highlight">a lot of</span> political will to address this crisis. <span class="adverb-highlight">Some</span> progress has been made, but <span class="adverb-highlight">most</span> challenges remain unresolved."</p>
+                
+                <p><strong>Trade Negotiation:</strong> "There is <span class="adverb-highlight">little</span> disagreement on basic principles, but <span class="adverb-highlight">several</span> technical issues require attention. We have <span class="adverb-highlight">a few</span> concerns about implementation timelines, though <span class="adverb-highlight">most</span> terms are acceptable to <span class="adverb-highlight">all</span> parties involved."</p>
+            </div>
+            
+            <div class="exercise-card">
+                <h3>News Analysis</h3>
+                <p>"The <span class="clickable-term" onclick="showDefinition('summit', 'A high-level meeting between heads of state or government.')">summit</span> concluded with <span class="adverb-highlight">mixed</span> results. <span class="adverb-highlight">Several</span> trade agreements were <span class="adverb-highlight">successfully</span> negotiated, but <span class="adverb-highlight">many</span> <span class="clickable-term" onclick="showDefinition('territorial', 'Relating to the ownership of land or sea areas by a country.')">territorial</span> disputes remain <span class="adverb-highlight">largely</span> unresolved. The <span class="clickable-term" onclick="showDefinition('mediator', 'A neutral party who helps facilitate negotiations between conflicting sides.')">mediator</span> <span class="adverb-highlight">cautiously</span> expressed <span class="adverb-highlight">some</span> optimism about future <span class="clickable-term" onclick="showDefinition('multilateral', 'Involving multiple parties or countries.')">multilateral</span> cooperation, though <span class="adverb-highlight">much</span> work remains."</p>
+            </div>
+            
+            <div class="exercise-card">
+                <h3>Academic Analysis</h3>
+                <p>"<span class="clickable-term" onclick="showDefinition('sovereignty', 'The authority of a state to govern itself without outside interference.')">Sovereignty</span> concerns have <span class="adverb-highlight">increasingly</span> influenced international law. <span class="adverb-highlight">Most</span> <span class="clickable-term" onclick="showDefinition('intervention', 'Action taken by a country to influence events in another country.')">interventions</span> are now <span class="adverb-highlight">more carefully</span> scrutinized by the international community, and <span class="adverb-highlight">all</span> <span class="clickable-term" onclick="showDefinition('humanitarian', 'Concerned with human welfare and the alleviation of suffering.')">humanitarian</span> justifications are <span class="adverb-highlight">thoroughly</span> examined before <span class="adverb-highlight">any</span> <span class="clickable-term" onclick="showDefinition('mandate', 'Official authorization to carry out a particular policy or action.')">mandate</span> is approved. However, <span class="adverb-highlight">little</span> consensus exists on implementation standards."</p>
+            </div>
+        </div>
+        
+        <div id="practice" class="tab-content">
+            <h2>Practice Exercises</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="exercise-card" id="exercise1">
+                <h3>Exercise 1: Choose the Appropriate Adverb</h3>
+                <div class="question">
+                    <p>The peace talks have _______ improved relations between the two nations.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">barely</div>
+                        <div class="option" onclick="selectOption(this, true)">significantly</div>
+                        <div class="option" onclick="selectOption(this, false)">rarely</div>
+                        <div class="option" onclick="selectOption(this, false)">occasionally</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(1)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(2)" style="display: none;">Next Exercise</button>
+                    <div id="feedback1" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+            
+            <div class="exercise-card" id="exercise2" style="display: none;">
+                <h3>Exercise 2: Diplomatic Precision</h3>
+                <div class="question">
+                    <p>The ambassador _______ addresses sensitive topics in public forums.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">frequently</div>
+                        <div class="option" onclick="selectOption(this, true)">rarely</div>
+                        <div class="option" onclick="selectOption(this, false)">substantially</div>
+                        <div class="option" onclick="selectOption(this, false)">considerably</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(2)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(3)" style="display: none;">Next Exercise</button>
+                    <div id="feedback2" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+            
+            <div class="exercise-card" id="exercise3" style="display: none;">
+                <h3>Exercise 3: Quantifying Diplomatic Success</h3>
+                <div class="question">
+                    <p>The sanctions have _______ affected the country's ability to engage in international trade.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, false)">occasionally</div>
+                        <div class="option" onclick="selectOption(this, true)">severely</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(3)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(4)" style="display: none;">Next Exercise</button>
+                    <div id="feedback3" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise4" style="display: none;">
+                <h3>Exercise 4: Quantifiers with Countable Nouns</h3>
+                <div class="question">
+                    <p>_______ countries have expressed support for the peace initiative.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">Much</div>
+                        <div class="option" onclick="selectOption(this, true)">Many</div>
+                        <div class="option" onclick="selectOption(this, false)">Little</div>
+                        <div class="option" onclick="selectOption(this, false)">A little</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(4)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(5)" style="display: none;">Next Exercise</button>
+                    <div id="feedback4" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise5" style="display: none;">
+                <h3>Exercise 5: Quantifiers with Uncountable Nouns</h3>
+                <div class="question">
+                    <p>There is _______ hope for a diplomatic breakthrough in the near future.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">many</div>
+                        <div class="option" onclick="selectOption(this, false)">few</div>
+                        <div class="option" onclick="selectOption(this, true)">little</div>
+                        <div class="option" onclick="selectOption(this, false)">several</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(5)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(6)" style="display: none;">Next Exercise</button>
+                    <div id="feedback5" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise6" style="display: none;">
+                <h3>Exercise 6: Positive vs Negative Quantifiers</h3>
+                <div class="question">
+                    <p>_______ delegates attended the emergency session, showing strong international concern.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">Few</div>
+                        <div class="option" onclick="selectOption(this, true)">Many</div>
+                        <div class="option" onclick="selectOption(this, false)">Little</div>
+                        <div class="option" onclick="selectOption(this, false)">Much</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(6)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(7)" style="display: none;">Next Exercise</button>
+                    <div id="feedback6" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise7" style="display: none;">
+                <h3>Exercise 7: Intensity of Response</h3>
+                <div class="question">
+                    <p>The international community has _______ condemned the human rights violations.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                        <div class="option" onclick="selectOption(this, true)">unanimously</div>
+                        <div class="option" onclick="selectOption(this, false)">occasionally</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(7)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(8)" style="display: none;">Next Exercise</button>
+                    <div id="feedback7" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise8" style="display: none;">
+                <h3>Exercise 8: "A few" vs "Few"</h3>
+                <div class="question">
+                    <p>_______ nations have the resources to lead this humanitarian mission effectively.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">A few</div>
+                        <div class="option" onclick="selectOption(this, true)">Few</div>
+                        <div class="option" onclick="selectOption(this, false)">A little</div>
+                        <div class="option" onclick="selectOption(this, false)">Little</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(8)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(9)" style="display: none;">Next Exercise</button>
+                    <div id="feedback8" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise9" style="display: none;">
+                <h3>Exercise 9: Universal Quantifiers</h3>
+                <div class="question">
+                    <p>_______ member states must ratify the treaty for it to take effect.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">Some</div>
+                        <div class="option" onclick="selectOption(this, false)">Many</div>
+                        <div class="option" onclick="selectOption(this, true)">All</div>
+                        <div class="option" onclick="selectOption(this, false)">Most</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(9)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(10)" style="display: none;">Next Exercise</button>
+                    <div id="feedback9" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise10" style="display: none;">
+                <h3>Exercise 10: Gradual Progress</h3>
+                <div class="question">
+                    <p>Relations between the two nations have _______ improved over the past decade.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">rarely</div>
+                        <div class="option" onclick="selectOption(this, true)">gradually</div>
+                        <div class="option" onclick="selectOption(this, false)">unanimously</div>
+                        <div class="option" onclick="selectOption(this, false)">minimally</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(10)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(11)" style="display: none;">Next Exercise</button>
+                    <div id="feedback10" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise11" style="display: none;">
+                <h3>Exercise 11: "A lot of" Usage</h3>
+                <div class="question">
+                    <p>The peace process requires _______ patience and diplomatic skill.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">many</div>
+                        <div class="option" onclick="selectOption(this, true)">a lot of</div>
+                        <div class="option" onclick="selectOption(this, false)">few</div>
+                        <div class="option" onclick="selectOption(this, false)">several</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(11)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(12)" style="display: none;">Next Exercise</button>
+                    <div id="feedback11" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise12" style="display: none;">
+                <h3>Exercise 12: "Some" in Diplomatic Context</h3>
+                <div class="question">
+                    <p>_______ progress has been made, but significant challenges remain.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">Any</div>
+                        <div class="option" onclick="selectOption(this, true)">Some</div>
+                        <div class="option" onclick="selectOption(this, false)">Much</div>
+                        <div class="option" onclick="selectOption(this, false)">All</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(12)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(13)" style="display: none;">Next Exercise</button>
+                    <div id="feedback12" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise13" style="display: none;">
+                <h3>Exercise 13: Consistent Behavior</h3>
+                <div class="question">
+                    <p>The nation has _______ violated international maritime law in recent years.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, true)">repeatedly</div>
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                        <div class="option" onclick="selectOption(this, false)">substantially</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(13)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(14)" style="display: none;">Next Exercise</button>
+                    <div id="feedback13" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise14" style="display: none;">
+                <h3>Exercise 14: Precise Measurement</h3>
+                <div class="question">
+                    <p>The ceasefire has _______ reduced civilian casualties by 40%.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">rarely</div>
+                        <div class="option" onclick="selectOption(this, true)">precisely</div>
+                        <div class="option" onclick="selectOption(this, false)">occasionally</div>
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(14)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(15)" style="display: none;">Next Exercise</button>
+                    <div id="feedback14" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise15" style="display: none;">
+                <h3>Exercise 15: Inadequate Response</h3>
+                <div class="question">
+                    <p>The international response to the crisis has been _______ inadequate.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">frequently</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                        <div class="option" onclick="selectOption(this, true)">woefully</div>
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(15)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(16)" style="display: none;">Next Exercise</button>
+                    <div id="feedback15" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise16" style="display: none;">
+                <h3>Exercise 16: Diplomatic Caution</h3>
+                <div class="question">
+                    <p>The foreign minister _______ addressed the territorial dispute in her speech.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">substantially</div>
+                        <div class="option" onclick="selectOption(this, true)">cautiously</div>
+                        <div class="option" onclick="selectOption(this, false)">frequently</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(16)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(17)" style="display: none;">Next Exercise</button>
+                    <div id="feedback16" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise17" style="display: none;">
+                <h3>Exercise 17: Complete Transformation</h3>
+                <div class="question">
+                    <p>The peace agreement has _______ transformed the region's political landscape.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, false)">occasionally</div>
+                        <div class="option" onclick="selectOption(this, true)">entirely</div>
+                        <div class="option" onclick="selectOption(this, false)">rarely</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(17)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(18)" style="display: none;">Next Exercise</button>
+                    <div id="feedback17" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise18" style="display: none;">
+                <h3>Exercise 18: Sporadic Occurrence</h3>
+                <div class="question">
+                    <p>Border incidents have occurred _______ since the ceasefire agreement.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">substantially</div>
+                        <div class="option" onclick="selectOption(this, true)">sporadically</div>
+                        <div class="option" onclick="selectOption(this, false)">entirely</div>
+                        <div class="option" onclick="selectOption(this, false)">precisely</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(18)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(19)" style="display: none;">Next Exercise</button>
+                    <div id="feedback18" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise19" style="display: none;">
+                <h3>Exercise 19: Diplomatic Effectiveness</h3>
+                <div class="question">
+                    <p>The economic sanctions have _______ achieved their intended objectives.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">sporadically</div>
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, true)">largely</div>
+                        <div class="option" onclick="selectOption(this, false)">rarely</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(19)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(20)" style="display: none;">Next Exercise</button>
+                    <div id="feedback19" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise20" style="display: none;">
+                <h3>Exercise 20: Diplomatic Urgency</h3>
+                <div class="question">
+                    <p>The ambassador _______ requested an emergency session of the Security Council.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, false)">sporadically</div>
+                        <div class="option" onclick="selectOption(this, true)">urgently</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(20)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(21)" style="display: none;">Next Exercise</button>
+                    <div id="feedback20" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise21" style="display: none;">
+                <h3>Exercise 21: Diplomatic Persistence</h3>
+                <div class="question">
+                    <p>The mediator has _______ worked to bridge the gap between opposing factions.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, true)">tirelessly</div>
+                        <div class="option" onclick="selectOption(this, false)">approximately</div>
+                        <div class="option" onclick="selectOption(this, false)">sporadically</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(21)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(22)" style="display: none;">Next Exercise</button>
+                    <div id="feedback21" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise22" style="display: none;">
+                <h3>Exercise 22: Limited Success</h3>
+                <div class="question">
+                    <p>The diplomatic initiative has _______ succeeded in its primary objectives.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, true)">scarcely</div>
+                        <div class="option" onclick="selectOption(this, false)">tirelessly</div>
+                        <div class="option" onclick="selectOption(this, false)">substantially</div>
+                        <div class="option" onclick="selectOption(this, false)">urgently</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(22)">Check Answer</button>
+                    <button class="next-btn" onclick="nextExercise(23)" style="display: none;">Next Exercise</button>
+                    <div id="feedback22" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+
+            <div class="exercise-card" id="exercise23" style="display: none;">
+                <h3>Exercise 23: Final Exercise</h3>
+                <div class="question">
+                    <p>The international community has _______ supported the peace process despite setbacks.</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">scarcely</div>
+                        <div class="option" onclick="selectOption(this, false)">marginally</div>
+                        <div class="option" onclick="selectOption(this, true)">consistently</div>
+                        <div class="option" onclick="selectOption(this, false)">sporadically</div>
+                    </div>
+                    <button class="check-btn" onclick="checkAnswer(23)">Check Answer</button>
+                    <button class="next-btn" onclick="resetExercises()" style="display: none;">Start Over</button>
+                    <div id="feedback23" style="margin-top: 15px; display: none;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="conversation" class="tab-content">
+            <h2>Conversation Practice</h2>
+            
+            <div class="conversation-prompt">
+                <h4>🎭 Role-Play: UN Security Council Meeting</h4>
+                <p><strong>Scenario:</strong> You are representing your country in a Security Council session discussing international sanctions.</p>
+                <ul class="prompt-questions">
+                    <li>Do <span class="adverb-highlight">many</span> or <span class="adverb-highlight">few</span> nations support the current sanctions regime?</li>
+                    <li>How <span class="adverb-highlight">much</span> impact have these measures had <span class="adverb-highlight">substantially</span>?</li>
+                    <li>Should <span class="adverb-highlight">all</span> member states or just <span class="adverb-highlight">some</span> participate in enforcement?</li>
+                </ul>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h4>🤝 Diplomatic Negotiation</h4>
+                <p><strong>Scenario:</strong> You're mediating a territorial dispute between two nations.</p>
+                <ul class="prompt-questions">
+                    <li>Have <span class="adverb-highlight">both</span> parties shown <span class="adverb-highlight">much</span> willingness to compromise?</li>
+                    <li>Are there <span class="adverb-highlight">any</span> areas where <span class="adverb-highlight">most</span> concerns can be addressed?</li>
+                    <li>How <span class="adverb-highlight">many</span> previous agreements have been <span class="adverb-highlight">thoroughly</span> implemented?</li>
+                </ul>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h4>📰 Press Conference</h4>
+                <p><strong>Scenario:</strong> You're a foreign minister addressing the media about recent diplomatic developments.</p>
+                <ul class="prompt-questions">
+                    <li>Has <span class="adverb-highlight">much</span> progress been made, or just <span class="adverb-highlight">a little</span>?</li>
+                    <li>Do <span class="adverb-highlight">all</span> parties support the initiative, or only <span class="adverb-highlight">several</span>?</li>
+                    <li>How <span class="adverb-highlight">many</span> challenges remain <span class="adverb-highlight">largely</span> unresolved?</li>
+                </ul>
+            </div>
+            
+            <div class="exercise-card">
+                <h3>Discussion Guidelines</h3>
+                <p><strong>Practice Tips:</strong></p>
+                <ul>
+                    <li>Use quantifiers (many, few, some, all) to specify amounts precisely</li>
+                    <li>Employ adverbs of quantity to avoid absolute statements</li>
+                    <li>Distinguish between countable (many/few) and uncountable (much/little) nouns</li>
+                    <li>Use positive quantifiers (a few, a little) vs negative ones (few, little) strategically</li>
+                    <li>Practice varying your quantification based on diplomatic context</li>
+                    <li>Consider the political implications of your word choices</li>
+                </ul>
+                
+                <h4>Key Quantifier Distinctions:</h4>
+                <ul>
+                    <li><strong>Many vs Much:</strong> Many countries (countable) vs Much support (uncountable)</li>
+                    <li><strong>Few vs A few:</strong> Few solutions (negative) vs A few options (positive)</li>
+                    <li><strong>Little vs A little:</strong> Little progress (negative) vs A little hope (positive)</li>
+                    <li><strong>Some vs Any:</strong> Some agreement (positive) vs Any objections (questions/negatives)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay" onclick="closeDefinition()"></div>
+    <div class="definition-popup" id="definitionPopup">
+        <button class="close-btn" onclick="closeDefinition()">×</button>
+        <h3 id="termTitle"></h3>
+        <p id="termDefinition"></p>
+        <p><em>Click anywhere outside to close</em></p>
+    </div>
+    
+    <script>
+        let currentExercise = 1;
+        let selectedOptions = {};
+        let exerciseResults = {};
+        
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        function showDefinition(term, definition) {
+            document.getElementById('termTitle').textContent = term.charAt(0).toUpperCase() + term.slice(1);
+            document.getElementById('termDefinition').textContent = definition;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('definitionPopup').style.display = 'block';
+        }
+        
+        function closeDefinition() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('definitionPopup').style.display = 'none';
+        }
+        
+        function selectOption(element, isCorrect) {
+            // Remove selection from siblings
+            const siblings = element.parentNode.children;
+            for (let sibling of siblings) {
+                sibling.classList.remove('selected');
+            }
+            
+            // Add selection to clicked element
+            element.classList.add('selected');
+            selectedOptions[currentExercise] = {element: element, isCorrect: isCorrect};
+        }
+        
+        function checkAnswer(exerciseNum) {
+            const selected = selectedOptions[exerciseNum];
+            if (!selected) {
+                alert('Please select an answer first.');
+                return;
+            }
+            
+            const options = selected.element.parentNode.children;
+            const feedbackDiv = document.getElementById(`feedback${exerciseNum}`);
+            
+            // Show correct/incorrect styling
+            for (let option of options) {
+                if (option.classList.contains('selected')) {
+                    if (selected.isCorrect) {
+                        option.classList.add('correct');
+                        feedbackDiv.innerHTML = '<p style="color: #28a745; font-weight: bold;">✓ Correct! This adverb appropriately quantifies the diplomatic situation.</p>';
+                    } else {
+                        option.classList.add('incorrect');
+                        feedbackDiv.innerHTML = '<p style="color: #dc3545; font-weight: bold;">✗ Incorrect. Consider the context and degree of change described.</p>';
+                    }
+                }
+            }
+            
+            // Disable options and show feedback
+            for (let option of options) {
+                option.style.pointerEvents = 'none';
+            }
+            
+            feedbackDiv.style.display = 'block';
+            document.querySelector(`#exercise${exerciseNum} .check-btn`).style.display = 'none';
+            document.querySelector(`#exercise${exerciseNum} .next-btn`).style.display = 'inline-block';
+            
+            exerciseResults[exerciseNum] = selected.isCorrect;
+            updateProgress();
+        }
+        
+        function nextExercise(nextNum) {
+            document.getElementById(`exercise${currentExercise}`).style.display = 'none';
+            document.getElementById(`exercise${nextNum}`).style.display = 'block';
+            currentExercise = nextNum;
+        }
+        
+        function resetExercises() {
+            // Reset all exercises
+            for (let i = 1; i <= 23; i++) {
+                document.getElementById(`exercise${i}`).style.display = i === 1 ? 'block' : 'none';
+                
+                // Reset options
+                const options = document.querySelectorAll(`#exercise${i} .option`);
+                options.forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                    option.style.pointerEvents = 'auto';
+                });
+                
+                // Reset buttons and feedback
+                document.querySelector(`#exercise${i} .check-btn`).style.display = 'inline-block';
+                document.querySelector(`#exercise${i} .next-btn`).style.display = 'none';
+                document.getElementById(`feedback${i}`).style.display = 'none';
+            }
+            
+            // Reset variables
+            currentExercise = 1;
+            selectedOptions = {};
+            exerciseResults = {};
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const completed = Object.keys(exerciseResults).length;
+            const total = 23;
+            const percentage = (completed / total) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+        
+        // Initialize progress
+        updateProgress();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9656c5bc50870adb',t:'MTc1MzU2MzA1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
