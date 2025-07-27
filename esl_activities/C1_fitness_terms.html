@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Vocabulary Trainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .flip-card {
+            perspective: 1000px;
+            width: 100%;
+            height: 200px;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .pulse-correct {
+            animation: pulseGreen 0.6s;
+        }
+        
+        @keyframes pulseGreen {
+            0% { background-color: rgb(34, 197, 94); }
+            50% { background-color: rgb(22, 163, 74); }
+            100% { background-color: rgb(34, 197, 94); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">💪 Fitness Vocabulary Trainer</h1>
+            <p class="text-lg text-gray-600">Master exercise and workout terminology for C1 level English</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button onclick="showSection('flashcards')" class="nav-btn bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                📚 Flashcards
+            </button>
+            <button onclick="showSection('matching')" class="nav-btn bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                🔗 Matching Game
+            </button>
+            <button onclick="showSection('fillblanks')" class="nav-btn bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                ✏️ Fill the Blanks
+            </button>
+            <button onclick="showSection('contextual')" class="nav-btn bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                🎯 Contextual Quiz
+            </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="bg-white rounded-lg p-4 mb-6 shadow-md">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700">Overall Progress</span>
+                <span class="text-sm text-gray-600" id="progress-text">0/40 words mastered</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-blue-600 h-3 rounded-full transition-all duration-300" style="width: 0%" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Flashcards Section -->
+        <div id="flashcards-section" class="section">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">📚 Vocabulary Flashcards</h2>
+                <div class="flip-card mb-6" id="flashcard">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                            <div>
+                                <h3 class="text-2xl font-bold mb-2" id="word-front">Click "Next Card" to start</h3>
+                                <p class="text-blue-100" id="word-type"></p>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-green-500 to-green-600 text-white">
+                            <div>
+                                <p class="text-lg mb-2" id="word-definition">Definition will appear here</p>
+                                <p class="text-green-100 italic" id="word-example">Example sentence here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <button onclick="flipCard()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Flip Card
+                    </button>
+                    <button onclick="nextCard()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Next Card
+                    </button>
+                    <button onclick="markKnown()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        I Know This
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matching Game Section -->
+        <div id="matching-section" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🔗 Matching Game</h2>
+                <p class="text-gray-600 mb-6">Match the vocabulary words with their definitions</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="matching-game">
+                    <!-- Matching items will be generated here -->
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="resetMatching()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        New Game
+                    </button>
+                    <div class="mt-4">
+                        <span class="text-lg font-medium">Score: <span id="matching-score">0</span>/5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fill in the Blanks Section -->
+        <div id="fillblanks-section" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">✏️ Fill in the Blanks</h2>
+                <div class="mb-6">
+                    <p class="text-lg mb-4" id="sentence-text">Click "New Sentence" to start</p>
+                    <input type="text" id="blank-input" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Type your answer here...">
+                </div>
+                <div class="flex justify-center gap-4">
+                    <button onclick="checkBlank()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Check Answer
+                    </button>
+                    <button onclick="newSentence()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        New Sentence
+                    </button>
+                    <button onclick="showHint()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Hint
+                    </button>
+                </div>
+                <div id="feedback" class="mt-4 text-center"></div>
+                <div id="hint" class="mt-2 text-center text-gray-600 italic"></div>
+            </div>
+        </div>
+
+        <!-- Contextual Quiz Section -->
+        <div id="contextual-section" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🎯 Contextual Quiz</h2>
+                <div class="mb-6">
+                    <p class="text-lg mb-4" id="context-question">Click "Start Quiz" to begin</p>
+                    <div class="grid grid-cols-1 gap-3" id="context-options">
+                        <!-- Options will be generated here -->
+                    </div>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <button onclick="startContextualQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Start Quiz
+                    </button>
+                    <button onclick="nextContextualQuestion()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors" id="next-context-btn" style="display: none;">
+                        Next Question
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <span class="text-lg font-medium">Quiz Score: <span id="context-score">0</span>/10</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive fitness vocabulary database
+        const vocabulary = [
+            {
+                word: "cardiovascular",
+                type: "adjective",
+                definition: "Relating to the heart and blood vessels; aerobic exercise that strengthens the heart",
+                example: "Running is an excellent cardiovascular exercise that improves heart health.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "endurance",
+                type: "noun",
+                definition: "The ability to sustain prolonged physical or mental effort",
+                example: "Marathon runners need exceptional endurance to complete the race.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "metabolism",
+                type: "noun",
+                definition: "The chemical processes that occur within the body to maintain life, including burning calories",
+                example: "High-intensity workouts can boost your metabolism for hours after exercising.",
+                difficulty: "advanced"
+            },
+            {
+                word: "plateau",
+                type: "noun/verb",
+                definition: "A period where progress stops despite continued effort",
+                example: "After months of progress, her weight loss hit a plateau.",
+                difficulty: "advanced"
+            },
+            {
+                word: "hypertrophy",
+                type: "noun",
+                definition: "The enlargement of muscle fibers through exercise",
+                example: "Consistent strength training leads to muscle hypertrophy over time.",
+                difficulty: "advanced"
+            },
+            {
+                word: "compound exercise",
+                type: "noun",
+                definition: "An exercise that works multiple muscle groups simultaneously",
+                example: "Squats are a compound exercise that targets legs, glutes, and core muscles.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "isolation exercise",
+                type: "noun",
+                definition: "An exercise that targets a single muscle group",
+                example: "Bicep curls are an isolation exercise focusing specifically on the bicep muscles.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "progressive overload",
+                type: "noun",
+                definition: "Gradually increasing the demands on muscles to promote growth and strength",
+                example: "Progressive overload involves adding more weight or reps each week.",
+                difficulty: "advanced"
+            },
+            {
+                word: "flexibility",
+                type: "noun",
+                definition: "The range of motion available at a joint",
+                example: "Yoga classes help improve flexibility and reduce muscle stiffness.",
+                difficulty: "beginner"
+            },
+            {
+                word: "stamina",
+                type: "noun",
+                definition: "Physical strength and energy that allows sustained effort",
+                example: "Boxing training builds both strength and stamina simultaneously.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "circuit training",
+                type: "noun",
+                definition: "A workout method involving multiple exercises performed in sequence with minimal rest",
+                example: "Circuit training combines cardio and strength exercises for maximum efficiency.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "high-intensity interval training",
+                type: "noun",
+                definition: "A training method alternating between intense bursts and recovery periods (HIIT)",
+                example: "HIIT workouts burn more calories in less time than steady-state cardio.",
+                difficulty: "advanced"
+            },
+            {
+                word: "recovery",
+                type: "noun",
+                definition: "The process of rest and repair that muscles need after exercise",
+                example: "Proper recovery between workouts is essential for muscle growth.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "warm-up",
+                type: "noun/verb",
+                definition: "Light exercise performed before intense activity to prepare the body",
+                example: "A proper warm-up reduces injury risk and improves performance.",
+                difficulty: "beginner"
+            },
+            {
+                word: "cool-down",
+                type: "noun/verb",
+                definition: "Gentle exercise performed after intense activity to gradually return to rest",
+                example: "The cool-down phase helps prevent muscle soreness and stiffness.",
+                difficulty: "beginner"
+            },
+            {
+                word: "repetition",
+                type: "noun",
+                definition: "One complete movement of an exercise (often shortened to 'rep')",
+                example: "Complete three sets of twelve repetitions for each exercise.",
+                difficulty: "beginner"
+            },
+            {
+                word: "set",
+                type: "noun",
+                definition: "A group of consecutive repetitions of an exercise",
+                example: "Rest for 60 seconds between each set of push-ups.",
+                difficulty: "beginner"
+            },
+            {
+                word: "form",
+                type: "noun",
+                definition: "The correct technique and posture for performing an exercise",
+                example: "Maintaining proper form is more important than lifting heavy weights.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "muscle fatigue",
+                type: "noun",
+                definition: "The temporary inability of muscles to maintain optimal performance",
+                example: "Muscle fatigue at the end of a set indicates you've worked the muscles effectively.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "anaerobic",
+                type: "adjective",
+                definition: "Exercise performed without oxygen, typically short bursts of high intensity",
+                example: "Sprinting is an anaerobic activity that builds power and speed.",
+                difficulty: "advanced"
+            },
+            {
+                word: "aerobic",
+                type: "adjective",
+                definition: "Exercise that uses oxygen to fuel muscles, typically sustained moderate intensity",
+                example: "Swimming is an excellent aerobic exercise for overall fitness.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "core strength",
+                type: "noun",
+                definition: "The stability and power of the muscles in the torso and pelvis",
+                example: "Planks are excellent for developing core strength and stability.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "functional fitness",
+                type: "noun",
+                definition: "Exercise that trains muscles to work together for daily activities",
+                example: "Functional fitness exercises mimic real-world movements like lifting and carrying.",
+                difficulty: "advanced"
+            },
+            {
+                word: "muscle memory",
+                type: "noun",
+                definition: "The ability to reproduce movement patterns without conscious effort",
+                example: "Muscle memory allows experienced athletes to perform complex movements automatically.",
+                difficulty: "advanced"
+            },
+            {
+                word: "cross-training",
+                type: "noun",
+                definition: "Incorporating different types of exercise to improve overall fitness",
+                example: "Cross-training prevents overuse injuries and maintains motivation.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "intensity",
+                type: "noun",
+                definition: "The level of effort or difficulty in an exercise or workout",
+                example: "High-intensity workouts require maximum effort for short periods.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "resistance training",
+                type: "noun",
+                definition: "Exercise that uses external resistance to build strength and muscle",
+                example: "Resistance training with weights helps build bone density and muscle mass.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "bodyweight exercise",
+                type: "noun",
+                definition: "Exercise that uses only body weight as resistance",
+                example: "Push-ups and squats are effective bodyweight exercises requiring no equipment.",
+                difficulty: "beginner"
+            },
+            {
+                word: "range of motion",
+                type: "noun",
+                definition: "The extent of movement possible at a joint during exercise",
+                example: "Full range of motion ensures muscles work through their complete length.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "muscle activation",
+                type: "noun",
+                definition: "The process of engaging specific muscles during exercise",
+                example: "Proper muscle activation ensures you're targeting the intended muscle groups.",
+                difficulty: "advanced"
+            },
+            {
+                word: "periodization",
+                type: "noun",
+                definition: "The systematic planning of athletic training with planned variation",
+                example: "Periodization involves cycling through different training phases for optimal results.",
+                difficulty: "advanced"
+            },
+            {
+                word: "overtraining",
+                type: "noun",
+                definition: "A condition caused by excessive exercise without adequate recovery",
+                example: "Overtraining can lead to decreased performance and increased injury risk.",
+                difficulty: "advanced"
+            },
+            {
+                word: "plyometrics",
+                type: "noun",
+                definition: "Explosive exercises that develop power through rapid muscle contractions",
+                example: "Plyometric exercises like jump squats improve athletic performance and power.",
+                difficulty: "advanced"
+            },
+            {
+                word: "isometric",
+                type: "adjective",
+                definition: "Exercise involving muscle contraction without joint movement",
+                example: "Planks are isometric exercises that build strength through static holds.",
+                difficulty: "advanced"
+            },
+            {
+                word: "concentric",
+                type: "adjective",
+                definition: "The phase of exercise where muscles shorten while contracting",
+                example: "The upward phase of a bicep curl is the concentric movement.",
+                difficulty: "advanced"
+            },
+            {
+                word: "eccentric",
+                type: "adjective",
+                definition: "The phase of exercise where muscles lengthen while under tension",
+                example: "The lowering phase of a push-up is the eccentric portion of the movement.",
+                difficulty: "advanced"
+            },
+            {
+                word: "superset",
+                type: "noun",
+                definition: "Performing two exercises back-to-back without rest",
+                example: "A superset of push-ups followed by pull-ups maximizes workout efficiency.",
+                difficulty: "intermediate"
+            },
+            {
+                word: "drop set",
+                type: "noun",
+                definition: "Continuing an exercise with reduced weight after muscle failure",
+                example: "Drop sets help push muscles beyond normal failure points for growth.",
+                difficulty: "advanced"
+            },
+            {
+                word: "time under tension",
+                type: "noun",
+                definition: "The duration muscles remain under stress during an exercise",
+                example: "Increasing time under tension can enhance muscle growth and strength gains.",
+                difficulty: "advanced"
+            },
+            {
+                word: "mind-muscle connection",
+                type: "noun",
+                definition: "The conscious focus on the muscle being worked during exercise",
+                example: "Developing a strong mind-muscle connection improves exercise effectiveness.",
+                difficulty: "advanced"
+            }
+        ];
+
+        // Game state variables
+        let currentCardIndex = 0;
+        let knownWords = new Set();
+        let matchingPairs = [];
+        let selectedMatching = null;
+        let matchingScore = 0;
+        let currentSentence = null;
+        let contextualQuestions = [];
+        let currentContextIndex = 0;
+        let contextScore = 0;
+
+        // Initialize the app
+        function init() {
+            showSection('flashcards');
+            updateProgress();
+            nextCard();
+        }
+
+        // Navigation
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Update nav button styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-white');
+            });
+            event.target.classList.add('ring-2', 'ring-white');
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const progress = (knownWords.size / vocabulary.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `${knownWords.size}/${vocabulary.length} words mastered`;
+        }
+
+        // Flashcard functionality
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % vocabulary.length;
+            const word = vocabulary[currentCardIndex];
+            
+            document.getElementById('word-front').textContent = word.word;
+            document.getElementById('word-type').textContent = word.type;
+            document.getElementById('word-definition').textContent = word.definition;
+            document.getElementById('word-example').textContent = word.example;
+            
+            // Reset card to front
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function markKnown() {
+            knownWords.add(vocabulary[currentCardIndex].word);
+            updateProgress();
+            nextCard();
+        }
+
+        // Matching game functionality
+        function resetMatching() {
+            const gameContainer = document.getElementById('matching-game');
+            gameContainer.innerHTML = '';
+            matchingPairs = [];
+            selectedMatching = null;
+            matchingScore = 0;
+            document.getElementById('matching-score').textContent = '0';
+            
+            // Select 5 random words
+            const shuffled = [...vocabulary].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 5);
+            
+            // Create word and definition pairs
+            const items = [];
+            selected.forEach(word => {
+                items.push({type: 'word', content: word.word, match: word.word});
+                items.push({type: 'definition', content: word.definition, match: word.word});
+            });
+            
+            // Shuffle items
+            items.sort(() => 0.5 - Math.random());
+            
+            // Create matching items
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `matching-item p-4 border-2 border-gray-300 rounded-lg cursor-pointer transition-all hover:border-blue-400 ${item.type === 'word' ? 'bg-blue-50' : 'bg-green-50'}`;
+                div.textContent = item.content;
+                div.onclick = () => selectMatching(div, item);
+                gameContainer.appendChild(div);
+            });
+        }
+
+        function selectMatching(element, item) {
+            if (selectedMatching === null) {
+                selectedMatching = {element, item};
+                element.classList.add('border-blue-500', 'bg-blue-100');
+            } else {
+                if (selectedMatching.item.match === item.match && selectedMatching.item.type !== item.type) {
+                    // Correct match
+                    selectedMatching.element.classList.add('pulse-correct', 'border-green-500', 'bg-green-100');
+                    element.classList.add('pulse-correct', 'border-green-500', 'bg-green-100');
+                    matchingScore++;
+                    document.getElementById('matching-score').textContent = matchingScore;
+                } else {
+                    // Incorrect match
+                    selectedMatching.element.classList.add('shake');
+                    element.classList.add('shake');
+                    setTimeout(() => {
+                        selectedMatching.element.classList.remove('shake', 'border-blue-500', 'bg-blue-100');
+                        element.classList.remove('shake');
+                    }, 500);
+                }
+                selectedMatching = null;
+            }
+        }
+
+        // Fill in the blanks functionality
+        const sentences = [
+            {
+                text: "Regular _____ exercise helps strengthen your heart and improve circulation.",
+                answer: "cardiovascular",
+                hint: "This type of exercise is also called 'cardio'"
+            },
+            {
+                text: "Marathon runners need exceptional _____ to complete the 26.2-mile race.",
+                answer: "endurance",
+                hint: "The ability to keep going for a long time"
+            },
+            {
+                text: "After months of progress, her fitness improvements hit a _____.",
+                answer: "plateau",
+                hint: "A flat area where progress stops"
+            },
+            {
+                text: "_____ training involves performing multiple exercises in sequence with minimal rest.",
+                answer: "circuit",
+                hint: "Think of moving in a circle from station to station"
+            },
+            {
+                text: "Proper _____ is more important than lifting heavy weights.",
+                answer: "form",
+                hint: "The correct technique and posture"
+            },
+            {
+                text: "A good _____ prepares your body for intense exercise and reduces injury risk.",
+                answer: "warm-up",
+                hint: "What you do before the main workout"
+            },
+            {
+                text: "_____ exercises like squats work multiple muscle groups simultaneously.",
+                answer: "compound",
+                hint: "The opposite of isolation exercises"
+            },
+            {
+                text: "High-intensity workouts can boost your _____ for hours after exercising.",
+                answer: "metabolism",
+                hint: "The process of burning calories in your body"
+            }
+        ];
+
+        function newSentence() {
+            currentSentence = sentences[Math.floor(Math.random() * sentences.length)];
+            document.getElementById('sentence-text').textContent = currentSentence.text;
+            document.getElementById('blank-input').value = '';
+            document.getElementById('feedback').innerHTML = '';
+            document.getElementById('hint').innerHTML = '';
+        }
+
+        function checkBlank() {
+            const userAnswer = document.getElementById('blank-input').value.trim().toLowerCase();
+            const correctAnswer = currentSentence.answer.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            if (userAnswer === correctAnswer) {
+                feedback.innerHTML = '<span class="text-green-600 font-medium">✅ Correct! Well done!</span>';
+                feedback.classList.add('pulse-correct');
+            } else {
+                feedback.innerHTML = '<span class="text-red-600 font-medium">❌ Try again. The correct answer is: ' + currentSentence.answer + '</span>';
+                feedback.classList.add('shake');
+            }
+            
+            setTimeout(() => {
+                feedback.classList.remove('pulse-correct', 'shake');
+            }, 600);
+        }
+
+        function showHint() {
+            document.getElementById('hint').textContent = '💡 Hint: ' + currentSentence.hint;
+        }
+
+        // Contextual quiz functionality
+        function startContextualQuiz() {
+            contextualQuestions = generateContextualQuestions();
+            currentContextIndex = 0;
+            contextScore = 0;
+            document.getElementById('context-score').textContent = '0';
+            showContextualQuestion();
+            document.getElementById('next-context-btn').style.display = 'inline-block';
+        }
+
+        function generateContextualQuestions() {
+            const questions = [
+                {
+                    question: "Sarah has been doing the same workout routine for 6 months and hasn't seen improvements in the last month. What is she experiencing?",
+                    options: ["Overtraining", "Plateau", "Muscle fatigue", "Poor form"],
+                    correct: 1,
+                    explanation: "A plateau occurs when progress stops despite continued effort."
+                },
+                {
+                    question: "Which type of exercise would be BEST for someone wanting to improve their heart health?",
+                    options: ["Isometric exercises", "Cardiovascular exercise", "Isolation exercises", "Plyometrics"],
+                    correct: 1,
+                    explanation: "Cardiovascular exercise specifically targets heart and circulatory system health."
+                },
+                {
+                    question: "Tom wants to build muscle mass. What training principle should he focus on?",
+                    options: ["Progressive overload", "Flexibility training", "Aerobic conditioning", "Cool-down periods"],
+                    correct: 0,
+                    explanation: "Progressive overload gradually increases demands on muscles to promote growth."
+                },
+                {
+                    question: "What should you do immediately before starting an intense workout?",
+                    options: ["Cool-down", "Stretch intensively", "Warm-up", "Eat a large meal"],
+                    correct: 2,
+                    explanation: "A warm-up prepares the body for exercise and reduces injury risk."
+                },
+                {
+                    question: "Which describes exercises that work multiple muscle groups at once?",
+                    options: ["Isolation exercises", "Compound exercises", "Isometric exercises", "Anaerobic exercises"],
+                    correct: 1,
+                    explanation: "Compound exercises work multiple muscle groups simultaneously."
+                },
+                {
+                    question: "A runner who can maintain a steady pace for hours has good:",
+                    options: ["Flexibility", "Hypertrophy", "Endurance", "Intensity"],
+                    correct: 2,
+                    explanation: "Endurance is the ability to sustain prolonged physical effort."
+                },
+                {
+                    question: "What type of training alternates between high-intensity bursts and recovery periods?",
+                    options: ["Circuit training", "HIIT", "Resistance training", "Functional fitness"],
+                    correct: 1,
+                    explanation: "HIIT (High-Intensity Interval Training) alternates between intense bursts and recovery."
+                },
+                {
+                    question: "The correct technique and posture for performing an exercise is called:",
+                    options: ["Range of motion", "Form", "Intensity", "Repetition"],
+                    correct: 1,
+                    explanation: "Form refers to the correct technique and posture during exercise."
+                },
+                {
+                    question: "What happens to muscles during the eccentric phase of an exercise?",
+                    options: ["They shorten while contracting", "They lengthen while under tension", "They remain static", "They completely relax"],
+                    correct: 1,
+                    explanation: "During the eccentric phase, muscles lengthen while still under tension."
+                },
+                {
+                    question: "Someone experiencing decreased performance despite continued training might be suffering from:",
+                    options: ["Good recovery", "Progressive overload", "Overtraining", "Muscle activation"],
+                    correct: 2,
+                    explanation: "Overtraining occurs from excessive exercise without adequate recovery."
+                }
+            ];
+            return questions.sort(() => 0.5 - Math.random());
+        }
+
+        function showContextualQuestion() {
+            if (currentContextIndex >= contextualQuestions.length) {
+                document.getElementById('context-question').innerHTML = `<div class="text-center"><h3 class="text-xl font-bold text-green-600">Quiz Complete!</h3><p>Final Score: ${contextScore}/10</p></div>`;
+                document.getElementById('context-options').innerHTML = '';
+                document.getElementById('next-context-btn').style.display = 'none';
+                return;
+            }
+
+            const question = contextualQuestions[currentContextIndex];
+            document.getElementById('context-question').textContent = `Question ${currentContextIndex + 1}/10: ${question.question}`;
+            
+            const optionsContainer = document.getElementById('context-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'context-option p-3 text-left border-2 border-gray-300 rounded-lg hover:border-blue-400 transition-colors';
+                button.textContent = option;
+                button.onclick = () => selectContextOption(index, question.correct, question.explanation);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectContextOption(selected, correct, explanation) {
+            const options = document.querySelectorAll('.context-option');
+            options.forEach((option, index) => {
+                option.disabled = true;
+                if (index === correct) {
+                    option.classList.add('bg-green-100', 'border-green-500');
+                } else if (index === selected && selected !== correct) {
+                    option.classList.add('bg-red-100', 'border-red-500');
+                }
+            });
+            
+            if (selected === correct) {
+                contextScore++;
+                document.getElementById('context-score').textContent = contextScore;
+            }
+            
+            // Show explanation
+            setTimeout(() => {
+                document.getElementById('context-question').innerHTML += `<div class="mt-4 p-3 bg-blue-50 rounded-lg"><strong>Explanation:</strong> ${explanation}</div>`;
+            }, 1000);
+        }
+
+        function nextContextualQuestion() {
+            currentContextIndex++;
+            showContextualQuestion();
+        }
+
+        // Initialize the app when page loads
+        window.onload = init;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965d3fff26dd8f16',t:'MTc1MzYzMDk4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
