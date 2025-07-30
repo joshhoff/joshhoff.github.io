@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Language Practice - C1 Level</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .language-toggle:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            background: #f39c12;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .exercise-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .exercise-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .type-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .type-btn:hover, .type-btn.active {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .exercise-content {
+            min-height: 400px;
+        }
+
+        .sentence-exercise {
+            background: #ecf0f1;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .historical-context {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-style: italic;
+            border-left: 3px solid #e74c3c;
+        }
+
+        .sentence-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 120px;
+            height: 35px;
+            border: 2px dashed #3498db;
+            border-radius: 5px;
+            margin: 0 5px;
+            position: relative;
+            background: white;
+        }
+
+        .blank input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .blank input:focus {
+            outline: none;
+            background: #e8f4fd;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .option {
+            background: #95a5a6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .option:hover {
+            background: #7f8c8d;
+            transform: translateY(-1px);
+        }
+
+        .option.used {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .check-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .next-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d5f4e6;
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+
+        .feedback.incorrect {
+            background: #fadbd8;
+            color: #e74c3c;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s ease;
+        }
+
+        .word-explanation {
+            background: #e8f6f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid #1abc9c;
+        }
+
+        .translation {
+            color: #7f8c8d;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .exercise-container {
+                padding: 20px;
+            }
+            
+            .language-toggle {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="language-toggle" onclick="toggleLanguage()">🇨🇿 Čeština</button>
+        
+        <div class="header">
+            <h1 class="main-title" id="mainTitle">Historical Language Practice</h1>
+            <p class="subtitle" id="subtitle">Master advanced adverbs and connecting words in historical contexts</p>
+            <span class="level-badge">C1 Level</span>
+        </div>
+
+        <div class="exercise-container">
+            <div class="exercise-type">
+                <button class="type-btn active" onclick="setExerciseType('adverbs')" id="adverbBtn">Adverbs</button>
+                <button class="type-btn" onclick="setExerciseType('connectors')" id="connectorBtn">Connecting Words</button>
+                <button class="type-btn" onclick="setExerciseType('mixed')" id="mixedBtn">Mixed Practice</button>
+            </div>
+
+            <div class="score">
+                <span id="scoreText">Score: </span><span id="currentScore">0</span>/<span id="totalQuestions">10</span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div class="exercise-content" id="exerciseContent">
+                <!-- Exercise content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentExerciseType = 'adverbs';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let totalQuestions = 10;
+        let currentAnswers = {};
+
+        const translations = {
+            en: {
+                mainTitle: "Historical Language Practice",
+                subtitle: "Master advanced adverbs and connecting words in historical contexts",
+                adverbBtn: "Adverbs",
+                connectorBtn: "Connecting Words",
+                mixedBtn: "Mixed Practice",
+                scoreText: "Score: ",
+                checkAnswer: "Check Answer",
+                nextQuestion: "Next Question",
+                correct: "Excellent! Your answer is correct.",
+                incorrect: "Not quite right. Try again or check the explanation below.",
+                completed: "Congratulations! You've completed the exercise.",
+                contextLabel: "Historical Context:"
+            },
+            cz: {
+                mainTitle: "Procvičování historického jazyka",
+                subtitle: "Zvládněte pokročilá příslovce a spojovací slova v historických kontextech",
+                adverbBtn: "Příslovce",
+                connectorBtn: "Spojovací slova",
+                mixedBtn: "Smíšené cvičení",
+                scoreText: "Skóre: ",
+                checkAnswer: "Zkontrolovat odpověď",
+                nextQuestion: "Další otázka",
+                correct: "Výborně! Vaše odpověď je správná.",
+                incorrect: "Není to úplně správně. Zkuste to znovu nebo se podívejte na vysvětlení níže.",
+                completed: "Gratulujeme! Dokončili jste cvičení.",
+                contextLabel: "Historický kontext:"
+            }
+        };
+
+        const exercises = {
+            adverbs: [
+                {
+                    context: {
+                        en: "The fall of the Roman Empire (476 AD)",
+                        cz: "Pád Římské říše (476 n. l.)"
+                    },
+                    sentence: {
+                        en: "The Roman Empire _____ declined over several centuries, _____ losing its political and military dominance.",
+                        cz: "Římská říše _____ upadala po několik století a _____ ztrácela svou politickou a vojenskou dominanci."
+                    },
+                    options: ["gradually", "subsequently", "inevitably", "simultaneously", "systematically"],
+                    correct: ["gradually", "subsequently"],
+                    explanation: {
+                        en: "'Gradually' shows the slow process of decline, while 'subsequently' indicates what happened as a result.",
+                        cz: "'Gradually' (postupně) ukazuje pomalý proces úpadku, zatímco 'subsequently' (následně) označuje, co se stalo v důsledku toho."
+                    }
+                },
+                {
+                    context: {
+                        en: "The Industrial Revolution (1760-1840)",
+                        cz: "Průmyslová revoluce (1760-1840)"
+                    },
+                    sentence: {
+                        en: "Steam power _____ transformed manufacturing, while workers _____ migrated from rural areas to industrial cities.",
+                        cz: "Parní energie _____ transformovala výrobu, zatímco dělníci _____ migrovali z venkovských oblastí do průmyslových měst."
+                    },
+                    options: ["fundamentally", "concurrently", "dramatically", "extensively", "progressively"],
+                    correct: ["fundamentally", "concurrently"],
+                    explanation: {
+                        en: "'Fundamentally' emphasizes the deep change, 'concurrently' shows events happening at the same time.",
+                        cz: "'Fundamentally' (zásadně) zdůrazňuje hlubokou změnu, 'concurrently' (současně) ukazuje události probíhající ve stejnou dobu."
+                    }
+                },
+                {
+                    context: {
+                        en: "World War I (1914-1918)",
+                        cz: "První světová válka (1914-1918)"
+                    },
+                    sentence: {
+                        en: "The assassination of Archduke Franz Ferdinand _____ triggered the war, which _____ spread across Europe.",
+                        cz: "Atentát na arcivévodu Františka Ferdinanda _____ spustil válku, která se _____ rozšířila po Evropě."
+                    },
+                    options: ["ultimately", "rapidly", "directly", "extensively", "systematically"],
+                    correct: ["ultimately", "rapidly"],
+                    explanation: {
+                        en: "'Ultimately' shows the final result, 'rapidly' describes the speed of the war's spread.",
+                        cz: "'Ultimately' (nakonec) ukazuje konečný výsledek, 'rapidly' (rychle) popisuje rychlost šíření války."
+                    }
+                }
+            ],
+            connectors: [
+                {
+                    context: {
+                        en: "The Renaissance (14th-17th century)",
+                        cz: "Renesance (14.-17. století)"
+                    },
+                    sentence: {
+                        en: "The Renaissance began in Italy; _____, it spread throughout Europe. _____ the period saw great artistic achievements, it also marked significant scientific progress.",
+                        cz: "Renesance začala v Itálii; _____ se rozšířila po celé Evropě. _____ toto období vidělo velké umělecké úspěchy, také znamenalo významný vědecký pokrok."
+                    },
+                    options: ["subsequently", "furthermore", "although", "nevertheless", "whereas"],
+                    correct: ["subsequently", "although"],
+                    explanation: {
+                        en: "'Subsequently' shows sequence, 'although' introduces contrast between artistic and scientific achievements.",
+                        cz: "'Subsequently' (následně) ukazuje posloupnost, 'although' (ačkoli) zavádí kontrast mezi uměleckými a vědeckými úspěchy."
+                    }
+                },
+                {
+                    context: {
+                        en: "The French Revolution (1789-1799)",
+                        cz: "Francouzská revoluce (1789-1799)"
+                    },
+                    sentence: {
+                        en: "The revolution promised equality for all citizens; _____, many inequalities persisted. _____ the initial goals were noble, the execution often became violent.",
+                        cz: "Revoluce slibovala rovnost pro všechny občany; _____ mnoho nerovností přetrvávalo. _____ počáteční cíle byly ušlechtilé, provedení se často stalo násilným."
+                    },
+                    options: ["however", "while", "consequently", "moreover", "nonetheless"],
+                    correct: ["however", "while"],
+                    explanation: {
+                        en: "'However' shows contrast with the promise, 'while' introduces a contrasting idea about goals vs. execution.",
+                        cz: "'However' (nicméně) ukazuje kontrast se slibem, 'while' (zatímco) zavádí kontrastní myšlenku o cílech vs. provedení."
+                    }
+                },
+                {
+                    context: {
+                        en: "The Cold War (1947-1991)",
+                        cz: "Studená válka (1947-1991)"
+                    },
+                    sentence: {
+                        en: "The US and USSR never engaged in direct warfare; _____, they competed through proxy conflicts. _____ both superpowers possessed nuclear weapons, neither used them.",
+                        cz: "USA a SSSR se nikdy nezapojily do přímé války; _____ soutěžily prostřednictvím zástupných konfliktů. _____ obě supervelmoci vlastnily jaderné zbraně, žádná je nepoužila."
+                    },
+                    options: ["instead", "although", "therefore", "meanwhile", "despite"],
+                    correct: ["instead", "although"],
+                    explanation: {
+                        en: "'Instead' shows alternative action, 'although' presents contrast despite nuclear capability.",
+                        cz: "'Instead' (místo toho) ukazuje alternativní akci, 'although' (ačkoli) představuje kontrast navzdory jaderné schopnosti."
+                    }
+                }
+            ]
+        };
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'cz' : 'en';
+            const btn = document.querySelector('.language-toggle');
+            btn.textContent = currentLanguage === 'en' ? '🇨🇿 Čeština' : '🇬🇧 English';
+            updateLanguage();
+            loadCurrentQuestion();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            document.getElementById('mainTitle').textContent = t.mainTitle;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('adverbBtn').textContent = t.adverbBtn;
+            document.getElementById('connectorBtn').textContent = t.connectorBtn;
+            document.getElementById('mixedBtn').textContent = t.mixedBtn;
+            document.getElementById('scoreText').textContent = t.scoreText;
+        }
+
+        function setExerciseType(type) {
+            currentExerciseType = type;
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            // Update active button
+            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(type === 'adverbs' ? 'adverbBtn' : 
+                                 type === 'connectors' ? 'connectorBtn' : 'mixedBtn').classList.add('active');
+            
+            updateScore();
+            loadCurrentQuestion();
+        }
+
+        function getCurrentExercises() {
+            if (currentExerciseType === 'mixed') {
+                return [...exercises.adverbs, ...exercises.connectors].sort(() => Math.random() - 0.5).slice(0, 10);
+            }
+            return exercises[currentExerciseType] || exercises.adverbs;
+        }
+
+        function loadCurrentQuestion() {
+            const exerciseSet = getCurrentExercises();
+            
+            if (currentQuestionIndex >= exerciseSet.length) {
+                showCompletion();
+                return;
+            }
+
+            const exercise = exerciseSet[currentQuestionIndex];
+            const t = translations[currentLanguage];
+            
+            const content = `
+                <div class="sentence-exercise">
+                    <div class="historical-context">
+                        <strong>${t.contextLabel}</strong> ${exercise.context[currentLanguage]}
+                    </div>
+                    <div class="sentence-text" id="sentenceText">
+                        ${createSentenceWithBlanks(exercise.sentence[currentLanguage], exercise.correct.length)}
+                    </div>
+                    <div class="options" id="optionsContainer">
+                        ${exercise.options.map(option => 
+                            `<span class="option" onclick="selectOption('${option}')">${option}</span>`
+                        ).join('')}
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="check-btn" onclick="checkAnswer()">${t.checkAnswer}</button>
+                        <button class="next-btn" onclick="nextQuestion()" style="display: none;">${t.nextQuestion}</button>
+                    </div>
+                    <div class="feedback" id="feedback" style="display: none;"></div>
+                    <div class="word-explanation" id="explanation" style="display: none;">
+                        <strong>Explanation:</strong> <span id="explanationText"></span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('exerciseContent').innerHTML = content;
+            currentAnswers = {};
+            updateProgress();
+        }
+
+        function createSentenceWithBlanks(sentence, numBlanks) {
+            let result = sentence;
+            for (let i = 0; i < numBlanks; i++) {
+                result = result.replace('_____', `<span class="blank"><input type="text" id="blank${i}" readonly onclick="focusBlank(${i})"></span>`);
+            }
+            return result;
+        }
+
+        function focusBlank(index) {
+            // This function helps with mobile interaction
+            document.getElementById(`blank${index}`).focus();
+        }
+
+        function selectOption(option) {
+            const optionElement = event.target;
+            if (optionElement.classList.contains('used')) return;
+            
+            // Find the first empty blank
+            const blanks = document.querySelectorAll('.blank input');
+            for (let i = 0; i < blanks.length; i++) {
+                if (!blanks[i].value) {
+                    blanks[i].value = option;
+                    currentAnswers[i] = option;
+                    optionElement.classList.add('used');
+                    break;
+                }
+            }
+        }
+
+        function checkAnswer() {
+            const exerciseSet = getCurrentExercises();
+            const exercise = exerciseSet[currentQuestionIndex];
+            const t = translations[currentLanguage];
+            
+            const userAnswers = Object.values(currentAnswers);
+            const correctAnswers = exercise.correct;
+            
+            let isCorrect = userAnswers.length === correctAnswers.length && 
+                           userAnswers.every(answer => correctAnswers.includes(answer));
+            
+            const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
+            const explanationText = document.getElementById('explanationText');
+            
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = t.correct;
+                score++;
+                updateScore();
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = t.incorrect;
+            }
+            
+            feedback.style.display = 'block';
+            explanation.style.display = 'block';
+            explanationText.textContent = exercise.explanation[currentLanguage];
+            
+            document.querySelector('.check-btn').style.display = 'none';
+            document.querySelector('.next-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            loadCurrentQuestion();
+        }
+
+        function updateScore() {
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showCompletion() {
+            const t = translations[currentLanguage];
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            document.getElementById('exerciseContent').innerHTML = `
+                <div class="sentence-exercise" style="text-align: center;">
+                    <h2>${t.completed}</h2>
+                    <div class="score" style="font-size: 2rem; margin: 30px 0;">
+                        ${score}/${totalQuestions} (${percentage}%)
+                    </div>
+                    <button class="check-btn" onclick="restartExercise()">
+                        ${currentLanguage === 'en' ? 'Practice Again' : 'Cvičit znovu'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function restartExercise() {
+            currentQuestionIndex = 0;
+            score = 0;
+            updateScore();
+            loadCurrentQuestion();
+        }
+
+        // Initialize the application
+        updateLanguage();
+        loadCurrentQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9674fcee67507b7f',t:'MTc1Mzg3OTg5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
