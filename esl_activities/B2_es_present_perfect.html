@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Perfect - Presente Perfecto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn:not(.active) {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .example-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .example-card .english {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .example-card .spanish {
+            color: #666;
+            font-style: italic;
+        }
+
+        .quiz-container {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .conjugation-practice {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .conjugation-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9ff;
+            border-radius: 8px;
+        }
+
+        .conjugation-item input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .conjugation-item input.correct {
+            border-color: #4caf50;
+            background: #f1f8e9;
+        }
+
+        .conjugation-item input.incorrect {
+            border-color: #f44336;
+            background: #fef1f1;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .conjugation-practice {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Present Perfect Tense</h1>
+            <p>Presente Perfecto en Inglés</p>
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 data-en="What is the Present Perfect?" data-es="¿Qué es el Presente Perfecto?">What is the Present Perfect?</h2>
+            <p data-en="The Present Perfect tense connects the past with the present. It describes actions that happened at an unspecified time in the past or actions that started in the past and continue to the present." 
+               data-es="El tiempo Presente Perfecto conecta el pasado con el presente. Describe acciones que ocurrieron en un tiempo no específico en el pasado o acciones que comenzaron en el pasado y continúan en el presente.">
+               The Present Perfect tense connects the past with the present. It describes actions that happened at an unspecified time in the past or actions that started in the past and continue to the present.
+            </p>
+
+            <div class="formula-box">
+                <div data-en="FORMULA: Subject + have/has + past participle" data-es="FÓRMULA: Sujeto + have/has + participio pasado">
+                    FORMULA: Subject + have/has + past participle
+                </div>
+            </div>
+
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="english">I have visited Paris.</div>
+                    <div class="spanish">He visitado París.</div>
+                </div>
+                <div class="example-card">
+                    <div class="english">She has lived here for 5 years.</div>
+                    <div class="spanish">Ella ha vivido aquí por 5 años.</div>
+                </div>
+                <div class="example-card">
+                    <div class="english">We have finished our homework.</div>
+                    <div class="spanish">Hemos terminado nuestra tarea.</div>
+                </div>
+                <div class="example-card">
+                    <div class="english">They have never seen snow.</div>
+                    <div class="spanish">Nunca han visto nieve.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 data-en="When to Use Present Perfect" data-es="Cuándo Usar el Presente Perfecto">When to Use Present Perfect</h2>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="english"><strong>Unfinished time periods:</strong><br>I have read 3 books this month.</div>
+                    <div class="spanish"><strong>Períodos de tiempo no terminados:</strong><br>He leído 3 libros este mes.</div>
+                </div>
+                <div class="example-card">
+                    <div class="english"><strong>Life experiences:</strong><br>Have you ever been to Japan?</div>
+                    <div class="spanish"><strong>Experiencias de vida:</strong><br>¿Has estado alguna vez en Japón?</div>
+                </div>
+                <div class="example-card">
+                    <div class="english"><strong>Recent actions with present results:</strong><br>I have lost my keys.</div>
+                    <div class="spanish"><strong>Acciones recientes con resultados presentes:</strong><br>He perdido mis llaves.</div>
+                </div>
+                <div class="example-card">
+                    <div class="english"><strong>Actions continuing to present:</strong><br>She has worked here since 2020.</div>
+                    <div class="spanish"><strong>Acciones que continúan al presente:</strong><br>Ella ha trabajado aquí desde 2020.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 data-en="Interactive Quiz" data-es="Cuestionario Interactivo">Interactive Quiz</h2>
+            <div class="quiz-container">
+                <div class="question" data-en="Choose the correct Present Perfect form:" data-es="Elige la forma correcta del Presente Perfecto:">
+                    Choose the correct Present Perfect form:
+                </div>
+                <div id="quiz-question"></div>
+                <div class="options" id="quiz-options"></div>
+                <button class="btn" id="quiz-submit" onclick="checkQuizAnswer()" disabled>
+                    <span data-en="Submit Answer" data-es="Enviar Respuesta">Submit Answer</span>
+                </button>
+                <button class="btn hidden" id="quiz-next" onclick="nextQuestion()">
+                    <span data-en="Next Question" data-es="Siguiente Pregunta">Next Question</span>
+                </button>
+                <div id="quiz-feedback"></div>
+                <div class="score" id="quiz-score">Score: 0/0</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 data-en="Conjugation Practice" data-es="Práctica de Conjugación">Conjugation Practice</h2>
+            <p data-en="Complete the sentences with the correct form of 'have' or 'has':" data-es="Completa las oraciones con la forma correcta de 'have' o 'has':">
+                Complete the sentences with the correct form of 'have' or 'has':
+            </p>
+            <div class="conjugation-practice" id="conjugation-practice"></div>
+            <button class="btn" onclick="checkConjugation()">
+                <span data-en="Check Answers" data-es="Verificar Respuestas">Check Answers</span>
+            </button>
+            <div class="score" id="conjugation-score"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let quizQuestions = [
+            {
+                question: { en: "I ___ never ___ to Australia.", es: "Yo nunca ___ ___ a Australia." },
+                options: [
+                    { en: "have / been", es: "have / been" },
+                    { en: "has / been", es: "has / been" },
+                    { en: "have / go", es: "have / go" },
+                    { en: "has / go", es: "has / go" }
+                ],
+                correct: 0
+            },
+            {
+                question: { en: "She ___ ___ her homework yet.", es: "Ella no ___ ___ su tarea todavía." },
+                options: [
+                    { en: "have / finished", es: "have / terminado" },
+                    { en: "has / finish", es: "has / terminar" },
+                    { en: "hasn't / finished", es: "hasn't / terminado" },
+                    { en: "haven't / finished", es: "haven't / terminado" }
+                ],
+                correct: 2
+            },
+            {
+                question: { en: "We ___ ___ here for two hours.", es: "Nosotros ___ ___ aquí por dos horas." },
+                options: [
+                    { en: "has / waited", es: "has / esperado" },
+                    { en: "have / wait", es: "have / esperar" },
+                    { en: "have / waited", es: "have / esperado" },
+                    { en: "has / wait", es: "has / esperar" }
+                ],
+                correct: 2
+            },
+            {
+                question: { en: "___ you ever ___ sushi?", es: "¿___ ___ sushi alguna vez?" },
+                options: [
+                    { en: "Has / eaten", es: "Has / comido" },
+                    { en: "Have / eat", es: "Have / comer" },
+                    { en: "Have / eaten", es: "Have / comido" },
+                    { en: "Has / eat", es: "Has / comer" }
+                ],
+                correct: 2
+            },
+            {
+                question: { en: "They ___ just ___ from vacation.", es: "Ellos ___ ___ de vacaciones." },
+                options: [
+                    { en: "has / returned", es: "has / regresado" },
+                    { en: "have / return", es: "have / regresar" },
+                    { en: "have / returned", es: "have / regresado" },
+                    { en: "has / return", es: "has / regresar" }
+                ],
+                correct: 2
+            }
+        ];
+
+        let conjugationExercises = [
+            { sentence: { en: "I ___ studied English for 3 years.", es: "Yo ___ estudiado inglés por 3 años." }, answer: "have" },
+            { sentence: { en: "She ___ lived in Madrid since 2019.", es: "Ella ___ vivido en Madrid desde 2019." }, answer: "has" },
+            { sentence: { en: "We ___ finished our project.", es: "Nosotros ___ terminado nuestro proyecto." }, answer: "have" },
+            { sentence: { en: "He ___ never traveled abroad.", es: "Él nunca ___ viajado al extranjero." }, answer: "has" },
+            { sentence: { en: "You ___ done a great job!", es: "¡Tú ___ hecho un gran trabajo!" }, answer: "have" },
+            { sentence: { en: "They ___ bought a new car.", es: "Ellos ___ comprado un auto nuevo." }, answer: "have" }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let selectedOption = -1;
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('[data-en]').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            loadQuizQuestion();
+            loadConjugationExercises();
+        }
+
+        function loadQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                document.getElementById('quiz-question').innerHTML = `
+                    <div style="text-align: center; font-size: 1.5rem; color: #667eea;">
+                        ${currentLanguage === 'en' ? 'Quiz Complete!' : '¡Cuestionario Completo!'}
+                    </div>
+                `;
+                document.getElementById('quiz-options').innerHTML = '';
+                document.getElementById('quiz-submit').style.display = 'none';
+                return;
+            }
+
+            const question = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-question').innerHTML = `<strong>${question.question[currentLanguage]}</strong>`;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option[currentLanguage];
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            selectedOption = -1;
+            document.getElementById('quiz-submit').disabled = true;
+            document.getElementById('quiz-next').classList.add('hidden');
+            document.getElementById('quiz-feedback').innerHTML = '';
+        }
+
+        function selectOption(index) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            selectedOption = index;
+            document.getElementById('quiz-submit').disabled = false;
+        }
+
+        function checkQuizAnswer() {
+            const question = quizQuestions[currentQuizIndex];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz-feedback');
+            if (selectedOption === question.correct) {
+                quizScore++;
+                feedback.innerHTML = `<div class="feedback correct">${currentLanguage === 'en' ? 'Correct! Well done!' : '¡Correcto! ¡Bien hecho!'}</div>`;
+            } else {
+                feedback.innerHTML = `<div class="feedback incorrect">${currentLanguage === 'en' ? 'Incorrect. The correct answer is highlighted in green.' : 'Incorrecto. La respuesta correcta está resaltada en verde.'}</div>`;
+            }
+            
+            document.getElementById('quiz-submit').classList.add('hidden');
+            document.getElementById('quiz-next').classList.remove('hidden');
+            updateQuizScore();
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            loadQuizQuestion();
+            document.getElementById('quiz-submit').classList.remove('hidden');
+        }
+
+        function updateQuizScore() {
+            document.getElementById('quiz-score').textContent = `${currentLanguage === 'en' ? 'Score' : 'Puntuación'}: ${quizScore}/${currentQuizIndex + 1}`;
+        }
+
+        function loadConjugationExercises() {
+            const container = document.getElementById('conjugation-practice');
+            container.innerHTML = '';
+            
+            conjugationExercises.forEach((exercise, index) => {
+                const div = document.createElement('div');
+                div.className = 'conjugation-item';
+                div.innerHTML = `
+                    <span>${exercise.sentence[currentLanguage].replace('___', '')}</span>
+                    <input type="text" id="conj-${index}" placeholder="${currentLanguage === 'en' ? 'have/has' : 'have/has'}" maxlength="4">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkConjugation() {
+            let correct = 0;
+            conjugationExercises.forEach((exercise, index) => {
+                const input = document.getElementById(`conj-${index}`);
+                const userAnswer = input.value.toLowerCase().trim();
+                
+                if (userAnswer === exercise.answer) {
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                    correct++;
+                } else {
+                    input.classList.add('incorrect');
+                    input.classList.remove('correct');
+                }
+            });
+            
+            document.getElementById('conjugation-score').textContent = 
+                `${currentLanguage === 'en' ? 'Score' : 'Puntuación'}: ${correct}/${conjugationExercises.length}`;
+        }
+
+        // Initialize the application
+        loadQuizQuestion();
+        loadConjugationExercises();
+        updateQuizScore();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9676b1ba14517e92',t:'MTc1Mzg5Nzc4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
