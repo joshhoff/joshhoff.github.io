@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Your Travel Story - ESL Creative Writing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .writing-area {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .story-section {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .story-prompts {
+            margin-bottom: 25px;
+        }
+
+        .story-prompts h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .prompt-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .prompt-btn {
+            background: white;
+            border: 2px solid #e1e8ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+
+        .prompt-btn:hover, .prompt-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .story-textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 20px;
+            border: 2px solid #e1e8ff;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-family: 'Georgia', serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .story-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .word-count {
+            text-align: right;
+            margin-top: 10px;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .vocabulary-panel, .tips-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .panel-title {
+            color: #667eea;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .vocab-category {
+            margin-bottom: 20px;
+        }
+
+        .vocab-category h4 {
+            color: #4a5568;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .vocab-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .vocab-tag {
+            background: #e6fffa;
+            color: #2d3748;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #b2f5ea;
+        }
+
+        .vocab-tag:hover {
+            background: #38b2ac;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            background: #f0fff4;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #48bb78;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #9ae6b4;
+        }
+
+        @media (max-width: 768px) {
+            .writing-area {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .story-textarea {
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✍️ Write Your Travel Story</h1>
+            <p>Create your own adventure story with helpful prompts and vocabulary!</p>
+        </div>
+        
+        <div class="writing-area">
+            <div class="story-section">
+                <div class="story-prompts">
+                    <h3>📝 Story Prompts</h3>
+                    <div class="prompt-buttons">
+                        <button class="prompt-btn" data-prompt="trip-to-china">Trip to China 🇨🇳</button>
+                        <button class="prompt-btn" data-prompt="beach-vacation">Beach Vacation 🏖️</button>
+                        <button class="prompt-btn" data-prompt="city-adventure">City Adventure 🏙️</button>
+                        <button class="prompt-btn" data-prompt="mountain-hiking">Mountain Hiking ⛰️</button>
+                        <button class="prompt-btn" data-prompt="food-journey">Food Journey 🍜</button>
+                        <button class="prompt-btn" data-prompt="cultural-visit">Cultural Visit 🏛️</button>
+                    </div>
+                </div>
+                
+                <textarea 
+                    class="story-textarea" 
+                    id="storyText" 
+                    placeholder="Start writing your travel story here... Where did you go? What did you see? How did you feel? Be creative and use the vocabulary words to help you!"
+                ></textarea>
+                
+                <div class="word-count">
+                    <span id="wordCount">0</span> words
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="saveStory()">Save My Story</button>
+                    <button class="btn btn-secondary" onclick="clearStory()">Start Over</button>
+                    <button class="btn btn-secondary" onclick="getInspiration()">Get Inspiration</button>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="vocabulary-panel">
+                    <div class="panel-title">📚 Vocabulary Helper</div>
+                    
+                    <div class="vocab-category">
+                        <h4>Transportation</h4>
+                        <div class="vocab-tags">
+                            <span class="vocab-tag">airplane</span>
+                            <span class="vocab-tag">train</span>
+                            <span class="vocab-tag">bus</span>
+                            <span class="vocab-tag">taxi</span>
+                            <span class="vocab-tag">subway</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vocab-category">
+                        <h4>Places</h4>
+                        <div class="vocab-tags">
+                            <span class="vocab-tag">hotel</span>
+                            <span class="vocab-tag">restaurant</span>
+                            <span class="vocab-tag">museum</span>
+                            <span class="vocab-tag">temple</span>
+                            <span class="vocab-tag">market</span>
+                            <span class="vocab-tag">beach</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vocab-category">
+                        <h4>Feelings</h4>
+                        <div class="vocab-tags">
+                            <span class="vocab-tag">excited</span>
+                            <span class="vocab-tag">amazed</span>
+                            <span class="vocab-tag">surprised</span>
+                            <span class="vocab-tag">happy</span>
+                            <span class="vocab-tag">curious</span>
+                            <span class="vocab-tag">peaceful</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vocab-category">
+                        <h4>Descriptions</h4>
+                        <div class="vocab-tags">
+                            <span class="vocab-tag">beautiful</span>
+                            <span class="vocab-tag">delicious</span>
+                            <span class="vocab-tag">crowded</span>
+                            <span class="vocab-tag">traditional</span>
+                            <span class="vocab-tag">modern</span>
+                            <span class="vocab-tag">colorful</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tips-panel">
+                    <div class="panel-title">💡 Writing Tips</div>
+                    <ul class="tips-list">
+                        <li>Start with where you went and when</li>
+                        <li>Describe what you saw and did</li>
+                        <li>Include your feelings and emotions</li>
+                        <li>Use descriptive words to paint a picture</li>
+                        <li>End with what you learned or remembered</li>
+                        <li>Don't worry about perfect grammar - focus on telling your story!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const storyPrompts = {
+            'trip-to-china': "Last summer, I visited China for the first time. When I arrived in Beijing, I felt...",
+            'beach-vacation': "The sun was shining as I walked onto the beautiful beach. The sand felt warm under my feet and...",
+            'city-adventure': "The busy city streets were full of life and energy. I walked through the crowded downtown area and...",
+            'mountain-hiking': "Early in the morning, I started my hike up the mountain trail. The fresh air filled my lungs as...",
+            'food-journey': "I decided to try the local food at a small restaurant. The waiter brought me a dish that smelled...",
+            'cultural-visit': "The ancient temple stood majestically in front of me. As I walked through the entrance, I noticed..."
+        };
+
+        const inspirationSentences = [
+            "The local people were very friendly and helped me with directions.",
+            "I took many photos to remember this special moment.",
+            "The food was completely different from what I eat at home.",
+            "I learned some new words in the local language.",
+            "The weather was perfect for exploring the city.",
+            "I bought a souvenir to remember my trip.",
+            "The sunset view was absolutely breathtaking.",
+            "I met other travelers from different countries.",
+            "The architecture was unlike anything I had seen before.",
+            "I felt grateful for this amazing experience."
+        ];
+
+        function updateWordCount() {
+            const text = document.getElementById('storyText').value;
+            const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+            document.getElementById('wordCount').textContent = words;
+        }
+
+        function saveStory() {
+            const storyText = document.getElementById('storyText').value.trim();
+            const feedback = document.getElementById('feedback');
+            
+            if (storyText === '') {
+                feedback.style.display = 'block';
+                feedback.className = 'feedback';
+                feedback.style.background = '#fed7d7';
+                feedback.style.color = '#742a2a';
+                feedback.style.border = '2px solid #fc8181';
+                feedback.innerHTML = '📝 Please write your story first before saving!';
+                return;
+            }
+            
+            // Save to localStorage
+            const savedStories = JSON.parse(localStorage.getItem('travelStories') || '[]');
+            const newStory = {
+                id: Date.now(),
+                text: storyText,
+                wordCount: storyText.split(/\s+/).length,
+                date: new Date().toLocaleDateString()
+            };
+            savedStories.push(newStory);
+            localStorage.setItem('travelStories', JSON.stringify(savedStories));
+            
+            feedback.style.display = 'block';
+            feedback.className = 'feedback success';
+            feedback.innerHTML = `🎉 Great job! Your story has been saved! You wrote ${newStory.wordCount} words. Keep practicing your English writing! ✨`;
+        }
+
+        function clearStory() {
+            if (confirm('Are you sure you want to start over? Your current story will be lost.')) {
+                document.getElementById('storyText').value = '';
+                document.getElementById('feedback').style.display = 'none';
+                document.querySelectorAll('.prompt-btn').forEach(btn => btn.classList.remove('active'));
+                updateWordCount();
+            }
+        }
+
+        function getInspiration() {
+            const randomSentence = inspirationSentences[Math.floor(Math.random() * inspirationSentences.length)];
+            const currentText = document.getElementById('storyText').value;
+            const newText = currentText + (currentText ? ' ' : '') + randomSentence;
+            document.getElementById('storyText').value = newText;
+            updateWordCount();
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            feedback.style.background = '#e6fffa';
+            feedback.style.color = '#2d3748';
+            feedback.style.border = '2px solid #81e6d9';
+            feedback.innerHTML = '💡 Added some inspiration to your story! Keep writing!';
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 3000);
+        }
+
+        // Add event listeners
+        document.getElementById('storyText').addEventListener('input', updateWordCount);
+
+        // Prompt button functionality
+        document.querySelectorAll('.prompt-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const promptKey = this.getAttribute('data-prompt');
+                const promptText = storyPrompts[promptKey];
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.prompt-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Set the prompt text
+                document.getElementById('storyText').value = promptText;
+                updateWordCount();
+                
+                // Focus on textarea
+                document.getElementById('storyText').focus();
+            });
+        });
+
+        // Vocabulary tag functionality
+        document.querySelectorAll('.vocab-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const word = this.textContent;
+                const textarea = document.getElementById('storyText');
+                const cursorPos = textarea.selectionStart;
+                const textBefore = textarea.value.substring(0, cursorPos);
+                const textAfter = textarea.value.substring(cursorPos);
+                
+                // Add space before word if needed
+                const needsSpaceBefore = textBefore.length > 0 && !textBefore.endsWith(' ');
+                const wordToInsert = (needsSpaceBefore ? ' ' : '') + word;
+                
+                textarea.value = textBefore + wordToInsert + textAfter;
+                textarea.focus();
+                textarea.setSelectionRange(cursorPos + wordToInsert.length, cursorPos + wordToInsert.length);
+                
+                updateWordCount();
+                
+                // Visual feedback
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.05)';
+                }, 150);
+            });
+        });
+
+        // Initialize word count
+        updateWordCount();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b0167744f74320',t:'MTc1NDQ5OTU5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
