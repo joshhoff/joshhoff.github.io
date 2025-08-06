@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Progressive Practice / Práctica del Presente Continuo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: #4299e1;
+            color: white;
+        }
+
+        .lang-btn:not(.active) {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: #48bb78;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #2d3748;
+        }
+
+        .explanation-box {
+            background: #f7fafc;
+            border-left: 5px solid #4299e1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .example {
+            background: #e6fffa;
+            border: 2px solid #38b2ac;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        }
+
+        .exercise {
+            background: #fff5f5;
+            border: 2px solid #fc8181;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+
+        .option.selected {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .option.correct {
+            border-color: #48bb78;
+            background: #c6f6d5;
+        }
+
+        .option.incorrect {
+            border-color: #f56565;
+            background: #fed7d7;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .conversation-prompt {
+            background: #fef5e7;
+            border: 2px solid #ed8936;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+        }
+
+        .prompt-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #c05621;
+            margin-bottom: 10px;
+        }
+
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+
+        .reset-btn {
+            background: #ed8936;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .reset-btn:hover {
+            background: #dd6b20;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Present Progressive Practice</h1>
+            <p class="subtitle">Práctica del Presente Continuo</p>
+            
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">🇺🇸 English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">🇪🇸 Español</button>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('intro')">
+                <span class="en">Introduction</span>
+                <span class="es" style="display: none;">Introducción</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('explanation')">
+                <span class="en">Learn</span>
+                <span class="es" style="display: none;">Aprender</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('practice')">
+                <span class="en">Practice</span>
+                <span class="es" style="display: none;">Práctica</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('conversation')">
+                <span class="en">Conversation</span>
+                <span class="es" style="display: none;">Conversación</span>
+            </button>
+        </div>
+
+        <!-- Introduction Section -->
+        <div id="intro" class="section active">
+            <h2 class="en">🌟 Welcome to Present Progressive Practice! 🌟</h2>
+            <h2 class="es" style="display: none;">🌟 ¡Bienvenido a la Práctica del Presente Continuo! 🌟</h2>
+            
+            <div class="explanation-box">
+                <div class="en">
+                    <p><strong>What is the Present Progressive?</strong></p>
+                    <p>The Present Progressive (also called Present Continuous) tells us what is happening RIGHT NOW! 🕐</p>
+                    <br>
+                    <p><strong>When do we use it?</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Actions happening now: "I am eating lunch" 🍽️</li>
+                        <li>Temporary situations: "She is staying with friends" 🏠</li>
+                        <li>Future plans: "We are meeting tomorrow" 📅</li>
+                    </ul>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>¿Qué es el Presente Continuo?</strong></p>
+                    <p>El Presente Continuo nos dice lo que está pasando ¡AHORA MISMO! 🕐</p>
+                    <br>
+                    <p><strong>¿Cuándo lo usamos?</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Acciones que pasan ahora: "Estoy comiendo" 🍽️</li>
+                        <li>Situaciones temporales: "Ella se está quedando con amigos" 🏠</li>
+                        <li>Planes futuros: "Nos vamos a encontrar mañana" 📅</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example">
+                <div class="en">
+                    <strong>Quick Examples:</strong><br>
+                    ✅ "I am reading a book" (Yo estoy leyendo un libro)<br>
+                    ✅ "They are playing soccer" (Ellos están jugando fútbol)<br>
+                    ✅ "She is cooking dinner" (Ella está cocinando la cena)
+                </div>
+                <div class="es" style="display: none;">
+                    <strong>Ejemplos Rápidos:</strong><br>
+                    ✅ "I am reading a book" (Yo estoy leyendo un libro)<br>
+                    ✅ "They are playing soccer" (Ellos están jugando fútbol)<br>
+                    ✅ "She is cooking dinner" (Ella está cocinando la cena)
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Section -->
+        <div id="explanation" class="section">
+            <h2 class="en">📚 How to Form the Present Progressive</h2>
+            <h2 class="es" style="display: none;">📚 Cómo Formar el Presente Continuo</h2>
+
+            <div class="explanation-box">
+                <div class="en">
+                    <h3>Formula: Subject + BE + Verb-ing</h3>
+                    <br>
+                    <p><strong>Step 1:</strong> Choose the correct form of "BE"</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>I</strong> → am</li>
+                        <li><strong>You/We/They</strong> → are</li>
+                        <li><strong>He/She/It</strong> → is</li>
+                    </ul>
+                    <br>
+                    <p><strong>Step 2:</strong> Add "-ing" to the main verb</p>
+                    <ul style="margin-left: 20px;">
+                        <li>play → play<strong>ing</strong></li>
+                        <li>eat → eat<strong>ing</strong></li>
+                        <li>run → runn<strong>ing</strong> (double the consonant)</li>
+                        <li>write → writ<strong>ing</strong> (drop the 'e')</li>
+                    </ul>
+                </div>
+                <div class="es" style="display: none;">
+                    <h3>Fórmula: Sujeto + BE + Verbo-ing</h3>
+                    <br>
+                    <p><strong>Paso 1:</strong> Elige la forma correcta de "BE"</p>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>I</strong> → am</li>
+                        <li><strong>You/We/They</strong> → are</li>
+                        <li><strong>He/She/It</strong> → is</li>
+                    </ul>
+                    <br>
+                    <p><strong>Paso 2:</strong> Añade "-ing" al verbo principal</p>
+                    <ul style="margin-left: 20px;">
+                        <li>play → play<strong>ing</strong></li>
+                        <li>eat → eat<strong>ing</strong></li>
+                        <li>run → runn<strong>ing</strong> (dobla la consonante)</li>
+                        <li>write → writ<strong>ing</strong> (quita la 'e')</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example">
+                <div class="en">
+                    <strong>Complete Examples:</strong><br>
+                    🏃‍♂️ I <strong>am running</strong> in the park<br>
+                    📱 You <strong>are texting</strong> your friend<br>
+                    🎵 She <strong>is singing</strong> a song<br>
+                    ⚽ They <strong>are playing</strong> football<br>
+                    📖 We <strong>are studying</strong> English
+                </div>
+                <div class="es" style="display: none;">
+                    <strong>Ejemplos Completos:</strong><br>
+                    🏃‍♂️ I <strong>am running</strong> in the park (Estoy corriendo en el parque)<br>
+                    📱 You <strong>are texting</strong> your friend (Estás enviando mensajes a tu amigo)<br>
+                    🎵 She <strong>is singing</strong> a song (Ella está cantando una canción)<br>
+                    ⚽ They <strong>are playing</strong> football (Ellos están jugando fútbol)<br>
+                    📖 We <strong>are studying</strong> English (Estamos estudiando inglés)
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="section">
+            <h2 class="en">🎯 Practice Exercises</h2>
+            <h2 class="es" style="display: none;">🎯 Ejercicios de Práctica</h2>
+            
+            <div class="score">
+                <span class="en">Score: </span>
+                <span class="es" style="display: none;">Puntuación: </span>
+                <span id="score">0</span>/10
+            </div>
+
+            <div id="exercises-container">
+                <!-- Exercises will be generated by JavaScript -->
+            </div>
+
+            <button class="reset-btn" onclick="resetPractice()">
+                <span class="en">🔄 Reset Practice</span>
+                <span class="es" style="display: none;">🔄 Reiniciar Práctica</span>
+            </button>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="section">
+            <h2 class="en">💬 Conversation Practice</h2>
+            <h2 class="es" style="display: none;">💬 Práctica de Conversación</h2>
+
+            <div class="explanation-box">
+                <div class="en">
+                    <p><strong>Instructions:</strong> Use these prompts to practice speaking with a friend, teacher, or even by yourself! Try to use the present progressive in your answers.</p>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>Instrucciones:</strong> ¡Usa estas preguntas para practicar hablando con un amigo, profesor, o incluso contigo mismo! Trata de usar el presente continuo en tus respuestas.</p>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">
+                    <span class="en">🏠 At Home</span>
+                    <span class="es" style="display: none;">🏠 En Casa</span>
+                </div>
+                <div class="en">
+                    <p><strong>Question:</strong> What are you doing right now?</p>
+                    <p><strong>Example Answer:</strong> "I am practicing English and learning about the present progressive!"</p>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>Pregunta:</strong> ¿Qué estás haciendo ahora mismo?</p>
+                    <p><strong>Respuesta de Ejemplo:</strong> "I am practicing English and learning about the present progressive!" (¡Estoy practicando inglés y aprendiendo sobre el presente continuo!)</p>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">
+                    <span class="en">👨‍👩‍👧‍👦 Family & Friends</span>
+                    <span class="es" style="display: none;">👨‍👩‍👧‍👦 Familia y Amigos</span>
+                </div>
+                <div class="en">
+                    <p><strong>Question:</strong> What is your family doing today?</p>
+                    <p><strong>Example Answer:</strong> "My mom is cooking dinner, my dad is watching TV, and my sister is doing homework."</p>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>Pregunta:</strong> ¿Qué está haciendo tu familia hoy?</p>
+                    <p><strong>Respuesta de Ejemplo:</strong> "My mom is cooking dinner, my dad is watching TV, and my sister is doing homework." (Mi mamá está cocinando la cena, mi papá está viendo TV, y mi hermana está haciendo tarea.)</p>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">
+                    <span class="en">🌤️ Weather & Activities</span>
+                    <span class="es" style="display: none;">🌤️ Clima y Actividades</span>
+                </div>
+                <div class="en">
+                    <p><strong>Question:</strong> What are people doing outside today?</p>
+                    <p><strong>Example Answer:</strong> "People are walking their dogs, children are playing in the park, and joggers are running."</p>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>Pregunta:</strong> ¿Qué está haciendo la gente afuera hoy?</p>
+                    <p><strong>Respuesta de Ejemplo:</strong> "People are walking their dogs, children are playing in the park, and joggers are running." (La gente está paseando a sus perros, los niños están jugando en el parque, y los corredores están corriendo.)</p>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">
+                    <span class="en">📱 Technology</span>
+                    <span class="es" style="display: none;">📱 Tecnología</span>
+                </div>
+                <div class="en">
+                    <p><strong>Question:</strong> What are you doing on your phone/computer?</p>
+                    <p><strong>Example Answer:</strong> "I am texting my friends, watching videos, and learning English!"</p>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>Pregunta:</strong> ¿Qué estás haciendo en tu teléfono/computadora?</p>
+                    <p><strong>Respuesta de Ejemplo:</strong> "I am texting my friends, watching videos, and learning English!" (¡Estoy enviando mensajes a mis amigos, viendo videos, y aprendiendo inglés!)</p>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">
+                    <span class="en">🎯 Future Plans</span>
+                    <span class="es" style="display: none;">🎯 Planes Futuros</span>
+                </div>
+                <div class="en">
+                    <p><strong>Question:</strong> What are you doing this weekend?</p>
+                    <p><strong>Example Answer:</strong> "I am visiting my grandparents on Saturday and I am going to the movies on Sunday."</p>
+                </div>
+                <div class="es" style="display: none;">
+                    <p><strong>Pregunta:</strong> ¿Qué vas a hacer este fin de semana?</p>
+                    <p><strong>Respuesta de Ejemplo:</strong> "I am visiting my grandparents on Saturday and I am going to the movies on Sunday." (Voy a visitar a mis abuelos el sábado y voy a ir al cine el domingo.)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentSection = 'intro';
+        let score = 0;
+        let currentExercise = 0;
+
+        const exercises = [
+            {
+                en: "I ___ reading a book right now.",
+                es: "I ___ reading a book right now. (Yo ___ leyendo un libro ahora mismo.)",
+                options: ["am", "is", "are", "be"],
+                correct: 0,
+                explanation: {
+                    en: "Use 'am' with 'I'",
+                    es: "Usa 'am' con 'I'"
+                }
+            },
+            {
+                en: "She ___ cooking dinner in the kitchen.",
+                es: "She ___ cooking dinner in the kitchen. (Ella ___ cocinando la cena en la cocina.)",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                explanation: {
+                    en: "Use 'is' with 'She/He/It'",
+                    es: "Usa 'is' con 'She/He/It'"
+                }
+            },
+            {
+                en: "They ___ playing soccer in the park.",
+                es: "They ___ playing soccer in the park. (Ellos ___ jugando fútbol en el parque.)",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                explanation: {
+                    en: "Use 'are' with 'They/We/You'",
+                    es: "Usa 'are' con 'They/We/You'"
+                }
+            },
+            {
+                en: "What is the correct form: 'run + ing'?",
+                es: "¿Cuál es la forma correcta: 'run + ing'?",
+                options: ["runing", "running", "runining", "runn"],
+                correct: 1,
+                explanation: {
+                    en: "Double the 'n' before adding 'ing'",
+                    es: "Dobla la 'n' antes de añadir 'ing'"
+                }
+            },
+            {
+                en: "We ___ studying English together.",
+                es: "We ___ studying English together. (Nosotros ___ estudiando inglés juntos.)",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                explanation: {
+                    en: "Use 'are' with 'We'",
+                    es: "Usa 'are' con 'We'"
+                }
+            },
+            {
+                en: "He ___ not working today.",
+                es: "He ___ not working today. (Él no ___ trabajando hoy.)",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                explanation: {
+                    en: "Use 'is' with 'He'",
+                    es: "Usa 'is' con 'He'"
+                }
+            },
+            {
+                en: "What is the correct form: 'write + ing'?",
+                es: "¿Cuál es la forma correcta: 'write + ing'?",
+                options: ["writeing", "writing", "writting", "writng"],
+                correct: 1,
+                explanation: {
+                    en: "Drop the 'e' before adding 'ing'",
+                    es: "Quita la 'e' antes de añadir 'ing'"
+                }
+            },
+            {
+                en: "You ___ doing great with this exercise!",
+                es: "You ___ doing great with this exercise! (¡Tú ___ haciéndolo muy bien con este ejercicio!)",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                explanation: {
+                    en: "Use 'are' with 'You'",
+                    es: "Usa 'are' con 'You'"
+                }
+            },
+            {
+                en: "The cat ___ sleeping on the sofa.",
+                es: "The cat ___ sleeping on the sofa. (El gato ___ durmiendo en el sofá.)",
+                options: ["am", "is", "are", "be"],
+                correct: 1,
+                explanation: {
+                    en: "Use 'is' with singular nouns (the cat = it)",
+                    es: "Usa 'is' con sustantivos singulares (the cat = it)"
+                }
+            },
+            {
+                en: "My friends ___ coming to the party tonight.",
+                es: "My friends ___ coming to the party tonight. (Mis amigos ___ viniendo a la fiesta esta noche.)",
+                options: ["am", "is", "are", "be"],
+                correct: 2,
+                explanation: {
+                    en: "Use 'are' with plural nouns (friends = they)",
+                    es: "Usa 'are' con sustantivos plurales (friends = they)"
+                }
+            }
+        ];
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide language content
+            document.querySelectorAll('.en').forEach(el => {
+                el.style.display = lang === 'en' ? 'block' : 'none';
+            });
+            document.querySelectorAll('.es').forEach(el => {
+                el.style.display = lang === 'es' ? 'block' : 'none';
+            });
+        }
+
+        function showSection(section) {
+            currentSection = section;
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide sections
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(section).classList.add('active');
+            
+            // Generate exercises if practice section
+            if (section === 'practice') {
+                generateExercises();
+            }
+        }
+
+        function generateExercises() {
+            const container = document.getElementById('exercises-container');
+            container.innerHTML = '';
+            
+            exercises.forEach((exercise, index) => {
+                const exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'exercise';
+                exerciseDiv.innerHTML = `
+                    <div class="question">
+                        ${index + 1}. ${currentLanguage === 'en' ? exercise.en : exercise.es}
+                    </div>
+                    <div class="options" id="options-${index}">
+                        ${exercise.options.map((option, optIndex) => 
+                            `<div class="option" onclick="selectAnswer(${index}, ${optIndex})">${option}</div>`
+                        ).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="feedback" style="display: none;"></div>
+                `;
+                container.appendChild(exerciseDiv);
+            });
+        }
+
+        function selectAnswer(exerciseIndex, optionIndex) {
+            const exercise = exercises[exerciseIndex];
+            const options = document.querySelectorAll(`#options-${exerciseIndex} .option`);
+            const feedback = document.getElementById(`feedback-${exerciseIndex}`);
+            
+            // Remove previous selections
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            options[optionIndex].classList.add('selected');
+            
+            // Check if correct
+            if (optionIndex === exercise.correct) {
+                options[optionIndex].classList.add('correct');
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = currentLanguage === 'en' ? 
+                    `✅ Correct! ${exercise.explanation.en}` : 
+                    `✅ ¡Correcto! ${exercise.explanation.es}`;
+                score++;
+            } else {
+                options[optionIndex].classList.add('incorrect');
+                options[exercise.correct].classList.add('correct');
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = currentLanguage === 'en' ? 
+                    `❌ Incorrect. ${exercise.explanation.en}` : 
+                    `❌ Incorrecto. ${exercise.explanation.es}`;
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('score').textContent = score;
+            
+            // Disable all options for this exercise
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+        }
+
+        function resetPractice() {
+            score = 0;
+            document.getElementById('score').textContent = score;
+            generateExercises();
+        }
+
+        // Initialize the app
+        generateExercises();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96af1b4d51660ad3',t:'MTc1NDQ4OTMxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
