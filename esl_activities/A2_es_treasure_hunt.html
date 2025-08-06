@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treasure Island Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #8B4513, #D2691E);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: "🏴‍☠️";
+            font-size: 3rem;
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header::after {
+            content: "🗺️";
+            font-size: 3rem;
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .story-section {
+            padding: 40px;
+            line-height: 1.8;
+        }
+
+        .scene-image {
+            font-size: 4rem;
+            text-align: center;
+            margin: 20px 0;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #E6F3FF, #F0F8FF);
+            border-radius: 15px;
+            border: 3px dashed #4682B4;
+        }
+
+        .story-text {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #2C3E50;
+            background: #F8F9FA;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #3498DB;
+        }
+
+        .choices {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            color: white;
+            border: none;
+            padding: 20px 25px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            text-align: left;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(45deg, #FF5252, #FF7043);
+        }
+
+        .choice-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .progress-bar {
+            background: #E0E0E0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .compass {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid #8B4513;
+        }
+
+        .map-container {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 3px solid #8B4513;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .map-container.hidden {
+            transform: translateX(220px);
+            opacity: 0;
+        }
+
+        .map-toggle {
+            position: fixed;
+            top: 340px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 69, 19, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .map-toggle:hover {
+            background: rgba(139, 69, 19, 1);
+            transform: scale(1.1);
+        }
+
+        .map-title {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #D2691E;
+            padding-bottom: 5px;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 2px;
+            height: 150px;
+            background: #E6F3FF;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .map-cell {
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .map-cell.water {
+            background: linear-gradient(135deg, #4FC3F7, #29B6F6);
+        }
+
+        .map-cell.beach {
+            background: linear-gradient(135deg, #FFE082, #FFCC02);
+        }
+
+        .map-cell.jungle {
+            background: linear-gradient(135deg, #66BB6A, #4CAF50);
+        }
+
+        .map-cell.mountain {
+            background: linear-gradient(135deg, #8D6E63, #6D4C41);
+        }
+
+        .map-cell.rocks {
+            background: linear-gradient(135deg, #90A4AE, #607D8B);
+        }
+
+        .map-cell.cave {
+            background: linear-gradient(135deg, #424242, #212121);
+        }
+
+        .player-marker {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+            z-index: 10;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .path-marker {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #FF5722;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px rgba(255, 87, 34, 0.6);
+        }
+
+        .treasure-found {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #8B4513;
+            text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .language-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .header::before,
+            .header::after {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .story-section {
+                padding: 20px;
+            }
+            
+            .compass {
+                position: relative;
+                margin: 20px auto;
+            }
+
+            .map-container {
+                position: relative;
+                margin: 20px auto;
+                right: auto;
+                top: auto;
+            }
+
+            .map-toggle {
+                position: relative;
+                margin: 10px auto;
+                right: auto;
+                top: auto;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="compass" id="compass">🧭</div>
+    
+    <div class="map-container" id="mapContainer">
+        <div class="map-title" id="mapTitle">Treasure Map</div>
+        <div class="map-grid" id="mapGrid">
+            <!-- Map cells will be generated by JavaScript -->
+        </div>
+    </div>
+    
+    <button class="map-toggle" id="mapToggle" onclick="game.toggleMap()">🗺️</button>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1 id="gameTitle">Treasure Island Adventure</h1>
+            <p class="subtitle" id="gameSubtitle">Navigate using directions to find the buried treasure!</p>
+            <button class="language-btn" id="languageBtn" onclick="game.toggleLanguage()">🇪🇸 Español</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        
+        <div class="story-section" id="gameContent">
+            <!-- Game content will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        class TreasureGame {
+            constructor() {
+                this.currentScene = 'start';
+                this.progress = 0;
+                this.currentLanguage = 'en';
+                this.mapVisible = true;
+                this.content = {
+                    en: {
+                        title: "Treasure Island Adventure",
+                        subtitle: "Navigate using directions to find the buried treasure!",
+                        languageBtn: "🇪🇸 Español",
+                        playAgain: "🔄 Play Again",
+                        newAdventure: "🏴‍☠️ Start New Adventure",
+                        goBack: "🔙 Go back",
+                        return: "🔙 Return",
+                        treasureTitle: "TREASURE FOUND!",
+                        mapTitle: "Treasure Map"
+                    },
+                    es: {
+                        title: "Aventura en la Isla del Tesoro",
+                        subtitle: "¡Navega usando direcciones para encontrar el tesoro enterrado!",
+                        languageBtn: "🇺🇸 English",
+                        playAgain: "🔄 Jugar de Nuevo",
+                        newAdventure: "🏴‍☠️ Comenzar Nueva Aventura",
+                        goBack: "🔙 Regresar",
+                        return: "🔙 Volver",
+                        treasureTitle: "¡TESORO ENCONTRADO!",
+                        mapTitle: "Mapa del Tesoro"
+                    }
+                };
+                this.scenes = {
+                    start: {
+                        image: '🏝️',
+                        text: {
+                            en: "You wake up on a small island. Your boat is broken. The sun is warm and you can hear the sea. In your pocket, you find an old map. The map has a big X on it. This X shows where treasure is hidden! The map says to start at the beach. Where do you want to go?",
+                            es: "Despiertas en una pequeña isla. Tu barco está roto. El sol está caliente y puedes escuchar el mar. En tu bolsillo, encuentras un mapa viejo. El mapa tiene una gran X. ¡Esta X muestra dónde está escondido el tesoro! El mapa dice que empieces en la playa. ¿Adónde quieres ir?"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🌅 Go EAST (where the sun comes up)", next: 'east1', correct: true },
+                                { text: "🌊 Go NORTH (to the big hills)", next: 'wrong1', correct: false },
+                                { text: "🌴 Go SOUTH (to the green trees)", next: 'wrong1', correct: false }
+                            ],
+                            es: [
+                                { text: "🌅 Ir al ESTE (donde sale el sol)", next: 'east1', correct: true },
+                                { text: "🌊 Ir al NORTE (a las colinas grandes)", next: 'wrong1', correct: false },
+                                { text: "🌴 Ir al SUR (a los árboles verdes)", next: 'wrong1', correct: false }
+                            ]
+                        }
+                    },
+                    east1: {
+                        image: '🌅',
+                        text: {
+                            en: "Good choice! You walk east on the sand. The morning sun feels nice on your face. You find some old wood from broken boats. Your map shows you need to find big rocks. You see three different ways to go.",
+                            es: "¡Buena elección! Caminas al este sobre la arena. El sol de la mañana se siente bien en tu cara. Encuentras madera vieja de barcos rotos. Tu mapa muestra que necesitas encontrar rocas grandes. Ves tres maneras diferentes de ir."
+                        },
+                        choices: {
+                            en: [
+                                { text: "⬅️ Turn LEFT (North) to the high rocks", next: 'north1', correct: true },
+                                { text: "➡️ Turn RIGHT (South) to the tall trees", next: 'wrong2', correct: false },
+                                { text: "⬆️ Go STRAIGHT (keep going East)", next: 'wrong2', correct: false }
+                            ],
+                            es: [
+                                { text: "⬅️ Girar a la IZQUIERDA (Norte) a las rocas altas", next: 'north1', correct: true },
+                                { text: "➡️ Girar a la DERECHA (Sur) a los árboles altos", next: 'wrong2', correct: false },
+                                { text: "⬆️ Ir DERECHO (seguir al Este)", next: 'wrong2', correct: false }
+                            ]
+                        }
+                    },
+                    north1: {
+                        image: '🗿',
+                        text: {
+                            en: "Perfect! You go north and find the big rocks from your map. There are old pictures cut into the rocks. Your map says to look for clean water. You can hear water moving somewhere near you. Which way should you go?",
+                            es: "¡Perfecto! Vas al norte y encuentras las rocas grandes de tu mapa. Hay dibujos viejos cortados en las rocas. Tu mapa dice que busques agua limpia. Puedes escuchar agua moviéndose en algún lugar cerca de ti. ¿Por dónde deberías ir?"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🌊 Follow the water sound DOWN (East)", next: 'wrong3', correct: false },
+                                { text: "🏔️ Follow the water sound UP (West) to the hills", next: 'west1', correct: true },
+                                { text: "🌿 Walk over the rocks going SOUTH", next: 'wrong3', correct: false }
+                            ],
+                            es: [
+                                { text: "🌊 Seguir el sonido del agua ABAJO (Este)", next: 'wrong3', correct: false },
+                                { text: "🏔️ Seguir el sonido del agua ARRIBA (Oeste) a las colinas", next: 'west1', correct: true },
+                                { text: "🌿 Caminar sobre las rocas yendo al SUR", next: 'wrong3', correct: false }
+                            ]
+                        }
+                    },
+                    west1: {
+                        image: '💧',
+                        text: {
+                            en: "Great work! You follow the water west and find a beautiful waterfall. Behind the falling water, you see a dark cave. Your map shows an X near a cave. This must be the right place! But there are three dark holes. Which cave do you choose?",
+                            es: "¡Buen trabajo! Sigues el agua al oeste y encuentras una cascada hermosa. Detrás del agua que cae, ves una cueva oscura. Tu mapa muestra una X cerca de una cueva. ¡Este debe ser el lugar correcto! Pero hay tres agujeros oscuros. ¿Qué cueva eliges?"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🕳️ Take the LEFT cave (Northwest)", next: 'wrong4', correct: false },
+                                { text: "🕳️ Take the MIDDLE cave (West)", next: 'treasure', correct: true },
+                                { text: "🕳️ Take the RIGHT cave (Southwest)", next: 'wrong4', correct: false }
+                            ],
+                            es: [
+                                { text: "🕳️ Tomar la cueva de la IZQUIERDA (Noroeste)", next: 'wrong4', correct: false },
+                                { text: "🕳️ Tomar la cueva del MEDIO (Oeste)", next: 'treasure', correct: true },
+                                { text: "🕳️ Tomar la cueva de la DERECHA (Suroeste)", next: 'wrong4', correct: false }
+                            ]
+                        }
+                    },
+                    treasure: {
+                        image: '💰',
+                        text: {
+                            en: "🎉 AMAZING! 🎉 You found the treasure! Inside the cave, you find a big box full of gold money, beautiful stones, and old special things. You are very good at following directions! Now you are the richest person on this island! You can buy anything you want!",
+                            es: "🎉 ¡INCREÍBLE! 🎉 ¡Encontraste el tesoro! Dentro de la cueva, encuentras una caja grande llena de dinero de oro, piedras hermosas y cosas especiales viejas. ¡Eres muy bueno siguiendo direcciones! ¡Ahora eres la persona más rica de esta isla! ¡Puedes comprar cualquier cosa que quieras!"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🔄 Play Again", next: 'start', correct: true }
+                            ],
+                            es: [
+                                { text: "🔄 Jugar de Nuevo", next: 'start', correct: true }
+                            ]
+                        }
+                    },
+                    wrong1: {
+                        image: '❌',
+                        text: {
+                            en: "Oh no! You are lost in the thick green trees. The map is hard to read here. You cannot find any special places. You need to go back to the beach and try a different way. Remember: the sun comes up in the EAST!",
+                            es: "¡Oh no! Estás perdido en los árboles verdes espesos. El mapa es difícil de leer aquí. No puedes encontrar ningún lugar especial. Necesitas regresar a la playa e intentar una manera diferente. ¡Recuerda: el sol sale por el ESTE!"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🔙 Go back to the beach", next: 'start', correct: true }
+                            ],
+                            es: [
+                                { text: "🔙 Regresar a la playa", next: 'start', correct: true }
+                            ]
+                        }
+                    },
+                    wrong2: {
+                        image: '❌',
+                        text: {
+                            en: "You walked into a wet, muddy place. There are no special places from your map here. The ground is soft and hard to walk on. You should go back and try a different way. Remember to look for the big rocks!",
+                            es: "Caminaste hacia un lugar húmedo y fangoso. No hay lugares especiales de tu mapa aquí. El suelo está blando y es difícil caminar. Deberías regresar e intentar una manera diferente. ¡Recuerda buscar las rocas grandes!"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🔙 Go back to the beach", next: 'east1', correct: true }
+                            ],
+                            es: [
+                                { text: "🔙 Regresar a la playa", next: 'east1', correct: true }
+                            ]
+                        }
+                    },
+                    wrong3: {
+                        image: '❌',
+                        text: {
+                            en: "You came to a place with no way out. There are plants with sharp points blocking your way. This is not the right place on your treasure map. You need to go back to the rocks and choose a different way. Think: where does water in the hills come from?",
+                            es: "Llegaste a un lugar sin salida. Hay plantas con puntas afiladas bloqueando tu camino. Este no es el lugar correcto en tu mapa del tesoro. Necesitas regresar a las rocas y elegir una manera diferente. Piensa: ¿de dónde viene el agua en las colinas?"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🔙 Go back to the big rocks", next: 'north1', correct: true }
+                            ],
+                            es: [
+                                { text: "🔙 Regresar a las rocas grandes", next: 'north1', correct: true }
+                            ]
+                        }
+                    },
+                    wrong4: {
+                        image: '❌',
+                        text: {
+                            en: "This cave has no treasure! It is empty and full of flying black animals that make noise. You can hear them making sounds as they fly around. Go back and try a different cave. The middle way is often the best choice!",
+                            es: "¡Esta cueva no tiene tesoro! Está vacía y llena de animales negros voladores que hacen ruido. Puedes escucharlos haciendo sonidos mientras vuelan alrededor. Regresa e intenta una cueva diferente. ¡El camino del medio suele ser la mejor elección!"
+                        },
+                        choices: {
+                            en: [
+                                { text: "🔙 Go back to choose another cave", next: 'west1', correct: true }
+                            ],
+                            es: [
+                                { text: "🔙 Regresar para elegir otra cueva", next: 'west1', correct: true }
+                            ]
+                        }
+                    }
+                };
+                
+                // Map layout: 4x4 grid representing the island
+                this.mapLayout = [
+                    ['water', 'water', 'mountain', 'mountain'],
+                    ['water', 'rocks', 'jungle', 'cave'],
+                    ['beach', 'beach', 'jungle', 'jungle'],
+                    ['water', 'water', 'jungle', 'jungle']
+                ];
+                
+                // Player positions for each scene
+                this.playerPositions = {
+                    'start': { row: 2, col: 0 },    // Beach start
+                    'east1': { row: 2, col: 1 },    // Beach east
+                    'north1': { row: 1, col: 1 },   // Rock formation
+                    'west1': { row: 1, col: 3 },    // Cave/waterfall
+                    'treasure': { row: 1, col: 3 }, // Inside cave
+                    'wrong1': { row: 3, col: 2 },   // Lost in jungle
+                    'wrong2': { row: 3, col: 1 },   // Swampy area
+                    'wrong3': { row: 0, col: 2 },   // Dead end mountains
+                    'wrong4': { row: 1, col: 2 }    // Wrong cave tunnel
+                };
+                
+                // Terrain emojis for each cell type
+                this.terrainEmojis = {
+                    'water': '🌊',
+                    'beach': '🏖️',
+                    'jungle': '🌴',
+                    'mountain': '⛰️',
+                    'rocks': '🗿',
+                    'cave': '🕳️'
+                };
+                
+                this.visitedPositions = new Set();
+                this.init();
+            }
+
+            init() {
+                this.initializeMap();
+                this.renderScene();
+            }
+
+            initializeMap() {
+                const mapGrid = document.getElementById('mapGrid');
+                mapGrid.innerHTML = '';
+                
+                for (let row = 0; row < 4; row++) {
+                    for (let col = 0; col < 4; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = `map-cell ${this.mapLayout[row][col]}`;
+                        cell.id = `cell-${row}-${col}`;
+                        cell.textContent = this.terrainEmojis[this.mapLayout[row][col]];
+                        mapGrid.appendChild(cell);
+                    }
+                }
+                
+                this.updatePlayerPosition();
+            }
+
+            renderScene() {
+                const scene = this.scenes[this.currentScene];
+                const content = document.getElementById('gameContent');
+                const lang = this.currentLanguage;
+                
+                if (this.currentScene === 'treasure') {
+                    content.innerHTML = `
+                        <div class="treasure-found">
+                            <div class="scene-image">${scene.image}</div>
+                            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">${this.content[lang].treasureTitle}</h2>
+                            <p style="font-size: 1.3rem; margin-bottom: 20px;">${scene.text[lang]}</p>
+                            <button class="restart-btn" onclick="game.restart()">${this.content[lang].newAdventure}</button>
+                        </div>
+                    `;
+                } else {
+                    const choicesHTML = scene.choices[lang].map((choice, index) => 
+                        `<button class="choice-btn" onclick="game.makeChoice('${choice.next}')">${choice.text}</button>`
+                    ).join('');
+
+                    content.innerHTML = `
+                        <div class="scene-image">${scene.image}</div>
+                        <div class="story-text">${scene.text[lang]}</div>
+                        <div class="choices">${choicesHTML}</div>
+                    `;
+                }
+
+                this.updateProgress();
+                this.updatePlayerPosition();
+                this.updateUI();
+            }
+
+            updatePlayerPosition() {
+                // Remove existing player markers and path markers
+                document.querySelectorAll('.player-marker, .path-marker').forEach(marker => {
+                    marker.remove();
+                });
+                
+                // Add path markers for visited positions
+                this.visitedPositions.forEach(posKey => {
+                    const [row, col] = posKey.split('-').map(Number);
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (cell) {
+                        const pathMarker = document.createElement('div');
+                        pathMarker.className = 'path-marker';
+                        cell.appendChild(pathMarker);
+                    }
+                });
+                
+                // Add current player position
+                const currentPos = this.playerPositions[this.currentScene];
+                if (currentPos) {
+                    const currentCell = document.getElementById(`cell-${currentPos.row}-${currentPos.col}`);
+                    if (currentCell) {
+                        const playerMarker = document.createElement('div');
+                        playerMarker.className = 'player-marker';
+                        playerMarker.textContent = this.currentScene === 'treasure' ? '👑' : '🚶‍♂️';
+                        currentCell.appendChild(playerMarker);
+                        
+                        // Add current position to visited positions
+                        this.visitedPositions.add(`${currentPos.row}-${currentPos.col}`);
+                    }
+                }
+            }
+
+            updateUI() {
+                const lang = this.currentLanguage;
+                document.getElementById('gameTitle').textContent = this.content[lang].title;
+                document.getElementById('gameSubtitle').textContent = this.content[lang].subtitle;
+                document.getElementById('languageBtn').textContent = this.content[lang].languageBtn;
+                document.getElementById('mapTitle').textContent = this.content[lang].mapTitle;
+            }
+
+            toggleLanguage() {
+                this.currentLanguage = this.currentLanguage === 'en' ? 'es' : 'en';
+                this.renderScene();
+            }
+
+            toggleMap() {
+                this.mapVisible = !this.mapVisible;
+                const mapContainer = document.getElementById('mapContainer');
+                const mapToggle = document.getElementById('mapToggle');
+                
+                if (this.mapVisible) {
+                    mapContainer.classList.remove('hidden');
+                    mapToggle.textContent = '🗺️';
+                } else {
+                    mapContainer.classList.add('hidden');
+                    mapToggle.textContent = '👁️';
+                }
+            }
+
+            makeChoice(nextScene) {
+                this.currentScene = nextScene;
+                
+                // Update progress based on correct path
+                const progressMap = {
+                    'start': 0,
+                    'east1': 25,
+                    'north1': 50,
+                    'west1': 75,
+                    'treasure': 100
+                };
+                
+                if (progressMap[nextScene] !== undefined) {
+                    this.progress = progressMap[nextScene];
+                }
+
+                this.renderScene();
+            }
+
+            updateProgress() {
+                const progressFill = document.getElementById('progressFill');
+                progressFill.style.width = this.progress + '%';
+            }
+
+            restart() {
+                this.currentScene = 'start';
+                this.progress = 0;
+                this.visitedPositions.clear();
+                this.renderScene();
+            }
+        }
+
+        // Initialize the game
+        const game = new TreasureGame();
+
+        // Add some compass animation
+        setInterval(() => {
+            const compass = document.getElementById('compass');
+            compass.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
+            setTimeout(() => {
+                compass.style.transform = 'rotate(0deg)';
+            }, 200);
+        }, 3000);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96aa366053250384',t:'MTc1NDQzNzk5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

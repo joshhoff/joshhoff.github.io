@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechVocab - Master Contemporary Technology Language</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .pulse-animation { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold text-center mb-2">🚀 TechVocab</h1>
+            <p class="text-xl text-center opacity-90">Master Contemporary Technology Language</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-center space-x-8 py-4">
+                <button onclick="showSection('learn')" class="nav-btn px-6 py-2 rounded-lg font-medium transition-all bg-blue-100 text-blue-700">📚 Learn</button>
+                <button onclick="showSection('practice')" class="nav-btn px-6 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">✍️ Practice</button>
+                <button onclick="showSection('conversation')" class="nav-btn px-6 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">💬 Conversation</button>
+                <button onclick="showSection('progress')" class="nav-btn px-6 py-2 rounded-lg font-medium transition-all hover:bg-gray-100">📊 Progress</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Learn Section -->
+        <section id="learn" class="section">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">📚 Learn Technology Vocabulary</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover cursor-pointer" onclick="showCategory('nouns')">
+                        <div class="text-4xl mb-4">🏷️</div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Nouns</h3>
+                        <p class="text-gray-600">Technology objects, concepts, and entities</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover cursor-pointer" onclick="showCategory('adjectives')">
+                        <div class="text-4xl mb-4">✨</div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Adjectives</h3>
+                        <p class="text-gray-600">Descriptive words for tech features</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover cursor-pointer" onclick="showCategory('phrasal-verbs')">
+                        <div class="text-4xl mb-4">⚡</div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Phrasal Verbs</h3>
+                        <p class="text-gray-600">Action phrases in technology</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg card-hover cursor-pointer" onclick="showCategory('adverbs')">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Adverbs</h3>
+                        <p class="text-gray-600">How tech actions are performed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vocabulary Display -->
+            <div id="vocabulary-display" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="category-title" class="text-2xl font-bold text-gray-800"></h3>
+                        <button onclick="hideCategory()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                    </div>
+                    <div id="vocabulary-list" class="space-y-6"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice" class="section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">✍️ Written Practice</h2>
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div id="practice-content">
+                    <div class="mb-6">
+                        <label class="block text-lg font-medium text-gray-700 mb-3">Choose Practice Type:</label>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <button onclick="startPractice('fill-blank')" class="p-4 border-2 border-blue-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-all">
+                                <div class="text-2xl mb-2">📝</div>
+                                <div class="font-medium">Fill in the Blanks</div>
+                            </button>
+                            <button onclick="startPractice('multiple-choice')" class="p-4 border-2 border-green-200 rounded-lg hover:border-green-400 hover:bg-green-50 transition-all">
+                                <div class="text-2xl mb-2">✅</div>
+                                <div class="font-medium">Multiple Choice</div>
+                            </button>
+                            <button onclick="startPractice('definition-match')" class="p-4 border-2 border-purple-200 rounded-lg hover:border-purple-400 hover:bg-purple-50 transition-all">
+                                <div class="text-2xl mb-2">🔗</div>
+                                <div class="font-medium">Match Definitions</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="practice-exercise" class="hidden"></div>
+            </div>
+        </section>
+
+        <!-- Conversation Section -->
+        <section id="conversation" class="section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">💬 Conversation Practice</h2>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎭 Role-Play Scenarios</h3>
+                    <div id="scenario-list" class="space-y-4"></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">💡 Discussion Prompts</h3>
+                    <div id="prompt-list" class="space-y-4"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section id="progress" class="section hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">📊 Your Progress</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-600 mb-2" id="words-learned">0</div>
+                    <div class="text-gray-600">Words Learned</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-green-600 mb-2" id="exercises-completed">0</div>
+                    <div class="text-gray-600">Exercises Completed</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-600 mb-2" id="accuracy-rate">0%</div>
+                    <div class="text-gray-600">Accuracy Rate</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-orange-600 mb-2" id="streak-days">0</div>
+                    <div class="text-gray-600">Day Streak</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = {
+            nouns: [
+                {
+                    word: "Algorithm",
+                    definition: "A set of rules or instructions for solving a problem or completing a task",
+                    context: "The social media platform uses a complex algorithm to determine what content appears in your feed.",
+                    example: "Machine learning algorithms can predict user behavior patterns."
+                },
+                {
+                    word: "Blockchain",
+                    definition: "A distributed digital ledger that records transactions across multiple computers",
+                    context: "Cryptocurrency transactions are secured using blockchain technology.",
+                    example: "The blockchain ensures that digital transactions cannot be altered or deleted."
+                },
+                {
+                    word: "Cloud Computing",
+                    definition: "The delivery of computing services over the internet",
+                    context: "Many businesses have moved their data storage to cloud computing platforms.",
+                    example: "Cloud computing allows you to access your files from anywhere with an internet connection."
+                },
+                {
+                    word: "Cybersecurity",
+                    definition: "The practice of protecting systems, networks, and data from digital attacks",
+                    context: "Companies invest heavily in cybersecurity to protect customer information.",
+                    example: "Strong cybersecurity measures include firewalls, encryption, and regular security updates."
+                }
+            ],
+            adjectives: [
+                {
+                    word: "User-friendly",
+                    definition: "Easy to use and understand, especially for non-technical users",
+                    context: "The new app interface is much more user-friendly than the previous version.",
+                    example: "A user-friendly design reduces the learning curve for new software."
+                },
+                {
+                    word: "Scalable",
+                    definition: "Able to handle increased workload or users without performance issues",
+                    context: "The cloud infrastructure is scalable to accommodate business growth.",
+                    example: "Scalable solutions can expand from serving hundreds to millions of users."
+                },
+                {
+                    word: "Encrypted",
+                    definition: "Protected by converting information into a secret code",
+                    context: "All sensitive data is encrypted before being stored in the database.",
+                    example: "Encrypted messages can only be read by authorized recipients."
+                },
+                {
+                    word: "Wireless",
+                    definition: "Operating without physical cables or connections",
+                    context: "The office uses wireless technology for internet connectivity.",
+                    example: "Wireless charging eliminates the need for charging cables."
+                }
+            ],
+            "phrasal-verbs": [
+                {
+                    word: "Log in/into",
+                    definition: "To access a computer system by entering credentials",
+                    context: "Please log into your account to view your personal dashboard.",
+                    example: "I need to log in to check my email messages."
+                },
+                {
+                    word: "Back up",
+                    definition: "To create a copy of data for protection against loss",
+                    context: "Remember to back up your important files regularly.",
+                    example: "The system automatically backs up data every night."
+                },
+                {
+                    word: "Set up",
+                    definition: "To install, configure, or prepare something for use",
+                    context: "The IT team will set up the new software on all computers.",
+                    example: "It took an hour to set up the video conference system."
+                },
+                {
+                    word: "Shut down",
+                    definition: "To turn off or stop a computer system properly",
+                    context: "Always shut down your computer properly to avoid data corruption.",
+                    example: "The server will shut down automatically for maintenance tonight."
+                }
+            ],
+            adverbs: [
+                {
+                    word: "Seamlessly",
+                    definition: "In a smooth way without problems or interruptions",
+                    context: "The new system integrates seamlessly with existing software.",
+                    example: "Data flows seamlessly between different departments."
+                },
+                {
+                    word: "Remotely",
+                    definition: "From a distance, not physically present",
+                    context: "Employees can work remotely using cloud-based tools.",
+                    example: "The technician can remotely access your computer to fix issues."
+                },
+                {
+                    word: "Automatically",
+                    definition: "Without human intervention or manual control",
+                    context: "The software automatically updates to the latest version.",
+                    example: "Emails are automatically sorted into different folders."
+                },
+                {
+                    word: "Efficiently",
+                    definition: "In a way that achieves maximum productivity with minimum effort",
+                    context: "The new processor handles tasks more efficiently than the old one.",
+                    example: "AI can efficiently analyze large amounts of data."
+                }
+            ]
+        };
+
+        // Practice exercises data
+        const exercises = {
+            "fill-blank": [
+                {
+                    sentence: "The company uses _______ technology to protect customer data from hackers.",
+                    answer: "cybersecurity",
+                    options: ["cybersecurity", "blockchain", "algorithm"]
+                },
+                {
+                    sentence: "Please _______ to your account to access your personal settings.",
+                    answer: "log in",
+                    options: ["log in", "back up", "set up"]
+                },
+                {
+                    sentence: "The new interface is very _______ and easy to navigate.",
+                    answer: "user-friendly",
+                    options: ["user-friendly", "scalable", "encrypted"]
+                }
+            ],
+            "multiple-choice": [
+                {
+                    question: "What does 'scalable' mean in technology?",
+                    options: [
+                        "Able to handle increased workload without performance issues",
+                        "Protected by secret codes",
+                        "Easy to use for beginners",
+                        "Operating without cables"
+                    ],
+                    answer: 0
+                },
+                {
+                    question: "Which phrasal verb means 'to create a copy of data'?",
+                    options: ["Log in", "Set up", "Back up", "Shut down"],
+                    answer: 2
+                }
+            ]
+        };
+
+        // Conversation scenarios and prompts
+        const conversationData = {
+            scenarios: [
+                {
+                    title: "Tech Support Call",
+                    description: "You're calling tech support about a software issue. Practice explaining technical problems clearly.",
+                    vocabulary: ["log in", "user-friendly", "automatically", "remotely"]
+                },
+                {
+                    title: "Product Presentation",
+                    description: "Present a new app to potential investors. Use technology vocabulary to highlight features.",
+                    vocabulary: ["scalable", "seamlessly", "encrypted", "cloud computing"]
+                },
+                {
+                    title: "Team Meeting",
+                    description: "Discuss implementing new technology in your workplace with colleagues.",
+                    vocabulary: ["back up", "efficiently", "cybersecurity", "wireless"]
+                }
+            ],
+            prompts: [
+                "Describe how artificial intelligence might change your industry in the next 5 years.",
+                "Explain the benefits and risks of storing personal data in the cloud.",
+                "Discuss why cybersecurity is important for small businesses.",
+                "Compare traditional and digital payment methods using technology vocabulary."
+            ]
+        };
+
+        // Progress tracking
+        let progress = {
+            wordsLearned: 0,
+            exercisesCompleted: 0,
+            correctAnswers: 0,
+            totalAnswers: 0,
+            streakDays: 0
+        };
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('techvocab-progress');
+            if (saved) {
+                progress = JSON.parse(saved);
+                updateProgressDisplay();
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            localStorage.setItem('techvocab-progress', JSON.stringify(progress));
+            updateProgressDisplay();
+        }
+
+        // Update progress display
+        function updateProgressDisplay() {
+            document.getElementById('words-learned').textContent = progress.wordsLearned;
+            document.getElementById('exercises-completed').textContent = progress.exercisesCompleted;
+            document.getElementById('accuracy-rate').textContent = 
+                progress.totalAnswers > 0 ? Math.round((progress.correctAnswers / progress.totalAnswers) * 100) + '%' : '0%';
+            document.getElementById('streak-days').textContent = progress.streakDays;
+        }
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-100', 'text-blue-700');
+                btn.classList.add('hover:bg-gray-100');
+            });
+            
+            event.target.classList.add('bg-blue-100', 'text-blue-700');
+            event.target.classList.remove('hover:bg-gray-100');
+
+            // Load section-specific content
+            if (sectionName === 'conversation') {
+                loadConversationContent();
+            } else if (sectionName === 'progress') {
+                updateProgressDisplay();
+            }
+        }
+
+        // Show vocabulary category
+        function showCategory(category) {
+            const display = document.getElementById('vocabulary-display');
+            const title = document.getElementById('category-title');
+            const list = document.getElementById('vocabulary-list');
+            
+            title.textContent = category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ');
+            
+            list.innerHTML = '';
+            vocabulary[category].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'border-l-4 border-blue-500 pl-6 py-4 bg-gray-50 rounded-r-lg';
+                div.innerHTML = `
+                    <h4 class="text-xl font-semibold text-gray-800 mb-2">${item.word}</h4>
+                    <p class="text-gray-700 mb-3"><strong>Definition:</strong> ${item.definition}</p>
+                    <p class="text-gray-600 mb-2"><strong>Context:</strong> ${item.context}</p>
+                    <p class="text-gray-600"><strong>Example:</strong> ${item.example}</p>
+                `;
+                list.appendChild(div);
+            });
+            
+            display.classList.remove('hidden');
+            progress.wordsLearned = Math.max(progress.wordsLearned, vocabulary[category].length);
+            saveProgress();
+        }
+
+        // Hide vocabulary category
+        function hideCategory() {
+            document.getElementById('vocabulary-display').classList.add('hidden');
+        }
+
+        // Start practice exercise
+        function startPractice(type) {
+            const content = document.getElementById('practice-content');
+            const exercise = document.getElementById('practice-exercise');
+            
+            content.classList.add('hidden');
+            exercise.classList.remove('hidden');
+            
+            if (type === 'fill-blank') {
+                loadFillBlankExercise();
+            } else if (type === 'multiple-choice') {
+                loadMultipleChoiceExercise();
+            } else if (type === 'definition-match') {
+                loadDefinitionMatchExercise();
+            }
+        }
+
+        // Load fill-in-the-blank exercise
+        function loadFillBlankExercise() {
+            const exercise = exercises['fill-blank'][Math.floor(Math.random() * exercises['fill-blank'].length)];
+            const container = document.getElementById('practice-exercise');
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <button onclick="backToPracticeMenu()" class="text-blue-600 hover:text-blue-800 mb-4">← Back to Practice Menu</button>
+                    <h3 class="text-xl font-semibold mb-4">Fill in the Blank</h3>
+                    <p class="text-lg mb-6">${exercise.sentence}</p>
+                    <div class="space-y-3">
+                        ${exercise.options.map(option => `
+                            <button onclick="checkFillBlank('${option}', '${exercise.answer}')" 
+                                    class="block w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-blue-400 transition-all">
+                                ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="fill-blank-result" class="mt-4 hidden"></div>
+                </div>
+            `;
+        }
+
+        // Check fill-in-the-blank answer
+        function checkFillBlank(selected, correct) {
+            const result = document.getElementById('fill-blank-result');
+            const isCorrect = selected === correct;
+            
+            progress.totalAnswers++;
+            if (isCorrect) progress.correctAnswers++;
+            progress.exercisesCompleted++;
+            saveProgress();
+            
+            result.className = `mt-4 p-4 rounded-lg ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            result.innerHTML = `
+                <div class="font-semibold">${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</div>
+                <div class="mt-2">${isCorrect ? 'Well done!' : `The correct answer is: ${correct}`}</div>
+                <button onclick="loadFillBlankExercise()" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Next Exercise
+                </button>
+            `;
+            result.classList.remove('hidden');
+        }
+
+        // Load multiple choice exercise
+        function loadMultipleChoiceExercise() {
+            const exercise = exercises['multiple-choice'][Math.floor(Math.random() * exercises['multiple-choice'].length)];
+            const container = document.getElementById('practice-exercise');
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <button onclick="backToPracticeMenu()" class="text-blue-600 hover:text-blue-800 mb-4">← Back to Practice Menu</button>
+                    <h3 class="text-xl font-semibold mb-4">Multiple Choice</h3>
+                    <p class="text-lg mb-6">${exercise.question}</p>
+                    <div class="space-y-3">
+                        ${exercise.options.map((option, index) => `
+                            <button onclick="checkMultipleChoice(${index}, ${exercise.answer})" 
+                                    class="block w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-blue-400 transition-all">
+                                ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="multiple-choice-result" class="mt-4 hidden"></div>
+                </div>
+            `;
+        }
+
+        // Check multiple choice answer
+        function checkMultipleChoice(selected, correct) {
+            const result = document.getElementById('multiple-choice-result');
+            const isCorrect = selected === correct;
+            
+            progress.totalAnswers++;
+            if (isCorrect) progress.correctAnswers++;
+            progress.exercisesCompleted++;
+            saveProgress();
+            
+            result.className = `mt-4 p-4 rounded-lg ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            result.innerHTML = `
+                <div class="font-semibold">${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</div>
+                <div class="mt-2">${isCorrect ? 'Excellent work!' : 'Keep practicing to improve!'}</div>
+                <button onclick="loadMultipleChoiceExercise()" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Next Exercise
+                </button>
+            `;
+            result.classList.remove('hidden');
+        }
+
+        // Load definition matching exercise
+        function loadDefinitionMatchExercise() {
+            const allWords = Object.values(vocabulary).flat();
+            const selectedWords = allWords.sort(() => 0.5 - Math.random()).slice(0, 4);
+            
+            const container = document.getElementById('practice-exercise');
+            container.innerHTML = `
+                <div class="mb-6">
+                    <button onclick="backToPracticeMenu()" class="text-blue-600 hover:text-blue-800 mb-4">← Back to Practice Menu</button>
+                    <h3 class="text-xl font-semibold mb-4">Match Definitions</h3>
+                    <p class="text-gray-600 mb-6">Click on a word, then click on its matching definition.</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-3">Words</h4>
+                            <div class="space-y-2">
+                                ${selectedWords.map((word, index) => `
+                                    <button onclick="selectWord(${index}, '${word.word}')" 
+                                            class="word-btn block w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-blue-400 transition-all">
+                                        ${word.word}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3">Definitions</h4>
+                            <div class="space-y-2">
+                                ${selectedWords.sort(() => 0.5 - Math.random()).map((word, index) => `
+                                    <button onclick="selectDefinition(${index}, '${word.word}', '${word.definition}')" 
+                                            class="def-btn block w-full p-3 text-left border-2 border-gray-200 rounded-lg hover:border-green-400 transition-all text-sm">
+                                        ${word.definition}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="match-result" class="mt-6 hidden"></div>
+                </div>
+            `;
+        }
+
+        let selectedWord = null;
+        let matchedPairs = 0;
+
+        function selectWord(index, word) {
+            // Reset previous selections
+            document.querySelectorAll('.word-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-blue-50');
+                btn.classList.add('border-gray-200');
+            });
+            
+            // Highlight selected word
+            event.target.classList.add('border-blue-500', 'bg-blue-50');
+            selectedWord = word;
+        }
+
+        function selectDefinition(index, correctWord, definition) {
+            if (!selectedWord) {
+                alert('Please select a word first!');
+                return;
+            }
+            
+            const isCorrect = selectedWord === correctWord;
+            const result = document.getElementById('match-result');
+            
+            if (isCorrect) {
+                event.target.classList.add('border-green-500', 'bg-green-50');
+                event.target.disabled = true;
+                
+                // Find and disable the matched word
+                document.querySelectorAll('.word-btn').forEach(btn => {
+                    if (btn.textContent.trim() === selectedWord) {
+                        btn.classList.add('border-green-500', 'bg-green-50');
+                        btn.disabled = true;
+                    }
+                });
+                
+                matchedPairs++;
+                progress.correctAnswers++;
+                
+                if (matchedPairs === 4) {
+                    progress.exercisesCompleted++;
+                    result.className = 'mt-6 p-4 bg-green-100 text-green-800 rounded-lg';
+                    result.innerHTML = `
+                        <div class="font-semibold">🎉 Excellent! All pairs matched correctly!</div>
+                        <button onclick="loadDefinitionMatchExercise(); matchedPairs = 0;" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Try Another Set
+                        </button>
+                    `;
+                    result.classList.remove('hidden');
+                }
+            } else {
+                event.target.classList.add('border-red-500', 'bg-red-50');
+                setTimeout(() => {
+                    event.target.classList.remove('border-red-500', 'bg-red-50');
+                    event.target.classList.add('border-gray-200');
+                }, 1000);
+            }
+            
+            progress.totalAnswers++;
+            saveProgress();
+            selectedWord = null;
+            
+            // Reset word selection
+            document.querySelectorAll('.word-btn').forEach(btn => {
+                if (!btn.disabled) {
+                    btn.classList.remove('border-blue-500', 'bg-blue-50');
+                    btn.classList.add('border-gray-200');
+                }
+            });
+        }
+
+        // Back to practice menu
+        function backToPracticeMenu() {
+            document.getElementById('practice-content').classList.remove('hidden');
+            document.getElementById('practice-exercise').classList.add('hidden');
+            matchedPairs = 0;
+        }
+
+        // Load conversation content
+        function loadConversationContent() {
+            const scenarioList = document.getElementById('scenario-list');
+            const promptList = document.getElementById('prompt-list');
+            
+            scenarioList.innerHTML = conversationData.scenarios.map(scenario => `
+                <div class="p-4 border border-gray-200 rounded-lg hover:border-blue-300 transition-all">
+                    <h4 class="font-semibold text-gray-800 mb-2">${scenario.title}</h4>
+                    <p class="text-gray-600 text-sm mb-3">${scenario.description}</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${scenario.vocabulary.map(word => `
+                            <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">${word}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            promptList.innerHTML = conversationData.prompts.map(prompt => `
+                <div class="p-4 border border-gray-200 rounded-lg hover:border-green-300 transition-all">
+                    <p class="text-gray-700">${prompt}</p>
+                </div>
+            `).join('');
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgress();
+            loadConversationContent();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96a9d1f21220c370',t:'MTc1NDQzMzg3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

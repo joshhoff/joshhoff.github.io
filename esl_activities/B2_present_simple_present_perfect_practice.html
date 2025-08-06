@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar Practice - Present Tenses</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .grammar-box {
+            background: #f8f9fa;
+            border-left: 5px solid #4facfe;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .grammar-box h3 {
+            color: #4facfe;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .grammar-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .grammar-box li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .grammar-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .exercise {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .exercise h4 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .question p {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .question input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .question input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .question select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .result.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .result.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .conversation-prompt h4 {
+            color: #d63031;
+            margin-bottom: 15px;
+        }
+
+        .conversation-prompt p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .score {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score h3 {
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 English Grammar Practice</h1>
+            <p>Master Present Simple & Present Perfect Tenses</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('grammar')">📚 Grammar Guide</button>
+            <button class="nav-tab" onclick="showSection('written')">✍️ Written Practice</button>
+            <button class="nav-tab" onclick="showSection('conversation')">💬 Conversation</button>
+        </div>
+
+        <div class="content">
+            <!-- Grammar Guide Section -->
+            <div id="grammar" class="section active">
+                <div class="grammar-box">
+                    <h3>Present Simple Tense</h3>
+                    <p><strong>Use:</strong> For habits, facts, and general truths</p>
+                    <p><strong>Structure:</strong> Subject + base verb (+ s/es for 3rd person singular)</p>
+                    <ul>
+                        <li>I work every day</li>
+                        <li>She speaks three languages</li>
+                        <li>The sun rises in the east</li>
+                        <li>Do you like coffee?</li>
+                        <li>He doesn't play tennis</li>
+                    </ul>
+                </div>
+
+                <div class="grammar-box">
+                    <h3>Present Perfect Tense</h3>
+                    <p><strong>Use:</strong> For actions that started in the past and continue to the present, or completed actions with present relevance</p>
+                    <p><strong>Structure:</strong> Subject + have/has + past participle</p>
+                    <ul>
+                        <li>I have lived here for five years</li>
+                        <li>She has finished her homework</li>
+                        <li>We have never been to Japan</li>
+                        <li>Have you seen this movie?</li>
+                        <li>He hasn't called me yet</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Written Practice Section -->
+            <div id="written" class="section">
+                <div class="score">
+                    <h3>Your Progress</h3>
+                    <p>Score: <span id="score">0</span> / <span id="total">0</span></p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="exercise">
+                    <h4>Exercise 1: Choose the Correct Tense</h4>
+                    <div class="question">
+                        <p>1. I _______ coffee every morning.</p>
+                        <select id="q1">
+                            <option value="">Choose an answer</option>
+                            <option value="drink">drink</option>
+                            <option value="have drunk">have drunk</option>
+                        </select>
+                    </div>
+                    <div class="question">
+                        <p>2. She _______ in London since 2020.</p>
+                        <select id="q2">
+                            <option value="">Choose an answer</option>
+                            <option value="lives">lives</option>
+                            <option value="has lived">has lived</option>
+                        </select>
+                    </div>
+                    <div class="question">
+                        <p>3. _______ you ever _______ sushi?</p>
+                        <select id="q3">
+                            <option value="">Choose an answer</option>
+                            <option value="Do / eat">Do / eat</option>
+                            <option value="Have / eaten">Have / eaten</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="checkAnswers1()">Check Answers</button>
+                    <div id="result1" class="result" style="display: none;"></div>
+                </div>
+
+                <div class="exercise">
+                    <h4>Exercise 2: Fill in the Blanks</h4>
+                    <div class="question">
+                        <p>1. My brother _______ (work) as a teacher for ten years.</p>
+                        <input type="text" id="fill1" placeholder="Type your answer">
+                    </div>
+                    <div class="question">
+                        <p>2. The train _______ (arrive) at 9 AM every day.</p>
+                        <input type="text" id="fill2" placeholder="Type your answer">
+                    </div>
+                    <div class="question">
+                        <p>3. I _______ (not/see) him recently.</p>
+                        <input type="text" id="fill3" placeholder="Type your answer">
+                    </div>
+                    <button class="btn" onclick="checkAnswers2()">Check Answers</button>
+                    <div id="result2" class="result" style="display: none;"></div>
+                </div>
+
+                <div class="exercise">
+                    <h4>Exercise 3: Correct or Incorrect?</h4>
+                    <div class="question">
+                        <p>1. "I am knowing him for five years." - Is this correct?</p>
+                        <select id="correct1">
+                            <option value="">Choose an answer</option>
+                            <option value="correct">Correct</option>
+                            <option value="incorrect">Incorrect</option>
+                        </select>
+                    </div>
+                    <div class="question">
+                        <p>2. "She has three cats." - Is this correct?</p>
+                        <select id="correct2">
+                            <option value="">Choose an answer</option>
+                            <option value="correct">Correct</option>
+                            <option value="incorrect">Incorrect</option>
+                        </select>
+                    </div>
+                    <div class="question">
+                        <p>3. "We have been to Paris last year." - Is this correct?</p>
+                        <select id="correct3">
+                            <option value="">Choose an answer</option>
+                            <option value="correct">Correct</option>
+                            <option value="incorrect">Incorrect</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="checkAnswers3()">Check Answers</button>
+                    <div id="result3" class="result" style="display: none;"></div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="resetExercises()">Reset All Exercises</button>
+            </div>
+
+            <!-- Conversation Section -->
+            <div id="conversation" class="section">
+                <h2 style="margin-bottom: 30px; color: #495057;">💬 Conversation Practice Prompts</h2>
+                
+                <div class="conversation-prompt">
+                    <h4>🏠 Daily Routines (Present Simple)</h4>
+                    <p><strong>Practice talking about:</strong></p>
+                    <p>• What time do you usually wake up?</p>
+                    <p>• What do you do on weekends?</p>
+                    <p>• How often do you exercise?</p>
+                    <p>• Where do you work/study?</p>
+                    <p><strong>Example:</strong> "I wake up at 7 AM every day. I usually have breakfast and then go to work."</p>
+                </div>
+
+                <div class="conversation-prompt">
+                    <h4>🌟 Life Experiences (Present Perfect)</h4>
+                    <p><strong>Practice talking about:</strong></p>
+                    <p>• Have you ever traveled to another country?</p>
+                    <p>• What's the most interesting book you have read?</p>
+                    <p>• Have you learned any new skills recently?</p>
+                    <p>• What changes have you made in your life this year?</p>
+                    <p><strong>Example:</strong> "I have visited five countries so far. The most beautiful place I have been to is Japan."</p>
+                </div>
+
+                <div class="conversation-prompt">
+                    <h4>🎯 Goals and Achievements (Mixed Tenses)</h4>
+                    <p><strong>Practice talking about:</strong></p>
+                    <p>• What do you want to achieve this year?</p>
+                    <p>• What have you accomplished recently?</p>
+                    <p>• How do you usually set your goals?</p>
+                    <p>• What progress have you made on your current projects?</p>
+                    <p><strong>Example:</strong> "I usually set three main goals each year. This year, I have already completed two of them."</p>
+                </div>
+
+                <div class="conversation-prompt">
+                    <h4>🍽️ Food and Cooking (Mixed Tenses)</h4>
+                    <p><strong>Practice talking about:</strong></p>
+                    <p>• What do you usually eat for breakfast?</p>
+                    <p>• Have you tried any new restaurants lately?</p>
+                    <p>• How often do you cook at home?</p>
+                    <p>• What's the best dish you have ever made?</p>
+                    <p><strong>Example:</strong> "I cook dinner almost every night. Recently, I have learned how to make Italian pasta from scratch."</p>
+                </div>
+
+                <div class="conversation-prompt">
+                    <h4>📱 Technology and Hobbies (Mixed Tenses)</h4>
+                    <p><strong>Practice talking about:</strong></p>
+                    <p>• How do you use technology in your daily life?</p>
+                    <p>• What new apps have you downloaded recently?</p>
+                    <p>• What hobbies do you enjoy?</p>
+                    <p>• Have you started any new hobbies this year?</p>
+                    <p><strong>Example:</strong> "I use my phone for everything. I have recently started learning photography as a new hobby."</p>
+                </div>
+
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; margin-top: 30px;">
+                    <h4 style="color: #1976d2; margin-bottom: 15px;">💡 Conversation Tips</h4>
+                    <p><strong>Present Simple:</strong> Use for habits, routines, and general facts</p>
+                    <p><strong>Present Perfect:</strong> Use for experiences, recent actions, and actions that continue to the present</p>
+                    <p><strong>Practice tip:</strong> Try to use both tenses in your responses to create more natural conversations!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let totalQuestions = 0;
+
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Update nav tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function checkAnswers1() {
+            const answers = {
+                q1: 'drink',
+                q2: 'has lived',
+                q3: 'Have / eaten'
+            };
+            
+            let correct = 0;
+            let total = 3;
+            
+            for (let q in answers) {
+                const userAnswer = document.getElementById(q).value;
+                if (userAnswer === answers[q]) {
+                    correct++;
+                }
+            }
+            
+            updateScore(correct, total);
+            showResult('result1', correct, total, 
+                `Correct answers: 1) drink (habit), 2) has lived (duration from past to present), 3) Have / eaten (life experience)`);
+        }
+
+        function checkAnswers2() {
+            const answers = {
+                fill1: ['has worked', 'has been working'],
+                fill2: ['arrives'],
+                fill3: ['haven\'t seen', 'have not seen']
+            };
+            
+            let correct = 0;
+            let total = 3;
+            
+            for (let q in answers) {
+                const userAnswer = document.getElementById(q).value.toLowerCase().trim();
+                if (Array.isArray(answers[q])) {
+                    if (answers[q].some(ans => ans.toLowerCase() === userAnswer)) {
+                        correct++;
+                    }
+                } else {
+                    if (userAnswer === answers[q].toLowerCase()) {
+                        correct++;
+                    }
+                }
+            }
+            
+            updateScore(correct, total);
+            showResult('result2', correct, total, 
+                `Correct answers: 1) has worked/has been working (duration), 2) arrives (schedule/routine), 3) haven't seen (recent time period)`);
+        }
+
+        function checkAnswers3() {
+            const answers = {
+                correct1: 'incorrect',
+                correct2: 'correct',
+                correct3: 'incorrect'
+            };
+            
+            let correct = 0;
+            let total = 3;
+            
+            for (let q in answers) {
+                const userAnswer = document.getElementById(q).value;
+                if (userAnswer === answers[q]) {
+                    correct++;
+                }
+            }
+            
+            updateScore(correct, total);
+            showResult('result3', correct, total, 
+                `Explanations: 1) Should be "I have known him for five years", 2) Correct - present simple for possession, 3) Should be "We went to Paris last year" (specific past time)`);
+        }
+
+        function updateScore(correct, total) {
+            currentScore += correct;
+            totalQuestions += total;
+            
+            document.getElementById('score').textContent = currentScore;
+            document.getElementById('total').textContent = totalQuestions;
+            
+            const percentage = totalQuestions > 0 ? (currentScore / totalQuestions) * 100 : 0;
+            document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        function showResult(resultId, correct, total, explanation) {
+            const resultDiv = document.getElementById(resultId);
+            const percentage = Math.round((correct / total) * 100);
+            
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result ' + (percentage >= 70 ? 'correct' : 'incorrect');
+            resultDiv.innerHTML = `
+                <strong>Score: ${correct}/${total} (${percentage}%)</strong><br>
+                ${explanation}
+            `;
+        }
+
+        function resetExercises() {
+            // Reset all form elements
+            const selects = document.querySelectorAll('select');
+            const inputs = document.querySelectorAll('input[type="text"]');
+            const results = document.querySelectorAll('.result');
+            
+            selects.forEach(select => select.value = '');
+            inputs.forEach(input => input.value = '');
+            results.forEach(result => result.style.display = 'none');
+            
+            // Reset score
+            currentScore = 0;
+            totalQuestions = 0;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('total').textContent = '0';
+            document.getElementById('progress').style.width = '0%';
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9678617b13a07e92',t:'MTc1MzkxNTQ2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
