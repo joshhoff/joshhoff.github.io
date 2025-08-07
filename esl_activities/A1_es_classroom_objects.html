@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Objects - ESL Learning App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: #4299e1;
+            color: white;
+        }
+
+        .lang-btn:not(.active) {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .activity-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .activity-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .activity-card h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .activity-card .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .game-area {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .game-area.active {
+            display: block;
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px auto;
+            max-width: 400px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard .object-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .flashcard .word {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .flashcard .translation {
+            font-size: 1.5rem;
+            color: #4a5568;
+            font-style: italic;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #4299e1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3182ce;
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+
+        .btn-back {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background: #dd6b20;
+        }
+
+        .matching-game {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .match-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .match-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .match-card.selected {
+            border-color: #4299e1;
+            background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
+        }
+
+        .match-card.matched {
+            background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
+            border-color: #48bb78;
+        }
+
+        .match-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .match-card .text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .quiz-question {
+            background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quiz-option:hover {
+            border-color: #4299e1;
+            background: #f7fafc;
+        }
+
+        .quiz-option.correct {
+            background: #c6f6d5;
+            border-color: #48bb78;
+        }
+
+        .quiz-option.incorrect {
+            background: #fed7d7;
+            border-color: #f56565;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a5568;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .flashcard {
+                padding: 25px;
+            }
+            
+            .flashcard .word {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="main-title">Classroom Objects Learning</h1>
+            <p id="subtitle">Learn vocabulary in English and Spanish!</p>
+            
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')" id="lang-en">English</button>
+                <button class="lang-btn" onclick="setLanguage('es')" id="lang-es">Español</button>
+            </div>
+        </div>
+
+        <div id="menu" class="activity-menu">
+            <div class="activity-card" onclick="startActivity('flashcards')">
+                <div class="icon">📚</div>
+                <h3 id="flashcards-title">Flashcards</h3>
+                <p id="flashcards-desc">Learn new words with pictures</p>
+            </div>
+            
+            <div class="activity-card" onclick="startActivity('matching')">
+                <div class="icon">🎯</div>
+                <h3 id="matching-title">Matching Game</h3>
+                <p id="matching-desc">Match objects with their names</p>
+            </div>
+            
+            <div class="activity-card" onclick="startActivity('quiz')">
+                <div class="icon">🧠</div>
+                <h3 id="quiz-title">Quiz Time</h3>
+                <p id="quiz-desc">Test your knowledge</p>
+            </div>
+            
+            <div class="activity-card" onclick="startActivity('listening')">
+                <div class="icon">🔊</div>
+                <h3 id="listening-title">Listen & Click</h3>
+                <p id="listening-desc">Hear the word and find the object</p>
+            </div>
+        </div>
+
+        <!-- Flashcards Activity -->
+        <div id="flashcards-game" class="game-area">
+            <div class="controls">
+                <button class="btn btn-back" onclick="goToMenu()" id="back-btn">← Back to Menu</button>
+                <button class="btn btn-secondary" onclick="toggleFlashcard()" id="flip-btn">Flip Card</button>
+                <button class="btn btn-primary" onclick="nextFlashcard()" id="next-btn">Next →</button>
+            </div>
+            
+            <div class="flashcard" onclick="toggleFlashcard()" id="flashcard">
+                <div class="object-icon" id="card-icon">📝</div>
+                <div class="word" id="card-word">Pencil</div>
+                <div class="translation" id="card-translation" style="display: none;">Lápiz</div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="flashcard-progress" style="width: 0%"></div>
+            </div>
+            <div class="score" id="flashcard-counter">Card 1 of 12</div>
+        </div>
+
+        <!-- Matching Game -->
+        <div id="matching-game" class="game-area">
+            <div class="controls">
+                <button class="btn btn-back" onclick="goToMenu()">← Back to Menu</button>
+                <button class="btn btn-secondary" onclick="resetMatching()" id="reset-matching">Reset Game</button>
+            </div>
+            
+            <div class="score" id="matching-score">Score: 0 / 6</div>
+            <div class="matching-game" id="matching-grid"></div>
+        </div>
+
+        <!-- Quiz Activity -->
+        <div id="quiz-game" class="game-area">
+            <div class="controls">
+                <button class="btn btn-back" onclick="goToMenu()">← Back to Menu</button>
+                <button class="btn btn-secondary" onclick="resetQuiz()" id="reset-quiz">New Quiz</button>
+            </div>
+            
+            <div class="score" id="quiz-score">Score: 0 / 10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="quiz-progress" style="width: 0%"></div>
+            </div>
+            
+            <div class="quiz-question" id="quiz-question">
+                <h3 id="question-text">What is this object?</h3>
+                <div class="object-icon" id="question-icon">📝</div>
+                <div class="quiz-options" id="quiz-options"></div>
+            </div>
+        </div>
+
+        <!-- Listening Activity -->
+        <div id="listening-game" class="game-area">
+            <div class="controls">
+                <button class="btn btn-back" onclick="goToMenu()">← Back to Menu</button>
+                <button class="btn btn-primary" onclick="playWord()" id="play-word">🔊 Play Word</button>
+                <button class="btn btn-secondary" onclick="nextListening()" id="next-listening">Next →</button>
+            </div>
+            
+            <div class="score" id="listening-score">Score: 0 / 8</div>
+            <div class="matching-game" id="listening-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary data
+        const vocabulary = [
+            { en: 'Pencil', es: 'Lápiz', icon: '✏️' },
+            { en: 'Book', es: 'Libro', icon: '📚' },
+            { en: 'Eraser', es: 'Borrador', icon: '🧽' },
+            { en: 'Ruler', es: 'Regla', icon: '📏' },
+            { en: 'Scissors', es: 'Tijeras', icon: '✂️' },
+            { en: 'Glue', es: 'Pegamento', icon: '🧴' },
+            { en: 'Crayon', es: 'Crayón', icon: '🖍️' },
+            { en: 'Paper', es: 'Papel', icon: '📄' },
+            { en: 'Backpack', es: 'Mochila', icon: '🎒' },
+            { en: 'Desk', es: 'Escritorio', icon: '🪑' },
+            { en: 'Chair', es: 'Silla', icon: '💺' },
+            { en: 'Calculator', es: 'Calculadora', icon: '🧮' }
+        ];
+
+        // Translations
+        const translations = {
+            en: {
+                'main-title': 'Classroom Objects Learning',
+                'subtitle': 'Learn vocabulary in English and Spanish!',
+                'flashcards-title': 'Flashcards',
+                'flashcards-desc': 'Learn new words with pictures',
+                'matching-title': 'Matching Game',
+                'matching-desc': 'Match objects with their names',
+                'quiz-title': 'Quiz Time',
+                'quiz-desc': 'Test your knowledge',
+                'listening-title': 'Listen & Click',
+                'listening-desc': 'Hear the word and find the object',
+                'back-btn': '← Back to Menu',
+                'flip-btn': 'Flip Card',
+                'next-btn': 'Next →',
+                'reset-matching': 'Reset Game',
+                'reset-quiz': 'New Quiz',
+                'play-word': '🔊 Play Word',
+                'next-listening': 'Next →',
+                'question-text': 'What is this object?'
+            },
+            es: {
+                'main-title': 'Aprendiendo Objetos del Aula',
+                'subtitle': '¡Aprende vocabulario en inglés y español!',
+                'flashcards-title': 'Tarjetas',
+                'flashcards-desc': 'Aprende nuevas palabras con imágenes',
+                'matching-title': 'Juego de Parejas',
+                'matching-desc': 'Conecta objetos con sus nombres',
+                'quiz-title': 'Hora del Quiz',
+                'quiz-desc': 'Pon a prueba tu conocimiento',
+                'listening-title': 'Escucha y Haz Clic',
+                'listening-desc': 'Escucha la palabra y encuentra el objeto',
+                'back-btn': '← Volver al Menú',
+                'flip-btn': 'Voltear Tarjeta',
+                'next-btn': 'Siguiente →',
+                'reset-matching': 'Reiniciar Juego',
+                'reset-quiz': 'Nuevo Quiz',
+                'play-word': '🔊 Reproducir Palabra',
+                'next-listening': 'Siguiente →',
+                'question-text': '¿Qué es este objeto?'
+            }
+        };
+
+        // Global state
+        let currentLanguage = 'en';
+        let currentActivity = 'menu';
+        let flashcardIndex = 0;
+        let showingTranslation = false;
+        let matchingScore = 0;
+        let selectedCards = [];
+        let matchedPairs = [];
+        let quizScore = 0;
+        let currentQuestion = 0;
+        let listeningScore = 0;
+        let currentListeningWord = 0;
+
+        // Language switching
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            updateTranslations();
+        }
+
+        function updateTranslations() {
+            Object.keys(translations[currentLanguage]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'BUTTON') {
+                        element.value = translations[currentLanguage][key];
+                    } else {
+                        element.textContent = translations[currentLanguage][key];
+                    }
+                }
+            });
+        }
+
+        // Navigation
+        function startActivity(activity) {
+            document.getElementById('menu').style.display = 'none';
+            document.querySelectorAll('.game-area').forEach(area => area.classList.remove('active'));
+            
+            currentActivity = activity;
+            
+            switch(activity) {
+                case 'flashcards':
+                    document.getElementById('flashcards-game').classList.add('active');
+                    initFlashcards();
+                    break;
+                case 'matching':
+                    document.getElementById('matching-game').classList.add('active');
+                    initMatching();
+                    break;
+                case 'quiz':
+                    document.getElementById('quiz-game').classList.add('active');
+                    initQuiz();
+                    break;
+                case 'listening':
+                    document.getElementById('listening-game').classList.add('active');
+                    initListening();
+                    break;
+            }
+        }
+
+        function goToMenu() {
+            document.getElementById('menu').style.display = 'grid';
+            document.querySelectorAll('.game-area').forEach(area => area.classList.remove('active'));
+            currentActivity = 'menu';
+        }
+
+        // Flashcards
+        function initFlashcards() {
+            flashcardIndex = 0;
+            showingTranslation = false;
+            updateFlashcard();
+        }
+
+        function updateFlashcard() {
+            const card = vocabulary[flashcardIndex];
+            document.getElementById('card-icon').textContent = card.icon;
+            document.getElementById('card-word').textContent = currentLanguage === 'en' ? card.en : card.es;
+            document.getElementById('card-translation').textContent = currentLanguage === 'en' ? card.es : card.en;
+            document.getElementById('card-translation').style.display = 'none';
+            document.getElementById('flashcard-counter').textContent = `Card ${flashcardIndex + 1} of ${vocabulary.length}`;
+            
+            const progress = ((flashcardIndex + 1) / vocabulary.length) * 100;
+            document.getElementById('flashcard-progress').style.width = progress + '%';
+            
+            showingTranslation = false;
+        }
+
+        function toggleFlashcard() {
+            const translation = document.getElementById('card-translation');
+            if (showingTranslation) {
+                translation.style.display = 'none';
+            } else {
+                translation.style.display = 'block';
+            }
+            showingTranslation = !showingTranslation;
+        }
+
+        function nextFlashcard() {
+            flashcardIndex = (flashcardIndex + 1) % vocabulary.length;
+            updateFlashcard();
+        }
+
+        // Matching Game
+        function initMatching() {
+            matchingScore = 0;
+            selectedCards = [];
+            matchedPairs = [];
+            
+            const gameWords = vocabulary.slice(0, 6);
+            const cards = [];
+            
+            gameWords.forEach((word, index) => {
+                cards.push({ type: 'icon', content: word.icon, id: index, matched: false });
+                cards.push({ type: 'word', content: currentLanguage === 'en' ? word.en : word.es, id: index, matched: false });
+            });
+            
+            // Shuffle cards
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            
+            const grid = document.getElementById('matching-grid');
+            grid.innerHTML = '';
+            
+            cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'match-card';
+                cardElement.onclick = () => selectMatchCard(index, card);
+                
+                if (card.type === 'icon') {
+                    cardElement.innerHTML = `<div class="icon">${card.content}</div>`;
+                } else {
+                    cardElement.innerHTML = `<div class="text">${card.content}</div>`;
+                }
+                
+                grid.appendChild(cardElement);
+            });
+            
+            window.matchingCards = cards;
+            updateMatchingScore();
+        }
+
+        function selectMatchCard(index, card) {
+            if (card.matched || selectedCards.includes(index)) return;
+            
+            const cardElement = document.querySelectorAll('#matching-grid .match-card')[index];
+            
+            if (selectedCards.length === 0) {
+                selectedCards.push(index);
+                cardElement.classList.add('selected');
+            } else if (selectedCards.length === 1) {
+                const firstIndex = selectedCards[0];
+                const firstCard = window.matchingCards[firstIndex];
+                
+                if (firstCard.id === card.id && firstCard.type !== card.type) {
+                    // Match found!
+                    matchingScore++;
+                    card.matched = true;
+                    firstCard.matched = true;
+                    
+                    cardElement.classList.add('matched');
+                    document.querySelectorAll('#matching-grid .match-card')[firstIndex].classList.add('matched');
+                    
+                    matchedPairs.push(card.id);
+                } else {
+                    // No match
+                    setTimeout(() => {
+                        cardElement.classList.remove('selected');
+                        document.querySelectorAll('#matching-grid .match-card')[firstIndex].classList.remove('selected');
+                    }, 1000);
+                }
+                
+                selectedCards = [];
+                updateMatchingScore();
+                
+                if (matchedPairs.length === 6) {
+                    setTimeout(() => {
+                        alert(currentLanguage === 'en' ? 'Congratulations! You matched all pairs!' : '¡Felicitaciones! ¡Emparejaste todas las cartas!');
+                    }, 500);
+                }
+            }
+        }
+
+        function updateMatchingScore() {
+            document.getElementById('matching-score').textContent = `Score: ${matchingScore} / 6`;
+        }
+
+        function resetMatching() {
+            initMatching();
+        }
+
+        // Quiz
+        function initQuiz() {
+            quizScore = 0;
+            currentQuestion = 0;
+            updateQuizScore();
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion >= 10) {
+                alert(currentLanguage === 'en' ? 
+                    `Quiz completed! Your score: ${quizScore}/10` : 
+                    `¡Quiz completado! Tu puntuación: ${quizScore}/10`);
+                return;
+            }
+            
+            const correctAnswer = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+            const wrongAnswers = vocabulary.filter(w => w !== correctAnswer)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+            
+            const allAnswers = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            
+            document.getElementById('question-icon').textContent = correctAnswer.icon;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            allAnswers.forEach(answer => {
+                const option = document.createElement('div');
+                option.className = 'quiz-option';
+                option.textContent = currentLanguage === 'en' ? answer.en : answer.es;
+                option.onclick = () => selectQuizAnswer(option, answer === correctAnswer);
+                optionsContainer.appendChild(option);
+            });
+            
+            const progress = (currentQuestion / 10) * 100;
+            document.getElementById('quiz-progress').style.width = progress + '%';
+        }
+
+        function selectQuizAnswer(element, isCorrect) {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.onclick = null;
+                if (opt === element) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            if (isCorrect) {
+                quizScore++;
+                updateQuizScore();
+            }
+            
+            currentQuestion++;
+            
+            setTimeout(() => {
+                nextQuestion();
+            }, 1500);
+        }
+
+        function updateQuizScore() {
+            document.getElementById('quiz-score').textContent = `Score: ${quizScore} / 10`;
+        }
+
+        function resetQuiz() {
+            initQuiz();
+        }
+
+        // Listening Activity
+        function initListening() {
+            listeningScore = 0;
+            currentListeningWord = 0;
+            setupListeningRound();
+        }
+
+        function setupListeningRound() {
+            if (currentListeningWord >= 8) {
+                alert(currentLanguage === 'en' ? 
+                    `Listening practice completed! Your score: ${listeningScore}/8` : 
+                    `¡Práctica de escucha completada! Tu puntuación: ${listeningScore}/8`);
+                return;
+            }
+            
+            const correctWord = vocabulary[currentListeningWord];
+            const wrongWords = vocabulary.filter(w => w !== correctWord)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 5);
+            
+            const allWords = [correctWord, ...wrongWords].sort(() => Math.random() - 0.5);
+            
+            const grid = document.getElementById('listening-grid');
+            grid.innerHTML = '';
+            
+            allWords.forEach(word => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.innerHTML = `<div class="icon">${word.icon}</div><div class="text">${currentLanguage === 'en' ? word.en : word.es}</div>`;
+                card.onclick = () => selectListeningAnswer(card, word === correctWord);
+                grid.appendChild(card);
+            });
+            
+            window.currentListeningAnswer = correctWord;
+            updateListeningScore();
+        }
+
+        function playWord() {
+            const word = window.currentListeningAnswer;
+            const text = currentLanguage === 'en' ? word.en : word.es;
+            
+            // Create a simple text-to-speech alternative
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = currentLanguage === 'en' ? 'en-US' : 'es-ES';
+            utterance.rate = 0.8;
+            
+            try {
+                speechSynthesis.speak(utterance);
+            } catch (e) {
+                // Fallback: show the word briefly
+                alert(currentLanguage === 'en' ? 
+                    `Listen for: ${text}` : 
+                    `Escucha: ${text}`);
+            }
+        }
+
+        function selectListeningAnswer(element, isCorrect) {
+            document.querySelectorAll('#listening-grid .match-card').forEach(card => {
+                card.onclick = null;
+                if (card === element) {
+                    card.classList.add(isCorrect ? 'matched' : 'selected');
+                }
+            });
+            
+            if (isCorrect) {
+                listeningScore++;
+            }
+            
+            currentListeningWord++;
+            updateListeningScore();
+            
+            setTimeout(() => {
+                setupListeningRound();
+            }, 1500);
+        }
+
+        function nextListening() {
+            currentListeningWord++;
+            setupListeningRound();
+        }
+
+        function updateListeningScore() {
+            document.getElementById('listening-score').textContent = `Score: ${listeningScore} / 8`;
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTranslations();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b74b8cb7b80bb7',t:'MTc1NDU3NTE3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
