@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Subjunctive Mood Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-button {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            margin: 0 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section-title {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .example-card {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .example-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .subjunctive-highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .conversation-prompt h3 {
+            margin-bottom: 15px;
+        }
+        
+        .prompt-scenario {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .practice-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .practice-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .gardening-site {
+            background: #f0f8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .site-header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .site-nav {
+            background: #2e7d32;
+            padding: 10px 0;
+            text-align: center;
+        }
+        
+        .site-nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .site-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .site-content {
+            padding: 30px;
+            line-height: 1.6;
+        }
+        
+        .article {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .highlight-subjunctive {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .highlight-subjunctive:hover {
+            background: #ffc107;
+            transform: scale(1.05);
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                margin: 5px 0;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .site-nav a {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Subjunctive Mood Mastery</h1>
+            <p>Advanced ESL Practice for Complex Grammar</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('examples')">📚 Written Examples</button>
+            <button class="tab-button" onclick="showTab('conversation')">💬 Conversation Practice</button>
+            <button class="tab-button" onclick="showTab('website')">🌱 Gardening Website Review</button>
+        </div>
+        
+        <div id="examples" class="tab-content active">
+            <h2 class="section-title">Written Examples & Explanations</h2>
+            
+            <div class="example-card">
+                <h3>1. Hypothetical Situations (If I were...)</h3>
+                <p><strong>Example:</strong> If I <span class="subjunctive-highlight">were</span> a professional gardener, I would specialize in organic vegetables.</p>
+                <p><strong>Usage:</strong> Use "were" for all persons in hypothetical situations, even with "I" or "he/she/it".</p>
+            </div>
+            
+            <div class="example-card">
+                <h3>2. Wishes and Desires</h3>
+                <p><strong>Example:</strong> I wish the weather <span class="subjunctive-highlight">were</span> more predictable for farming.</p>
+                <p><strong>Usage:</strong> After "wish," use the subjunctive to express something contrary to reality.</p>
+            </div>
+            
+            <div class="example-card">
+                <h3>3. Recommendations and Suggestions</h3>
+                <p><strong>Example:</strong> The expert suggests that every gardener <span class="subjunctive-highlight">water</span> their plants early in the morning.</p>
+                <p><strong>Usage:</strong> After verbs like "suggest," "recommend," "insist," use the base form of the verb.</p>
+            </div>
+            
+            <div class="example-card">
+                <h3>4. Formal Expressions</h3>
+                <p><strong>Example:</strong> It is essential that the soil <span class="subjunctive-highlight">be</span> tested before planting.</p>
+                <p><strong>Usage:</strong> After expressions like "it is important/essential/necessary that," use the base form.</p>
+            </div>
+            
+            <div class="example-card">
+                <h3>5. As if/As though</h3>
+                <p><strong>Example:</strong> The plant looks as if it <span class="subjunctive-highlight">were</span> dying from overwatering.</p>
+                <p><strong>Usage:</strong> Use subjunctive after "as if" or "as though" for unreal comparisons.</p>
+            </div>
+            
+            <button class="practice-button" onclick="showPracticeExercise()">Practice with Exercises</button>
+            <div id="practice-area" style="display: none; margin-top: 20px; padding: 20px; background: #f0f8ff; border-radius: 10px;">
+                <h3>Quick Practice</h3>
+                <p>Complete the sentence: "If I _____ (be) you, I would plant tomatoes in spring."</p>
+                <input type="text" id="answer1" placeholder="Your answer" style="padding: 8px; margin: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                <button class="practice-button" onclick="checkAnswer()">Check Answer</button>
+                <div id="feedback" style="margin-top: 10px; font-weight: bold;"></div>
+            </div>
+        </div>
+        
+        <div id="conversation" class="tab-content">
+            <h2 class="section-title">Conversation Practice Prompts</h2>
+            
+            <div class="conversation-prompt">
+                <h3>🏡 Scenario 1: Giving Advice to a New Homeowner</h3>
+                <div class="prompt-scenario">
+                    <p><strong>Situation:</strong> Your friend just bought their first house with a garden.</p>
+                    <p><strong>Your task:</strong> Give advice using subjunctive mood structures.</p>
+                    <p><strong>Key phrases to use:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>"I suggest that you..."</li>
+                        <li>"It's important that the garden..."</li>
+                        <li>"If I were you, I would..."</li>
+                        <li>"I recommend that you..."</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h3>🌿 Scenario 2: Discussing Hypothetical Garden Plans</h3>
+                <div class="prompt-scenario">
+                    <p><strong>Situation:</strong> You're planning an ideal garden with unlimited budget.</p>
+                    <p><strong>Your task:</strong> Describe what you would do in hypothetical situations.</p>
+                    <p><strong>Key phrases to use:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>"If I had unlimited space..."</li>
+                        <li>"Were I to design a perfect garden..."</li>
+                        <li>"I wish I could..."</li>
+                        <li>"If money were no object..."</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h3>🌱 Scenario 3: Expressing Regrets About Past Gardening</h3>
+                <div class="prompt-scenario">
+                    <p><strong>Situation:</strong> Discussing mistakes made in previous gardening attempts.</p>
+                    <p><strong>Your task:</strong> Express regrets and alternative actions.</p>
+                    <p><strong>Key phrases to use:</strong></p>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>"I wish I had..."</li>
+                        <li>"If only I had known..."</li>
+                        <li>"Had I planted earlier..."</li>
+                        <li>"I would rather have..."</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <button class="practice-button" onclick="startConversationTimer()">Start 5-Minute Practice</button>
+            <div id="timer-display" style="text-align: center; margin: 20px 0; font-size: 1.5rem; color: #667eea;"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </div>
+        
+        <div id="website" class="tab-content">
+            <h2 class="section-title">Gardening Website - Find the Subjunctive!</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                Review this fake gardening website and click on highlighted subjunctive examples to learn more.
+            </p>
+            
+            <div class="gardening-site">
+                <div class="site-header">
+                    <h1>🌻 Green Thumb Gardens</h1>
+                    <p>Your Complete Guide to Successful Gardening</p>
+                </div>
+                
+                <div class="site-nav">
+                    <a href="#" onclick="return false;">Home</a>
+                    <a href="#" onclick="return false;">Plant Care</a>
+                    <a href="#" onclick="return false;">Seasonal Tips</a>
+                    <a href="#" onclick="return false;">Expert Advice</a>
+                    <a href="#" onclick="return false;">Contact</a>
+                </div>
+                
+                <div class="site-content">
+                    <div class="article">
+                        <h2>🌱 Spring Planting Guide</h2>
+                        <p>As spring approaches, many gardeners wonder about the best planting strategies. Our expert horticulturist, Dr. Sarah Green, suggests that every gardener <span class="highlight-subjunctive tooltip">prepare<span class="tooltiptext">Subjunctive: base form after 'suggests that'</span></span> their soil at least two weeks before planting.</p>
+                        
+                        <p>"If I <span class="highlight-subjunctive tooltip">were<span class="tooltiptext">Subjunctive: 'were' for hypothetical situations</span></span> starting a garden today," says Dr. Green, "I would focus on soil health first." She recommends that beginners <span class="highlight-subjunctive tooltip">start<span class="tooltiptext">Subjunctive: base form after 'recommends that'</span></span> with easy-to-grow vegetables like lettuce and radishes.</p>
+                        
+                        <p>It is essential that the soil <span class="highlight-subjunctive tooltip">be<span class="tooltiptext">Subjunctive: base form after 'it is essential that'</span></span> well-draining for most vegetables. Many new gardeners act as if watering <span class="highlight-subjunctive tooltip">were<span class="tooltiptext">Subjunctive: 'were' after 'as if' for unreal comparison</span></span> the only important factor, but soil preparation is equally crucial.</p>
+                    </div>
+                    
+                    <div class="article">
+                        <h2>🍅 Tomato Growing Tips</h2>
+                        <p>Growing perfect tomatoes requires attention to detail. We insist that every tomato plant <span class="highlight-subjunctive tooltip">receive<span class="tooltiptext">Subjunctive: base form after 'insist that'</span></span> at least 6-8 hours of direct sunlight daily.</p>
+                        
+                        <p>Many gardeners wish their tomatoes <span class="highlight-subjunctive tooltip">were<span class="tooltiptext">Subjunctive: 'were' after 'wish' for contrary-to-fact situations</span></span> more resistant to diseases. While we can't change genetics, proper care makes a huge difference.</p>
+                        
+                        <p>If only more gardeners <span class="highlight-subjunctive tooltip">knew<span class="tooltiptext">Subjunctive: past form after 'if only' for regret</span></span> about companion planting! Basil planted near tomatoes acts as though it <span class="highlight-subjunctive tooltip">were<span class="tooltiptext">Subjunctive: 'were' after 'as though'</span></span> a natural pest deterrent.</p>
+                    </div>
+                    
+                    <div class="article">
+                        <h2>🌿 Expert Interview: Organic Gardening</h2>
+                        <p><strong>Interviewer:</strong> What would you do if you <span class="highlight-subjunctive tooltip">were<span class="tooltiptext">Subjunctive: 'were' in hypothetical question</span></span> starting an organic garden from scratch?</p>
+                        
+                        <p><strong>Expert:</strong> I would demand that the previous soil history <span class="highlight-subjunctive tooltip">be<span class="tooltiptext">Subjunctive: base form after 'demand that'</span></span> thoroughly investigated. It's crucial that any new organic gardener <span class="highlight-subjunctive tooltip">understand<span class="tooltiptext">Subjunctive: base form after 'it's crucial that'</span></span> what chemicals may have been used previously.</p>
+                        
+                        <p>I also suggest that beginners <span class="highlight-subjunctive tooltip">focus<span class="tooltiptext">Subjunctive: base form after 'suggest that'</span></span> on building healthy soil through composting. If I <span class="highlight-subjunctive tooltip">were<span class="tooltiptext">Subjunctive: 'were' in hypothetical statement</span></span> to give one piece of advice, it would be to start composting immediately.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="practice-button" onclick="showSubjunctiveCount()">Show My Progress</button>
+                <div id="subjunctive-counter" style="margin-top: 15px; font-size: 1.2rem; color: #667eea;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let conversationTimer;
+        let timeLeft = 300; // 5 minutes
+        let clickedSubjunctives = new Set();
+        
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function showPracticeExercise() {
+            const practiceArea = document.getElementById('practice-area');
+            practiceArea.style.display = practiceArea.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function checkAnswer() {
+            const answer = document.getElementById('answer1').value.toLowerCase().trim();
+            const feedback = document.getElementById('feedback');
+            
+            if (answer === 'were') {
+                feedback.innerHTML = '✅ Correct! "Were" is used for all persons in hypothetical situations.';
+                feedback.style.color = '#4CAF50';
+            } else {
+                feedback.innerHTML = '❌ Try again! Hint: Use "were" for hypothetical situations, even with "I".';
+                feedback.style.color = '#f44336';
+            }
+        }
+        
+        function startConversationTimer() {
+            const timerDisplay = document.getElementById('timer-display');
+            const progressBar = document.getElementById('progress');
+            
+            if (conversationTimer) {
+                clearInterval(conversationTimer);
+            }
+            
+            timeLeft = 300; // Reset to 5 minutes
+            
+            conversationTimer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `⏰ ${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+                
+                const progress = ((300 - timeLeft) / 300) * 100;
+                progressBar.style.width = progress + '%';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(conversationTimer);
+                    timerDisplay.textContent = '🎉 Practice session complete!';
+                    timerDisplay.style.color = '#4CAF50';
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+        
+        // Add click tracking for subjunctive examples
+        document.addEventListener('DOMContentLoaded', function() {
+            const subjunctiveElements = document.querySelectorAll('.highlight-subjunctive');
+            
+            subjunctiveElements.forEach((element, index) => {
+                element.addEventListener('click', function() {
+                    clickedSubjunctives.add(index);
+                    this.style.backgroundColor = '#4CAF50';
+                    this.style.color = 'white';
+                });
+            });
+        });
+        
+        function showSubjunctiveCount() {
+            const total = document.querySelectorAll('.highlight-subjunctive').length;
+            const found = clickedSubjunctives.size;
+            const counter = document.getElementById('subjunctive-counter');
+            
+            counter.innerHTML = `
+                📊 Progress: ${found}/${total} subjunctive examples discovered!<br>
+                ${found === total ? '🎉 Excellent work! You found them all!' : '💡 Keep exploring to find more examples!'}
+            `;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96b6ef1ba3e60049',t:'MTc1NDU3MTM4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
