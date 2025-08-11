@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced ESL Practice - Czech Speakers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 20px;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            min-height: 600px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .exercise-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .prompt-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .example-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .czech-note {
+            background: #e8f5e8;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+            font-style: italic;
+        }
+
+        .pronunciation-guide {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .practice-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .practice-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .phrasal-verb-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #17a2b8;
+        }
+
+        .verb-definition {
+            font-weight: 600;
+            color: #17a2b8;
+            margin-bottom: 10px;
+        }
+
+        .pronunciation-word {
+            display: inline-block;
+            background: #f8f9fa;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            border: 2px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pronunciation-word:hover {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: #dc3545;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Advanced ESL Practice</h1>
+            <p>Specialized training for Czech speakers mastering advanced English</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('subjunctive')">Subjunctive Mood</button>
+            <button class="tab-button" onclick="showTab('phrasal')">Phrasal Verbs</button>
+            <button class="tab-button" onclick="showTab('pronunciation')">Pronunciation</button>
+        </div>
+
+        <div id="subjunctive" class="tab-content active">
+            <div class="exercise-card">
+                <div class="exercise-title">🎭 Subjunctive Mood Practice</div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-text">
+                        <strong>Scenario:</strong> You're in a job interview discussing hypothetical situations and company policies.
+                    </div>
+                    <div class="example-box">
+                        <strong>Practice these subjunctive forms:</strong><br>
+                        • "If I were the manager..." (contrary to fact)<br>
+                        • "I suggest that he be promoted..." (formal suggestion)<br>
+                        • "It's important that she arrive on time..." (necessity)
+                    </div>
+                    <div class="czech-note">
+                        <strong>Czech Note:</strong> Unlike Czech conditional mood (kondicionál), English subjunctive often uses base verb forms. Czech: "Kdyby byl manažerem..." vs English: "If he were manager..."
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-text">
+                        <strong>Role-play:</strong> You're giving advice to a friend about their relationship problems.
+                    </div>
+                    <div class="example-box">
+                        <strong>Use these subjunctive expressions:</strong><br>
+                        • "If I were you, I would..."<br>
+                        • "I wish you were more confident..."<br>
+                        • "It's crucial that you be honest with her..."
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-text">
+                        <strong>Business Meeting:</strong> Discuss company policies and make formal recommendations.
+                    </div>
+                    <div class="example-box">
+                        <strong>Formal subjunctive patterns:</strong><br>
+                        • "I recommend that the policy be reviewed..."<br>
+                        • "It's essential that everyone attend the meeting..."<br>
+                        • "I propose that we postpone the decision..."
+                    </div>
+                </div>
+
+                <button class="practice-button" onclick="generateSubjunctivePrompt()">Generate New Prompt</button>
+                <button class="practice-button" onclick="showSubjunctiveExplanation()">Grammar Explanation</button>
+            </div>
+        </div>
+
+        <div id="phrasal" class="tab-content">
+            <div class="exercise-card">
+                <div class="exercise-title">🔄 Advanced Phrasal Verbs</div>
+                
+                <div class="phrasal-verb-card">
+                    <div class="verb-definition">CLAMP DOWN ON <span class="difficulty-badge">Advanced</span></div>
+                    <p><strong>Meaning:</strong> To take strict action to stop something</p>
+                    <div class="czech-note">Czech equivalent: "zakročit proti", "tvrdě zasáhnout"</div>
+                    <div class="conversation-prompt">
+                        <strong>Conversation starter:</strong> "The government needs to clamp down on tax evasion. What's your opinion on stricter financial regulations?"
+                    </div>
+                </div>
+
+                <div class="phrasal-verb-card">
+                    <div class="verb-definition">PHASE OUT <span class="difficulty-badge">Advanced</span></div>
+                    <p><strong>Meaning:</strong> To gradually stop using or providing something</p>
+                    <div class="czech-note">Czech equivalent: "postupně zrušit", "vyřadit z provozu"</div>
+                    <div class="conversation-prompt">
+                        <strong>Conversation starter:</strong> "Many companies are phasing out remote work policies. How do you feel about returning to the office?"
+                    </div>
+                </div>
+
+                <div class="phrasal-verb-card">
+                    <div class="verb-definition">COTTON ON TO <span class="difficulty-badge">Advanced</span></div>
+                    <p><strong>Meaning:</strong> To begin to understand or realize something</p>
+                    <div class="czech-note">Czech equivalent: "přijít na to", "pochopit"</div>
+                    <div class="conversation-prompt">
+                        <strong>Conversation starter:</strong> "It took me ages to cotton on to what she was really trying to say. Have you ever misunderstood someone's hints?"
+                    </div>
+                </div>
+
+                <div class="phrasal-verb-card">
+                    <div class="verb-definition">BRUSH UP ON <span class="difficulty-badge">Intermediate</span></div>
+                    <p><strong>Meaning:</strong> To improve or refresh your knowledge of something</p>
+                    <div class="czech-note">Czech equivalent: "oprášit si znalosti", "zdokonalit se"</div>
+                    <div class="conversation-prompt">
+                        <strong>Conversation starter:</strong> "I need to brush up on my presentation skills before the conference. What skills would you like to improve?"
+                    </div>
+                </div>
+
+                <button class="practice-button" onclick="generatePhrasalPrompt()">New Phrasal Verb</button>
+                <button class="practice-button" onclick="testPhrasalKnowledge()">Test Your Knowledge</button>
+            </div>
+        </div>
+
+        <div id="pronunciation" class="tab-content">
+            <div class="exercise-card">
+                <div class="exercise-title">🗣️ Pronunciation Challenges for Czech Speakers</div>
+                
+                <div class="pronunciation-guide">
+                    <strong>TH Sounds (θ/ð) - Most challenging for Czech speakers</strong>
+                    <div style="margin: 15px 0;">
+                        <div class="pronunciation-word" onclick="playPronunciation('think')">THINK /θɪŋk/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('this')">THIS /ðɪs/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('through')">THROUGH /θruː/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('although')">ALTHOUGH /ɔːlˈðoʊ/</div>
+                    </div>
+                    <div class="czech-note">
+                        Czech speakers often substitute /s/ or /z/ for TH sounds. Practice: tongue between teeth!
+                    </div>
+                </div>
+
+                <div class="pronunciation-guide">
+                    <strong>W vs V Distinction</strong>
+                    <div style="margin: 15px 0;">
+                        <div class="pronunciation-word" onclick="playPronunciation('wine')">WINE /waɪn/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('vine')">VINE /vaɪn/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('west')">WEST /west/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('vest')">VEST /vest/</div>
+                    </div>
+                    <div class="czech-note">
+                        Czech has only /v/ sound. For /w/: round lips, no teeth contact!
+                    </div>
+                </div>
+
+                <div class="pronunciation-guide">
+                    <strong>Final Consonant Clusters</strong>
+                    <div style="margin: 15px 0;">
+                        <div class="pronunciation-word" onclick="playPronunciation('asked')">ASKED /æskt/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('months')">MONTHS /mʌnθs/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('strengths')">STRENGTHS /streŋθs/</div>
+                        <div class="pronunciation-word" onclick="playPronunciation('twelfths')">TWELFTHS /twelfθs/</div>
+                    </div>
+                    <div class="czech-note">
+                        Czech speakers often add vowels between consonants. Practice saying all consonants clearly!
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-text">
+                        <strong>Pronunciation Practice Dialogue:</strong> Order at a restaurant focusing on difficult sounds
+                    </div>
+                    <div class="example-box">
+                        "I'd like the <strong>three-cheese</strong> pizza with <strong>extra vegetables</strong>. Could you also bring me some <strong>water</strong> and tell me about your <strong>wine</strong> selection? I think I'll have the <strong>white wine</strong> that goes <strong>with</strong> seafood."
+                    </div>
+                </div>
+
+                <button class="practice-button" onclick="generatePronunciationExercise()">New Exercise</button>
+                <button class="practice-button" onclick="recordPronunciation()">Record Practice</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProgress = 0;
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function generateSubjunctivePrompt() {
+            const prompts = [
+                {
+                    scenario: "University Academic Committee Meeting",
+                    text: "You're proposing changes to university policies. Use formal subjunctive mood.",
+                    examples: [
+                        "I suggest that the deadline be extended...",
+                        "It's imperative that students submit their work on time...",
+                        "I recommend that the professor reconsider the grading criteria..."
+                    ]
+                },
+                {
+                    scenario: "Giving Life Advice to a Friend",
+                    text: "Your friend is considering a major life change. Use hypothetical subjunctive.",
+                    examples: [
+                        "If I were in your position, I would...",
+                        "I wish you were more confident about this decision...",
+                        "If you were to move abroad, what would you miss most?"
+                    ]
+                },
+                {
+                    scenario: "Corporate Strategy Meeting",
+                    text: "Discussing company restructuring and policy changes.",
+                    examples: [
+                        "I propose that the department be reorganized...",
+                        "It's crucial that everyone understand the new procedures...",
+                        "I insist that the budget be reviewed thoroughly..."
+                    ]
+                }
+            ];
+
+            const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+            
+            const promptHTML = `
+                <div class="conversation-prompt" style="animation: fadeIn 0.5s ease-in;">
+                    <div class="prompt-text">
+                        <strong>New Scenario:</strong> ${randomPrompt.text}
+                    </div>
+                    <div class="example-box">
+                        <strong>Practice these patterns:</strong><br>
+                        ${randomPrompt.examples.map(ex => `• "${ex}"`).join('<br>')}
+                    </div>
+                </div>
+            `;
+            
+            const exerciseCard = document.querySelector('#subjunctive .exercise-card');
+            exerciseCard.insertAdjacentHTML('beforeend', promptHTML);
+            updateProgress();
+        }
+
+        function generatePhrasalPrompt() {
+            const phrasalVerbs = [
+                {
+                    verb: "ZERO IN ON",
+                    meaning: "To focus attention on something specific",
+                    czech: "zaměřit se na, soustředit se na",
+                    prompt: "The detective needs to zero in on the main suspect. How do you zero in on important details when studying?"
+                },
+                {
+                    verb: "WARD OFF",
+                    meaning: "To prevent something bad from happening",
+                    czech: "odrazit, zabránit",
+                    prompt: "Vitamin C helps ward off colds. What do you do to ward off stress during busy periods?"
+                },
+                {
+                    verb: "TIDE OVER",
+                    meaning: "To help someone through a difficult period",
+                    czech: "pomoci překlenout těžké období",
+                    prompt: "This loan should tide us over until next month. What has helped tide you over during challenging times?"
+                },
+                {
+                    verb: "SINGLE OUT",
+                    meaning: "To choose or identify someone/something from a group",
+                    czech: "vybrat, vyčlenit",
+                    prompt: "The teacher singled out the best students for praise. Have you ever been singled out for recognition?"
+                }
+            ];
+
+            const randomVerb = phrasalVerbs[Math.floor(Math.random() * phrasalVerbs.length)];
+            
+            const verbHTML = `
+                <div class="phrasal-verb-card" style="animation: slideIn 0.5s ease-out;">
+                    <div class="verb-definition">${randomVerb.verb} <span class="difficulty-badge">Advanced</span></div>
+                    <p><strong>Meaning:</strong> ${randomVerb.meaning}</p>
+                    <div class="czech-note">Czech equivalent: "${randomVerb.czech}"</div>
+                    <div class="conversation-prompt">
+                        <strong>Conversation starter:</strong> "${randomVerb.prompt}"
+                    </div>
+                </div>
+            `;
+            
+            const exerciseCard = document.querySelector('#phrasal .exercise-card');
+            exerciseCard.insertAdjacentHTML('beforeend', verbHTML);
+            updateProgress();
+        }
+
+        function generatePronunciationExercise() {
+            const exercises = [
+                {
+                    focus: "Consonant Clusters + TH",
+                    words: ["LENGTHS /leŋθs/", "WIDTHS /wɪdθs/", "DEPTHS /depθs/", "CLOTHS /klɔːθs/"],
+                    practice: "Practice saying: 'The lengths and widths of these cloths vary in depths.'"
+                },
+                {
+                    focus: "W vs V in Context",
+                    words: ["WAVE /weɪv/", "WEAVE /wiːv/", "WAIVER /ˈweɪvər/", "WAVER /ˈweɪvər/"],
+                    practice: "Practice saying: 'We will waive the fee, but don't waver on the decision to weave through the wave.'"
+                },
+                {
+                    focus: "Silent Letters",
+                    words: ["KNEE /niː/", "GNOME /noʊm/", "PSALM /sɑːm/", "LAMB /læm/"],
+                    practice: "Practice saying: 'The lamb near the gnome hurt its knee while reading a psalm.'"
+                }
+            ];
+
+            const randomExercise = exercises[Math.floor(Math.random() * exercises.length)];
+            
+            const exerciseHTML = `
+                <div class="pronunciation-guide" style="animation: fadeIn 0.5s ease-in;">
+                    <strong>${randomExercise.focus}</strong>
+                    <div style="margin: 15px 0;">
+                        ${randomExercise.words.map(word => 
+                            `<div class="pronunciation-word" onclick="playPronunciation('${word.split(' ')[0].toLowerCase()}')">${word}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="example-box">
+                        <strong>Sentence Practice:</strong> ${randomExercise.practice}
+                    </div>
+                </div>
+            `;
+            
+            const exerciseCard = document.querySelector('#pronunciation .exercise-card');
+            exerciseCard.insertAdjacentHTML('beforeend', exerciseHTML);
+            updateProgress();
+        }
+
+        function playPronunciation(word) {
+            // Simulate pronunciation feedback
+            const button = event.target;
+            button.style.background = '#28a745';
+            button.style.color = 'white';
+            button.innerHTML = `🔊 ${button.innerHTML.split(' ')[0]}`;
+            
+            setTimeout(() => {
+                button.style.background = '#f8f9fa';
+                button.style.color = 'black';
+                button.innerHTML = button.innerHTML.replace('🔊 ', '');
+            }, 1500);
+        }
+
+        function showSubjunctiveExplanation() {
+            const explanation = `
+                <div class="example-box" style="animation: fadeIn 0.5s ease-in;">
+                    <h3>Subjunctive Mood for Czech Speakers</h3>
+                    <p><strong>Key Differences from Czech:</strong></p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li><strong>Form:</strong> English uses base verb form (be, go, have) vs Czech inflected forms</li>
+                        <li><strong>Usage:</strong> More formal in English, used in specific contexts</li>
+                        <li><strong>Frequency:</strong> Less common in spoken English than Czech kondicionál</li>
+                    </ul>
+                    <p><strong>Common Patterns:</strong></p>
+                    <ul style="margin: 15px 0; padding-left: 20px;">
+                        <li>If I were... (contrary to fact)</li>
+                        <li>I suggest that he be... (formal suggestion)</li>
+                        <li>It's important that she arrive... (necessity)</li>
+                    </ul>
+                </div>
+            `;
+            
+            const exerciseCard = document.querySelector('#subjunctive .exercise-card');
+            exerciseCard.insertAdjacentHTML('beforeend', explanation);
+        }
+
+        function testPhrasalKnowledge() {
+            const questions = [
+                "What does 'clamp down on' mean?",
+                "Use 'phase out' in a sentence about technology.",
+                "What's the difference between 'cotton on to' and 'catch on to'?"
+            ];
+            
+            const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            
+            const testHTML = `
+                <div class="conversation-prompt" style="animation: slideIn 0.5s ease-out;">
+                    <div class="prompt-text">
+                        <strong>Quick Test:</strong> ${randomQuestion}
+                    </div>
+                    <div class="example-box">
+                        Think about your answer, then practice using it in a conversation!
+                    </div>
+                </div>
+            `;
+            
+            const exerciseCard = document.querySelector('#phrasal .exercise-card');
+            exerciseCard.insertAdjacentHTML('beforeend', testHTML);
+        }
+
+        function recordPronunciation() {
+            alert('Recording feature would integrate with speech recognition API in a full implementation. For now, practice speaking the words aloud and compare with native speaker recordings!');
+        }
+
+        function updateProgress() {
+            currentProgress = Math.min(currentProgress + 10, 100);
+            const progressBar = document.querySelector('.progress-fill');
+            if (progressBar) {
+                progressBar.style.width = currentProgress + '%';
+            }
+        }
+
+        // Add some CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateX(-20px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize progress bar
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressHTML = `
+                <div style="margin: 20px 0;">
+                    <p style="font-weight: 600; margin-bottom: 10px;">Practice Progress</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                card.insertAdjacentHTML('afterbegin', progressHTML);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96d9108025409994',t:'MTc1NDkyOTI2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
