@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DMS &lt;-&gt; DD Converter with Map</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background: #f9f9f9; }
+        h2 { color: #2c3e50; }
+        .container { display: flex; gap: 40px; }
+        .form-section, .map-section { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+        label { display: block; margin-top: 10px; }
+        input[type="number"], input[type="text"] { width: 60px; margin-right: 5px; }
+        .result { margin-top: 10px; font-weight: bold; }
+        #map { width: 400px; height: 300px; background: #e3e3e3; border: 1px solid #ccc; border-radius: 6px; position: relative; }
+        .marker { position: absolute; width: 16px; height: 16px; background: red; border-radius: 50%; border: 2px solid #fff; transform: translate(-50%, -50%); }
+        .info { font-size: 0.95em; color: #555; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>DMS &lt;-&gt; DD Coordinate Converter</h2>
+    <div class="container">
+        <div class="form-section">
+            <form id="converterForm" autocomplete="off">
+                <fieldset>
+                    <legend>Convert DMS to DD</legend>
+                    <label>Latitude:
+                        <input type="number" id="lat_deg" placeholder="°" min="0" max="90">°
+                        <input type="number" id="lat_min" placeholder="'" min="0" max="59">' 
+                        <input type="number" id="lat_sec" placeholder='"' min="0" max="59.999">"
+                        <select id="lat_dir">
+                            <option value="N">N</option>
+                            <option value="S">S</option>
+                        </select>
+                    </label>
+                    <label>Longitude:
+                        <input type="number" id="lon_deg" placeholder="°" min="0" max="180">°
+                        <input type="number" id="lon_min" placeholder="'" min="0" max="59">' 
+                        <input type="number" id="lon_sec" placeholder='"' min="0" max="59.999">"
+                        <select id="lon_dir">
+                            <option value="E">E</option>
+                            <option value="W">W</option>
+                        </select>
+                    </label>
+                    <button type="button" onclick="convertDMStoDD()">Convert to DD</button>
+                    <div class="result" id="dms2dd_result"></div>
+                </fieldset>
+                <fieldset style="margin-top:20px;">
+                    <legend>Convert DD to DMS</legend>
+                    <label>Latitude:
+                        <input type="number" id="dd_lat" step="any" placeholder="e.g. 37.7749">
+                    </label>
+                    <label>Longitude:
+                        <input type="number" id="dd_lon" step="any" placeholder="e.g. -122.4194">
+                    </label>
+                    <button type="button" onclick="convertDDtoDMS()">Convert to DMS</button>
+                    <div class="result" id="dd2dms_result"></div>
+                </fieldset>
+                <fieldset style="margin-top:20px;">
+                    <legend>Map Marker Info</legend>
+                    <label>Label:
+                        <input type="text" id="marker_label" maxlength="20" placeholder="Optional label">
+                    </label>
+                    <button type="button" onclick="updateMap()">Show on Map</button>
+                </fieldset>
+            </form>
+            <div class="info">
+                <b>Instructions:</b> Enter coordinates in either format and convert. Use "Show on Map" to plot the point.
+            </div>
+        </div>
+        <div class="map-section">
+            <div id="map"></div>
+            <div id="map_info" class="info"></div>
+        </div>
+    </div>
+    <script>
+        // DMS to DD conversion
+        function convertDMStoDD() {
+            let lat_deg = parseInt(document.getElementById('lat_deg').value) || 0;
+            let lat_min = parseInt(document.getElementById('lat_min').value) || 0;
+            let lat_sec = parseFloat(document.getElementById('lat_sec').value) || 0;
+            let lat_dir = document.getElementById('lat_dir').value;
+
+            let lon_deg = parseInt(document.getElementById('lon_deg').value) || 0;
+            let lon_min = parseInt(document.getElementById('lon_min').value) || 0;
+            let lon_sec = parseFloat(document.getElementById('lon_sec').value) || 0;
+            let lon_dir = document.getElementById('lon_dir').value;
+
+            let lat_dd = lat_deg + lat_min/60 + lat_sec/3600;
+            if (lat_dir === 'S') lat_dd *= -1;
+            let lon_dd = lon_deg + lon_min/60 + lon_sec/3600;
+            if (lon_dir === 'W') lon_dd *= -1;
+
+            document.getElementById('dms2dd_result').textContent = 
+                `Latitude: ${lat_dd.toFixed(6)}, Longitude: ${lon_dd.toFixed(6)}`;
+
+            // Fill DD fields for convenience
+            document.getElementById('dd_lat').value = lat_dd.toFixed(6);
+            document.getElementById('dd_lon').value = lon_dd.toFixed(6);
+        }
+
+        // DD to DMS conversion
+        function convertDDtoDMS() {
+            let lat_dd = parseFloat(document.getElementById('dd_lat').value) || 0;
+            let lon_dd = parseFloat(document.getElementById('dd_lon').value) || 0;
+
+            let lat_dir = lat_dd >= 0 ? 'N' : 'S';
+            let lon_dir = lon_dd >= 0 ? 'E' : 'W';
+
+            let lat_abs = Math.abs(lat_dd);
+            let lat_deg = Math.floor(lat_abs);
+            let lat_min = Math.floor((lat_abs - lat_deg) * 60);
+            let lat_sec = ((lat_abs - lat_deg - lat_min/60) * 3600);
+
+            let lon_abs = Math.abs(lon_dd);
+            let lon_deg = Math.floor(lon_abs);
+            let lon_min = Math.floor((lon_abs - lon_deg) * 60);
+            let lon_sec = ((lon_abs - lon_deg - lon_min/60) * 3600);
+
+            document.getElementById('dd2dms_result').textContent =
+                `Latitude: ${lat_deg}° ${lat_min}' ${lat_sec.toFixed(3)}" ${lat_dir}, ` +
+                `Longitude: ${lon_deg}° ${lon_min}' ${lon_sec.toFixed(3)}" ${lon_dir}`;
+
+            // Fill DMS fields for convenience
+            document.getElementById('lat_deg').value = lat_deg;
+            document.getElementById('lat_min').value = lat_min;
+            document.getElementById('lat_sec').value = lat_sec.toFixed(3);
+            document.getElementById('lat_dir').value = lat_dir;
+            document.getElementById('lon_deg').value = lon_deg;
+            document.getElementById('lon_min').value = lon_min;
+            document.getElementById('lon_sec').value = lon_sec.toFixed(3);
+            document.getElementById('lon_dir').value = lon_dir;
+        }
+
+        // Simple illustrative map (not real-world accurate, just for visualization)
+        function updateMap() {
+            let lat = parseFloat(document.getElementById('dd_lat').value);
+            let lon = parseFloat(document.getElementById('dd_lon').value);
+            let label = document.getElementById('marker_label').value.trim();
+
+            if (isNaN(lat) || isNaN(lon)) {
+                document.getElementById('map_info').textContent = "Please enter valid DD coordinates.";
+                return;
+            }
+
+            // Map bounds: lat [-90,90], lon [-180,180]
+            let map = document.getElementById('map');
+            map.innerHTML = ''; // Clear previous marker
+
+            // Map size
+            let w = map.offsetWidth, h = map.offsetHeight;
+            // Convert lat/lon to x/y (simple equirectangular projection)
+            let x = ((lon + 180) / 360) * w;
+            let y = ((90 - lat) / 180) * h;
+
+            // Marker
+            let marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            map.appendChild(marker);
+
+            // Label
+            if (label) {
+                let lbl = document.createElement('div');
+                lbl.style.position = 'absolute';
+                lbl.style.left = (x + 12) + 'px';
+                lbl.style.top = (y - 8) + 'px';
+                lbl.style.background = '#fff8';
+                lbl.style.padding = '2px 6px';
+                lbl.style.borderRadius = '4px';
+                lbl.style.fontSize = '0.95em';
+                lbl.style.pointerEvents = 'none';
+                lbl.textContent = label;
+                map.appendChild(lbl);
+            }
+
+            document.getElementById('map_info').textContent =
+                `Plotted at Latitude: ${lat.toFixed(6)}, Longitude: ${lon.toFixed(6)}`;
+        }
+    </script>
+</body>
+</html>
