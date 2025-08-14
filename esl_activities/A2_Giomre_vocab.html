@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detective Grimoire ESL Academy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Roboto:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%);
+            color: #f4f1e8;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #8b4513;
+        }
+        
+        .title {
+            font-family: 'Creepster', cursive;
+            font-size: 3rem;
+            color: #ffd700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(145deg, #8b4513, #a0522d);
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .nav-btn:hover {
+            background: linear-gradient(145deg, #a0522d, #cd853f);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            color: #2c1810;
+        }
+        
+        .section {
+            display: none;
+            background: rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #8b4513;
+            margin-bottom: 20px;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .section h2 {
+            color: #ffd700;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .flashcard-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(145deg, #f4f1e8, #e8e5d8);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            border: 3px solid #8b4513;
+        }
+        
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .flashcard-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(145deg, #d4af37, #b8941f);
+        }
+        
+        .flashcard-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c1810;
+        }
+        
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: linear-gradient(145deg, #8b4513, #a0522d);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(145deg, #a0522d, #cd853f);
+            transform: translateY(-1px);
+        }
+        
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .question {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #8b4513;
+        }
+        
+        .question h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .option {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #8b4513;
+            color: #f4f1e8;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #ffd700;
+        }
+        
+        .option.correct {
+            background: rgba(0,255,0,0.3);
+            border-color: #00ff00;
+        }
+        
+        .option.incorrect {
+            background: rgba(255,0,0,0.3);
+            border-color: #ff0000;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .flashcard {
+                width: 250px;
+                height: 150px;
+            }
+            
+            .flashcard-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🔍 Detective Grimoire ESL Academy</h1>
+            <p class="subtitle">Solve mysteries while learning English!</p>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('flashcards')">📚 Flashcards</button>
+                <button class="nav-btn" onclick="showSection('vocabulary')">🔤 Vocabulary Quiz</button>
+                <button class="nav-btn" onclick="showSection('grammar')">📝 Grammar Test</button>
+            </div>
+        </div>
+
+        <!-- Flashcards Section -->
+        <div id="flashcards" class="section active">
+            <h2>🃏 Mystery Vocabulary Flashcards</h2>
+            <div class="score">Card <span id="cardNumber">1</span> of <span id="totalCards">10</span></div>
+            <div class="progress-bar">
+                <div class="progress" id="flashcardProgress" style="width: 10%"></div>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-front">
+                        <div class="flashcard-text" id="flashcardFront">Click to reveal the mystery word!</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-text" id="flashcardBack">Detective</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flashcard-controls">
+                <button class="btn" onclick="previousCard()">⬅️ Previous</button>
+                <button class="btn" onclick="flipCard()">🔄 Flip Card</button>
+                <button class="btn" onclick="nextCard()">Next ➡️</button>
+            </div>
+        </div>
+
+        <!-- Vocabulary Quiz Section -->
+        <div id="vocabulary" class="section">
+            <h2>🔍 Vocabulary Detective Quiz</h2>
+            <div class="score">Score: <span id="vocabScore">0</span>/10</div>
+            <div class="progress-bar">
+                <div class="progress" id="vocabProgress" style="width: 0%"></div>
+            </div>
+            <div class="quiz-container">
+                <div class="question">
+                    <h3 id="vocabQuestion">What does "investigate" mean?</h3>
+                    <div class="options" id="vocabOptions">
+                        <div class="option" onclick="selectVocabAnswer(this, true)">To examine carefully to find the truth</div>
+                        <div class="option" onclick="selectVocabAnswer(this, false)">To run away quickly</div>
+                        <div class="option" onclick="selectVocabAnswer(this, false)">To eat something</div>
+                        <div class="option" onclick="selectVocabAnswer(this, false)">To sleep deeply</div>
+                    </div>
+                </div>
+                <button class="btn" onclick="nextVocabQuestion()" id="vocabNext" style="display: none;">Next Question ➡️</button>
+                <button class="btn" onclick="restartVocabQuiz()" id="vocabRestart" style="display: none;">🔄 Try Again</button>
+            </div>
+        </div>
+
+        <!-- Grammar Test Section -->
+        <div id="grammar" class="section">
+            <h2>📝 Grammar Mystery Test</h2>
+            <div class="score">Score: <span id="grammarScore">0</span>/8</div>
+            <div class="progress-bar">
+                <div class="progress" id="grammarProgress" style="width: 0%"></div>
+            </div>
+            <div class="quiz-container">
+                <div class="question">
+                    <h3 id="grammarQuestion">Detective Grimoire _____ the clues carefully.</h3>
+                    <div class="options" id="grammarOptions">
+                        <div class="option" onclick="selectGrammarAnswer(this, true)">examines</div>
+                        <div class="option" onclick="selectGrammarAnswer(this, false)">examine</div>
+                        <div class="option" onclick="selectGrammarAnswer(this, false)">examining</div>
+                        <div class="option" onclick="selectGrammarAnswer(this, false)">examined</div>
+                    </div>
+                </div>
+                <button class="btn" onclick="nextGrammarQuestion()" id="grammarNext" style="display: none;">Next Question ➡️</button>
+                <button class="btn" onclick="restartGrammarQuiz()" id="grammarRestart" style="display: none;">🔄 Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Flashcard data
+        const flashcards = [
+            { front: "A person who solves crimes", back: "Detective" },
+            { front: "A hint that helps solve a mystery", back: "Clue" },
+            { front: "To look for something carefully", back: "Search" },
+            { front: "A person who might have done the crime", back: "Suspect" },
+            { front: "To ask questions to get information", back: "Investigate" },
+            { front: "Something that proves what happened", back: "Evidence" },
+            { front: "A secret or puzzle to solve", back: "Mystery" },
+            { front: "To find the answer to a problem", back: "Solve" },
+            { front: "A person who saw what happened", back: "Witness" },
+            { front: "The answer to who did the crime", back: "Solution" }
+        ];
+
+        // Vocabulary quiz data
+        const vocabQuestions = [
+            {
+                question: "What does 'investigate' mean?",
+                options: ["To examine carefully to find the truth", "To run away quickly", "To eat something", "To sleep deeply"],
+                correct: 0
+            },
+            {
+                question: "What is a 'clue'?",
+                options: ["A type of food", "A hint that helps solve a mystery", "A musical instrument", "A color"],
+                correct: 1
+            },
+            {
+                question: "What does 'suspect' mean as a noun?",
+                options: ["A tool", "A place", "A person who might have done the crime", "A time of day"],
+                correct: 2
+            },
+            {
+                question: "What is 'evidence'?",
+                options: ["Something that proves what happened", "A type of weather", "A game", "A book"],
+                correct: 0
+            },
+            {
+                question: "What does 'witness' mean?",
+                options: ["To be afraid", "To be happy", "A person who saw what happened", "To be tired"],
+                correct: 2
+            },
+            {
+                question: "What does 'solve' mean?",
+                options: ["To break something", "To find the answer to a problem", "To make noise", "To be quiet"],
+                correct: 1
+            },
+            {
+                question: "What is a 'mystery'?",
+                options: ["A secret or puzzle to solve", "A type of animal", "A kind of food", "A piece of clothing"],
+                correct: 0
+            },
+            {
+                question: "What does 'search' mean?",
+                options: ["To sing", "To dance", "To look for something carefully", "To paint"],
+                correct: 2
+            },
+            {
+                question: "What is a 'detective'?",
+                options: ["A person who solves crimes", "A type of car", "A building", "A season"],
+                correct: 0
+            },
+            {
+                question: "What is a 'solution'?",
+                options: ["A problem", "The answer to who did the crime", "A question", "A mistake"],
+                correct: 1
+            }
+        ];
+
+        // Grammar quiz data
+        const grammarQuestions = [
+            {
+                question: "Detective Grimoire _____ the clues carefully.",
+                options: ["examines", "examine", "examining", "examined"],
+                correct: 0
+            },
+            {
+                question: "The witness _____ what happened yesterday.",
+                options: ["see", "saw", "seeing", "sees"],
+                correct: 1
+            },
+            {
+                question: "_____ you find any evidence at the scene?",
+                options: ["Do", "Did", "Does", "Are"],
+                correct: 1
+            },
+            {
+                question: "The suspect _____ nervous when questioned.",
+                options: ["look", "looks", "looking", "looked"],
+                correct: 1
+            },
+            {
+                question: "We _____ solve this mystery together.",
+                options: ["will", "was", "were", "is"],
+                correct: 0
+            },
+            {
+                question: "The detective _____ been working on this case for weeks.",
+                options: ["have", "has", "had", "having"],
+                correct: 1
+            },
+            {
+                question: "_____ is the most important clue?",
+                options: ["What", "Where", "When", "Who"],
+                correct: 0
+            },
+            {
+                question: "The mystery _____ finally solved!",
+                options: ["is", "are", "was", "were"],
+                correct: 2
+            }
+        ];
+
+        // Current states
+        let currentFlashcard = 0;
+        let currentVocabQuestion = 0;
+        let currentGrammarQuestion = 0;
+        let vocabScore = 0;
+        let grammarScore = 0;
+        let vocabAnswered = false;
+        let grammarAnswered = false;
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Flashcard functions
+        function updateFlashcard() {
+            const card = flashcards[currentFlashcard];
+            document.getElementById('flashcardFront').textContent = card.front;
+            document.getElementById('flashcardBack').textContent = card.back;
+            document.getElementById('cardNumber').textContent = currentFlashcard + 1;
+            document.getElementById('totalCards').textContent = flashcards.length;
+            document.getElementById('flashcardProgress').style.width = ((currentFlashcard + 1) / flashcards.length * 100) + '%';
+            
+            // Reset card to front
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (currentFlashcard < flashcards.length - 1) {
+                currentFlashcard++;
+                updateFlashcard();
+            }
+        }
+
+        function previousCard() {
+            if (currentFlashcard > 0) {
+                currentFlashcard--;
+                updateFlashcard();
+            }
+        }
+
+        // Vocabulary quiz functions
+        function updateVocabQuestion() {
+            const question = vocabQuestions[currentVocabQuestion];
+            document.getElementById('vocabQuestion').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('vocabOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectVocabAnswer(optionDiv, index === question.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('vocabNext').style.display = 'none';
+            vocabAnswered = false;
+        }
+
+        function selectVocabAnswer(element, isCorrect) {
+            if (vocabAnswered) return;
+            
+            vocabAnswered = true;
+            
+            // Show correct/incorrect styling
+            document.querySelectorAll('#vocabOptions .option').forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                vocabScore++;
+                document.getElementById('vocabScore').textContent = vocabScore;
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                const correctIndex = vocabQuestions[currentVocabQuestion].correct;
+                document.querySelectorAll('#vocabOptions .option')[correctIndex].classList.add('correct');
+            }
+            
+            document.getElementById('vocabProgress').style.width = ((currentVocabQuestion + 1) / vocabQuestions.length * 100) + '%';
+            
+            if (currentVocabQuestion < vocabQuestions.length - 1) {
+                document.getElementById('vocabNext').style.display = 'inline-block';
+            } else {
+                document.getElementById('vocabRestart').style.display = 'inline-block';
+            }
+        }
+
+        function nextVocabQuestion() {
+            currentVocabQuestion++;
+            updateVocabQuestion();
+        }
+
+        function restartVocabQuiz() {
+            currentVocabQuestion = 0;
+            vocabScore = 0;
+            document.getElementById('vocabScore').textContent = vocabScore;
+            document.getElementById('vocabProgress').style.width = '0%';
+            document.getElementById('vocabRestart').style.display = 'none';
+            updateVocabQuestion();
+        }
+
+        // Grammar quiz functions
+        function updateGrammarQuestion() {
+            const question = grammarQuestions[currentGrammarQuestion];
+            document.getElementById('grammarQuestion').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('grammarOptions');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectGrammarAnswer(optionDiv, index === question.correct);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('grammarNext').style.display = 'none';
+            grammarAnswered = false;
+        }
+
+        function selectGrammarAnswer(element, isCorrect) {
+            if (grammarAnswered) return;
+            
+            grammarAnswered = true;
+            
+            // Show correct/incorrect styling
+            document.querySelectorAll('#grammarOptions .option').forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                grammarScore++;
+                document.getElementById('grammarScore').textContent = grammarScore;
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                const correctIndex = grammarQuestions[currentGrammarQuestion].correct;
+                document.querySelectorAll('#grammarOptions .option')[correctIndex].classList.add('correct');
+            }
+            
+            document.getElementById('grammarProgress').style.width = ((currentGrammarQuestion + 1) / grammarQuestions.length * 100) + '%';
+            
+            if (currentGrammarQuestion < grammarQuestions.length - 1) {
+                document.getElementById('grammarNext').style.display = 'inline-block';
+            } else {
+                document.getElementById('grammarRestart').style.display = 'inline-block';
+            }
+        }
+
+        function nextGrammarQuestion() {
+            currentGrammarQuestion++;
+            updateGrammarQuestion();
+        }
+
+        function restartGrammarQuiz() {
+            currentGrammarQuestion = 0;
+            grammarScore = 0;
+            document.getElementById('grammarScore').textContent = grammarScore;
+            document.getElementById('grammarProgress').style.width = '0%';
+            document.getElementById('grammarRestart').style.display = 'none';
+            updateGrammarQuestion();
+        }
+
+        // Initialize the app
+        updateFlashcard();
+        updateVocabQuestion();
+        updateGrammarQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96f1275072c6f1aa',t:'MTc1NTE4MTg2Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
