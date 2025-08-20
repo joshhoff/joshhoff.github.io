@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Travel Vocabulary Quiz | Тест просунутого словника подорожей | Quiz Avanzado de Vocabulario de Viajes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .correct { background: linear-gradient(135deg, #10b981, #059669); }
+        .incorrect { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .pulse-correct { animation: pulseCorrect 0.6s ease-out; }
+        .pulse-incorrect { animation: pulseIncorrect 0.6s ease-out; }
+        @keyframes pulseCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.05); background: #10b981; } 100% { transform: scale(1); } }
+        @keyframes pulseIncorrect { 0% { transform: scale(1); } 50% { transform: scale(1.05); background: #ef4444; } 100% { transform: scale(1); } }
+        .language-flag { font-size: 1.2em; margin-right: 0.5rem; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex justify-center items-center gap-4 mb-4">
+                <div class="text-4xl">🎓</div>
+                <h1 class="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
+                    <span id="title-en">Advanced Travel Vocabulary Quiz</span>
+                    <span id="title-uk" class="hidden">Тест просунутого словника подорожей</span>
+                    <span id="title-es" class="hidden">Quiz Avanzado de Vocabulario de Viajes</span>
+                </h1>
+                <div class="text-4xl">🌐</div>
+            </div>
+            
+            <!-- Language Toggle -->
+            <div class="flex justify-center mb-6">
+                <div class="bg-white rounded-full p-1 shadow-lg border-2 border-indigo-100">
+                    <button id="lang-en" class="px-4 py-2 rounded-full font-medium transition-all duration-300 bg-indigo-500 text-white flex items-center">
+                        <span class="language-flag">🇺🇸</span>English
+                    </button>
+                    <button id="lang-uk" class="px-4 py-2 rounded-full font-medium transition-all duration-300 text-indigo-500 hover:bg-indigo-50 flex items-center">
+                        <span class="language-flag">🇺🇦</span>Українська
+                    </button>
+                    <button id="lang-es" class="px-4 py-2 rounded-full font-medium transition-all duration-300 text-indigo-500 hover:bg-indigo-50 flex items-center">
+                        <span class="language-flag">🇪🇸</span>Español
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-indigo-100 mb-8">
+                <p id="instructions-en" class="text-gray-700 text-lg">
+                    Master advanced travel terminology! Test your comprehension of sophisticated travel vocabulary, including complex phrasal verbs and professional hospitality terms.
+                </p>
+                <p id="instructions-uk" class="text-gray-700 text-lg hidden">
+                    Опануйте просунуту туристичну термінологію! Перевірте своє розуміння складного словника подорожей, включаючи комплексні фразові дієслова та професійні терміни гостинності.
+                </p>
+                <p id="instructions-es" class="text-gray-700 text-lg hidden">
+                    ¡Domina la terminología avanzada de viajes! Pon a prueba tu comprensión del vocabulario sofisticado de viajes, incluyendo verbos frasales complejos y términos profesionales de hospitalidad.
+                </p>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="bg-white rounded-2xl shadow-xl border border-indigo-100 p-8">
+            <!-- Progress Bar -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="progress-text-en" class="text-sm font-medium text-gray-600">Question 1 of 20</span>
+                    <span id="progress-text-uk" class="text-sm font-medium text-gray-600 hidden">Питання 1 з 20</span>
+                    <span id="progress-text-es" class="text-sm font-medium text-gray-600 hidden">Pregunta 1 de 20</span>
+                    <span id="score-text" class="text-sm font-medium text-indigo-600">Score: 0/0</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 h-3 rounded-full transition-all duration-500" style="width: 5%"></div>
+                </div>
+            </div>
+
+            <!-- Difficulty Level -->
+            <div class="flex justify-center mb-6">
+                <div id="difficulty-badge" class="px-4 py-2 bg-gradient-to-r from-red-100 to-red-200 text-red-800 rounded-full text-sm font-bold border border-red-300">
+                    <span id="difficulty-en">Advanced Level</span>
+                    <span id="difficulty-uk" class="hidden">Просунутий рівень</span>
+                    <span id="difficulty-es" class="hidden">Nivel Avanzado</span>
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div class="mb-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <div id="category-badge" class="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                        Phrasal Verb
+                    </div>
+                    <div id="complexity-indicator" class="flex gap-1">
+                        <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                        <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                        <div class="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                        <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                        <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                    </div>
+                </div>
+                <h2 id="question-text" class="text-3xl font-bold text-gray-800 mb-3">
+                    expedite the repatriation process
+                </h2>
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <p id="context-sentence" class="text-gray-700 italic">
+                        "The consulate will <strong>expedite the repatriation process</strong> for stranded citizens."
+                    </p>
+                </div>
+                <p id="question-context-en" class="text-gray-600 font-medium">
+                    What does this advanced travel term mean?
+                </p>
+                <p id="question-context-uk" class="text-gray-600 font-medium hidden">
+                    Що означає цей просунутий туристичний термін?
+                </p>
+                <p id="question-context-es" class="text-gray-600 font-medium hidden">
+                    ¿Qué significa este término avanzado de viajes?
+                </p>
+            </div>
+
+            <!-- Answer Options -->
+            <div id="options-container" class="space-y-4 mb-8">
+                <!-- Options will be populated by JavaScript -->
+            </div>
+
+            <!-- Next Button -->
+            <div class="text-center">
+                <button id="next-btn" class="px-8 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
+                    <span id="next-btn-en">Next Question</span>
+                    <span id="next-btn-uk" class="hidden">Наступне питання</span>
+                    <span id="next-btn-es" class="hidden">Siguiente Pregunta</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Modal -->
+        <div id="results-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl">
+                <div class="text-center">
+                    <div class="text-6xl mb-4" id="results-emoji">🎓</div>
+                    <h3 id="results-title-en" class="text-2xl font-bold text-gray-800 mb-4">Assessment Complete!</h3>
+                    <h3 id="results-title-uk" class="text-2xl font-bold text-gray-800 mb-4 hidden">Оцінювання завершено!</h3>
+                    <h3 id="results-title-es" class="text-2xl font-bold text-gray-800 mb-4 hidden">¡Evaluación Completa!</h3>
+                    
+                    <div class="bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 rounded-xl p-6 mb-6">
+                        <div id="final-score" class="text-4xl font-bold text-indigo-600 mb-2">16/20</div>
+                        <div id="percentage" class="text-xl text-gray-700 mb-2">80%</div>
+                        <div id="proficiency-level" class="text-lg font-semibold text-purple-600 mb-2">Advanced Proficiency</div>
+                        <div id="grade-en" class="text-lg font-medium text-gray-600">Exceptional mastery!</div>
+                        <div id="grade-uk" class="text-lg font-medium text-gray-600 hidden">Виняткове володіння!</div>
+                        <div id="grade-es" class="text-lg font-medium text-gray-600 hidden">¡Dominio excepcional!</div>
+                    </div>
+
+                    <button id="restart-btn" class="px-6 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 mr-3">
+                        <span id="restart-btn-en">Retake Assessment</span>
+                        <span id="restart-btn-uk" class="hidden">Пройти оцінювання знову</span>
+                        <span id="restart-btn-es" class="hidden">Repetir Evaluación</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Advanced quiz data with sophisticated travel terminology
+        const quizData = [
+            {
+                word: "expedite the repatriation process",
+                category: "phrasal verb",
+                complexity: 5,
+                context: "The consulate will <strong>expedite the repatriation process</strong> for stranded citizens.",
+                options: [
+                    "Cancel travel documents for citizens abroad",
+                    "Delay the return of citizens to their home country",
+                    "Accelerate the process of returning citizens to their homeland",
+                    "Investigate citizens living overseas"
+                ],
+                correct: 2
+            },
+            {
+                word: "circumnavigate",
+                category: "verb",
+                complexity: 4,
+                context: "The luxury cruise will <strong>circumnavigate</strong> the Mediterranean Sea.",
+                options: [
+                    "Travel completely around something",
+                    "Travel directly across a body of water",
+                    "Avoid traveling through an area",
+                    "Make multiple stops in different ports"
+                ],
+                correct: 0
+            },
+            {
+                word: "diplomatic immunity",
+                category: "noun",
+                complexity: 5,
+                context: "The ambassador's <strong>diplomatic immunity</strong> allowed passage without inspection.",
+                options: [
+                    "Priority boarding privileges",
+                    "Exemption from paying travel taxes",
+                    "Special medical insurance for travelers",
+                    "Legal protection from prosecution in foreign countries"
+                ],
+                correct: 3
+            },
+            {
+                word: "embark upon",
+                category: "phrasal verb",
+                complexity: 3,
+                context: "Tomorrow we shall <strong>embark upon</strong> our transcontinental expedition.",
+                options: [
+                    "Begin or start a journey or venture",
+                    "Cancel or postpone a journey",
+                    "Complete a difficult journey",
+                    "Plan the details of a trip"
+                ],
+                correct: 0
+            },
+            {
+                word: "concierge services",
+                category: "noun",
+                complexity: 3,
+                context: "The hotel's <strong>concierge services</strong> include restaurant reservations and theater tickets.",
+                options: [
+                    "Transportation to the airport",
+                    "Room cleaning and maintenance",
+                    "Personalized assistance and recommendations",
+                    "Luggage storage and delivery"
+                ],
+                correct: 2
+            },
+            {
+                word: "disembark from",
+                category: "phrasal verb",
+                complexity: 3,
+                context: "Passengers must <strong>disembark from</strong> the vessel at the designated port.",
+                options: [
+                    "Reserve seats on transportation",
+                    "Leave or get off a vehicle or vessel",
+                    "Board or get onto a vehicle",
+                    "Transfer between different vehicles"
+                ],
+                correct: 1
+            },
+            {
+                word: "itinerary modification",
+                category: "noun",
+                complexity: 4,
+                context: "Due to weather conditions, an <strong>itinerary modification</strong> was necessary.",
+                options: [
+                    "Addition of travel insurance",
+                    "Upgrade to premium accommodations",
+                    "Cancellation of the entire trip",
+                    "Change or alteration to travel plans"
+                ],
+                correct: 3
+            },
+            {
+                word: "check out of",
+                category: "phrasal verb",
+                complexity: 2,
+                context: "Guests must <strong>check out of</strong> their suites by 11:00 AM.",
+                options: [
+                    "Leave and settle the bill at accommodation",
+                    "Register and receive room keys",
+                    "Inspect the room for damages",
+                    "Request additional hotel services"
+                ],
+                correct: 0
+            },
+            {
+                word: "customs declaration",
+                category: "noun",
+                complexity: 4,
+                context: "All travelers must complete a <strong>customs declaration</strong> upon arrival.",
+                options: [
+                    "Medical certificate for international travel",
+                    "Statement of items being brought into a country",
+                    "Reservation confirmation for hotels",
+                    "Proof of travel insurance coverage"
+                ],
+                correct: 1
+            },
+            {
+                word: "venture forth",
+                category: "phrasal verb",
+                complexity: 4,
+                context: "The explorers decided to <strong>venture forth</strong> into uncharted territory.",
+                options: [
+                    "Create detailed maps of an area",
+                    "Return to a familiar place",
+                    "Go forward boldly into unknown areas",
+                    "Establish a permanent settlement"
+                ],
+                correct: 2
+            },
+            {
+                word: "transit visa",
+                category: "noun",
+                complexity: 4,
+                context: "A <strong>transit visa</strong> is required for the layover in Dubai.",
+                options: [
+                    "Work authorization document",
+                    "Tourist activity permit",
+                    "Permanent residence permit",
+                    "Temporary permission to pass through a country"
+                ],
+                correct: 3
+            },
+            {
+                word: "set forth",
+                category: "phrasal verb",
+                complexity: 3,
+                context: "The expedition will <strong>set forth</strong> at dawn tomorrow.",
+                options: [
+                    "Create detailed plans",
+                    "Begin a journey or departure",
+                    "Establish a camp or base",
+                    "Gather necessary supplies"
+                ],
+                correct: 1
+            },
+            {
+                word: "hospitality suite",
+                category: "noun",
+                complexity: 3,
+                context: "The corporate <strong>hospitality suite</strong> offers premium amenities for VIP guests.",
+                options: [
+                    "Conference room for business meetings",
+                    "Medical facility within a hotel",
+                    "Standard hotel room with basic facilities",
+                    "Luxurious accommodation for entertaining guests"
+                ],
+                correct: 3
+            },
+            {
+                word: "touch down",
+                category: "phrasal verb",
+                complexity: 2,
+                context: "The aircraft will <strong>touch down</strong> at Heathrow at 14:30.",
+                options: [
+                    "Change flight direction",
+                    "Take off from an airport",
+                    "Land at a destination",
+                    "Refuel during a journey"
+                ],
+                correct: 2
+            },
+            {
+                word: "diplomatic pouch",
+                category: "noun",
+                complexity: 5,
+                context: "Official documents were sent via <strong>diplomatic pouch</strong> to avoid inspection.",
+                options: [
+                    "Secure mail system for government communications",
+                    "Tourist information package",
+                    "Emergency medical supplies",
+                    "Cultural exchange materials"
+                ],
+                correct: 0
+            },
+            {
+                word: "sojourn",
+                category: "noun",
+                complexity: 4,
+                context: "Her <strong>sojourn</strong> in Tuscany lasted three months.",
+                options: [
+                    "Business conference",
+                    "Brief visit or quick trip",
+                    "Permanent relocation",
+                    "Temporary stay or residence"
+                ],
+                correct: 3
+            },
+            {
+                word: "turn back",
+                category: "phrasal verb",
+                complexity: 2,
+                context: "Due to severe weather, the pilot decided to <strong>turn back</strong>.",
+                options: [
+                    "Make an emergency landing",
+                    "Return to the starting point",
+                    "Continue forward despite obstacles",
+                    "Change to an alternative route"
+                ],
+                correct: 1
+            },
+            {
+                word: "consular services",
+                category: "noun",
+                complexity: 4,
+                context: "<strong>Consular services</strong> include passport renewal and emergency assistance.",
+                options: [
+                    "International shipping services",
+                    "Private travel planning services",
+                    "Government assistance for citizens abroad",
+                    "Hotel booking and tour arrangements"
+                ],
+                correct: 2
+            },
+            {
+                word: "lay over",
+                category: "phrasal verb",
+                complexity: 3,
+                context: "We will <strong>lay over</strong> in Frankfurt for four hours.",
+                options: [
+                    "Make a temporary stop during travel",
+                    "Cancel the remaining journey",
+                    "Change to a different airline",
+                    "Upgrade to a better seat class"
+                ],
+                correct: 0
+            },
+            {
+                word: "expatriate community",
+                category: "noun",
+                complexity: 4,
+                context: "The <strong>expatriate community</strong> in Bangkok is quite large and diverse.",
+                options: [
+                    "Diplomatic staff and families",
+                    "People living outside their native country",
+                    "Local residents of a city",
+                    "International business travelers"
+                ],
+                correct: 1
+            }
+        ];
+
+        // Comprehensive translations
+        const translations = {
+            en: {
+                title: "Advanced Travel Vocabulary Quiz",
+                instructions: "Master advanced travel terminology! Test your comprehension of sophisticated travel vocabulary, including complex phrasal verbs and professional hospitality terms.",
+                questionContext: "What does this advanced travel term mean?",
+                progressText: "Question",
+                of: "of",
+                nextBtn: "Next Question",
+                resultsTitle: "Assessment Complete!",
+                restartBtn: "Retake Assessment",
+                difficulty: "Advanced Level",
+                categories: {
+                    noun: "Noun",
+                    "phrasal verb": "Phrasal Verb",
+                    verb: "Verb"
+                },
+                proficiencyLevels: {
+                    expert: "Expert Proficiency",
+                    advanced: "Advanced Proficiency", 
+                    intermediate: "Intermediate Proficiency",
+                    developing: "Developing Proficiency"
+                },
+                grades: {
+                    expert: "Exceptional mastery!",
+                    advanced: "Outstanding performance!",
+                    intermediate: "Solid understanding!",
+                    developing: "Continue developing skills!"
+                }
+            },
+            uk: {
+                title: "Тест просунутого словника подорожей",
+                instructions: "Опануйте просунуту туристичну термінологію! Перевірте своє розуміння складного словника подорожей, включаючи комплексні фразові дієслова та професійні терміни гостинності.",
+                questionContext: "Що означає цей просунутий туристичний термін?",
+                progressText: "Питання",
+                of: "з",
+                nextBtn: "Наступне питання",
+                resultsTitle: "Оцінювання завершено!",
+                restartBtn: "Пройти оцінювання знову",
+                difficulty: "Просунутий рівень",
+                categories: {
+                    noun: "Іменник",
+                    "phrasal verb": "Фразове дієслово",
+                    verb: "Дієслово"
+                },
+                proficiencyLevels: {
+                    expert: "Експертне володіння",
+                    advanced: "Просунуте володіння",
+                    intermediate: "Середнє володіння", 
+                    developing: "Володіння що розвивається"
+                },
+                grades: {
+                    expert: "Виняткове володіння!",
+                    advanced: "Видатні результати!",
+                    intermediate: "Міцне розуміння!",
+                    developing: "Продовжуйте розвивати навички!"
+                }
+            },
+            es: {
+                title: "Quiz Avanzado de Vocabulario de Viajes",
+                instructions: "¡Domina la terminología avanzada de viajes! Pon a prueba tu comprensión del vocabulario sofisticado de viajes, incluyendo verbos frasales complejos y términos profesionales de hospitalidad.",
+                questionContext: "¿Qué significa este término avanzado de viajes?",
+                progressText: "Pregunta",
+                of: "de",
+                nextBtn: "Siguiente Pregunta",
+                resultsTitle: "¡Evaluación Completa!",
+                restartBtn: "Repetir Evaluación",
+                difficulty: "Nivel Avanzado",
+                categories: {
+                    noun: "Sustantivo",
+                    "phrasal verb": "Verbo Frasal",
+                    verb: "Verbo"
+                },
+                proficiencyLevels: {
+                    expert: "Competencia Experta",
+                    advanced: "Competencia Avanzada",
+                    intermediate: "Competencia Intermedia",
+                    developing: "Competencia en Desarrollo"
+                },
+                grades: {
+                    expert: "¡Dominio excepcional!",
+                    advanced: "¡Rendimiento sobresaliente!",
+                    intermediate: "¡Comprensión sólida!",
+                    developing: "¡Continúa desarrollando habilidades!"
+                }
+            }
+        };
+
+        // Quiz state
+        let currentLanguage = 'en';
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let quizQuestions = [...quizData].sort(() => Math.random() - 0.5);
+
+        // DOM elements
+        const langEnBtn = document.getElementById('lang-en');
+        const langUkBtn = document.getElementById('lang-uk');
+        const langEsBtn = document.getElementById('lang-es');
+        const nextBtn = document.getElementById('next-btn');
+        const optionsContainer = document.getElementById('options-container');
+        const resultsModal = document.getElementById('results-modal');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Language switching
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            [langEnBtn, langUkBtn, langEsBtn].forEach(btn => {
+                btn.className = 'px-4 py-2 rounded-full font-medium transition-all duration-300 text-indigo-500 hover:bg-indigo-50 flex items-center';
+            });
+            
+            document.getElementById(`lang-${lang}`).className = 'px-4 py-2 rounded-full font-medium transition-all duration-300 bg-indigo-500 text-white flex items-center';
+
+            // Show/hide elements based on language
+            ['en', 'uk', 'es'].forEach(l => {
+                document.querySelectorAll(`[id$="-${l}"]`).forEach(el => {
+                    el.classList.toggle('hidden', lang !== l);
+                });
+            });
+
+            updateUI();
+        }
+
+        // Update UI elements
+        function updateUI() {
+            const t = translations[currentLanguage];
+            const question = quizQuestions[currentQuestion];
+            
+            // Update progress
+            document.getElementById(`progress-text-${currentLanguage}`).textContent = 
+                `${t.progressText} ${currentQuestion + 1} ${t.of} ${quizQuestions.length}`;
+            
+            // Update score
+            document.getElementById('score-text').textContent = `Score: ${score}/${currentQuestion}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            
+            // Update category badge
+            const category = question.category;
+            document.getElementById('category-badge').textContent = t.categories[category];
+            
+            // Update complexity indicator
+            const complexityDots = document.getElementById('complexity-indicator').children;
+            for (let i = 0; i < complexityDots.length; i++) {
+                complexityDots[i].className = i < question.complexity ? 
+                    'w-2 h-2 bg-indigo-500 rounded-full' : 
+                    'w-2 h-2 bg-gray-300 rounded-full';
+            }
+            
+            // Update question and context
+            document.getElementById('question-text').textContent = question.word;
+            document.getElementById('context-sentence').innerHTML = question.context;
+        }
+
+        // Display question options
+        function displayOptions() {
+            const question = quizQuestions[currentQuestion];
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full p-5 text-left bg-gray-50 hover:bg-gray-100 rounded-xl border-2 border-transparent hover:border-indigo-200 transition-all duration-300 transform hover:scale-102';
+                button.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center font-bold text-gray-600 flex-shrink-0 mt-1">
+                            ${String.fromCharCode(65 + index)}
+                        </div>
+                        <span class="text-gray-800 font-medium leading-relaxed">${option}</span>
+                    </div>
+                `;
+                
+                button.addEventListener('click', () => selectAnswer(index, button));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Handle answer selection
+        function selectAnswer(answerIndex, buttonElement) {
+            if (selectedAnswer !== null) return;
+            
+            selectedAnswer = answerIndex;
+            const question = quizQuestions[currentQuestion];
+            const isCorrect = answerIndex === question.correct;
+            
+            // Update score
+            if (isCorrect) {
+                score++;
+                buttonElement.classList.add('correct', 'pulse-correct');
+                buttonElement.querySelector('.w-10').innerHTML = '✓';
+                buttonElement.querySelector('.w-10').classList.add('text-white');
+            } else {
+                buttonElement.classList.add('incorrect', 'pulse-incorrect');
+                buttonElement.querySelector('.w-10').innerHTML = '✗';
+                buttonElement.querySelector('.w-10').classList.add('text-white');
+                
+                // Show correct answer
+                const correctButton = optionsContainer.children[question.correct];
+                correctButton.classList.add('correct');
+                correctButton.querySelector('.w-10').innerHTML = '✓';
+                correctButton.querySelector('.w-10').classList.add('text-white');
+            }
+            
+            // Disable all buttons
+            Array.from(optionsContainer.children).forEach(btn => {
+                btn.style.pointerEvents = 'none';
+            });
+            
+            // Enable next button
+            nextBtn.disabled = false;
+            
+            // Update score display
+            document.getElementById('score-text').textContent = `Score: ${score}/${currentQuestion + 1}`;
+        }
+
+        // Move to next question
+        function nextQuestion() {
+            currentQuestion++;
+            selectedAnswer = null;
+            nextBtn.disabled = true;
+            
+            if (currentQuestion >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+            
+            updateUI();
+            displayOptions();
+        }
+
+        // Show final results
+        function showResults() {
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            const t = translations[currentLanguage];
+            
+            document.getElementById('final-score').textContent = `${score}/${quizQuestions.length}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            
+            // Determine proficiency level, grade and emoji
+            let proficiency, grade, emoji;
+            if (percentage >= 90) {
+                proficiency = t.proficiencyLevels.expert;
+                grade = t.grades.expert;
+                emoji = '🏆';
+            } else if (percentage >= 75) {
+                proficiency = t.proficiencyLevels.advanced;
+                grade = t.grades.advanced;
+                emoji = '🎓';
+            } else if (percentage >= 60) {
+                proficiency = t.proficiencyLevels.intermediate;
+                grade = t.grades.intermediate;
+                emoji = '📚';
+            } else {
+                proficiency = t.proficiencyLevels.developing;
+                grade = t.grades.developing;
+                emoji = '💪';
+            }
+            
+            document.getElementById('proficiency-level').textContent = proficiency;
+            document.getElementById(`grade-${currentLanguage}`).textContent = grade;
+            document.getElementById('results-emoji').textContent = emoji;
+            
+            resultsModal.classList.remove('hidden');
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            quizQuestions = [...quizData].sort(() => Math.random() - 0.5);
+            
+            resultsModal.classList.add('hidden');
+            updateUI();
+            displayOptions();
+        }
+
+        // Event listeners
+        langEnBtn.addEventListener('click', () => switchLanguage('en'));
+        langUkBtn.addEventListener('click', () => switchLanguage('uk'));
+        langEsBtn.addEventListener('click', () => switchLanguage('es'));
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartQuiz);
+
+        // Initialize quiz
+        switchLanguage('en');
+        displayOptions();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97255a04d0ef7bf8',t:'MTc1NTcyOTE5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
