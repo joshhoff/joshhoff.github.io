@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spanish Subjunctive Practice</title>
+    <title>Práctica del Subjuntivo Español</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -14,14 +14,98 @@
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
         .pulse-green { animation: pulseGreen 0.6s ease-in-out; }
         @keyframes pulseGreen { 0% { background-color: rgb(34, 197, 94); } 50% { background-color: rgb(22, 163, 74); } 100% { background-color: rgb(34, 197, 94); } }
+        
+        .tooltip-word {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dotted #6366f1;
+            color: #6366f1;
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            margin-bottom: 5px;
+        }
+        
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1f2937;
+        }
+        
+        .tooltip-word:hover .tooltip {
+            opacity: 1;
+        }
+        
+        .conversation-bubble {
+            max-width: 80%;
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+        
+        .user-bubble {
+            background: #6366f1;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 6px;
+        }
+        
+        .tutor-bubble {
+            background: #f3f4f6;
+            color: #374151;
+            margin-right: auto;
+            border-bottom-left-radius: 6px;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #9ca3af;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
     <div class="container mx-auto px-4 py-8 max-w-4xl">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-indigo-800 mb-2">🇪🇸 Subjunctive Practice</h1>
-            <p class="text-lg text-gray-600">Master the Spanish subjunctive mood with your tutor</p>
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">🇪🇸 <span class="tooltip-word">Práctica<span class="tooltip">Practice</span></span> del <span class="tooltip-word">Subjuntivo<span class="tooltip">Subjunctive</span></span></h1>
+            <p class="text-lg text-gray-600"><span class="tooltip-word">Domina<span class="tooltip">Master</span></span> el modo subjuntivo español con tu <span class="tooltip-word">tutor<span class="tooltip">tutor</span></span></p>
         </div>
 
         <!-- Score and Progress -->
@@ -29,15 +113,15 @@
             <div class="flex justify-between items-center mb-4">
                 <div class="text-center">
                     <div class="text-2xl font-bold text-green-600" id="score">0</div>
-                    <div class="text-sm text-gray-500">Correct</div>
+                    <div class="text-sm text-gray-500"><span class="tooltip-word">Correctas<span class="tooltip">Correct</span></span></div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-red-500" id="incorrect">0</div>
-                    <div class="text-sm text-gray-500">Incorrect</div>
+                    <div class="text-sm text-gray-500"><span class="tooltip-word">Incorrectas<span class="tooltip">Incorrect</span></span></div>
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-indigo-600" id="streak">0</div>
-                    <div class="text-sm text-gray-500">Streak</div>
+                    <div class="text-sm text-gray-500"><span class="tooltip-word">Racha<span class="tooltip">Streak</span></span></div>
                 </div>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-3">
@@ -47,22 +131,27 @@
 
         <!-- Practice Mode Selection -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6" id="modeSelection">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Choose Practice Mode</h2>
-            <div class="grid md:grid-cols-3 gap-4">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4"><span class="tooltip-word">Elige<span class="tooltip">Choose</span></span> el <span class="tooltip-word">Modo<span class="tooltip">Mode</span></span> de <span class="tooltip-word">Práctica<span class="tooltip">Practice</span></span></h2>
+            <div class="grid md:grid-cols-4 gap-4">
                 <button onclick="startMode('conjugation')" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg transition-colors">
                     <div class="text-xl mb-2">📝</div>
-                    <div class="font-semibold">Conjugation</div>
-                    <div class="text-sm opacity-90">Practice verb forms</div>
+                    <div class="font-semibold"><span class="tooltip-word">Conjugación<span class="tooltip">Conjugation</span></span></div>
+                    <div class="text-sm opacity-90"><span class="tooltip-word">Practica<span class="tooltip">Practice</span></span> formas verbales</div>
                 </button>
                 <button onclick="startMode('triggers')" class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg transition-colors">
                     <div class="text-xl mb-2">🎯</div>
-                    <div class="font-semibold">Trigger Phrases</div>
-                    <div class="text-sm opacity-90">Identify subjunctive cues</div>
+                    <div class="font-semibold"><span class="tooltip-word">Expresiones<span class="tooltip">Trigger Phrases</span></span></div>
+                    <div class="text-sm opacity-90"><span class="tooltip-word">Identifica<span class="tooltip">Identify</span></span> señales del subjuntivo</div>
                 </button>
                 <button onclick="startMode('sentences')" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg transition-colors">
                     <div class="text-xl mb-2">💬</div>
-                    <div class="font-semibold">Complete Sentences</div>
-                    <div class="text-sm opacity-90">Fill in the blanks</div>
+                    <div class="font-semibold"><span class="tooltip-word">Oraciones<span class="tooltip">Sentences</span></span></div>
+                    <div class="text-sm opacity-90"><span class="tooltip-word">Completa<span class="tooltip">Complete</span></span> los espacios</div>
+                </button>
+                <button onclick="startMode('conversation')" class="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg transition-colors">
+                    <div class="text-xl mb-2">🗣️</div>
+                    <div class="font-semibold"><span class="tooltip-word">Conversación<span class="tooltip">Conversation</span></span></div>
+                    <div class="text-sm opacity-90"><span class="tooltip-word">Diálogos<span class="tooltip">Interactive dialogues</span></span> interactivos</div>
                 </button>
             </div>
         </div>
@@ -70,22 +159,42 @@
         <!-- Practice Area -->
         <div class="bg-white rounded-xl shadow-lg p-6 hidden fade-in" id="practiceArea">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-semibold text-gray-800" id="modeTitle">Practice Mode</h2>
+                <h2 class="text-2xl font-semibold text-gray-800" id="modeTitle"><span class="tooltip-word">Modo<span class="tooltip">Practice Mode</span></span> de <span class="tooltip-word">Práctica<span class="tooltip">Practice</span></span></h2>
                 <button onclick="resetPractice()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-                    🔄 New Mode
+                    🔄 <span class="tooltip-word">Nuevo<span class="tooltip">New</span></span> <span class="tooltip-word">Modo<span class="tooltip">Mode</span></span>
                 </button>
             </div>
 
+            <!-- Conversation Area -->
+            <div id="conversationArea" class="hidden">
+                <div class="bg-gray-50 rounded-lg p-4 mb-4 h-96 overflow-y-auto" id="chatContainer">
+                    <div class="text-center text-gray-500 mb-4">
+                        <span class="tooltip-word">¡Comienza<span class="tooltip">Start</span></span> una <span class="tooltip-word">conversación<span class="tooltip">conversation</span></span> con tu <span class="tooltip-word">tutor<span class="tooltip">tutor</span></span>!
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="conversationInput" placeholder="Escribe tu respuesta aquí..." 
+                           class="flex-1 p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+                           onkeypress="handleConversationKeyPress(event)">
+                    <button onclick="sendMessage()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        <span class="tooltip-word">Enviar<span class="tooltip">Send</span></span>
+                    </button>
+                </div>
+                <div class="mt-4 flex flex-wrap gap-2" id="quickResponses">
+                    <!-- Quick response buttons will be added here -->
+                </div>
+            </div>
+
             <!-- Question Area -->
-            <div class="mb-6">
+            <div class="mb-6" id="questionArea">
                 <div class="bg-indigo-50 rounded-lg p-6 mb-4">
-                    <div class="text-lg font-medium text-gray-800 mb-2" id="questionText">Loading question...</div>
+                    <div class="text-lg font-medium text-gray-800 mb-2" id="questionText"><span class="tooltip-word">Cargando<span class="tooltip">Loading</span></span> <span class="tooltip-word">pregunta<span class="tooltip">question</span></span>...</div>
                     <div class="text-sm text-gray-600" id="questionHint"></div>
                 </div>
 
                 <!-- Answer Input -->
                 <div class="mb-4">
-                    <input type="text" id="answerInput" placeholder="Type your answer here..." 
+                    <input type="text" id="answerInput" placeholder="Escribe tu respuesta aquí..." 
                            class="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-indigo-500 focus:outline-none"
                            onkeypress="handleKeyPress(event)">
                 </div>
@@ -98,15 +207,15 @@
                 <div class="flex gap-3">
                     <button onclick="checkAnswer()" id="submitBtn" 
                             class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex-1">
-                        Submit Answer
+                        <span class="tooltip-word">Enviar<span class="tooltip">Submit</span></span> <span class="tooltip-word">Respuesta<span class="tooltip">Answer</span></span>
                     </button>
                     <button onclick="showHint()" id="hintBtn"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                        💡 Hint
+                        💡 <span class="tooltip-word">Pista<span class="tooltip">Hint</span></span>
                     </button>
                     <button onclick="nextQuestion()" id="nextBtn"
                             class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors hidden">
-                        Next →
+                        <span class="tooltip-word">Siguiente<span class="tooltip">Next</span></span> →
                     </button>
                 </div>
             </div>
@@ -116,30 +225,30 @@
 
             <!-- Explanation Area -->
             <div id="explanation" class="hidden bg-blue-50 rounded-lg p-4">
-                <h3 class="font-semibold text-blue-800 mb-2">📚 Explanation</h3>
+                <h3 class="font-semibold text-blue-800 mb-2">📚 <span class="tooltip-word">Explicación<span class="tooltip">Explanation</span></span></h3>
                 <div id="explanationText" class="text-blue-700"></div>
             </div>
         </div>
 
         <!-- Study Notes -->
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">📖 Quick Reference</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">📖 <span class="tooltip-word">Referencia<span class="tooltip">Quick Reference</span></span> <span class="tooltip-word">Rápida<span class="tooltip">Quick</span></span></h2>
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="font-semibold text-indigo-600 mb-2">Common Triggers</h3>
+                    <h3 class="font-semibold text-indigo-600 mb-2"><span class="tooltip-word">Expresiones<span class="tooltip">Common Triggers</span></span> <span class="tooltip-word">Comunes<span class="tooltip">Common</span></span></h3>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Es importante que... (It's important that...)</li>
-                        <li>• Espero que... (I hope that...)</li>
-                        <li>• Dudo que... (I doubt that...)</li>
-                        <li>• Quiero que... (I want that...)</li>
-                        <li>• No creo que... (I don't think that...)</li>
+                        <li>• <span class="tooltip-word">Es importante que<span class="tooltip">It's important that</span></span>...</li>
+                        <li>• <span class="tooltip-word">Espero que<span class="tooltip">I hope that</span></span>...</li>
+                        <li>• <span class="tooltip-word">Dudo que<span class="tooltip">I doubt that</span></span>...</li>
+                        <li>• <span class="tooltip-word">Quiero que<span class="tooltip">I want that</span></span>...</li>
+                        <li>• <span class="tooltip-word">No creo que<span class="tooltip">I don't think that</span></span>...</li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-indigo-600 mb-2">Present Subjunctive Endings</h3>
+                    <h3 class="font-semibold text-indigo-600 mb-2"><span class="tooltip-word">Terminaciones<span class="tooltip">Present Subjunctive Endings</span></span> del <span class="tooltip-word">Subjuntivo<span class="tooltip">Subjunctive</span></span></h3>
                     <div class="text-sm text-gray-600">
-                        <div class="mb-2"><strong>-AR verbs:</strong> -e, -es, -e, -emos, -éis, -en</div>
-                        <div><strong>-ER/-IR verbs:</strong> -a, -as, -a, -amos, -áis, -an</div>
+                        <div class="mb-2"><strong><span class="tooltip-word">Verbos<span class="tooltip">-AR verbs</span></span> -AR:</strong> -e, -es, -e, -emos, -éis, -en</div>
+                        <div><strong><span class="tooltip-word">Verbos<span class="tooltip">-ER/-IR verbs</span></span> -ER/-IR:</strong> -a, -as, -a, -amos, -áis, -an</div>
                     </div>
                 </div>
             </div>
@@ -161,36 +270,36 @@
                     verb: 'hablar',
                     person: 'yo',
                     answer: 'hable',
-                    hint: 'Remember: -AR verbs use -e endings in subjunctive',
-                    explanation: 'For -AR verbs in present subjunctive, "yo" takes the ending -e. Hablar → hable'
+                    hint: 'Recuerda: los verbos -AR usan terminaciones -e en subjuntivo',
+                    explanation: 'Para verbos -AR en presente de subjuntivo, "yo" toma la terminación -e. Hablar → hable'
                 },
                 {
                     verb: 'comer',
                     person: 'tú',
                     answer: 'comas',
-                    hint: 'ER verbs use -a endings in subjunctive',
-                    explanation: 'For -ER verbs in present subjunctive, "tú" takes the ending -as. Comer → comas'
+                    hint: 'Los verbos -ER usan terminaciones -a en subjuntivo',
+                    explanation: 'Para verbos -ER en presente de subjuntivo, "tú" toma la terminación -as. Comer → comas'
                 },
                 {
                     verb: 'vivir',
                     person: 'él/ella',
                     answer: 'viva',
-                    hint: 'IR verbs follow the same pattern as ER verbs',
-                    explanation: 'For -IR verbs in present subjunctive, "él/ella" takes the ending -a. Vivir → viva'
+                    hint: 'Los verbos -IR siguen el mismo patrón que los -ER',
+                    explanation: 'Para verbos -IR en presente de subjuntivo, "él/ella" toma la terminación -a. Vivir → viva'
                 },
                 {
                     verb: 'estudiar',
                     person: 'nosotros',
                     answer: 'estudiemos',
-                    hint: 'Nosotros form keeps the stem and adds -emos for AR verbs',
-                    explanation: 'For -AR verbs in present subjunctive, "nosotros" takes the ending -emos. Estudiar → estudiemos'
+                    hint: 'La forma nosotros mantiene la raíz y añade -emos para verbos -AR',
+                    explanation: 'Para verbos -AR en presente de subjuntivo, "nosotros" toma la terminación -emos. Estudiar → estudiemos'
                 },
                 {
                     verb: 'escribir',
                     person: 'ellos',
                     answer: 'escriban',
-                    hint: 'Ellos form uses -an for ER/IR verbs in subjunctive',
-                    explanation: 'For -IR verbs in present subjunctive, "ellos" takes the ending -an. Escribir → escriban'
+                    hint: 'La forma ellos usa -an para verbos -ER/-IR en subjuntivo',
+                    explanation: 'Para verbos -IR en presente de subjuntivo, "ellos" toma la terminación -an. Escribir → escriban'
                 }
             ],
             triggers: [
@@ -198,45 +307,95 @@
                     sentence: 'Es importante que tú _____ español.',
                     options: ['estudias', 'estudies', 'estudiar', 'estudiaste'],
                     answer: 'estudies',
-                    hint: '"Es importante que" always triggers subjunctive',
-                    explanation: 'Expressions of importance like "Es importante que" require the subjunctive mood.'
+                    hint: '"Es importante que" siempre requiere subjuntivo',
+                    explanation: 'Las expresiones de importancia como "Es importante que" requieren el modo subjuntivo.'
                 },
                 {
                     sentence: 'Espero que ella _____ mañana.',
                     options: ['viene', 'venga', 'venir', 'vino'],
                     answer: 'venga',
-                    hint: 'Expressions of hope use subjunctive',
-                    explanation: 'Verbs expressing hope like "esperar" require the subjunctive in the dependent clause.'
+                    hint: 'Las expresiones de esperanza usan subjuntivo',
+                    explanation: 'Los verbos que expresan esperanza como "esperar" requieren el subjuntivo en la cláusula dependiente.'
                 },
                 {
                     sentence: 'Dudo que él _____ la verdad.',
                     options: ['sabe', 'sepa', 'saber', 'sabía'],
                     answer: 'sepa',
-                    hint: 'Expressions of doubt trigger subjunctive',
-                    explanation: 'Verbs expressing doubt like "dudar" require the subjunctive mood.'
+                    hint: 'Las expresiones de duda requieren subjuntivo',
+                    explanation: 'Los verbos que expresan duda como "dudar" requieren el modo subjuntivo.'
                 }
             ],
             sentences: [
                 {
                     sentence: 'Quiero que mis amigos _____ (venir) a la fiesta.',
                     answer: 'vengan',
-                    hint: 'Venir is irregular: veng- + subjunctive endings',
-                    explanation: 'After "quiero que", use subjunctive. Venir has irregular stem "veng-" in subjunctive.'
+                    hint: 'Venir es irregular: veng- + terminaciones de subjuntivo',
+                    explanation: 'Después de "quiero que", usa subjuntivo. Venir tiene raíz irregular "veng-" en subjuntivo.'
                 },
                 {
                     sentence: 'Es necesario que nosotros _____ (hacer) la tarea.',
                     answer: 'hagamos',
-                    hint: 'Hacer is irregular: hag- + subjunctive endings',
-                    explanation: 'After "es necesario que", use subjunctive. Hacer has irregular stem "hag-" in subjunctive.'
+                    hint: 'Hacer es irregular: hag- + terminaciones de subjuntivo',
+                    explanation: 'Después de "es necesario que", usa subjuntivo. Hacer tiene raíz irregular "hag-" en subjuntivo.'
                 },
                 {
                     sentence: 'No creo que ellos _____ (tener) razón.',
                     answer: 'tengan',
-                    hint: 'Tener is irregular: teng- + subjunctive endings',
-                    explanation: 'After "no creo que", use subjunctive. Tener has irregular stem "teng-" in subjunctive.'
+                    hint: 'Tener es irregular: teng- + terminaciones de subjuntivo',
+                    explanation: 'Después de "no creo que", usa subjuntivo. Tener tiene raíz irregular "teng-" en subjuntivo.'
+                }
+            ],
+            conversation: [
+                {
+                    scenario: 'restaurant',
+                    title: 'En el Restaurante',
+                    tutorStart: '¡Hola! Soy tu camarero. ¿Qué te gustaría que te recomiende hoy?',
+                    responses: [
+                        'Espero que tengas algo vegetariano.',
+                        'Quiero que me traigas el menú, por favor.',
+                        'Dudo que haya platos sin gluten.'
+                    ],
+                    feedback: {
+                        'Espero que tengas algo vegetariano.': '¡Perfecto! Usaste "espero que" + subjuntivo correctamente.',
+                        'Quiero que me traigas el menú, por favor.': '¡Excelente! "Quiero que" siempre requiere subjuntivo.',
+                        'Dudo que haya platos sin gluten.': '¡Muy bien! "Dudo que" + subjuntivo es correcto.'
+                    }
+                },
+                {
+                    scenario: 'travel',
+                    title: 'Planificando un Viaje',
+                    tutorStart: 'Estamos planificando nuestras vacaciones. ¿Qué sugieres?',
+                    responses: [
+                        'Es importante que reservemos el hotel pronto.',
+                        'Sugiero que visitemos los museos.',
+                        'No creo que llueva mucho en esa época.'
+                    ],
+                    feedback: {
+                        'Es importante que reservemos el hotel pronto.': '¡Correcto! "Es importante que" + subjuntivo.',
+                        'Sugiero que visitemos los museos.': '¡Bien hecho! "Sugiero que" requiere subjuntivo.',
+                        'No creo que llueva mucho en esa época.': '¡Perfecto! Negación + creer = subjuntivo.'
+                    }
+                },
+                {
+                    scenario: 'advice',
+                    title: 'Dando Consejos',
+                    tutorStart: 'Mi hijo no estudia mucho. ¿Qué me aconsejas?',
+                    responses: [
+                        'Te aconsejo que hables con él.',
+                        'Es mejor que establezcan horarios de estudio.',
+                        'Ojalá que entienda la importancia de estudiar.'
+                    ],
+                    feedback: {
+                        'Te aconsejo que hables con él.': '¡Excelente! "Aconsejar que" + subjuntivo.',
+                        'Es mejor que establezcan horarios de estudio.': '¡Muy bien! "Es mejor que" requiere subjuntivo.',
+                        'Ojalá que entienda la importancia de estudiar.': '¡Perfecto! "Ojalá que" siempre usa subjuntivo.'
+                    }
                 }
             ]
         };
+
+        let currentConversation = null;
+        let conversationStep = 0;
 
         function startMode(mode) {
             currentMode = mode;
@@ -244,13 +403,166 @@
             document.getElementById('practiceArea').classList.remove('hidden');
             
             const titles = {
-                conjugation: '📝 Conjugation Practice',
-                triggers: '🎯 Trigger Phrase Practice',
-                sentences: '💬 Sentence Completion'
+                conjugation: '📝 Práctica de Conjugación',
+                triggers: '🎯 Práctica de Expresiones',
+                sentences: '💬 Completar Oraciones',
+                conversation: '🗣️ Conversación Interactiva'
             };
             
-            document.getElementById('modeTitle').textContent = titles[mode];
-            loadQuestion();
+            document.getElementById('modeTitle').innerHTML = titles[mode];
+            
+            if (mode === 'conversation') {
+                document.getElementById('conversationArea').classList.remove('hidden');
+                document.getElementById('questionArea').classList.add('hidden');
+                startConversation();
+            } else {
+                document.getElementById('conversationArea').classList.add('hidden');
+                document.getElementById('questionArea').classList.remove('hidden');
+                loadQuestion();
+            }
+        }
+
+        function startConversation() {
+            const conversations = questions.conversation;
+            currentConversation = conversations[Math.floor(Math.random() * conversations.length)];
+            conversationStep = 0;
+            
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.innerHTML = `
+                <div class="text-center text-gray-500 mb-4">
+                    <strong>${currentConversation.title}</strong>
+                </div>
+            `;
+            
+            addTutorMessage(currentConversation.tutorStart);
+            showQuickResponses();
+        }
+
+        function addTutorMessage(message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'conversation-bubble tutor-bubble';
+            messageDiv.innerHTML = addTooltips(message);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addUserMessage(message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'conversation-bubble user-bubble';
+            messageDiv.textContent = message;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addTooltips(text) {
+            const tooltips = {
+                'camarero': 'waiter',
+                'recomiende': 'recommend',
+                'vegetariano': 'vegetarian',
+                'traigas': 'bring',
+                'menú': 'menu',
+                'platos': 'dishes',
+                'gluten': 'gluten',
+                'planificando': 'planning',
+                'vacaciones': 'vacation',
+                'sugieres': 'suggest',
+                'reservemos': 'reserve',
+                'hotel': 'hotel',
+                'pronto': 'soon',
+                'visitemos': 'visit',
+                'museos': 'museums',
+                'llueva': 'rain',
+                'época': 'season',
+                'consejos': 'advice',
+                'estudia': 'studies',
+                'aconsejas': 'advise',
+                'hables': 'talk',
+                'establezcan': 'establish',
+                'horarios': 'schedules',
+                'entienda': 'understand',
+                'importancia': 'importance'
+            };
+            
+            let result = text;
+            for (const [spanish, english] of Object.entries(tooltips)) {
+                const regex = new RegExp(`\\b${spanish}\\b`, 'gi');
+                result = result.replace(regex, `<span class="tooltip-word">${spanish}<span class="tooltip">${english}</span></span>`);
+            }
+            return result;
+        }
+
+        function showQuickResponses() {
+            const quickResponsesDiv = document.getElementById('quickResponses');
+            quickResponsesDiv.innerHTML = '';
+            
+            currentConversation.responses.forEach(response => {
+                const button = document.createElement('button');
+                button.textContent = response;
+                button.className = 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-4 py-2 rounded-lg text-sm transition-colors';
+                button.onclick = () => selectQuickResponse(response);
+                quickResponsesDiv.appendChild(button);
+            });
+        }
+
+        function selectQuickResponse(response) {
+            document.getElementById('conversationInput').value = response;
+        }
+
+        function handleConversationKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('conversationInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addUserMessage(message);
+            input.value = '';
+            
+            // Show typing indicator
+            const chatContainer = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'conversation-bubble tutor-bubble typing-indicator';
+            typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            setTimeout(() => {
+                chatContainer.removeChild(typingDiv);
+                
+                // Check if message matches expected responses
+                const feedback = currentConversation.feedback[message];
+                if (feedback) {
+                    addTutorMessage(feedback);
+                    score += 2;
+                    streak++;
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('streak').textContent = streak;
+                } else {
+                    addTutorMessage('Interesante respuesta. ¿Puedes intentar usar una expresión que requiera subjuntivo?');
+                }
+                
+                // Continue conversation or start new scenario
+                setTimeout(() => {
+                    if (Math.random() > 0.5) {
+                        startConversation(); // New scenario
+                    } else {
+                        const followUps = [
+                            '¿Qué más te gustaría que hiciéramos?',
+                            'Espero que estés disfrutando la práctica.',
+                            '¿Hay algo específico que quieras que practiquemos?'
+                        ];
+                        addTutorMessage(followUps[Math.floor(Math.random() * followUps.length)]);
+                        showQuickResponses();
+                    }
+                }, 1500);
+            }, 2000);
         }
 
         function loadQuestion() {
@@ -328,7 +640,7 @@
             
             if (userAnswer === correctAnswer) {
                 feedbackDiv.className = 'bg-green-100 border border-green-300 text-green-800 rounded-lg p-4 mb-4 pulse-green';
-                feedbackDiv.innerHTML = '<div class="font-semibold">🎉 ¡Correcto! Excellent work!</div>';
+                feedbackDiv.innerHTML = '<div class="font-semibold">🎉 ¡<span class="tooltip-word">Correcto<span class="tooltip">Correct</span></span>! <span class="tooltip-word">¡Excelente<span class="tooltip">Excellent</span></span> <span class="tooltip-word">trabajo<span class="tooltip">work</span></span>!</div>';
                 
                 if (!usedHint) {
                     score += 2;
@@ -343,9 +655,9 @@
             } else {
                 feedbackDiv.className = 'bg-red-100 border border-red-300 text-red-800 rounded-lg p-4 mb-4 shake';
                 feedbackDiv.innerHTML = `
-                    <div class="font-semibold">❌ Not quite right</div>
-                    <div>Your answer: <span class="font-mono">${userAnswer}</span></div>
-                    <div>Correct answer: <span class="font-mono">${currentQuestion.answer}</span></div>
+                    <div class="font-semibold">❌ <span class="tooltip-word">No<span class="tooltip">Not</span></span> <span class="tooltip-word">exactamente<span class="tooltip">quite right</span></span></div>
+                    <div><span class="tooltip-word">Tu<span class="tooltip">Your</span></span> <span class="tooltip-word">respuesta<span class="tooltip">answer</span></span>: <span class="font-mono">${userAnswer}</span></div>
+                    <div><span class="tooltip-word">Respuesta<span class="tooltip">Correct</span></span> <span class="tooltip-word">correcta<span class="tooltip">answer</span></span>: <span class="font-mono">${currentQuestion.answer}</span></div>
                 `;
                 
                 incorrect++;
@@ -367,7 +679,7 @@
             const feedbackDiv = document.getElementById('feedback');
             feedbackDiv.classList.remove('hidden');
             feedbackDiv.className = 'bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-lg p-4 mb-4';
-            feedbackDiv.innerHTML = `<div class="font-semibold">💡 Hint:</div><div>${currentQuestion.hint}</div>`;
+            feedbackDiv.innerHTML = `<div class="font-semibold">💡 <span class="tooltip-word">Pista<span class="tooltip">Hint</span></span>:</div><div>${currentQuestion.hint}</div>`;
             usedHint = true;
         }
 
@@ -391,5 +703,5 @@
         // Initialize
         document.getElementById('answerInput').focus();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972d8c52b1dcf7c3',t:'MTc1NTgxNTE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972dd93ba1780ffc',t:'MTc1NTgxODI5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
