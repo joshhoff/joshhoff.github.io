@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Subjunctive Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .shake { animation: shake 0.5s ease-in-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .pulse-green { animation: pulseGreen 0.6s ease-in-out; }
+        @keyframes pulseGreen { 0% { background-color: rgb(34, 197, 94); } 50% { background-color: rgb(22, 163, 74); } 100% { background-color: rgb(34, 197, 94); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">🇪🇸 Subjunctive Practice</h1>
+            <p class="text-lg text-gray-600">Master the Spanish subjunctive mood with your tutor</p>
+        </div>
+
+        <!-- Score and Progress -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600" id="score">0</div>
+                    <div class="text-sm text-gray-500">Correct</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-red-500" id="incorrect">0</div>
+                    <div class="text-sm text-gray-500">Incorrect</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-indigo-600" id="streak">0</div>
+                    <div class="text-sm text-gray-500">Streak</div>
+                </div>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-indigo-600 h-3 rounded-full transition-all duration-300" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Practice Mode Selection -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6" id="modeSelection">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Choose Practice Mode</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <button onclick="startMode('conjugation')" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg transition-colors">
+                    <div class="text-xl mb-2">📝</div>
+                    <div class="font-semibold">Conjugation</div>
+                    <div class="text-sm opacity-90">Practice verb forms</div>
+                </button>
+                <button onclick="startMode('triggers')" class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg transition-colors">
+                    <div class="text-xl mb-2">🎯</div>
+                    <div class="font-semibold">Trigger Phrases</div>
+                    <div class="text-sm opacity-90">Identify subjunctive cues</div>
+                </button>
+                <button onclick="startMode('sentences')" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg transition-colors">
+                    <div class="text-xl mb-2">💬</div>
+                    <div class="font-semibold">Complete Sentences</div>
+                    <div class="text-sm opacity-90">Fill in the blanks</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Practice Area -->
+        <div class="bg-white rounded-xl shadow-lg p-6 hidden fade-in" id="practiceArea">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-gray-800" id="modeTitle">Practice Mode</h2>
+                <button onclick="resetPractice()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    🔄 New Mode
+                </button>
+            </div>
+
+            <!-- Question Area -->
+            <div class="mb-6">
+                <div class="bg-indigo-50 rounded-lg p-6 mb-4">
+                    <div class="text-lg font-medium text-gray-800 mb-2" id="questionText">Loading question...</div>
+                    <div class="text-sm text-gray-600" id="questionHint"></div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mb-4">
+                    <input type="text" id="answerInput" placeholder="Type your answer here..." 
+                           class="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-indigo-500 focus:outline-none"
+                           onkeypress="handleKeyPress(event)">
+                </div>
+
+                <!-- Multiple Choice (for trigger mode) -->
+                <div id="multipleChoice" class="grid md:grid-cols-2 gap-3 mb-4 hidden">
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3">
+                    <button onclick="checkAnswer()" id="submitBtn" 
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex-1">
+                        Submit Answer
+                    </button>
+                    <button onclick="showHint()" id="hintBtn"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        💡 Hint
+                    </button>
+                    <button onclick="nextQuestion()" id="nextBtn"
+                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors hidden">
+                        Next →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feedback Area -->
+            <div id="feedback" class="hidden rounded-lg p-4 mb-4"></div>
+
+            <!-- Explanation Area -->
+            <div id="explanation" class="hidden bg-blue-50 rounded-lg p-4">
+                <h3 class="font-semibold text-blue-800 mb-2">📚 Explanation</h3>
+                <div id="explanationText" class="text-blue-700"></div>
+            </div>
+        </div>
+
+        <!-- Study Notes -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">📖 Quick Reference</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-indigo-600 mb-2">Common Triggers</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Es importante que... (It's important that...)</li>
+                        <li>• Espero que... (I hope that...)</li>
+                        <li>• Dudo que... (I doubt that...)</li>
+                        <li>• Quiero que... (I want that...)</li>
+                        <li>• No creo que... (I don't think that...)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-indigo-600 mb-2">Present Subjunctive Endings</h3>
+                    <div class="text-sm text-gray-600">
+                        <div class="mb-2"><strong>-AR verbs:</strong> -e, -es, -e, -emos, -éis, -en</div>
+                        <div><strong>-ER/-IR verbs:</strong> -a, -as, -a, -amos, -áis, -an</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = '';
+        let currentQuestion = {};
+        let score = 0;
+        let incorrect = 0;
+        let streak = 0;
+        let questionCount = 0;
+        let usedHint = false;
+
+        const questions = {
+            conjugation: [
+                {
+                    verb: 'hablar',
+                    person: 'yo',
+                    answer: 'hable',
+                    hint: 'Remember: -AR verbs use -e endings in subjunctive',
+                    explanation: 'For -AR verbs in present subjunctive, "yo" takes the ending -e. Hablar → hable'
+                },
+                {
+                    verb: 'comer',
+                    person: 'tú',
+                    answer: 'comas',
+                    hint: 'ER verbs use -a endings in subjunctive',
+                    explanation: 'For -ER verbs in present subjunctive, "tú" takes the ending -as. Comer → comas'
+                },
+                {
+                    verb: 'vivir',
+                    person: 'él/ella',
+                    answer: 'viva',
+                    hint: 'IR verbs follow the same pattern as ER verbs',
+                    explanation: 'For -IR verbs in present subjunctive, "él/ella" takes the ending -a. Vivir → viva'
+                },
+                {
+                    verb: 'estudiar',
+                    person: 'nosotros',
+                    answer: 'estudiemos',
+                    hint: 'Nosotros form keeps the stem and adds -emos for AR verbs',
+                    explanation: 'For -AR verbs in present subjunctive, "nosotros" takes the ending -emos. Estudiar → estudiemos'
+                },
+                {
+                    verb: 'escribir',
+                    person: 'ellos',
+                    answer: 'escriban',
+                    hint: 'Ellos form uses -an for ER/IR verbs in subjunctive',
+                    explanation: 'For -IR verbs in present subjunctive, "ellos" takes the ending -an. Escribir → escriban'
+                }
+            ],
+            triggers: [
+                {
+                    sentence: 'Es importante que tú _____ español.',
+                    options: ['estudias', 'estudies', 'estudiar', 'estudiaste'],
+                    answer: 'estudies',
+                    hint: '"Es importante que" always triggers subjunctive',
+                    explanation: 'Expressions of importance like "Es importante que" require the subjunctive mood.'
+                },
+                {
+                    sentence: 'Espero que ella _____ mañana.',
+                    options: ['viene', 'venga', 'venir', 'vino'],
+                    answer: 'venga',
+                    hint: 'Expressions of hope use subjunctive',
+                    explanation: 'Verbs expressing hope like "esperar" require the subjunctive in the dependent clause.'
+                },
+                {
+                    sentence: 'Dudo que él _____ la verdad.',
+                    options: ['sabe', 'sepa', 'saber', 'sabía'],
+                    answer: 'sepa',
+                    hint: 'Expressions of doubt trigger subjunctive',
+                    explanation: 'Verbs expressing doubt like "dudar" require the subjunctive mood.'
+                }
+            ],
+            sentences: [
+                {
+                    sentence: 'Quiero que mis amigos _____ (venir) a la fiesta.',
+                    answer: 'vengan',
+                    hint: 'Venir is irregular: veng- + subjunctive endings',
+                    explanation: 'After "quiero que", use subjunctive. Venir has irregular stem "veng-" in subjunctive.'
+                },
+                {
+                    sentence: 'Es necesario que nosotros _____ (hacer) la tarea.',
+                    answer: 'hagamos',
+                    hint: 'Hacer is irregular: hag- + subjunctive endings',
+                    explanation: 'After "es necesario que", use subjunctive. Hacer has irregular stem "hag-" in subjunctive.'
+                },
+                {
+                    sentence: 'No creo que ellos _____ (tener) razón.',
+                    answer: 'tengan',
+                    hint: 'Tener is irregular: teng- + subjunctive endings',
+                    explanation: 'After "no creo que", use subjunctive. Tener has irregular stem "teng-" in subjunctive.'
+                }
+            ]
+        };
+
+        function startMode(mode) {
+            currentMode = mode;
+            document.getElementById('modeSelection').classList.add('hidden');
+            document.getElementById('practiceArea').classList.remove('hidden');
+            
+            const titles = {
+                conjugation: '📝 Conjugation Practice',
+                triggers: '🎯 Trigger Phrase Practice',
+                sentences: '💬 Sentence Completion'
+            };
+            
+            document.getElementById('modeTitle').textContent = titles[mode];
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const modeQuestions = questions[currentMode];
+            currentQuestion = modeQuestions[Math.floor(Math.random() * modeQuestions.length)];
+            usedHint = false;
+            
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('explanation').classList.add('hidden');
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('hintBtn').classList.remove('hidden');
+            
+            if (currentMode === 'conjugation') {
+                document.getElementById('questionText').textContent = 
+                    `Conjugate "${currentQuestion.verb}" for "${currentQuestion.person}" in present subjunctive:`;
+                document.getElementById('questionHint').textContent = 
+                    `Example: hablar (yo) → hable`;
+                document.getElementById('multipleChoice').classList.add('hidden');
+                document.getElementById('answerInput').classList.remove('hidden');
+            } else if (currentMode === 'triggers') {
+                document.getElementById('questionText').textContent = 
+                    'Choose the correct form:';
+                document.getElementById('questionHint').textContent = currentQuestion.sentence;
+                document.getElementById('answerInput').classList.add('hidden');
+                document.getElementById('multipleChoice').classList.remove('hidden');
+                
+                const choicesDiv = document.getElementById('multipleChoice');
+                choicesDiv.innerHTML = '';
+                currentQuestion.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.className = 'bg-gray-100 hover:bg-gray-200 border-2 border-gray-300 p-3 rounded-lg transition-colors choice-btn';
+                    button.onclick = () => selectChoice(button, option);
+                    choicesDiv.appendChild(button);
+                });
+            } else if (currentMode === 'sentences') {
+                document.getElementById('questionText').textContent = 
+                    'Complete the sentence with the correct subjunctive form:';
+                document.getElementById('questionHint').textContent = currentQuestion.sentence;
+                document.getElementById('multipleChoice').classList.add('hidden');
+                document.getElementById('answerInput').classList.remove('hidden');
+            }
+            
+            document.getElementById('answerInput').focus();
+        }
+
+        function selectChoice(button, choice) {
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.classList.remove('border-indigo-500', 'bg-indigo-50');
+                btn.classList.add('border-gray-300', 'bg-gray-100');
+            });
+            
+            button.classList.remove('border-gray-300', 'bg-gray-100');
+            button.classList.add('border-indigo-500', 'bg-indigo-50');
+            
+            document.getElementById('answerInput').value = choice;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = currentQuestion.answer.toLowerCase();
+            const feedbackDiv = document.getElementById('feedback');
+            
+            feedbackDiv.classList.remove('hidden');
+            document.getElementById('explanation').classList.remove('hidden');
+            document.getElementById('explanationText').textContent = currentQuestion.explanation;
+            
+            if (userAnswer === correctAnswer) {
+                feedbackDiv.className = 'bg-green-100 border border-green-300 text-green-800 rounded-lg p-4 mb-4 pulse-green';
+                feedbackDiv.innerHTML = '<div class="font-semibold">🎉 ¡Correcto! Excellent work!</div>';
+                
+                if (!usedHint) {
+                    score += 2;
+                    streak++;
+                } else {
+                    score += 1;
+                    streak++;
+                }
+                
+                document.getElementById('score').textContent = score;
+                document.getElementById('streak').textContent = streak;
+            } else {
+                feedbackDiv.className = 'bg-red-100 border border-red-300 text-red-800 rounded-lg p-4 mb-4 shake';
+                feedbackDiv.innerHTML = `
+                    <div class="font-semibold">❌ Not quite right</div>
+                    <div>Your answer: <span class="font-mono">${userAnswer}</span></div>
+                    <div>Correct answer: <span class="font-mono">${currentQuestion.answer}</span></div>
+                `;
+                
+                incorrect++;
+                streak = 0;
+                document.getElementById('incorrect').textContent = incorrect;
+                document.getElementById('streak').textContent = streak;
+            }
+            
+            questionCount++;
+            const progress = Math.min((questionCount / 10) * 100, 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('hintBtn').classList.add('hidden');
+        }
+
+        function showHint() {
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.classList.remove('hidden');
+            feedbackDiv.className = 'bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-lg p-4 mb-4';
+            feedbackDiv.innerHTML = `<div class="font-semibold">💡 Hint:</div><div>${currentQuestion.hint}</div>`;
+            usedHint = true;
+        }
+
+        function nextQuestion() {
+            loadQuestion();
+        }
+
+        function resetPractice() {
+            document.getElementById('modeSelection').classList.remove('hidden');
+            document.getElementById('practiceArea').classList.add('hidden');
+            score = 0;
+            incorrect = 0;
+            streak = 0;
+            questionCount = 0;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('incorrect').textContent = '0';
+            document.getElementById('streak').textContent = '0';
+            document.getElementById('progressBar').style.width = '0%';
+        }
+
+        // Initialize
+        document.getElementById('answerInput').focus();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972d8c52b1dcf7c3',t:'MTc1NTgxNTE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

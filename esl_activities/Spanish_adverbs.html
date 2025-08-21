@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Adverbs Learning App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">📚 Spanish Adverbs Mastery</h1>
+            <p class="text-gray-600">Learn, practice, and master Spanish adverbs with interactive lessons</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow-md p-2 flex space-x-2">
+                <button onclick="showSection('grammar')" id="grammarBtn" class="px-6 py-2 rounded-md bg-indigo-600 text-white font-medium transition-colors">
+                    Grammar Rules
+                </button>
+                <button onclick="showSection('flashcards')" id="flashcardsBtn" class="px-6 py-2 rounded-md text-indigo-600 hover:bg-indigo-50 font-medium transition-colors">
+                    Flashcards
+                </button>
+                <button onclick="showSection('conversation')" id="conversationBtn" class="px-6 py-2 rounded-md text-indigo-600 hover:bg-indigo-50 font-medium transition-colors">
+                    Conversation
+                </button>
+            </div>
+        </nav>
+
+        <!-- Grammar Rules Section -->
+        <section id="grammarSection" class="space-y-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-4">🎯 Spanish Adverb Rules</h2>
+                
+                <div class="space-y-6">
+                    <div class="border-l-4 border-blue-400 pl-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">1. Formation with -mente</h3>
+                        <p class="text-gray-600 mb-2">Add <strong>-mente</strong> to the feminine form of adjectives:</p>
+                        <div class="bg-blue-50 p-3 rounded-md">
+                            <p><strong>rápido</strong> → <strong>rápida</strong> → <strong>rápidamente</strong> (quickly)</p>
+                            <p><strong>fácil</strong> → <strong>fácilmente</strong> (easily)</p>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-green-400 pl-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">2. Position in Sentences</h3>
+                        <p class="text-gray-600 mb-2">Adverbs usually come after the verb they modify:</p>
+                        <div class="bg-green-50 p-3 rounded-md">
+                            <p><strong>Ella habla claramente.</strong> (She speaks clearly.)</p>
+                            <p><strong>Corremos rápidamente.</strong> (We run quickly.)</p>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">3. Common Irregular Adverbs</h3>
+                        <p class="text-gray-600 mb-2">Some adverbs don't follow the -mente pattern:</p>
+                        <div class="bg-purple-50 p-3 rounded-md grid grid-cols-2 gap-2">
+                            <p><strong>bien</strong> (well)</p>
+                            <p><strong>mal</strong> (badly)</p>
+                            <p><strong>mucho</strong> (a lot)</p>
+                            <p><strong>poco</strong> (little)</p>
+                            <p><strong>muy</strong> (very)</p>
+                            <p><strong>bastante</strong> (quite)</p>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-orange-400 pl-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">4. Time and Frequency Adverbs</h3>
+                        <div class="bg-orange-50 p-3 rounded-md grid grid-cols-2 gap-2">
+                            <p><strong>siempre</strong> (always)</p>
+                            <p><strong>nunca</strong> (never)</p>
+                            <p><strong>a veces</strong> (sometimes)</p>
+                            <p><strong>ya</strong> (already)</p>
+                            <p><strong>todavía</strong> (still)</p>
+                            <p><strong>pronto</strong> (soon)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flashcards Section -->
+        <section id="flashcardsSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-4">🃏 Adverb Flashcards</h2>
+                
+                <div class="text-center mb-6">
+                    <div class="flip-card w-80 h-48 mx-auto cursor-pointer" id="flashcard" onclick="flipCard()">
+                        <div class="flip-card-inner relative w-full h-full">
+                            <div class="flip-card-front absolute w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-white">
+                                <div class="text-center">
+                                    <p class="text-sm mb-2">English</p>
+                                    <p class="text-2xl font-bold" id="englishWord">quickly</p>
+                                </div>
+                            </div>
+                            <div class="flip-card-back absolute w-full h-full bg-gradient-to-br from-green-500 to-teal-600 rounded-lg flex items-center justify-center text-white">
+                                <div class="text-center">
+                                    <p class="text-sm mb-2">Español</p>
+                                    <p class="text-2xl font-bold" id="spanishWord">rápidamente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center space-x-4 mb-4">
+                    <button onclick="previousCard()" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-colors">
+                        ← Previous
+                    </button>
+                    <button onclick="nextCard()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors">
+                        Next →
+                    </button>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-gray-600">Card <span id="cardNumber">1</span> of <span id="totalCards">12</span></p>
+                    <p class="text-sm text-gray-500 mt-2">Click the card to flip it!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conversation Section -->
+        <section id="conversationSection" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-4">💬 Conversation Practice</h2>
+                
+                <div class="mb-6">
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md mb-4">
+                        <h3 class="font-semibold text-gray-800 mb-2">Current Prompt:</h3>
+                        <p class="text-gray-700" id="conversationPrompt">Describe your daily routine using time adverbs (siempre, nunca, a veces, etc.)</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Response (in Spanish):</label>
+                        <textarea 
+                            id="userResponse" 
+                            class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+                            rows="4" 
+                            placeholder="Write your response here using Spanish adverbs...">
+                        </textarea>
+                    </div>
+
+                    <div class="flex space-x-3 mb-4">
+                        <button onclick="checkResponse()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors">
+                            ✓ Check My Answer
+                        </button>
+                        <button onclick="showExample()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
+                            💡 Show Example
+                        </button>
+                        <button onclick="newPrompt()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors">
+                            🔄 New Prompt
+                        </button>
+                    </div>
+
+                    <div id="feedback" class="hidden p-4 rounded-md mb-4"></div>
+                    <div id="example" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md"></div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <h4 class="font-semibold text-gray-800 mb-2">💡 Helpful Adverbs for Conversation:</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                        <span class="bg-white px-2 py-1 rounded">siempre (always)</span>
+                        <span class="bg-white px-2 py-1 rounded">nunca (never)</span>
+                        <span class="bg-white px-2 py-1 rounded">a menudo (often)</span>
+                        <span class="bg-white px-2 py-1 rounded">raramente (rarely)</span>
+                        <span class="bg-white px-2 py-1 rounded">rápidamente (quickly)</span>
+                        <span class="bg-white px-2 py-1 rounded">lentamente (slowly)</span>
+                        <span class="bg-white px-2 py-1 rounded">cuidadosamente (carefully)</span>
+                        <span class="bg-white px-2 py-1 rounded">fácilmente (easily)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Flashcard data
+        const flashcards = [
+            { english: "quickly", spanish: "rápidamente" },
+            { english: "slowly", spanish: "lentamente" },
+            { english: "carefully", spanish: "cuidadosamente" },
+            { english: "easily", spanish: "fácilmente" },
+            { english: "always", spanish: "siempre" },
+            { english: "never", spanish: "nunca" },
+            { english: "sometimes", spanish: "a veces" },
+            { english: "often", spanish: "a menudo" },
+            { english: "well", spanish: "bien" },
+            { english: "badly", spanish: "mal" },
+            { english: "very", spanish: "muy" },
+            { english: "quite", spanish: "bastante" }
+        ];
+
+        let currentCard = 0;
+        let isFlipped = false;
+
+        // Conversation prompts
+        const conversationPrompts = [
+            {
+                prompt: "Describe your daily routine using time adverbs (siempre, nunca, a veces, etc.)",
+                example: "Siempre me despierto temprano. Nunca desayuno rápidamente porque me gusta comer lentamente. A veces camino al trabajo, pero generalmente voy en autobús."
+            },
+            {
+                prompt: "Explain how you study Spanish using manner adverbs (-mente adverbs)",
+                example: "Estudio español cuidadosamente todos los días. Leo lentamente para entender bien. Practico frecuentemente con aplicaciones y hablo claramente cuando practico."
+            },
+            {
+                prompt: "Describe a recent trip or outing using various adverbs",
+                example: "Recientemente fui al parque. Caminé tranquilamente por los senderos. Los niños jugaban alegremente mientras sus padres hablaban cómodamente en los bancos."
+            },
+            {
+                prompt: "Talk about your hobbies and how you do them using adverbs",
+                example: "Me gusta cocinar creativamente los fines de semana. Siempre preparo la comida cuidadosamente. A veces experimento audazmente con nuevas recetas."
+            },
+            {
+                prompt: "Describe how different people in your family do things using comparative adverbs",
+                example: "Mi hermana habla más rápidamente que yo. Mi padre conduce más cuidadosamente que mi madre. Yo cocino menos frecuentemente que mis padres."
+            }
+        ];
+
+        let currentPromptIndex = 0;
+
+        // Navigation functions
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('grammarSection').classList.add('hidden');
+            document.getElementById('flashcardsSection').classList.add('hidden');
+            document.getElementById('conversationSection').classList.add('hidden');
+
+            // Show selected section
+            document.getElementById(section + 'Section').classList.remove('hidden');
+
+            // Update button styles
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.className = 'px-6 py-2 rounded-md text-indigo-600 hover:bg-indigo-50 font-medium transition-colors';
+            });
+            document.getElementById(section + 'Btn').className = 'px-6 py-2 rounded-md bg-indigo-600 text-white font-medium transition-colors';
+        }
+
+        // Flashcard functions
+        function updateCard() {
+            document.getElementById('englishWord').textContent = flashcards[currentCard].english;
+            document.getElementById('spanishWord').textContent = flashcards[currentCard].spanish;
+            document.getElementById('cardNumber').textContent = currentCard + 1;
+            document.getElementById('totalCards').textContent = flashcards.length;
+            
+            // Reset flip state
+            document.getElementById('flashcard').classList.remove('flipped');
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % flashcards.length;
+            updateCard();
+        }
+
+        function previousCard() {
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            updateCard();
+        }
+
+        // Conversation functions
+        function checkResponse() {
+            const response = document.getElementById('userResponse').value.trim();
+            const feedback = document.getElementById('feedback');
+            
+            if (response === '') {
+                feedback.className = 'bg-red-50 border-l-4 border-red-400 p-4 rounded-md mb-4';
+                feedback.innerHTML = '<p class="text-red-700">Please write a response first!</p>';
+                feedback.classList.remove('hidden');
+                return;
+            }
+
+            // Simple check for adverbs (this is a basic implementation)
+            const adverbPatterns = [
+                'mente', 'siempre', 'nunca', 'veces', 'bien', 'mal', 'muy', 'bastante', 
+                'rápidamente', 'lentamente', 'cuidadosamente', 'fácilmente', 'frecuentemente'
+            ];
+            
+            const hasAdverbs = adverbPatterns.some(pattern => 
+                response.toLowerCase().includes(pattern.toLowerCase())
+            );
+
+            if (hasAdverbs) {
+                feedback.className = 'bg-green-50 border-l-4 border-green-400 p-4 rounded-md mb-4';
+                feedback.innerHTML = '<p class="text-green-700"><strong>¡Excelente!</strong> Great use of Spanish adverbs! Your response shows good understanding of adverb placement and usage.</p>';
+            } else {
+                feedback.className = 'bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md mb-4';
+                feedback.innerHTML = '<p class="text-yellow-700"><strong>Good effort!</strong> Try to include more Spanish adverbs in your response. Look at the helpful adverbs list below for inspiration.</p>';
+            }
+            
+            feedback.classList.remove('hidden');
+        }
+
+        function showExample() {
+            const example = document.getElementById('example');
+            const currentPrompt = conversationPrompts[currentPromptIndex];
+            
+            example.innerHTML = `
+                <h4 class="font-semibold text-gray-800 mb-2">Example Response:</h4>
+                <p class="text-gray-700">${currentPrompt.example}</p>
+            `;
+            example.classList.remove('hidden');
+        }
+
+        function newPrompt() {
+            currentPromptIndex = (currentPromptIndex + 1) % conversationPrompts.length;
+            document.getElementById('conversationPrompt').textContent = conversationPrompts[currentPromptIndex].prompt;
+            document.getElementById('userResponse').value = '';
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('example').classList.add('hidden');
+        }
+
+        // Initialize the app
+        updateCard();
+        document.getElementById('conversationPrompt').textContent = conversationPrompts[currentPromptIndex].prompt;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972d85c0f43e28f2',t:'MTc1NTgxNDg3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
