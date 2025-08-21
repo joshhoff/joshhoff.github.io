@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Flip Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .flip-card {
+            width: 350px;
+            height: 250px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out;
+            cursor: pointer;
+        }
+
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #4834d4, #686de0);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .card-front h2 {
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card-back .definition {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 5px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            height: 8px;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .card-counter {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .flip-hint {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .flip-card {
+                width: 300px;
+                height: 220px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card-front h2 {
+                font-size: 1.8rem;
+            }
+            
+            .card-back .definition {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Vocabulary Practice</h1>
+        <p>Click cards to flip and learn definitions</p>
+    </div>
+
+    <div class="card-counter" id="cardCounter">Card 1 of 10</div>
+    
+    <div class="progress">
+        <div class="progress-bar" id="progressBar" style="width: 10%"></div>
+    </div>
+
+    <div class="card-container">
+        <div class="flip-card" id="flipCard">
+            <div class="card-face card-front">
+                <h2 id="wordText">equipped</h2>
+            </div>
+            <div class="card-face card-back">
+                <div class="definition" id="definitionText">
+                    Having the necessary tools, skills, or resources needed for a particular task or situation.
+                    <br><br>
+                    <em>Example: The research team was well-equipped with advanced technology to study marine life.</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-secondary" id="prevBtn" onclick="previousCard()">← Previous</button>
+        <button class="btn btn-primary" id="flipBtn" onclick="flipCard()">Flip Card</button>
+        <button class="btn btn-secondary" id="nextBtn" onclick="nextCard()">Next →</button>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-primary" onclick="shuffleCards()">🔀 Shuffle</button>
+        <button class="btn btn-primary" onclick="resetProgress()">🔄 Reset</button>
+        <button class="btn btn-secondary" id="languageToggle" onclick="toggleLanguage()">🌐 Español</button>
+    </div>
+
+    <div class="flip-hint">
+        💡 Click the card or use the Flip button to see definitions
+    </div>
+
+    <script>
+        const vocabularyEnglish = [
+            {
+                word: "equipped",
+                definition: "Having the necessary tools, skills, or resources needed for a particular task or situation.<br><br><em>Example: The research team was well-equipped with advanced technology to study marine life.</em>"
+            },
+            {
+                word: "predict",
+                definition: "To say or estimate that something will happen in the future based on current information or patterns.<br><br><em>Example: Scientists can predict whale migration patterns using satellite data.</em>"
+            },
+            {
+                word: "tracking",
+                definition: "Following or monitoring the movement, progress, or development of something over time.<br><br><em>Example: Researchers are tracking the whale's journey across the Pacific Ocean.</em>"
+            },
+            {
+                word: "whale",
+                definition: "A large marine mammal that breathes air and lives in oceans around the world.<br><br><em>Example: The blue whale is the largest animal ever known to have lived on Earth.</em>"
+            },
+            {
+                word: "keep an eye on",
+                definition: "To watch, monitor, or pay attention to something carefully and regularly.<br><br><em>Example: Marine biologists keep an eye on whale populations to ensure their conservation.</em>"
+            },
+            {
+                word: "gather",
+                definition: "To collect, assemble, or bring together information, objects, or people from different sources.<br><br><em>Example: The team will gather data about whale behavior during their research expedition.</em>"
+            },
+            {
+                word: "detailed",
+                definition: "Containing many specific facts, features, or pieces of information; thorough and comprehensive.<br><br><em>Example: The scientists created a detailed map of the whale's migration route.</em>"
+            },
+            {
+                word: "expertise",
+                definition: "Special skill, knowledge, or experience in a particular area or subject.<br><br><em>Example: Her expertise in marine biology made her the perfect leader for the whale research project.</em>"
+            },
+            {
+                word: "analyzes",
+                definition: "Examines something carefully and in detail to understand it better or draw conclusions.<br><br><em>Example: The computer program analyzes whale songs to identify different species.</em>"
+            },
+            {
+                word: "buoy",
+                definition: "A floating device anchored in water to mark locations, provide warnings, or collect data.<br><br><em>Example: The research buoy collects information about water temperature and whale movements.</em>"
+            }
+        ];
+
+        const vocabularySpanish = [
+            {
+                word: "equipado",
+                definition: "Que tiene las herramientas, habilidades o recursos necesarios para una tarea o situación particular.<br><br><em>Ejemplo: El equipo de investigación estaba bien equipado con tecnología avanzada para estudiar la vida marina.</em>"
+            },
+            {
+                word: "predecir",
+                definition: "Decir o estimar que algo sucederá en el futuro basándose en información actual o patrones.<br><br><em>Ejemplo: Los científicos pueden predecir los patrones de migración de las ballenas usando datos satelitales.</em>"
+            },
+            {
+                word: "rastrear",
+                definition: "Seguir o monitorear el movimiento, progreso o desarrollo de algo a lo largo del tiempo.<br><br><em>Ejemplo: Los investigadores están rastreando el viaje de la ballena a través del Océano Pacífico.</em>"
+            },
+            {
+                word: "ballena",
+                definition: "Un mamífero marino grande que respira aire y vive en océanos alrededor del mundo.<br><br><em>Ejemplo: La ballena azul es el animal más grande que se conoce que haya vivido en la Tierra.</em>"
+            },
+            {
+                word: "vigilar",
+                definition: "Observar, monitorear o prestar atención a algo cuidadosa y regularmente.<br><br><em>Ejemplo: Los biólogos marinos vigilan las poblaciones de ballenas para asegurar su conservación.</em>"
+            },
+            {
+                word: "recopilar",
+                definition: "Recolectar, reunir o juntar información, objetos o personas de diferentes fuentes.<br><br><em>Ejemplo: El equipo recopilará datos sobre el comportamiento de las ballenas durante su expedición de investigación.</em>"
+            },
+            {
+                word: "detallado",
+                definition: "Que contiene muchos hechos específicos, características o piezas de información; minucioso y completo.<br><br><em>Ejemplo: Los científicos crearon un mapa detallado de la ruta de migración de la ballena.</em>"
+            },
+            {
+                word: "experiencia",
+                definition: "Habilidad especial, conocimiento o experiencia en un área o tema particular.<br><br><em>Ejemplo: Su experiencia en biología marina la convirtió en la líder perfecta para el proyecto de investigación de ballenas.</em>"
+            },
+            {
+                word: "analiza",
+                definition: "Examina algo cuidadosa y detalladamente para entenderlo mejor o sacar conclusiones.<br><br><em>Ejemplo: El programa de computadora analiza los cantos de las ballenas para identificar diferentes especies.</em>"
+            },
+            {
+                word: "boya",
+                definition: "Un dispositivo flotante anclado en el agua para marcar ubicaciones, proporcionar advertencias o recopilar datos.<br><br><em>Ejemplo: La boya de investigación recopila información sobre la temperatura del agua y los movimientos de las ballenas.</em>"
+            }
+        ];
+
+        let vocabulary = vocabularyEnglish;
+        let currentLanguage = 'english';
+
+        let currentCardIndex = 0;
+        let isFlipped = false;
+
+        function updateCard() {
+            const card = vocabulary[currentCardIndex];
+            document.getElementById('wordText').textContent = card.word;
+            document.getElementById('definitionText').innerHTML = card.definition;
+            const cardText = currentLanguage === 'english' ? 'Card' : 'Tarjeta';
+            const ofText = currentLanguage === 'english' ? 'of' : 'de';
+            document.getElementById('cardCounter').textContent = `${cardText} ${currentCardIndex + 1} ${ofText} ${vocabulary.length}`;
+            
+            // Update progress bar
+            const progress = ((currentCardIndex + 1) / vocabulary.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Reset flip state
+            document.getElementById('flipCard').classList.remove('flipped');
+            isFlipped = false;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentCardIndex === 0;
+            document.getElementById('nextBtn').disabled = currentCardIndex === vocabulary.length - 1;
+        }
+
+        function flipCard() {
+            const card = document.getElementById('flipCard');
+            card.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function nextCard() {
+            if (currentCardIndex < vocabulary.length - 1) {
+                currentCardIndex++;
+                updateCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCard();
+            }
+        }
+
+        function shuffleCards() {
+            // Fisher-Yates shuffle algorithm
+            for (let i = vocabulary.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [vocabulary[i], vocabulary[j]] = [vocabulary[j], vocabulary[i]];
+            }
+            currentCardIndex = 0;
+            updateCard();
+        }
+
+        function resetProgress() {
+            currentCardIndex = 0;
+            updateCard();
+        }
+
+        function toggleLanguage() {
+            if (currentLanguage === 'english') {
+                vocabulary = vocabularySpanish;
+                currentLanguage = 'spanish';
+                document.getElementById('languageToggle').textContent = '🌐 English';
+                document.querySelector('.header h1').textContent = '📚 Práctica de Vocabulario';
+                document.querySelector('.header p').textContent = 'Haz clic en las tarjetas para voltearlas y aprender definiciones';
+                document.getElementById('prevBtn').innerHTML = '← Anterior';
+                document.getElementById('flipBtn').textContent = 'Voltear Tarjeta';
+                document.getElementById('nextBtn').innerHTML = 'Siguiente →';
+                document.querySelector('.flip-hint').textContent = '💡 Haz clic en la tarjeta o usa el botón Voltear para ver las definiciones';
+            } else {
+                vocabulary = vocabularyEnglish;
+                currentLanguage = 'english';
+                document.getElementById('languageToggle').textContent = '🌐 Español';
+                document.querySelector('.header h1').textContent = '📚 Vocabulary Practice';
+                document.querySelector('.header p').textContent = 'Click cards to flip and learn definitions';
+                document.getElementById('prevBtn').innerHTML = '← Previous';
+                document.getElementById('flipBtn').textContent = 'Flip Card';
+                document.getElementById('nextBtn').innerHTML = 'Next →';
+                document.querySelector('.flip-hint').textContent = '💡 Click the card or use the Flip button to see definitions';
+            }
+            currentCardIndex = 0;
+            updateCard();
+        }
+
+        // Add click event to card for flipping
+        document.getElementById('flipCard').addEventListener('click', flipCard);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowLeft':
+                    previousCard();
+                    break;
+                case 'ArrowRight':
+                    nextCard();
+                    break;
+                case ' ':
+                case 'Enter':
+                    event.preventDefault();
+                    flipCard();
+                    break;
+            }
+        });
+
+        // Initialize the first card
+        updateCard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972b52d0674108c9',t:'MTc1NTc5MTgxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
