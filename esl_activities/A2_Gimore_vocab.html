@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Detective Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 20px;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+        }
+
+        .tab-btn:hover {
+            background: #e9ecef;
+        }
+
+        .tab-content {
+            padding: 40px;
+            min-height: 600px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .vocab-word {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .vocab-definition {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .vocab-example {
+            font-style: italic;
+            opacity: 0.9;
+            border-left: 3px solid #ffd700;
+            padding-left: 15px;
+        }
+
+        .game-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            color: #495057;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .matching-game {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .word-list, .definition-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .word-item, .definition-item {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .word-item:hover, .definition-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .word-item.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+
+        .definition-item.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+
+        .word-item.correct, .definition-item.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .sentence-practice {
+            margin: 20px 0;
+        }
+
+        .sentence-item {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .sentence-text {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .verb-highlight {
+            background: #ffd700;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .tense-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .verb-dropdown {
+            background: white;
+            border: 2px solid #4facfe;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 120px;
+        }
+
+        .verb-dropdown:focus {
+            outline: none;
+            border-color: #00f2fe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
+        }
+
+        .verb-dropdown.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .verb-dropdown.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .grammar-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .grammar-feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .grammar-feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quiz-option:hover {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #495057;
+            margin: 20px 0;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .matching-game {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕵️ Detective English Practice</h1>
+            <p>Learn vocabulary and grammar with detective stories!</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('vocabulary')">📚 Vocabulary</button>
+            <button class="tab-btn" onclick="showTab('matching')">🎯 Matching Game</button>
+            <button class="tab-btn" onclick="showTab('grammar')">📝 Grammar Practice</button>
+            <button class="tab-btn" onclick="showTab('quiz')">🧩 Quiz</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- Vocabulary Tab -->
+            <div id="vocabulary" class="tab-pane active">
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="vocab-word">🔍 Clue</div>
+                        <div class="vocab-definition">A piece of information that helps solve a mystery or problem.</div>
+                        <div class="vocab-example">"The detective found a clue at the crime scene."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">🕵️ Suspect</div>
+                        <div class="vocab-definition">A person who might have done something wrong.</div>
+                        <div class="vocab-example">"The police questioned the suspect about the missing jewels."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">📷 Camera</div>
+                        <div class="vocab-definition">A device that takes pictures or records videos.</div>
+                        <div class="vocab-example">"The security camera recorded everything that happened."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">🔓 Lock Pick</div>
+                        <div class="vocab-definition">A special tool used to open locks without a key.</div>
+                        <div class="vocab-example">"The thief used a lock pick to enter the building."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">🦀 Claw</div>
+                        <div class="vocab-definition">The sharp, curved nail of an animal like a cat or crab.</div>
+                        <div class="vocab-example">"The cat used its claw to climb the tree."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">🐧 Flipper</div>
+                        <div class="vocab-definition">The flat body part that sea animals use to swim.</div>
+                        <div class="vocab-example">"The penguin used its flipper to swim fast in the water."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">📁 Folder</div>
+                        <div class="vocab-definition">A container that holds papers or documents together.</div>
+                        <div class="vocab-example">"Agent Folder keeps all the case files organized."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word">👁️ Witness</div>
+                        <div class="vocab-definition">A person who saw something happen.</div>
+                        <div class="vocab-example">"The witness told the police what she saw that night."</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matching Game Tab -->
+            <div id="matching" class="tab-pane">
+                <div class="game-section">
+                    <h2 class="game-title">🎯 Match the Words with Their Meanings</h2>
+                    <div class="score">Score: <span id="matchingScore">0</span>/8</div>
+                    <div class="matching-game">
+                        <div class="word-list">
+                            <div class="word-item" data-word="clue">🔍 Clue</div>
+                            <div class="word-item" data-word="suspect">🕵️ Suspect</div>
+                            <div class="word-item" data-word="camera">📷 Camera</div>
+                            <div class="word-item" data-word="lockpick">🔓 Lock Pick</div>
+                            <div class="word-item" data-word="claw">🦀 Claw</div>
+                            <div class="word-item" data-word="flipper">🐧 Flipper</div>
+                            <div class="word-item" data-word="folder">📁 Folder</div>
+                            <div class="word-item" data-word="witness">👁️ Witness</div>
+                        </div>
+                        <div class="definition-list">
+                            <div class="definition-item" data-word="camera">Takes pictures or videos</div>
+                            <div class="definition-item" data-word="witness">Person who saw something happen</div>
+                            <div class="definition-item" data-word="clue">Information that helps solve a mystery</div>
+                            <div class="definition-item" data-word="flipper">Sea animal's swimming body part</div>
+                            <div class="definition-item" data-word="suspect">Person who might have done wrong</div>
+                            <div class="definition-item" data-word="folder">Container for papers</div>
+                            <div class="definition-item" data-word="claw">Sharp curved nail of animal</div>
+                            <div class="definition-item" data-word="lockpick">Tool to open locks without key</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="resetMatching()">🔄 Reset Game</button>
+                    <div id="matchingFeedback" class="feedback" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Grammar Practice Tab -->
+            <div id="grammar" class="tab-pane">
+                <div class="game-section">
+                    <h2 class="game-title">📝 Grammar Practice: Choose the Correct Verb</h2>
+                    <div class="score">Score: <span id="grammarScore">0</span>/4</div>
+                    <div class="sentence-practice">
+                        <div class="sentence-item" data-question="0">
+                            <div class="sentence-text">Boggy's looks <span class="verb-selector">
+                                <select class="verb-dropdown" onchange="checkGrammarAnswer(0, this.value)">
+                                    <option value="">Choose...</option>
+                                    <option value="change">change</option>
+                                    <option value="changed">changed</option>
+                                    <option value="changes">changes</option>
+                                </select>
+                            </span> over time.</div>
+                            <div class="tense-info" id="explanation-0" style="display: none;">
+                                <strong>Past Tense:</strong> "Changed" is correct! It shows something that happened before now. Boggy looked different in the past than now.
+                            </div>
+                            <div class="grammar-feedback" id="feedback-0"></div>
+                        </div>
+                        <div class="sentence-item" data-question="1">
+                            <div class="sentence-text">Agent Folder <span class="verb-selector">
+                                <select class="verb-dropdown" onchange="checkGrammarAnswer(1, this.value)">
+                                    <option value="">Choose...</option>
+                                    <option value="stay">stay</option>
+                                    <option value="stays">stays</option>
+                                    <option value="stayed">stayed</option>
+                                </select>
+                            </span> in the museum.</div>
+                            <div class="tense-info" id="explanation-1" style="display: none;">
+                                <strong>Present Tense:</strong> "Stays" is correct! It shows something happening now or regularly. Agent Folder is at the museum right now.
+                            </div>
+                            <div class="grammar-feedback" id="feedback-1"></div>
+                        </div>
+                        <div class="sentence-item" data-question="2">
+                            <div class="sentence-text">Van-De-Peer <span class="verb-selector">
+                                <select class="verb-dropdown" onchange="checkGrammarAnswer(2, this.value)">
+                                    <option value="">Choose...</option>
+                                    <option value="is">is</option>
+                                    <option value="was">was</option>
+                                    <option value="will be">will be</option>
+                                </select>
+                            </span> alone last night.</div>
+                            <div class="tense-info" id="explanation-2" style="display: none;">
+                                <strong>Past Tense:</strong> "Was" is correct! It shows a state in the past. Van-De-Peer had no one with him yesterday evening.
+                            </div>
+                            <div class="grammar-feedback" id="feedback-2"></div>
+                        </div>
+                        <div class="sentence-item" data-question="3">
+                            <div class="sentence-text">Van-De-Peer <span class="verb-selector">
+                                <select class="verb-dropdown" onchange="checkGrammarAnswer(3, this.value)">
+                                    <option value="">Choose...</option>
+                                    <option value="record">record</option>
+                                    <option value="records">records</option>
+                                    <option value="recorded">recorded</option>
+                                </select>
+                            </span> a video of the swamp last night.</div>
+                            <div class="tense-info" id="explanation-3" style="display: none;">
+                                <strong>Past Tense:</strong> "Recorded" is correct! It shows an action completed in the past. Van-De-Peer made a video yesterday.
+                            </div>
+                            <div class="grammar-feedback" id="feedback-3"></div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="resetGrammar()">🔄 Reset Practice</button>
+                </div>
+            </div>
+
+            <!-- Quiz Tab -->
+            <div id="quiz" class="tab-pane">
+                <div class="game-section">
+                    <h2 class="game-title">🧩 Test Your Knowledge</h2>
+                    <div class="score">Score: <span id="quizScore">0</span>/6</div>
+                    <div id="quizContainer">
+                        <!-- Quiz questions will be generated here -->
+                    </div>
+                    <button class="btn" onclick="resetQuiz()">🔄 Start New Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab panes
+            const panes = document.querySelectorAll('.tab-pane');
+            panes.forEach(pane => pane.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Matching Game
+        let selectedWord = null;
+        let selectedDefinition = null;
+        let matchingScore = 0;
+        let matchedPairs = new Set();
+
+        function initializeMatching() {
+            const wordItems = document.querySelectorAll('.word-item');
+            const definitionItems = document.querySelectorAll('.definition-item');
+            
+            wordItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.classList.contains('correct')) return;
+                    
+                    // Clear previous selections
+                    wordItems.forEach(w => w.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedWord = this.dataset.word;
+                    
+                    checkMatch();
+                });
+            });
+            
+            definitionItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.classList.contains('correct')) return;
+                    
+                    // Clear previous selections
+                    definitionItems.forEach(d => d.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedDefinition = this.dataset.word;
+                    
+                    checkMatch();
+                });
+            });
+        }
+
+        function checkMatch() {
+            if (selectedWord && selectedDefinition) {
+                if (selectedWord === selectedDefinition) {
+                    // Correct match
+                    const wordElement = document.querySelector(`.word-item[data-word="${selectedWord}"]`);
+                    const defElement = document.querySelector(`.definition-item[data-word="${selectedDefinition}"]`);
+                    
+                    wordElement.classList.remove('selected');
+                    wordElement.classList.add('correct');
+                    defElement.classList.remove('selected');
+                    defElement.classList.add('correct');
+                    
+                    matchedPairs.add(selectedWord);
+                    matchingScore++;
+                    document.getElementById('matchingScore').textContent = matchingScore;
+                    
+                    showMatchingFeedback('Correct! Great job! 🎉', 'correct');
+                    
+                    if (matchingScore === 8) {
+                        setTimeout(() => {
+                            showMatchingFeedback('Congratulations! You matched all words! 🏆', 'correct');
+                        }, 1000);
+                    }
+                } else {
+                    // Incorrect match
+                    showMatchingFeedback('Try again! Those don\'t match. 🤔', 'incorrect');
+                    
+                    // Clear selections after a delay
+                    setTimeout(() => {
+                        document.querySelectorAll('.word-item, .definition-item').forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                    }, 1000);
+                }
+                
+                selectedWord = null;
+                selectedDefinition = null;
+            }
+        }
+
+        function showMatchingFeedback(message, type) {
+            const feedback = document.getElementById('matchingFeedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
+        }
+
+        function resetMatching() {
+            matchingScore = 0;
+            matchedPairs.clear();
+            selectedWord = null;
+            selectedDefinition = null;
+            
+            document.getElementById('matchingScore').textContent = '0';
+            document.querySelectorAll('.word-item, .definition-item').forEach(item => {
+                item.classList.remove('selected', 'correct');
+            });
+            
+            document.getElementById('matchingFeedback').style.display = 'none';
+        }
+
+        // Quiz functionality
+        const quizQuestions = [
+            {
+                question: "What is a 'clue'?",
+                options: ["A type of camera", "Information that helps solve a mystery", "A person who saw something", "A tool for opening locks"],
+                correct: 1
+            },
+            {
+                question: "Which sentence uses PAST tense?",
+                options: ["Agent Folder stays in the museum", "Boggy's looks changed over time", "The detective finds clues", "The camera records videos"],
+                correct: 1
+            },
+            {
+                question: "What does a 'witness' do?",
+                options: ["Takes pictures", "Solves mysteries", "Sees something happen", "Opens locks"],
+                correct: 2
+            },
+            {
+                question: "In 'Van-De-Peer was alone last night', what tense is 'was'?",
+                options: ["Present tense", "Past tense", "Future tense", "Present continuous"],
+                correct: 1
+            },
+            {
+                question: "What is a 'flipper'?",
+                options: ["A detective tool", "A sea animal's swimming part", "A type of camera", "A container for papers"],
+                correct: 1
+            },
+            {
+                question: "Which word means 'a person who might have done something wrong'?",
+                options: ["Witness", "Clue", "Suspect", "Folder"],
+                correct: 2
+            }
+        ];
+
+        let currentQuizScore = 0;
+        let answeredQuestions = new Set();
+
+        function generateQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <h3>Question ${index + 1}: ${q.question}</h3>
+                    <div class="quiz-options">
+                        ${q.options.map((option, optIndex) => 
+                            `<div class="quiz-option" onclick="selectAnswer(${index}, ${optIndex})">${option}</div>`
+                        ).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            if (answeredQuestions.has(questionIndex)) return;
+            
+            const question = quizQuestions[questionIndex];
+            const options = document.querySelectorAll(`.quiz-question:nth-child(${questionIndex + 1}) .quiz-option`);
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === optionIndex && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (optionIndex === question.correct) {
+                currentQuizScore++;
+                document.getElementById('quizScore').textContent = currentQuizScore;
+            }
+            
+            answeredQuestions.add(questionIndex);
+        }
+
+        function resetQuiz() {
+            currentQuizScore = 0;
+            answeredQuestions.clear();
+            document.getElementById('quizScore').textContent = '0';
+            generateQuiz();
+        }
+
+        // Grammar Practice functionality
+        const grammarAnswers = ['changed', 'stays', 'was', 'recorded'];
+        let grammarScore = 0;
+        let grammarAnswered = new Set();
+
+        function checkGrammarAnswer(questionIndex, selectedValue) {
+            if (grammarAnswered.has(questionIndex)) return;
+            
+            const dropdown = document.querySelector(`[data-question="${questionIndex}"] .verb-dropdown`);
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
+            const explanation = document.getElementById(`explanation-${questionIndex}`);
+            
+            if (selectedValue === grammarAnswers[questionIndex]) {
+                // Correct answer
+                dropdown.classList.add('correct');
+                feedback.textContent = '✅ Correct! Well done!';
+                feedback.className = 'grammar-feedback correct';
+                explanation.style.display = 'block';
+                grammarScore++;
+                document.getElementById('grammarScore').textContent = grammarScore;
+            } else if (selectedValue !== '') {
+                // Incorrect answer
+                dropdown.classList.add('incorrect');
+                feedback.textContent = '❌ Try again! Think about when this action happened.';
+                feedback.className = 'grammar-feedback incorrect';
+                
+                // Allow them to try again after a delay
+                setTimeout(() => {
+                    dropdown.classList.remove('incorrect');
+                    dropdown.value = '';
+                    feedback.textContent = '';
+                    feedback.className = 'grammar-feedback';
+                }, 2000);
+                return;
+            }
+            
+            grammarAnswered.add(questionIndex);
+            dropdown.disabled = true;
+        }
+
+        function resetGrammar() {
+            grammarScore = 0;
+            grammarAnswered.clear();
+            document.getElementById('grammarScore').textContent = '0';
+            
+            // Reset all dropdowns and feedback
+            for (let i = 0; i < 4; i++) {
+                const dropdown = document.querySelector(`[data-question="${i}"] .verb-dropdown`);
+                const feedback = document.getElementById(`feedback-${i}`);
+                const explanation = document.getElementById(`explanation-${i}`);
+                
+                dropdown.value = '';
+                dropdown.disabled = false;
+                dropdown.classList.remove('correct', 'incorrect');
+                feedback.textContent = '';
+                feedback.className = 'grammar-feedback';
+                explanation.style.display = 'none';
+            }
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMatching();
+            generateQuiz();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97330cbee41e14dc',t:'MTc1NTg3MjgzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
