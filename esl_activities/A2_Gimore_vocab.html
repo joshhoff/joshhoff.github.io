@@ -44,6 +44,35 @@
             opacity: 0.9;
         }
 
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #4facfe;
+            border-color: white;
+        }
+
         .nav-tabs {
             display: flex;
             background: #f8f9fa;
@@ -262,6 +291,47 @@
             border: 1px solid #f5c6cb;
         }
 
+        .verb-options {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .verb-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .verb-option:hover {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+
+        .verb-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .verb-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .verb-option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .quiz-question {
             background: white;
             padding: 25px;
@@ -370,15 +440,19 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🕵️ Detective English Practice</h1>
-            <p>Learn vocabulary and grammar with detective stories!</p>
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+            </div>
+            <h1 data-en="🕵️ Detective English Practice" data-es="🕵️ Práctica de Inglés Detectivesco">🕵️ Detective English Practice</h1>
+            <p data-en="Learn vocabulary and grammar with detective stories!" data-es="¡Aprende vocabulario y gramática con historias de detectives!">Learn vocabulary and grammar with detective stories!</p>
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="showTab('vocabulary')">📚 Vocabulary</button>
-            <button class="tab-btn" onclick="showTab('matching')">🎯 Matching Game</button>
-            <button class="tab-btn" onclick="showTab('grammar')">📝 Grammar Practice</button>
-            <button class="tab-btn" onclick="showTab('quiz')">🧩 Quiz</button>
+            <button class="tab-btn active" onclick="showTab('vocabulary')" data-en="📚 Vocabulary" data-es="📚 Vocabulario">📚 Vocabulary</button>
+            <button class="tab-btn" onclick="showTab('matching')" data-en="🎯 Matching Game" data-es="🎯 Juego de Emparejar">🎯 Matching Game</button>
+            <button class="tab-btn" onclick="showTab('grammar')" data-en="📝 Grammar Practice" data-es="📝 Práctica de Gramática">📝 Grammar Practice</button>
+            <button class="tab-btn" onclick="showTab('quiz')" data-en="🧩 Quiz" data-es="🧩 Examen">🧩 Quiz</button>
         </div>
 
         <div class="tab-content">
@@ -386,44 +460,54 @@
             <div id="vocabulary" class="tab-pane active">
                 <div class="vocab-grid">
                     <div class="vocab-card">
-                        <div class="vocab-word">🔍 Clue</div>
-                        <div class="vocab-definition">A piece of information that helps solve a mystery or problem.</div>
-                        <div class="vocab-example">"The detective found a clue at the crime scene."</div>
+                        <div class="vocab-word" data-en="🤔 Suspicious" data-es="🤔 Sospechoso">🤔 Suspicious</div>
+                        <div class="vocab-definition" data-en="Acting in a way that makes people think something is wrong." data-es="Actuar de una manera que hace que la gente piense que algo está mal.">Acting in a way that makes people think something is wrong.</div>
+                        <div class="vocab-example" data-en='"The man looked suspicious near the bank."' data-es='"El hombre se veía sospechoso cerca del banco."'>"The man looked suspicious near the bank."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">🕵️ Suspect</div>
-                        <div class="vocab-definition">A person who might have done something wrong.</div>
-                        <div class="vocab-example">"The police questioned the suspect about the missing jewels."</div>
+                        <div class="vocab-word" data-en="💰 Bribe" data-es="💰 Soborno">💰 Bribe</div>
+                        <div class="vocab-definition" data-en="Money given to someone to make them do something dishonest." data-es="Dinero dado a alguien para hacerle hacer algo deshonesto.">Money given to someone to make them do something dishonest.</div>
+                        <div class="vocab-example" data-en='"The guard accepted a bribe to let them in."' data-es='"El guardia aceptó un soborno para dejarlos entrar."'>"The guard accepted a bribe to let them in."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">📷 Camera</div>
-                        <div class="vocab-definition">A device that takes pictures or records videos.</div>
-                        <div class="vocab-example">"The security camera recorded everything that happened."</div>
+                        <div class="vocab-word" data-en="📈 Profit" data-es="📈 Ganancia">📈 Profit</div>
+                        <div class="vocab-definition" data-en="Money earned from selling something for more than it cost." data-es="Dinero ganado al vender algo por más de lo que costó.">Money earned from selling something for more than it cost.</div>
+                        <div class="vocab-example" data-en='"The store made a good profit this month."' data-es='"La tienda tuvo una buena ganancia este mes."'>"The store made a good profit this month."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">🔓 Lock Pick</div>
-                        <div class="vocab-definition">A special tool used to open locks without a key.</div>
-                        <div class="vocab-example">"The thief used a lock pick to enter the building."</div>
+                        <div class="vocab-word" data-en="🧳 Tourist" data-es="🧳 Turista">🧳 Tourist</div>
+                        <div class="vocab-definition" data-en="A person who visits a place for pleasure or vacation." data-es="Una persona que visita un lugar por placer o vacaciones.">A person who visits a place for pleasure or vacation.</div>
+                        <div class="vocab-example" data-en='"Many tourists visit the museum every day."' data-es='"Muchos turistas visitan el museo todos los días."'>"Many tourists visit the museum every day."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">🦀 Claw</div>
-                        <div class="vocab-definition">The sharp, curved nail of an animal like a cat or crab.</div>
-                        <div class="vocab-example">"The cat used its claw to climb the tree."</div>
+                        <div class="vocab-word" data-en="🛍️ Gift Shop" data-es="🛍️ Tienda de Regalos">🛍️ Gift Shop</div>
+                        <div class="vocab-definition" data-en="A store that sells souvenirs and small presents." data-es="Una tienda que vende recuerdos y pequeños regalos.">A store that sells souvenirs and small presents.</div>
+                        <div class="vocab-example" data-en='"We bought postcards at the gift shop."' data-es='"Compramos postales en la tienda de regalos."'>"We bought postcards at the gift shop."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">🐧 Flipper</div>
-                        <div class="vocab-definition">The flat body part that sea animals use to swim.</div>
-                        <div class="vocab-example">"The penguin used its flipper to swim fast in the water."</div>
+                        <div class="vocab-word" data-en="🏠 Tree House" data-es="🏠 Casa del Árbol">🏠 Tree House</div>
+                        <div class="vocab-definition" data-en="A small house built in the branches of a tree." data-es="Una pequeña casa construida en las ramas de un árbol.">A small house built in the branches of a tree.</div>
+                        <div class="vocab-example" data-en='"The children played in their tree house."' data-es='"Los niños jugaron en su casa del árbol."'>"The children played in their tree house."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">📁 Folder</div>
-                        <div class="vocab-definition">A container that holds papers or documents together.</div>
-                        <div class="vocab-example">"Agent Folder keeps all the case files organized."</div>
+                        <div class="vocab-word" data-en="🌉 Bridge" data-es="🌉 Puente">🌉 Bridge</div>
+                        <div class="vocab-definition" data-en="A structure built over water or roads to help people cross." data-es="Una estructura construida sobre agua o carreteras para ayudar a las personas a cruzar.">A structure built over water or roads to help people cross.</div>
+                        <div class="vocab-example" data-en='"We walked across the old wooden bridge."' data-es='"Caminamos por el viejo puente de madera."'>"We walked across the old wooden bridge."</div>
                     </div>
                     <div class="vocab-card">
-                        <div class="vocab-word">👁️ Witness</div>
-                        <div class="vocab-definition">A person who saw something happen.</div>
-                        <div class="vocab-example">"The witness told the police what she saw that night."</div>
+                        <div class="vocab-word" data-en="🎭 Costume" data-es="🎭 Disfraz">🎭 Costume</div>
+                        <div class="vocab-definition" data-en="Special clothes worn to look like someone or something else." data-es="Ropa especial usada para parecer otra persona o cosa.">Special clothes worn to look like someone or something else.</div>
+                        <div class="vocab-example" data-en='"She wore a ghost costume for Halloween."' data-es='"Ella usó un disfraz de fantasma para Halloween."'>"She wore a ghost costume for Halloween."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word" data-en="🪟 Curtain" data-es="🪟 Cortina">🪟 Curtain</div>
+                        <div class="vocab-definition" data-en="Fabric that hangs in front of windows or stages." data-es="Tela que cuelga frente a ventanas o escenarios.">Fabric that hangs in front of windows or stages.</div>
+                        <div class="vocab-example" data-en='"Please close the curtain to block the sun."' data-es='"Por favor cierra la cortina para bloquear el sol."'>"Please close the curtain to block the sun."</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-word" data-en="👤 Appearance" data-es="👤 Apariencia">👤 Appearance</div>
+                        <div class="vocab-definition" data-en="How someone or something looks." data-es="Cómo se ve alguien o algo.">How someone or something looks.</div>
+                        <div class="vocab-example" data-en='"His appearance changed after the haircut."' data-es='"Su apariencia cambió después del corte de pelo."'>"His appearance changed after the haircut."</div>
                     </div>
                 </div>
             </div>
@@ -431,31 +515,35 @@
             <!-- Matching Game Tab -->
             <div id="matching" class="tab-pane">
                 <div class="game-section">
-                    <h2 class="game-title">🎯 Match the Words with Their Meanings</h2>
-                    <div class="score">Score: <span id="matchingScore">0</span>/8</div>
+                    <h2 class="game-title" data-en="🎯 Match the Words with Their Meanings" data-es="🎯 Empareja las Palabras con sus Significados">🎯 Match the Words with Their Meanings</h2>
+                    <div class="score" data-en="Score:" data-es="Puntuación:">Score: <span id="matchingScore">0</span>/10</div>
                     <div class="matching-game">
                         <div class="word-list">
-                            <div class="word-item" data-word="clue">🔍 Clue</div>
-                            <div class="word-item" data-word="suspect">🕵️ Suspect</div>
-                            <div class="word-item" data-word="camera">📷 Camera</div>
-                            <div class="word-item" data-word="lockpick">🔓 Lock Pick</div>
-                            <div class="word-item" data-word="claw">🦀 Claw</div>
-                            <div class="word-item" data-word="flipper">🐧 Flipper</div>
-                            <div class="word-item" data-word="folder">📁 Folder</div>
-                            <div class="word-item" data-word="witness">👁️ Witness</div>
+                            <div class="word-item" data-word="suspicious" data-en="🤔 Suspicious" data-es="🤔 Sospechoso">🤔 Suspicious</div>
+                            <div class="word-item" data-word="bribe" data-en="💰 Bribe" data-es="💰 Soborno">💰 Bribe</div>
+                            <div class="word-item" data-word="profit" data-en="📈 Profit" data-es="📈 Ganancia">📈 Profit</div>
+                            <div class="word-item" data-word="tourist" data-en="🧳 Tourist" data-es="🧳 Turista">🧳 Tourist</div>
+                            <div class="word-item" data-word="giftshop" data-en="🛍️ Gift Shop" data-es="🛍️ Tienda de Regalos">🛍️ Gift Shop</div>
+                            <div class="word-item" data-word="treehouse" data-en="🏠 Tree House" data-es="🏠 Casa del Árbol">🏠 Tree House</div>
+                            <div class="word-item" data-word="bridge" data-en="🌉 Bridge" data-es="🌉 Puente">🌉 Bridge</div>
+                            <div class="word-item" data-word="costume" data-en="🎭 Costume" data-es="🎭 Disfraz">🎭 Costume</div>
+                            <div class="word-item" data-word="curtain" data-en="🪟 Curtain" data-es="🪟 Cortina">🪟 Curtain</div>
+                            <div class="word-item" data-word="appearance" data-en="👤 Appearance" data-es="👤 Apariencia">👤 Appearance</div>
                         </div>
                         <div class="definition-list">
-                            <div class="definition-item" data-word="camera">Takes pictures or videos</div>
-                            <div class="definition-item" data-word="witness">Person who saw something happen</div>
-                            <div class="definition-item" data-word="clue">Information that helps solve a mystery</div>
-                            <div class="definition-item" data-word="flipper">Sea animal's swimming body part</div>
-                            <div class="definition-item" data-word="suspect">Person who might have done wrong</div>
-                            <div class="definition-item" data-word="folder">Container for papers</div>
-                            <div class="definition-item" data-word="claw">Sharp curved nail of animal</div>
-                            <div class="definition-item" data-word="lockpick">Tool to open locks without key</div>
+                            <div class="definition-item" data-word="tourist" data-en="Person who visits for pleasure" data-es="Persona que visita por placer">Person who visits for pleasure</div>
+                            <div class="definition-item" data-word="appearance" data-en="How someone looks" data-es="Cómo se ve alguien">How someone looks</div>
+                            <div class="definition-item" data-word="suspicious" data-en="Acting in a way that seems wrong" data-es="Actuar de manera que parece mal">Acting in a way that seems wrong</div>
+                            <div class="definition-item" data-word="curtain" data-en="Fabric that hangs at windows" data-es="Tela que cuelga en ventanas">Fabric that hangs at windows</div>
+                            <div class="definition-item" data-word="bribe" data-en="Money for dishonest favors" data-es="Dinero por favores deshonestos">Money for dishonest favors</div>
+                            <div class="definition-item" data-word="bridge" data-en="Structure to cross water or roads" data-es="Estructura para cruzar agua o carreteras">Structure to cross water or roads</div>
+                            <div class="definition-item" data-word="profit" data-en="Money earned from selling" data-es="Dinero ganado al vender">Money earned from selling</div>
+                            <div class="definition-item" data-word="costume" data-en="Special clothes for disguise" data-es="Ropa especial para disfrazarse">Special clothes for disguise</div>
+                            <div class="definition-item" data-word="giftshop" data-en="Store selling souvenirs" data-es="Tienda que vende recuerdos">Store selling souvenirs</div>
+                            <div class="definition-item" data-word="treehouse" data-en="House built in tree branches" data-es="Casa construida en ramas de árbol">House built in tree branches</div>
                         </div>
                     </div>
-                    <button class="btn" onclick="resetMatching()">🔄 Reset Game</button>
+                    <button class="btn" onclick="resetMatching()" data-en="🔄 Reset Game" data-es="🔄 Reiniciar Juego">🔄 Reset Game</button>
                     <div id="matchingFeedback" class="feedback" style="display: none;"></div>
                 </div>
             </div>
@@ -463,79 +551,53 @@
             <!-- Grammar Practice Tab -->
             <div id="grammar" class="tab-pane">
                 <div class="game-section">
-                    <h2 class="game-title">📝 Grammar Practice: Choose the Correct Verb</h2>
-                    <div class="score">Score: <span id="grammarScore">0</span>/4</div>
+                    <h2 class="game-title" data-en="📝 Grammar Practice: Choose the Correct Verb" data-es="📝 Práctica de Gramática: Elige el Verbo Correcto">📝 Grammar Practice: Choose the Correct Verb</h2>
+                    <div class="score" data-en="Score:" data-es="Puntuación:">Score: <span id="grammarScore">0</span>/3</div>
                     <div class="sentence-practice">
                         <div class="sentence-item" data-question="0">
-                            <div class="sentence-text">Boggy's looks <span class="verb-selector">
-                                <select class="verb-dropdown" onchange="checkGrammarAnswer(0, this.value)">
-                                    <option value="">Choose...</option>
-                                    <option value="change">change</option>
-                                    <option value="changed">changed</option>
-                                    <option value="changes">changes</option>
-                                </select>
-                            </span> over time.</div>
-                            <div class="tense-info" id="explanation-0" style="display: none;">
-                                <strong>Past Tense:</strong> "Changed" is correct! It shows something that happened before now. Boggy looked different in the past than now.
+                            <div class="sentence-text" data-en="Harper the cook _____ a knife" data-es="Harper la cocinera _____ un cuchillo">Harper the cook _____ a knife</div>
+                            <div class="verb-options">
+                                <div class="verb-option" onclick="checkGrammarAnswer(0, 'carry')" data-en="carry" data-es="llevar">carry</div>
+                                <div class="verb-option" onclick="checkGrammarAnswer(0, 'carries')" data-en="carries" data-es="lleva">carries</div>
+                                <div class="verb-option" onclick="checkGrammarAnswer(0, 'carried')" data-en="carried" data-es="llevó">carried</div>
                             </div>
+                            <div class="tense-info" id="explanation-0" style="display: none;" data-en="Present Tense: 'Carries' is correct! Harper is one person, so we use the third person singular form with 's'." data-es="Tiempo Presente: '¡Carries' es correcto! Harper es una persona, así que usamos la forma singular de tercera persona con 's'.">Present Tense: "Carries" is correct! Harper is one person, so we use the third person singular form with 's'.</div>
                             <div class="grammar-feedback" id="feedback-0"></div>
                         </div>
                         <div class="sentence-item" data-question="1">
-                            <div class="sentence-text">Agent Folder <span class="verb-selector">
-                                <select class="verb-dropdown" onchange="checkGrammarAnswer(1, this.value)">
-                                    <option value="">Choose...</option>
-                                    <option value="stay">stay</option>
-                                    <option value="stays">stays</option>
-                                    <option value="stayed">stayed</option>
-                                </select>
-                            </span> in the museum.</div>
-                            <div class="tense-info" id="explanation-1" style="display: none;">
-                                <strong>Present Tense:</strong> "Stays" is correct! It shows something happening now or regularly. Agent Folder is at the museum right now.
+                            <div class="sentence-text" data-en="Lady Weybridge lives _____ in the woods" data-es="Lady Weybridge vive _____ en el bosque">Lady Weybridge lives _____ in the woods</div>
+                            <div class="verb-options">
+                                <div class="verb-option" onclick="checkGrammarAnswer(1, 'lonely')" data-en="lonely" data-es="solitaria">lonely</div>
+                                <div class="verb-option" onclick="checkGrammarAnswer(1, 'alone')" data-en="alone" data-es="sola">alone</div>
+                                <div class="verb-option" onclick="checkGrammarAnswer(1, 'single')" data-en="single" data-es="soltera">single</div>
                             </div>
+                            <div class="tense-info" id="explanation-1" style="display: none;" data-en="Adverb: 'Alone' is correct! It describes how she lives - by herself, without other people." data-es="Adverbio: '¡Alone' es correcto! Describe cómo vive - por sí misma, sin otras personas.">Adverb: "Alone" is correct! It describes how she lives - by herself, without other people.</div>
                             <div class="grammar-feedback" id="feedback-1"></div>
                         </div>
                         <div class="sentence-item" data-question="2">
-                            <div class="sentence-text">Van-De-Peer <span class="verb-selector">
-                                <select class="verb-dropdown" onchange="checkGrammarAnswer(2, this.value)">
-                                    <option value="">Choose...</option>
-                                    <option value="is">is</option>
-                                    <option value="was">was</option>
-                                    <option value="will be">will be</option>
-                                </select>
-                            </span> alone last night.</div>
-                            <div class="tense-info" id="explanation-2" style="display: none;">
-                                <strong>Past Tense:</strong> "Was" is correct! It shows a state in the past. Van-De-Peer had no one with him yesterday evening.
+                            <div class="sentence-text" data-en="We found a _____ head in the gift shop" data-es="Encontramos una cabeza de _____ en la tienda de regalos">We found a _____ head in the gift shop</div>
+                            <div class="verb-options">
+                                <div class="verb-option" onclick="checkGrammarAnswer(2, 'mask')" data-en="mask" data-es="máscara">mask</div>
+                                <div class="verb-option" onclick="checkGrammarAnswer(2, 'costume')" data-en="costume" data-es="disfraz">costume</div>
+                                <div class="verb-option" onclick="checkGrammarAnswer(2, 'hat')" data-en="hat" data-es="sombrero">hat</div>
                             </div>
+                            <div class="tense-info" id="explanation-2" style="display: none;" data-en="Noun: 'Costume' is correct! A costume head is part of a disguise or outfit for dressing up." data-es="Sustantivo: '¡Costume' es correcto! Una cabeza de disfraz es parte de un disfraz o atuendo para vestirse.">Noun: "Costume" is correct! A costume head is part of a disguise or outfit for dressing up.</div>
                             <div class="grammar-feedback" id="feedback-2"></div>
                         </div>
-                        <div class="sentence-item" data-question="3">
-                            <div class="sentence-text">Van-De-Peer <span class="verb-selector">
-                                <select class="verb-dropdown" onchange="checkGrammarAnswer(3, this.value)">
-                                    <option value="">Choose...</option>
-                                    <option value="record">record</option>
-                                    <option value="records">records</option>
-                                    <option value="recorded">recorded</option>
-                                </select>
-                            </span> a video of the swamp last night.</div>
-                            <div class="tense-info" id="explanation-3" style="display: none;">
-                                <strong>Past Tense:</strong> "Recorded" is correct! It shows an action completed in the past. Van-De-Peer made a video yesterday.
-                            </div>
-                            <div class="grammar-feedback" id="feedback-3"></div>
-                        </div>
                     </div>
-                    <button class="btn" onclick="resetGrammar()">🔄 Reset Practice</button>
+                    <button class="btn" onclick="resetGrammar()" data-en="🔄 Reset Practice" data-es="🔄 Reiniciar Práctica">🔄 Reset Practice</button>
                 </div>
             </div>
 
             <!-- Quiz Tab -->
             <div id="quiz" class="tab-pane">
                 <div class="game-section">
-                    <h2 class="game-title">🧩 Test Your Knowledge</h2>
-                    <div class="score">Score: <span id="quizScore">0</span>/6</div>
+                    <h2 class="game-title" data-en="🧩 Test Your Knowledge" data-es="🧩 Pon a Prueba tu Conocimiento">🧩 Test Your Knowledge</h2>
+                    <div class="score" data-en="Score:" data-es="Puntuación:">Score: <span id="quizScore">0</span>/6</div>
                     <div id="quizContainer">
                         <!-- Quiz questions will be generated here -->
                     </div>
-                    <button class="btn" onclick="resetQuiz()">🔄 Start New Quiz</button>
+                    <button class="btn" onclick="resetQuiz()" data-en="🔄 Start New Quiz" data-es="🔄 Comenzar Nuevo Examen">🔄 Start New Quiz</button>
                 </div>
             </div>
         </div>
@@ -610,16 +672,19 @@
                     matchingScore++;
                     document.getElementById('matchingScore').textContent = matchingScore;
                     
-                    showMatchingFeedback('Correct! Great job! 🎉', 'correct');
+                    const correctMsg = currentLanguage === 'es' ? '¡Correcto! ¡Buen trabajo! 🎉' : 'Correct! Great job! 🎉';
+                    showMatchingFeedback(correctMsg, 'correct');
                     
-                    if (matchingScore === 8) {
+                    if (matchingScore === 10) {
                         setTimeout(() => {
-                            showMatchingFeedback('Congratulations! You matched all words! 🏆', 'correct');
+                            const completeMsg = currentLanguage === 'es' ? '¡Felicitaciones! ¡Emparejaste todas las palabras! 🏆' : 'Congratulations! You matched all words! 🏆';
+                            showMatchingFeedback(completeMsg, 'correct');
                         }, 1000);
                     }
                 } else {
                     // Incorrect match
-                    showMatchingFeedback('Try again! Those don\'t match. 🤔', 'incorrect');
+                    const incorrectMsg = currentLanguage === 'es' ? '¡Inténtalo de nuevo! Esas no coinciden. 🤔' : 'Try again! Those don\'t match. 🤔';
+                    showMatchingFeedback(incorrectMsg, 'incorrect');
                     
                     // Clear selections after a delay
                     setTimeout(() => {
@@ -659,37 +724,110 @@
             document.getElementById('matchingFeedback').style.display = 'none';
         }
 
+        // Language functionality
+        let currentLanguage = 'en';
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (element.hasAttribute(`data-${lang}`)) {
+                    element.textContent = element.getAttribute(`data-${lang}`);
+                }
+            });
+            
+            // Update matching score text
+            updateScoreText();
+        }
+
+        function updateScoreText() {
+            const scoreElements = document.querySelectorAll('.score');
+            scoreElements.forEach(element => {
+                if (element.hasAttribute('data-en')) {
+                    const scoreText = element.getAttribute(`data-${currentLanguage}`);
+                    const scoreNumber = element.querySelector('span').textContent;
+                    const totalScore = element.textContent.includes('/') ? element.textContent.split('/')[1].split(' ')[0] : '';
+                    if (totalScore) {
+                        element.innerHTML = `${scoreText} <span id="${element.querySelector('span').id}">${scoreNumber}</span>/${totalScore}`;
+                    } else {
+                        element.innerHTML = `${scoreText} <span id="${element.querySelector('span').id}">${scoreNumber}</span>`;
+                    }
+                }
+            });
+        }
+
         // Quiz functionality
         const quizQuestions = [
             {
-                question: "What is a 'clue'?",
-                options: ["A type of camera", "Information that helps solve a mystery", "A person who saw something", "A tool for opening locks"],
+                question: {
+                    en: "What is 'suspicious'?",
+                    es: "¿Qué es 'sospechoso'?"
+                },
+                options: {
+                    en: ["Acting normally", "Acting in a way that seems wrong", "Being very friendly", "Being helpful"],
+                    es: ["Actuar normalmente", "Actuar de manera que parece mal", "Ser muy amigable", "Ser útil"]
+                },
                 correct: 1
             },
             {
-                question: "Which sentence uses PAST tense?",
-                options: ["Agent Folder stays in the museum", "Boggy's looks changed over time", "The detective finds clues", "The camera records videos"],
+                question: {
+                    en: "What is a 'bribe'?",
+                    es: "¿Qué es un 'soborno'?"
+                },
+                options: {
+                    en: ["A gift", "Money for dishonest favors", "A reward", "A payment"],
+                    es: ["Un regalo", "Dinero por favores deshonestos", "Una recompensa", "Un pago"]
+                },
                 correct: 1
             },
             {
-                question: "What does a 'witness' do?",
-                options: ["Takes pictures", "Solves mysteries", "Sees something happen", "Opens locks"],
-                correct: 2
-            },
-            {
-                question: "In 'Van-De-Peer was alone last night', what tense is 'was'?",
-                options: ["Present tense", "Past tense", "Future tense", "Present continuous"],
+                question: {
+                    en: "What does 'profit' mean?",
+                    es: "¿Qué significa 'ganancia'?"
+                },
+                options: {
+                    en: ["Money lost", "Money earned from selling", "Money borrowed", "Money saved"],
+                    es: ["Dinero perdido", "Dinero ganado al vender", "Dinero prestado", "Dinero ahorrado"]
+                },
                 correct: 1
             },
             {
-                question: "What is a 'flipper'?",
-                options: ["A detective tool", "A sea animal's swimming part", "A type of camera", "A container for papers"],
+                question: {
+                    en: "What is a 'tourist'?",
+                    es: "¿Qué es un 'turista'?"
+                },
+                options: {
+                    en: ["A local person", "Someone who visits for pleasure", "A worker", "A student"],
+                    es: ["Una persona local", "Alguien que visita por placer", "Un trabajador", "Un estudiante"]
+                },
                 correct: 1
             },
             {
-                question: "Which word means 'a person who might have done something wrong'?",
-                options: ["Witness", "Clue", "Suspect", "Folder"],
-                correct: 2
+                question: {
+                    en: "What is a 'costume'?",
+                    es: "¿Qué es un 'disfraz'?"
+                },
+                options: {
+                    en: ["Regular clothes", "Special clothes for disguise", "Work uniform", "Sports clothes"],
+                    es: ["Ropa normal", "Ropa especial para disfrazarse", "Uniforme de trabajo", "Ropa deportiva"]
+                },
+                correct: 1
+            },
+            {
+                question: {
+                    en: "What is 'appearance'?",
+                    es: "¿Qué es 'apariencia'?"
+                },
+                options: {
+                    en: ["How someone acts", "How someone looks", "What someone says", "Where someone lives"],
+                    es: ["Cómo actúa alguien", "Cómo se ve alguien", "Lo que dice alguien", "Dónde vive alguien"]
+                },
+                correct: 1
             }
         ];
 
@@ -703,10 +841,11 @@
             quizQuestions.forEach((q, index) => {
                 const questionDiv = document.createElement('div');
                 questionDiv.className = 'quiz-question';
+                const questionText = currentLanguage === 'es' ? 'Pregunta' : 'Question';
                 questionDiv.innerHTML = `
-                    <h3>Question ${index + 1}: ${q.question}</h3>
+                    <h3>${questionText} ${index + 1}: ${q.question[currentLanguage]}</h3>
                     <div class="quiz-options">
-                        ${q.options.map((option, optIndex) => 
+                        ${q.options[currentLanguage].map((option, optIndex) => 
                             `<div class="quiz-option" onclick="selectAnswer(${index}, ${optIndex})">${option}</div>`
                         ).join('')}
                     </div>
@@ -746,43 +885,54 @@
         }
 
         // Grammar Practice functionality
-        const grammarAnswers = ['changed', 'stays', 'was', 'recorded'];
+        const grammarAnswers = ['carries', 'alone', 'costume'];
         let grammarScore = 0;
         let grammarAnswered = new Set();
 
         function checkGrammarAnswer(questionIndex, selectedValue) {
             if (grammarAnswered.has(questionIndex)) return;
             
-            const dropdown = document.querySelector(`[data-question="${questionIndex}"] .verb-dropdown`);
+            const options = document.querySelectorAll(`[data-question="${questionIndex}"] .verb-option`);
             const feedback = document.getElementById(`feedback-${questionIndex}`);
             const explanation = document.getElementById(`explanation-${questionIndex}`);
             
             if (selectedValue === grammarAnswers[questionIndex]) {
                 // Correct answer
-                dropdown.classList.add('correct');
-                feedback.textContent = '✅ Correct! Well done!';
+                options.forEach(option => {
+                    if (option.textContent.trim() === selectedValue || option.getAttribute('data-en') === selectedValue) {
+                        option.classList.add('correct');
+                    }
+                    option.classList.add('disabled');
+                });
+                
+                const correctText = currentLanguage === 'es' ? '✅ ¡Correcto! ¡Bien hecho!' : '✅ Correct! Well done!';
+                feedback.textContent = correctText;
                 feedback.className = 'grammar-feedback correct';
                 explanation.style.display = 'block';
                 grammarScore++;
                 document.getElementById('grammarScore').textContent = grammarScore;
-            } else if (selectedValue !== '') {
+                grammarAnswered.add(questionIndex);
+            } else {
                 // Incorrect answer
-                dropdown.classList.add('incorrect');
-                feedback.textContent = '❌ Try again! Think about when this action happened.';
+                options.forEach(option => {
+                    if (option.textContent.trim() === selectedValue || option.getAttribute('data-en') === selectedValue) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                const incorrectText = currentLanguage === 'es' ? '❌ ¡Inténtalo de nuevo! Piensa en la forma correcta.' : '❌ Try again! Think about the correct form.';
+                feedback.textContent = incorrectText;
                 feedback.className = 'grammar-feedback incorrect';
                 
                 // Allow them to try again after a delay
                 setTimeout(() => {
-                    dropdown.classList.remove('incorrect');
-                    dropdown.value = '';
+                    options.forEach(option => {
+                        option.classList.remove('incorrect');
+                    });
                     feedback.textContent = '';
                     feedback.className = 'grammar-feedback';
                 }, 2000);
-                return;
             }
-            
-            grammarAnswered.add(questionIndex);
-            dropdown.disabled = true;
         }
 
         function resetGrammar() {
@@ -790,15 +940,15 @@
             grammarAnswered.clear();
             document.getElementById('grammarScore').textContent = '0';
             
-            // Reset all dropdowns and feedback
-            for (let i = 0; i < 4; i++) {
-                const dropdown = document.querySelector(`[data-question="${i}"] .verb-dropdown`);
+            // Reset all options and feedback
+            for (let i = 0; i < 3; i++) {
+                const options = document.querySelectorAll(`[data-question="${i}"] .verb-option`);
                 const feedback = document.getElementById(`feedback-${i}`);
                 const explanation = document.getElementById(`explanation-${i}`);
                 
-                dropdown.value = '';
-                dropdown.disabled = false;
-                dropdown.classList.remove('correct', 'incorrect');
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect', 'disabled');
+                });
                 feedback.textContent = '';
                 feedback.className = 'grammar-feedback';
                 explanation.style.display = 'none';
@@ -811,5 +961,5 @@
             generateQuiz();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97330cbee41e14dc',t:'MTc1NTg3MjgzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9734b92092878ea3',t:'MTc1NTg5MDM4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
