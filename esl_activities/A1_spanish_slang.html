@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Phrases from Spain - Learning App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .bounce { animation: bounce 0.6s ease-in-out; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-50 to-red-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-red-700 mb-2">🇪🇸 Spanish Phrases from Spain</h1>
+            <p class="text-gray-600 text-lg">Master authentic Spanish expressions with interactive practice</p>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Choose Your Practice Mode</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <button onclick="startMode('written')" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    📝 Written Practice
+                    <p class="text-sm font-normal mt-1">Translate phrases and learn meanings</p>
+                </button>
+                <button onclick="startMode('conversation')" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    💬 Conversation Practice
+                    <p class="text-sm font-normal mt-1">Practice in realistic scenarios</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Practice Area -->
+        <div id="practiceArea" class="hidden">
+            <!-- Written Practice -->
+            <div id="writtenPractice" class="hidden bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Written Practice</h3>
+                    <div class="text-sm text-gray-600">
+                        Question <span id="questionNumber">1</span> of <span id="totalQuestions">13</span>
+                    </div>
+                </div>
+                
+                <div id="writtenQuestion" class="mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <p class="text-lg font-medium text-blue-800" id="spanishPhrase"></p>
+                    </div>
+                    <p class="text-gray-700 mb-4" id="questionText"></p>
+                    <input type="text" id="answerInput" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Type your answer here...">
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="checkAnswer()" id="checkBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">Check Answer</button>
+                    <button onclick="nextQuestion()" id="nextBtn" class="hidden bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium">Next Question</button>
+                    <button onclick="showHint()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg font-medium">💡 Hint</button>
+                </div>
+
+                <div id="feedback" class="hidden mt-4 p-4 rounded-lg"></div>
+                <div id="hint" class="hidden mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400"></div>
+            </div>
+
+            <!-- Conversation Practice -->
+            <div id="conversationPractice" class="hidden bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Conversation Practice</h3>
+                    <div class="text-sm text-gray-600">
+                        Scenario <span id="scenarioNumber">1</span> of <span id="totalScenarios">8</span>
+                    </div>
+                </div>
+
+                <div id="conversationScenario" class="mb-6">
+                    <div class="bg-green-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold text-green-800 mb-2">Situation:</h4>
+                        <p class="text-green-700" id="scenarioText"></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="text-gray-700" id="conversationPrompt"></p>
+                    </div>
+                    <textarea id="conversationAnswer" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none h-24" placeholder="Write your response in Spanish..."></textarea>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="checkConversation()" id="checkConvBtn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium">Check Response</button>
+                    <button onclick="nextScenario()" id="nextScenarioBtn" class="hidden bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium">Next Scenario</button>
+                    <button onclick="showConversationHint()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg font-medium">💡 Hint</button>
+                </div>
+
+                <div id="conversationFeedback" class="hidden mt-4 p-4 rounded-lg"></div>
+                <div id="conversationHint" class="hidden mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400"></div>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="hidden bg-white rounded-xl shadow-lg p-6 text-center">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">¡Excelente trabajo!</h3>
+                <div class="text-6xl mb-4">🎉</div>
+                <p class="text-lg text-gray-600 mb-6">You've completed the practice session!</p>
+                <div class="flex gap-4 justify-center">
+                    <button onclick="restartPractice()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium">Practice Again</button>
+                    <button onclick="goHome()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium">Choose New Mode</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div id="backButton" class="hidden mt-6 text-center">
+            <button onclick="goHome()" class="text-gray-600 hover:text-gray-800 font-medium">← Back to Mode Selection</button>
+        </div>
+    </div>
+
+    <script>
+        const phrases = [
+            {
+                spanish: "¡Vaya sorpresa!",
+                english: "What a surprise!",
+                hint: "Used when something unexpected happens",
+                question: "How would you express surprise in Spanish?"
+            },
+            {
+                spanish: "Me lo/la lleva",
+                english: "I'll take it",
+                hint: "Used when deciding to buy something",
+                question: "How do you say 'I'll take it' when shopping?"
+            },
+            {
+                spanish: "Ni hablar",
+                english: "No way / Out of the question",
+                hint: "Strong way to refuse something",
+                question: "How do you firmly refuse something in Spanish?"
+            },
+            {
+                spanish: "¡Qué va!",
+                english: "No way! / Come on!",
+                hint: "Expresses disbelief or disagreement",
+                question: "How do you express disbelief in Spanish?"
+            },
+            {
+                spanish: "A la vuelta",
+                english: "Around the corner / On the way back",
+                hint: "Refers to location or return journey",
+                question: "How do you say 'around the corner' in Spanish?"
+            },
+            {
+                spanish: "¿Por dónde queda...?",
+                english: "Where is...? / How do I get to...?",
+                hint: "Used to ask for directions",
+                question: "How do you ask for directions in Spanish?"
+            },
+            {
+                spanish: "Se puede arreglar",
+                english: "It can be fixed",
+                hint: "Used when something is repairable",
+                question: "How do you say something can be repaired?"
+            },
+            {
+                spanish: "¿Cuánto tardaría?",
+                english: "How long would it take?",
+                hint: "Asking about duration",
+                question: "How do you ask about how long something will take?"
+            },
+            {
+                spanish: "Me he quedado sin...",
+                english: "I've run out of...",
+                hint: "When you don't have something left",
+                question: "How do you say you've run out of something?"
+            },
+            {
+                spanish: "Ya está hecho",
+                english: "It's already done",
+                hint: "Something is completed",
+                question: "How do you say something is already finished?"
+            },
+            {
+                spanish: "A propósito",
+                english: "By the way / On purpose",
+                hint: "Can mean intentionally or to change topic",
+                question: "How do you say 'by the way' in Spanish?"
+            },
+            {
+                spanish: "En realidad",
+                english: "Actually / In reality",
+                hint: "Used to clarify or correct",
+                question: "How do you say 'actually' in Spanish?"
+            },
+            {
+                spanish: "No se preocupe por eso",
+                english: "Don't worry about that",
+                hint: "Reassuring someone",
+                question: "How do you tell someone not to worry?"
+            }
+        ];
+
+        const conversationScenarios = [
+            {
+                situation: "You're at a restaurant and the waiter brings you the wrong dish",
+                prompt: "The waiter apologizes profusely. Reassure them it's okay.",
+                expectedPhrases: ["No se preocupe por eso", "no se preocupe"],
+                hint: "Use the phrase that means 'don't worry about that'"
+            },
+            {
+                situation: "A friend suggests going to an expensive restaurant you can't afford",
+                prompt: "Politely but firmly decline the suggestion.",
+                expectedPhrases: ["Ni hablar", "ni hablar"],
+                hint: "Use a strong way to say 'no way'"
+            },
+            {
+                situation: "You're shopping and decide to buy a shirt you've been looking at",
+                prompt: "Tell the shopkeeper you want to purchase it.",
+                expectedPhrases: ["Me lo lleva", "me lo lleva"],
+                hint: "Use the phrase that means 'I'll take it'"
+            },
+            {
+                situation: "You're lost and need to find the nearest pharmacy",
+                prompt: "Ask a local person for directions.",
+                expectedPhrases: ["¿Por dónde queda", "por dónde queda"],
+                hint: "Use the phrase for asking directions"
+            },
+            {
+                situation: "Your friend claims they finished all their homework in 10 minutes",
+                prompt: "Express your disbelief at this claim.",
+                expectedPhrases: ["¡Qué va!", "qué va"],
+                hint: "Use an expression of disbelief"
+            },
+            {
+                situation: "You're at a repair shop asking about fixing your phone",
+                prompt: "Ask how long the repair would take.",
+                expectedPhrases: ["¿Cuánto tardaría?", "cuánto tardaría"],
+                hint: "Ask about duration"
+            },
+            {
+                situation: "You run into an old friend unexpectedly at the grocery store",
+                prompt: "Express your surprise at seeing them there.",
+                expectedPhrases: ["¡Vaya sorpresa!", "vaya sorpresa"],
+                hint: "Express surprise"
+            },
+            {
+                situation: "You want to add something to the conversation you're having",
+                prompt: "Introduce a new topic or additional information.",
+                expectedPhrases: ["A propósito", "a propósito"],
+                hint: "Use 'by the way' to introduce something"
+            }
+        ];
+
+        let currentMode = '';
+        let currentQuestion = 0;
+        let currentScenario = 0;
+
+        function startMode(mode) {
+            currentMode = mode;
+            currentQuestion = 0;
+            currentScenario = 0;
+            
+            document.querySelector('.bg-white.rounded-xl.shadow-lg.p-6.mb-8').style.display = 'none';
+            document.getElementById('practiceArea').classList.remove('hidden');
+            document.getElementById('backButton').classList.remove('hidden');
+            
+            if (mode === 'written') {
+                document.getElementById('writtenPractice').classList.remove('hidden');
+                document.getElementById('totalQuestions').textContent = phrases.length;
+                loadWrittenQuestion();
+            } else {
+                document.getElementById('conversationPractice').classList.remove('hidden');
+                document.getElementById('totalScenarios').textContent = conversationScenarios.length;
+                loadConversationScenario();
+            }
+        }
+
+        function loadWrittenQuestion() {
+            if (currentQuestion >= phrases.length) {
+                showResults();
+                return;
+            }
+
+            const phrase = phrases[currentQuestion];
+            document.getElementById('questionNumber').textContent = currentQuestion + 1;
+            document.getElementById('spanishPhrase').textContent = phrase.spanish;
+            document.getElementById('questionText').textContent = phrase.question;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').focus();
+            
+            // Reset UI
+            document.getElementById('checkBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('hint').classList.add('hidden');
+            
+            document.getElementById('writtenQuestion').classList.add('fade-in');
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = phrases[currentQuestion].english.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            feedback.classList.remove('hidden');
+            
+            if (userAnswer === correctAnswer || correctAnswer.includes(userAnswer) && userAnswer.length > 3) {
+                feedback.className = 'mt-4 p-4 rounded-lg bg-green-50 border-l-4 border-green-400';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">✅</span>
+                        <div>
+                            <p class="font-semibold text-green-800">¡Correcto!</p>
+                            <p class="text-green-700">"${phrases[currentQuestion].spanish}" means "${phrases[currentQuestion].english}"</p>
+                        </div>
+                    </div>
+                `;
+                feedback.classList.add('bounce');
+            } else {
+                feedback.className = 'mt-4 p-4 rounded-lg bg-red-50 border-l-4 border-red-400';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">❌</span>
+                        <div>
+                            <p class="font-semibold text-red-800">Not quite right</p>
+                            <p class="text-red-700">The correct answer is: "${phrases[currentQuestion].english}"</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('checkBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function showHint() {
+            const hint = document.getElementById('hint');
+            hint.classList.remove('hidden');
+            hint.innerHTML = `<p class="text-yellow-800"><strong>Hint:</strong> ${phrases[currentQuestion].hint}</p>`;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadWrittenQuestion();
+        }
+
+        function loadConversationScenario() {
+            if (currentScenario >= conversationScenarios.length) {
+                showResults();
+                return;
+            }
+
+            const scenario = conversationScenarios[currentScenario];
+            document.getElementById('scenarioNumber').textContent = currentScenario + 1;
+            document.getElementById('scenarioText').textContent = scenario.situation;
+            document.getElementById('conversationPrompt').textContent = scenario.prompt;
+            document.getElementById('conversationAnswer').value = '';
+            document.getElementById('conversationAnswer').focus();
+            
+            // Reset UI
+            document.getElementById('checkConvBtn').classList.remove('hidden');
+            document.getElementById('nextScenarioBtn').classList.add('hidden');
+            document.getElementById('conversationFeedback').classList.add('hidden');
+            document.getElementById('conversationHint').classList.add('hidden');
+            
+            document.getElementById('conversationScenario').classList.add('fade-in');
+        }
+
+        function checkConversation() {
+            const userAnswer = document.getElementById('conversationAnswer').value.trim().toLowerCase();
+            const scenario = conversationScenarios[currentScenario];
+            const feedback = document.getElementById('conversationFeedback');
+            
+            feedback.classList.remove('hidden');
+            
+            let isCorrect = false;
+            for (let phrase of scenario.expectedPhrases) {
+                if (userAnswer.includes(phrase.toLowerCase())) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+            
+            if (isCorrect) {
+                feedback.className = 'mt-4 p-4 rounded-lg bg-green-50 border-l-4 border-green-400';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">✅</span>
+                        <div>
+                            <p class="font-semibold text-green-800">¡Excelente!</p>
+                            <p class="text-green-700">Great use of Spanish phrases in context!</p>
+                        </div>
+                    </div>
+                `;
+                feedback.classList.add('bounce');
+            } else {
+                feedback.className = 'mt-4 p-4 rounded-lg bg-yellow-50 border-l-4 border-yellow-400';
+                feedback.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">💭</span>
+                        <div>
+                            <p class="font-semibold text-yellow-800">Good try!</p>
+                            <p class="text-yellow-700">Consider using: "${scenario.expectedPhrases[0]}"</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('checkConvBtn').classList.add('hidden');
+            document.getElementById('nextScenarioBtn').classList.remove('hidden');
+        }
+
+        function showConversationHint() {
+            const hint = document.getElementById('conversationHint');
+            hint.classList.remove('hidden');
+            hint.innerHTML = `<p class="text-yellow-800"><strong>Hint:</strong> ${conversationScenarios[currentScenario].hint}</p>`;
+        }
+
+        function nextScenario() {
+            currentScenario++;
+            loadConversationScenario();
+        }
+
+        function showResults() {
+            document.getElementById('writtenPractice').classList.add('hidden');
+            document.getElementById('conversationPractice').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        function restartPractice() {
+            if (currentMode === 'written') {
+                currentQuestion = 0;
+                document.getElementById('results').classList.add('hidden');
+                document.getElementById('writtenPractice').classList.remove('hidden');
+                loadWrittenQuestion();
+            } else {
+                currentScenario = 0;
+                document.getElementById('results').classList.add('hidden');
+                document.getElementById('conversationPractice').classList.remove('hidden');
+                loadConversationScenario();
+            }
+        }
+
+        function goHome() {
+            document.getElementById('practiceArea').classList.add('hidden');
+            document.getElementById('backButton').classList.add('hidden');
+            document.querySelector('.bg-white.rounded-xl.shadow-lg.p-6.mb-8').style.display = 'block';
+            document.getElementById('writtenPractice').classList.add('hidden');
+            document.getElementById('conversationPractice').classList.add('hidden');
+            document.getElementById('results').classList.add('hidden');
+        }
+
+        // Allow Enter key to submit answers
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (!document.getElementById('checkBtn').classList.contains('hidden')) {
+                    checkAnswer();
+                } else if (!document.getElementById('nextBtn').classList.contains('hidden')) {
+                    nextQuestion();
+                }
+            }
+        });
+
+        document.getElementById('conversationAnswer').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                if (!document.getElementById('checkConvBtn').classList.contains('hidden')) {
+                    checkConversation();
+                } else if (!document.getElementById('nextScenarioBtn').classList.contains('hidden')) {
+                    nextScenario();
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974c97e683d5585e',t:'MTc1NjE0MDY3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
