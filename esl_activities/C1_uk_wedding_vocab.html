@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Vocabulary Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #f0e6ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #6b46c1;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7c3aed;
+            font-size: 1.1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: white;
+            border: 2px solid #d1d5db;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #7c3aed;
+            color: white;
+            border-color: #7c3aed;
+        }
+
+        .tab-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .tab-btn.active:hover {
+            background: #6d28d9;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Flashcard Styles */
+        .flashcard-container {
+            text-align: center;
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 500px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .flashcard:hover {
+            transform: translateY(-5px);
+        }
+
+        .flashcard .term {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .flashcard .definition {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .flashcard .type {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .progress {
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        /* Practice Section Styles */
+        .practice-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .practice-item h3 {
+            color: #6b46c1;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .practice-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .practice-input:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        /* Conversation Prompts */
+        .prompt-card {
+            background: linear-gradient(135deg, #ffeef8 0%, #f0e6ff 100%);
+            border: 2px solid #e879f9;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .prompt-card h3 {
+            color: #a21caf;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .prompt-card p {
+            color: #6b7280;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .flashcard {
+                padding: 30px 20px;
+                min-height: 250px;
+            }
+            
+            .flashcard .term {
+                font-size: 1.6rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💒 Wedding Vocabulary Flashcards</h1>
+            <p>Master wedding terms and special vocabulary with interactive practice</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showSection('flashcards')" id="tab-flashcards">Flashcards</button>
+            <button class="tab-btn" onclick="showSection('practice')" id="tab-practice">Written Practice</button>
+            <button class="tab-btn" onclick="showSection('conversation')" id="tab-conversation">Conversation</button>
+            <button class="tab-btn" onclick="toggleLanguage()" id="lang-toggle">🇺🇦 UA</button>
+        </div>
+
+        <!-- Flashcards Section -->
+        <div id="flashcards" class="section active">
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="currentCard">1</div>
+                    <div class="stat-label">Current Card</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalCards">20</div>
+                    <div class="stat-label">Total Cards</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="correctCount">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" style="width: 5%"></div>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="type" id="cardType">Noun</div>
+                    <div class="term" id="cardTerm">Aisle</div>
+                    <div class="definition" id="cardDefinition" style="display: none;">
+                        A passage between rows of seats in a church, theater, or other building. In weddings, the bride walks down the aisle to reach the altar.
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="previousCard()">← Previous</button>
+                <button class="btn" onclick="flipCard()" id="flipBtn">Show Definition</button>
+                <button class="btn" onclick="markCorrect()" id="gotItBtn">✓ Got It!</button>
+                <button class="btn btn-secondary" onclick="nextCard()">Next →</button>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="shuffleCards()">🔀 Shuffle</button>
+                <button class="btn btn-secondary" onclick="resetProgress()">🔄 Reset</button>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="section">
+            <h2 style="color: #6b46c1; margin-bottom: 25px; text-align: center;">Written Practice Exercises</h2>
+            
+            <div class="practice-item">
+                <h3 id="fillBlanksTitle">Fill in the Blanks</h3>
+                <p style="margin-bottom: 15px;" id="fillBlanksDesc">Complete these wedding-related sentences:</p>
+                <div style="margin-bottom: 10px;">
+                    <p id="sentence1Text">1. The bride walked down the _______ in her beautiful gown.</p>
+                    <input type="text" class="practice-input" placeholder="Your answer" id="blank1">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <p id="sentence2Text">2. The wedding cake had three _______ decorated with flowers.</p>
+                    <input type="text" class="practice-input" placeholder="Your answer" id="blank2">
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <p id="sentence3Text">3. Her dress was _______ attention-grabbing with its intricate beadwork.</p>
+                    <input type="text" class="practice-input" placeholder="Your answer" id="blank3">
+                </div>
+                <button class="btn" onclick="checkBlanks()" id="checkAnswersBtn">Check Answers</button>
+                <div id="blanksResult" style="margin-top: 10px;"></div>
+            </div>
+
+            <div class="practice-item">
+                <h3 id="sentenceCreationTitle">Sentence Creation</h3>
+                <p style="margin-bottom: 15px;" id="sentenceCreationDesc">Write sentences using these words:</p>
+                <div style="margin-bottom: 15px;">
+                    <strong>Word: Bouquet</strong>
+                    <textarea class="practice-input" rows="2" placeholder="Write a sentence using 'bouquet'..." id="sentence1"></textarea>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Word: Ceremony</strong>
+                    <textarea class="practice-input" rows="2" placeholder="Write a sentence using 'ceremony'..." id="sentence2"></textarea>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Word: Reception</strong>
+                    <textarea class="practice-input" rows="2" placeholder="Write a sentence using 'reception'..." id="sentence3"></textarea>
+                </div>
+            </div>
+
+            <div class="practice-item">
+                <h3 id="wordAssocTitle">Word Associations</h3>
+                <p style="margin-bottom: 15px;" id="wordAssocDesc">List 3 words you associate with each term:</p>
+                <div style="margin-bottom: 15px;">
+                    <strong>Cluster:</strong>
+                    <input type="text" class="practice-input" placeholder="Word 1, Word 2, Word 3" id="assoc1">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>Magnetic:</strong>
+                    <input type="text" class="practice-input" placeholder="Word 1, Word 2, Word 3" id="assoc2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="section">
+            <h2 style="color: #6b46c1; margin-bottom: 25px; text-align: center;" id="conversationTitle">Conversation Practice</h2>
+            
+            <div class="prompt-card" id="rolePlay">
+                <h3>🎭 Role Play: Wedding Planner</h3>
+                <p>You are a wedding planner meeting with a couple. Use vocabulary words like "aisle," "tier," "cluster," and "reception" to discuss their wedding plans. Practice explaining different ceremony layouts and decoration options.</p>
+            </div>
+
+            <div class="prompt-card" id="discussion">
+                <h3>💬 Discussion Questions</h3>
+                <p><strong>1.</strong> Describe your ideal wedding ceremony. Where would guests sit? How would the aisle be decorated?<br><br>
+                <strong>2.</strong> What makes a wedding dress "high key" attention-grabbing? Discuss different styles and their impact.<br><br>
+                <strong>3.</strong> How would you arrange flowers in clusters around the venue? What colors would be most magnetic to guests?</p>
+            </div>
+
+            <div class="prompt-card" id="vocabChallenge">
+                <h3>🎯 Vocabulary Challenge</h3>
+                <p>Create a 2-minute speech about planning the perfect wedding reception. You must use at least 8 words from your vocabulary list. Focus on describing the venue, decorations, and atmosphere.</p>
+            </div>
+
+            <div class="prompt-card" id="storytelling">
+                <h3>📝 Storytelling Prompt</h3>
+                <p>Tell the story of a memorable wedding you attended (real or imaginary). Include details about walking down the aisle, the ceremony setup, the reception venue, and what made it special. Use descriptive vocabulary to paint a vivid picture.</p>
+            </div>
+
+            <div class="prompt-card" id="compare">
+                <h3>🤔 Compare and Contrast</h3>
+                <p>Compare traditional weddings in your culture with modern destination weddings. Discuss differences in ceremony structure, venue choices, and decoration styles. Use vocabulary words to describe specific elements.</p>
+            </div>
+
+            <div class="prompt-card" id="debate">
+                <h3>🎪 Debate Topic</h3>
+                <p>"Large, elaborate weddings are better than small, intimate ceremonies." Take a side and argue your position using wedding vocabulary. Consider factors like venue size, guest arrangements, and overall atmosphere.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            {
+                term: "Aisle",
+                definition: "A passage between rows of seats in a church, theater, or other building. In weddings, the bride walks down the aisle to reach the altar.",
+                type: "Noun",
+                termUA: "Прохід",
+                definitionUA: "Прохід між рядами сидінь у церкві, театрі або іншій будівлі. На весіллях наречена йде проходом до вівтаря.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Tier",
+                definition: "A level or layer, especially one of several in a structure. Wedding cakes often have multiple tiers stacked on top of each other.",
+                type: "Noun",
+                termUA: "Ярус",
+                definitionUA: "Рівень або шар, особливо один з кількох у структурі. Весільні торти часто мають кілька ярусів, складених один на одного.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Staircase",
+                definition: "A set of steps leading from one floor to another. Grand staircases are popular for dramatic wedding entrances and photos.",
+                type: "Noun",
+                termUA: "Сходи",
+                definitionUA: "Набір сходинок, що ведуть з одного поверху на інший. Величні сходи популярні для драматичних весільних входів та фотосесій.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "High Key",
+                definition: "Slang for something that is attention-grabbing, obvious, or surprisingly formal. 'That wedding dress is high key gorgeous!'",
+                type: "Slang/Adjective",
+                termUA: "Хай кі",
+                definitionUA: "Сленг для чогось, що привертає увагу, очевидного або несподівано формального. 'Та весільна сукня хай кі прекрасна!'",
+                typeUA: "Сленг/Прикметник"
+            },
+            {
+                term: "Cluster",
+                definition: "A group of similar things positioned closely together. Wedding decorations often feature clusters of flowers or candles.",
+                type: "Noun/Verb",
+                termUA: "Скупчення",
+                definitionUA: "Група подібних речей, розташованих близько одна до одної. Весільні прикраси часто містять скупчення квітів або свічок.",
+                typeUA: "Іменник/Дієслово"
+            },
+            {
+                term: "Magnetic",
+                definition: "Having the power to attract or charm people. A magnetic personality draws others in, like a charismatic bride or groom.",
+                type: "Adjective",
+                termUA: "Магнетичний",
+                definitionUA: "Мати силу приваблювати або зачаровувати людей. Магнетична особистість притягує інших, як харизматична наречена або наречений.",
+                typeUA: "Прикметник"
+            },
+            {
+                term: "Barrel",
+                definition: "A cylindrical container, often wooden. Rustic weddings might use wine barrels as decoration or cocktail tables.",
+                type: "Noun",
+                termUA: "Бочка",
+                definitionUA: "Циліндричний контейнер, часто дерев'яний. Рустикальні весілля можуть використовувати винні бочки як прикрасу або коктейльні столики.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Bouquet",
+                definition: "An arrangement of flowers, typically given as a gift or carried by a bride during her wedding ceremony.",
+                type: "Noun",
+                termUA: "Букет",
+                definitionUA: "Композиція з квітів, зазвичай дарується як подарунок або носиться нареченою під час весільної церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Ceremony",
+                definition: "A formal religious or public occasion celebrating a particular achievement or event, like a wedding ceremony.",
+                type: "Noun",
+                termUA: "Церемонія",
+                definitionUA: "Формальна релігійна або публічна подія, що святкує певне досягнення або подію, як весільна церемонія.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Reception",
+                definition: "A formal party held to celebrate a particular event, especially the party after a wedding ceremony.",
+                type: "Noun",
+                termUA: "Прийом",
+                definitionUA: "Формальна вечірка, що проводиться для святкування певної події, особливо вечірка після весільної церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Vows",
+                definition: "Solemn promises made by couples to each other during their wedding ceremony.",
+                type: "Noun",
+                termUA: "Клятви",
+                definitionUA: "Урочисті обіцянки, які дають пари один одному під час весільної церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Altar",
+                definition: "A raised platform or table used for religious ceremonies, where couples stand during their wedding.",
+                type: "Noun",
+                termUA: "Вівтар",
+                definitionUA: "Піднесена платформа або стіл, що використовується для релігійних церемоній, де стоять пари під час весілля.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Rehearsal",
+                definition: "A practice session before the actual wedding ceremony to ensure everything goes smoothly.",
+                type: "Noun",
+                termUA: "Репетиція",
+                definitionUA: "Тренувальна сесія перед справжньою весільною церемонією, щоб забезпечити гладкий перебіг усього.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Toast",
+                definition: "A speech given to honor the couple, usually accompanied by raising glasses in celebration.",
+                type: "Noun/Verb",
+                termUA: "Тост",
+                definitionUA: "Промова на честь пари, зазвичай супроводжується підняттям келихів на святкування.",
+                typeUA: "Іменник/Дієслово"
+            },
+            {
+                term: "Elegant",
+                definition: "Graceful and stylish in appearance or manner. Many brides aim for an elegant wedding style.",
+                type: "Adjective",
+                termUA: "Елегантний",
+                definitionUA: "Граціозний та стильний у зовнішності або манері. Багато наречених прагнуть елегантного весільного стилю.",
+                typeUA: "Прикметник"
+            },
+            {
+                term: "Radiant",
+                definition: "Shining brightly; glowing with happiness. Brides are often described as radiant on their wedding day.",
+                type: "Adjective",
+                termUA: "Сяючий",
+                definitionUA: "Яскраво світиться; сяє від щастя. Наречених часто описують як сяючих у день весілля.",
+                typeUA: "Прикметник"
+            },
+            {
+                term: "Celebrate",
+                definition: "To acknowledge a significant or happy day or event with a social gathering or enjoyable activity.",
+                type: "Verb",
+                termUA: "Святкувати",
+                definitionUA: "Відзначати значущий або щасливий день чи подію соціальним зібранням або приємною діяльністю.",
+                typeUA: "Дієслово"
+            },
+            {
+                term: "Cherish",
+                definition: "To protect and care for someone lovingly; to hold dear. Couples promise to cherish each other.",
+                type: "Verb",
+                termUA: "Плекати",
+                definitionUA: "Захищати та піклуватися про когось з любов'ю; дорожити. Пари обіцяють плекати один одного.",
+                typeUA: "Дієслово"
+            },
+            {
+                term: "Unity",
+                definition: "The state of being united or joined as a whole. Wedding ceremonies often include unity rituals.",
+                type: "Noun",
+                termUA: "Єдність",
+                definitionUA: "Стан об'єднання або з'єднання в ціле. Весільні церемонії часто включають ритуали єдності.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Commitment",
+                definition: "A pledge or promise to do something; dedication to a relationship or cause.",
+                type: "Noun",
+                termUA: "Зобов'язання",
+                definitionUA: "Обіцянка або обітниця зробити щось; відданість стосункам або справі.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Venue",
+                definition: "The place where an event takes place. Choosing the perfect wedding venue is crucial for couples.",
+                type: "Noun",
+                termUA: "Місце проведення",
+                definitionUA: "Місце, де відбувається подія. Вибір ідеального місця для весілля є вирішальним для пар.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Gown",
+                definition: "A long, elegant dress, especially one worn on formal occasions like weddings.",
+                type: "Noun",
+                termUA: "Сукня",
+                definitionUA: "Довга, елегантна сукня, особливо та, що носиться на формальних заходах, як весілля.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Tuxedo",
+                definition: "A man's formal evening suit, typically black with satin lapels, worn at weddings and formal events.",
+                type: "Noun",
+                termUA: "Смокінг",
+                definitionUA: "Чоловічий формальний вечірній костюм, зазвичай чорний з атласними лацканами, що носиться на весіллях та формальних заходах.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Bridesmaid",
+                definition: "A woman who assists and accompanies a bride on her wedding day.",
+                type: "Noun",
+                termUA: "Подружка нареченої",
+                definitionUA: "Жінка, яка допомагає та супроводжує наречену в день весілля.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Groomsman",
+                definition: "A man who assists the groom on his wedding day and participates in the wedding ceremony.",
+                type: "Noun",
+                termUA: "Друг нареченого",
+                definitionUA: "Чоловік, який допомагає нареченому в день весілля та бере участь у весільній церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Honeymoon",
+                definition: "A vacation taken by newlyweds immediately after their wedding to celebrate their marriage.",
+                type: "Noun",
+                termUA: "Медовий місяць",
+                definitionUA: "Відпустка, яку беруть молодята одразу після весілля, щоб відсвяткувати свій шлюб.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Anniversary",
+                definition: "The yearly recurrence of the date of a past event, especially a wedding.",
+                type: "Noun",
+                termUA: "Річниця",
+                definitionUA: "Щорічне повторення дати минулої події, особливо весілля.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Engagement",
+                definition: "A formal agreement to get married; the period between proposal and wedding.",
+                type: "Noun",
+                termUA: "Заручини",
+                definitionUA: "Формальна угода одружитися; період між пропозицією та весіллям.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Ring Bearer",
+                definition: "A young person, usually a child, who carries the wedding rings during the ceremony.",
+                type: "Noun",
+                termUA: "Носій кілець",
+                definitionUA: "Молода людина, зазвичай дитина, яка несе весільні каблучки під час церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Flower Girl",
+                definition: "A young girl who scatters flower petals before the bride as she walks down the aisle.",
+                type: "Noun",
+                termUA: "Дівчинка з квітами",
+                definitionUA: "Маленька дівчинка, яка розсипає пелюстки квітів перед нареченою, коли та йде проходом.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Processional",
+                definition: "The formal entrance of the wedding party and bride into the ceremony space.",
+                type: "Noun",
+                termUA: "Процесія",
+                definitionUA: "Формальний вхід весільної компанії та нареченої до місця церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Recessional",
+                definition: "The formal exit of the newly married couple and wedding party after the ceremony.",
+                type: "Noun",
+                termUA: "Вихідна процесія",
+                definitionUA: "Формальний вихід щойно одруженої пари та весільної компанії після церемонії.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Officiant",
+                definition: "The person who performs the wedding ceremony, such as a minister, priest, or judge.",
+                type: "Noun",
+                termUA: "Офіціант",
+                definitionUA: "Особа, яка проводить весільну церемонію, наприклад, священник або суддя.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Centerpiece",
+                definition: "A decorative arrangement placed in the center of a table, often featuring flowers or candles.",
+                type: "Noun",
+                termUA: "Центральна композиція",
+                definitionUA: "Декоративна композиція, розміщена в центрі столу, часто з квітами або свічками.",
+                typeUA: "Іменник"
+            },
+            {
+                term: "Catering",
+                definition: "The business of providing food and drink for events like weddings.",
+                type: "Noun",
+                termUA: "Кейтеринг",
+                definitionUA: "Бізнес з надання їжі та напоїв для заходів, таких як весілля.",
+                typeUA: "Іменник"
+            }
+        ];
+
+        let currentCardIndex = 0;
+        let isFlipped = false;
+        let correctAnswers = 0;
+        let shuffledCards = [...vocabulary];
+        let currentLanguage = 'en';
+
+        const translations = {
+            en: {
+                title: "💒 Wedding Vocabulary Flashcards",
+                subtitle: "Master wedding terms and special vocabulary with interactive practice",
+                flashcards: "Flashcards",
+                practice: "Written Practice",
+                conversation: "Conversation",
+                currentCard: "Current Card",
+                totalCards: "Total Cards",
+                correct: "Correct",
+                showDefinition: "Show Definition",
+                showTerm: "Show Term",
+                gotIt: "✓ Got It!",
+                previous: "← Previous",
+                next: "Next →",
+                shuffle: "🔀 Shuffle",
+                reset: "🔄 Reset",
+                practiceTitle: "Written Practice Exercises",
+                fillBlanks: "Fill in the Blanks",
+                fillBlanksDesc: "Complete these wedding-related sentences:",
+                sentence1: "1. The bride walked down the _______ in her beautiful gown.",
+                sentence2: "2. The wedding cake had three _______ decorated with flowers.",
+                sentence3: "3. Her dress was _______ attention-grabbing with its intricate beadwork.",
+                checkAnswers: "Check Answers",
+                sentenceCreation: "Sentence Creation",
+                sentenceDesc: "Write sentences using these words:",
+                wordAssoc: "Word Associations",
+                wordAssocDesc: "List 3 words you associate with each term:",
+                conversationTitle: "Conversation Practice"
+            },
+            ua: {
+                title: "💒 Картки весільної лексики",
+                subtitle: "Опануйте весільні терміни та спеціальну лексику з інтерактивною практикою",
+                flashcards: "Картки",
+                practice: "Письмова практика",
+                conversation: "Розмова",
+                currentCard: "Поточна картка",
+                totalCards: "Всього карток",
+                correct: "Правильно",
+                showDefinition: "Показати визначення",
+                showTerm: "Показати термін",
+                gotIt: "✓ Зрозуміло!",
+                previous: "← Попередня",
+                next: "Наступна →",
+                shuffle: "🔀 Перемішати",
+                reset: "🔄 Скинути",
+                practiceTitle: "Вправи для письмової практики",
+                fillBlanks: "Заповніть пропуски",
+                fillBlanksDesc: "Доповніть ці речення, пов'язані з весіллям:",
+                sentence1: "1. Наречена йшла _______ у своїй прекрасній сукні.",
+                sentence2: "2. Весільний торт мав три _______, прикрашені квітами.",
+                sentence3: "3. Її сукня була _______ привертаючою увагу своїм складним бісерним шиттям.",
+                checkAnswers: "Перевірити відповіді",
+                sentenceCreation: "Створення речень",
+                sentenceDesc: "Напишіть речення, використовуючи ці слова:",
+                wordAssoc: "Словесні асоціації",
+                wordAssocDesc: "Перерахуйте 3 слова, які ви асоціюєте з кожним терміном:",
+                conversationTitle: "Практика розмови"
+            }
+        };
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and activate tab
+            document.getElementById(sectionName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ua' : 'en';
+            updateLanguage();
+            updateCard();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // Update header
+            document.querySelector('.header h1').textContent = t.title;
+            document.querySelector('.header p').textContent = t.subtitle;
+            
+            // Update navigation
+            document.getElementById('tab-flashcards').textContent = t.flashcards;
+            document.getElementById('tab-practice').textContent = t.practice;
+            document.getElementById('tab-conversation').textContent = t.conversation;
+            document.getElementById('lang-toggle').textContent = currentLanguage === 'en' ? '🇺🇦 UA' : '🇺🇸 EN';
+            
+            // Update flashcard section
+            document.querySelector('.stat-label').textContent = t.currentCard;
+            document.querySelectorAll('.stat-label')[1].textContent = t.totalCards;
+            document.querySelectorAll('.stat-label')[2].textContent = t.correct;
+            
+            // Update buttons
+            document.querySelector('.controls .btn-secondary').textContent = t.previous;
+            document.querySelectorAll('.controls .btn-secondary')[1].textContent = t.next;
+            document.querySelectorAll('.controls .btn-secondary')[2].textContent = t.shuffle;
+            document.querySelectorAll('.controls .btn-secondary')[3].textContent = t.reset;
+            
+            const gotItBtn = document.getElementById('gotItBtn');
+            if (gotItBtn) gotItBtn.textContent = t.gotIt;
+            
+            // Update practice section
+            const practiceTitle = document.querySelector('#practice h2');
+            if (practiceTitle) practiceTitle.textContent = t.practiceTitle;
+            
+            // Update practice elements
+            const fillBlanksTitle = document.getElementById('fillBlanksTitle');
+            if (fillBlanksTitle) fillBlanksTitle.textContent = t.fillBlanks;
+            
+            const fillBlanksDesc = document.getElementById('fillBlanksDesc');
+            if (fillBlanksDesc) fillBlanksDesc.textContent = t.fillBlanksDesc;
+            
+            const sentence1Text = document.getElementById('sentence1Text');
+            if (sentence1Text) sentence1Text.textContent = t.sentence1;
+            
+            const sentence2Text = document.getElementById('sentence2Text');
+            if (sentence2Text) sentence2Text.textContent = t.sentence2;
+            
+            const sentence3Text = document.getElementById('sentence3Text');
+            if (sentence3Text) sentence3Text.textContent = t.sentence3;
+            
+            const checkAnswersBtn = document.getElementById('checkAnswersBtn');
+            if (checkAnswersBtn) checkAnswersBtn.textContent = t.checkAnswers;
+            
+            const sentenceCreationTitle = document.getElementById('sentenceCreationTitle');
+            if (sentenceCreationTitle) sentenceCreationTitle.textContent = t.sentenceCreation;
+            
+            const sentenceCreationDesc = document.getElementById('sentenceCreationDesc');
+            if (sentenceCreationDesc) sentenceCreationDesc.textContent = t.sentenceDesc;
+            
+            const wordAssocTitle = document.getElementById('wordAssocTitle');
+            if (wordAssocTitle) wordAssocTitle.textContent = t.wordAssoc;
+            
+            const wordAssocDesc = document.getElementById('wordAssocDesc');
+            if (wordAssocDesc) wordAssocDesc.textContent = t.wordAssocDesc;
+            
+            const conversationTitle = document.getElementById('conversationTitle');
+            if (conversationTitle) conversationTitle.textContent = t.conversationTitle;
+            
+            // Update conversation prompts
+            updateConversationPrompts();
+        }
+        
+        function updateConversationPrompts() {
+            const isUkrainian = currentLanguage === 'ua';
+            
+            if (isUkrainian) {
+                document.querySelector('#rolePlay h3').textContent = '🎭 Рольова гра: Весільний планувальник';
+                document.querySelector('#rolePlay p').textContent = 'Ви весільний планувальник, який зустрічається з парою. Використовуйте словникові слова як "прохід", "ярус", "скупчення" та "прийом", щоб обговорити їхні весільні плани. Практикуйте пояснення різних планувань церемонії та варіантів декору.';
+                
+                document.querySelector('#discussion h3').textContent = '💬 Питання для обговорення';
+                document.querySelector('#discussion p').innerHTML = '<strong>1.</strong> Опишіть вашу ідеальну весільну церемонію. Де сидітимуть гості? Як буде прикрашений прохід?<br><br><strong>2.</strong> Що робить весільну сукню "хай кі" привертаючою увагу? Обговоріть різні стилі та їх вплив.<br><br><strong>3.</strong> Як би ви розташували квіти скупченнями навколо місця проведення? Які кольори були б найбільш магнетичними для гостей?';
+                
+                document.querySelector('#vocabChallenge h3').textContent = '🎯 Словниковий виклик';
+                document.querySelector('#vocabChallenge p').textContent = 'Створіть 2-хвилинну промову про планування ідеального весільного прийому. Ви повинні використати принаймні 8 слів зі свого словникового списку. Зосередьтеся на описі місця проведення, декорацій та атмосфери.';
+                
+                document.querySelector('#storytelling h3').textContent = '📝 Розповідь історії';
+                document.querySelector('#storytelling p').textContent = 'Розкажіть історію пам\'ятного весілля, на якому ви були (справжнього або уявного). Включіть деталі про ходіння проходом, налаштування церемонії, місце прийому та те, що зробило його особливим. Використовуйте описову лексику, щоб намалювати яскраву картину.';
+                
+                document.querySelector('#compare h3').textContent = '🤔 Порівняння та протиставлення';
+                document.querySelector('#compare p').textContent = 'Порівняйте традиційні весілля у вашій культурі з сучасними весіллями в екзотичних місцях. Обговоріть відмінності в структурі церемонії, виборі місць та стилях декору. Використовуйте словникові слова для опису конкретних елементів.';
+                
+                document.querySelector('#debate h3').textContent = '🎪 Тема для дебатів';
+                document.querySelector('#debate p').textContent = '"Великі, розкішні весілля кращі за маленькі, інтимні церемонії." Оберіть сторону та аргументуйте свою позицію, використовуючи весільну лексику. Розгляньте такі фактори, як розмір місця проведення, розташування гостей та загальна атмосфера.';
+            } else {
+                document.querySelector('#rolePlay h3').textContent = '🎭 Role Play: Wedding Planner';
+                document.querySelector('#rolePlay p').textContent = 'You are a wedding planner meeting with a couple. Use vocabulary words like "aisle," "tier," "cluster," and "reception" to discuss their wedding plans. Practice explaining different ceremony layouts and decoration options.';
+                
+                document.querySelector('#discussion h3').textContent = '💬 Discussion Questions';
+                document.querySelector('#discussion p').innerHTML = '<strong>1.</strong> Describe your ideal wedding ceremony. Where would guests sit? How would the aisle be decorated?<br><br><strong>2.</strong> What makes a wedding dress "high key" attention-grabbing? Discuss different styles and their impact.<br><br><strong>3.</strong> How would you arrange flowers in clusters around the venue? What colors would be most magnetic to guests?';
+                
+                document.querySelector('#vocabChallenge h3').textContent = '🎯 Vocabulary Challenge';
+                document.querySelector('#vocabChallenge p').textContent = 'Create a 2-minute speech about planning the perfect wedding reception. You must use at least 8 words from your vocabulary list. Focus on describing the venue, decorations, and atmosphere.';
+                
+                document.querySelector('#storytelling h3').textContent = '📝 Storytelling Prompt';
+                document.querySelector('#storytelling p').textContent = 'Tell the story of a memorable wedding you attended (real or imaginary). Include details about walking down the aisle, the ceremony setup, the reception venue, and what made it special. Use descriptive vocabulary to paint a vivid picture.';
+                
+                document.querySelector('#compare h3').textContent = '🤔 Compare and Contrast';
+                document.querySelector('#compare p').textContent = 'Compare traditional weddings in your culture with modern destination weddings. Discuss differences in ceremony structure, venue choices, and decoration styles. Use vocabulary words to describe specific elements.';
+                
+                document.querySelector('#debate h3').textContent = '🎪 Debate Topic';
+                document.querySelector('#debate p').textContent = '"Large, elaborate weddings are better than small, intimate ceremonies." Take a side and argue your position using wedding vocabulary. Consider factors like venue size, guest arrangements, and overall atmosphere.';
+            }
+        }
+
+        function updateCard() {
+            const card = shuffledCards[currentCardIndex];
+            const isUkrainian = currentLanguage === 'ua';
+            
+            document.getElementById('cardTerm').textContent = isUkrainian ? card.termUA : card.term;
+            document.getElementById('cardDefinition').textContent = isUkrainian ? card.definitionUA : card.definition;
+            document.getElementById('cardType').textContent = isUkrainian ? card.typeUA : card.type;
+            document.getElementById('currentCard').textContent = currentCardIndex + 1;
+            document.getElementById('totalCards').textContent = shuffledCards.length;
+            
+            // Update progress bar
+            const progress = ((currentCardIndex + 1) / shuffledCards.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Reset flip state
+            isFlipped = false;
+            document.getElementById('cardDefinition').style.display = 'none';
+            document.getElementById('cardTerm').style.display = 'block';
+            
+            const t = translations[currentLanguage];
+            document.getElementById('flipBtn').textContent = t.showDefinition;
+        }
+
+        function flipCard() {
+            const t = translations[currentLanguage];
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                document.getElementById('cardTerm').style.display = 'none';
+                document.getElementById('cardDefinition').style.display = 'block';
+                document.getElementById('flipBtn').textContent = t.showTerm;
+            } else {
+                document.getElementById('cardTerm').style.display = 'block';
+                document.getElementById('cardDefinition').style.display = 'none';
+                document.getElementById('flipBtn').textContent = t.showDefinition;
+            }
+        }
+
+        function nextCard() {
+            if (currentCardIndex < shuffledCards.length - 1) {
+                currentCardIndex++;
+                updateCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCard();
+            }
+        }
+
+        function markCorrect() {
+            correctAnswers++;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            nextCard();
+        }
+
+        function shuffleCards() {
+            for (let i = shuffledCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledCards[i], shuffledCards[j]] = [shuffledCards[j], shuffledCards[i]];
+            }
+            currentCardIndex = 0;
+            updateCard();
+        }
+
+        function resetProgress() {
+            currentCardIndex = 0;
+            correctAnswers = 0;
+            shuffledCards = [...vocabulary];
+            document.getElementById('correctCount').textContent = '0';
+            updateCard();
+        }
+
+        function checkBlanks() {
+            const answers = {
+                blank1: 'aisle',
+                blank2: 'tiers',
+                blank3: 'high key'
+            };
+            
+            let result = '';
+            let correct = 0;
+            
+            Object.keys(answers).forEach(id => {
+                const userAnswer = document.getElementById(id).value.toLowerCase().trim();
+                const correctAnswer = answers[id];
+                
+                if (userAnswer === correctAnswer) {
+                    result += `✓ ${correctAnswer} - Correct!<br>`;
+                    correct++;
+                } else {
+                    result += `✗ ${correctAnswer} - Try again (you wrote: ${userAnswer})<br>`;
+                }
+            });
+            
+            result += `<br><strong>Score: ${correct}/3</strong>`;
+            document.getElementById('blanksResult').innerHTML = result;
+        }
+
+        // Initialize the app
+        updateCard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97570cd0d7170fcb',t:'MTc1NjI1MDMyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
