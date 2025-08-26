@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance & Direction Practice - ESL Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .language-toggle {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-toggle:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #44a08d, #4ecdc4);
+        }
+
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .flip-card-front {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            color: #333;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(45deg, #a8edea, #fed6e3);
+            color: #333;
+            transform: rotateY(180deg);
+        }
+
+        .card-word {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-type {
+            background: rgba(255,255,255,0.8);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .card-example {
+            font-style: italic;
+            font-size: 1rem;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .practice-area {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .prompt-card {
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .prompt-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #d63384;
+            margin-bottom: 10px;
+        }
+
+        .prompt-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .practice-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin: 10px 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .practice-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .category-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn.active {
+            background: #28a745;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(45deg, #84fab0, #8fd3f4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="mainTitle">🕺 Dance & Direction Practice 💃</h1>
+            <p id="subtitle">Learn English movement words with fun!</p>
+            <button class="language-toggle" onclick="toggleLanguage()" id="langBtn">Español</button>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showSection('directions')" id="directionsBtn">Directions</button>
+            <button class="nav-btn" onclick="showSection('dance')" id="danceBtn">Dance Terms</button>
+            <button class="nav-btn" onclick="showSection('practice')" id="practiceBtn">Practice</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="cardsViewed">0</div>
+                <div class="stat-label" id="cardsLabel">Cards Viewed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="practiceCount">0</div>
+                <div class="stat-label" id="practiceLabel">Practice Sessions</div>
+            </div>
+        </div>
+
+        <!-- Directions Section -->
+        <div id="directions" class="section active">
+            <h2 id="directionsTitle">🧭 Direction & Movement Words</h2>
+            <div class="category-selector">
+                <button class="category-btn active" onclick="filterCards('directions', 'all')" id="allDirectionsBtn">All</button>
+                <button class="category-btn" onclick="filterCards('directions', 'noun')" id="nounsBtn">Nouns</button>
+                <button class="category-btn" onclick="filterCards('directions', 'verb')" id="verbsBtn">Verbs</button>
+                <button class="category-btn" onclick="filterCards('directions', 'adjective')" id="adjectivesBtn">Adjectives</button>
+            </div>
+            <div class="cards-container" id="directionsCards"></div>
+        </div>
+
+        <!-- Dance Section -->
+        <div id="dance" class="section">
+            <h2 id="danceTitle">💃 Dance & Movement Terms</h2>
+            <div class="category-selector">
+                <button class="category-btn active" onclick="filterCards('dance', 'all')" id="allDanceBtn">All</button>
+                <button class="category-btn" onclick="filterCards('dance', 'ballet')" id="balletBtn">Ballet</button>
+                <button class="category-btn" onclick="filterCards('dance', 'general')" id="generalBtn">General</button>
+            </div>
+            <div class="cards-container" id="danceCards"></div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="section">
+            <h2 id="practiceTitle">📝 Practice Time!</h2>
+            <div class="practice-area">
+                <div class="prompt-card">
+                    <div class="prompt-title" id="writingPromptTitle">✍️ Writing Practice</div>
+                    <div class="prompt-text" id="writingPrompt">Write 3 sentences using direction words. Example: "Turn left at the corner."</div>
+                    <textarea class="practice-input" id="writingInput" rows="4" placeholder="Write your sentences here..."></textarea>
+                    <button class="btn" onclick="newWritingPrompt()" id="newWritingBtn">New Prompt</button>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="prompt-title" id="speakingPromptTitle">🗣️ Speaking Practice</div>
+                    <div class="prompt-text" id="speakingPrompt">Describe how to dance. Use at least 5 dance words.</div>
+                    <button class="btn" onclick="newSpeakingPrompt()" id="newSpeakingBtn">New Prompt</button>
+                    <button class="btn" onclick="completePractice()" id="completeBtn">Mark Complete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let cardsViewedCount = 0;
+        let practiceSessionCount = 0;
+
+        const translations = {
+            en: {
+                mainTitle: "🕺 Dance & Direction Practice 💃",
+                subtitle: "Learn English movement words with fun!",
+                langBtn: "Español",
+                directionsBtn: "Directions",
+                danceBtn: "Dance Terms",
+                practiceBtn: "Practice",
+                cardsLabel: "Cards Viewed",
+                practiceLabel: "Practice Sessions",
+                directionsTitle: "🧭 Direction & Movement Words",
+                danceTitle: "💃 Dance & Movement Terms",
+                practiceTitle: "📝 Practice Time!",
+                allDirectionsBtn: "All",
+                nounsBtn: "Nouns",
+                verbsBtn: "Verbs",
+                adjectivesBtn: "Adjectives",
+                allDanceBtn: "All",
+                balletBtn: "Ballet",
+                generalBtn: "General",
+                writingPromptTitle: "✍️ Writing Practice",
+                speakingPromptTitle: "🗣️ Speaking Practice",
+                newWritingBtn: "New Prompt",
+                newSpeakingBtn: "New Prompt",
+                completeBtn: "Mark Complete"
+            },
+            es: {
+                mainTitle: "🕺 Práctica de Danza y Direcciones 💃",
+                subtitle: "¡Aprende palabras de movimiento en inglés con diversión!",
+                langBtn: "English",
+                directionsBtn: "Direcciones",
+                danceBtn: "Términos de Danza",
+                practiceBtn: "Práctica",
+                cardsLabel: "Tarjetas Vistas",
+                practiceLabel: "Sesiones de Práctica",
+                directionsTitle: "🧭 Palabras de Dirección y Movimiento",
+                danceTitle: "💃 Términos de Danza y Movimiento",
+                practiceTitle: "📝 ¡Hora de Practicar!",
+                allDirectionsBtn: "Todas",
+                nounsBtn: "Sustantivos",
+                verbsBtn: "Verbos",
+                adjectivesBtn: "Adjetivos",
+                allDanceBtn: "Todas",
+                balletBtn: "Ballet",
+                generalBtn: "General",
+                writingPromptTitle: "✍️ Práctica de Escritura",
+                speakingPromptTitle: "🗣️ Práctica de Habla",
+                newWritingBtn: "Nueva Pregunta",
+                newSpeakingBtn: "Nueva Pregunta",
+                completeBtn: "Marcar Completo"
+            }
+        };
+
+        const directionsData = [
+            {word: "left", spanish: "izquierda", type: "noun", example: "Turn left at the corner.", spanishExample: "Gira a la izquierda en la esquina."},
+            {word: "right", spanish: "derecha", type: "noun", example: "Raise your right hand.", spanishExample: "Levanta tu mano derecha."},
+            {word: "forward", spanish: "adelante", type: "adjective", example: "Step forward slowly.", spanishExample: "Da un paso adelante lentamente."},
+            {word: "backward", spanish: "hacia atrás", type: "adjective", example: "Move backward three steps.", spanishExample: "Muévete hacia atrás tres pasos."},
+            {word: "up", spanish: "arriba", type: "adjective", example: "Look up at the sky.", spanishExample: "Mira hacia arriba al cielo."},
+            {word: "down", spanish: "abajo", type: "adjective", example: "Put your hands down.", spanishExample: "Baja las manos."},
+            {word: "turn", spanish: "girar", type: "verb", example: "Turn around slowly.", spanishExample: "Gira lentamente."},
+            {word: "spin", spanish: "dar vueltas", type: "verb", example: "Spin in a circle.", spanishExample: "Da vueltas en círculo."},
+            {word: "jump", spanish: "saltar", type: "verb", example: "Jump high in the air.", spanishExample: "Salta alto en el aire."},
+            {word: "step", spanish: "paso", type: "noun", example: "Take a big step.", spanishExample: "Da un paso grande."},
+            {word: "walk", spanish: "caminar", type: "verb", example: "Walk to the door.", spanishExample: "Camina hacia la puerta."},
+            {word: "run", spanish: "correr", type: "verb", example: "Run fast to the finish.", spanishExample: "Corre rápido hasta la meta."},
+            {word: "stop", spanish: "parar", type: "verb", example: "Stop when I say go.", spanishExample: "Para cuando diga ya."},
+            {word: "start", spanish: "empezar", type: "verb", example: "Start moving now.", spanishExample: "Empieza a moverte ahora."},
+            {word: "bend", spanish: "doblar", type: "verb", example: "Bend your knees.", spanishExample: "Dobla las rodillas."},
+            {word: "stretch", spanish: "estirar", type: "verb", example: "Stretch your arms up.", spanishExample: "Estira los brazos hacia arriba."},
+            {word: "lean", spanish: "inclinarse", type: "verb", example: "Lean to the left.", spanishExample: "Inclínate hacia la izquierda."},
+            {word: "crouch", spanish: "agacharse", type: "verb", example: "Crouch down low.", spanishExample: "Agáchate bien bajo."},
+            {word: "stand", spanish: "pararse", type: "verb", example: "Stand up straight.", spanishExample: "Párate derecho."},
+            {word: "sit", spanish: "sentarse", type: "verb", example: "Sit on the chair.", spanishExample: "Siéntate en la silla."},
+            {word: "raise", spanish: "levantar", type: "verb", example: "Raise your hand.", spanishExample: "Levanta la mano."},
+            {word: "lower", spanish: "bajar", type: "verb", example: "Lower your voice.", spanishExample: "Baja la voz."},
+            {word: "side", spanish: "lado", type: "noun", example: "Move to the side.", spanishExample: "Muévete al lado."},
+            {word: "center", spanish: "centro", type: "noun", example: "Go to the center.", spanishExample: "Ve al centro."}
+        ];
+
+        const danceData = [
+            {word: "ballet", spanish: "ballet", type: "ballet", example: "She studies ballet every day.", spanishExample: "Ella estudia ballet todos los días."},
+            {word: "plié", spanish: "plié", type: "ballet", example: "Do a plié with bent knees.", spanishExample: "Haz un plié con las rodillas dobladas."},
+            {word: "pirouette", spanish: "pirueta", type: "ballet", example: "She did a perfect pirouette.", spanishExample: "Hizo una pirueta perfecta."},
+            {word: "arabesque", spanish: "arabesco", type: "ballet", example: "Hold the arabesque position.", spanishExample: "Mantén la posición de arabesco."},
+            {word: "grand jeté", spanish: "gran jeté", type: "ballet", example: "The grand jeté looks like flying.", spanishExample: "El gran jeté parece volar."},
+            {word: "sway", spanish: "balancearse", type: "general", example: "Sway gently to the music.", spanishExample: "Balancéate suavemente con la música."},
+            {word: "twirl", spanish: "girar", type: "general", example: "Twirl your dress around.", spanishExample: "Haz girar tu vestido."},
+            {word: "dip", spanish: "inclinar", type: "general", example: "Dip your partner low.", spanishExample: "Inclina a tu pareja hacia abajo."},
+            {word: "scoop", spanish: "recoger", type: "general", example: "Scoop your arms up high.", spanishExample: "Recoge los brazos hacia arriba."},
+            {word: "glide", spanish: "deslizarse", type: "general", example: "Glide across the floor.", spanishExample: "Deslízate por el suelo."},
+            {word: "tap", spanish: "zapateado", type: "general", example: "Tap your feet to the beat.", spanishExample: "Zapatea al ritmo."},
+            {word: "shuffle", spanish: "arrastrar", type: "general", example: "Shuffle your feet sideways.", spanishExample: "Arrastra los pies hacia los lados."},
+            {word: "leap", spanish: "salto", type: "general", example: "Take a big leap forward.", spanishExample: "Da un gran salto hacia adelante."},
+            {word: "pose", spanish: "pose", type: "general", example: "Hold that beautiful pose.", spanishExample: "Mantén esa hermosa pose."},
+            {word: "flow", spanish: "fluir", type: "general", example: "Let your movements flow.", spanishExample: "Deja que tus movimientos fluyan."},
+            {word: "rhythm", spanish: "ritmo", type: "general", example: "Follow the rhythm of the music.", spanishExample: "Sigue el ritmo de la música."},
+            {word: "grace", spanish: "gracia", type: "general", example: "Dance with grace and beauty.", spanishExample: "Baila con gracia y belleza."},
+            {word: "expression", spanish: "expresión", type: "general", example: "Show expression in your face.", spanishExample: "Muestra expresión en tu cara."},
+            {word: "balance", spanish: "equilibrio", type: "general", example: "Keep your balance on one foot.", spanishExample: "Mantén el equilibrio en un pie."},
+            {word: "coordination", spanish: "coordinación", type: "general", example: "Good coordination is important.", spanishExample: "La buena coordinación es importante."},
+            {word: "chassé", spanish: "chassé", type: "ballet", example: "Do a chassé to the right.", spanishExample: "Haz un chassé hacia la derecha."},
+            {word: "tendu", spanish: "tendu", type: "ballet", example: "Point your foot in tendu.", spanishExample: "Apunta el pie en tendu."},
+            {word: "relevé", spanish: "relevé", type: "ballet", example: "Rise up on your toes in relevé.", spanishExample: "Levántate en las puntas en relevé."},
+            {word: "port de bras", spanish: "port de bras", type: "ballet", example: "Move your arms in port de bras.", spanishExample: "Mueve los brazos en port de bras."}
+        ];
+
+        const writingPrompts = {
+            en: [
+                "Write 3 sentences using direction words. Example: 'Turn left at the corner.'",
+                "Describe how to get from your house to school using direction words.",
+                "Write about a dance performance you watched. Use dance terms.",
+                "Create a story about someone learning to dance for the first time.",
+                "Write instructions for a simple dance move using both direction and dance words.",
+                "Describe your favorite type of dance and why you like it.",
+                "Write about a time when you had to give directions to someone.",
+                "Create a dialogue between a dance teacher and student."
+            ],
+            es: [
+                "Escribe 3 oraciones usando palabras de dirección. Ejemplo: 'Gira a la izquierda en la esquina.'",
+                "Describe cómo ir de tu casa a la escuela usando palabras de dirección.",
+                "Escribe sobre una presentación de danza que viste. Usa términos de danza.",
+                "Crea una historia sobre alguien aprendiendo a bailar por primera vez.",
+                "Escribe instrucciones para un movimiento de baile simple usando palabras de dirección y danza.",
+                "Describe tu tipo favorito de danza y por qué te gusta.",
+                "Escribe sobre una vez que tuviste que dar direcciones a alguien.",
+                "Crea un diálogo entre un maestro de danza y un estudiante."
+            ]
+        };
+
+        const speakingPrompts = {
+            en: [
+                "Describe how to dance. Use at least 5 dance words.",
+                "Give directions from the classroom to the cafeteria.",
+                "Explain your favorite dance move step by step.",
+                "Describe a ballet performance using ballet terms.",
+                "Tell someone how to do a simple warm-up exercise.",
+                "Explain how to teach someone to spin safely.",
+                "Describe the difference between walking and dancing.",
+                "Talk about why dance is good exercise."
+            ],
+            es: [
+                "Describe cómo bailar. Usa al menos 5 palabras de danza.",
+                "Da direcciones del salón de clases a la cafetería.",
+                "Explica tu movimiento de baile favorito paso a paso.",
+                "Describe una presentación de ballet usando términos de ballet.",
+                "Dile a alguien cómo hacer un ejercicio simple de calentamiento.",
+                "Explica cómo enseñar a alguien a girar de forma segura.",
+                "Describe la diferencia entre caminar y bailar.",
+                "Habla sobre por qué la danza es buen ejercicio."
+            ]
+        };
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+            renderCards();
+        }
+
+        function updateLanguage() {
+            const texts = translations[currentLanguage];
+            Object.keys(texts).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = texts[key];
+                }
+            });
+            
+            // Update placeholders
+            const writingInput = document.getElementById('writingInput');
+            if (writingInput) {
+                writingInput.placeholder = currentLanguage === 'en' ? 
+                    'Write your sentences here...' : 'Escribe tus oraciones aquí...';
+            }
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function createCard(data, category) {
+            const card = document.createElement('div');
+            card.className = 'flip-card';
+            card.onclick = () => {
+                card.classList.toggle('flipped');
+                cardsViewedCount++;
+                document.getElementById('cardsViewed').textContent = cardsViewedCount;
+            };
+
+            const word = currentLanguage === 'en' ? data.word : data.spanish;
+            const translation = currentLanguage === 'en' ? data.spanish : data.word;
+            const example = currentLanguage === 'en' ? data.example : data.spanishExample;
+            const typeLabel = currentLanguage === 'en' ? data.type : 
+                (data.type === 'noun' ? 'sustantivo' : 
+                 data.type === 'verb' ? 'verbo' : 
+                 data.type === 'adjective' ? 'adjetivo' : data.type);
+
+            card.innerHTML = `
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-word">${word}</div>
+                        <div class="card-type">${typeLabel}</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">
+                            ${currentLanguage === 'en' ? 'Click to see more!' : '¡Haz clic para ver más!'}
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-word">${translation}</div>
+                        <div class="card-example">${example}</div>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function renderCards(category = 'directions', filter = 'all') {
+            const container = document.getElementById(category + 'Cards');
+            container.innerHTML = '';
+
+            const data = category === 'directions' ? directionsData : danceData;
+            const filteredData = filter === 'all' ? data : data.filter(item => item.type === filter);
+
+            filteredData.forEach(item => {
+                const card = createCard(item, category);
+                container.appendChild(card);
+            });
+        }
+
+        function filterCards(category, filter) {
+            // Update active button
+            const buttons = document.querySelectorAll(`#${category} .category-btn`);
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            renderCards(category, filter);
+        }
+
+        function newWritingPrompt() {
+            const prompts = writingPrompts[currentLanguage];
+            const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById('writingPrompt').textContent = randomPrompt;
+        }
+
+        function newSpeakingPrompt() {
+            const prompts = speakingPrompts[currentLanguage];
+            const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById('speakingPrompt').textContent = randomPrompt;
+        }
+
+        function completePractice() {
+            practiceSessionCount++;
+            document.getElementById('practiceCount').textContent = practiceSessionCount;
+            
+            const message = currentLanguage === 'en' ? 
+                'Great job! Practice session completed!' : 
+                '¡Buen trabajo! ¡Sesión de práctica completada!';
+            
+            alert(message);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCards('directions');
+            renderCards('dance');
+            newWritingPrompt();
+            newSpeakingPrompt();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9753d3603700547c',t:'MTc1NjIxNjUxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
