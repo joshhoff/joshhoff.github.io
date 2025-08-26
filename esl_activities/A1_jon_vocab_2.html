@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bilingual Vocabulary Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .correct { background: linear-gradient(135deg, #10b981, #059669); }
+        .incorrect { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .neutral { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-4" id="title">Bilingual Vocabulary Test</h1>
+            <p class="text-xl text-blue-100 mb-6" id="subtitle">Test your comprehension in English and Spanish</p>
+            
+            <!-- Language Toggle -->
+            <div class="flex justify-center mb-6">
+                <div class="bg-white/20 backdrop-blur-sm rounded-full p-1 flex">
+                    <button id="langEn" class="px-6 py-2 rounded-full font-medium transition-all duration-300 text-white bg-white/30">English</button>
+                    <button id="langEs" class="px-6 py-2 rounded-full font-medium transition-all duration-300 text-white/70 hover:text-white">Español</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl">
+            <!-- Start Screen -->
+            <div id="startScreen" class="text-center">
+                <div class="mb-8">
+                    <div class="text-6xl mb-4">📚</div>
+                    <h2 class="text-2xl font-semibold text-white mb-4" id="startTitle">Ready to Test Your Vocabulary?</h2>
+                    <p class="text-blue-100 mb-6" id="startDesc">You'll be tested on 12 important terms. Choose the correct definition for each word.</p>
+                </div>
+                <button id="startBtn" class="neutral text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <span id="startBtnText">Start Test</span>
+                </button>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="questionScreen" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-blue-100" id="progress">Question 1 of 12</div>
+                    <div class="text-blue-100" id="score">Score: 0/0</div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-3xl font-bold text-white mb-4 text-center" id="currentWord">gather</h3>
+                    <p class="text-blue-100 text-center mb-6" id="questionPrompt">What does this word mean?</p>
+                </div>
+
+                <div class="grid gap-4 mb-6" id="optionsContainer">
+                    <!-- Options will be inserted here -->
+                </div>
+
+                <div id="feedback" class="hidden text-center p-4 rounded-xl mb-4">
+                    <p class="font-semibold text-lg" id="feedbackText"></p>
+                    <p class="mt-2" id="explanationText"></p>
+                </div>
+
+                <div class="text-center">
+                    <button id="nextBtn" class="hidden neutral text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                        <span id="nextBtnText">Next Question</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="hidden text-center fade-in">
+                <div class="mb-8">
+                    <div class="text-6xl mb-4" id="resultEmoji">🎉</div>
+                    <h2 class="text-3xl font-bold text-white mb-4" id="resultTitle">Test Complete!</h2>
+                    <div class="text-6xl font-bold text-white mb-4" id="finalScore">10/12</div>
+                    <p class="text-blue-100 mb-6" id="resultMessage">Great job! You have a strong vocabulary.</p>
+                </div>
+                <button id="restartBtn" class="neutral text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <span id="restartBtnText">Take Test Again</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary data with English and Spanish definitions
+        const vocabulary = {
+            en: {
+                gather: {
+                    correct: "To collect or bring together",
+                    options: ["To collect or bring together", "To scatter widely", "To measure carefully", "To destroy completely"],
+                    explanation: "Gather means to collect, assemble, or bring things together in one place."
+                },
+                pollutants: {
+                    correct: "Harmful substances that contaminate the environment",
+                    options: ["Harmful substances that contaminate the environment", "Clean water sources", "Natural air particles", "Beneficial chemicals"],
+                    explanation: "Pollutants are substances that cause pollution and harm to the environment."
+                },
+                eradicate: {
+                    correct: "To completely eliminate or destroy",
+                    options: ["To completely eliminate or destroy", "To partially reduce", "To carefully study", "To slowly improve"],
+                    explanation: "Eradicate means to completely remove or destroy something, especially something harmful."
+                },
+                prescribe: {
+                    correct: "To recommend or order a treatment",
+                    options: ["To recommend or order a treatment", "To refuse medical care", "To diagnose a disease", "To prevent illness"],
+                    explanation: "Prescribe means to recommend or order a specific treatment, medication, or course of action."
+                },
+                ignition: {
+                    correct: "The process of starting a fire or engine",
+                    options: ["The process of starting a fire or engine", "The act of extinguishing flames", "A cooling mechanism", "A safety procedure"],
+                    explanation: "Ignition is the process of catching fire or starting an engine."
+                },
+                measure: {
+                    correct: "To determine the size, amount, or degree of something",
+                    options: ["To determine the size, amount, or degree of something", "To guess approximately", "To ignore completely", "To change the value"],
+                    explanation: "Measure means to find out the exact size, amount, or degree of something using instruments or standards."
+                },
+                emit: {
+                    correct: "To give off or release something",
+                    options: ["To give off or release something", "To absorb completely", "To store safely", "To transform entirely"],
+                    explanation: "Emit means to produce and discharge something, such as light, heat, sound, or gas."
+                },
+                disperse: {
+                    correct: "To spread or scatter in different directions",
+                    options: ["To spread or scatter in different directions", "To gather in one place", "To organize systematically", "To compress tightly"],
+                    explanation: "Disperse means to distribute or spread over a wide area."
+                },
+                convey: {
+                    correct: "To transport or communicate something",
+                    options: ["To transport or communicate something", "To hide information", "To destroy messages", "To confuse others"],
+                    explanation: "Convey means to carry, transport, or communicate something from one place to another."
+                },
+                pod: {
+                    correct: "A small group or container",
+                    options: ["A small group or container", "A large building", "A type of vehicle", "A measurement unit"],
+                    explanation: "Pod refers to a small group of people or animals, or a container that holds seeds or other items."
+                },
+                flux: {
+                    correct: "Continuous change or flow",
+                    options: ["Continuous change or flow", "Complete stillness", "Perfect stability", "Permanent condition"],
+                    explanation: "Flux refers to continuous change, movement, or flow of something."
+                },
+                exchange: {
+                    correct: "To give and receive mutually",
+                    options: ["To give and receive mutually", "To keep everything", "To lose permanently", "To refuse offers"],
+                    explanation: "Exchange means to give something and receive something else in return."
+                }
+            },
+            es: {
+                gather: {
+                    correct: "Recoger o reunir",
+                    options: ["Recoger o reunir", "Esparcir ampliamente", "Medir cuidadosamente", "Destruir completamente"],
+                    explanation: "Gather significa recoger, reunir o juntar cosas en un lugar."
+                },
+                pollutants: {
+                    correct: "Sustancias dañinas que contaminan el ambiente",
+                    options: ["Sustancias dañinas que contaminan el ambiente", "Fuentes de agua limpia", "Partículas naturales del aire", "Químicos beneficiosos"],
+                    explanation: "Los contaminantes son sustancias que causan polución y daño al medio ambiente."
+                },
+                eradicate: {
+                    correct: "Eliminar o destruir completamente",
+                    options: ["Eliminar o destruir completamente", "Reducir parcialmente", "Estudiar cuidadosamente", "Mejorar lentamente"],
+                    explanation: "Eradicate significa remover o destruir algo completamente, especialmente algo dañino."
+                },
+                prescribe: {
+                    correct: "Recomendar u ordenar un tratamiento",
+                    options: ["Recomendar u ordenar un tratamiento", "Rechazar atención médica", "Diagnosticar una enfermedad", "Prevenir enfermedades"],
+                    explanation: "Prescribe significa recomendar u ordenar un tratamiento, medicamento o curso de acción específico."
+                },
+                ignition: {
+                    correct: "El proceso de encender fuego o motor",
+                    options: ["El proceso de encender fuego o motor", "El acto de extinguir llamas", "Un mecanismo de enfriamiento", "Un procedimiento de seguridad"],
+                    explanation: "Ignition es el proceso de prender fuego o arrancar un motor."
+                },
+                measure: {
+                    correct: "Determinar el tamaño, cantidad o grado de algo",
+                    options: ["Determinar el tamaño, cantidad o grado de algo", "Adivinar aproximadamente", "Ignorar completamente", "Cambiar el valor"],
+                    explanation: "Measure significa encontrar el tamaño, cantidad o grado exacto de algo usando instrumentos o estándares."
+                },
+                emit: {
+                    correct: "Despedir o liberar algo",
+                    options: ["Despedir o liberar algo", "Absorber completamente", "Almacenar con seguridad", "Transformar completamente"],
+                    explanation: "Emit significa producir y descargar algo, como luz, calor, sonido o gas."
+                },
+                disperse: {
+                    correct: "Esparcir o dispersar en diferentes direcciones",
+                    options: ["Esparcir o dispersar en diferentes direcciones", "Reunir en un lugar", "Organizar sistemáticamente", "Comprimir fuertemente"],
+                    explanation: "Disperse significa distribuir o esparcir sobre un área amplia."
+                },
+                convey: {
+                    correct: "Transportar o comunicar algo",
+                    options: ["Transportar o comunicar algo", "Ocultar información", "Destruir mensajes", "Confundir a otros"],
+                    explanation: "Convey significa llevar, transportar o comunicar algo de un lugar a otro."
+                },
+                pod: {
+                    correct: "Un grupo pequeño o contenedor",
+                    options: ["Un grupo pequeño o contenedor", "Un edificio grande", "Un tipo de vehículo", "Una unidad de medida"],
+                    explanation: "Pod se refiere a un grupo pequeño de personas o animales, o un contenedor que guarda semillas u otros artículos."
+                },
+                flux: {
+                    correct: "Cambio o flujo continuo",
+                    options: ["Cambio o flujo continuo", "Quietud completa", "Estabilidad perfecta", "Condición permanente"],
+                    explanation: "Flux se refiere al cambio, movimiento o flujo continuo de algo."
+                },
+                exchange: {
+                    correct: "Dar y recibir mutuamente",
+                    options: ["Dar y recibir mutuamente", "Quedarse con todo", "Perder permanentemente", "Rechazar ofertas"],
+                    explanation: "Exchange significa dar algo y recibir algo más a cambio."
+                }
+            }
+        };
+
+        // Translations
+        const translations = {
+            en: {
+                title: "Bilingual Vocabulary Test",
+                subtitle: "Test your comprehension in English and Spanish",
+                startTitle: "Ready to Test Your Vocabulary?",
+                startDesc: "You'll be tested on 12 important terms. Choose the correct definition for each word.",
+                startBtn: "Start Test",
+                questionPrompt: "What does this word mean?",
+                nextBtn: "Next Question",
+                finishBtn: "Finish Test",
+                resultTitle: "Test Complete!",
+                restartBtn: "Take Test Again",
+                correct: "Correct!",
+                incorrect: "Incorrect!",
+                progress: "Question",
+                of: "of",
+                score: "Score:"
+            },
+            es: {
+                title: "Examen de Vocabulario Bilingüe",
+                subtitle: "Prueba tu comprensión en inglés y español",
+                startTitle: "¿Listo para Probar tu Vocabulario?",
+                startDesc: "Serás evaluado en 12 términos importantes. Elige la definición correcta para cada palabra.",
+                startBtn: "Comenzar Examen",
+                questionPrompt: "¿Qué significa esta palabra?",
+                nextBtn: "Siguiente Pregunta",
+                finishBtn: "Terminar Examen",
+                resultTitle: "¡Examen Completado!",
+                restartBtn: "Tomar Examen Otra Vez",
+                correct: "¡Correcto!",
+                incorrect: "¡Incorrecto!",
+                progress: "Pregunta",
+                of: "de",
+                score: "Puntuación:"
+            }
+        };
+
+        // Game state
+        let currentLang = 'en';
+        let currentQuestion = 0;
+        let score = 0;
+        let questions = [];
+        let answered = false;
+
+        // DOM elements
+        const langEn = document.getElementById('langEn');
+        const langEs = document.getElementById('langEs');
+        const startScreen = document.getElementById('startScreen');
+        const questionScreen = document.getElementById('questionScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const startBtn = document.getElementById('startBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Initialize
+        function init() {
+            updateLanguage();
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            langEn.addEventListener('click', () => switchLanguage('en'));
+            langEs.addEventListener('click', () => switchLanguage('es'));
+            startBtn.addEventListener('click', startQuiz);
+            nextBtn.addEventListener('click', nextQuestion);
+            restartBtn.addEventListener('click', restartQuiz);
+        }
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            updateLanguage();
+            
+            // Update button styles
+            if (lang === 'en') {
+                langEn.className = 'px-6 py-2 rounded-full font-medium transition-all duration-300 text-white bg-white/30';
+                langEs.className = 'px-6 py-2 rounded-full font-medium transition-all duration-300 text-white/70 hover:text-white';
+            } else {
+                langEs.className = 'px-6 py-2 rounded-full font-medium transition-all duration-300 text-white bg-white/30';
+                langEn.className = 'px-6 py-2 rounded-full font-medium transition-all duration-300 text-white/70 hover:text-white';
+            }
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('startTitle').textContent = t.startTitle;
+            document.getElementById('startDesc').textContent = t.startDesc;
+            document.getElementById('startBtnText').textContent = t.startBtn;
+            document.getElementById('questionPrompt').textContent = t.questionPrompt;
+            document.getElementById('nextBtnText').textContent = t.nextBtn;
+            document.getElementById('restartBtnText').textContent = t.restartBtn;
+            document.getElementById('resultTitle').textContent = t.resultTitle;
+        }
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            questions = Object.keys(vocabulary[currentLang]);
+            shuffleArray(questions);
+            
+            startScreen.classList.add('hidden');
+            questionScreen.classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            answered = false;
+            const word = questions[currentQuestion];
+            const wordData = vocabulary[currentLang][word];
+            
+            document.getElementById('currentWord').textContent = word;
+            document.getElementById('progress').textContent = `${translations[currentLang].progress} ${currentQuestion + 1} ${translations[currentLang].of} ${questions.length}`;
+            document.getElementById('score').textContent = `${translations[currentLang].score} ${score}/${currentQuestion}`;
+            
+            // Shuffle options
+            const options = [...wordData.options];
+            shuffleArray(options);
+            
+            // Create option buttons
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full p-4 text-left bg-white/20 hover:bg-white/30 rounded-xl text-white font-medium transition-all duration-300 transform hover:scale-105';
+                button.textContent = option;
+                button.addEventListener('click', () => selectAnswer(option, wordData.correct, wordData.explanation));
+                container.appendChild(button);
+            });
+            
+            // Hide feedback and next button
+            document.getElementById('feedback').classList.add('hidden');
+            nextBtn.classList.add('hidden');
+        }
+
+        function selectAnswer(selected, correct, explanation) {
+            if (answered) return;
+            answered = true;
+            
+            const isCorrect = selected === correct;
+            if (isCorrect) score++;
+            
+            // Update button styles
+            const buttons = document.querySelectorAll('#optionsContainer button');
+            buttons.forEach(btn => {
+                if (btn.textContent === correct) {
+                    btn.className = btn.className.replace('bg-white/20 hover:bg-white/30', 'correct');
+                } else if (btn.textContent === selected && !isCorrect) {
+                    btn.className = btn.className.replace('bg-white/20 hover:bg-white/30', 'incorrect');
+                } else {
+                    btn.className = btn.className.replace('hover:bg-white/30', '');
+                    btn.style.opacity = '0.5';
+                }
+            });
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            const feedbackText = document.getElementById('feedbackText');
+            const explanationText = document.getElementById('explanationText');
+            
+            feedbackText.textContent = isCorrect ? translations[currentLang].correct : translations[currentLang].incorrect;
+            explanationText.textContent = explanation;
+            
+            feedback.className = `text-center p-4 rounded-xl mb-4 ${isCorrect ? 'bg-green-500/20 text-green-100' : 'bg-red-500/20 text-red-100'}`;
+            feedback.classList.remove('hidden');
+            
+            // Show next button
+            nextBtn.classList.remove('hidden');
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('nextBtnText').textContent = translations[currentLang].finishBtn;
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                document.getElementById('nextBtnText').textContent = translations[currentLang].nextBtn;
+                showQuestion();
+            }
+        }
+
+        function showResults() {
+            questionScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+            
+            let emoji, message;
+            if (percentage >= 90) {
+                emoji = '🎉';
+                message = currentLang === 'en' ? 'Excellent! You have mastered these terms!' : '¡Excelente! ¡Has dominado estos términos!';
+            } else if (percentage >= 70) {
+                emoji = '👏';
+                message = currentLang === 'en' ? 'Great job! You have a strong vocabulary.' : '¡Buen trabajo! Tienes un vocabulario sólido.';
+            } else if (percentage >= 50) {
+                emoji = '📚';
+                message = currentLang === 'en' ? 'Good effort! Keep studying to improve.' : '¡Buen esfuerzo! Sigue estudiando para mejorar.';
+            } else {
+                emoji = '💪';
+                message = currentLang === 'en' ? 'Keep practicing! You\'ll get better with time.' : '¡Sigue practicando! Mejorarás con el tiempo.';
+            }
+            
+            document.getElementById('resultEmoji').textContent = emoji;
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Start the application
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9754d700b19852cb',t:'MTc1NjIyNzE0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
