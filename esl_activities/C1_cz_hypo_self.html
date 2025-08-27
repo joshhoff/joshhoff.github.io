@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced ESL Reading: Hypnosis & Self-Confidence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .essay-section {
+            margin-bottom: 40px;
+        }
+
+        .essay-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .essay-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+
+        .essay-text p {
+            margin-bottom: 20px;
+        }
+
+        .highlight-word {
+            border-bottom: 1px dotted #999;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: inherit;
+        }
+
+        .highlight-word:hover {
+            background: rgba(52, 152, 219, 0.1);
+            border-bottom: 1px solid #3498db;
+        }
+
+        .exercises-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .exercise {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .exercise h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question p {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            background: #f1f3f4;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .option.selected {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .option.correct {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .check-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Advanced ESL Reading Comprehension</h1>
+            <p>Hypnosis and Self-Confidence: A Scientific Perspective</p>
+        </div>
+
+        <div class="content">
+            <div class="essay-section">
+                <h2 class="essay-title">The Transformative Power of Hypnosis on Self-Confidence</h2>
+                
+                <div class="essay-text">
+                    <p>Recent scientific research has <span class="highlight-word tooltip">substantiated<span class="tooltip-text">Czech: podložit, potvrdit</span></span> the profound impact that hypnosis can have on an individual's self-confidence levels. This therapeutic technique, once relegated to the realm of entertainment, has emerged as a <span class="highlight-word tooltip">legitimate<span class="tooltip-text">Czech: legitimní, oprávněný</span></span> psychological intervention with measurable benefits.</p>
+
+                    <p>The <span class="highlight-word tooltip">neurological mechanisms<span class="tooltip-text">Czech: neurologické mechanismy</span></span> underlying hypnosis involve the modulation of brain wave patterns, particularly in the theta frequency range. During hypnotic states, the <span class="highlight-word tooltip">prefrontal cortex<span class="tooltip-text">Czech: prefrontální kůra</span></span> exhibits decreased activity, while the <span class="highlight-word tooltip">limbic system<span class="tooltip-text">Czech: limbický systém</span></span> becomes more receptive to positive suggestions. This neuroplasticity allows for the <span class="highlight-word tooltip">restructuring<span class="tooltip-text">Czech: přestrukturování</span></span> of deeply ingrained negative thought patterns.</p>
+
+                    <p>Clinical studies have demonstrated that individuals who undergo hypnotherapy sessions specifically targeting self-confidence show <span class="highlight-word tooltip">statistically significant<span class="tooltip-text">Czech: statisticky významný</span></span> improvements in self-efficacy measures. The process involves <span class="highlight-word tooltip">systematic desensitization<span class="tooltip-text">Czech: systematická desenzitizace</span></span> to anxiety-provoking situations and the implantation of empowering beliefs through carefully crafted suggestions.</p>
+
+                    <p>Furthermore, the <span class="highlight-word tooltip">cumulative effects<span class="tooltip-text">Czech: kumulativní účinky</span></span> of repeated hypnotic sessions create lasting changes in neural pathways associated with self-perception. Participants in longitudinal studies have reported sustained improvements in public speaking abilities, social interactions, and professional performance, with benefits persisting months after treatment <span class="highlight-word tooltip">cessation<span class="tooltip-text">Czech: ukončení</span></span>.</p>
+                </div>
+            </div>
+
+            <div class="exercises-section">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">Comprehension Exercises</h2>
+                
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="score" id="scoreDisplay">Score: 0/6</div>
+
+                <!-- Exercise 1: Vocabulary -->
+                <div class="exercise">
+                    <h3>Exercise 1: Advanced Vocabulary</h3>
+                    <div class="question">
+                        <p>What does "substantiated" mean in the context of the essay?</p>
+                        <div class="options" data-question="1" data-correct="2">
+                            <div class="option" data-value="1">Questioned or doubted</div>
+                            <div class="option" data-value="2">Supported with evidence</div>
+                            <div class="option" data-value="3">Completely rejected</div>
+                            <div class="option" data-value="4">Partially understood</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer(1)">Check Answer</button>
+                        <div class="feedback" id="feedback1" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise 2: Complex sentence structure -->
+                <div class="exercise">
+                    <h3>Exercise 2: Sentence Structure Analysis</h3>
+                    <div class="question">
+                        <p>In the sentence "This neuroplasticity allows for the restructuring of deeply ingrained negative thought patterns," what is the main grammatical function of "deeply ingrained"?</p>
+                        <div class="options" data-question="2" data-correct="3">
+                            <div class="option" data-value="1">Adverbial phrase modifying "allows"</div>
+                            <div class="option" data-value="2">Predicate adjective</div>
+                            <div class="option" data-value="3">Compound adjective modifying "thought patterns"</div>
+                            <div class="option" data-value="4">Gerund phrase acting as subject</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer(2)">Check Answer</button>
+                        <div class="feedback" id="feedback2" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise 3: Scientific terminology -->
+                <div class="exercise">
+                    <h3>Exercise 3: Scientific Concepts</h3>
+                    <div class="question">
+                        <p>According to the essay, what happens to the prefrontal cortex during hypnotic states?</p>
+                        <div class="options" data-question="3" data-correct="2">
+                            <div class="option" data-value="1">It becomes hyperactive</div>
+                            <div class="option" data-value="2">It exhibits decreased activity</div>
+                            <div class="option" data-value="3">It completely shuts down</div>
+                            <div class="option" data-value="4">It synchronizes with the limbic system</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer(3)">Check Answer</button>
+                        <div class="feedback" id="feedback3" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise 4: Reading comprehension -->
+                <div class="exercise">
+                    <h3>Exercise 4: Main Idea Comprehension</h3>
+                    <div class="question">
+                        <p>What is the primary evidence presented for hypnosis being effective for self-confidence?</p>
+                        <div class="options" data-question="4" data-correct="1">
+                            <div class="option" data-value="1">Clinical studies showing statistically significant improvements</div>
+                            <div class="option" data-value="2">Personal testimonials from patients</div>
+                            <div class="option" data-value="3">Historical records of hypnosis use</div>
+                            <div class="option" data-value="4">Theoretical models of brain function</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer(4)">Check Answer</button>
+                        <div class="feedback" id="feedback4" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise 5: Complex vocabulary -->
+                <div class="exercise">
+                    <h3>Exercise 5: Context Clues</h3>
+                    <div class="question">
+                        <p>Based on context, "systematic desensitization" most likely refers to:</p>
+                        <div class="options" data-question="5" data-correct="3">
+                            <div class="option" data-value="1">Making someone more sensitive to stimuli</div>
+                            <div class="option" data-value="2">Random exposure to fears</div>
+                            <div class="option" data-value="3">Gradual reduction of anxiety responses</div>
+                            <div class="option" data-value="4">Complete avoidance of stressful situations</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer(5)">Check Answer</button>
+                        <div class="feedback" id="feedback5" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise 6: Inference -->
+                <div class="exercise">
+                    <h3>Exercise 6: Critical Inference</h3>
+                    <div class="question">
+                        <p>The phrase "benefits persisting months after treatment cessation" suggests that:</p>
+                        <div class="options" data-question="6" data-correct="4">
+                            <div class="option" data-value="1">Hypnosis only works during sessions</div>
+                            <div class="option" data-value="2">Treatment must continue indefinitely</div>
+                            <div class="option" data-value="3">Benefits disappear immediately after treatment</div>
+                            <div class="option" data-value="4">Hypnosis creates lasting neurological changes</div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer(6)">Check Answer</button>
+                        <div class="feedback" id="feedback6" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let totalQuestions = 6;
+        let answeredQuestions = new Set();
+
+        // Add click handlers for options
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from siblings
+                this.parentNode.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                // Add selected class to clicked option
+                this.classList.add('selected');
+            });
+        });
+
+        function checkAnswer(questionNum) {
+            const optionsContainer = document.querySelector(`[data-question="${questionNum}"]`);
+            const selectedOption = optionsContainer.querySelector('.option.selected');
+            const correctAnswer = optionsContainer.dataset.correct;
+            const feedbackDiv = document.getElementById(`feedback${questionNum}`);
+            const checkBtn = optionsContainer.parentNode.querySelector('.check-btn');
+            
+            if (!selectedOption) {
+                alert('Please select an answer first!');
+                return;
+            }
+
+            const selectedValue = selectedOption.dataset.value;
+            const isCorrect = selectedValue === correctAnswer;
+            
+            // Disable further clicking and show correct answers
+            optionsContainer.querySelectorAll('.option').forEach(option => {
+                option.style.pointerEvents = 'none';
+                if (option.dataset.value === correctAnswer) {
+                    option.classList.add('correct');
+                } else if (option.classList.contains('selected') && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // Show feedback
+            feedbackDiv.style.display = 'block';
+            if (isCorrect) {
+                feedbackDiv.className = 'feedback correct';
+                feedbackDiv.innerHTML = '✓ Correct! Well done on understanding this advanced concept.';
+                if (!answeredQuestions.has(questionNum)) {
+                    score++;
+                    answeredQuestions.add(questionNum);
+                }
+            } else {
+                feedbackDiv.className = 'feedback incorrect';
+                const explanations = {
+                    1: 'Incorrect. "Substantiated" means supported with evidence or proof.',
+                    2: 'Incorrect. "Deeply ingrained" is a compound adjective describing the type of thought patterns.',
+                    3: 'Incorrect. The essay states that the prefrontal cortex exhibits decreased activity during hypnosis.',
+                    4: 'Incorrect. The essay specifically mentions clinical studies with statistically significant improvements as evidence.',
+                    5: 'Incorrect. Systematic desensitization refers to gradually reducing anxiety responses through controlled exposure.',
+                    6: 'Incorrect. The persistence of benefits after treatment ends suggests lasting neurological changes.'
+                };
+                feedbackDiv.innerHTML = `✗ ${explanations[questionNum]}`;
+                answeredQuestions.add(questionNum);
+            }
+
+            // Disable button and update progress
+            checkBtn.disabled = true;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (answeredQuestions.size / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}/${totalQuestions}`;
+            
+            if (answeredQuestions.size === totalQuestions) {
+                setTimeout(() => {
+                    const percentage = Math.round((score / totalQuestions) * 100);
+                    let message = '';
+                    if (percentage >= 90) {
+                        message = 'Excellent! You have mastered advanced English comprehension! 🎉';
+                    } else if (percentage >= 70) {
+                        message = 'Great job! Your advanced English skills are developing well! 👏';
+                    } else if (percentage >= 50) {
+                        message = 'Good effort! Keep practicing with advanced texts to improve! 📚';
+                    } else {
+                        message = 'Keep studying! Advanced English takes time to master! 💪';
+                    }
+                    alert(`Quiz Complete!\nFinal Score: ${score}/${totalQuestions} (${percentage}%)\n\n${message}`);
+                }, 500);
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9759183aa62a092a',t:'MTc1NjI3MTc2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
