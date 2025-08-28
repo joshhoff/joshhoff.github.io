@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GIS Portfolio</title>
+
+  <!-- Optional: ArcGIS Maps SDK (commented out until you add real maps)
+  <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.30/"></script>
+  -->
+
+  <style>
+    :root{
+      --bg: #0f1115;
+      --panel: #151823;
+      --text: #e7e9ee;
+      --muted: #a9b1c3;
+      --accent: #6ea8ff;
+      --border: #232737;
+      --radius: 14px;
+      --maxw: 1100px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    /* Page */
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% -10%, #1a2030 0%, #0f1115 60%) fixed,
+                  radial-gradient(1000px 700px at 120% 10%, #162033 0%, #0f1115 40%) fixed,
+                  var(--bg);
+    }
+
+    /* Header */
+    .site-header{
+      position: sticky; top:0; z-index: 5;
+      backdrop-filter: blur(8px);
+      background: rgba(15,17,21,.6);
+      border-bottom: 1px solid var(--border);
+    }
+    .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 18px 20px; }
+    .brand{
+      display:flex; align-items:center; gap:.75rem; letter-spacing:.4px;
+      font-weight: 650;
+    }
+    .brand .dot{ width:12px; height:12px; border-radius:50%; background: var(--accent); box-shadow: 0 0 18px var(--accent); }
+
+    /* Layout */
+    .stack{ display: grid; gap: 26px; padding: 24px 20px 80px; max-width: var(--maxw); margin: 0 auto; }
+
+    /* Project card */
+    .project{
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) padding-box,
+                  radial-gradient(120% 140% at 100% -20%, rgba(110,168,255,.15), transparent 60%) border-box,
+                  var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: clip;
+    }
+    .project-head{
+      display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center;
+      padding: 18px 18px 0 18px;
+    }
+    .project-title{
+      flex:1 1 280px; min-width: 220px;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      padding: 10px 12px; border-radius: 10px; font-size: 1rem;
+    }
+    .meta{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .meta input, .meta select{
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      padding: 10px 12px; border-radius: 10px; font-size: .95rem;
+    }
+
+    /* Map area (placeholder container) */
+    .map-wrap{
+      display:grid; gap: 14px; padding: 16px 18px 6px 18px;
+    }
+    .map-container{
+      width: 100%;
+      aspect-ratio: 16 / 9; /* Responsive height */
+      background:
+        repeating-linear-gradient(45deg, #1b2030 0 12px, #1a2031 12px 24px);
+      border: 1px dashed #3a4160;
+      border-radius: 12px;
+      display:grid; place-items:center; position: relative; overflow: hidden;
+    }
+    .map-hint{
+      position: absolute; inset: auto 14px 14px auto;
+      background: rgba(20,25,35,.78);
+      border: 1px solid var(--border);
+      padding: 6px 10px; border-radius: 8px; font-size: .85rem; color: var(--muted);
+    }
+    .map-placeholder{
+      text-align:center; color: #8fa2d6; font-weight: 600; letter-spacing:.3px;
+      opacity: .9;
+    }
+
+    /* Description box */
+    .desc{
+      padding: 0 18px 18px 18px;
+    }
+    .desc textarea{
+      width: 100%; min-height: 160px; resize: vertical;
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--border);
+      color: var(--text); padding: 12px 14px; border-radius: 10px;
+      outline: none;
+    }
+    .desc .help{
+      margin-top: 6px; color: var(--muted); font-size: .9rem;
+      display:flex; justify-content: space-between; align-items:center;
+    }
+
+    /* Add button */
+    .actions{ display:flex; justify-content:center; margin-top: 6px; }
+    .add-btn{
+      background: linear-gradient(180deg, #2b64ff, #2150ce);
+      border: none; color: white; padding: 14px 18px; border-radius: 12px;
+      font-weight: 650; letter-spacing:.2px; cursor: pointer; box-shadow: var(--shadow);
+    }
+    .add-btn:hover{ filter: brightness(1.05); }
+
+    /* Print/PDF */
+    @media print{
+      .site-header, .actions, .map-hint{ display:none !important; }
+      body{ background: white; }
+      .project{ break-inside: avoid; box-shadow:none; border-color:#ddd; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand" aria-label="Portfolio header">
+        <span class="dot" aria-hidden="true"></span>
+        <span>GIS Portfolio</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="stack" id="projects">
+    <!-- ===== Project: duplicate as needed ===== -->
+    <section class="project" aria-labelledby="p1-title">
+      <div class="project-head">
+        <input id="p1-title" class="project-title" type="text" placeholder="Project title (e.g., Urban Tree Canopy Web Map)" />
+        <div class="meta" aria-label="Project metadata">
+          <input type="text" inputmode="numeric" placeholder="Year" aria-label="Year" />
+          <select aria-label="Category">
+            <option value="" selected>Category</option>
+            <option>Transportation</option>
+            <option>Environment</option>
+            <option>Public Safety</option>
+            <option>Utilities</option>
+            <option>Planning</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="map-wrap">
+        <!-- Map container (no map initialized yet) -->
+        <div class="map-container" id="map-1" role="region" aria-label="Web map 1">
+          <div class="map-placeholder">Map Container (16:9). Insert ArcGIS Web Map here.</div>
+          <div class="map-hint">Add your ArcGIS map later.</div>
+        </div>
+      </div>
+
+      <div class="desc">
+        <label for="desc-1" class="visually-hidden">Description for project 1</label>
+        <textarea id="desc-1" placeholder="Describe the map, purpose, data sources, your role, techniques, and outcomes..."></textarea>
+        <div class="help"><span>Tip: mention data sources & your role.</span><span class="count" data-for="desc-1">0 chars</span></div>
+      </div>
+    </section>
+
+    <!-- Another example project -->
+    <section class="project" aria-labelledby="p2-title">
+      <div class="project-head">
+        <input id="p2-title" class="project-title" type="text" placeholder="Project title" />
+        <div class="meta">
+          <input type="text" inputmode="numeric" placeholder="Year" aria-label="Year" />
+          <select aria-label="Category">
+            <option value="" selected>Category</option>
+            <option>Transportation</option>
+            <option>Environment</option>
+            <option>Public Safety</option>
+            <option>Utilities</option>
+            <option>Planning</option>
+          </select>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <div class="map-container" id="map-2" role="region" aria-label="Web map 2">
+          <div class="map-placeholder">Map Container (16:9). Insert ArcGIS Web Map here.</div>
+          <div class="map-hint">Add your ArcGIS map later.</div>
+        </div>
+      </div>
+      <div class="desc">
+        <textarea id="desc-2" placeholder="Project description..."></textarea>
+        <div class="help"><span>Keep it concise but specific.</span><span class="count" data-for="desc-2">0 chars</span></div>
+      </div>
+    </section>
+
+    <!-- Third example -->
+    <section class="project" aria-labelledby="p3-title">
+      <div class="project-head">
+        <input id="p3-title" class="project-title" type="text" placeholder="Project title" />
+        <div class="meta">
+          <input type="text" inputmode="numeric" placeholder="Year" aria-label="Year" />
+          <select aria-label="Category">
+            <option value="" selected>Category</option>
+            <option>Transportation</option>
+            <option>Environment</option>
+            <option>Public Safety</option>
+            <option>Utilities</option>
+            <option>Planning</option>
+          </select>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <div class="map-container" id="map-3" role="region" aria-label="Web map 3">
+          <div class="map-placeholder">Map Container (16:9). Insert ArcGIS Web Map here.</div>
+          <div class="map-hint">Add your ArcGIS map later.</div>
+        </div>
+      </div>
+      <div class="desc">
+        <textarea id="desc-3" placeholder="Project description..."></textarea>
+        <div class="help"><span>What decision did this map support?</span><span class="count" data-for="desc-3">0 chars</span></div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button class="add-btn" id="add">+ New Project</button>
+    </div>
+  </main>
+
+  <script>
+    // --- live character counts ---
+    document.querySelectorAll('.count').forEach(el => {
+      const id = el.getAttribute('data-for');
+      const ta = document.getElementById(id);
+      const update = () => el.textContent = (ta.value || '').length + ' chars';
+      ta.addEventListener('input', update); update();
+    });
+
+    // --- add new project section ---
+    const projects = document.getElementById('projects');
+    const addBtn = document.getElementById('add');
+
+    addBtn.addEventListener('click', () => {
+      const idx = projects.querySelectorAll('.project').length + 1;
+      const section = document.createElement('section');
+      section.className = 'project';
+      section.innerHTML = `
+        <div class="project-head">
+          <input class="project-title" type="text" placeholder="Project title" />
+          <div class="meta">
+            <input type="text" inputmode="numeric" placeholder="Year" aria-label="Year" />
+            <select aria-label="Category">
+              <option value="" selected>Category</option>
+              <option>Transportation</option>
+              <option>Environment</option>
+              <option>Public Safety</option>
+              <option>Utilities</option>
+              <option>Planning</option>
+            </select>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <div class="map-container" id="map-${idx}" role="region" aria-label="Web map ${idx}">
+            <div class="map-placeholder">Map Container (16:9). Insert ArcGIS Web Map here.</div>
+            <div class="map-hint">Add your ArcGIS map later.</div>
+          </div>
+        </div>
+        <div class="desc">
+          <textarea id="desc-${idx}" placeholder="Project description..."></textarea>
+          <div class="help"><span>Describe layers, symbology & insight.</span><span class="count" data-for="desc-${idx}">0 chars</span></div>
+        </div>
+      `;
+      projects.insertBefore(section, document.querySelector('.actions'));
+
+      // wire up the new counter
+      const counter = section.querySelector('.count');
+      const ta = section.querySelector('textarea');
+      const update = () => counter.textContent = (ta.value || '').length + ' chars';
+      ta.addEventListener('input', update); update();
+    });
+
+    /* === HOW TO INJECT ARC GIS WEB MAPS LATER ===
+       1) Uncomment the <link> and <script> that load https://js.arcgis.com above.
+       2) Replace this comment with something like:
+
+          require(["esri/Map", "esri/views/MapView", "esri/WebMap"], (Map, MapView, WebMap) => {
+            const items = [
+              { id: "map-1", webmapId: "YOUR_WEBMAP_ID_1" },
+              { id: "map-2", webmapId: "YOUR_WEBMAP_ID_2" },
+              { id: "map-3", webmapId: "YOUR_WEBMAP_ID_3" }
+            ];
+
+            items.forEach(item => {
+              const webmap = new WebMap({ portalItem: { id: item.webmapId } });
+              new MapView({
+                container: item.id,
+                map: webmap
+              });
+            });
+          });
+
+       3) If you prefer ArcGIS Maps SDK for JavaScript ESM, use the @arcgis/core build and import modules.
+    */
+  </script>
+</body>
+</html>
