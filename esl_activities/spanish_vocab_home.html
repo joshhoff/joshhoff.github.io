@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa Vocabulary - Spanish Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .flip-card {
+            perspective: 1000px;
+            width: 100%;
+            height: 200px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        .pulse-correct {
+            animation: pulseGreen 0.6s ease-in-out;
+        }
+        .pulse-incorrect {
+            animation: pulseRed 0.6s ease-in-out;
+        }
+        @keyframes pulseGreen {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background-color: #10b981; }
+            100% { transform: scale(1); }
+        }
+        @keyframes pulseRed {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background-color: #ef4444; }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">🏠 Casa Vocabulary</h1>
+            <p class="text-lg text-gray-600">Learn Spanish words for house materials and furniture</p>
+            <div class="mt-4 flex justify-center items-center space-x-6">
+                <div class="bg-white rounded-lg px-4 py-2 shadow-md">
+                    <span class="text-sm text-gray-500">Score:</span>
+                    <span id="score" class="text-xl font-bold text-indigo-600 ml-2">0</span>
+                </div>
+                <div class="bg-white rounded-lg px-4 py-2 shadow-md">
+                    <span class="text-sm text-gray-500">Streak:</span>
+                    <span id="streak" class="text-xl font-bold text-green-600 ml-2">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg p-2 shadow-md">
+                <button id="flashcardMode" class="px-6 py-2 rounded-md bg-indigo-600 text-white font-medium transition-colors">
+                    Flashcards
+                </button>
+                <button id="quizMode" class="px-6 py-2 rounded-md text-indigo-600 hover:bg-indigo-50 font-medium transition-colors">
+                    Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- Flashcard Mode -->
+        <div id="flashcardSection" class="max-w-2xl mx-auto">
+            <div class="flip-card mx-auto mb-6" id="flashcard">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
+                        <div class="text-6xl mb-4" id="cardEmoji">🛏️</div>
+                        <div class="text-2xl font-semibold" id="cardEnglish">Bed</div>
+                        <div class="text-sm mt-2 opacity-80">Click to reveal Spanish</div>
+                    </div>
+                    <div class="flip-card-back bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-lg">
+                        <div class="text-6xl mb-4" id="cardEmojiBack">🛏️</div>
+                        <div class="text-3xl font-bold" id="cardSpanish">Cama</div>
+                        <div class="text-lg mt-2" id="cardPronunciation">[KAH-mah]</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="prevCard" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    ← Previous
+                </button>
+                <button id="nextCard" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    Next →
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Mode -->
+        <div id="quizSection" class="max-w-2xl mx-auto hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <div class="text-center mb-6">
+                    <div class="text-6xl mb-4" id="quizEmoji">🛏️</div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">What is this in Spanish?</h3>
+                    <p class="text-xl text-indigo-600 font-medium" id="quizEnglish">Bed</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="quizOptions">
+                    <!-- Quiz options will be inserted here -->
+                </div>
+            </div>
+            <div class="text-center">
+                <button id="nextQuiz" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors hidden">
+                    Next Question →
+                </button>
+            </div>
+        </div>
+
+        <!-- Vocabulary List -->
+        <div class="max-w-4xl mx-auto mt-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Complete Vocabulary List</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="vocabularyGrid">
+                <!-- Vocabulary cards will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            { english: "Bed", spanish: "Cama", pronunciation: "[KAH-mah]", emoji: "🛏️" },
+            { english: "Pillow", spanish: "Almohada", pronunciation: "[al-mo-AH-dah]", emoji: "🛏️" },
+            { english: "Cabinet", spanish: "Gabinete", pronunciation: "[gah-bee-NEH-teh]", emoji: "🗄️" },
+            { english: "Drawer", spanish: "Cajón", pronunciation: "[kah-HOHN]", emoji: "📦" },
+            { english: "Chair", spanish: "Silla", pronunciation: "[SEE-yah]", emoji: "🪑" },
+            { english: "Table", spanish: "Mesa", pronunciation: "[MEH-sah]", emoji: "🪑" },
+            { english: "Sofa", spanish: "Sofá", pronunciation: "[so-FAH]", emoji: "🛋️" },
+            { english: "Curtain", spanish: "Cortina", pronunciation: "[kor-TEE-nah]", emoji: "🪟" },
+            { english: "Mirror", spanish: "Espejo", pronunciation: "[es-PEH-ho]", emoji: "🪞" },
+            { english: "Lamp", spanish: "Lámpara", pronunciation: "[LAHM-pah-rah]", emoji: "💡" },
+            { english: "Carpet", spanish: "Alfombra", pronunciation: "[al-FOM-brah]", emoji: "🏠" },
+            { english: "Door", spanish: "Puerta", pronunciation: "[PWER-tah]", emoji: "🚪" },
+            { english: "Window", spanish: "Ventana", pronunciation: "[ven-TAH-nah]", emoji: "🪟" },
+            { english: "Shelf", spanish: "Estante", pronunciation: "[es-TAHN-teh]", emoji: "📚" },
+            { english: "Blanket", spanish: "Manta", pronunciation: "[MAHN-tah]", emoji: "🛏️" },
+            { english: "Towel", spanish: "Toalla", pronunciation: "[to-AH-yah]", emoji: "🏠" }
+        ];
+
+        let currentCardIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let currentMode = 'flashcard';
+
+        // Initialize the app
+        function init() {
+            showFlashcard();
+            generateVocabularyGrid();
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            document.getElementById('flashcard').addEventListener('click', flipCard);
+            document.getElementById('nextCard').addEventListener('click', nextCard);
+            document.getElementById('prevCard').addEventListener('click', prevCard);
+            document.getElementById('flashcardMode').addEventListener('click', () => switchMode('flashcard'));
+            document.getElementById('quizMode').addEventListener('click', () => switchMode('quiz'));
+            document.getElementById('nextQuiz').addEventListener('click', nextQuiz);
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            const flashcardBtn = document.getElementById('flashcardMode');
+            const quizBtn = document.getElementById('quizMode');
+            const flashcardSection = document.getElementById('flashcardSection');
+            const quizSection = document.getElementById('quizSection');
+
+            if (mode === 'flashcard') {
+                flashcardBtn.className = 'px-6 py-2 rounded-md bg-indigo-600 text-white font-medium transition-colors';
+                quizBtn.className = 'px-6 py-2 rounded-md text-indigo-600 hover:bg-indigo-50 font-medium transition-colors';
+                flashcardSection.classList.remove('hidden');
+                quizSection.classList.add('hidden');
+            } else {
+                quizBtn.className = 'px-6 py-2 rounded-md bg-indigo-600 text-white font-medium transition-colors';
+                flashcardBtn.className = 'px-6 py-2 rounded-md text-indigo-600 hover:bg-indigo-50 font-medium transition-colors';
+                flashcardSection.classList.add('hidden');
+                quizSection.classList.remove('hidden');
+                generateQuiz();
+            }
+        }
+
+        function showFlashcard() {
+            const card = vocabulary[currentCardIndex];
+            document.getElementById('cardEmoji').textContent = card.emoji;
+            document.getElementById('cardEmojiBack').textContent = card.emoji;
+            document.getElementById('cardEnglish').textContent = card.english;
+            document.getElementById('cardSpanish').textContent = card.spanish;
+            document.getElementById('cardPronunciation').textContent = card.pronunciation;
+            
+            // Reset flip state
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % vocabulary.length;
+            showFlashcard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + vocabulary.length) % vocabulary.length;
+            showFlashcard();
+        }
+
+        function generateQuiz() {
+            const currentWord = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+            document.getElementById('quizEmoji').textContent = currentWord.emoji;
+            document.getElementById('quizEnglish').textContent = currentWord.english;
+
+            // Generate options
+            const options = [currentWord.spanish];
+            while (options.length < 4) {
+                const randomWord = vocabulary[Math.floor(Math.random() * vocabulary.length)];
+                if (!options.includes(randomWord.spanish)) {
+                    options.push(randomWord.spanish);
+                }
+            }
+
+            // Shuffle options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'bg-gray-100 hover:bg-gray-200 text-gray-800 p-4 rounded-lg font-medium transition-colors text-lg';
+                button.textContent = option;
+                button.addEventListener('click', () => checkAnswer(option, currentWord.spanish, button));
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('nextQuiz').classList.add('hidden');
+        }
+
+        function checkAnswer(selected, correct, button) {
+            const allButtons = document.querySelectorAll('#quizOptions button');
+            allButtons.forEach(btn => btn.disabled = true);
+
+            if (selected === correct) {
+                button.classList.add('pulse-correct');
+                button.className = 'bg-green-500 text-white p-4 rounded-lg font-medium text-lg';
+                score += 10;
+                streak += 1;
+            } else {
+                button.classList.add('pulse-incorrect');
+                button.className = 'bg-red-500 text-white p-4 rounded-lg font-medium text-lg';
+                // Show correct answer
+                allButtons.forEach(btn => {
+                    if (btn.textContent === correct) {
+                        btn.className = 'bg-green-500 text-white p-4 rounded-lg font-medium text-lg';
+                    }
+                });
+                streak = 0;
+            }
+
+            updateScore();
+            document.getElementById('nextQuiz').classList.remove('hidden');
+        }
+
+        function nextQuiz() {
+            generateQuiz();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+        }
+
+        function generateVocabularyGrid() {
+            const grid = document.getElementById('vocabularyGrid');
+            vocabulary.forEach(word => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow';
+                card.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">${word.emoji}</div>
+                        <div class="text-lg font-semibold text-gray-800">${word.english}</div>
+                        <div class="text-xl font-bold text-indigo-600">${word.spanish}</div>
+                        <div class="text-sm text-gray-500">${word.pronunciation}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initialize the app when page loads
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'976842c070382ea5',t:'MTc1NjQzMDc5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
