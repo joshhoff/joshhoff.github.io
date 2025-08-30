@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Perfect Practice - Irregular Verbs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .correct { background-color: #dcfce7; border-color: #16a34a; }
+        .incorrect { background-color: #fef2f2; border-color: #dc2626; }
+        .pulse-green { animation: pulseGreen 0.6s ease-in-out; }
+        @keyframes pulseGreen { 0%, 100% { background-color: #dcfce7; } 50% { background-color: #bbf7d0; } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">Present Perfect Practice</h1>
+            <p class="text-lg text-gray-600">Master irregular past participles with interactive exercises</p>
+            <div class="mt-4 bg-white rounded-lg p-4 shadow-md">
+                <p class="text-sm text-gray-700"><strong>Remember:</strong> Present Perfect = have/has + past participle</p>
+                <p class="text-xs text-gray-500 mt-1">Example: "I have <em>eaten</em> lunch" (eat → eaten)</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+            <button onclick="showActivity('verb-forms')" class="activity-btn bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                📚 Verb Forms
+            </button>
+            <button onclick="showActivity('fill-blanks')" class="activity-btn bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                ✏️ Fill the Blanks
+            </button>
+            <button onclick="showActivity('sentence-builder')" class="activity-btn bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                🔧 Sentence Builder
+            </button>
+            <button onclick="showActivity('conversation')" class="activity-btn bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                💬 Conversation
+            </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="bg-white rounded-lg p-4 mb-6 shadow-md">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700">Progress</span>
+                <span class="text-sm text-gray-500" id="progress-text">0/10</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-indigo-600 h-3 rounded-full transition-all duration-300" style="width: 0%" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Activity 1: Verb Forms Practice -->
+        <div id="verb-forms" class="activity bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Match the Past Participle</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-4">Base Verb</h3>
+                    <div id="base-verbs" class="space-y-3"></div>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-4">Past Participle</h3>
+                    <div id="past-participles" class="space-y-3"></div>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="checkVerbMatches()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Check Answers
+                </button>
+                <button onclick="resetVerbForms()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-colors ml-4">
+                    Reset
+                </button>
+            </div>
+            <div id="verb-feedback" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- Activity 2: Fill in the Blanks -->
+        <div id="fill-blanks" class="activity bg-white rounded-xl shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">✏️ Complete the Sentences</h2>
+            <div class="space-y-6" id="fill-questions"></div>
+            <div class="mt-6 text-center">
+                <button onclick="checkFillBlanks()" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Check Answers
+                </button>
+                <button onclick="nextFillSet()" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-medium transition-colors ml-4">
+                    Next Set
+                </button>
+            </div>
+            <div id="fill-feedback" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- Activity 3: Sentence Builder -->
+        <div id="sentence-builder" class="activity bg-white rounded-xl shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">🔧 Build Present Perfect Sentences</h2>
+            <div class="mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <p class="font-medium text-gray-800" id="sentence-prompt"></p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" id="word-bank"></div>
+                <div class="bg-gray-50 p-4 rounded-lg min-h-16 border-2 border-dashed border-gray-300" id="sentence-area">
+                    <p class="text-gray-500 text-center">Drag words here to build your sentence</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <button onclick="checkSentence()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Check Sentence
+                </button>
+                <button onclick="nextSentence()" class="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-medium transition-colors ml-4">
+                    Next Sentence
+                </button>
+            </div>
+            <div id="sentence-feedback" class="mt-4 text-center"></div>
+        </div>
+
+        <!-- Activity 4: Conversation Practice -->
+        <div id="conversation" class="activity bg-white rounded-xl shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">💬 Conversation Practice</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gradient-to-r from-pink-50 to-rose-50 p-6 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 mb-4">🗣️ Speaking Prompts</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-sm mb-4">
+                        <p class="text-gray-700" id="speaking-prompt"></p>
+                    </div>
+                    <button onclick="nextSpeakingPrompt()" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        Next Prompt
+                    </button>
+                </div>
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-lg">
+                    <h3 class="font-semibold text-gray-800 mb-4">✍️ Writing Prompts</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-sm mb-4">
+                        <p class="text-gray-700" id="writing-prompt"></p>
+                    </div>
+                    <textarea id="writing-area" class="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Write your response here..."></textarea>
+                    <div class="mt-3 flex gap-2">
+                        <button onclick="nextWritingPrompt()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                            Next Prompt
+                        </button>
+                        <button onclick="clearWriting()" class="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Display -->
+        <div class="mt-8 text-center">
+            <div class="bg-white rounded-lg p-6 shadow-md">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Your Score</h3>
+                <div class="text-3xl font-bold text-indigo-600" id="total-score">0</div>
+                <p class="text-gray-600">points earned</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Irregular verbs data
+        const irregularVerbs = [
+            {base: 'be', participle: 'been'}, {base: 'become', participle: 'become'}, {base: 'begin', participle: 'begun'},
+            {base: 'break', participle: 'broken'}, {base: 'bring', participle: 'brought'}, {base: 'build', participle: 'built'},
+            {base: 'buy', participle: 'bought'}, {base: 'catch', participle: 'caught'}, {base: 'choose', participle: 'chosen'},
+            {base: 'come', participle: 'come'}, {base: 'do', participle: 'done'}, {base: 'drink', participle: 'drunk'},
+            {base: 'drive', participle: 'driven'}, {base: 'eat', participle: 'eaten'}, {base: 'fall', participle: 'fallen'},
+            {base: 'feel', participle: 'felt'}, {base: 'find', participle: 'found'}, {base: 'fly', participle: 'flown'},
+            {base: 'forget', participle: 'forgotten'}, {base: 'get', participle: 'gotten'}, {base: 'give', participle: 'given'},
+            {base: 'go', participle: 'gone'}, {base: 'grow', participle: 'grown'}, {base: 'have', participle: 'had'},
+            {base: 'hear', participle: 'heard'}, {base: 'hide', participle: 'hidden'}, {base: 'know', participle: 'known'},
+            {base: 'leave', participle: 'left'}, {base: 'lose', participle: 'lost'}, {base: 'make', participle: 'made'},
+            {base: 'meet', participle: 'met'}, {base: 'read', participle: 'read'}, {base: 'ride', participle: 'ridden'},
+            {base: 'run', participle: 'run'}, {base: 'see', participle: 'seen'}, {base: 'sell', participle: 'sold'},
+            {base: 'send', participle: 'sent'}, {base: 'sing', participle: 'sung'}, {base: 'sit', participle: 'sat'},
+            {base: 'sleep', participle: 'slept'}, {base: 'speak', participle: 'spoken'}, {base: 'spend', participle: 'spent'},
+            {base: 'swim', participle: 'swum'}, {base: 'take', participle: 'taken'}, {base: 'teach', participle: 'taught'},
+            {base: 'tell', participle: 'told'}, {base: 'think', participle: 'thought'}, {base: 'throw', participle: 'thrown'},
+            {base: 'understand', participle: 'understood'}, {base: 'wake', participle: 'woken'}, {base: 'wear', participle: 'worn'},
+            {base: 'win', participle: 'won'}, {base: 'write', participle: 'written'}
+        ];
+
+        // Fill in the blanks sentences
+        const fillBlankSentences = [
+            {sentence: "I have _____ (eat) breakfast already.", answer: "eaten"},
+            {sentence: "She has _____ (go) to the store.", answer: "gone"},
+            {sentence: "They have _____ (see) that movie before.", answer: "seen"},
+            {sentence: "We have _____ (be) friends for years.", answer: "been"},
+            {sentence: "He has _____ (write) three books.", answer: "written"},
+            {sentence: "I have _____ (drink) too much coffee today.", answer: "drunk"},
+            {sentence: "She has _____ (break) her phone.", answer: "broken"},
+            {sentence: "They have _____ (buy) a new car.", answer: "bought"},
+            {sentence: "We have _____ (find) the perfect house.", answer: "found"},
+            {sentence: "He has _____ (lose) his keys again.", answer: "lost"},
+            {sentence: "I have _____ (meet) many interesting people.", answer: "met"},
+            {sentence: "She has _____ (teach) English for 10 years.", answer: "taught"},
+            {sentence: "They have _____ (build) a beautiful garden.", answer: "built"},
+            {sentence: "We have _____ (choose) our vacation destination.", answer: "chosen"},
+            {sentence: "He has _____ (forget) his password.", answer: "forgotten"},
+            {sentence: "I have _____ (hear) this song before.", answer: "heard"},
+            {sentence: "She has _____ (give) me great advice.", answer: "given"},
+            {sentence: "They have _____ (take) many photos.", answer: "taken"},
+            {sentence: "We have _____ (make) dinner together.", answer: "made"},
+            {sentence: "He has _____ (run) five marathons.", answer: "run"},
+            {sentence: "I have _____ (sleep) for eight hours.", answer: "slept"},
+            {sentence: "She has _____ (speak) to the manager.", answer: "spoken"},
+            {sentence: "They have _____ (swim) in the ocean.", answer: "swum"},
+            {sentence: "We have _____ (throw) away old clothes.", answer: "thrown"},
+            {sentence: "He has _____ (understand) the lesson.", answer: "understood"},
+            {sentence: "I have _____ (wear) this dress many times.", answer: "worn"},
+            {sentence: "She has _____ (win) several awards.", answer: "won"},
+            {sentence: "They have _____ (catch) the bus.", answer: "caught"},
+            {sentence: "We have _____ (drive) across the country.", answer: "driven"},
+            {sentence: "He has _____ (fall) asleep at his desk.", answer: "fallen"}
+        ];
+
+        // Sentence building prompts
+        const sentencePrompts = [
+            {prompt: "Create a sentence about eating something delicious", words: ["I", "have", "eaten", "delicious", "pizza", "today"], correct: "I have eaten delicious pizza today"},
+            {prompt: "Make a sentence about visiting a place", words: ["She", "has", "been", "to", "Paris", "twice"], correct: "She has been to Paris twice"},
+            {prompt: "Build a sentence about reading books", words: ["They", "have", "read", "many", "interesting", "books"], correct: "They have read many interesting books"},
+            {prompt: "Create a sentence about meeting someone", words: ["We", "have", "met", "the", "new", "teacher"], correct: "We have met the new teacher"},
+            {prompt: "Make a sentence about buying something", words: ["He", "has", "bought", "a", "new", "computer"], correct: "He has bought a new computer"},
+            {prompt: "Build a sentence about learning something", words: ["I", "have", "learned", "to", "play", "guitar"], correct: "I have learned to play guitar"},
+            {prompt: "Create a sentence about seeing a movie", words: ["She", "has", "seen", "that", "movie", "already"], correct: "She has seen that movie already"},
+            {prompt: "Make a sentence about writing", words: ["They", "have", "written", "a", "beautiful", "story"], correct: "They have written a beautiful story"},
+            {prompt: "Build a sentence about traveling", words: ["We", "have", "traveled", "to", "many", "countries"], correct: "We have traveled to many countries"},
+            {prompt: "Create a sentence about finding something", words: ["He", "has", "found", "his", "lost", "wallet"], correct: "He has found his lost wallet"}
+        ];
+
+        // Speaking prompts
+        const speakingPrompts = [
+            "Tell me about a place you have visited recently.",
+            "Describe something delicious you have eaten this week.",
+            "Talk about a movie you have seen that you really enjoyed.",
+            "Share about a skill you have learned in the past year.",
+            "Describe a person you have met who made a good impression.",
+            "Tell me about a book you have read that changed your thinking.",
+            "Talk about a mistake you have made and what you learned.",
+            "Describe a goal you have achieved recently.",
+            "Share about a tradition you have experienced in your culture.",
+            "Tell me about a challenge you have overcome.",
+            "Describe a gift you have given that made someone happy.",
+            "Talk about a place you have lived that you miss.",
+            "Share about a hobby you have tried but didn't continue.",
+            "Tell me about a teacher who has influenced your life.",
+            "Describe a technology you have used that amazed you."
+        ];
+
+        // Writing prompts
+        const writingPrompts = [
+            "Write about three things you have accomplished this year that make you proud.",
+            "Describe a time when you have helped someone and how it made you feel.",
+            "Write about a country you have never visited but would like to explore.",
+            "Describe the most interesting person you have ever met.",
+            "Write about a skill you have always wanted to learn and why.",
+            "Describe a meal you have cooked that everyone enjoyed.",
+            "Write about a decision you have made that changed your life.",
+            "Describe a festival or celebration you have attended in your culture.",
+            "Write about a piece of advice you have received that was very helpful.",
+            "Describe a time when you have felt very proud of a family member.",
+            "Write about a place in your hometown that has special meaning to you.",
+            "Describe a challenge you have faced while learning English.",
+            "Write about a friendship you have maintained for many years.",
+            "Describe a moment when you have felt truly grateful.",
+            "Write about a dream you have had that you remember clearly."
+        ];
+
+        // Global variables
+        let currentScore = 0;
+        let currentProgress = 0;
+        let maxProgress = 10;
+        let selectedVerb = null;
+        let verbMatches = {};
+        let currentFillSet = 0;
+        let currentSentenceIndex = 0;
+        let currentSpeakingIndex = 0;
+        let currentWritingIndex = 0;
+        let builtSentence = [];
+
+        // Initialize the app
+        function init() {
+            showActivity('verb-forms');
+            setupVerbForms();
+            setupFillBlanks();
+            setupSentenceBuilder();
+            setupConversation();
+        }
+
+        // Show specific activity
+        function showActivity(activityName) {
+            document.querySelectorAll('.activity').forEach(el => el.classList.add('hidden'));
+            document.getElementById(activityName).classList.remove('hidden');
+            document.getElementById(activityName).classList.add('fade-in');
+            
+            // Update button styles
+            document.querySelectorAll('.activity-btn').forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-opacity-50');
+            });
+            event.target.classList.add('ring-4', 'ring-opacity-50');
+        }
+
+        // Setup verb forms activity
+        function setupVerbForms() {
+            const selectedVerbs = irregularVerbs.slice(0, 8);
+            const baseVerbsContainer = document.getElementById('base-verbs');
+            const pastParticipleContainer = document.getElementById('past-participles');
+            
+            if (!baseVerbsContainer || !pastParticipleContainer) return;
+            
+            baseVerbsContainer.innerHTML = '';
+            pastParticipleContainer.innerHTML = '';
+            
+            selectedVerbs.forEach(verb => {
+                const baseDiv = document.createElement('div');
+                baseDiv.className = 'bg-blue-100 p-3 rounded-lg cursor-pointer hover:bg-blue-200 transition-colors font-medium';
+                baseDiv.innerHTML = verb.base;
+                baseDiv.onclick = () => selectVerb(verb.base, baseDiv);
+                baseVerbsContainer.appendChild(baseDiv);
+            });
+            
+            const shuffledParticiples = [...selectedVerbs].sort(() => Math.random() - 0.5);
+            shuffledParticiples.forEach(verb => {
+                const particDiv = document.createElement('div');
+                particDiv.className = 'bg-green-100 p-3 rounded-lg cursor-pointer hover:bg-green-200 transition-colors font-medium';
+                particDiv.innerHTML = verb.participle;
+                particDiv.onclick = () => selectParticiple(verb.participle, particDiv);
+                pastParticipleContainer.appendChild(particDiv);
+            });
+        }
+
+        function selectVerb(verb, element) {
+            document.querySelectorAll('#base-verbs > div').forEach(el => el.classList.remove('ring-2', 'ring-blue-500'));
+            element.classList.add('ring-2', 'ring-blue-500');
+            selectedVerb = verb;
+        }
+
+        function selectParticiple(participle, element) {
+            if (selectedVerb) {
+                verbMatches[selectedVerb] = participle;
+                element.classList.add('bg-yellow-200');
+                selectedVerb = null;
+                document.querySelectorAll('#base-verbs > div').forEach(el => el.classList.remove('ring-2', 'ring-blue-500'));
+            }
+        }
+
+        function checkVerbMatches() {
+            let correct = 0;
+            const feedback = document.getElementById('verb-feedback');
+            
+            Object.keys(verbMatches).forEach(base => {
+                const correctParticiple = irregularVerbs.find(v => v.base === base)?.participle;
+                if (verbMatches[base] === correctParticiple) {
+                    correct++;
+                }
+            });
+            
+            const total = Object.keys(verbMatches).length;
+            feedback.innerHTML = `<div class="bg-${correct === total ? 'green' : 'yellow'}-100 p-4 rounded-lg">
+                <p class="font-medium">You got ${correct} out of ${total} correct!</p>
+                ${correct === total ? '<p class="text-green-600">Perfect! 🎉</p>' : '<p class="text-yellow-600">Keep practicing! 💪</p>'}
+            </div>`;
+            
+            if (correct === total) {
+                updateScore(10);
+                updateProgress();
+            }
+        }
+
+        function resetVerbForms() {
+            verbMatches = {};
+            selectedVerb = null;
+            setupVerbForms();
+            document.getElementById('verb-feedback').innerHTML = '';
+        }
+
+        // Setup fill in the blanks
+        function setupFillBlanks() {
+            displayFillBlanks();
+        }
+
+        function displayFillBlanks() {
+            const container = document.getElementById('fill-questions');
+            const startIndex = currentFillSet * 5;
+            const endIndex = Math.min(startIndex + 5, fillBlankSentences.length);
+            
+            container.innerHTML = '';
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const question = fillBlankSentences[i];
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'bg-gray-50 p-4 rounded-lg';
+                questionDiv.innerHTML = `
+                    <p class="mb-3 text-gray-800">${question.sentence}</p>
+                    <input type="text" class="fill-input w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" 
+                           data-answer="${question.answer}" placeholder="Enter the past participle...">
+                `;
+                container.appendChild(questionDiv);
+            }
+        }
+
+        function checkFillBlanks() {
+            const inputs = document.querySelectorAll('.fill-input');
+            let correct = 0;
+            
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                    correct++;
+                } else {
+                    input.classList.add('incorrect');
+                    input.classList.remove('correct');
+                }
+            });
+            
+            const feedback = document.getElementById('fill-feedback');
+            feedback.innerHTML = `<div class="bg-${correct === inputs.length ? 'green' : 'yellow'}-100 p-4 rounded-lg">
+                <p class="font-medium">You got ${correct} out of ${inputs.length} correct!</p>
+            </div>`;
+            
+            if (correct === inputs.length) {
+                updateScore(15);
+                updateProgress();
+            }
+        }
+
+        function nextFillSet() {
+            currentFillSet = (currentFillSet + 1) % Math.ceil(fillBlankSentences.length / 5);
+            displayFillBlanks();
+            document.getElementById('fill-feedback').innerHTML = '';
+        }
+
+        // Setup sentence builder
+        function setupSentenceBuilder() {
+            displaySentenceBuilder();
+        }
+
+        function displaySentenceBuilder() {
+            const prompt = sentencePrompts[currentSentenceIndex];
+            document.getElementById('sentence-prompt').innerHTML = prompt.prompt;
+            
+            const wordBank = document.getElementById('word-bank');
+            if (!wordBank) return;
+            
+            wordBank.innerHTML = '';
+            
+            const shuffledWords = [...prompt.words].sort(() => Math.random() - 0.5);
+            shuffledWords.forEach(word => {
+                const wordDiv = document.createElement('div');
+                wordDiv.className = 'bg-blue-500 text-white p-2 rounded-lg cursor-pointer hover:bg-blue-600 transition-colors text-center font-medium';
+                wordDiv.innerHTML = word;
+                wordDiv.onclick = () => addWordToSentence(word, wordDiv);
+                wordBank.appendChild(wordDiv);
+            });
+            
+            builtSentence = [];
+            document.getElementById('sentence-area').innerHTML = '<p class="text-gray-500 text-center">Click words above to build your sentence</p>';
+        }
+
+        function addWordToSentence(word, element) {
+            builtSentence.push(word);
+            element.style.display = 'none';
+            
+            const sentenceArea = document.getElementById('sentence-area');
+            sentenceArea.innerHTML = `<p class="text-gray-800">${builtSentence.join(' ')}</p>
+                <button onclick="clearSentence()" class="mt-2 bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">Clear</button>`;
+        }
+
+        function clearSentence() {
+            builtSentence = [];
+            displaySentenceBuilder();
+        }
+
+        function checkSentence() {
+            const prompt = sentencePrompts[currentSentenceIndex];
+            const userSentence = builtSentence.join(' ').toLowerCase();
+            const correctSentence = prompt.correct.toLowerCase();
+            
+            const feedback = document.getElementById('sentence-feedback');
+            
+            if (userSentence === correctSentence) {
+                feedback.innerHTML = '<div class="bg-green-100 p-4 rounded-lg"><p class="text-green-600 font-medium">Perfect sentence! 🎉</p></div>';
+                updateScore(20);
+                updateProgress();
+            } else {
+                feedback.innerHTML = `<div class="bg-yellow-100 p-4 rounded-lg">
+                    <p class="text-yellow-600 font-medium">Good try! Here's the correct sentence:</p>
+                    <p class="text-gray-700 mt-2">"${prompt.correct}"</p>
+                </div>`;
+            }
+        }
+
+        function nextSentence() {
+            currentSentenceIndex = (currentSentenceIndex + 1) % sentencePrompts.length;
+            displaySentenceBuilder();
+            document.getElementById('sentence-feedback').innerHTML = '';
+        }
+
+        // Setup conversation practice
+        function setupConversation() {
+            displaySpeakingPrompt();
+            displayWritingPrompt();
+        }
+
+        function displaySpeakingPrompt() {
+            const element = document.getElementById('speaking-prompt');
+            if (element) {
+                element.innerHTML = speakingPrompts[currentSpeakingIndex];
+            }
+        }
+
+        function displayWritingPrompt() {
+            const element = document.getElementById('writing-prompt');
+            if (element) {
+                element.innerHTML = writingPrompts[currentWritingIndex];
+            }
+        }
+
+        function nextSpeakingPrompt() {
+            currentSpeakingIndex = (currentSpeakingIndex + 1) % speakingPrompts.length;
+            displaySpeakingPrompt();
+        }
+
+        function nextWritingPrompt() {
+            currentWritingIndex = (currentWritingIndex + 1) % writingPrompts.length;
+            displayWritingPrompt();
+            document.getElementById('writing-area').value = '';
+        }
+
+        function clearWriting() {
+            document.getElementById('writing-area').value = '';
+        }
+
+        // Score and progress functions
+        function updateScore(points) {
+            currentScore += points;
+            document.getElementById('total-score').textContent = currentScore;
+            
+            // Add pulse animation
+            const scoreElement = document.getElementById('total-score');
+            scoreElement.classList.add('pulse-green');
+            setTimeout(() => scoreElement.classList.remove('pulse-green'), 600);
+        }
+
+        function updateProgress() {
+            currentProgress = Math.min(currentProgress + 1, maxProgress);
+            const percentage = (currentProgress / maxProgress) * 100;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `${currentProgress}/${maxProgress}`;
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+        });
+        
+        // Backup initialization
+        window.onload = function() {
+            if (document.readyState === 'complete') {
+                init();
+            }
+        };
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977476d3e0ec58fe',t:'MTc1NjU1ODc1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
