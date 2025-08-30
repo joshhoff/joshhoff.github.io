@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Vocabulary & Present Perfect Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .correct { background-color: #10b981 !important; color: white !important; }
+        .incorrect { background-color: #ef4444 !important; color: white !important; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .tab-active { border-bottom-color: #2563eb !important; color: #2563eb !important; background-color: #eff6ff !important; }
+        .tab-inactive { border-bottom-color: transparent !important; color: #6b7280 !important; }
+        .practice-sentence { transition: all 0.3s ease; }
+        .practice-sentence:hover { transform: translateX(5px); background-color: #f8fafc; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🚗 Car Vocabulary & Present Perfect</h1>
+            <p class="text-lg text-gray-600">Advanced ESL Practice for Polish Speakers</p>
+            <div class="mt-4 bg-white rounded-lg p-4 shadow-md">
+                <p class="text-sm text-gray-700"><strong>Tip:</strong> Focus on the present perfect structure: <em>have/has + past participle</em></p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white rounded-xl shadow-lg mb-6">
+            <div class="flex border-b">
+                <button onclick="showTab('quiz')" id="quiz-tab" class="flex-1 py-4 px-6 text-center font-medium border-b-2 tab-active">
+                    🚗 Interactive Quiz
+                </button>
+                <button onclick="showTab('practice')" id="practice-tab" class="flex-1 py-4 px-6 text-center font-medium border-b-2 tab-inactive hover:text-gray-700">
+                    📝 Practice Sentences
+                </button>
+                <button onclick="showTab('conversation')" id="conversation-tab" class="flex-1 py-4 px-6 text-center font-medium border-b-2 tab-inactive hover:text-gray-700">
+                    💬 Conversation Prompts
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Tab Content -->
+        <div id="quiz-content" class="tab-content">
+            <!-- Progress Bar -->
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-gray-700">Progress</span>
+                    <span class="text-sm font-medium text-gray-700" id="progress-text">0/10</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="bg-blue-600 h-3 rounded-full transition-all duration-300" id="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Score Display -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-green-100 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-green-800" id="correct-score">0</div>
+                    <div class="text-sm text-green-600">Correct</div>
+                </div>
+                <div class="bg-red-100 rounded-lg p-4 text-center">
+                    <div class="text-2xl font-bold text-red-800" id="incorrect-score">0</div>
+                    <div class="text-sm text-red-600">Incorrect</div>
+                </div>
+            </div>
+
+            <!-- Main Quiz Area -->
+            <div id="quiz-container" class="bg-white rounded-xl shadow-lg p-8">
+                <!-- Question Display -->
+                <div id="question-area" class="mb-8">
+                    <div class="text-center mb-6">
+                        <div class="text-6xl mb-4" id="car-emoji">🚗</div>
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-2" id="question-text">Loading...</h2>
+                        <p class="text-gray-600" id="polish-hint"></p>
+                    </div>
+                </div>
+
+                <!-- Answer Options -->
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <!-- Feedback Area -->
+                <div id="feedback-area" class="hidden">
+                    <div class="bg-gray-50 rounded-lg p-6 text-center">
+                        <div class="text-4xl mb-2" id="feedback-emoji">✅</div>
+                        <div class="text-lg font-semibold mb-2" id="feedback-text">Correct!</div>
+                        <div class="text-gray-600 mb-4" id="explanation-text"></div>
+                        <button onclick="nextQuestion()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-container" class="hidden bg-white rounded-xl shadow-lg p-8 text-center">
+                <div class="text-6xl mb-4">🏆</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Quiz Complete!</h2>
+                <div class="text-xl mb-6">
+                    Your Score: <span class="font-bold text-blue-600" id="final-score">0/10</span>
+                </div>
+                <div class="mb-6" id="performance-message"></div>
+                <button onclick="restartQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Try Again
+                </button>
+            </div>
+        </div>
+
+        <!-- Practice Sentences Tab Content -->
+        <div id="practice-content" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📝 Practice Sentences</h2>
+                <p class="text-gray-600 mb-8 text-center">Complete these sentences using the present perfect tense. Click to reveal the answer!</p>
+                
+                <div class="space-y-4" id="practice-sentences">
+                    <!-- Practice sentences will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Prompts Tab Content -->
+        <div id="conversation-content" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">💬 Conversation Prompts</h2>
+                <p class="text-gray-600 mb-8 text-center">Practice speaking with these conversation starters. Use present perfect tense in your responses!</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="conversation-prompts">
+                    <!-- Conversation prompts will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Vocabulary Reference -->
+        <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">🔧 Car Vocabulary Reference</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                <div><strong>Engine:</strong> silnik</div>
+                <div><strong>Brake:</strong> hamulec</div>
+                <div><strong>Tire:</strong> opona</div>
+                <div><strong>Steering wheel:</strong> kierownica</div>
+                <div><strong>Headlight:</strong> reflektor</div>
+                <div><strong>Windshield:</strong> przednia szyba</div>
+                <div><strong>Hood:</strong> maska</div>
+                <div><strong>Trunk:</strong> bagażnik</div>
+                <div><strong>Bumper:</strong> zderzak</div>
+                <div><strong>Mirror:</strong> lusterko</div>
+                <div><strong>Seat belt:</strong> pas bezpieczeństwa</div>
+                <div><strong>Dashboard:</strong> deska rozdzielcza</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                emoji: "🔧",
+                question: "Complete: 'I ___ my car's engine three times this year.'",
+                polishHint: "Naprawiłem silnik mojego samochodu (repair - naprawić)",
+                options: ["have repaired", "has repaired", "repaired", "am repairing"],
+                correct: 0,
+                explanation: "Use 'have repaired' because 'I' takes 'have' + past participle. This shows completed actions with present relevance."
+            },
+            {
+                emoji: "🛞",
+                question: "Complete: 'She ___ new tires for her car recently.'",
+                polishHint: "Kupiła nowe opony (buy - kupić)",
+                options: ["have bought", "has bought", "bought", "is buying"],
+                correct: 1,
+                explanation: "Use 'has bought' because 'she' takes 'has' + past participle. 'Recently' indicates present perfect."
+            },
+            {
+                emoji: "🚗",
+                question: "Complete: 'We ___ our car twice this month.'",
+                polishHint: "Umyliśmy samochód (wash - myć)",
+                options: ["washed", "have washed", "has washed", "are washing"],
+                correct: 1,
+                explanation: "Use 'have washed' because 'we' takes 'have' + past participle. 'This month' shows a time period continuing to now."
+            },
+            {
+                emoji: "🔦",
+                question: "Complete: 'The mechanic ___ the headlights already.'",
+                polishHint: "Mechanik naprawił reflektory (fix - naprawić)",
+                options: ["fixed", "have fixed", "has fixed", "is fixing"],
+                correct: 2,
+                explanation: "Use 'has fixed' because 'mechanic' (he/she) takes 'has' + past participle. 'Already' is a present perfect time marker."
+            },
+            {
+                emoji: "🛡️",
+                question: "Complete: 'They ___ the bumper since the accident.'",
+                polishHint: "Nie naprawili zderzaka (not repair - nie naprawić)",
+                options: ["didn't repair", "haven't repaired", "hasn't repaired", "don't repair"],
+                correct: 1,
+                explanation: "Use 'haven't repaired' for negative present perfect. 'Since' indicates a starting point continuing to now."
+            },
+            {
+                emoji: "🪟",
+                question: "Complete: 'I ___ the windshield wipers yet.'",
+                polishHint: "Jeszcze nie wymieniłem wycieraczek (not replace - nie wymienić)",
+                options: ["didn't replace", "haven't replaced", "hasn't replaced", "don't replace"],
+                correct: 1,
+                explanation: "Use 'haven't replaced' with 'yet' in negative sentences. 'Yet' is used in present perfect negative and questions."
+            },
+            {
+                emoji: "⛽",
+                question: "Complete: '___ you ever ___ out of gas while driving?'",
+                polishHint: "Czy kiedykolwiek zabrakło ci paliwa? (run out - zabrakło)",
+                options: ["Did / run", "Have / run", "Has / run", "Do / run"],
+                correct: 1,
+                explanation: "Use 'Have you ever run' for life experiences. 'Ever' with present perfect asks about any time up to now."
+            },
+            {
+                emoji: "🔑",
+                question: "Complete: 'He ___ his car keys somewhere in the house.'",
+                polishHint: "Zgubił kluczyki (lose - zgubić)",
+                options: ["lost", "have lost", "has lost", "is losing"],
+                correct: 2,
+                explanation: "Use 'has lost' because 'he' takes 'has' + past participle. The result (keys are missing) is relevant now."
+            },
+            {
+                emoji: "🚙",
+                question: "Complete: 'How long ___ you ___ this car?'",
+                polishHint: "Jak długo masz ten samochód? (have - mieć)",
+                options: ["do / have", "have / had", "has / had", "did / have"],
+                correct: 1,
+                explanation: "Use 'have you had' for duration from past to present. 'How long' with present perfect asks about ongoing situations."
+            },
+            {
+                emoji: "🔧",
+                question: "Complete: 'The car ___ strange noises since yesterday.'",
+                polishHint: "Samochód wydaje dziwne dźwięki (make - wydawać)",
+                options: ["made", "have made", "has been making", "is making"],
+                correct: 2,
+                explanation: "Use 'has been making' (present perfect continuous) for ongoing actions that started in the past and continue now."
+            }
+        ];
+
+        const practiceSentences = [
+            {
+                sentence: "I ___ (drive) this car for five years.",
+                answer: "have driven",
+                polish: "Prowadzę ten samochód od pięciu lat."
+            },
+            {
+                sentence: "She ___ (never/see) such a fast car before.",
+                answer: "has never seen",
+                polish: "Nigdy wcześniej nie widziała tak szybkiego samochodu."
+            },
+            {
+                sentence: "We ___ (just/finish) washing the car.",
+                answer: "have just finished",
+                polish: "Właśnie skończyliśmy myć samochód."
+            },
+            {
+                sentence: "The mechanic ___ (already/check) the brakes.",
+                answer: "has already checked",
+                polish: "Mechanik już sprawdził hamulce."
+            },
+            {
+                sentence: "They ___ (not/change) the oil yet.",
+                answer: "haven't changed",
+                polish: "Jeszcze nie zmienili oleju."
+            },
+            {
+                sentence: "___ you ever ___ (have) a flat tire?",
+                answer: "Have / had",
+                polish: "Czy kiedykolwiek miałeś przebicie opony?"
+            },
+            {
+                sentence: "My father ___ (teach) me how to drive.",
+                answer: "has taught",
+                polish: "Mój ojciec nauczył mnie prowadzić."
+            },
+            {
+                sentence: "The car ___ (break down) three times this month.",
+                answer: "has broken down",
+                polish: "Samochód zepsuł się trzy razy w tym miesiącu."
+            },
+            {
+                sentence: "I ___ (lose) my car keys again!",
+                answer: "have lost",
+                polish: "Znowu zgubiłem kluczyki do samochodu!"
+            },
+            {
+                sentence: "She ___ (be) a careful driver since the accident.",
+                answer: "has been",
+                polish: "Jest ostrożną kierowczynią od czasu wypadku."
+            },
+            {
+                sentence: "We ___ (travel) 500 kilometers today.",
+                answer: "have traveled",
+                polish: "Przejechaliśmy dziś 500 kilometrów."
+            },
+            {
+                sentence: "The traffic ___ (get) worse recently.",
+                answer: "has gotten",
+                polish: "Ruch drogowy pogorszył się ostatnio."
+            },
+            {
+                sentence: "He ___ (not/pass) his driving test yet.",
+                answer: "hasn't passed",
+                polish: "Jeszcze nie zdał egzaminu na prawo jazdy."
+            },
+            {
+                sentence: "___ the mechanic ___ (fix) the engine?",
+                answer: "Has / fixed",
+                polish: "Czy mechanik naprawił silnik?"
+            },
+            {
+                sentence: "I ___ (never/drive) such an expensive car.",
+                answer: "have never driven",
+                polish: "Nigdy nie prowadziłem tak drogiego samochodu."
+            },
+            {
+                sentence: "The car dealership ___ (sell) 50 cars this week.",
+                answer: "has sold",
+                polish: "Salon samochodowy sprzedał 50 samochodów w tym tygodniu."
+            },
+            {
+                sentence: "My sister ___ (just/get) her driver's license.",
+                answer: "has just gotten",
+                polish: "Moja siostra właśnie dostała prawo jazdy."
+            },
+            {
+                sentence: "We ___ (park) in the wrong place several times.",
+                answer: "have parked",
+                polish: "Parkowaliśmy w złym miejscu kilka razy."
+            },
+            {
+                sentence: "The GPS ___ (help) us find the way many times.",
+                answer: "has helped",
+                polish: "GPS pomógł nam znaleźć drogę wiele razy."
+            },
+            {
+                sentence: "___ you ___ (ever/be) in a car accident?",
+                answer: "Have / ever been",
+                polish: "Czy kiedykolwiek miałeś wypadek samochodowy?"
+            },
+            {
+                sentence: "The car ___ (not/start) since yesterday.",
+                answer: "hasn't started",
+                polish: "Samochód nie odpala od wczoraj."
+            },
+            {
+                sentence: "I ___ (forget) where I parked my car.",
+                answer: "have forgotten",
+                polish: "Zapomniałem gdzie zaparkowałem samochód."
+            },
+            {
+                sentence: "She ___ (drive) in heavy traffic for two hours.",
+                answer: "has been driving",
+                polish: "Jedzie w korku od dwóch godzin."
+            },
+            {
+                sentence: "The police ___ (stop) many speeding drivers today.",
+                answer: "have stopped",
+                polish: "Policja zatrzymała dziś wielu kierowców za przekroczenie prędkości."
+            },
+            {
+                sentence: "We ___ (use) this parking garage for years.",
+                answer: "have used",
+                polish: "Korzystamy z tego parkingu od lat."
+            },
+            {
+                sentence: "The car insurance ___ (become) more expensive.",
+                answer: "has become",
+                polish: "Ubezpieczenie samochodu stało się droższe."
+            },
+            {
+                sentence: "He ___ (always/be) interested in sports cars.",
+                answer: "has always been",
+                polish: "Zawsze interesował się samochodami sportowymi."
+            },
+            {
+                sentence: "___ the tire pressure ___ (drop) recently?",
+                answer: "Has / dropped",
+                polish: "Czy ciśnienie w oponach spadło ostatnio?"
+            },
+            {
+                sentence: "I ___ (not/see) such bad weather for driving.",
+                answer: "haven't seen",
+                polish: "Nie widziałem tak złej pogody do jazdy."
+            },
+            {
+                sentence: "The car rental company ___ (give) us a discount.",
+                answer: "has given",
+                polish: "Wypożyczalnia samochodów dała nam zniżkę."
+            },
+            {
+                sentence: "My driving skills ___ (improve) a lot this year.",
+                answer: "have improved",
+                polish: "Moje umiejętności jazdy bardzo się poprawiły w tym roku."
+            },
+            {
+                sentence: "The mechanic ___ (work) on this car all morning.",
+                answer: "has been working",
+                polish: "Mechanik pracuje nad tym samochodem całe rano."
+            },
+            {
+                sentence: "___ you ___ (ever/drive) a manual transmission car?",
+                answer: "Have / ever driven",
+                polish: "Czy kiedykolwiek prowadziłeś samochód z manualną skrzynią biegów?"
+            }
+        ];
+
+        const conversationPrompts = [
+            {
+                emoji: "🚗",
+                title: "Car Ownership Experience",
+                prompt: "Tell me about your experience with cars. How long have you owned a car? What problems have you had?",
+                tips: "Use: 'I have owned...', 'I have had problems with...', 'I have never experienced...'"
+            },
+            {
+                emoji: "🔧",
+                title: "Car Maintenance",
+                prompt: "Describe your car maintenance routine. What repairs have you done recently? What haven't you done yet?",
+                tips: "Use: 'I have changed...', 'I haven't replaced...', 'The mechanic has fixed...'"
+            },
+            {
+                emoji: "🛣️",
+                title: "Driving Experiences",
+                prompt: "What interesting places have you driven to? Have you ever been in a traffic jam or gotten lost?",
+                tips: "Use: 'I have driven to...', 'I have been stuck in...', 'I have never gotten lost...'"
+            },
+            {
+                emoji: "⛽",
+                title: "Fuel and Costs",
+                prompt: "How have gas prices affected you? What have you done to save money on car expenses?",
+                tips: "Use: 'Prices have increased...', 'I have started...', 'I haven't bought...'"
+            },
+            {
+                emoji: "🚙",
+                title: "Dream Cars",
+                prompt: "What cars have you always wanted to drive? Have you ever test-driven an expensive car?",
+                tips: "Use: 'I have always wanted...', 'I have never driven...', 'I have dreamed of...'"
+            },
+            {
+                emoji: "🏁",
+                title: "Driving Skills",
+                prompt: "How have your driving skills changed over time? What driving situations have been challenging?",
+                tips: "Use: 'My skills have improved...', 'I have learned...', 'I have become more...'"
+            },
+            {
+                emoji: "🚦",
+                title: "Traffic and Rules",
+                prompt: "What traffic problems have you experienced in your city? Have you ever gotten a traffic ticket?",
+                tips: "Use: 'Traffic has gotten worse...', 'I have never received...', 'The city has built...'"
+            },
+            {
+                emoji: "🛞",
+                title: "Car Problems",
+                prompt: "What car troubles have you experienced? How have you dealt with breakdowns or accidents?",
+                tips: "Use: 'I have had...', 'My car has broken down...', 'I have learned to...'"
+            },
+            {
+                emoji: "🚗",
+                title: "Car Technology",
+                prompt: "How has car technology changed since you started driving? What new features have impressed you?",
+                tips: "Use: 'Cars have become...', 'I have seen...', 'Technology has made...'"
+            },
+            {
+                emoji: "🏪",
+                title: "Car Shopping",
+                prompt: "Describe your car buying experiences. What factors have influenced your car choices?",
+                tips: "Use: 'I have bought...', 'I have always considered...', 'Dealers have offered...'"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let answered = false;
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => {
+                tab.classList.remove('tab-active');
+                tab.classList.add('tab-inactive');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-content').classList.remove('hidden');
+            
+            // Add active class to selected tab
+            document.getElementById(tabName + '-tab').classList.add('tab-active');
+            document.getElementById(tabName + '-tab').classList.remove('tab-inactive');
+            
+            // Initialize content if needed
+            if (tabName === 'practice') {
+                initializePracticeSentences();
+            } else if (tabName === 'conversation') {
+                initializeConversationPrompts();
+            }
+        }
+
+        function initializePracticeSentences() {
+            const container = document.getElementById('practice-sentences');
+            if (container.children.length > 0) return; // Already initialized
+            
+            practiceSentences.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'practice-sentence bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500 cursor-pointer hover:shadow-md';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <p class="text-gray-800 font-medium mb-2">${item.sentence}</p>
+                            <p class="text-sm text-gray-600 italic">${item.polish}</p>
+                            <div class="answer-reveal hidden mt-3 p-3 bg-green-50 rounded border-l-4 border-green-500">
+                                <p class="text-green-800 font-semibold">Answer: ${item.answer}</p>
+                            </div>
+                        </div>
+                        <span class="text-2xl ml-4">📝</span>
+                    </div>
+                `;
+                
+                div.onclick = () => {
+                    const answerDiv = div.querySelector('.answer-reveal');
+                    answerDiv.classList.toggle('hidden');
+                };
+                
+                container.appendChild(div);
+            });
+        }
+
+        function initializeConversationPrompts() {
+            const container = document.getElementById('conversation-prompts');
+            if (container.children.length > 0) return; // Already initialized
+            
+            conversationPrompts.forEach(prompt => {
+                const div = document.createElement('div');
+                div.className = 'bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200 hover:shadow-lg transition-all duration-300';
+                div.innerHTML = `
+                    <div class="text-center mb-4">
+                        <div class="text-4xl mb-2">${prompt.emoji}</div>
+                        <h3 class="text-lg font-semibold text-gray-800">${prompt.title}</h3>
+                    </div>
+                    <p class="text-gray-700 mb-4">${prompt.prompt}</p>
+                    <div class="bg-white rounded p-3 border-l-4 border-blue-500">
+                        <p class="text-sm text-blue-700"><strong>Grammar Tips:</strong></p>
+                        <p class="text-sm text-blue-600">${prompt.tips}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('car-emoji').textContent = question.emoji;
+            document.getElementById('question-text').textContent = question.question;
+            document.getElementById('polish-hint').textContent = question.polishHint;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'bg-gray-100 hover:bg-gray-200 border-2 border-gray-200 rounded-lg p-4 text-left transition-all duration-200 hover:border-blue-300';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('feedback-area').classList.add('hidden');
+            answered = false;
+            updateProgress();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (answered) return;
+            
+            answered = true;
+            const question = questions[currentQuestion];
+            const buttons = document.querySelectorAll('#options-container button');
+            
+            buttons.forEach((button, index) => {
+                if (index === question.correct) {
+                    button.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    button.classList.add('incorrect');
+                }
+                button.style.pointerEvents = 'none';
+            });
+
+            const isCorrect = selectedIndex === question.correct;
+            
+            if (isCorrect) {
+                correctAnswers++;
+                document.getElementById('feedback-emoji').textContent = '✅';
+                document.getElementById('feedback-text').textContent = 'Excellent!';
+                document.getElementById('feedback-text').className = 'text-lg font-semibold mb-2 text-green-600';
+            } else {
+                incorrectAnswers++;
+                document.getElementById('feedback-emoji').textContent = '❌';
+                document.getElementById('feedback-text').textContent = 'Not quite right';
+                document.getElementById('feedback-text').className = 'text-lg font-semibold mb-2 text-red-600';
+            }
+
+            document.getElementById('explanation-text').textContent = question.explanation;
+            document.getElementById('feedback-area').classList.remove('hidden');
+            document.getElementById('feedback-area').classList.add('fade-in');
+
+            updateScores();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                displayQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `${currentQuestion}/${questions.length}`;
+        }
+
+        function updateScores() {
+            document.getElementById('correct-score').textContent = correctAnswers;
+            document.getElementById('incorrect-score').textContent = incorrectAnswers;
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('results-container').classList.remove('hidden');
+            document.getElementById('results-container').classList.add('fade-in');
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            document.getElementById('final-score').textContent = `${correctAnswers}/${questions.length} (${percentage}%)`;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 Outstanding! You have excellent mastery of the present perfect tense with car vocabulary.';
+            } else if (percentage >= 70) {
+                message = '👍 Great job! You have a solid understanding. Review the explanations for even better results.';
+            } else if (percentage >= 50) {
+                message = '📚 Good effort! Focus on the present perfect structure: have/has + past participle.';
+            } else {
+                message = '💪 Keep practicing! Review the present perfect rules and try again.';
+            }
+            
+            document.getElementById('performance-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            answered = false;
+            
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('results-container').classList.add('hidden');
+            
+            updateScores();
+            displayQuestion();
+        }
+
+        // Initialize the app
+        displayQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97761a0973e92773',t:'MTc1NjU3NTkyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
