@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>There Was vs There Were - ESL Learning App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .correct { animation: correctPulse 0.6s ease-in-out; }
+        .incorrect { animation: incorrectShake 0.6s ease-in-out; }
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background-color: #10b981; }
+            100% { transform: scale(1); }
+        }
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); background-color: #ef4444; }
+            75% { transform: translateX(5px); background-color: #ef4444; }
+        }
+        .keyword {
+            border-bottom: 1px dotted #6b7280;
+            cursor: help;
+            transition: all 0.2s ease;
+        }
+        .keyword:hover {
+            background-color: #fef3c7;
+            border-bottom-color: #d97706;
+        }
+        .definition-popup {
+            position: fixed;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .definition-popup::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 20px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-bottom: none;
+            border-right: none;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">There Was vs There Were</h1>
+            <p class="text-lg text-gray-600">Nauka dla Polaków • ESL Grammar Practice</p>
+            <div class="mt-4 bg-white rounded-lg p-4 shadow-sm">
+                <p class="text-sm text-gray-700"><strong>Wskazówka:</strong> "There was" = pojedyncza rzecz, "There were" = wiele rzeczy</p>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700">Postęp / Progress</span>
+                <span class="text-sm font-medium text-gray-700" id="progress-text">0/45</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-blue-600 h-3 rounded-full transition-all duration-300" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Score Display -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-green-100 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-green-800" id="correct-score">0</div>
+                <div class="text-sm text-green-600">Poprawne / Correct</div>
+            </div>
+            <div class="bg-red-100 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-red-800" id="incorrect-score">0</div>
+                <div class="text-sm text-red-600">Błędne / Incorrect</div>
+            </div>
+        </div>
+
+        <!-- Grammar Rule Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8" id="rule-card">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📚 Zasada Gramatyczna / Grammar Rule</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-blue-800 mb-2">THERE WAS (był/była/było)</h3>
+                    <p class="text-sm text-gray-700 mb-2">Używamy z rzeczownikami w liczbie pojedynczej:</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• There <strong>was</strong> a book on the table.</li>
+                        <li>• There <strong>was</strong> one student in class.</li>
+                        <li>• There <strong>was</strong> some milk in the fridge.</li>
+                    </ul>
+                </div>
+                <div class="bg-green-50 rounded-lg p-4">
+                    <h3 class="font-semibold text-green-800 mb-2">THERE WERE (były/było)</h3>
+                    <p class="text-sm text-gray-700 mb-2">Używamy z rzeczownikami w liczbie mnogiej:</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• There <strong>were</strong> books on the table.</li>
+                        <li>• There <strong>were</strong> many students in class.</li>
+                        <li>• There <strong>were</strong> two cats in the garden.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise Card -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8" id="exercise-card">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-800">🎯 Ćwiczenie / Exercise</h2>
+                <button onclick="showHint()" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+                    💡 Podpowiedź / Hint
+                </button>
+            </div>
+            
+            <div class="text-center mb-8">
+                <p class="text-lg text-gray-700 mb-6" id="question-text">Loading question...</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="selectAnswer('was')" class="answer-btn bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-medium transition-all transform hover:scale-105" id="was-btn">
+                        There WAS
+                    </button>
+                    <button onclick="selectAnswer('were')" class="answer-btn bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition-all transform hover:scale-105" id="were-btn">
+                        There WERE
+                    </button>
+                </div>
+            </div>
+
+            <div class="hidden bg-gray-50 rounded-lg p-4 mb-4" id="hint-box">
+                <p class="text-sm text-gray-700" id="hint-text"></p>
+            </div>
+
+            <div class="hidden rounded-lg p-4 mb-4" id="feedback-box">
+                <p class="font-medium" id="feedback-text"></p>
+                <p class="text-sm mt-2" id="explanation-text"></p>
+            </div>
+
+            <div class="text-center">
+                <button onclick="nextQuestion()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors" id="next-btn">
+                    Następne pytanie / Next Question →
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Card (Hidden initially) -->
+        <div class="hidden bg-white rounded-xl shadow-lg p-6" id="results-card">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🎉 Gratulacje! / Congratulations!</h2>
+                <div class="text-6xl mb-4" id="final-emoji">🎯</div>
+                <p class="text-lg text-gray-700 mb-6" id="final-message"></p>
+                <div class="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
+                    <div class="bg-green-100 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-green-800" id="final-correct">0</div>
+                        <div class="text-sm text-green-600">Poprawne</div>
+                    </div>
+                    <div class="bg-blue-100 rounded-lg p-4">
+                        <div class="text-2xl font-bold text-blue-800" id="final-percentage">0%</div>
+                        <div class="text-sm text-blue-600">Wynik</div>
+                    </div>
+                </div>
+                <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Zacznij ponownie / Start Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const definitions = {
+            "Renaissance": "A period of cultural rebirth in Europe (14th-17th centuries) marked by renewed interest in art, literature, and learning. / Renesans - okres odrodzenia kulturalnego w Europie.",
+            "unprecedented": "Never done or known before; without previous example. / Bezprecedensowy - nigdy wcześniej nie widziany.",
+            "flourishing": "A state of vigorous growth, development, or prosperity. / Rozkwit - stan intensywnego rozwoju lub prosperity.",
+            "recession": "A period of temporary economic decline during which trade and industrial activity are reduced. / Recesja - okres spadku aktywności ekonomicznej.",
+            "multinational": "Operating in several countries; involving several countries. / Międzynarodowy - działający w kilku krajach.",
+            "archaeological": "Relating to archaeology, the study of human history through excavation of sites and artifacts. / Archeologiczny - związany z badaniem historii przez wykopaliska.",
+            "millennia": "Plural of millennium; periods of a thousand years. / Tysiąclecia - okresy tysiąca lat.",
+            "skepticism": "A skeptical attitude; doubt as to the truth of something. / Sceptycyzm - wątpliwość co do prawdziwości czegoś.",
+            "feasibility": "The state or degree of being easily or conveniently done. / Wykonalność - możliwość zrealizowania czegoś.",
+            "Victorian": "Relating to the reign of Queen Victoria (1837-1901) or the values of that time. / Wiktoriański - związany z epoką królowej Wiktorii.",
+            "stringent": "Strict, precise, and exacting; demanding exact conformity to rules. / Rygorystyczny - bardzo surowy i wymagający.",
+            "conventions": "A way in which something is usually done; accepted standards. / Konwencje - przyjęte standardy postępowania.",
+            "pharmaceutical": "Relating to medicinal drugs, or their preparation, use, or sale. / Farmaceutyczny - związany z lekami.",
+            "breakthrough": "A sudden, dramatic, and important discovery or development. / Przełom - ważne odkrycie lub postęp.",
+            "protocols": "The official procedure or system of rules. / Protokoły - oficjalne procedury.",
+            "diplomatic": "Relating to diplomacy; skilled in dealing with sensitive matters. / Dyplomatyczny - związany z dyplomacją.",
+            "correspondence": "Letters sent or received; communication by exchanging letters. / Korespondencja - wymiana listów.",
+            "archives": "A collection of historical documents or records. / Archiwa - zbiór dokumentów historycznych.",
+            "classified": "Designated as officially secret and accessible only to authorized people. / Tajny - dostępny tylko dla upoważnionych osób.",
+            "catastrophe": "An event causing great and often sudden damage or suffering; a disaster. / Katastrofa - wydarzenie powodujące wielkie szkody.",
+            "contamination": "The presence of a minor and unwanted constituent. / Skażenie - obecność niepożądanych substancji.",
+            "ecosystem": "A biological community of interacting organisms and their physical environment. / Ekosystem - społeczność organizmów i ich środowisko.",
+            "parliamentary": "Relating to a parliament or its members. / Parlamentarny - związany z parlamentem.",
+            "coalition": "An alliance for combined action, especially a temporary alliance of political parties. / Koalicja - sojusz partii politycznych.",
+            "molecular": "Relating to or consisting of molecules. / Molekularny - związany z molekułami.",
+            "intricate": "Very complicated or detailed. / Skomplikowany - bardzo złożony.",
+            "compound": "A thing that is composed of two or more separate elements; a substance. / Związek - substancja złożona z elementów.",
+            "merger": "A combination of two things, especially companies, into one. / Fuzja - połączenie dwóch firm w jedną.",
+            "fluctuations": "Irregular rising and falling in number or amount; variations. / Wahania - nieregularne zmiany wartości.",
+            "psychological": "Relating to the human mind and behavior. / Psychologiczny - związany z umysłem i zachowaniem.",
+            "correlation": "A mutual relationship or connection between two or more things. / Korelacja - wzajemny związek między rzeczami.",
+            "trauma": "A deeply distressing or disturbing experience. / Trauma - głęboko stresujące doświadczenie.",
+            "behavioral": "Relating to the way in which someone acts or conducts themselves. / Behawioralny - związany ze sposobem zachowania.",
+            "metropolitan": "Relating to a large city, especially the chief city of a country or region. / Metropolitalny - związany z dużym miastem.",
+            "infrastructure": "The basic physical and organizational structures needed for operation of a society. / Infrastruktura - podstawowe struktury społeczeństwa.",
+            "simultaneously": "At the same time. / Jednocześnie - w tym samym czasie.",
+            "curator": "A keeper or custodian of a museum or other collection. / Kurator - opiekun kolekcji muzealnej.",
+            "manuscript": "A handwritten or typed document, especially an author's original copy. / Rękopis - dokument napisany ręcznie.",
+            "medieval": "Relating to the Middle Ages. / Średniowieczny - związany ze średniowieczem.",
+            "theoretical": "Concerned with or involving the theory of a subject rather than its practical application. / Teoretyczny - związany z teorią.",
+            "physicists": "Scientists who study physics. / Fizycy - naukowcy badający fizykę.",
+            "divergent": "Tending to be different or develop in different directions. / Rozbieżny - rozwijający się w różnych kierunkach.",
+            "quantum": "Relating to quantum theory in physics. / Kwantowy - związany z teorią kwantową.",
+            "entanglement": "A complicated or compromising relationship or situation. / Splątanie - skomplikowana sytuacja lub związek.",
+            "anthropological": "Relating to anthropology, the study of human societies and cultures. / Antropologiczny - związany z badaniem społeczeństw i kultur.",
+            "parallels": "Similar features or aspects; comparisons. / Podobieństwa - cechy wspólne lub porównania.",
+            "rituals": "Religious or solemn ceremonies consisting of actions performed according to a prescribed order. / Rytuały - ceremonie religijne lub uroczyste.",
+            "symposium": "A conference or meeting to discuss a particular subject. / Sympozjum - konferencja na określony temat.",
+            "consensus": "General agreement among a group. / Konsensus - powszechna zgoda w grupie.",
+            "labyrinthine": "Like a labyrinth; extremely complex and difficult to follow. / Labiryntowy - bardzo skomplikowany i trudny do zrozumienia.",
+            "artifacts": "Objects made by humans, typically of cultural or historical interest. / Artefakty - przedmioty wykonane przez ludzi o znaczeniu kulturowym.",
+            "seismic": "Relating to earthquakes or earth vibrations. / Sejsmiczny - związany z trzęsieniami ziemi.",
+            "displacement": "The moving of something from its position. / Przemieszczenie - przesunięcie czegoś z miejsca.",
+            "luminaries": "People who inspire or influence others, especially prominent people. / Luminarze - wybitne osobistości.",
+            "gala": "A special celebratory entertainment or performance. / Gala - uroczyste wydarzenie lub przedstawienie.",
+            "philanthropists": "People who seek to promote the welfare of others through donations. / Filantropowie - ludzie wspierający dobroczynność.",
+            "neurological": "Relating to the anatomy, functions, and diseases of nerves. / Neurologiczny - związany z układem nerwowym.",
+            "neuroplasticity": "The brain's ability to reorganize itself by forming new neural connections. / Neuroplastyczność - zdolność mózgu do reorganizacji.",
+            "tumultuous": "Very loud, confused, or disorderly. / Burzliwy - bardzo głośny, chaotyczny lub nieporządny.",
+            "emissaries": "People sent on a special mission as a diplomatic representative. / Emisariusze - wysłannicy dyplomatyczni.",
+            "ecclesiastical": "Relating to the Christian Church or its clergy. / Kościelny - związany z Kościołem chrześcijańskim.",
+            "codex": "An ancient manuscript text in book form. / Kodeks - starożytny rękopis w formie księgi.",
+            "renaissance": "A revival of or renewed interest in something. / Renesans - odrodzenie lub odnowione zainteresowanie.",
+            "methodologies": "Systems of methods used in a particular area of study. / Metodologie - systemy metod w określonej dziedzinie.",
+            "sustainability": "The ability to maintain at a certain rate or level. / Zrównoważoność - zdolność do utrzymania na określonym poziomie.",
+            "epidemiological": "Relating to the branch of medicine dealing with disease patterns. / Epidemiologiczny - związany z badaniem wzorców chorób.",
+            "cognoscenti": "People who are especially well informed about a particular subject. / Znawcy - ludzie szczególnie dobrze poinformowani o danym temacie.",
+            "authenticity": "The quality of being genuine or real. / Autentyczność - cecha bycia prawdziwym lub rzeczywistym.",
+            "crystalline": "Having the structure and form of a crystal; very clear. / Krystaliczny - mający strukturę kryształu; bardzo przejrzysty.",
+            "symmetry": "Correct proportion of the parts of a thing; balance. / Symetria - prawidłowe proporcje części; równowaga.",
+            "promulgation": "The action of making known a law or decree. / Promulgacja - ogłoszenie prawa lub dekretu.",
+            "ramifications": "Complex or unwelcome consequences of an action. / Konsekwencje - złożone lub niepożądane skutki działania.",
+            "lexicographical": "Relating to the writing or compilation of dictionaries. / Leksykograficzny - związany z tworzeniem słowników.",
+            "consistency": "The quality of being consistent; compatibility. / Spójność - cecha bycia konsekwentnym; zgodność.",
+            "virtuosos": "People highly skilled in music or another artistic pursuit. / Wirtuozowie - ludzie bardzo uzdolnieni w muzyce lub sztuce.",
+            "conservatory": "A college for the study of classical music or other arts. / Konserwatorium - szkoła muzyczna lub artystyczna.",
+            "repertoires": "Collections of pieces that a performer knows or is prepared to perform. / Repertuary - zbiory utworów przygotowanych do wykonania.",
+            "biotechnological": "Relating to biotechnology, the use of living systems in technology. / Biotechnologiczny - związany z wykorzystaniem systemów żywych.",
+            "gene": "A unit of heredity transferred from parent to offspring. / Gen - jednostka dziedziczności przekazywana potomstwu.",
+            "excavation": "The action of excavating something, especially an archaeological site. / Wykopaliska - działanie polegające na odkopywaniu, szczególnie stanowisk archeologicznych.",
+            "pottery": "Pots, dishes, and other articles made of earthenware or baked clay. / Ceramika - naczynia i przedmioty z gliny lub wypalonej ceramiki.",
+            "cosmological": "Relating to cosmology, the science of the origin and development of the universe. / Kosmologiczny - związany z nauką o pochodzeniu wszechświata.",
+            "inflation": "In cosmology, a theory of exponential expansion of space in the early universe. / Inflacja - w kosmologii, teoria eksponencjalnego rozszerzania się przestrzeni.",
+            "manuscripts": "Handwritten or typed documents, especially original copies. / Rękopisy - dokumenty pisane ręcznie lub maszynowo.",
+            "commentaries": "Explanatory or critical notes on a text. / Komentarze - objaśnienia lub krytyczne uwagi do tekstu.",
+            "algorithmic": "Relating to or using algorithms. / Algorytmiczny - związany z algorytmami lub je wykorzystujący.",
+            "optimization": "The action of making the best or most effective use of something. / Optymalizacja - działanie mające na celu najlepsze wykorzystanie czegoś.",
+            "ratification": "The action of signing or giving formal consent to a treaty. / Ratyfikacja - podpisanie lub formalne wyrażenie zgody na traktat.",
+            "negotiations": "Discussions aimed at reaching an agreement. / Negocjacje - rozmowy mające na celu osiągnięcie porozumienia.",
+            "phenomenological": "Relating to phenomenology, the study of consciousness and experience. / Fenomenologiczny - związany z badaniem świadomości i doświadczenia.",
+            "insights": "Accurate and deep understanding; clear perception. / Spostrzeżenia - dokładne i głębokie zrozumienie; jasne postrzeganie.",
+            "resistance": "The refusal to accept or comply with something. / Opór - odmowa przyjęcia lub podporządkowania się czemuś.",
+            "researchers": "People who carry out academic or scientific research. / Badacze - ludzie prowadzący badania akademickie lub naukowe.",
+            "algorithms": "Processes or sets of rules to be followed in calculations. / Algorytmy - procesy lub zestawy reguł w obliczeniach.",
+            "geopolitical": "Relating to politics influenced by geographical factors. / Geopolityczny - związany z polityką wpływaną przez czynniki geograficzne.",
+            "instability": "Lack of stability; the state of being unstable. / Niestabilność - brak stabilności; stan bycia niestabilnym.",
+            "connoisseurs": "Experts able to give critical judgments in an art or matter of taste. / Koneserzy - eksperci potrafiący wydawać krytyczne osądy w sztuce.",
+            "viticulture": "The cultivation and harvesting of grapes, especially for winemaking. / Winiarstwo - uprawa i zbiór winogron, szczególnie do produkcji wina.",
+            "jurisprudential": "Relating to jurisprudence, the theory or philosophy of law. / Prawniczy - związany z teorią lub filozofią prawa.",
+            "implementation": "The process of putting a decision or plan into effect. / Wdrożenie - proces wprowadzania decyzji lub planu w życie.",
+            "curriculum": "The subjects comprising a course of study in a school or college. / Program nauczania - przedmioty składające się na kurs studiów.",
+            "ethnographic": "Relating to ethnography, the scientific description of peoples and cultures. / Etnograficzny - związany z naukowym opisem ludów i kultur.",
+            "thermodynamic": "Relating to thermodynamics, the branch of physics dealing with heat and temperature. / Termodynamiczny - związany z działem fizyki zajmującym się ciepłem.",
+            "equilibrium": "A state in which opposing forces or influences are balanced. / Równowaga - stan, w którym przeciwstawne siły są zrównoważone.",
+            "bibliophiles": "People who collect or have a great love of books. / Bibliofile - ludzie kolekcjonujący książki lub bardzo je kochający.",
+            "competition": "The activity or condition of striving to gain or win something. / Konkurencja - działalność lub warunek dążenia do zdobycia czegoś."
+        };
+
+        const questions = [
+            {
+                text: "During the <span class='keyword' data-word='Renaissance'>Renaissance</span> period, _____ an <span class='keyword' data-word='unprecedented'>unprecedented</span> <span class='keyword' data-word='flourishing'>flourishing</span> of artistic and intellectual achievements throughout Europe.",
+                correct: "was",
+                hint: "'Flourishing' to rzeczownik niepoliczalny oznaczający rozkwit",
+                explanation: "Używamy 'was' bo 'flourishing' to rzeczownik niepoliczalny w liczbie pojedynczej, mimo że odnosi się do wielu osiągnięć."
+            },
+            {
+                text: "In the aftermath of the economic <span class='keyword' data-word='recession'>recession</span>, _____ numerous <span class='keyword' data-word='multinational'>multinational</span> corporations struggling to maintain their market dominance.",
+                correct: "were", 
+                hint: "'Numerous corporations' = wiele korporacji (plural)",
+                explanation: "Używamy 'were' bo 'numerous multinational corporations' to liczba mnoga."
+            },
+            {
+                text: "According to the <span class='keyword' data-word='archaeological'>archaeological</span> evidence, _____ sophisticated civilizations inhabiting this region <span class='keyword' data-word='millennia'>millennia</span> before previously thought.",
+                correct: "were",
+                hint: "'Civilizations' to zawsze liczba mnoga",
+                explanation: "Używamy 'were' bo 'sophisticated civilizations' to liczba mnoga, nawet gdy mowa o jednej cywilizacji jako zbiorowości."
+            },
+            {
+                text: "Despite the technological advancements, _____ still considerable <span class='keyword' data-word='skepticism'>skepticism</span> among the scientific community regarding the <span class='keyword' data-word='feasibility'>feasibility</span> of the project.",
+                correct: "was",
+                hint: "'Skepticism' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'skepticism' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Throughout the <span class='keyword' data-word='Victorian'>Victorian</span> era, _____ <span class='keyword' data-word='stringent'>stringent</span> social <span class='keyword' data-word='conventions'>conventions</span> that dictated virtually every aspect of public behavior.",
+                correct: "were",
+                hint: "'Conventions' = konwencje społeczne (plural)",
+                explanation: "Używamy 'were' bo 'stringent social conventions' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='pharmaceutical'>pharmaceutical</span> laboratory, _____ an extraordinary <span class='keyword' data-word='breakthrough'>breakthrough</span> that could revolutionize cancer treatment <span class='keyword' data-word='protocols'>protocols</span>.",
+                correct: "was",
+                hint: "'Breakthrough' = przełom, jedno odkrycie (singular)",
+                explanation: "Używamy 'was' bo 'breakthrough' to rzeczownik policzalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='diplomatic'>diplomatic</span> <span class='keyword' data-word='correspondence'>correspondence</span> discovered in the <span class='keyword' data-word='archives'>archives</span>, _____ several <span class='keyword' data-word='classified'>classified</span> documents that shed new light on the negotiations.",
+                correct: "were",
+                hint: "'Several documents' = kilka dokumentów (plural)",
+                explanation: "Używamy 'were' bo 'several classified documents' to liczba mnoga."
+            },
+            {
+                text: "In the aftermath of the environmental <span class='keyword' data-word='catastrophe'>catastrophe</span>, _____ widespread <span class='keyword' data-word='contamination'>contamination</span> affecting the entire <span class='keyword' data-word='ecosystem'>ecosystem</span> for decades.",
+                correct: "was",
+                hint: "'Contamination' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'contamination' to rzeczownik niepoliczalny, zawsze singular, mimo szerokiego zasięgu."
+            },
+            {
+                text: "During the <span class='keyword' data-word='parliamentary'>parliamentary</span> debates, _____ heated exchanges between the opposition members and the ruling <span class='keyword' data-word='coalition'>coalition</span> representatives.",
+                correct: "were",
+                hint: "'Exchanges' = wymiany zdań (plural)",
+                explanation: "Używamy 'were' bo 'heated exchanges' to liczba mnoga."
+            },
+            {
+                text: "Within the complex <span class='keyword' data-word='molecular'>molecular</span> structure, _____ an <span class='keyword' data-word='intricate'>intricate</span> network of chemical bonds that determines the <span class='keyword' data-word='compound'>compound</span>'s unique properties.",
+                correct: "was",
+                hint: "'Network' = sieć, jedna struktura (singular)",
+                explanation: "Używamy 'was' bo 'network' to rzeczownik policzalny w liczbie pojedynczej, mimo że składa się z wielu elementów."
+            },
+            {
+                text: "Following the <span class='keyword' data-word='merger'>merger</span> announcement, _____ substantial <span class='keyword' data-word='fluctuations'>fluctuations</span> in the stock prices of both companies involved.",
+                correct: "were",
+                hint: "'Fluctuations' = wahania (plural)",
+                explanation: "Używamy 'were' bo 'substantial fluctuations' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='psychological'>psychological</span> assessment, _____ compelling evidence suggesting a <span class='keyword' data-word='correlation'>correlation</span> between childhood <span class='keyword' data-word='trauma'>trauma</span> and adult <span class='keyword' data-word='behavioral'>behavioral</span> patterns.",
+                correct: "was",
+                hint: "'Evidence' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'evidence' to rzeczownik niepoliczalny, zawsze singular."
+            },
+            {
+                text: "Throughout the <span class='keyword' data-word='metropolitan'>metropolitan</span> area, _____ numerous <span class='keyword' data-word='infrastructure'>infrastructure</span> projects <span class='keyword' data-word='simultaneously'>simultaneously</span> under construction to modernize the transportation system.",
+                correct: "were",
+                hint: "'Numerous projects' = liczne projekty (plural)",
+                explanation: "Używamy 'were' bo 'numerous infrastructure projects' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='curator'>curator</span>'s private collection, _____ an exceptionally rare <span class='keyword' data-word='manuscript'>manuscript</span> dating back to the <span class='keyword' data-word='medieval'>medieval</span> period.",
+                correct: "was",
+                hint: "'Manuscript' = rękopis, jeden dokument (singular)",
+                explanation: "Używamy 'was' bo 'manuscript' to rzeczownik policzalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='theoretical'>theoretical</span> <span class='keyword' data-word='physicists'>physicists</span> at the conference, _____ <span class='keyword' data-word='divergent'>divergent</span> opinions regarding the implications of <span class='keyword' data-word='quantum'>quantum</span> <span class='keyword' data-word='entanglement'>entanglement</span> for future technologies.",
+                correct: "were",
+                hint: "'Opinions' = opinie (plural)",
+                explanation: "Używamy 'were' bo 'divergent opinions' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='anthropological'>anthropological</span> study, _____ fascinating <span class='keyword' data-word='parallels'>parallels</span> between ancient <span class='keyword' data-word='rituals'>rituals</span> and contemporary social practices.",
+                correct: "were",
+                hint: "'Parallels' = podobieństwa (plural)",
+                explanation: "Używamy 'were' bo 'fascinating parallels' to liczba mnoga."
+            },
+            {
+                text: "During the <span class='keyword' data-word='symposium'>symposium</span> on climate change, _____ overwhelming <span class='keyword' data-word='consensus'>consensus</span> among the international experts regarding the urgency of the situation.",
+                correct: "was",
+                hint: "'Consensus' = zgoda, jednomyślność (singular)",
+                explanation: "Używamy 'was' bo 'consensus' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='labyrinthine'>labyrinthine</span> corridors of the ancient palace, _____ hidden chambers containing priceless <span class='keyword' data-word='artifacts'>artifacts</span> from forgotten civilizations.",
+                correct: "were",
+                hint: "'Chambers' = komnaty (plural)",
+                explanation: "Używamy 'were' bo 'hidden chambers' to liczba mnoga."
+            },
+            {
+                text: "Following the <span class='keyword' data-word='seismic'>seismic</span> activity in the region, _____ significant <span class='keyword' data-word='displacement'>displacement</span> of the geological formations that had remained stable for centuries.",
+                correct: "was",
+                hint: "'Displacement' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'displacement' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='luminaries'>luminaries</span> attending the <span class='keyword' data-word='gala'>gala</span>, _____ distinguished <span class='keyword' data-word='philanthropists'>philanthropists</span> who had dedicated their lives to humanitarian causes.",
+                correct: "were",
+                hint: "'Philanthropists' = filantropowie (plural)",
+                explanation: "Używamy 'were' bo 'distinguished philanthropists' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='neurological'>neurological</span> examination, _____ compelling evidence of <span class='keyword' data-word='neuroplasticity'>neuroplasticity</span> in patients recovering from traumatic brain injuries.",
+                correct: "was",
+                hint: "'Evidence' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'evidence' to rzeczownik niepoliczalny, zawsze singular."
+            },
+            {
+                text: "Throughout the <span class='keyword' data-word='tumultuous'>tumultuous</span> period of political upheaval, _____ clandestine meetings between the revolutionary leaders and foreign <span class='keyword' data-word='emissaries'>emissaries</span>.",
+                correct: "were",
+                hint: "'Meetings' = spotkania (plural)",
+                explanation: "Używamy 'were' bo 'clandestine meetings' to liczba mnoga."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='ecclesiastical'>ecclesiastical</span> archives, _____ a remarkable <span class='keyword' data-word='codex'>codex</span> containing previously unknown theological treatises from the early Christian period.",
+                correct: "was",
+                hint: "'Codex' = kodeks, jedna księga (singular)",
+                explanation: "Używamy 'was' bo 'codex' to rzeczownik policzalny w liczbie pojedynczej."
+            },
+            {
+                text: "During the <span class='keyword' data-word='renaissance'>renaissance</span> of urban planning, _____ innovative <span class='keyword' data-word='methodologies'>methodologies</span> that integrated <span class='keyword' data-word='sustainability'>sustainability</span> with aesthetic considerations.",
+                correct: "were",
+                hint: "'Methodologies' = metodologie (plural)",
+                explanation: "Używamy 'were' bo 'innovative methodologies' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='epidemiological'>epidemiological</span> investigation, _____ substantial <span class='keyword' data-word='correlation'>correlation</span> between environmental factors and the prevalence of certain autoimmune disorders.",
+                correct: "was",
+                hint: "'Correlation' = korelacja (singular)",
+                explanation: "Używamy 'was' bo 'correlation' to rzeczownik policzalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='cognoscenti'>cognoscenti</span> of contemporary art, _____ heated debates regarding the <span class='keyword' data-word='authenticity'>authenticity</span> and cultural significance of digital installations.",
+                correct: "were",
+                hint: "'Debates' = debaty (plural)",
+                explanation: "Używamy 'were' bo 'heated debates' to liczba mnoga."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='crystalline'>crystalline</span> structure of the mineral, _____ an extraordinary <span class='keyword' data-word='symmetry'>symmetry</span> that defied conventional geological understanding.",
+                correct: "was",
+                hint: "'Symmetry' = symetria (singular)",
+                explanation: "Używamy 'was' bo 'symmetry' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Following the <span class='keyword' data-word='promulgation'>promulgation</span> of the new legislation, _____ widespread <span class='keyword' data-word='ramifications'>ramifications</span> affecting multiple sectors of the economy.",
+                correct: "were",
+                hint: "'Ramifications' = konsekwencje (plural)",
+                explanation: "Używamy 'were' bo 'widespread ramifications' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='lexicographical'>lexicographical</span> analysis, _____ remarkable <span class='keyword' data-word='consistency'>consistency</span> in the semantic evolution of Indo-European root words across different language families.",
+                correct: "was",
+                hint: "'Consistency' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'consistency' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='virtuosos'>virtuosos</span> performing at the <span class='keyword' data-word='conservatory'>conservatory</span>, _____ exceptional musicians who had mastered both classical and contemporary <span class='keyword' data-word='repertoires'>repertoires</span>.",
+                correct: "were",
+                hint: "'Musicians' = muzycy (plural)",
+                explanation: "Używamy 'were' bo 'exceptional musicians' to liczba mnoga."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='biotechnological'>biotechnological</span> laboratory, _____ groundbreaking research on <span class='keyword' data-word='gene'>gene</span> therapy that could potentially cure hereditary diseases.",
+                correct: "was",
+                hint: "'Research' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'research' to rzeczownik niepoliczalny, zawsze singular."
+            },
+            {
+                text: "During the <span class='keyword' data-word='excavation'>excavation</span> of the ancient settlement, _____ numerous <span class='keyword' data-word='pottery'>pottery</span> shards that provided insights into daily life during the Bronze Age.",
+                correct: "were",
+                hint: "'Shards' = odłamki (plural)",
+                explanation: "Używamy 'were' bo 'numerous pottery shards' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='cosmological'>cosmological</span> model, _____ compelling evidence supporting the theory of <span class='keyword' data-word='inflation'>inflation</span> in the early universe.",
+                correct: "was",
+                hint: "'Evidence' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'evidence' to rzeczownik niepoliczalny, zawsze singular."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='manuscripts'>manuscripts</span> discovered in the monastery library, _____ illuminated texts containing rare <span class='keyword' data-word='commentaries'>commentaries</span> on Aristotelian philosophy.",
+                correct: "were",
+                hint: "'Texts' = teksty (plural)",
+                explanation: "Używamy 'were' bo 'illuminated texts' to liczba mnoga."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='algorithmic'>algorithmic</span> framework, _____ sophisticated <span class='keyword' data-word='optimization'>optimization</span> that enhanced the system's performance by several orders of magnitude.",
+                correct: "was",
+                hint: "'Optimization' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'optimization' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Following the <span class='keyword' data-word='ratification'>ratification</span> of the international treaty, _____ complex <span class='keyword' data-word='negotiations'>negotiations</span> regarding the implementation of environmental protection measures.",
+                correct: "were",
+                hint: "'Negotiations' = negocjacje (plural)",
+                explanation: "Używamy 'were' bo 'complex negotiations' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='phenomenological'>phenomenological</span> study of consciousness, _____ profound <span class='keyword' data-word='insights'>insights</span> into the nature of subjective experience and perception.",
+                correct: "were",
+                hint: "'Insights' = spostrzeżenia (plural)",
+                explanation: "Używamy 'were' bo 'profound insights' to liczba mnoga."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='ecclesiastical'>ecclesiastical</span> hierarchy, _____ considerable <span class='keyword' data-word='resistance'>resistance</span> to the proposed reforms in liturgical practices.",
+                correct: "was",
+                hint: "'Resistance' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'resistance' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "During the <span class='keyword' data-word='symposium'>symposium</span> on artificial intelligence, _____ distinguished <span class='keyword' data-word='researchers'>researchers</span> presenting their latest findings on machine learning <span class='keyword' data-word='algorithms'>algorithms</span>.",
+                correct: "were",
+                hint: "'Researchers' = badacze (plural)",
+                explanation: "Używamy 'were' bo 'distinguished researchers' to liczba mnoga."
+            },
+            {
+                text: "In the <span class='keyword' data-word='geopolitical'>geopolitical</span> analysis, _____ significant <span class='keyword' data-word='instability'>instability</span> in the region following the collapse of traditional power structures.",
+                correct: "was",
+                hint: "'Instability' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'instability' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='connoisseurs'>connoisseurs</span> of fine wine, _____ unanimous agreement that the vintage represented an exceptional year for the region's <span class='keyword' data-word='viticulture'>viticulture</span>.",
+                correct: "was",
+                hint: "'Agreement' = zgoda (singular)",
+                explanation: "Używamy 'was' bo 'unanimous agreement' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='jurisprudential'>jurisprudential</span> framework, _____ precedent-setting cases that fundamentally altered the interpretation of constitutional law.",
+                correct: "were",
+                hint: "'Cases' = sprawy sądowe (plural)",
+                explanation: "Używamy 'were' bo 'precedent-setting cases' to liczba mnoga."
+            },
+            {
+                text: "Following the <span class='keyword' data-word='implementation'>implementation</span> of the new <span class='keyword' data-word='curriculum'>curriculum</span>, _____ measurable improvement in students' critical thinking and analytical skills.",
+                correct: "was",
+                hint: "'Improvement' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'improvement' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "In the <span class='keyword' data-word='ethnographic'>ethnographic</span> documentation, _____ detailed accounts of traditional ceremonies that had been practiced for generations without written records.",
+                correct: "were",
+                hint: "'Accounts' = relacje (plural)",
+                explanation: "Używamy 'were' bo 'detailed accounts' to liczba mnoga."
+            },
+            {
+                text: "Within the <span class='keyword' data-word='thermodynamic'>thermodynamic</span> system, _____ remarkable <span class='keyword' data-word='equilibrium'>equilibrium</span> that maintained stability despite external perturbations.",
+                correct: "was",
+                hint: "'Equilibrium' = równowaga (singular)",
+                explanation: "Używamy 'was' bo 'equilibrium' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            },
+            {
+                text: "Among the <span class='keyword' data-word='bibliophiles'>bibliophiles</span> attending the rare book auction, _____ intense <span class='keyword' data-word='competition'>competition</span> for the first edition of the philosophical treatise.",
+                correct: "was",
+                hint: "'Competition' to rzeczownik niepoliczalny",
+                explanation: "Używamy 'was' bo 'competition' to rzeczownik niepoliczalny w liczbie pojedynczej."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('question-text').innerHTML = question.text;
+            document.getElementById('hint-box').classList.add('hidden');
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            // Reset button states
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('correct', 'incorrect');
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+            
+            // Add event listeners to keywords
+            const keywords = document.querySelectorAll('.keyword');
+            keywords.forEach(keyword => {
+                keyword.addEventListener('click', showDefinition);
+                keyword.addEventListener('mouseenter', showDefinition);
+                keyword.addEventListener('mouseleave', hideDefinition);
+            });
+            
+            answered = false;
+            updateProgress();
+        }
+
+        function showDefinition(event) {
+            const word = event.target.getAttribute('data-word');
+            const definition = definitions[word];
+            
+            if (!definition) return;
+            
+            // Remove existing popup
+            const existingPopup = document.querySelector('.definition-popup');
+            if (existingPopup) {
+                existingPopup.remove();
+            }
+            
+            // Create popup
+            const popup = document.createElement('div');
+            popup.className = 'definition-popup';
+            popup.innerHTML = `<strong>${word}</strong><br>${definition}`;
+            
+            // Position popup
+            const rect = event.target.getBoundingClientRect();
+            popup.style.left = `${rect.left}px`;
+            popup.style.top = `${rect.bottom + 10}px`;
+            
+            // Adjust if popup goes off screen
+            document.body.appendChild(popup);
+            const popupRect = popup.getBoundingClientRect();
+            if (popupRect.right > window.innerWidth) {
+                popup.style.left = `${window.innerWidth - popupRect.width - 10}px`;
+            }
+            if (popupRect.bottom > window.innerHeight) {
+                popup.style.top = `${rect.top - popupRect.height - 10}px`;
+            }
+        }
+
+        function hideDefinition(event) {
+            // Only hide on mouseleave, not on click
+            if (event.type === 'mouseleave') {
+                setTimeout(() => {
+                    const popup = document.querySelector('.definition-popup');
+                    if (popup && !popup.matches(':hover')) {
+                        popup.remove();
+                    }
+                }, 100);
+            }
+        }
+
+        // Close popup when clicking elsewhere
+        document.addEventListener('click', (event) => {
+            if (!event.target.classList.contains('keyword') && !event.target.closest('.definition-popup')) {
+                const popup = document.querySelector('.definition-popup');
+                if (popup) {
+                    popup.remove();
+                }
+            }
+        });
+
+        function selectAnswer(answer) {
+            if (answered) return;
+            
+            answered = true;
+            const question = questions[currentQuestion];
+            const wasBtn = document.getElementById('was-btn');
+            const wereBtn = document.getElementById('were-btn');
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackText = document.getElementById('feedback-text');
+            const explanationText = document.getElementById('explanation-text');
+            
+            // Disable all buttons
+            wasBtn.disabled = true;
+            wereBtn.disabled = true;
+            wasBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            wereBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            if (answer === question.correct) {
+                correctAnswers++;
+                const correctBtn = answer === 'was' ? wasBtn : wereBtn;
+                correctBtn.classList.add('correct');
+                feedbackBox.className = 'bg-green-100 border border-green-300 rounded-lg p-4 mb-4';
+                feedbackText.textContent = '✅ Świetnie! / Excellent!';
+                feedbackText.className = 'font-medium text-green-800';
+            } else {
+                incorrectAnswers++;
+                const incorrectBtn = answer === 'was' ? wasBtn : wereBtn;
+                const correctBtn = question.correct === 'was' ? wasBtn : wereBtn;
+                incorrectBtn.classList.add('incorrect');
+                correctBtn.classList.add('correct');
+                feedbackBox.className = 'bg-red-100 border border-red-300 rounded-lg p-4 mb-4';
+                feedbackText.textContent = '❌ Nie tym razem / Not this time';
+                feedbackText.className = 'font-medium text-red-800';
+            }
+            
+            explanationText.textContent = question.explanation;
+            explanationText.className = 'text-sm mt-2 text-gray-700';
+            feedbackBox.classList.remove('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            
+            updateScores();
+        }
+
+        function showHint() {
+            const question = questions[currentQuestion];
+            const hintBox = document.getElementById('hint-box');
+            const hintText = document.getElementById('hint-text');
+            
+            hintText.textContent = `💡 ${question.hint}`;
+            hintBox.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('progress-text').textContent = `${currentQuestion}/${questions.length}`;
+        }
+
+        function updateScores() {
+            document.getElementById('correct-score').textContent = correctAnswers;
+            document.getElementById('incorrect-score').textContent = incorrectAnswers;
+        }
+
+        function showResults() {
+            document.getElementById('exercise-card').classList.add('hidden');
+            document.getElementById('results-card').classList.remove('hidden');
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            document.getElementById('final-correct').textContent = correctAnswers;
+            document.getElementById('final-percentage').textContent = `${percentage}%`;
+            
+            let message, emoji;
+            if (percentage >= 90) {
+                message = "Doskonały wynik! Świetnie opanowałeś tę zasadę! / Perfect score! You've mastered this rule!";
+                emoji = "🏆";
+            } else if (percentage >= 70) {
+                message = "Bardzo dobry wynik! Jeszcze trochę praktyki i będzie idealnie! / Very good! A bit more practice and you'll be perfect!";
+                emoji = "🎯";
+            } else if (percentage >= 50) {
+                message = "Dobry początek! Przejrzyj zasady i spróbuj ponownie. / Good start! Review the rules and try again.";
+                emoji = "📚";
+            } else {
+                message = "Nie martw się! Przeczytaj zasady jeszcze raz i spróbuj ponownie. / Don't worry! Read the rules again and try once more.";
+                emoji = "💪";
+            }
+            
+            document.getElementById('final-message').textContent = message;
+            document.getElementById('final-emoji').textContent = emoji;
+            
+            // Update final progress
+            document.getElementById('progress-bar').style.width = '100%';
+            document.getElementById('progress-text').textContent = `${questions.length}/${questions.length}`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            answered = false;
+            
+            document.getElementById('exercise-card').classList.remove('hidden');
+            document.getElementById('results-card').classList.add('hidden');
+            
+            updateScores();
+            loadQuestion();
+        }
+
+        // Initialize the app
+        loadQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'977f31c4d7b7cb9e',t:'MTc1NjY3MTI2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
