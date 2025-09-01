@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workplace English Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            padding: 8px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .conversation-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+        
+        .type-btn {
+            padding: 12px 25px;
+            border: none;
+            background: #e2e8f0;
+            color: #4a5568;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .type-btn.active {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .prompt-section {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .prompt-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        
+        .prompt-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        
+        .new-prompt-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .new-prompt-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        .response-section {
+            margin-bottom: 25px;
+        }
+        
+        .response-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        
+        .response-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1em;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        
+        .response-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .phrase-item {
+            background: #f7fafc;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid #667eea;
+        }
+        
+        .phrase-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+        
+        .phrase-en {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+        
+        .phrase-es {
+            font-size: 0.9em;
+            color: #718096;
+            font-style: italic;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+            
+            .conversation-type {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .language-toggle {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title" data-en="Lead-in Phrases" data-es="Frases de Introducción">Lead-in Phrases</h3>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">I'd like to discuss...</div>
+                    <div class="phrase-es">Me gustaría discutir...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">What do you think about...?</div>
+                    <div class="phrase-es">¿Qué piensas sobre...?</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">In my opinion...</div>
+                    <div class="phrase-es">En mi opinión...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">Could you help me understand...?</div>
+                    <div class="phrase-es">¿Podrías ayudarme a entender...?</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">I have a question about...</div>
+                    <div class="phrase-es">Tengo una pregunta sobre...</div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title" data-en="Connector Words" data-es="Palabras Conectoras">Connector Words</h3>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">However...</div>
+                    <div class="phrase-es">Sin embargo...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">Furthermore...</div>
+                    <div class="phrase-es">Además...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">On the other hand...</div>
+                    <div class="phrase-es">Por otro lado...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">As a result...</div>
+                    <div class="phrase-es">Como resultado...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">For instance...</div>
+                    <div class="phrase-es">Por ejemplo...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">In conclusion...</div>
+                    <div class="phrase-es">En conclusión...</div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-title" data-en="Polite Expressions" data-es="Expresiones Corteses">Polite Expressions</h3>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">Excuse me, but...</div>
+                    <div class="phrase-es">Disculpe, pero...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">I appreciate your time...</div>
+                    <div class="phrase-es">Agradezco su tiempo...</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">Would it be possible to...?</div>
+                    <div class="phrase-es">¿Sería posible...?</div>
+                </div>
+                <div class="phrase-item" onclick="insertPhrase(this)">
+                    <div class="phrase-en">Thank you for your patience...</div>
+                    <div class="phrase-es">Gracias por su paciencia...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1 data-en="Workplace English Practice" data-es="Práctica de Inglés Laboral">Workplace English Practice</h1>
+                <div class="language-toggle">
+                    <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                    <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+                </div>
+            </div>
+            
+            <div class="conversation-type">
+                <button class="type-btn active" onclick="setConversationType('formal')" data-en="Formal Conversations" data-es="Conversaciones Formales">Formal Conversations</button>
+                <button class="type-btn" onclick="setConversationType('smalltalk')" data-en="Small Talk" data-es="Charla Informal">Small Talk</button>
+            </div>
+            
+            <div class="prompt-section">
+                <h2 class="prompt-title" data-en="Conversation Prompt" data-es="Situación de Conversación">Conversation Prompt</h2>
+                <p class="prompt-text" id="currentPrompt">You're in a team meeting and your manager asks for your opinion on a new project proposal. How would you respond professionally while sharing your thoughts?</p>
+                <button class="new-prompt-btn" onclick="generateNewPrompt()" data-en="New Prompt" data-es="Nueva Situación">New Prompt</button>
+            </div>
+            
+            <div class="response-section">
+                <h2 class="response-title" data-en="Your Response (Practice Speaking, Then Write)" data-es="Tu Respuesta (Practica Hablando, Luego Escribe)">Your Response (Practice Speaking, Then Write)</h2>
+                <textarea class="response-textarea" id="responseArea" placeholder="First, practice speaking your response out loud. Then write what you said here to reinforce your learning..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentType = 'formal';
+        
+        const prompts = {
+            formal: {
+                en: [
+                    "You're in a team meeting and your manager asks for your opinion on a new project proposal. How would you respond professionally while sharing your thoughts?",
+                    "A colleague asks you to explain a complex process to a new team member. How would you structure your explanation?",
+                    "You need to request additional resources for your project during a budget meeting. How would you present your case?",
+                    "Your supervisor asks you to give feedback on a coworker's presentation. How would you provide constructive criticism?",
+                    "You're leading a client call and need to address a concern they've raised about project timelines. How would you handle this?",
+                    "A department head asks you to present your quarterly results to the executive team. How would you begin your presentation?",
+                    "You need to decline a meeting invitation due to scheduling conflicts. How would you respond professionally?",
+                    "Your manager asks you to mentor a new employee. How would you introduce yourself and explain your role?"
+                ],
+                es: [
+                    "Estás en una reunión de equipo y tu gerente te pide tu opinión sobre una nueva propuesta de proyecto. ¿Cómo responderías profesionalmente mientras compartes tus pensamientos?",
+                    "Un colega te pide que expliques un proceso complejo a un nuevo miembro del equipo. ¿Cómo estructurarías tu explicación?",
+                    "Necesitas solicitar recursos adicionales para tu proyecto durante una reunión de presupuesto. ¿Cómo presentarías tu caso?",
+                    "Tu supervisor te pide que des retroalimentación sobre la presentación de un compañero de trabajo. ¿Cómo proporcionarías críticas constructivas?",
+                    "Estás liderando una llamada con un cliente y necesitas abordar una preocupación que han planteado sobre los plazos del proyecto. ¿Cómo manejarías esto?",
+                    "Un jefe de departamento te pide que presentes tus resultados trimestrales al equipo ejecutivo. ¿Cómo comenzarías tu presentación?",
+                    "Necesitas declinar una invitación a una reunión debido a conflictos de horario. ¿Cómo responderías profesionalmente?",
+                    "Tu gerente te pide que mentores a un nuevo empleado. ¿Cómo te presentarías y explicarías tu rol?"
+                ]
+            },
+            smalltalk: {
+                en: [
+                    "You're waiting for the elevator with a colleague you don't know well. How would you start a friendly conversation?",
+                    "It's Monday morning and you're getting coffee in the break room with coworkers. What would you say to start the week positively?",
+                    "A colleague mentions they had a great weekend. How would you show interest and share about your own weekend?",
+                    "You notice a coworker looks tired. How would you express concern while being respectful of their privacy?",
+                    "Someone compliments your presentation from last week. How would you respond graciously and continue the conversation?",
+                    "You're at a company lunch and sitting next to someone from a different department. How would you get to know them better?",
+                    "A colleague mentions they're planning a vacation. How would you show interest and maybe share travel experiences?",
+                    "It's Friday afternoon and everyone seems ready for the weekend. How would you engage in light, positive conversation?"
+                ],
+                es: [
+                    "Estás esperando el ascensor con un colega que no conoces bien. ¿Cómo iniciarías una conversación amigable?",
+                    "Es lunes por la mañana y estás tomando café en la sala de descanso con compañeros de trabajo. ¿Qué dirías para comenzar la semana positivamente?",
+                    "Un colega menciona que tuvo un gran fin de semana. ¿Cómo mostrarías interés y compartirías sobre tu propio fin de semana?",
+                    "Notas que un compañero de trabajo se ve cansado. ¿Cómo expresarías preocupación siendo respetuoso de su privacidad?",
+                    "Alguien elogia tu presentación de la semana pasada. ¿Cómo responderías con gracia y continuarías la conversación?",
+                    "Estás en un almuerzo de la empresa y sentado junto a alguien de un departamento diferente. ¿Cómo los conocerías mejor?",
+                    "Un colega menciona que está planeando unas vacaciones. ¿Cómo mostrarías interés y tal vez compartirías experiencias de viaje?",
+                    "Es viernes por la tarde y todos parecen listos para el fin de semana. ¿Cómo participarías en una conversación ligera y positiva?"
+                ]
+            }
+        };
+        
+        const placeholders = {
+            en: "First, practice speaking your response out loud. Then write what you said here to reinforce your learning...",
+            es: "Primero, practica hablando tu respuesta en voz alta. Luego escribe lo que dijiste aquí para reforzar tu aprendizaje..."
+        };
+        
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all text elements
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (element.hasAttribute(`data-${lang}`)) {
+                    element.textContent = element.getAttribute(`data-${lang}`);
+                }
+            });
+            
+            // Update placeholder
+            document.getElementById('responseArea').placeholder = placeholders[lang];
+            
+            // Update current prompt
+            generateNewPrompt();
+        }
+        
+        function setConversationType(type) {
+            currentType = type;
+            
+            // Update active type button
+            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Generate new prompt for the selected type
+            generateNewPrompt();
+        }
+        
+        function generateNewPrompt() {
+            const promptsArray = prompts[currentType][currentLanguage];
+            const randomPrompt = promptsArray[Math.floor(Math.random() * promptsArray.length)];
+            document.getElementById('currentPrompt').textContent = randomPrompt;
+        }
+        
+        function insertPhrase(phraseElement) {
+            const englishPhrase = phraseElement.querySelector('.phrase-en').textContent;
+            const responseArea = document.getElementById('responseArea');
+            const currentText = responseArea.value;
+            const cursorPosition = responseArea.selectionStart;
+            
+            const newText = currentText.slice(0, cursorPosition) + englishPhrase + ' ' + currentText.slice(cursorPosition);
+            responseArea.value = newText;
+            
+            // Set cursor position after inserted text
+            const newCursorPosition = cursorPosition + englishPhrase.length + 1;
+            responseArea.setSelectionRange(newCursorPosition, newCursorPosition);
+            responseArea.focus();
+        }
+        
+        // Initialize with a random prompt
+        generateNewPrompt();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97866df653e62eea',t:'MTc1Njc0NzEzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
