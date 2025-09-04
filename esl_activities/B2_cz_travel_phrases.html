@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel English Master - Phrasal Verbs & Expressions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .phrasal-verb-card {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .phrasal-verb-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .meaning {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .czech-translation {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .example {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #4CAF50;
+            margin: 5px 0;
+        }
+
+        .exercise-container {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .exercise-title {
+            color: #667eea;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #e0e7ff;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f8f9ff;
+            border: 2px solid #e0e7ff;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #e0e7ff;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .check-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .conversation-prompt h3 {
+            color: #8e2de2;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .prompt-scenario {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .key-phrases {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .key-phrases h4 {
+            color: #8e2de2;
+            margin-bottom: 10px;
+        }
+
+        .phrase-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .phrase-tag {
+            background: #8e2de2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .score-display {
+            text-align: center;
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        .fill-blank {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .blank-input {
+            background: #fff;
+            border: 2px solid #ff9800;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin: 0 5px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .blank-input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        .blank-input.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .phrase-list {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Travel English Master</h1>
+            <p>Advanced Phrasal Verbs & Expressions for Czech Speakers</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('vocabulary')">📚 Vocabulary</button>
+            <button class="tab-btn" onclick="showTab('exercises')">✍️ Exercises</button>
+            <button class="tab-btn" onclick="showTab('conversation')">💬 Conversation</button>
+        </div>
+
+        <!-- Vocabulary Section -->
+        <div id="vocabulary" class="content-section active">
+            <h2 style="color: #667eea; margin-bottom: 25px; font-size: 2rem;">Travel Phrasal Verbs & Expressions</h2>
+            
+            <div class="phrasal-verb-card">
+                <h3>Set off / Set out</h3>
+                <div class="meaning">To begin a journey</div>
+                <div class="czech-translation">Vydat se na cestu, začít cestu</div>
+                <div class="example">"We set off early to avoid traffic." / "They set out for Prague at dawn."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Check in / Check out</h3>
+                <div class="meaning">To register arrival / To pay and leave a hotel</div>
+                <div class="czech-translation">Přihlásit se / Odhlásit se (z hotelu)</div>
+                <div class="example">"Please check in at reception." / "We need to check out by 11 AM."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Drop off / Pick up</h3>
+                <div class="meaning">To leave someone/something at a place / To collect</div>
+                <div class="czech-translation">Vysadit, odvézt / Vyzvednout</div>
+                <div class="example">"Can you drop me off at the airport?" / "I'll pick you up at 8 PM."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Get away</h3>
+                <div class="meaning">To escape or go on vacation</div>
+                <div class="czech-translation">Uniknout, jet na dovolenou</div>
+                <div class="example">"I need to get away from the city for a while."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Stop over</h3>
+                <div class="meaning">To make a brief stop during a journey</div>
+                <div class="czech-translation">Udělat si zastávku, mezipřistání</div>
+                <div class="example">"We'll stop over in Frankfurt on our way to Tokyo."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Look forward to</h3>
+                <div class="meaning">To anticipate with pleasure</div>
+                <div class="czech-translation">Těšit se na</div>
+                <div class="example">"I'm really looking forward to our trip to Italy."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Run into</h3>
+                <div class="meaning">To meet unexpectedly / To encounter problems</div>
+                <div class="czech-translation">Narazit na, potkat náhodou</div>
+                <div class="example">"We ran into some delays at customs." / "I ran into my old friend in Paris!"</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Turn up</h3>
+                <div class="meaning">To arrive or appear unexpectedly</div>
+                <div class="czech-translation">Objevit se, dorazit</div>
+                <div class="example">"My luggage finally turned up after three days."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Branch out</h3>
+                <div class="meaning">To explore new destinations or try different experiences</div>
+                <div class="czech-translation">Rozšířit obzory, zkusit něco nového</div>
+                <div class="example">"This year we decided to branch out and visit Southeast Asia instead of Europe."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Fall through</h3>
+                <div class="meaning">When plans fail or don't happen</div>
+                <div class="czech-translation">Nevyjít, ztroskotať</div>
+                <div class="example">"Our vacation plans fell through when the airline went on strike."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Hold up</h3>
+                <div class="meaning">To delay or cause delays</div>
+                <div class="czech-translation">Zdržet, způsobit zpoždění</div>
+                <div class="example">"The security check held us up for over an hour."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Put up with</h3>
+                <div class="meaning">To tolerate unpleasant conditions</div>
+                <div class="czech-translation">Snášet, tolerovat</div>
+                <div class="example">"I can't put up with this noisy hotel room any longer."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Come across</h3>
+                <div class="meaning">To find or discover by chance</div>
+                <div class="czech-translation">Narazit na, objevit náhodou</div>
+                <div class="example">"We came across this amazing little restaurant in a back alley."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Get around</h3>
+                <div class="meaning">To travel from place to place / To avoid a problem</div>
+                <div class="czech-translation">Pohybovat se, cestovat / Obejít problém</div>
+                <div class="example">"It's easy to get around Prague by public transport." / "We found a way to get around the visa requirement."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Settle in</h3>
+                <div class="meaning">To become comfortable in a new place</div>
+                <div class="czech-translation">Zabydlet se, usadit se</div>
+                <div class="example">"It took us a few days to settle in at our new accommodation."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Map out</h3>
+                <div class="meaning">To plan in detail</div>
+                <div class="czech-translation">Naplánovat detailně, rozvrhnout</div>
+                <div class="example">"We spent hours mapping out our three-week European itinerary."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Touch down</h3>
+                <div class="meaning">When an aircraft lands</div>
+                <div class="czech-translation">Přistát (letadlo)</div>
+                <div class="example">"We're scheduled to touch down in Vienna at 14:30 local time."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>See off</h3>
+                <div class="meaning">To accompany someone to their departure point</div>
+                <div class="czech-translation">Doprovodit na odjezd, rozloučit se</div>
+                <div class="example">"My family came to see me off at the airport."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Live it up</h3>
+                <div class="meaning">To enjoy yourself extravagantly</div>
+                <div class="czech-translation">Užívat si naplno, žít si</div>
+                <div class="example">"We decided to live it up on our last night in Paris."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Venture out</h3>
+                <div class="meaning">To go somewhere despite risks or uncertainty</div>
+                <div class="czech-translation">Odvážit se vydat, riskovat cestu</div>
+                <div class="example">"Despite the rain, we ventured out to explore the old town."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Stumble upon</h3>
+                <div class="meaning">To discover something unexpectedly</div>
+                <div class="czech-translation">Narazit náhodou na, objevit neočekávaně</div>
+                <div class="example">"We stumbled upon a hidden gem of a café while wandering through the streets."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Wind down</h3>
+                <div class="meaning">To relax and reduce activity</div>
+                <div class="czech-translation">Uvolnit se, zklidnit se</div>
+                <div class="example">"After a busy day of sightseeing, we like to wind down at a local pub."</div>
+            </div>
+
+            <div class="phrasal-verb-card">
+                <h3>Pull through</h3>
+                <div class="meaning">To successfully overcome difficulties</div>
+                <div class="czech-translation">Překonat obtíže, zvládnout to</div>
+                <div class="example">"Despite all the travel complications, we pulled through and had an amazing trip."</div>
+            </div>
+        </div>
+
+        <!-- Exercises Section -->
+        <div id="exercises" class="content-section">
+            <h2 style="color: #667eea; margin-bottom: 25px; font-size: 2rem;">Practice Exercises</h2>
+            
+            <div class="exercise-container">
+                <div class="exercise-title">Exercise 1: Multiple Choice</div>
+                <div id="quiz-container">
+                    <!-- Quiz questions will be generated here -->
+                </div>
+                <button class="check-btn" onclick="checkQuizAnswers()">Check Answers</button>
+                <div id="quiz-score" class="score-display" style="display: none;"></div>
+            </div>
+
+            <div class="exercise-container">
+                <div class="exercise-title">Exercise 2: Fill in the Blanks</div>
+                <div class="fill-blank">
+                    <p><strong>Complete the sentences with the correct phrasal verbs:</strong></p>
+                    <p style="margin: 15px 0;">1. The security delays <input type="text" class="blank-input" data-answer="held up"> our departure by three hours.</p>
+                    <p style="margin: 15px 0;">2. We <input type="text" class="blank-input" data-answer="stumbled upon"> an incredible hidden beach while hiking.</p>
+                    <p style="margin: 15px 0;">3. It took us several days to <input type="text" class="blank-input" data-answer="settle in"> at our new Airbnb.</p>
+                    <p style="margin: 15px 0;">4. Despite the storm, we decided to <input type="text" class="blank-input" data-answer="venture out"> and explore the city.</p>
+                    <p style="margin: 15px 0;">5. We need to carefully <input type="text" class="blank-input" data-answer="map out"> our route through the mountains.</p>
+                    <p style="margin: 15px 0;">6. After all the travel stress, we finally managed to <input type="text" class="blank-input" data-answer="pull through"> and enjoy our holiday.</p>
+                </div>
+                <button class="check-btn" onclick="checkFillBlanks()">Check Answers</button>
+                <div id="fill-score" class="score-display" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="content-section">
+            <h2 style="color: #667eea; margin-bottom: 25px; font-size: 2rem;">Conversation Practice</h2>
+            
+            <div class="conversation-prompt">
+                <h3>🏨 Scenario 1: Luxury Travel Complications</h3>
+                <div class="prompt-scenario">
+                    <strong>Situation:</strong> You've booked an expensive luxury resort, but your vacation plans are falling apart. The resort is overbooked, your spa treatments were cancelled, and you're considering legal action. Negotiate with the hotel manager for compensation.
+                    <br><br>
+                    <strong>Advanced challenges:</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>Demand appropriate compensation for the inconvenience</li>
+                        <li>Negotiate alternative luxury accommodations</li>
+                        <li>Discuss potential legal implications</li>
+                        <li>Maintain professionalism while expressing frustration</li>
+                    </ul>
+                </div>
+                <div class="key-phrases">
+                    <h4>Key phrases to use:</h4>
+                    <div class="phrase-list">
+                        <span class="phrase-tag">fall through</span>
+                        <span class="phrase-tag">put up with</span>
+                        <span class="phrase-tag">pull through</span>
+                        <span class="phrase-tag">hold up</span>
+                        <span class="phrase-tag">settle in</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <h3>✈️ Scenario 2: Business Travel Crisis</h3>
+                <div class="prompt-scenario">
+                    <strong>Situation:</strong> You're a business executive whose international conference presentation has been jeopardized by travel complications. Your flight was cancelled, your presentation materials are lost, and you need to find creative solutions while maintaining professional relationships.
+                    <br><br>
+                    <strong>Professional challenges:</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>Explain the situation to important clients</li>
+                        <li>Arrange emergency alternative travel</li>
+                        <li>Coordinate with international colleagues across time zones</li>
+                        <li>Salvage the business opportunity despite setbacks</li>
+                    </ul>
+                </div>
+                <div class="key-phrases">
+                    <h4>Key phrases to use:</h4>
+                    <div class="phrase-list">
+                        <span class="phrase-tag">touch down</span>
+                        <span class="phrase-tag">branch out</span>
+                        <span class="phrase-tag">map out</span>
+                        <span class="phrase-tag">get around</span>
+                        <span class="phrase-tag">pull through</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <h3>🗺️ Scenario 3: Adventure Travel Planning</h3>
+                <div class="prompt-scenario">
+                    <strong>Situation:</strong> You're organizing an extreme adventure expedition to remote locations with significant risks. Discuss insurance, emergency protocols, and contingency plans with your travel companions and expedition leader.
+                    <br><br>
+                    <strong>Complex considerations:</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>Risk assessment and safety protocols</li>
+                        <li>Emergency evacuation procedures</li>
+                        <li>Equipment failure contingencies</li>
+                        <li>Cultural sensitivity in remote communities</li>
+                        <li>Environmental impact and sustainability</li>
+                    </ul>
+                </div>
+                <div class="key-phrases">
+                    <h4>Key phrases to use:</h4>
+                    <div class="phrase-list">
+                        <span class="phrase-tag">venture out</span>
+                        <span class="phrase-tag">map out</span>
+                        <span class="phrase-tag">stumble upon</span>
+                        <span class="phrase-tag">come across</span>
+                        <span class="phrase-tag">branch out</span>
+                        <span class="phrase-tag">pull through</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <h3>🌍 Scenario 4: Cultural Immersion Dilemma</h3>
+                <div class="prompt-scenario">
+                    <strong>Situation:</strong> You're on a cultural exchange program, but you're struggling to adapt to local customs and experiencing culture shock. Discuss your challenges with your host family and program coordinator while being respectful of cultural differences.
+                    <br><br>
+                    <strong>Sensitive topics:</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>Addressing cultural misunderstandings diplomatically</li>
+                        <li>Expressing homesickness without offending hosts</li>
+                        <li>Negotiating personal boundaries respectfully</li>
+                        <li>Finding balance between adaptation and authenticity</li>
+                    </ul>
+                </div>
+                <div class="key-phrases">
+                    <h4>Key phrases to use:</h4>
+                    <div class="phrase-list">
+                        <span class="phrase-tag">settle in</span>
+                        <span class="phrase-tag">come across</span>
+                        <span class="phrase-tag">put up with</span>
+                        <span class="phrase-tag">wind down</span>
+                        <span class="phrase-tag">get around</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <h3>🎉 Scenario 5: Milestone Celebration Travel</h3>
+                <div class="prompt-scenario">
+                    <strong>Situation:</strong> You're planning a once-in-a-lifetime celebration trip (anniversary, retirement, etc.) with a significant budget. Discuss luxury options, exclusive experiences, and creating unforgettable memories with a high-end travel consultant.
+                    <br><br>
+                    <strong>Luxury considerations:</strong>
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li>Exclusive access to private venues and experiences</li>
+                        <li>Personalized service and concierge arrangements</li>
+                        <li>Balancing extravagance with meaningful experiences</li>
+                        <li>Creating lasting memories within budget constraints</li>
+                    </ul>
+                </div>
+                <div class="key-phrases">
+                    <h4>Key phrases to use:</h4>
+                    <div class="phrase-list">
+                        <span class="phrase-tag">live it up</span>
+                        <span class="phrase-tag">branch out</span>
+                        <span class="phrase-tag">stumble upon</span>
+                        <span class="phrase-tag">see off</span>
+                        <span class="phrase-tag">wind down</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data
+        const quizQuestions = [
+            {
+                question: "Our vacation plans _____ when the hotel was overbooked.",
+                options: ["fell through", "held up", "branched out", "settled in"],
+                correct: 0
+            },
+            {
+                question: "We decided to _____ this year and explore South America instead of Europe.",
+                options: ["wind down", "branch out", "put up with", "map out"],
+                correct: 1
+            },
+            {
+                question: "While exploring the old quarter, we _____ a fantastic local market.",
+                options: ["held up", "fell through", "stumbled upon", "touched down"],
+                correct: 2
+            },
+            {
+                question: "I can't _____ this cramped airplane seat for another 8 hours.",
+                options: ["put up with", "venture out", "live it up", "see off"],
+                correct: 0
+            },
+            {
+                question: "We spent the entire evening _____ our three-week European itinerary.",
+                options: ["winding down", "pulling through", "mapping out", "getting around"],
+                correct: 2
+            },
+            {
+                question: "The flight is scheduled to _____ in Prague at 15:45 local time.",
+                options: ["settle in", "touch down", "come across", "hold up"],
+                correct: 1
+            },
+            {
+                question: "Despite the language barrier, we managed to _____ the city quite easily.",
+                options: ["get around", "fall through", "venture out", "live it up"],
+                correct: 0
+            },
+            {
+                question: "On our last night in Barcelona, we decided to _____ and try the most expensive restaurant.",
+                options: ["wind down", "pull through", "live it up", "branch out"],
+                correct: 2
+            }
+        ];
+
+        let selectedAnswers = {};
+
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Generate quiz if exercises tab is selected
+            if (tabName === 'exercises') {
+                generateQuiz();
+            }
+        }
+
+        function generateQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-text">${index + 1}. ${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((option, optIndex) => `
+                            <div class="option" onclick="selectAnswer(${index}, ${optIndex})" data-question="${index}" data-option="${optIndex}">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            // Remove previous selection for this question
+            document.querySelectorAll(`[data-question="${questionIndex}"]`).forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            event.target.classList.add('selected');
+            selectedAnswers[questionIndex] = optionIndex;
+        }
+
+        function checkQuizAnswers() {
+            let correct = 0;
+            
+            quizQuestions.forEach((q, index) => {
+                const options = document.querySelectorAll(`[data-question="${index}"]`);
+                const userAnswer = selectedAnswers[index];
+                
+                options.forEach((option, optIndex) => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                    
+                    if (optIndex === q.correct) {
+                        option.classList.add('correct');
+                    } else if (optIndex === userAnswer && optIndex !== q.correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (userAnswer === q.correct) {
+                    correct++;
+                }
+            });
+            
+            const scoreDiv = document.getElementById('quiz-score');
+            scoreDiv.style.display = 'block';
+            scoreDiv.innerHTML = `Your Score: ${correct}/${quizQuestions.length} (${Math.round(correct/quizQuestions.length*100)}%)`;
+        }
+
+        function checkFillBlanks() {
+            const inputs = document.querySelectorAll('.blank-input');
+            let correct = 0;
+            
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                input.classList.remove('correct', 'incorrect');
+                
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correct++;
+                } else {
+                    input.classList.add('incorrect');
+                }
+            });
+            
+            const scoreDiv = document.getElementById('fill-score');
+            scoreDiv.style.display = 'block';
+            scoreDiv.innerHTML = `Your Score: ${correct}/${inputs.length} (${Math.round(correct/inputs.length*100)}%)`;
+        }
+
+        // Initialize the quiz when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuiz();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979da61b22722f7d',t:'MTc1Njk5MDYwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
