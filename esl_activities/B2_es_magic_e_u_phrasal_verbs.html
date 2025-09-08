@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phrasal Verbs Practice - Práctica de Verbos Frasales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .pronunciation-button:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .correct-answer {
+            animation: correctPulse 0.6s ease-in-out;
+        }
+        
+        .incorrect-answer {
+            animation: incorrectShake 0.5s ease-in-out;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2" id="main-title">
+                Phrasal Verbs Practice
+            </h1>
+            <p class="text-lg text-gray-600 mb-4" id="subtitle">
+                Master phrasal verbs with magic "e" and /juː/, /ʌ/ sounds
+            </p>
+            
+            <!-- Language Toggle -->
+            <div class="flex justify-center items-center gap-4 mb-6">
+                <button id="lang-en" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium">
+                    English
+                </button>
+                <button id="lang-es" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium">
+                    Español
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="bg-white rounded-lg p-4 mb-6 shadow-md">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700" id="progress-text">Progress</span>
+                <span class="text-sm text-gray-500" id="score-display">0/0</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div id="progress-bar" class="progress-bar bg-green-500 h-3 rounded-full" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <button id="study-mode" class="card-hover bg-white p-6 rounded-xl shadow-md text-center border-2 border-transparent hover:border-indigo-300">
+                <div class="text-3xl mb-2">📚</div>
+                <h3 class="font-semibold text-gray-800 mb-1" data-en="Study Mode" data-es="Modo Estudio">Study Mode</h3>
+                <p class="text-sm text-gray-600" data-en="Learn phrasal verbs with examples" data-es="Aprende verbos frasales con ejemplos">Learn phrasal verbs with examples</p>
+            </button>
+            
+            <button id="pronunciation-mode" class="card-hover bg-white p-6 rounded-xl shadow-md text-center border-2 border-transparent hover:border-indigo-300">
+                <div class="text-3xl mb-2">🎵</div>
+                <h3 class="font-semibold text-gray-800 mb-1" data-en="Pronunciation" data-es="Pronunciación">Pronunciation</h3>
+                <p class="text-sm text-gray-600" data-en="Practice sounds and pronunciation" data-es="Practica sonidos y pronunciación">Practice sounds and pronunciation</p>
+            </button>
+            
+            <button id="conversation-mode" class="card-hover bg-white p-6 rounded-xl shadow-md text-center border-2 border-transparent hover:border-indigo-300">
+                <div class="text-3xl mb-2">💬</div>
+                <h3 class="font-semibold text-gray-800 mb-1" data-en="Conversation" data-es="Conversación">Conversation</h3>
+                <p class="text-sm text-gray-600" data-en="Practice in real dialogues" data-es="Practica en diálogos reales">Practice in real dialogues</p>
+            </button>
+            
+            <button id="quiz-mode" class="card-hover bg-white p-6 rounded-xl shadow-md text-center border-2 border-transparent hover:border-indigo-300">
+                <div class="text-3xl mb-2">🎯</div>
+                <h3 class="font-semibold text-gray-800 mb-1" data-en="Quiz Mode" data-es="Modo Quiz">Quiz Mode</h3>
+                <p class="text-sm text-gray-600" data-en="Test your knowledge" data-es="Pon a prueba tus conocimientos">Test your knowledge</p>
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="content-area" class="bg-white rounded-xl shadow-lg p-8">
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="text-center">
+                <div class="text-6xl mb-4">🎓</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4" data-en="Welcome to Phrasal Verbs Practice!" data-es="¡Bienvenido a la Práctica de Verbos Frasales!">
+                    Welcome to Phrasal Verbs Practice!
+                </h2>
+                <p class="text-gray-600 mb-6" data-en="Choose a mode above to start learning phrasal verbs with magic 'e' patterns and special sounds." data-es="Elige un modo arriba para comenzar a aprender verbos frasales con patrones de 'e' mágica y sonidos especiales.">
+                    Choose a mode above to start learning phrasal verbs with magic 'e' patterns and special sounds.
+                </p>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-800 mb-2" data-en="What you'll learn:" data-es="Lo que aprenderás:">What you'll learn:</h3>
+                    <ul class="text-left text-blue-700 space-y-1">
+                        <li data-en="• Phrasal verbs with magic 'e' (like 'make up', 'take off')" data-es="• Verbos frasales con 'e' mágica (como 'make up', 'take off')">• Phrasal verbs with magic 'e' (like 'make up', 'take off')</li>
+                        <li data-en="• /juː/ sound patterns (like 'use up', 'tune in')" data-es="• Patrones de sonido /juː/ (como 'use up', 'tune in')">• /juː/ sound patterns (like 'use up', 'tune in')</li>
+                        <li data-en="• /ʌ/ sound patterns (like 'cut off', 'shut down')" data-es="• Patrones de sonido /ʌ/ (como 'cut off', 'shut down')">• /ʌ/ sound patterns (like 'cut off', 'shut down')</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Study Mode Content -->
+            <div id="study-content" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800" data-en="Study Phrasal Verbs" data-es="Estudiar Verbos Frasales">Study Phrasal Verbs</h2>
+                    <button id="back-to-menu" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        <span data-en="← Back" data-es="← Volver">← Back</span>
+                    </button>
+                </div>
+                
+                <div id="study-card" class="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-lg mb-4">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 id="phrasal-verb" class="text-2xl font-bold text-indigo-800 mb-2">make up</h3>
+                            <p id="pronunciation" class="text-lg text-gray-600 mb-2">/meɪk ʌp/</p>
+                            <button id="play-pronunciation" class="pronunciation-button bg-indigo-600 text-white px-3 py-1 rounded-full text-sm hover:bg-indigo-700">
+                                🔊 <span data-en="Play" data-es="Reproducir">Play</span>
+                            </button>
+                        </div>
+                        <div class="text-right">
+                            <span id="sound-pattern" class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Magic E + /ʌ/</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2" data-en="Meaning:" data-es="Significado:">Meaning:</h4>
+                            <p id="meaning-en" class="text-gray-700 mb-2">to invent or create something</p>
+                            <p id="meaning-es" class="text-gray-600 italic">inventar o crear algo</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-800 mb-2" data-en="Example:" data-es="Ejemplo:">Example:</h4>
+                            <p id="example-en" class="text-gray-700 mb-2">"She made up a story for her children."</p>
+                            <p id="example-es" class="text-gray-600 italic">"Ella inventó una historia para sus hijos."</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="prev-card" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                        <span data-en="← Previous" data-es="← Anterior">← Previous</span>
+                    </button>
+                    <span id="card-counter" class="flex items-center text-gray-600">1 / 12</span>
+                    <button id="next-card" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                        <span data-en="Next →" data-es="Siguiente →">Next →</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pronunciation Mode Content -->
+            <div id="pronunciation-content" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800" data-en="Pronunciation Practice" data-es="Práctica de Pronunciación">Pronunciation Practice</h2>
+                    <button class="back-to-menu px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        <span data-en="← Back" data-es="← Volver">← Back</span>
+                    </button>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <button id="filter-magic-e" class="filter-btn bg-purple-100 text-purple-800 px-4 py-2 rounded-lg font-medium border-2 border-purple-300">
+                        Magic E
+                    </button>
+                    <button id="filter-uu" class="filter-btn bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium border-2 border-transparent">
+                        /juː/ Sound
+                    </button>
+                    <button id="filter-uh" class="filter-btn bg-green-100 text-green-800 px-4 py-2 rounded-lg font-medium border-2 border-transparent">
+                        /ʌ/ Sound
+                    </button>
+                </div>
+                
+                <div id="pronunciation-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Pronunciation cards will be populated here -->
+                </div>
+            </div>
+
+            <!-- Conversation Mode Content -->
+            <div id="conversation-content" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800" data-en="Conversation Practice" data-es="Práctica de Conversación">Conversation Practice</h2>
+                    <button class="back-to-menu px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        <span data-en="← Back" data-es="← Volver">← Back</span>
+                    </button>
+                </div>
+                
+                <!-- Scenario Selection -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <button id="scenario-daily" class="scenario-btn bg-blue-100 text-blue-800 px-4 py-3 rounded-lg font-medium border-2 border-blue-300 text-center">
+                        <div class="text-2xl mb-1">🏠</div>
+                        <div data-en="Daily Life" data-es="Vida Diaria">Daily Life</div>
+                    </button>
+                    <button id="scenario-work" class="scenario-btn bg-green-100 text-green-800 px-4 py-3 rounded-lg font-medium border-2 border-transparent text-center">
+                        <div class="text-2xl mb-1">💼</div>
+                        <div data-en="Work & Business" data-es="Trabajo y Negocios">Work & Business</div>
+                    </button>
+                    <button id="scenario-social" class="scenario-btn bg-purple-100 text-purple-800 px-4 py-3 rounded-lg font-medium border-2 border-transparent text-center">
+                        <div class="text-2xl mb-1">👥</div>
+                        <div data-en="Social Situations" data-es="Situaciones Sociales">Social Situations</div>
+                    </button>
+                </div>
+                
+                <!-- Conversation Display -->
+                <div id="conversation-display" class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 id="conversation-title" class="text-xl font-semibold text-gray-800">Morning Routine Discussion</h3>
+                        <div class="flex gap-2">
+                            <button id="conversation-hint" class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm hover:bg-yellow-200">
+                                💡 <span data-en="Hint" data-es="Pista">Hint</span>
+                            </button>
+                            <button id="conversation-reset" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200">
+                                🔄 <span data-en="Reset" data-es="Reiniciar">Reset</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Conversation Messages -->
+                    <div id="conversation-messages" class="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                        <!-- Messages will be populated here -->
+                    </div>
+                    
+                    <!-- Response Options -->
+                    <div id="response-options" class="space-y-2">
+                        <!-- Response options will be populated here -->
+                    </div>
+                    
+                    <!-- Hint Display -->
+                    <div id="hint-display" class="hidden mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+                        <p id="hint-text" class="text-yellow-800 text-sm"></p>
+                    </div>
+                </div>
+                
+                <!-- Progress and Navigation -->
+                <div class="flex justify-between items-center">
+                    <button id="conversation-prev" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                        <span data-en="← Previous" data-es="← Anterior">← Previous</span>
+                    </button>
+                    <div class="text-center">
+                        <span id="conversation-progress" class="text-gray-600">1 / 5</span>
+                        <div class="text-sm text-gray-500 mt-1">
+                            <span data-en="Phrasal verbs used:" data-es="Verbos frasales usados:">Phrasal verbs used:</span>
+                            <span id="verbs-used-count" class="font-medium">0</span>
+                        </div>
+                    </div>
+                    <button id="conversation-next" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                        <span data-en="Continue →" data-es="Continuar →">Continue →</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Mode Content -->
+            <div id="quiz-content" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800" data-en="Quiz Challenge" data-es="Desafío Quiz">Quiz Challenge</h2>
+                    <button class="back-to-menu px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        <span data-en="← Back" data-es="← Volver">← Back</span>
+                    </button>
+                </div>
+                
+                <div id="quiz-question" class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4" data-en="What does this phrasal verb mean?" data-es="¿Qué significa este verbo frasal?">
+                        What does this phrasal verb mean?
+                    </h3>
+                    <div class="text-center mb-4">
+                        <span id="quiz-phrasal-verb" class="text-3xl font-bold text-indigo-800">make up</span>
+                        <button id="quiz-play-sound" class="ml-4 pronunciation-button bg-indigo-600 text-white px-3 py-1 rounded-full text-sm hover:bg-indigo-700">
+                            🔊
+                        </button>
+                    </div>
+                    
+                    <div id="quiz-options" class="grid md:grid-cols-2 gap-3">
+                        <!-- Quiz options will be populated here -->
+                    </div>
+                </div>
+                
+                <div id="quiz-result" class="hidden bg-white p-4 rounded-lg border-l-4 mb-4">
+                    <p id="result-text" class="font-medium"></p>
+                    <p id="result-explanation" class="text-sm text-gray-600 mt-1"></p>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="quiz-restart" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+                        <span data-en="Restart Quiz" data-es="Reiniciar Quiz">Restart Quiz</span>
+                    </button>
+                    <button id="quiz-next" class="hidden px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        <span data-en="Next Question" data-es="Siguiente Pregunta">Next Question</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conversation scenarios data
+        const conversationScenarios = {
+            daily: {
+                titleEn: "Morning Routine Discussion",
+                titleEs: "Discusión de Rutina Matutina",
+                conversations: [
+                    {
+                        id: 1,
+                        contextEn: "You're talking with your roommate about morning routines.",
+                        contextEs: "Estás hablando con tu compañero de cuarto sobre rutinas matutinas.",
+                        messages: [
+                            { speaker: "Roommate", textEn: "I can never wake up on time! What do you do?", textEs: "¡Nunca puedo despertar a tiempo! ¿Qué haces tú?" }
+                        ],
+                        responses: [
+                            { 
+                                textEn: "I wake up at 6 AM and make up a schedule the night before.", 
+                                textEs: "Me despierto a las 6 AM y hago un horario la noche anterior.",
+                                phrasalVerbs: ["wake up", "make up"],
+                                correct: true,
+                                feedback: { en: "Great! You used 'wake up' and 'make up' correctly.", es: "¡Excelente! Usaste 'wake up' y 'make up' correctamente." }
+                            },
+                            { 
+                                textEn: "I just sleep more and hope for the best.", 
+                                textEs: "Solo duermo más y espero lo mejor.",
+                                phrasalVerbs: [],
+                                correct: false,
+                                feedback: { en: "Try using phrasal verbs like 'wake up' or 'get up'.", es: "Intenta usar verbos frasales como 'wake up' o 'get up'." }
+                            },
+                            { 
+                                textEn: "I use up all my energy staying awake late.", 
+                                textEs: "Uso toda mi energía manteniéndome despierto hasta tarde.",
+                                phrasalVerbs: ["use up"],
+                                correct: true,
+                                feedback: { en: "Good use of 'use up'! But maybe try a better morning strategy.", es: "¡Buen uso de 'use up'! Pero tal vez intenta una mejor estrategia matutina." }
+                            }
+                        ],
+                        hintEn: "Think about phrasal verbs related to sleeping and planning.",
+                        hintEs: "Piensa en verbos frasales relacionados con dormir y planificar."
+                    },
+                    {
+                        id: 2,
+                        contextEn: "Continuing the conversation about getting ready.",
+                        contextEs: "Continuando la conversación sobre prepararse.",
+                        messages: [
+                            { speaker: "You", textEn: "[Previous response]", textEs: "[Respuesta anterior]" },
+                            { speaker: "Roommate", textEn: "That sounds good! What about when you're running late?", textEs: "¡Eso suena bien! ¿Qué pasa cuando llegas tarde?" }
+                        ],
+                        responses: [
+                            { 
+                                textEn: "I take off running to catch the bus and never give up!", 
+                                textEs: "¡Salgo corriendo para tomar el autobús y nunca me rindo!",
+                                phrasalVerbs: ["take off", "give up"],
+                                correct: true,
+                                feedback: { en: "Perfect! 'Take off' (leave quickly) and 'give up' used well.", es: "¡Perfecto! 'Take off' (irse rápidamente) y 'give up' bien usados." }
+                            },
+                            { 
+                                textEn: "I usually panic and make everything worse.", 
+                                textEs: "Usualmente entro en pánico y empeoro todo.",
+                                phrasalVerbs: [],
+                                correct: false,
+                                feedback: { en: "Try using phrasal verbs like 'hurry up' or 'speed up'.", es: "Intenta usar verbos frasales como 'hurry up' o 'speed up'." }
+                            },
+                            { 
+                                textEn: "I shut down and just stay home instead.", 
+                                textEs: "Me cierro y simplemente me quedo en casa.",
+                                phrasalVerbs: ["shut down"],
+                                correct: true,
+                                feedback: { en: "Interesting use of 'shut down'! Though maybe not the best strategy.", es: "¡Uso interesante de 'shut down'! Aunque tal vez no sea la mejor estrategia." }
+                            }
+                        ],
+                        hintEn: "Consider phrasal verbs about moving quickly or not giving up.",
+                        hintEs: "Considera verbos frasales sobre moverse rápidamente o no rendirse."
+                    }
+                ]
+            },
+            work: {
+                titleEn: "Office Project Discussion",
+                titleEs: "Discusión de Proyecto de Oficina",
+                conversations: [
+                    {
+                        id: 1,
+                        contextEn: "You're in a meeting discussing a project deadline.",
+                        contextEs: "Estás en una reunión discutiendo la fecha límite de un proyecto.",
+                        messages: [
+                            { speaker: "Manager", textEn: "The client wants to move the deadline up. How can we handle this?", textEs: "El cliente quiere adelantar la fecha límite. ¿Cómo podemos manejar esto?" }
+                        ],
+                        responses: [
+                            { 
+                                textEn: "We could save up our resources and work overtime to make up for lost time.", 
+                                textEs: "Podríamos ahorrar nuestros recursos y trabajar horas extra para compensar el tiempo perdido.",
+                                phrasalVerbs: ["save up", "make up"],
+                                correct: true,
+                                feedback: { en: "Excellent! 'Save up' and 'make up' show good planning.", es: "¡Excelente! 'Save up' y 'make up' muestran buena planificación." }
+                            },
+                            { 
+                                textEn: "I think we should just give up on this project.", 
+                                textEs: "Creo que deberíamos rendirnos con este proyecto.",
+                                phrasalVerbs: ["give up"],
+                                correct: false,
+                                feedback: { en: "Using 'give up' correctly, but maybe too negative for work!", es: "Usas 'give up' correctamente, ¡pero tal vez demasiado negativo para el trabajo!" }
+                            },
+                            { 
+                                textEn: "Let's look up similar projects and see how they managed tight deadlines.", 
+                                textEs: "Busquemos proyectos similares y veamos cómo manejaron fechas límite ajustadas.",
+                                phrasalVerbs: ["look up"],
+                                correct: true,
+                                feedback: { en: "Smart approach! 'Look up' shows good research thinking.", es: "¡Enfoque inteligente! 'Look up' muestra buen pensamiento de investigación." }
+                            }
+                        ],
+                        hintEn: "Think about phrasal verbs related to research and time management.",
+                        hintEs: "Piensa en verbos frasales relacionados con investigación y gestión del tiempo."
+                    }
+                ]
+            },
+            social: {
+                titleEn: "Party Planning Conversation",
+                titleEs: "Conversación de Planificación de Fiesta",
+                conversations: [
+                    {
+                        id: 1,
+                        contextEn: "You're helping a friend plan a surprise party.",
+                        contextEs: "Estás ayudando a un amigo a planificar una fiesta sorpresa.",
+                        messages: [
+                            { speaker: "Friend", textEn: "I'm so nervous about this party! What if something goes wrong?", textEs: "¡Estoy tan nervioso por esta fiesta! ¿Qué pasa si algo sale mal?" }
+                        ],
+                        responses: [
+                            { 
+                                textEn: "Don't worry! Let's make up a backup plan and cheer up - it'll be great!", 
+                                textEs: "¡No te preocupes! Hagamos un plan de respaldo y animémonos - ¡será genial!",
+                                phrasalVerbs: ["make up", "cheer up"],
+                                correct: true,
+                                feedback: { en: "Perfect! 'Make up' (create) and 'cheer up' are great here.", es: "¡Perfecto! 'Make up' (crear) y 'cheer up' son geniales aquí." }
+                            },
+                            { 
+                                textEn: "Maybe we should just shut down the whole idea.", 
+                                textEs: "Tal vez deberíamos cerrar toda la idea.",
+                                phrasalVerbs: ["shut down"],
+                                correct: false,
+                                feedback: { en: "You used 'shut down' correctly, but that's not very supportive!", es: "Usaste 'shut down' correctamente, ¡pero eso no es muy solidario!" }
+                            },
+                            { 
+                                textEn: "Let's tune in to some party planning shows for inspiration!", 
+                                textEs: "¡Sintonicemos algunos programas de planificación de fiestas para inspiración!",
+                                phrasalVerbs: ["tune in"],
+                                correct: true,
+                                feedback: { en: "Creative use of 'tune in'! Good thinking.", es: "¡Uso creativo de 'tune in'! Buen pensamiento." }
+                            }
+                        ],
+                        hintEn: "Think about phrasal verbs that show support and planning.",
+                        hintEs: "Piensa en verbos frasales que muestren apoyo y planificación."
+                    }
+                ]
+            }
+        };
+
+        // Phrasal verbs data with magic e, /juː/, and /ʌ/ patterns
+        const phrasalVerbs = [
+            {
+                verb: "make up",
+                pronunciation: "/meɪk ʌp/",
+                pattern: "Magic E + /ʌ/",
+                meaningEn: "to invent or create something",
+                meaningEs: "inventar o crear algo",
+                exampleEn: "She made up a story for her children.",
+                exampleEs: "Ella inventó una historia para sus hijos.",
+                category: "magic-e"
+            },
+            {
+                verb: "take off",
+                pronunciation: "/teɪk ɒf/",
+                pattern: "Magic E",
+                meaningEn: "to remove or to leave quickly",
+                meaningEs: "quitar o irse rápidamente",
+                exampleEn: "Please take off your shoes before entering.",
+                exampleEs: "Por favor quítate los zapatos antes de entrar.",
+                category: "magic-e"
+            },
+            {
+                verb: "use up",
+                pronunciation: "/juːz ʌp/",
+                pattern: "/juː/ + /ʌ/",
+                meaningEn: "to consume completely",
+                meaningEs: "consumir completamente",
+                exampleEn: "We used up all the milk this morning.",
+                exampleEs: "Usamos toda la leche esta mañana.",
+                category: "uu"
+            },
+            {
+                verb: "tune in",
+                pronunciation: "/tjuːn ɪn/",
+                pattern: "/juː/ Sound",
+                meaningEn: "to watch or listen to a broadcast",
+                meaningEs: "sintonizar una transmisión",
+                exampleEn: "Don't forget to tune in to the news tonight.",
+                exampleEs: "No olvides sintonizar las noticias esta noche.",
+                category: "uu"
+            },
+            {
+                verb: "cut off",
+                pronunciation: "/kʌt ɒf/",
+                pattern: "/ʌ/ Sound",
+                meaningEn: "to disconnect or stop suddenly",
+                meaningEs: "desconectar o parar de repente",
+                exampleEn: "The phone call was cut off unexpectedly.",
+                exampleEs: "La llamada se cortó inesperadamente.",
+                category: "uh"
+            },
+            {
+                verb: "shut down",
+                pronunciation: "/ʃʌt daʊn/",
+                pattern: "/ʌ/ Sound",
+                meaningEn: "to close or stop operating",
+                meaningEs: "cerrar o dejar de funcionar",
+                exampleEn: "The factory will shut down next month.",
+                exampleEs: "La fábrica cerrará el próximo mes.",
+                category: "uh"
+            },
+            {
+                verb: "come true",
+                pronunciation: "/kʌm truː/",
+                pattern: "/ʌ/ + /juː/",
+                meaningEn: "to become reality",
+                meaningEs: "hacerse realidad",
+                exampleEn: "Her dreams finally came true.",
+                exampleEs: "Sus sueños finalmente se hicieron realidad.",
+                category: "uu"
+            },
+            {
+                verb: "wake up",
+                pronunciation: "/weɪk ʌp/",
+                pattern: "Magic E + /ʌ/",
+                meaningEn: "to stop sleeping",
+                meaningEs: "despertar",
+                exampleEn: "I wake up at 7 AM every day.",
+                exampleEs: "Me despierto a las 7 AM todos los días.",
+                category: "magic-e"
+            },
+            {
+                verb: "give up",
+                pronunciation: "/ɡɪv ʌp/",
+                pattern: "/ʌ/ Sound",
+                meaningEn: "to stop trying or quit",
+                meaningEs: "rendirse o dejar de intentar",
+                exampleEn: "Don't give up on your dreams.",
+                exampleEs: "No te rindas con tus sueños.",
+                category: "uh"
+            },
+            {
+                verb: "look up",
+                pronunciation: "/lʊk ʌp/",
+                pattern: "/ʌ/ Sound",
+                meaningEn: "to search for information",
+                meaningEs: "buscar información",
+                exampleEn: "I need to look up this word in the dictionary.",
+                exampleEs: "Necesito buscar esta palabra en el diccionario.",
+                category: "uh"
+            },
+            {
+                verb: "save up",
+                pronunciation: "/seɪv ʌp/",
+                pattern: "Magic E + /ʌ/",
+                meaningEn: "to collect money over time",
+                meaningEs: "ahorrar dinero con el tiempo",
+                exampleEn: "She's saving up for a new car.",
+                exampleEs: "Está ahorrando para un carro nuevo.",
+                category: "magic-e"
+            },
+            {
+                verb: "cheer up",
+                pronunciation: "/tʃɪər ʌp/",
+                pattern: "/ʌ/ Sound",
+                meaningEn: "to become happier",
+                meaningEs: "animarse",
+                exampleEn: "The good news cheered him up.",
+                exampleEs: "Las buenas noticias lo animaron.",
+                category: "uh"
+            }
+        ];
+
+        // Application state
+        let currentLanguage = 'en';
+        let currentMode = 'welcome';
+        let currentCardIndex = 0;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let quizQuestions = [];
+        let currentFilter = 'magic-e';
+        let currentScenario = 'daily';
+        let currentConversationIndex = 0;
+        let conversationHistory = [];
+        let phrasalVerbsUsed = new Set();
+
+        // Language translations
+        const translations = {
+            en: {
+                'main-title': 'Phrasal Verbs Practice',
+                'subtitle': 'Master phrasal verbs with magic "e" and /juː/, /ʌ/ sounds',
+                'progress-text': 'Progress'
+            },
+            es: {
+                'main-title': 'Práctica de Verbos Frasales',
+                'subtitle': 'Domina los verbos frasales con "e" mágica y sonidos /juː/, /ʌ/',
+                'progress-text': 'Progreso'
+            }
+        };
+
+        // Initialize the application
+        function init() {
+            setupEventListeners();
+            updateLanguage();
+            showWelcomeScreen();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Language toggle
+            document.getElementById('lang-en').addEventListener('click', () => switchLanguage('en'));
+            document.getElementById('lang-es').addEventListener('click', () => switchLanguage('es'));
+
+            // Mode selection
+            document.getElementById('study-mode').addEventListener('click', () => showStudyMode());
+            document.getElementById('pronunciation-mode').addEventListener('click', () => showPronunciationMode());
+            document.getElementById('conversation-mode').addEventListener('click', () => showConversationMode());
+            document.getElementById('quiz-mode').addEventListener('click', () => showQuizMode());
+
+            // Back buttons
+            document.querySelectorAll('.back-to-menu, #back-to-menu').forEach(btn => {
+                btn.addEventListener('click', showWelcomeScreen);
+            });
+
+            // Study mode navigation
+            document.getElementById('prev-card').addEventListener('click', () => navigateCard(-1));
+            document.getElementById('next-card').addEventListener('click', () => navigateCard(1));
+
+            // Pronunciation buttons
+            document.getElementById('play-pronunciation').addEventListener('click', () => playPronunciation(phrasalVerbs[currentCardIndex].verb));
+
+            // Filter buttons
+            document.getElementById('filter-magic-e').addEventListener('click', () => setFilter('magic-e'));
+            document.getElementById('filter-uu').addEventListener('click', () => setFilter('uu'));
+            document.getElementById('filter-uh').addEventListener('click', () => setFilter('uh'));
+
+            // Conversation buttons
+            document.getElementById('scenario-daily').addEventListener('click', () => setScenario('daily'));
+            document.getElementById('scenario-work').addEventListener('click', () => setScenario('work'));
+            document.getElementById('scenario-social').addEventListener('click', () => setScenario('social'));
+            document.getElementById('conversation-hint').addEventListener('click', showConversationHint);
+            document.getElementById('conversation-reset').addEventListener('click', resetConversation);
+            document.getElementById('conversation-prev').addEventListener('click', () => navigateConversation(-1));
+            document.getElementById('conversation-next').addEventListener('click', () => navigateConversation(1));
+
+            // Quiz buttons
+            document.getElementById('quiz-restart').addEventListener('click', startQuiz);
+            document.getElementById('quiz-next').addEventListener('click', nextQuizQuestion);
+            document.getElementById('quiz-play-sound').addEventListener('click', () => {
+                if (quizQuestions.length > 0) {
+                    playPronunciation(quizQuestions[currentQuizIndex].verb);
+                }
+            });
+        }
+
+        // Switch language
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.getElementById('lang-en').className = lang === 'en' 
+                ? 'px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium'
+                : 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium';
+            
+            document.getElementById('lang-es').className = lang === 'es' 
+                ? 'px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium'
+                : 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium';
+
+            updateLanguage();
+        }
+
+        // Update language content
+        function updateLanguage() {
+            document.querySelectorAll('[data-en]').forEach(element => {
+                const key = currentLanguage === 'en' ? 'data-en' : 'data-es';
+                element.textContent = element.getAttribute(key);
+            });
+
+            // Update specific translations
+            if (translations[currentLanguage]) {
+                Object.keys(translations[currentLanguage]).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.textContent = translations[currentLanguage][key];
+                    }
+                });
+            }
+
+            // Update current mode content
+            if (currentMode === 'study') {
+                updateStudyCard();
+            } else if (currentMode === 'quiz') {
+                updateQuizDisplay();
+            }
+        }
+
+        // Show welcome screen
+        function showWelcomeScreen() {
+            currentMode = 'welcome';
+            hideAllContent();
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            updateProgress(0, 0);
+        }
+
+        // Show study mode
+        function showStudyMode() {
+            currentMode = 'study';
+            currentCardIndex = 0;
+            hideAllContent();
+            document.getElementById('study-content').classList.remove('hidden');
+            updateStudyCard();
+            updateProgress(currentCardIndex + 1, phrasalVerbs.length);
+        }
+
+        // Show pronunciation mode
+        function showPronunciationMode() {
+            currentMode = 'pronunciation';
+            hideAllContent();
+            document.getElementById('pronunciation-content').classList.remove('hidden');
+            setFilter('magic-e');
+            updateProgress(0, 0);
+        }
+
+        // Show conversation mode
+        function showConversationMode() {
+            currentMode = 'conversation';
+            hideAllContent();
+            document.getElementById('conversation-content').classList.remove('hidden');
+            setScenario('daily');
+            updateProgress(0, 0);
+        }
+
+        // Show quiz mode
+        function showQuizMode() {
+            currentMode = 'quiz';
+            hideAllContent();
+            document.getElementById('quiz-content').classList.remove('hidden');
+            startQuiz();
+        }
+
+        // Hide all content sections
+        function hideAllContent() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('study-content').classList.add('hidden');
+            document.getElementById('pronunciation-content').classList.add('hidden');
+            document.getElementById('conversation-content').classList.add('hidden');
+            document.getElementById('quiz-content').classList.add('hidden');
+        }
+
+        // Update study card
+        function updateStudyCard() {
+            const verb = phrasalVerbs[currentCardIndex];
+            
+            document.getElementById('phrasal-verb').textContent = verb.verb;
+            document.getElementById('pronunciation').textContent = verb.pronunciation;
+            document.getElementById('sound-pattern').textContent = verb.pattern;
+            document.getElementById('meaning-en').textContent = verb.meaningEn;
+            document.getElementById('meaning-es').textContent = verb.meaningEs;
+            document.getElementById('example-en').textContent = `"${verb.exampleEn}"`;
+            document.getElementById('example-es').textContent = `"${verb.exampleEs}"`;
+            document.getElementById('card-counter').textContent = `${currentCardIndex + 1} / ${phrasalVerbs.length}`;
+            
+            // Update navigation buttons
+            document.getElementById('prev-card').disabled = currentCardIndex === 0;
+            document.getElementById('next-card').disabled = currentCardIndex === phrasalVerbs.length - 1;
+            
+            updateProgress(currentCardIndex + 1, phrasalVerbs.length);
+        }
+
+        // Navigate study cards
+        function navigateCard(direction) {
+            const newIndex = currentCardIndex + direction;
+            if (newIndex >= 0 && newIndex < phrasalVerbs.length) {
+                currentCardIndex = newIndex;
+                updateStudyCard();
+            }
+        }
+
+        // Set pronunciation filter
+        function setFilter(category) {
+            currentFilter = category;
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-4 py-2 rounded-lg font-medium border-2 border-transparent';
+            });
+            
+            const activeBtn = document.getElementById(`filter-${category}`);
+            if (category === 'magic-e') {
+                activeBtn.className = 'filter-btn bg-purple-100 text-purple-800 px-4 py-2 rounded-lg font-medium border-2 border-purple-300';
+            } else if (category === 'uu') {
+                activeBtn.className = 'filter-btn bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium border-2 border-blue-300';
+            } else {
+                activeBtn.className = 'filter-btn bg-green-100 text-green-800 px-4 py-2 rounded-lg font-medium border-2 border-green-300';
+            }
+            
+            updatePronunciationGrid();
+        }
+
+        // Update pronunciation grid
+        function updatePronunciationGrid() {
+            const grid = document.getElementById('pronunciation-grid');
+            const filteredVerbs = phrasalVerbs.filter(verb => verb.category === currentFilter);
+            
+            grid.innerHTML = filteredVerbs.map(verb => `
+                <div class="card-hover bg-white p-4 rounded-lg shadow-md border">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-lg font-semibold text-gray-800">${verb.verb}</h3>
+                        <button onclick="playPronunciation('${verb.verb}')" class="pronunciation-button bg-indigo-600 text-white px-2 py-1 rounded-full text-xs hover:bg-indigo-700">
+                            🔊
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">${verb.pronunciation}</p>
+                    <p class="text-sm text-gray-700 mb-1">${currentLanguage === 'en' ? verb.meaningEn : verb.meaningEs}</p>
+                    <p class="text-xs text-gray-500 italic">"${currentLanguage === 'en' ? verb.exampleEn : verb.exampleEs}"</p>
+                </div>
+            `).join('');
+        }
+
+        // Start quiz
+        function startQuiz() {
+            quizQuestions = [...phrasalVerbs].sort(() => Math.random() - 0.5);
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-next').classList.add('hidden');
+            nextQuizQuestion();
+        }
+
+        // Next quiz question
+        function nextQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+
+            const currentVerb = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-phrasal-verb').textContent = currentVerb.verb;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-next').classList.add('hidden');
+
+            // Generate options
+            const correctAnswer = currentLanguage === 'en' ? currentVerb.meaningEn : currentVerb.meaningEs;
+            const wrongAnswers = phrasalVerbs
+                .filter(v => v.verb !== currentVerb.verb)
+                .map(v => currentLanguage === 'en' ? v.meaningEn : v.meaningEs)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+
+            const allOptions = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+
+            const optionsHTML = allOptions.map((option, index) => `
+                <button onclick="selectQuizAnswer('${option}', '${correctAnswer}')" 
+                        class="quiz-option text-left p-3 bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+                    ${option}
+                </button>
+            `).join('');
+
+            document.getElementById('quiz-options').innerHTML = optionsHTML;
+            updateProgress(currentQuizIndex + 1, quizQuestions.length);
+        }
+
+        // Select quiz answer
+        function selectQuizAnswer(selected, correct) {
+            const isCorrect = selected === correct;
+            const resultDiv = document.getElementById('quiz-result');
+            const resultText = document.getElementById('result-text');
+            const resultExplanation = document.getElementById('result-explanation');
+
+            if (isCorrect) {
+                quizScore++;
+                resultDiv.className = 'bg-green-50 p-4 rounded-lg border-l-4 border-green-500 mb-4';
+                resultText.textContent = currentLanguage === 'en' ? '✅ Correct!' : '✅ ¡Correcto!';
+                resultText.className = 'font-medium text-green-800';
+            } else {
+                resultDiv.className = 'bg-red-50 p-4 rounded-lg border-l-4 border-red-500 mb-4';
+                resultText.textContent = currentLanguage === 'en' ? '❌ Incorrect' : '❌ Incorrecto';
+                resultText.className = 'font-medium text-red-800';
+            }
+
+            const currentVerb = quizQuestions[currentQuizIndex];
+            const explanation = currentLanguage === 'en' 
+                ? `"${currentVerb.verb}" means: ${currentVerb.meaningEn}`
+                : `"${currentVerb.verb}" significa: ${currentVerb.meaningEs}`;
+            
+            resultExplanation.textContent = explanation;
+            resultExplanation.className = 'text-sm text-gray-600 mt-1';
+
+            resultDiv.classList.remove('hidden');
+            document.getElementById('quiz-next').classList.remove('hidden');
+
+            // Disable all option buttons
+            document.querySelectorAll('.quiz-option').forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+
+            currentQuizIndex++;
+        }
+
+        // Show quiz results
+        function showQuizResults() {
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            const resultDiv = document.getElementById('quiz-result');
+            const resultText = document.getElementById('result-text');
+            const resultExplanation = document.getElementById('result-explanation');
+
+            resultDiv.className = 'bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 mb-4';
+            
+            if (currentLanguage === 'en') {
+                resultText.textContent = `🎉 Quiz Complete! Score: ${quizScore}/${quizQuestions.length} (${percentage}%)`;
+                resultExplanation.textContent = percentage >= 70 
+                    ? 'Excellent work! You have a great understanding of these phrasal verbs.'
+                    : 'Good effort! Try studying the cards again to improve your score.';
+            } else {
+                resultText.textContent = `🎉 ¡Quiz Completado! Puntuación: ${quizScore}/${quizQuestions.length} (${percentage}%)`;
+                resultExplanation.textContent = percentage >= 70 
+                    ? '¡Excelente trabajo! Tienes una gran comprensión de estos verbos frasales.'
+                    : '¡Buen esfuerzo! Intenta estudiar las tarjetas nuevamente para mejorar tu puntuación.';
+            }
+
+            resultText.className = 'font-medium text-blue-800';
+            resultDiv.classList.remove('hidden');
+            document.getElementById('quiz-next').classList.add('hidden');
+            
+            // Hide quiz question area
+            document.getElementById('quiz-question').style.display = 'none';
+            
+            updateProgress(quizQuestions.length, quizQuestions.length);
+        }
+
+        // Update quiz display for language changes
+        function updateQuizDisplay() {
+            if (currentMode === 'quiz' && currentQuizIndex < quizQuestions.length) {
+                nextQuizQuestion();
+            }
+        }
+
+        // Play pronunciation (simulated)
+        function playPronunciation(verb) {
+            // Since we can't actually play audio, we'll show a visual feedback
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '🔊 Playing...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }, 1000);
+            
+            // Show pronunciation in a temporary tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'fixed bg-black text-white px-2 py-1 rounded text-sm z-50';
+            tooltip.style.top = '50%';
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translate(-50%, -50%)';
+            
+            const verbData = phrasalVerbs.find(v => v.verb === verb);
+            tooltip.textContent = verbData ? verbData.pronunciation : verb;
+            
+            document.body.appendChild(tooltip);
+            
+            setTimeout(() => {
+                document.body.removeChild(tooltip);
+            }, 2000);
+        }
+
+        // Set conversation scenario
+        function setScenario(scenario) {
+            currentScenario = scenario;
+            currentConversationIndex = 0;
+            conversationHistory = [];
+            phrasalVerbsUsed.clear();
+            
+            // Update scenario buttons
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.className = 'scenario-btn px-4 py-3 rounded-lg font-medium border-2 border-transparent text-center';
+            });
+            
+            const activeBtn = document.getElementById(`scenario-${scenario}`);
+            if (scenario === 'daily') {
+                activeBtn.className = 'scenario-btn bg-blue-100 text-blue-800 px-4 py-3 rounded-lg font-medium border-2 border-blue-300 text-center';
+            } else if (scenario === 'work') {
+                activeBtn.className = 'scenario-btn bg-green-100 text-green-800 px-4 py-3 rounded-lg font-medium border-2 border-green-300 text-center';
+            } else {
+                activeBtn.className = 'scenario-btn bg-purple-100 text-purple-800 px-4 py-3 rounded-lg font-medium border-2 border-purple-300 text-center';
+            }
+            
+            updateConversationDisplay();
+        }
+
+        // Update conversation display
+        function updateConversationDisplay() {
+            const scenarioData = conversationScenarios[currentScenario];
+            const conversation = scenarioData.conversations[currentConversationIndex];
+            
+            // Update title
+            const title = currentLanguage === 'en' ? scenarioData.titleEn : scenarioData.titleEs;
+            document.getElementById('conversation-title').textContent = title;
+            
+            // Update messages
+            const messagesContainer = document.getElementById('conversation-messages');
+            messagesContainer.innerHTML = '';
+            
+            // Add context
+            const contextDiv = document.createElement('div');
+            contextDiv.className = 'bg-blue-100 p-3 rounded-lg mb-4 text-sm text-blue-800';
+            contextDiv.textContent = currentLanguage === 'en' ? conversation.contextEn : conversation.contextEs;
+            messagesContainer.appendChild(contextDiv);
+            
+            // Add conversation history
+            conversationHistory.forEach(msg => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `flex ${msg.speaker === 'You' ? 'justify-end' : 'justify-start'} mb-3`;
+                msgDiv.innerHTML = `
+                    <div class="${msg.speaker === 'You' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800'} px-4 py-2 rounded-lg max-w-xs">
+                        <div class="font-medium text-xs mb-1">${msg.speaker}</div>
+                        <div>${msg.text}</div>
+                    </div>
+                `;
+                messagesContainer.appendChild(msgDiv);
+            });
+            
+            // Add current messages
+            conversation.messages.forEach(msg => {
+                if (msg.textEn !== "[Previous response]") {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = 'flex justify-start mb-3';
+                    msgDiv.innerHTML = `
+                        <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg max-w-xs">
+                            <div class="font-medium text-xs mb-1">${msg.speaker}</div>
+                            <div>${currentLanguage === 'en' ? msg.textEn : msg.textEs}</div>
+                        </div>
+                    `;
+                    messagesContainer.appendChild(msgDiv);
+                }
+            });
+            
+            // Update response options
+            const optionsContainer = document.getElementById('response-options');
+            optionsContainer.innerHTML = conversation.responses.map((response, index) => `
+                <button onclick="selectConversationResponse(${index})" 
+                        class="conversation-response text-left p-3 bg-white border-2 border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors w-full">
+                    ${currentLanguage === 'en' ? response.textEn : response.textEs}
+                    ${response.phrasalVerbs.length > 0 ? `<div class="text-xs text-indigo-600 mt-1">Uses: ${response.phrasalVerbs.join(', ')}</div>` : ''}
+                </button>
+            `).join('');
+            
+            // Update progress
+            const totalConversations = scenarioData.conversations.length;
+            document.getElementById('conversation-progress').textContent = `${currentConversationIndex + 1} / ${totalConversations}`;
+            document.getElementById('verbs-used-count').textContent = phrasalVerbsUsed.size;
+            
+            // Update navigation buttons
+            document.getElementById('conversation-prev').disabled = currentConversationIndex === 0;
+            document.getElementById('conversation-next').disabled = currentConversationIndex >= totalConversations - 1;
+            
+            // Hide hint
+            document.getElementById('hint-display').classList.add('hidden');
+            
+            updateProgress(currentConversationIndex + 1, totalConversations);
+        }
+
+        // Select conversation response
+        function selectConversationResponse(responseIndex) {
+            const scenarioData = conversationScenarios[currentScenario];
+            const conversation = scenarioData.conversations[currentConversationIndex];
+            const response = conversation.responses[responseIndex];
+            
+            // Add response to history
+            conversationHistory.push({
+                speaker: 'You',
+                text: currentLanguage === 'en' ? response.textEn : response.textEs
+            });
+            
+            // Track phrasal verbs used
+            response.phrasalVerbs.forEach(verb => phrasalVerbsUsed.add(verb));
+            
+            // Show feedback
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `p-3 rounded-lg mt-4 ${response.correct ? 'bg-green-50 border-l-4 border-green-500' : 'bg-yellow-50 border-l-4 border-yellow-500'}`;
+            feedbackDiv.innerHTML = `
+                <div class="font-medium ${response.correct ? 'text-green-800' : 'text-yellow-800'}">
+                    ${response.correct ? '✅' : '💡'} ${currentLanguage === 'en' ? response.feedback.en : response.feedback.es}
+                </div>
+            `;
+            
+            // Add feedback after response options
+            const optionsContainer = document.getElementById('response-options');
+            optionsContainer.appendChild(feedbackDiv);
+            
+            // Disable all response buttons
+            document.querySelectorAll('.conversation-response').forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+            
+            // Enable next button if not at the end
+            if (currentConversationIndex < scenarioData.conversations.length - 1) {
+                document.getElementById('conversation-next').disabled = false;
+            }
+            
+            // Update verb count
+            document.getElementById('verbs-used-count').textContent = phrasalVerbsUsed.size;
+        }
+
+        // Show conversation hint
+        function showConversationHint() {
+            const scenarioData = conversationScenarios[currentScenario];
+            const conversation = scenarioData.conversations[currentConversationIndex];
+            
+            const hintDisplay = document.getElementById('hint-display');
+            const hintText = document.getElementById('hint-text');
+            
+            hintText.textContent = currentLanguage === 'en' ? conversation.hintEn : conversation.hintEs;
+            hintDisplay.classList.remove('hidden');
+        }
+
+        // Reset conversation
+        function resetConversation() {
+            conversationHistory = [];
+            phrasalVerbsUsed.clear();
+            currentConversationIndex = 0;
+            updateConversationDisplay();
+        }
+
+        // Navigate conversation
+        function navigateConversation(direction) {
+            const scenarioData = conversationScenarios[currentScenario];
+            const newIndex = currentConversationIndex + direction;
+            
+            if (newIndex >= 0 && newIndex < scenarioData.conversations.length) {
+                currentConversationIndex = newIndex;
+                updateConversationDisplay();
+            }
+        }
+
+        // Update progress bar
+        function updateProgress(current, total) {
+            const percentage = total > 0 ? (current / total) * 100 : 0;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('score-display').textContent = `${current}/${total}`;
+        }
+
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c05ea7d526f7af',t:'MTc1NzM1NDY4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
