@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Expressions & Slang for Italian Speakers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .progress-bar { transition: width 0.5s ease; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex justify-center items-center gap-4 mb-4">
+                <h1 class="text-4xl font-bold text-gray-800">🇺🇸 <span data-en="English Expressions & Slang" data-it="Espressioni e Slang Inglesi">English Expressions & Slang</span></h1>
+                <button onclick="toggleLanguage()" class="bg-white hover:bg-gray-50 border-2 border-indigo-200 text-indigo-600 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                    <span id="lang-toggle">🇮🇹 IT</span>
+                </button>
+            </div>
+            <p class="text-lg text-gray-600" data-en="For advanced Italian students learning English" data-it="Per studenti italiani avanzati che imparano l'inglese">For advanced Italian students learning English</p>
+            <div class="mt-4 bg-white rounded-full px-6 py-2 inline-block shadow-sm">
+                <span class="text-sm font-medium text-gray-700" data-en="Progress:" data-it="Progresso:">Progress:</span>
+                <span id="progress-text" class="text-sm font-bold text-indigo-600">0/30</span>
+                <div class="w-32 bg-gray-200 rounded-full h-2 mt-1 inline-block ml-2">
+                    <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Selection -->
+        <div id="category-selection" class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center" data-en="Choose a Category" data-it="Scegli una Categoria">Choose a Category</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <button onclick="startCategory('idioms')" class="category-btn bg-white p-6 rounded-xl shadow-md card-hover text-center">
+                    <div class="text-3xl mb-2">🎭</div>
+                    <h3 class="font-semibold text-gray-800" data-en="Idioms" data-it="Modi di Dire">Idioms</h3>
+                    <p class="text-sm text-gray-600 mt-1" data-en="Common sayings" data-it="Espressioni comuni">Common sayings</p>
+                    <div class="text-xs text-indigo-600 mt-1 font-medium">10 <span data-en="expressions" data-it="espressioni">expressions</span></div>
+                </button>
+                <button onclick="startCategory('slang')" class="category-btn bg-white p-6 rounded-xl shadow-md card-hover text-center">
+                    <div class="text-3xl mb-2">😎</div>
+                    <h3 class="font-semibold text-gray-800" data-en="Slang" data-it="Slang">Slang</h3>
+                    <p class="text-sm text-gray-600 mt-1" data-en="Informal expressions" data-it="Espressioni informali">Informal expressions</p>
+                    <div class="text-xs text-indigo-600 mt-1 font-medium">10 <span data-en="expressions" data-it="espressioni">expressions</span></div>
+                </button>
+                <button onclick="startCategory('phrases')" class="category-btn bg-white p-6 rounded-xl shadow-md card-hover text-center">
+                    <div class="text-3xl mb-2">💬</div>
+                    <h3 class="font-semibold text-gray-800" data-en="Phrases" data-it="Frasi">Phrases</h3>
+                    <p class="text-sm text-gray-600 mt-1" data-en="Everyday expressions" data-it="Espressioni quotidiane">Everyday expressions</p>
+                    <div class="text-xs text-indigo-600 mt-1 font-medium">10 <span data-en="expressions" data-it="espressioni">expressions</span></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Learning Interface -->
+        <div id="learning-interface" class="hidden">
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="showCategories()" class="text-indigo-600 hover:text-indigo-800 font-medium" data-en="← Back to Categories" data-it="← Torna alle Categorie">← Back to Categories</button>
+                    <span id="category-title" class="text-lg font-semibold text-gray-800"></span>
+                    <span id="card-counter" class="text-sm text-gray-500"></span>
+                </div>
+
+                <div id="expression-card" class="text-center fade-in">
+                    <div class="mb-6">
+                        <h3 id="expression-text" class="text-3xl font-bold text-gray-800 mb-4"></h3>
+                        <div id="context-badge" class="inline-block bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium mb-4"></div>
+                    </div>
+                    
+                    <div id="meaning-section" class="hidden mb-6">
+                        <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg mb-4">
+                            <h4 class="font-semibold text-green-800 mb-2" data-en="Meaning:" data-it="Significato:">Meaning:</h4>
+                            <p id="meaning-text" class="text-green-700"></p>
+                        </div>
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-4">
+                            <h4 class="font-semibold text-blue-800 mb-2" data-en="Italian equivalent:" data-it="Equivalente italiano:">Italian equivalent:</h4>
+                            <p id="italian-text" class="text-blue-700 italic"></p>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                            <h4 class="font-semibold text-yellow-800 mb-2" data-en="Example:" data-it="Esempio:">Example:</h4>
+                            <p id="example-text" class="text-yellow-700"></p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 justify-center">
+                        <button id="reveal-btn" onclick="revealMeaning()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors" data-en="Show Meaning" data-it="Mostra Significato">
+                            Show Meaning
+                        </button>
+                        <button id="next-btn" onclick="nextExpression()" class="hidden bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors" data-en="Next Expression" data-it="Prossima Espressione">
+                            Next Expression
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Reference -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h3 class="font-semibold text-gray-800 mb-3" data-en="💡 Learning Tips" data-it="💡 Consigli per l'Apprendimento">💡 Learning Tips</h3>
+                <ul class="text-sm text-gray-600 space-y-1">
+                    <li data-en="• Pay attention to context - these expressions are often informal" data-it="• Fai attenzione al contesto - queste espressioni sono spesso informali">• Pay attention to context - these expressions are often informal</li>
+                    <li data-en="• Practice using them in conversations with native speakers" data-it="• Pratica usandole in conversazioni con madrelingua">• Practice using them in conversations with native speakers</li>
+                    <li data-en="• Some slang may be regional or generational" data-it="• Alcuni slang possono essere regionali o generazionali">• Some slang may be regional or generational</li>
+                    <li data-en="• When in doubt, stick to more formal alternatives in professional settings" data-it="• In caso di dubbio, usa alternative più formali in contesti professionali">• When in doubt, stick to more formal alternatives in professional settings</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Completion Screen -->
+        <div id="completion-screen" class="hidden text-center">
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div class="text-6xl mb-4">🎉</div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4" data-en="Congratulations!" data-it="Congratulazioni!">Congratulations!</h2>
+                <p class="text-lg text-gray-600 mb-6" data-en="You've completed this category. Great job learning these expressions!" data-it="Hai completato questa categoria. Ottimo lavoro nell'imparare queste espressioni!">You've completed this category. Great job learning these expressions!</p>
+                <button onclick="showCategories()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-medium transition-colors" data-en="Try Another Category" data-it="Prova un'Altra Categoria">
+                    Try Another Category
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const expressions = {
+            idioms: [
+                {
+                    expression: "Break a leg!",
+                    context: "Theater/Performance",
+                    meaning: "Good luck! (especially before a performance)",
+                    italian: "In bocca al lupo!",
+                    example: "You have your job interview today? Break a leg!"
+                },
+                {
+                    expression: "It's raining cats and dogs",
+                    context: "Weather",
+                    meaning: "It's raining very heavily",
+                    italian: "Piove a catinelle",
+                    example: "I can't go out now - it's raining cats and dogs!"
+                },
+                {
+                    expression: "Spill the beans",
+                    context: "Secrets",
+                    meaning: "To reveal a secret or tell the truth",
+                    italian: "Vuotare il sacco",
+                    example: "Come on, spill the beans! What really happened?"
+                },
+                {
+                    expression: "Hit the nail on the head",
+                    context: "Accuracy",
+                    meaning: "To be exactly right about something",
+                    italian: "Cogliere nel segno",
+                    example: "You hit the nail on the head with that analysis."
+                },
+                {
+                    expression: "Bite the bullet",
+                    context: "Difficult decisions",
+                    meaning: "To face a difficult situation with courage",
+                    italian: "Stringere i denti",
+                    example: "I don't want to study, but I'll have to bite the bullet."
+                },
+                {
+                    expression: "Don't cry over spilled milk",
+                    context: "Regret",
+                    meaning: "Don't worry about past mistakes that can't be changed",
+                    italian: "Inutile piangere sul latte versato",
+                    example: "You failed the test, but don't cry over spilled milk - study harder next time."
+                },
+                {
+                    expression: "The ball is in your court",
+                    context: "Responsibility",
+                    meaning: "It's your turn to make a decision or take action",
+                    italian: "Tocca a te decidere",
+                    example: "I've given you all the information. The ball is in your court now."
+                },
+                {
+                    expression: "Kill two birds with one stone",
+                    context: "Efficiency",
+                    meaning: "Accomplish two things with one action",
+                    italian: "Prendere due piccioni con una fava",
+                    example: "I'll visit the bank and buy groceries - kill two birds with one stone."
+                },
+                {
+                    expression: "When pigs fly",
+                    context: "Impossibility",
+                    meaning: "Something that will never happen",
+                    italian: "Quando gli asini voleranno",
+                    example: "He'll clean his room when pigs fly!"
+                },
+                {
+                    expression: "A piece of cake",
+                    context: "Difficulty",
+                    meaning: "Something very easy to do",
+                    italian: "Un gioco da ragazzi",
+                    example: "The math test was a piece of cake for her."
+                }
+            ],
+            slang: [
+                {
+                    expression: "That's fire!",
+                    context: "Modern slang",
+                    meaning: "That's really good/awesome/excellent",
+                    italian: "È fantastico!/È una bomba!",
+                    example: "Did you hear her new song? That's fire!"
+                },
+                {
+                    expression: "I'm ghosting him",
+                    context: "Dating/Social",
+                    meaning: "Suddenly stopping all communication with someone",
+                    italian: "Lo sto ignorando completamente",
+                    example: "He was too clingy, so I'm ghosting him."
+                },
+                {
+                    expression: "No cap",
+                    context: "Youth slang",
+                    meaning: "No lie, I'm being serious/honest",
+                    italian: "Sul serio, non sto scherzando",
+                    example: "That movie was amazing, no cap."
+                },
+                {
+                    expression: "It's a vibe",
+                    context: "Atmosphere",
+                    meaning: "It has a good feeling/atmosphere",
+                    italian: "Ha una bella atmosfera",
+                    example: "This coffee shop is really cozy - it's a vibe."
+                },
+                {
+                    expression: "Salty",
+                    context: "Emotions",
+                    meaning: "Bitter, upset, or angry about something",
+                    italian: "Amareggiato/risentito",
+                    example: "He's still salty about losing the game yesterday."
+                },
+                {
+                    expression: "That slaps!",
+                    context: "Music/Quality",
+                    meaning: "That's really good (especially music)",
+                    italian: "È fantastico! (specialmente musica)",
+                    example: "This new album slaps - I can't stop listening to it."
+                },
+                {
+                    expression: "I'm dead",
+                    context: "Humor",
+                    meaning: "That's so funny, I'm laughing so hard",
+                    italian: "Sto morendo dal ridere",
+                    example: "Did you see that meme? I'm dead!"
+                },
+                {
+                    expression: "It hits different",
+                    context: "Experience",
+                    meaning: "It feels special or unique in some way",
+                    italian: "È diverso/speciale",
+                    example: "Pizza at 2 AM just hits different."
+                },
+                {
+                    expression: "That's sus",
+                    context: "Suspicion",
+                    meaning: "That's suspicious or questionable",
+                    italian: "È sospetto",
+                    example: "He said he was sick, but I saw him at the mall. That's sus."
+                },
+                {
+                    expression: "I'm lowkey tired",
+                    context: "Degree",
+                    meaning: "I'm somewhat/kind of tired (not extremely)",
+                    italian: "Sono un po' stanco",
+                    example: "I'm lowkey tired, but I can still go out tonight."
+                }
+            ],
+            phrases: [
+                {
+                    expression: "I'm all ears",
+                    context: "Listening",
+                    meaning: "I'm ready to listen carefully",
+                    italian: "Sono tutto orecchi",
+                    example: "You wanted to tell me something? I'm all ears."
+                },
+                {
+                    expression: "Better late than never",
+                    context: "Timing",
+                    meaning: "It's better to do something late than not at all",
+                    italian: "Meglio tardi che mai",
+                    example: "You finally called me back! Better late than never."
+                },
+                {
+                    expression: "Don't beat around the bush",
+                    context: "Direct communication",
+                    meaning: "Speak directly, don't avoid the main point",
+                    italian: "Non menare il can per l'aia",
+                    example: "Stop beating around the bush and tell me what happened."
+                },
+                {
+                    expression: "It's not rocket science",
+                    context: "Difficulty",
+                    meaning: "It's not very difficult or complicated",
+                    italian: "Non è così difficile",
+                    example: "Just follow the instructions - it's not rocket science."
+                },
+                {
+                    expression: "Keep your chin up",
+                    context: "Encouragement",
+                    meaning: "Stay positive, don't get discouraged",
+                    italian: "Tieni duro, non scoraggiarti",
+                    example: "I know work is stressful, but keep your chin up!"
+                },
+                {
+                    expression: "Long time no see",
+                    context: "Greeting",
+                    meaning: "I haven't seen you in a long time",
+                    italian: "È da tanto che non ci vediamo",
+                    example: "Maria! Long time no see! How have you been?"
+                },
+                {
+                    expression: "My bad",
+                    context: "Apology",
+                    meaning: "My mistake, I'm sorry",
+                    italian: "Colpa mia, scusa",
+                    example: "I forgot to call you back yesterday. My bad!"
+                },
+                {
+                    expression: "No worries",
+                    context: "Reassurance",
+                    meaning: "Don't worry about it, it's okay",
+                    italian: "Non ti preoccupare",
+                    example: "Sorry I'm late! - No worries, we just got here too."
+                },
+                {
+                    expression: "What's up?",
+                    context: "Greeting",
+                    meaning: "How are you? What's happening?",
+                    italian: "Come va? Che succede?",
+                    example: "Hey John! What's up? Haven't seen you all week."
+                },
+                {
+                    expression: "I'm swamped",
+                    context: "Busy",
+                    meaning: "I'm very busy, overwhelmed with work",
+                    italian: "Sono sommerso di lavoro",
+                    example: "Can we meet next week? I'm swamped with deadlines right now."
+                }
+            ]
+        };
+
+        let currentCategory = '';
+        let currentIndex = 0;
+        let completedCount = 0;
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'it' : 'en';
+            const langToggle = document.getElementById('lang-toggle');
+            langToggle.textContent = currentLanguage === 'en' ? '🇮🇹 IT' : '🇺🇸 EN';
+            
+            // Update all bilingual elements
+            const bilingualElements = document.querySelectorAll('[data-en][data-it]');
+            bilingualElements.forEach(element => {
+                element.textContent = element.getAttribute(`data-${currentLanguage}`);
+            });
+        }
+
+        function startCategory(category) {
+            currentCategory = category;
+            currentIndex = 0;
+            completedCount = 0;
+            
+            document.getElementById('category-selection').classList.add('hidden');
+            document.getElementById('learning-interface').classList.remove('hidden');
+            document.getElementById('completion-screen').classList.add('hidden');
+            
+            const categoryTitles = {
+                idioms: currentLanguage === 'en' ? '🎭 Idioms' : '🎭 Modi di Dire',
+                slang: currentLanguage === 'en' ? '😎 Slang' : '😎 Slang',
+                phrases: currentLanguage === 'en' ? '💬 Common Phrases' : '💬 Frasi Comuni'
+            };
+            
+            document.getElementById('category-title').textContent = categoryTitles[category];
+            updateProgress();
+            showExpression();
+        }
+
+        function showExpression() {
+            const expr = expressions[currentCategory][currentIndex];
+            const total = expressions[currentCategory].length;
+            
+            document.getElementById('expression-text').textContent = expr.expression;
+            document.getElementById('context-badge').textContent = expr.context;
+            document.getElementById('meaning-text').textContent = expr.meaning;
+            document.getElementById('italian-text').textContent = expr.italian;
+            document.getElementById('example-text').textContent = expr.example;
+            document.getElementById('card-counter').textContent = `${currentIndex + 1}/${total}`;
+            
+            document.getElementById('meaning-section').classList.add('hidden');
+            document.getElementById('reveal-btn').classList.remove('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function revealMeaning() {
+            document.getElementById('meaning-section').classList.remove('hidden');
+            document.getElementById('reveal-btn').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            
+            completedCount++;
+            updateProgress();
+        }
+
+        function nextExpression() {
+            currentIndex++;
+            
+            if (currentIndex >= expressions[currentCategory].length) {
+                showCompletion();
+            } else {
+                showExpression();
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('learning-interface').classList.add('hidden');
+            document.getElementById('completion-screen').classList.remove('hidden');
+        }
+
+        function showCategories() {
+            document.getElementById('category-selection').classList.remove('hidden');
+            document.getElementById('learning-interface').classList.add('hidden');
+            document.getElementById('completion-screen').classList.add('hidden');
+            
+            // Reset progress
+            completedCount = 0;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = 30; // Total across all categories (10 each)
+            const percentage = (completedCount / total) * 100;
+            
+            document.getElementById('progress-text').textContent = `${completedCount}/${total}`;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97c8a7ab07572f4a',t:'MTc1NzQ0MTU1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
