@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Verbs for Spanish Speakers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .modal-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .modal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .correct { background-color: #dcfce7; border-color: #16a34a; }
+        .incorrect { background-color: #fef2f2; border-color: #dc2626; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Modal Verbs for Spanish Speakers</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Learn English modal verbs by connecting them to Spanish equivalents you already know!</p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap justify-center mb-8 bg-white rounded-lg p-2 shadow-lg">
+            <button onclick="showSection('explanation')" id="tab-explanation" class="tab-button px-6 py-3 rounded-md font-medium transition-all duration-200 bg-blue-500 text-white">
+                📚 Explanation
+            </button>
+            <button onclick="showSection('examples')" id="tab-examples" class="tab-button px-6 py-3 rounded-md font-medium transition-all duration-200 text-gray-600 hover:bg-gray-100">
+                💡 Examples
+            </button>
+            <button onclick="showSection('practice')" id="tab-practice" class="tab-practice px-6 py-3 rounded-md font-medium transition-all duration-200 text-gray-600 hover:bg-gray-100">
+                🎯 Practice
+            </button>
+        </div>
+
+        <!-- Explanation Section -->
+        <div id="explanation-section" class="section">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">What are Modal Verbs?</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-600 mb-4">🎯 Function</h3>
+                        <p class="text-gray-700 mb-4">Modal verbs are helper verbs that show:</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li><strong>Possibility</strong> - might, may, could</li>
+                            <li><strong>Ability</strong> - can, could</li>
+                            <li><strong>Permission</strong> - can, may</li>
+                            <li><strong>Obligation</strong> - must, should</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-green-600 mb-4">🔗 Spanish Connection</h3>
+                        <p class="text-gray-700 mb-4">Similar to Spanish verbs you know:</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li><strong>poder</strong> → can, could</li>
+                            <li><strong>deber</strong> → must, should</li>
+                            <li><strong>querer</strong> → would</li>
+                            <li><strong>soler</strong> → would (habits)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Key Rules</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-400">
+                        <h4 class="font-semibold text-gray-800 mb-2">Never Change Form</h4>
+                        <p class="text-gray-700 text-sm">I can, she can, we can<br><span class="text-red-500">❌ cans, canned</span></p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-400">
+                        <h4 class="font-semibold text-gray-800 mb-2">Base Form After</h4>
+                        <p class="text-gray-700 text-sm">can <strong>go</strong>, should <strong>study</strong><br><span class="text-red-500">❌ can going</span></p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-400">
+                        <h4 class="font-semibold text-gray-800 mb-2">No "Do" Needed</h4>
+                        <p class="text-gray-700 text-sm">Can you swim?<br><span class="text-red-500">❌ Do you can swim?</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Section -->
+        <div id="examples-section" class="section hidden">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="modal-cards">
+                <!-- Modal cards will be generated here -->
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice-section" class="section hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Practice Exercise</h2>
+                <div id="quiz-container">
+                    <div class="mb-6">
+                        <p class="text-lg text-gray-700 mb-4">Score: <span id="score" class="font-bold text-blue-600">0</span> / <span id="total" class="font-bold text-gray-600">0</span></p>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div id="question-container" class="mb-6">
+                        <!-- Questions will be generated here -->
+                    </div>
+                    <div class="flex justify-between">
+                        <button onclick="previousQuestion()" id="prev-btn" class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition-colors disabled:opacity-50" disabled>
+                            ← Previous
+                        </button>
+                        <button onclick="nextQuestion()" id="next-btn" class="px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal verbs data
+        const modalData = [
+            {
+                modal: "CAN",
+                spanish: "poder",
+                meaning: "Ability / Permission",
+                example: "I can swim",
+                spanish_example: "Puedo nadar",
+                color: "blue"
+            },
+            {
+                modal: "COULD",
+                spanish: "podría / pude",
+                meaning: "Past ability / Polite request",
+                example: "Could you help me?",
+                spanish_example: "¿Podrías ayudarme?",
+                color: "indigo"
+            },
+            {
+                modal: "MUST",
+                spanish: "deber / tener que",
+                meaning: "Strong obligation",
+                example: "You must study",
+                spanish_example: "Debes estudiar",
+                color: "red"
+            },
+            {
+                modal: "SHOULD",
+                spanish: "debería",
+                meaning: "Advice / Recommendation",
+                example: "You should rest",
+                spanish_example: "Deberías descansar",
+                color: "orange"
+            },
+            {
+                modal: "MAY",
+                spanish: "poder / tal vez",
+                meaning: "Permission / Possibility",
+                example: "It may rain",
+                spanish_example: "Tal vez llueva",
+                color: "green"
+            },
+            {
+                modal: "MIGHT",
+                spanish: "podría / tal vez",
+                meaning: "Weak possibility",
+                example: "She might come",
+                spanish_example: "Tal vez venga",
+                color: "purple"
+            },
+            {
+                modal: "WILL",
+                spanish: "futuro",
+                meaning: "Future / Promise",
+                example: "I will call you",
+                spanish_example: "Te llamaré",
+                color: "teal"
+            },
+            {
+                modal: "WOULD",
+                spanish: "condicional / solía",
+                meaning: "Conditional / Past habit",
+                example: "I would like coffee",
+                spanish_example: "Me gustaría café",
+                color: "pink"
+            }
+        ];
+
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "I ___ speak Spanish fluently.",
+                spanish: "Puedo hablar español con fluidez.",
+                options: ["can", "must", "should", "might"],
+                correct: 0
+            },
+            {
+                question: "You ___ study harder for the exam.",
+                spanish: "Deberías estudiar más para el examen.",
+                options: ["can", "must", "should", "will"],
+                correct: 2
+            },
+            {
+                question: "___ you help me with this?",
+                spanish: "¿Podrías ayudarme con esto?",
+                options: ["Must", "Should", "Could", "Will"],
+                correct: 2
+            },
+            {
+                question: "It ___ rain tomorrow.",
+                spanish: "Tal vez llueva mañana.",
+                options: ["must", "should", "can", "might"],
+                correct: 3
+            },
+            {
+                question: "Students ___ wear uniforms at this school.",
+                spanish: "Los estudiantes deben usar uniformes en esta escuela.",
+                options: ["can", "must", "might", "would"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswers = [];
+
+        // Initialize the application
+        function init() {
+            generateModalCards();
+            generateQuiz();
+        }
+
+        // Show different sections
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            
+            // Show selected section
+            document.getElementById(section + '-section').classList.remove('hidden');
+            
+            // Update tab styles
+            document.querySelectorAll('.tab-button, .tab-practice').forEach(tab => {
+                tab.classList.remove('bg-blue-500', 'text-white');
+                tab.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+            
+            document.getElementById('tab-' + section).classList.add('bg-blue-500', 'text-white');
+            document.getElementById('tab-' + section).classList.remove('text-gray-600', 'hover:bg-gray-100');
+        }
+
+        // Generate modal verb cards
+        function generateModalCards() {
+            const container = document.getElementById('modal-cards');
+            container.innerHTML = '';
+            
+            modalData.forEach((modal, index) => {
+                const card = document.createElement('div');
+                card.className = `modal-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-${modal.color}-400 fade-in`;
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-2xl font-bold text-${modal.color}-600">${modal.modal}</h3>
+                        <span class="text-sm bg-${modal.color}-100 text-${modal.color}-800 px-3 py-1 rounded-full">${modal.meaning}</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Spanish equivalent:</p>
+                            <p class="font-semibold text-gray-800">${modal.spanish}</p>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <p class="font-medium text-blue-800">${modal.example}</p>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <p class="font-medium text-green-800">${modal.spanish_example}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Generate quiz
+        function generateQuiz() {
+            selectedAnswers = new Array(quizQuestions.length).fill(null);
+            displayQuestion();
+            updateProgress();
+        }
+
+        // Display current question
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestion];
+            const container = document.getElementById('question-container');
+            
+            container.innerHTML = `
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Question ${currentQuestion + 1} of ${quizQuestions.length}</h3>
+                    <p class="text-lg text-gray-700 mb-2">${question.question}</p>
+                    <p class="text-sm text-gray-500 italic">${question.spanish}</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    ${question.options.map((option, index) => `
+                        <button onclick="selectAnswer(${index})" 
+                                class="answer-btn p-4 border-2 border-gray-200 rounded-lg text-left hover:border-blue-300 transition-all duration-200 ${selectedAnswers[currentQuestion] === index ? (index === question.correct ? 'correct' : 'incorrect') : ''}"
+                                ${selectedAnswers[currentQuestion] !== null ? 'disabled' : ''}>
+                            ${option}
+                        </button>
+                    `).join('')}
+                </div>
+                ${selectedAnswers[currentQuestion] !== null ? `
+                    <div class="mt-4 p-4 rounded-lg ${selectedAnswers[currentQuestion] === question.correct ? 'bg-green-100 border border-green-300' : 'bg-red-100 border border-red-300'}">
+                        <p class="font-medium ${selectedAnswers[currentQuestion] === question.correct ? 'text-green-800' : 'text-red-800'}">
+                            ${selectedAnswers[currentQuestion] === question.correct ? '✅ Correct!' : '❌ Incorrect. The correct answer is: ' + question.options[question.correct]}
+                        </p>
+                    </div>
+                ` : ''}
+            `;
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentQuestion === 0;
+            document.getElementById('next-btn').textContent = currentQuestion === quizQuestions.length - 1 ? 'Finish' : 'Next →';
+        }
+
+        // Select answer
+        function selectAnswer(answerIndex) {
+            if (selectedAnswers[currentQuestion] !== null) return;
+            
+            selectedAnswers[currentQuestion] = answerIndex;
+            
+            if (answerIndex === quizQuestions[currentQuestion].correct) {
+                score++;
+            }
+            
+            updateProgress();
+            displayQuestion();
+        }
+
+        // Navigate questions
+        function nextQuestion() {
+            if (currentQuestion < quizQuestions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            const answered = selectedAnswers.filter(a => a !== null).length;
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = answered;
+            document.getElementById('progress-bar').style.width = `${(answered / quizQuestions.length) * 100}%`;
+        }
+
+        // Show results
+        function showResults() {
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            const container = document.getElementById('question-container');
+            
+            container.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">${percentage >= 80 ? '🎉' : percentage >= 60 ? '👍' : '📚'}</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Quiz Complete!</h3>
+                    <p class="text-xl text-gray-600 mb-6">You scored ${score} out of ${quizQuestions.length} (${percentage}%)</p>
+                    <div class="space-y-2 text-left max-w-md mx-auto">
+                        ${percentage >= 80 ? '<p class="text-green-600 font-medium">🌟 Excellent! You have a great understanding of modal verbs!</p>' : 
+                          percentage >= 60 ? '<p class="text-yellow-600 font-medium">👏 Good job! Review the examples to improve further.</p>' : 
+                          '<p class="text-red-600 font-medium">📖 Keep practicing! Review the explanation and examples sections.</p>'}
+                    </div>
+                    <button onclick="restartQuiz()" class="mt-6 px-8 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors">
+                        Try Again
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('prev-btn').style.display = 'none';
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswers = new Array(quizQuestions.length).fill(null);
+            document.getElementById('next-btn').style.display = 'block';
+            document.getElementById('prev-btn').style.display = 'block';
+            displayQuestion();
+            updateProgress();
+        }
+
+        // Initialize the app
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cf5e39b5272b60',t:'MTc1NzUxMTk1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+

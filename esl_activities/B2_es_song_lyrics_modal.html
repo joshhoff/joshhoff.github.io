@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Melody - Learn English with Songs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .modal-hover {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .modal-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .modal-hover:hover .modal-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .draggable {
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+        
+        .draggable:hover {
+            transform: scale(1.05);
+        }
+        
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-100 via-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🎵 Modal Melody</h1>
+            <p class="text-lg text-gray-600">Learn English Modal Verbs Through Music</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-700">Progress</span>
+                <span class="text-sm font-medium text-gray-700" id="progress-text">0/5 Complete</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-gradient-to-r from-purple-500 to-blue-500 h-3 rounded-full transition-all duration-500" id="progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Song Selection -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6" id="song-selection">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">🎸 Choose Your Classic Rock Song</h2>
+            <p class="text-gray-600 mb-6">Select a classic rock song to practice modal verbs:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div class="song-card bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="selectSong('bohemian')">
+                    <div class="text-2xl mb-2">👑</div>
+                    <h3 class="font-bold text-gray-800">Bohemian Rhapsody</h3>
+                    <p class="text-sm text-gray-600">Queen</p>
+                    <p class="text-xs text-red-600 mt-2">Modal verbs: will, can, must</p>
+                </div>
+                
+                <div class="song-card bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="selectSong('hotel')">
+                    <div class="text-2xl mb-2">🦅</div>
+                    <h3 class="font-bold text-gray-800">Hotel California</h3>
+                    <p class="text-sm text-gray-600">Eagles</p>
+                    <p class="text-xs text-blue-600 mt-2">Modal verbs: can, could, will</p>
+                </div>
+                
+                <div class="song-card bg-gradient-to-br from-purple-50 to-violet-50 border-2 border-purple-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="selectSong('stairway')">
+                    <div class="text-2xl mb-2">🪜</div>
+                    <h3 class="font-bold text-gray-800">Stairway to Heaven</h3>
+                    <p class="text-sm text-gray-600">Led Zeppelin</p>
+                    <p class="text-xs text-purple-600 mt-2">Modal verbs: can, will, may</p>
+                </div>
+                
+                <div class="song-card bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="selectSong('imagine')">
+                    <div class="text-2xl mb-2">🕊️</div>
+                    <h3 class="font-bold text-gray-800">Imagine</h3>
+                    <p class="text-sm text-gray-600">John Lennon</p>
+                    <p class="text-xs text-green-600 mt-2">Modal verbs: can, will, may</p>
+                </div>
+                
+                <div class="song-card bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="selectSong('satisfaction')">
+                    <div class="text-2xl mb-2">🎸</div>
+                    <h3 class="font-bold text-gray-800">Satisfaction</h3>
+                    <p class="text-sm text-gray-600">Rolling Stones</p>
+                    <p class="text-xs text-yellow-600 mt-2">Modal verbs: can't, could, should</p>
+                </div>
+                
+                <div class="song-card bg-gradient-to-br from-gray-50 to-slate-50 border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow-md transition-all" onclick="selectSong('wall')">
+                    <div class="text-2xl mb-2">🧱</div>
+                    <h3 class="font-bold text-gray-800">Another Brick in the Wall</h3>
+                    <p class="text-sm text-gray-600">Pink Floyd</p>
+                    <p class="text-xs text-gray-600 mt-2">Modal verbs: don't, can't, will</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Sections -->
+        <div id="activity-container" class="hidden">
+            <!-- Activity 1: Gap Fill -->
+            <div class="activity-section bg-white rounded-xl shadow-lg p-6 mb-6" id="gap-fill-section">
+                <div class="flex items-center mb-4">
+                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">1</span>
+                    <h2 class="text-2xl font-semibold text-gray-800">🎤 Complete the Lyrics</h2>
+                </div>
+                
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 mb-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-700" id="current-song-title">Select a song to begin</h3>
+                        <button class="text-sm text-purple-600 hover:text-purple-800" onclick="backToSongSelection()">← Change Song</button>
+                    </div>
+                    <div class="text-lg leading-relaxed text-gray-800" id="lyrics-container">
+                        <!-- Lyrics will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <button class="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-6 rounded-lg transition-colors" onclick="checkGapFill()">
+                    Check Answers ✓
+                </button>
+                <div id="gap-feedback" class="mt-4"></div>
+            </div>
+
+            <!-- Activity 2: Modal Meanings -->
+            <div class="activity-section bg-white rounded-xl shadow-lg p-6 mb-6 opacity-50" id="modal-meanings-section">
+                <div class="flex items-center mb-4">
+                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">2</span>
+                    <h2 class="text-2xl font-semibold text-gray-800">🌍 Explore Modal Meanings</h2>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Hover over the modal verbs to see their meanings and Spanish translations:</p>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+                    <div class="text-lg leading-relaxed">
+                        <p class="mb-3">You <span class="modal-hover bg-blue-200 px-2 py-1 rounded font-medium">should
+                            <span class="modal-tooltip">deberías (advice/consejo)</span>
+                        </span> listen to your heart.</p>
+                        
+                        <p class="mb-3">We <span class="modal-hover bg-green-200 px-2 py-1 rounded font-medium">must
+                            <span class="modal-tooltip">debemos (obligation/obligación)</span>
+                        </span> believe in love.</p>
+                        
+                        <p class="mb-3">Dreams <span class="modal-hover bg-yellow-200 px-2 py-1 rounded font-medium">can
+                            <span class="modal-tooltip">pueden (possibility/posibilidad)</span>
+                        </span> come true.</p>
+                        
+                        <p class="mb-3">You <span class="modal-hover bg-purple-200 px-2 py-1 rounded font-medium">might
+                            <span class="modal-tooltip">podrías (possibility/posibilidad)</span>
+                        </span> find happiness.</p>
+                        
+                        <p class="mb-3">Love <span class="modal-hover bg-red-200 px-2 py-1 rounded font-medium">will
+                            <span class="modal-tooltip">va a (future/futuro)</span>
+                        </span> find a way.</p>
+                    </div>
+                </div>
+                
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-colors mt-4" onclick="completeModalMeanings()">
+                    Continue to Categorization 📚
+                </button>
+            </div>
+
+            <!-- Activity 3: Categorization Game -->
+            <div class="activity-section bg-white rounded-xl shadow-lg p-6 mb-6 opacity-50" id="categorization-section">
+                <div class="flex items-center mb-4">
+                    <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">3</span>
+                    <h2 class="text-2xl font-semibold text-gray-800">🎯 Categorize Modal Verbs</h2>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Drag the modal verbs into the correct categories:</p>
+                
+                <div class="mb-6">
+                    <h4 class="font-medium text-gray-700 mb-3">Modal Verbs to Sort:</h4>
+                    <div class="flex flex-wrap gap-3" id="modal-bank">
+                        <span class="draggable bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-lg font-medium cursor-grab" draggable="true" data-modal="should">should</span>
+                        <span class="draggable bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-lg font-medium cursor-grab" draggable="true" data-modal="must">must</span>
+                        <span class="draggable bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-lg font-medium cursor-grab" draggable="true" data-modal="can">can</span>
+                        <span class="draggable bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-lg font-medium cursor-grab" draggable="true" data-modal="might">might</span>
+                        <span class="draggable bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-lg font-medium cursor-grab" draggable="true" data-modal="will">will</span>
+                        <span class="draggable bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-lg font-medium cursor-grab" draggable="true" data-modal="could">could</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="drop-zone bg-red-50 border-red-200 rounded-lg p-4" data-category="obligation">
+                        <h4 class="font-medium text-red-700 mb-2 text-center">Obligation</h4>
+                        <p class="text-sm text-red-600 text-center mb-3">Must do something</p>
+                        <div class="modal-drop-area min-h-16"></div>
+                    </div>
+                    
+                    <div class="drop-zone bg-yellow-50 border-yellow-200 rounded-lg p-4" data-category="possibility">
+                        <h4 class="font-medium text-yellow-700 mb-2 text-center">Possibility</h4>
+                        <p class="text-sm text-yellow-600 text-center mb-3">Maybe/Perhaps</p>
+                        <div class="modal-drop-area min-h-16"></div>
+                    </div>
+                    
+                    <div class="drop-zone bg-blue-50 border-blue-200 rounded-lg p-4" data-category="advice">
+                        <h4 class="font-medium text-blue-700 mb-2 text-center">Advice</h4>
+                        <p class="text-sm text-blue-600 text-center mb-3">Recommendation</p>
+                        <div class="modal-drop-area min-h-16"></div>
+                    </div>
+                    
+                    <div class="drop-zone bg-green-50 border-green-200 rounded-lg p-4" data-category="future">
+                        <h4 class="font-medium text-green-700 mb-2 text-center">Future</h4>
+                        <p class="text-sm text-green-600 text-center mb-3">Will happen</p>
+                        <div class="modal-drop-area min-h-16"></div>
+                    </div>
+                </div>
+                
+                <button class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-6 rounded-lg transition-colors" onclick="checkCategorization()">
+                    Check Categories ✓
+                </button>
+                <div id="categorization-feedback" class="mt-4"></div>
+            </div>
+
+            <!-- Activity 4: Sentence Builder -->
+            <div class="activity-section bg-white rounded-xl shadow-lg p-6 mb-6 opacity-50" id="sentence-builder-section">
+                <div class="flex items-center mb-4">
+                    <span class="bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">4</span>
+                    <h2 class="text-2xl font-semibold text-gray-800">✍️ Create Your Own Sentences</h2>
+                </div>
+                
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-6 mb-4">
+                    <h4 class="font-medium text-gray-700 mb-3">Make a sentence about your life using "should":</h4>
+                    <textarea 
+                        class="w-full p-4 border-2 border-yellow-300 rounded-lg resize-none focus:border-yellow-500 focus:outline-none" 
+                        rows="3" 
+                        placeholder="Example: I should practice English every day to improve my skills."
+                        id="sentence-input"
+                    ></textarea>
+                </div>
+                
+                <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-6 rounded-lg transition-colors" onclick="submitSentence()">
+                    Submit Sentence 📝
+                </button>
+                <div id="sentence-feedback" class="mt-4"></div>
+            </div>
+
+            <!-- Activity 5: Listening Practice -->
+            <div class="activity-section bg-white rounded-xl shadow-lg p-6 mb-6 opacity-50" id="listening-section">
+                <div class="flex items-center mb-4">
+                    <span class="bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold mr-3">5</span>
+                    <h2 class="text-2xl font-semibold text-gray-800">🎧 Pronunciation Practice</h2>
+                </div>
+                
+                <p class="text-gray-600 mb-4">Practice pronouncing these lines from the song:</p>
+                
+                <div class="space-y-4" id="listening-lines">
+                    <!-- Lines will be populated by JavaScript based on selected song -->
+                </div>
+                
+                <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 px-6 rounded-lg transition-colors mt-6" onclick="completeLearning()">
+                    Complete Learning Journey 🎉
+                </button>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div id="completion-message" class="hidden bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl shadow-lg p-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">🎉 Congratulations!</h2>
+            <p class="text-xl mb-4">You've completed the Modal Melody learning journey!</p>
+            <p class="text-lg">You've mastered modal verbs through music. Keep practicing and singing! 🎵</p>
+        </div>
+    </div>
+
+    <script>
+        let currentActivity = 1;
+        let completedActivities = 0;
+        const totalActivities = 5;
+        let selectedSong = null;
+        
+        // Song data with lyrics and modal verbs
+        const songs = {
+            bohemian: {
+                title: "Bohemian Rhapsody by Queen",
+                lyrics: [
+                    "Is this the real life?",
+                    "Is this just fantasy?",
+                    "Caught in a landslide",
+                    "No escape from reality",
+                    "Open your eyes, look up to the skies and see",
+                    "I'm just a poor boy, I need no sympathy",
+                    "Because I'm easy come, easy go",
+                    "Little high, little low",
+                    "Any way the wind blows doesn't really matter to me",
+                    "Mama, just killed a man",
+                    "Put a gun against his head",
+                    "Pulled my trigger, now he's dead",
+                    "Mama, life had just begun",
+                    "But now I've gone and thrown it all away",
+                    "Mama, ooh, didn't mean to make you cry",
+                    "If I'm not back again this time tomorrow",
+                    "Carry on, carry on as if nothing really matters"
+                ],
+                gaps: [
+                    { line: 8, word: "will", answer: "will", text: "Any way the wind blows doesn't really matter to me, to me" },
+                    { line: 15, word: "can", answer: "can", text: "If I ___ not back again this time tomorrow" },
+                    { line: 16, word: "must", answer: "must", text: "Carry on, carry on as if nothing really matters" }
+                ]
+            },
+            hotel: {
+                title: "Hotel California by Eagles",
+                lyrics: [
+                    "On a dark desert highway, cool wind in my hair",
+                    "Warm smell of colitas, rising up through the air",
+                    "Up ahead in the distance, I saw a shimmering light",
+                    "My head grew heavy and my sight grew dim",
+                    "I had to stop for the night",
+                    "There she stood in the doorway",
+                    "I heard the mission bell",
+                    "And I was thinking to myself",
+                    "'This could be Heaven or this could be Hell'",
+                    "Then she lit up a candle and she showed me the way",
+                    "There were voices down the corridor",
+                    "I thought I heard them say",
+                    "'Welcome to the Hotel California'",
+                    "'Such a lovely place'",
+                    "'You can check out any time you like'",
+                    "'But you can never leave'"
+                ],
+                gaps: [
+                    { line: 8, word: "could", answer: "could", text: "'This ___ be Heaven or this ___ be Hell'" },
+                    { line: 14, word: "can", answer: "can", text: "'You ___ check out any time you like'" },
+                    { line: 15, word: "can", answer: "can", text: "'But you ___ never leave'" }
+                ]
+            },
+            stairway: {
+                title: "Stairway to Heaven by Led Zeppelin",
+                lyrics: [
+                    "There's a lady who's sure all that glitters is gold",
+                    "And she's buying a stairway to heaven",
+                    "When she gets there she knows, if the stores are all closed",
+                    "With a word she can get what she came for",
+                    "Ooh, ooh, and she's buying a stairway to heaven",
+                    "There's a sign on the wall but she wants to be sure",
+                    "'Cause you know sometimes words have two meanings",
+                    "In a tree by the brook, there's a songbird who sings",
+                    "Sometimes all of our thoughts are misgiven",
+                    "And it makes me wonder",
+                    "There's a feeling I get when I look to the west",
+                    "And my spirit is crying for leaving",
+                    "In my thoughts I have seen rings of smoke through the trees",
+                    "And the voices of those who stand looking"
+                ],
+                gaps: [
+                    { line: 3, word: "can", answer: "can", text: "With a word she ___ get what she came for" },
+                    { line: 6, word: "may", answer: "may", text: "'Cause you know sometimes words ___ have two meanings" },
+                    { line: 13, word: "will", answer: "will", text: "And the voices of those who stand looking ___ call" }
+                ]
+            },
+            imagine: {
+                title: "Imagine by John Lennon",
+                lyrics: [
+                    "Imagine there's no heaven",
+                    "It's easy if you try",
+                    "No hell below us",
+                    "Above us only sky",
+                    "Imagine all the people living for today",
+                    "Imagine there's no countries",
+                    "It isn't hard to do",
+                    "Nothing to kill or die for",
+                    "And no religion too",
+                    "Imagine all the people living life in peace",
+                    "You may say I'm a dreamer",
+                    "But I'm not the only one",
+                    "I hope someday you'll join us",
+                    "And the world will be as one"
+                ],
+                gaps: [
+                    { line: 1, word: "can", answer: "can", text: "It's easy if you try" },
+                    { line: 10, word: "may", answer: "may", text: "You ___ say I'm a dreamer" },
+                    { line: 12, word: "will", answer: "will", text: "I hope someday you'll join us" },
+                    { line: 13, word: "will", answer: "will", text: "And the world ___ be as one" }
+                ]
+            },
+            satisfaction: {
+                title: "(I Can't Get No) Satisfaction by Rolling Stones",
+                lyrics: [
+                    "I can't get no satisfaction",
+                    "I can't get no satisfaction",
+                    "'Cause I try and I try and I try and I try",
+                    "I can't get no, I can't get no",
+                    "When I'm drivin' in my car",
+                    "And the man comes on the radio",
+                    "He's tellin' me more and more",
+                    "About some useless information",
+                    "Supposed to fire my imagination",
+                    "I can't get no, oh no, no, no",
+                    "Hey hey hey, that's what I say"
+                ],
+                gaps: [
+                    { line: 0, word: "can't", answer: "can't", text: "I ___ get no satisfaction" },
+                    { line: 1, word: "can't", answer: "can't", text: "I ___ get no satisfaction" },
+                    { line: 3, word: "can't", answer: "can't", text: "I ___ get no, I ___ get no" },
+                    { line: 9, word: "can't", answer: "can't", text: "I ___ get no, oh no, no, no" }
+                ]
+            },
+            wall: {
+                title: "Another Brick in the Wall by Pink Floyd",
+                lyrics: [
+                    "We don't need no education",
+                    "We don't need no thought control",
+                    "No dark sarcasm in the classroom",
+                    "Teachers leave them kids alone",
+                    "Hey! Teachers! Leave them kids alone!",
+                    "All in all it's just another brick in the wall",
+                    "All in all you're just another brick in the wall",
+                    "We don't need no education",
+                    "We don't need no thought control"
+                ],
+                gaps: [
+                    { line: 0, word: "don't", answer: "don't", text: "We ___ need no education" },
+                    { line: 1, word: "don't", answer: "don't", text: "We ___ need no thought control" },
+                    { line: 7, word: "don't", answer: "don't", text: "We ___ need no education" },
+                    { line: 8, word: "don't", answer: "don't", text: "We ___ need no thought control" }
+                ]
+            }
+        };
+        
+        // Modal categorization answers
+        const correctCategories = {
+            'should': 'advice',
+            'must': 'obligation', 
+            'can': 'possibility',
+            'might': 'possibility',
+            'will': 'future',
+            'could': 'possibility'
+        };
+        
+        function selectSong(songKey) {
+            selectedSong = songKey;
+            const song = songs[songKey];
+            
+            // Hide song selection and show activities
+            document.getElementById('song-selection').style.display = 'none';
+            document.getElementById('activity-container').classList.remove('hidden');
+            
+            // Update song title
+            document.getElementById('current-song-title').textContent = song.title;
+            
+            // Generate lyrics with gaps
+            generateLyricsWithGaps(song);
+            
+            // Reset progress
+            completedActivities = 0;
+            updateProgress();
+            
+            // Scroll to gap fill section
+            document.getElementById('gap-fill-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function backToSongSelection() {
+            document.getElementById('song-selection').style.display = 'block';
+            document.getElementById('activity-container').classList.add('hidden');
+            selectedSong = null;
+            completedActivities = 0;
+            updateProgress();
+            
+            // Reset all activities to locked state
+            const sections = document.querySelectorAll('.activity-section');
+            sections.forEach((section, index) => {
+                if (index > 0) {
+                    section.classList.add('opacity-50');
+                }
+            });
+        }
+        
+        function generateLyricsWithGaps(song) {
+            const container = document.getElementById('lyrics-container');
+            let lyricsHTML = '';
+            
+            // Create modified lyrics with gaps
+            const lyricsWithGaps = [...song.lyrics];
+            
+            // Replace words with gaps in specific lines
+            song.gaps.forEach(gap => {
+                if (gap.text) {
+                    lyricsWithGaps[gap.line] = gap.text;
+                } else {
+                    lyricsWithGaps[gap.line] = lyricsWithGaps[gap.line].replace(gap.word, '___');
+                }
+            });
+            
+            lyricsWithGaps.forEach((line, index) => {
+                let lineHTML = line;
+                
+                // Replace ___ with input fields
+                const gapCount = (line.match(/___/g) || []).length;
+                for (let i = 0; i < gapCount; i++) {
+                    const gap = song.gaps.find(g => g.line === index);
+                    if (gap) {
+                        const gapInput = `<input type="text" class="gap-input bg-yellow-100 border-2 border-yellow-300 rounded px-2 py-1 w-20 text-center font-medium" data-answer="${gap.answer}" placeholder="___">`;
+                        lineHTML = lineHTML.replace('___', gapInput);
+                    }
+                }
+                
+                lyricsHTML += `<p class="mb-3">${lineHTML}</p>`;
+            });
+            
+            container.innerHTML = lyricsHTML;
+            
+            // Also generate listening practice lines
+            generateListeningLines(song);
+        }
+        
+        function generateListeningLines(song) {
+            const container = document.getElementById('listening-lines');
+            let linesHTML = '';
+            
+            // Get lines with modal verbs for listening practice
+            const modalLines = song.gaps.map(gap => {
+                const line = song.lyrics[gap.line];
+                return line.replace('___', gap.answer);
+            }).slice(0, 3); // Limit to 3 lines
+            
+            modalLines.forEach((line, index) => {
+                linesHTML += `
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4">
+                        <p class="text-lg mb-3">"${line}"</p>
+                        <div class="flex gap-3">
+                            <button class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors" onclick="playLine(${index + 1})">
+                                🔊 Play
+                            </button>
+                            <button class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors" onclick="recordLine(${index + 1})">
+                                🎤 Record Yourself
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = linesHTML;
+        }
+        
+        function updateProgress() {
+            const percentage = (completedActivities / totalActivities) * 100;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = `${completedActivities}/${totalActivities} Complete`;
+        }
+        
+        function unlockNextActivity(activityNumber) {
+            const nextSection = document.querySelector(`#activity-container .activity-section:nth-child(${activityNumber + 1})`);
+            if (nextSection) {
+                nextSection.classList.remove('opacity-50');
+                nextSection.classList.add('fade-in');
+                nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        function checkGapFill() {
+            const inputs = document.querySelectorAll('.gap-input');
+            let correct = 0;
+            let total = inputs.length;
+            
+            inputs.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                if (userAnswer === correctAnswer) {
+                    input.classList.remove('border-red-300', 'bg-red-100');
+                    input.classList.add('border-green-300', 'bg-green-100');
+                    correct++;
+                } else {
+                    input.classList.remove('border-green-300', 'bg-green-100');
+                    input.classList.add('border-red-300', 'bg-red-100');
+                }
+            });
+            
+            const feedback = document.getElementById('gap-feedback');
+            if (correct === total) {
+                feedback.innerHTML = `
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                        <strong>Perfect! 🎉</strong> You got all ${correct}/${total} answers correct!
+                    </div>
+                `;
+                completedActivities++;
+                updateProgress();
+                setTimeout(() => unlockNextActivity(1), 1000);
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg">
+                        <strong>Good try!</strong> You got ${correct}/${total} correct. Check the red boxes and try again.
+                    </div>
+                `;
+            }
+        }
+        
+        function completeModalMeanings() {
+            completedActivities++;
+            updateProgress();
+            unlockNextActivity(2);
+        }
+        
+        // Drag and Drop functionality
+        let draggedElement = null;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const draggables = document.querySelectorAll('.draggable');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', function(e) {
+                    draggedElement = this;
+                    this.style.opacity = '0.5';
+                });
+                
+                draggable.addEventListener('dragend', function(e) {
+                    this.style.opacity = '1';
+                });
+            });
+            
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('drag-over');
+                });
+                
+                zone.addEventListener('dragleave', function(e) {
+                    this.classList.remove('drag-over');
+                });
+                
+                zone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    if (draggedElement) {
+                        const dropArea = this.querySelector('.modal-drop-area');
+                        dropArea.appendChild(draggedElement);
+                        draggedElement = null;
+                    }
+                });
+            });
+        });
+        
+        function checkCategorization() {
+            const dropZones = document.querySelectorAll('.drop-zone');
+            let correct = 0;
+            let total = 0;
+            
+            dropZones.forEach(zone => {
+                const category = zone.dataset.category;
+                const modals = zone.querySelectorAll('.draggable');
+                
+                modals.forEach(modal => {
+                    total++;
+                    const modalText = modal.dataset.modal;
+                    if (correctCategories[modalText] === category) {
+                        modal.classList.remove('bg-red-100');
+                        modal.classList.add('bg-green-100');
+                        correct++;
+                    } else {
+                        modal.classList.remove('bg-green-100');
+                        modal.classList.add('bg-red-100');
+                    }
+                });
+            });
+            
+            const feedback = document.getElementById('categorization-feedback');
+            if (correct === total && total > 0) {
+                feedback.innerHTML = `
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                        <strong>Excellent! 🎯</strong> All modal verbs are correctly categorized!
+                    </div>
+                `;
+                completedActivities++;
+                updateProgress();
+                setTimeout(() => unlockNextActivity(3), 1000);
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg">
+                        <strong>Keep trying!</strong> You got ${correct}/${total} correct. Red items need to be moved.
+                    </div>
+                `;
+            }
+        }
+        
+        function submitSentence() {
+            const sentence = document.getElementById('sentence-input').value.trim();
+            const feedback = document.getElementById('sentence-feedback');
+            
+            if (sentence.length < 10) {
+                feedback.innerHTML = `
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg">
+                        Please write a longer sentence about your life using "should".
+                    </div>
+                `;
+                return;
+            }
+            
+            if (sentence.toLowerCase().includes('should')) {
+                feedback.innerHTML = `
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                        <strong>Great sentence! ✍️</strong><br>
+                        <em>"${sentence}"</em><br><br>
+                        <strong>Teacher feedback:</strong> Excellent use of "should" for giving advice about your life! This shows you understand how to use modal verbs for recommendations.
+                    </div>
+                `;
+                completedActivities++;
+                updateProgress();
+                setTimeout(() => unlockNextActivity(4), 1000);
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg">
+                        Please include the word "should" in your sentence.
+                    </div>
+                `;
+            }
+        }
+        
+        function playLine(lineNumber) {
+            const lines = [
+                "I will not give you up this time",
+                "Baby, I am dancing in the dark"
+            ];
+            
+            // Create a simple text-to-speech simulation
+            const button = event.target;
+            button.innerHTML = '🔊 Playing...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = '🔊 Play';
+                button.disabled = false;
+                
+                // Show feedback
+                const feedback = document.createElement('div');
+                feedback.className = 'mt-2 text-sm text-green-600';
+                feedback.textContent = '✓ Audio played! Practice saying: "' + lines[lineNumber - 1] + '"';
+                button.parentElement.appendChild(feedback);
+                
+                setTimeout(() => feedback.remove(), 3000);
+            }, 2000);
+        }
+        
+        function recordLine(lineNumber) {
+            const button = event.target;
+            button.innerHTML = '🎤 Recording...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = '🎤 Record Yourself';
+                button.disabled = false;
+                
+                // Show feedback
+                const feedback = document.createElement('div');
+                feedback.className = 'mt-2 text-sm text-blue-600';
+                feedback.textContent = '✓ Recording complete! Great pronunciation practice!';
+                button.parentElement.appendChild(feedback);
+                
+                setTimeout(() => feedback.remove(), 3000);
+            }, 3000);
+        }
+        
+        function completeLearning() {
+            completedActivities++;
+            updateProgress();
+            
+            // Show completion message
+            document.getElementById('completion-message').classList.remove('hidden');
+            document.getElementById('completion-message').classList.add('fade-in');
+            document.getElementById('completion-message').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cf62c1d1f5cba6',t:'MTc1NzUxMjEzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
