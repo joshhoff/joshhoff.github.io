@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Vocabulary Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .flashcard {
+            width: 400px;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #4834d4, #686de0);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .word {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .definition {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .example {
+            font-size: 1rem;
+            font-style: italic;
+            opacity: 0.9;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+        }
+
+        .click-hint {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .progress {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 3px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+            height: 8px;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: white;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .completion-message {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .flashcard {
+                width: 320px;
+                height: 280px;
+            }
+            
+            .word {
+                font-size: 2rem;
+            }
+            
+            .definition {
+                font-size: 1.1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .progress {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 ESL Vocabulary Flashcards</h1>
+        <p>Click the cards to reveal definitions and examples</p>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">Card 1 of 10</div>
+    </div>
+
+    <div class="flashcard-container">
+        <div class="flashcard" id="flashcard">
+            <div class="card-face card-front">
+                <div class="word" id="currentWord">deny</div>
+                <div class="click-hint">Click to see definition</div>
+            </div>
+            <div class="card-face card-back">
+                <div class="definition" id="currentDefinition">to refuse to give or allow something</div>
+                <div class="example" id="currentExample">"The teacher will deny permission to leave early without a good reason."</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-secondary" id="prevBtn">← Previous</button>
+        <button class="btn btn-primary" id="nextBtn">Next →</button>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-secondary" id="shuffleBtn">🔀 Shuffle</button>
+        <button class="btn btn-secondary" id="resetBtn">🔄 Reset</button>
+    </div>
+
+    <div class="completion-message" id="completionMessage">
+        <h2>🎉 Congratulations!</h2>
+        <p>You've reviewed all vocabulary words!</p>
+        <button class="btn btn-primary" onclick="resetCards()" style="margin-top: 15px;">Study Again</button>
+    </div>
+
+    <script>
+        const vocabulary = [
+            {
+                word: "deny",
+                definition: "to refuse to give or allow something",
+                example: "The teacher will deny permission to leave early without a good reason."
+            },
+            {
+                word: "thicker",
+                definition: "having a greater width or depth; more dense",
+                example: "The fog became thicker as we drove up the mountain."
+            },
+            {
+                word: "approach",
+                definition: "to come near or closer to something",
+                example: "We watched the storm approach from the west."
+            },
+            {
+                word: "permission",
+                definition: "official approval to do something",
+                example: "You need permission from your parents to go on the field trip."
+            },
+            {
+                word: "hatch",
+                definition: "to emerge from an egg; or a small opening/door",
+                example: "The baby birds will hatch in about two weeks."
+            },
+            {
+                word: "scholar",
+                definition: "a person who studies and has great knowledge in a subject",
+                example: "The history scholar wrote several books about ancient civilizations."
+            },
+            {
+                word: "suspect",
+                definition: "to believe something is likely true; or a person thought to be guilty",
+                example: "I suspect it will rain today because of the dark clouds."
+            },
+            {
+                word: "swamp",
+                definition: "an area of very wet, soft land; or to overwhelm",
+                example: "The alligators live in the swamp behind our house."
+            },
+            {
+                word: "attraction",
+                definition: "something that draws interest or visitors; appeal",
+                example: "The new museum is the city's biggest tourist attraction."
+            },
+            {
+                word: "bribe",
+                definition: "money or gifts given to influence someone's actions dishonestly",
+                example: "Offering a bribe to a police officer is illegal and wrong."
+            }
+        ];
+
+        let currentIndex = 0;
+        let isFlipped = false;
+        let currentDeck = [...vocabulary];
+
+        const flashcard = document.getElementById('flashcard');
+        const currentWord = document.getElementById('currentWord');
+        const currentDefinition = document.getElementById('currentDefinition');
+        const currentExample = document.getElementById('currentExample');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const completionMessage = document.getElementById('completionMessage');
+
+        function updateCard() {
+            const current = currentDeck[currentIndex];
+            currentWord.textContent = current.word;
+            currentDefinition.textContent = current.definition;
+            currentExample.textContent = `"${current.example}"`;
+            
+            // Reset flip state
+            flashcard.classList.remove('flipped');
+            isFlipped = false;
+            
+            // Update progress
+            const progress = ((currentIndex + 1) / currentDeck.length) * 100;
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `Card ${currentIndex + 1} of ${currentDeck.length}`;
+            
+            // Update button states
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === currentDeck.length - 1;
+            
+            // Show completion message if at the end
+            if (currentIndex === currentDeck.length - 1 && isFlipped) {
+                setTimeout(() => {
+                    completionMessage.style.display = 'block';
+                }, 1000);
+            }
+        }
+
+        function flipCard() {
+            flashcard.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function nextCard() {
+            if (currentIndex < currentDeck.length - 1) {
+                currentIndex++;
+                updateCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCard();
+            }
+        }
+
+        function shuffleDeck() {
+            for (let i = currentDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]];
+            }
+            currentIndex = 0;
+            updateCard();
+            completionMessage.style.display = 'none';
+        }
+
+        function resetCards() {
+            currentDeck = [...vocabulary];
+            currentIndex = 0;
+            updateCard();
+            completionMessage.style.display = 'none';
+        }
+
+        // Event listeners
+        flashcard.addEventListener('click', flipCard);
+        nextBtn.addEventListener('click', nextCard);
+        prevBtn.addEventListener('click', prevCard);
+        shuffleBtn.addEventListener('click', shuffleDeck);
+        resetBtn.addEventListener('click', resetCards);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                if (isFlipped) {
+                    nextCard();
+                } else {
+                    flipCard();
+                }
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevCard();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        // Initialize
+        updateCard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97d073e6e1fecba6',t:'MTc1NzUyMzMyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
