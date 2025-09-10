@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Pronoun Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .correct { background-color: #dcfce7; border-color: #16a34a; }
+        .incorrect { background-color: #fef2f2; border-color: #dc2626; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-900 mb-2">Spanish Pronoun Practice</h1>
+            <p class="text-lg text-indigo-700">Master direct, indirect, subject, object, and possessive pronouns</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button onclick="showSection('overview')" class="nav-btn bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                📚 Overview
+            </button>
+            <button onclick="showSection('written')" class="nav-btn bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                ✍️ Written Practice
+            </button>
+            <button onclick="showSection('conversation')" class="nav-btn bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors">
+                💬 Conversation
+            </button>
+            <button onclick="showSection('reference')" class="nav-btn bg-orange-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-700 transition-colors">
+                📖 Reference
+            </button>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="overview" class="section bg-white rounded-xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Welcome to Spanish Pronoun Practice!</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-blue-800 mb-3">What You'll Learn</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Subject pronouns (yo, tú, él, ella...)</li>
+                        <li>• Direct object pronouns (me, te, lo, la...)</li>
+                        <li>• Indirect object pronouns (me, te, le...)</li>
+                        <li>• Possessive pronouns (mío, tuyo, suyo...)</li>
+                        <li>• Reflexive pronouns (me, te, se...)</li>
+                    </ul>
+                </div>
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-green-800 mb-3">Practice Methods</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>• Fill-in-the-blank exercises</li>
+                        <li>• Translation challenges</li>
+                        <li>• Conversation scenarios</li>
+                        <li>• Real-world examples</li>
+                        <li>• Instant feedback</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="showSection('written')" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                    Start Practicing! 🚀
+                </button>
+            </div>
+        </div>
+
+        <!-- Written Practice Section -->
+        <div id="written" class="section bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Written Practice Exercises</h2>
+            
+            <!-- Exercise Type Selector -->
+            <div class="flex flex-wrap gap-3 mb-6">
+                <button onclick="loadExercise('subject')" class="exercise-btn bg-blue-100 text-blue-800 px-4 py-2 rounded-lg hover:bg-blue-200 transition-colors">
+                    Subject Pronouns
+                </button>
+                <button onclick="loadExercise('direct')" class="exercise-btn bg-green-100 text-green-800 px-4 py-2 rounded-lg hover:bg-green-200 transition-colors">
+                    Direct Object
+                </button>
+                <button onclick="loadExercise('indirect')" class="exercise-btn bg-purple-100 text-purple-800 px-4 py-2 rounded-lg hover:bg-purple-200 transition-colors">
+                    Indirect Object
+                </button>
+                <button onclick="loadExercise('possessive')" class="exercise-btn bg-orange-100 text-orange-800 px-4 py-2 rounded-lg hover:bg-orange-200 transition-colors">
+                    Possessive
+                </button>
+                <button onclick="loadExercise('reflexive')" class="exercise-btn bg-pink-100 text-pink-800 px-4 py-2 rounded-lg hover:bg-pink-200 transition-colors">
+                    Reflexive
+                </button>
+            </div>
+
+            <!-- Exercise Content -->
+            <div id="exercise-content" class="bg-gray-50 p-6 rounded-lg">
+                <p class="text-gray-600 text-center">Select an exercise type above to begin practicing!</p>
+            </div>
+
+            <!-- Score Display -->
+            <div id="score-display" class="mt-4 text-center hidden">
+                <div class="inline-flex items-center gap-4 bg-indigo-50 px-6 py-3 rounded-lg">
+                    <span class="text-indigo-800 font-medium">Score: <span id="score">0</span>/<span id="total">0</span></span>
+                    <button onclick="resetScore()" class="text-indigo-600 hover:text-indigo-800 text-sm">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="section bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Conversation Practice</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Scenario Selector -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Choose a Scenario</h3>
+                    <div class="space-y-3">
+                        <button onclick="loadConversation('restaurant')" class="w-full text-left bg-yellow-50 hover:bg-yellow-100 p-4 rounded-lg border border-yellow-200 transition-colors">
+                            <div class="font-medium text-yellow-800">🍽️ At a Restaurant</div>
+                            <div class="text-sm text-yellow-600">Practice ordering food and talking to waiters</div>
+                        </button>
+                        <button onclick="loadConversation('shopping')" class="w-full text-left bg-green-50 hover:bg-green-100 p-4 rounded-lg border border-green-200 transition-colors">
+                            <div class="font-medium text-green-800">🛍️ Shopping</div>
+                            <div class="text-sm text-green-600">Ask about prices and make purchases</div>
+                        </button>
+                        <button onclick="loadConversation('family')" class="w-full text-left bg-blue-50 hover:bg-blue-100 p-4 rounded-lg border border-blue-200 transition-colors">
+                            <div class="font-medium text-blue-800">👨‍👩‍👧‍👦 Family Talk</div>
+                            <div class="text-sm text-blue-600">Discuss family members and relationships</div>
+                        </button>
+                        <button onclick="loadConversation('directions')" class="w-full text-left bg-purple-50 hover:bg-purple-100 p-4 rounded-lg border border-purple-200 transition-colors">
+                            <div class="font-medium text-purple-800">🗺️ Asking Directions</div>
+                            <div class="text-sm text-purple-600">Navigate and give directions</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Conversation Content -->
+                <div id="conversation-content" class="bg-gray-50 p-6 rounded-lg">
+                    <p class="text-gray-600 text-center">Select a scenario to start practicing conversations!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reference Section -->
+        <div id="reference" class="section bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Pronoun Reference Guide</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Subject Pronouns -->
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-blue-800 mb-4">Subject Pronouns</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="font-medium">yo</span><span class="text-gray-600">I</span></div>
+                        <div class="flex justify-between"><span class="font-medium">tú</span><span class="text-gray-600">you (informal)</span></div>
+                        <div class="flex justify-between"><span class="font-medium">él/ella/usted</span><span class="text-gray-600">he/she/you (formal)</span></div>
+                        <div class="flex justify-between"><span class="font-medium">nosotros/as</span><span class="text-gray-600">we</span></div>
+                        <div class="flex justify-between"><span class="font-medium">vosotros/as</span><span class="text-gray-600">you all (Spain)</span></div>
+                        <div class="flex justify-between"><span class="font-medium">ellos/ellas/ustedes</span><span class="text-gray-600">they/you all</span></div>
+                    </div>
+                </div>
+
+                <!-- Direct Object Pronouns -->
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-green-800 mb-4">Direct Object Pronouns</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="font-medium">me</span><span class="text-gray-600">me</span></div>
+                        <div class="flex justify-between"><span class="font-medium">te</span><span class="text-gray-600">you</span></div>
+                        <div class="flex justify-between"><span class="font-medium">lo/la</span><span class="text-gray-600">him/her/it/you</span></div>
+                        <div class="flex justify-between"><span class="font-medium">nos</span><span class="text-gray-600">us</span></div>
+                        <div class="flex justify-between"><span class="font-medium">os</span><span class="text-gray-600">you all (Spain)</span></div>
+                        <div class="flex justify-between"><span class="font-medium">los/las</span><span class="text-gray-600">them/you all</span></div>
+                    </div>
+                </div>
+
+                <!-- Indirect Object Pronouns -->
+                <div class="bg-purple-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-purple-800 mb-4">Indirect Object Pronouns</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="font-medium">me</span><span class="text-gray-600">to/for me</span></div>
+                        <div class="flex justify-between"><span class="font-medium">te</span><span class="text-gray-600">to/for you</span></div>
+                        <div class="flex justify-between"><span class="font-medium">le</span><span class="text-gray-600">to/for him/her/you</span></div>
+                        <div class="flex justify-between"><span class="font-medium">nos</span><span class="text-gray-600">to/for us</span></div>
+                        <div class="flex justify-between"><span class="font-medium">os</span><span class="text-gray-600">to/for you all (Spain)</span></div>
+                        <div class="flex justify-between"><span class="font-medium">les</span><span class="text-gray-600">to/for them/you all</span></div>
+                    </div>
+                </div>
+
+                <!-- Possessive Pronouns -->
+                <div class="bg-orange-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold text-orange-800 mb-4">Possessive Pronouns</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="font-medium">mío/a</span><span class="text-gray-600">mine</span></div>
+                        <div class="flex justify-between"><span class="font-medium">tuyo/a</span><span class="text-gray-600">yours</span></div>
+                        <div class="flex justify-between"><span class="font-medium">suyo/a</span><span class="text-gray-600">his/hers/yours</span></div>
+                        <div class="flex justify-between"><span class="font-medium">nuestro/a</span><span class="text-gray-600">ours</span></div>
+                        <div class="flex justify-between"><span class="font-medium">vuestro/a</span><span class="text-gray-600">yours (Spain)</span></div>
+                        <div class="flex justify-between"><span class="font-medium">suyo/a</span><span class="text-gray-600">theirs/yours</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-yellow-50 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold text-yellow-800 mb-3">💡 Quick Tips</h3>
+                <ul class="space-y-2 text-yellow-700">
+                    <li>• Object pronouns usually go before the conjugated verb</li>
+                    <li>• With infinitives, you can attach pronouns to the end</li>
+                    <li>• "Le" and "les" change to "se" when used with "lo/la/los/las"</li>
+                    <li>• Possessive pronouns must agree in gender and number</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let totalQuestions = 0;
+        let currentExerciseType = '';
+
+        const exercises = {
+            subject: [
+                { question: "_____ soy estudiante.", answer: "yo", english: "I am a student." },
+                { question: "_____ eres muy inteligente.", answer: "tú", english: "You are very intelligent." },
+                { question: "_____ es mi hermana.", answer: "ella", english: "She is my sister." },
+                { question: "_____ somos amigos.", answer: "nosotros", english: "We are friends." },
+                { question: "_____ están en casa.", answer: "ellos", english: "They are at home." }
+            ],
+            direct: [
+                { question: "María _____ ve todos los días. (me)", answer: "me", english: "María sees me every day." },
+                { question: "Yo _____ conozco bien. (you - informal)", answer: "te", english: "I know you well." },
+                { question: "Nosotros _____ compramos ayer. (it - masculine)", answer: "lo", english: "We bought it yesterday." },
+                { question: "Ellos _____ invitan a la fiesta. (us)", answer: "nos", english: "They invite us to the party." },
+                { question: "¿_____ puedes ayudar? (them - feminine)", answer: "las", english: "Can you help them?" }
+            ],
+            indirect: [
+                { question: "Yo _____ doy el libro. (to him)", answer: "le", english: "I give the book to him." },
+                { question: "Ella _____ escribe una carta. (to me)", answer: "me", english: "She writes a letter to me." },
+                { question: "Nosotros _____ compramos regalos. (to them)", answer: "les", english: "We buy gifts for them." },
+                { question: "¿_____ puedes prestar dinero? (to us)", answer: "nos", english: "Can you lend money to us?" },
+                { question: "El profesor _____ explica la lección. (to you - informal)", answer: "te", english: "The teacher explains the lesson to you." }
+            ],
+            possessive: [
+                { question: "Este libro es _____. (mine)", answer: "mío", english: "This book is mine." },
+                { question: "La casa _____ es muy grande. (yours - informal)", answer: "tuya", english: "Your house is very big." },
+                { question: "Los amigos _____ son simpáticos. (ours)", answer: "nuestros", english: "Our friends are nice." },
+                { question: "¿Es _____ este coche? (his)", answer: "suyo", english: "Is this car his?" },
+                { question: "Las llaves _____ están aquí. (theirs)", answer: "suyas", english: "Their keys are here." }
+            ],
+            reflexive: [
+                { question: "Yo _____ levanto temprano.", answer: "me", english: "I get up early." },
+                { question: "Tú _____ lavas las manos.", answer: "te", english: "You wash your hands." },
+                { question: "Ella _____ peina el cabello.", answer: "se", english: "She combs her hair." },
+                { question: "Nosotros _____ vestimos rápido.", answer: "nos", english: "We get dressed quickly." },
+                { question: "Ellos _____ acuestan tarde.", answer: "se", english: "They go to bed late." }
+            ]
+        };
+
+        const conversations = {
+            restaurant: {
+                title: "🍽️ At a Restaurant",
+                scenarios: [
+                    {
+                        situation: "You want to order food. The waiter asks what you'd like.",
+                        prompt: "Practice using direct object pronouns: 'I want it' (lo quiero), 'Bring it to me' (tráigamelo)",
+                        example: "Waiter: ¿Qué desea usted?\nYou: Quiero la paella. ¿Puede traérmela, por favor?"
+                    },
+                    {
+                        situation: "You're asking about the bill and want to pay.",
+                        prompt: "Use indirect object pronouns: 'Can you bring me the check?' (¿Puede traerme la cuenta?)",
+                        example: "You: ¿Puede traerme la cuenta, por favor?\nWaiter: Se la traigo enseguida."
+                    }
+                ]
+            },
+            shopping: {
+                title: "🛍️ Shopping",
+                scenarios: [
+                    {
+                        situation: "You're looking at clothes and want to try something on.",
+                        prompt: "Practice with possessive and direct object pronouns: 'Is this yours?' (¿Es suyo esto?), 'I like it' (me gusta)",
+                        example: "You: Me gusta esta camisa. ¿Puedo probármela?\nSeller: Claro, el probador está allí."
+                    },
+                    {
+                        situation: "You want to buy something for your friend.",
+                        prompt: "Use indirect object pronouns: 'I want to buy this for her' (Quiero comprárselo)",
+                        example: "You: Quiero comprar este regalo para mi amiga.\nSeller: ¿Se lo envuelvo?"
+                    }
+                ]
+            },
+            family: {
+                title: "👨‍👩‍👧‍👦 Family Talk",
+                scenarios: [
+                    {
+                        situation: "Describing your family members and their belongings.",
+                        prompt: "Use possessive pronouns: 'This is mine, that is his' (Esto es mío, eso es suyo)",
+                        example: "Friend: ¿De quién es este coche?\nYou: Es nuestro. El rojo es suyo (de mi hermano)."
+                    },
+                    {
+                        situation: "Talking about helping family members.",
+                        prompt: "Practice indirect object pronouns: 'I help them' (les ayudo), 'They call me' (me llaman)",
+                        example: "You: Siempre les ayudo con las tareas.\nFriend: ¿Y ellos te ayudan a ti también?"
+                    }
+                ]
+            },
+            directions: {
+                title: "🗺️ Asking Directions",
+                scenarios: [
+                    {
+                        situation: "You're lost and need to ask for directions.",
+                        prompt: "Use direct and indirect object pronouns: 'Can you help me?' (¿Puede ayudarme?), 'Show it to me' (muéstremelo)",
+                        example: "You: Disculpe, ¿puede ayudarme? Estoy perdido.\nPerson: Claro, ¿adónde quiere ir? Se lo explico."
+                    },
+                    {
+                        situation: "Someone asks you for directions to a place you know.",
+                        prompt: "Practice giving directions with pronouns: 'I'll explain it to you' (se lo explico)",
+                        example: "Person: ¿Sabe dónde está el museo?\nYou: Sí, se lo explico. Está cerca de aquí."
+                    }
+                ]
+            }
+        };
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            document.getElementById(sectionName).classList.add('fade-in');
+        }
+
+        function loadExercise(type) {
+            currentExerciseType = type;
+            const exerciseList = exercises[type];
+            const content = document.getElementById('exercise-content');
+            
+            let html = `<h3 class="text-lg font-semibold text-gray-800 mb-4 capitalize">${type} Pronouns Practice</h3>`;
+            
+            exerciseList.forEach((exercise, index) => {
+                html += `
+                    <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+                        <p class="text-gray-700 mb-2"><strong>Fill in the blank:</strong></p>
+                        <p class="text-lg mb-2">${exercise.question}</p>
+                        <p class="text-sm text-gray-500 mb-3"><em>${exercise.english}</em></p>
+                        <div class="flex gap-3 items-center">
+                            <input type="text" id="answer-${index}" class="border border-gray-300 rounded px-3 py-2 w-32" placeholder="Your answer">
+                            <button onclick="checkAnswer(${index}, '${exercise.answer}')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
+                                Check
+                            </button>
+                            <span id="feedback-${index}" class="font-medium"></span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+            document.getElementById('score-display').classList.remove('hidden');
+        }
+
+        function checkAnswer(index, correctAnswer) {
+            const userAnswer = document.getElementById(`answer-${index}`).value.trim().toLowerCase();
+            const feedback = document.getElementById(`feedback-${index}`);
+            const input = document.getElementById(`answer-${index}`);
+            
+            totalQuestions++;
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                feedback.textContent = '✅ Correct!';
+                feedback.className = 'font-medium text-green-600';
+                input.className = 'border border-green-500 rounded px-3 py-2 w-32 correct';
+                currentScore++;
+            } else {
+                feedback.textContent = `❌ Incorrect. Answer: ${correctAnswer}`;
+                feedback.className = 'font-medium text-red-600';
+                input.className = 'border border-red-500 rounded px-3 py-2 w-32 incorrect';
+            }
+            
+            updateScore();
+            input.disabled = true;
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = currentScore;
+            document.getElementById('total').textContent = totalQuestions;
+        }
+
+        function resetScore() {
+            currentScore = 0;
+            totalQuestions = 0;
+            updateScore();
+            if (currentExerciseType) {
+                loadExercise(currentExerciseType);
+            }
+        }
+
+        function loadConversation(type) {
+            const conversation = conversations[type];
+            const content = document.getElementById('conversation-content');
+            
+            let html = `<h3 class="text-xl font-semibold text-gray-800 mb-4">${conversation.title}</h3>`;
+            
+            conversation.scenarios.forEach((scenario, index) => {
+                html += `
+                    <div class="mb-6 p-4 bg-white border border-gray-200 rounded-lg">
+                        <h4 class="font-semibold text-gray-700 mb-2">Scenario ${index + 1}:</h4>
+                        <p class="text-gray-600 mb-3">${scenario.situation}</p>
+                        
+                        <div class="bg-blue-50 p-3 rounded mb-3">
+                            <p class="text-sm font-medium text-blue-800 mb-1">Practice Focus:</p>
+                            <p class="text-blue-700">${scenario.prompt}</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-3 rounded">
+                            <p class="text-sm font-medium text-gray-700 mb-1">Example Dialogue:</p>
+                            <p class="text-gray-600 whitespace-pre-line">${scenario.example}</p>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button onclick="togglePracticeArea(${index})" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors">
+                                Practice This Scenario
+                            </button>
+                        </div>
+                        
+                        <div id="practice-${index}" class="mt-4 hidden">
+                            <textarea id="response-${index}" class="w-full p-3 border border-gray-300 rounded-lg" rows="3" placeholder="Write your response here..."></textarea>
+                            <div class="mt-2 flex gap-2">
+                                <button onclick="clearResponse(${index})" class="bg-gray-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-600 transition-colors">
+                                    Clear
+                                </button>
+                                <button onclick="showTips(${index})" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600 transition-colors">
+                                    Show Tips
+                                </button>
+                            </div>
+                            <div id="tips-${index}" class="mt-2 hidden bg-yellow-50 p-3 rounded border border-yellow-200">
+                                <p class="text-yellow-800 text-sm">💡 Remember to use the correct pronoun placement and agreement!</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+        }
+
+        function togglePracticeArea(index) {
+            const practiceArea = document.getElementById(`practice-${index}`);
+            practiceArea.classList.toggle('hidden');
+        }
+
+        function clearResponse(index) {
+            document.getElementById(`response-${index}`).value = '';
+        }
+
+        function showTips(index) {
+            const tips = document.getElementById(`tips-${index}`);
+            tips.classList.toggle('hidden');
+        }
+
+        // Initialize with overview section
+        showSection('overview');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97d2a3bfb3ab9810',t:'MTc1NzU0NjI1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
