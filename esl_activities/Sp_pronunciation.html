@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor de Pronunciación Española</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .lesson-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn.active {
+            background: #4299e1;
+            color: white;
+        }
+        
+        .lesson-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .sound-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #4299e1;
+        }
+        
+        .sound-title {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .phonetic {
+            background: #4299e1;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            background: #e6fffa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #38b2ac;
+        }
+        
+        .practice-words {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .word-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .word-card:hover {
+            border-color: #4299e1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .word-spanish {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .word-english {
+            color: #718096;
+            font-style: italic;
+        }
+        
+        .activity-section {
+            background: #fff5f5;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 2px solid #fed7d7;
+        }
+        
+        .activity-title {
+            color: #c53030;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quiz-question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .quiz-option {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .quiz-option.correct {
+            background: #c6f6d5;
+            border-color: #38a169;
+        }
+        
+        .quiz-option.incorrect {
+            background: #fed7d7;
+            border-color: #e53e3e;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4299e1, #38b2ac);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+        
+        .tip-box {
+            background: #fffaf0;
+            border: 2px solid #fbd38d;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tip-title {
+            color: #c05621;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .lesson-content {
+                padding: 25px;
+            }
+            
+            .practice-words {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Tutor de Pronunciación Española</h1>
+            <p>Domina los sonidos más difíciles del español para hablantes de inglés</p>
+        </div>
+        
+        <div class="lesson-nav">
+            <button class="nav-btn active" onclick="showLesson('rr')">RR Fuerte</button>
+            <button class="nav-btn" onclick="showLesson('r')">R Suave</button>
+            <button class="nav-btn" onclick="showLesson('j')">J/G Suave</button>
+            <button class="nav-btn" onclick="showLesson('ll')">LL/Y</button>
+            <button class="nav-btn" onclick="showLesson('n')">Ñ</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+        </div>
+        
+        <div class="lesson-content" id="lessonContent">
+            <!-- Content will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const lessons = {
+            'rr': {
+                title: 'RR - El Sonido Vibrante Múltiple',
+                phonetic: '/r/',
+                explanation: 'La RR es un sonido vibrante que se produce haciendo vibrar la punta de la lengua contra el paladar. Es como un "motor" que vibra. Para los hablantes de inglés, este es uno de los sonidos más desafiantes.',
+                tip: 'Practica diciendo "butter" muy rápido en inglés, luego trata de hacer vibrar más la lengua. También puedes practicar con "tr-tr-tr" para encontrar la posición correcta.',
+                words: [
+                    { spanish: 'perro', english: 'dog', phonetic: 'PE-rro' },
+                    { spanish: 'carro', english: 'car', phonetic: 'CA-rro' },
+                    { spanish: 'ferrocarril', english: 'railroad', phonetic: 'fe-rro-ca-RRIL' },
+                    { spanish: 'arroz', english: 'rice', phonetic: 'a-RROZ' },
+                    { spanish: 'correr', english: 'to run', phonetic: 'co-RRER' },
+                    { spanish: 'terrible', english: 'terrible', phonetic: 'te-RRI-ble' }
+                ],
+                quiz: {
+                    question: '¿Cuál de estas palabras tiene el sonido RR fuerte?',
+                    options: ['pero', 'perro', 'para', 'pera'],
+                    correct: 1
+                }
+            },
+            'r': {
+                title: 'R - El Sonido Vibrante Simple',
+                phonetic: '/ɾ/',
+                explanation: 'La R suave es un sonido de "tap" rápido, similar al sonido de la D en "ladder" en inglés americano. La lengua toca brevemente el paladar una sola vez.',
+                tip: 'Piensa en el sonido de la T en "water" o "butter" en inglés americano. Es un toque rápido y suave, no una vibración continua como la RR.',
+                words: [
+                    { spanish: 'pero', english: 'but', phonetic: 'PE-ro' },
+                    { spanish: 'cara', english: 'face', phonetic: 'CA-ra' },
+                    { spanish: 'para', english: 'for', phonetic: 'PA-ra' },
+                    { spanish: 'hora', english: 'hour', phonetic: 'O-ra' },
+                    { spanish: 'comer', english: 'to eat', phonetic: 'co-MER' },
+                    { spanish: 'amor', english: 'love', phonetic: 'a-MOR' }
+                ],
+                quiz: {
+                    question: '¿Cuál es la diferencia entre "pero" y "perro"?',
+                    options: ['No hay diferencia', 'Pero tiene R suave, perro tiene RR fuerte', 'Pero es más largo', 'Perro es más suave'],
+                    correct: 1
+                }
+            },
+            'j': {
+                title: 'J/G - El Sonido Fricativo Velar',
+                phonetic: '/x/',
+                explanation: 'Este sonido se produce en la parte posterior de la boca, como cuando haces gárgaras suavemente. Es más fuerte que la H en inglés, pero no tan áspero como el sonido alemán "ach".',
+                tip: 'Imagina que tienes algo pequeño en la garganta y quieres sacarlo suavemente. O piensa en el sonido que haces cuando empañas un espejo con el aliento, pero más sonoro.',
+                words: [
+                    { spanish: 'joven', english: 'young', phonetic: 'JO-ven' },
+                    { spanish: 'general', english: 'general', phonetic: 'ge-ne-RAL' },
+                    { spanish: 'trabajo', english: 'work', phonetic: 'tra-BA-jo' },
+                    { spanish: 'gente', english: 'people', phonetic: 'GEN-te' },
+                    { spanish: 'jugar', english: 'to play', phonetic: 'ju-GAR' },
+                    { spanish: 'página', english: 'page', phonetic: 'PÁ-gi-na' }
+                ],
+                quiz: {
+                    question: '¿Cuándo se pronuncia la G como J?',
+                    options: ['Siempre', 'Antes de E e I', 'Antes de A, O, U', 'Nunca'],
+                    correct: 1
+                }
+            },
+            'll': {
+                title: 'LL/Y - El Sonido Palatal',
+                phonetic: '/ʎ/ o /ʝ/',
+                explanation: 'Tradicionalmente, LL tenía un sonido único, pero en muchas regiones ahora suena como Y. Es similar a la Y en "yes" en inglés, pero puede ser más fuerte dependiendo de la región.',
+                tip: 'En la mayoría de países latinoamericanos, puedes pronunciar LL como Y en inglés. En España, algunos mantienen el sonido tradicional que es como "li" muy rápido.',
+                words: [
+                    { spanish: 'llamar', english: 'to call', phonetic: 'lla-MAR' },
+                    { spanish: 'pollo', english: 'chicken', phonetic: 'PO-llo' },
+                    { spanish: 'calle', english: 'street', phonetic: 'CA-lle' },
+                    { spanish: 'amarillo', english: 'yellow', phonetic: 'a-ma-RI-llo' },
+                    { spanish: 'llorar', english: 'to cry', phonetic: 'llo-RAR' },
+                    { spanish: 'silla', english: 'chair', phonetic: 'SI-lla' }
+                ],
+                quiz: {
+                    question: '¿Cómo se pronuncia "pollo" en la mayoría de países?',
+                    options: ['PO-lo', 'PO-yo', 'PO-lio', 'PO-rro'],
+                    correct: 1
+                }
+            },
+            'n': {
+                title: 'Ñ - El Sonido Nasal Palatal',
+                phonetic: '/ɲ/',
+                explanation: 'La Ñ es como el sonido "ny" en "canyon" en inglés, pero más integrado. La lengua toca el paladar mientras el aire sale por la nariz.',
+                tip: 'Piensa en "onion" en inglés, pero haz que el sonido "ny" sea más fuerte y claro. O imagina que dices "ni" muy rápido mientras tocas el paladar con la lengua.',
+                words: [
+                    { spanish: 'niño', english: 'child', phonetic: 'NI-ño' },
+                    { spanish: 'español', english: 'Spanish', phonetic: 'es-pa-ÑOL' },
+                    { spanish: 'mañana', english: 'tomorrow', phonetic: 'ma-ÑA-na' },
+                    { spanish: 'pequeño', english: 'small', phonetic: 'pe-QUE-ño' },
+                    { spanish: 'enseñar', english: 'to teach', phonetic: 'en-se-ÑAR' },
+                    { spanish: 'año', english: 'year', phonetic: 'A-ño' }
+                ],
+                quiz: {
+                    question: '¿Cuál es la diferencia entre "ano" y "año"?',
+                    options: ['No hay diferencia', 'Año tiene Ñ, ano tiene N', 'Ano es más largo', 'Son sinónimos'],
+                    correct: 1
+                }
+            }
+        };
+
+        let currentLesson = 'rr';
+        let completedLessons = new Set();
+
+        function showLesson(lessonId) {
+            currentLesson = lessonId;
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update progress
+            const lessonKeys = Object.keys(lessons);
+            const currentIndex = lessonKeys.indexOf(lessonId);
+            const progress = ((currentIndex + 1) / lessonKeys.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // Load lesson content
+            const lesson = lessons[lessonId];
+            const content = `
+                <div class="sound-card">
+                    <div class="sound-title">
+                        <span class="phonetic">${lesson.phonetic}</span>
+                        ${lesson.title}
+                    </div>
+                    
+                    <div class="explanation">
+                        <strong>📚 Explicación:</strong><br>
+                        ${lesson.explanation}
+                    </div>
+                    
+                    <div class="tip-box">
+                        <div class="tip-title">💡 Consejo para practicar:</div>
+                        ${lesson.tip}
+                    </div>
+                </div>
+                
+                <div class="activity-section">
+                    <div class="activity-title">
+                        🎵 Actividad 1: Palabras de Práctica
+                    </div>
+                    <p>Haz clic en cada palabra para escuchar la pronunciación correcta:</p>
+                    <div class="practice-words">
+                        ${lesson.words.map(word => `
+                            <div class="word-card" onclick="pronounceWord('${word.spanish}', '${word.phonetic}')">
+                                <div class="word-spanish">${word.spanish}</div>
+                                <div class="word-english">${word.english}</div>
+                                <small style="color: #4299e1;">[${word.phonetic}]</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="activity-section">
+                    <div class="activity-title">
+                        🧠 Actividad 2: Quiz de Comprensión
+                    </div>
+                    <div class="quiz-question">
+                        <strong>${lesson.quiz.question}</strong>
+                        <div class="quiz-options" id="quizOptions">
+                            ${lesson.quiz.options.map((option, index) => `
+                                <div class="quiz-option" onclick="checkAnswer(${index}, ${lesson.quiz.correct})">${option}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="activity-section">
+                    <div class="activity-title">
+                        🎯 Actividad 3: Práctica de Repetición
+                    </div>
+                    <p>Repite cada palabra 5 veces en voz alta, prestando atención al sonido específico:</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 15px;">
+                        ${lesson.words.slice(0, 3).map(word => `
+                            <button class="quiz-option" onclick="startRepetition('${word.spanish}')" style="cursor: pointer;">
+                                Practicar: ${word.spanish}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('lessonContent').innerHTML = content;
+        }
+
+        function pronounceWord(word, phonetic) {
+            // Visual feedback for pronunciation
+            event.target.style.transform = 'scale(1.05)';
+            event.target.style.background = '#e6fffa';
+            
+            // Show pronunciation guide
+            const originalContent = event.target.innerHTML;
+            event.target.innerHTML = `
+                <div class="word-spanish" style="color: #38b2ac;">${word}</div>
+                <div style="color: #2d3748; font-weight: bold;">[${phonetic}]</div>
+                <small style="color: #38b2ac;">¡Pronunciando!</small>
+            `;
+            
+            setTimeout(() => {
+                event.target.innerHTML = originalContent;
+                event.target.style.transform = '';
+                event.target.style.background = '';
+            }, 2000);
+        }
+
+        function checkAnswer(selected, correct) {
+            const options = document.querySelectorAll('#quizOptions .quiz-option');
+            
+            options.forEach((option, index) => {
+                if (index === correct) {
+                    option.classList.add('correct');
+                } else if (index === selected && selected !== correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (selected === correct) {
+                completedLessons.add(currentLesson);
+                setTimeout(() => {
+                    alert('¡Correcto! 🎉 Has completado esta lección.');
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    alert('No es correcto. La respuesta correcta está marcada en verde. ¡Sigue practicando! 💪');
+                }, 500);
+            }
+        }
+
+        function startRepetition(word) {
+            let count = 0;
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            const interval = setInterval(() => {
+                count++;
+                button.textContent = `${word} (${count}/5)`;
+                button.style.background = '#c6f6d5';
+                
+                if (count >= 5) {
+                    clearInterval(interval);
+                    button.textContent = '¡Completado! ✅';
+                    button.style.background = '#38a169';
+                    button.style.color = 'white';
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '';
+                        button.style.color = '';
+                    }, 2000);
+                }
+            }, 1000);
+        }
+
+        // Initialize with first lesson
+        showLesson('rr');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98140a1af7ca2df4',t:'MTc1ODIzMjAyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
