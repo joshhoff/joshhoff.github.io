@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me Either vs Me Neither - ESL Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+        }
+        
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .rule-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .rule-box h3 {
+            color: #d63031;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .rule-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 10px;
+        }
+        
+        .rule-item strong {
+            color: #2d3436;
+        }
+        
+        .exercise {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .exercise h4 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4facfe;
+        }
+        
+        .question p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option-btn {
+            padding: 12px 24px;
+            border: 2px solid #4facfe;
+            background: white;
+            color: #4facfe;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            background: #4facfe;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.selected {
+            background: #4facfe;
+            color: white;
+        }
+        
+        .option-btn.correct {
+            background: #00b894;
+            border-color: #00b894;
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            background: #e17055;
+            border-color: #e17055;
+            color: white;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d1f2eb;
+            color: #00b894;
+            border: 1px solid #00b894;
+        }
+        
+        .feedback.incorrect {
+            background: #fadbd8;
+            color: #e17055;
+            border: 1px solid #e17055;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #fd79a8;
+        }
+        
+        .conversation-prompt h4 {
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .scenario {
+            background: rgba(255,255,255,0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .scenario strong {
+            color: #6c5ce7;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #495057;
+            margin-top: 10px;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+            
+            .option-btn {
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Me Either vs Me Neither</h1>
+            <p>Master the correct usage in everyday conversations</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('rules')">📚 Grammar Rules</button>
+            <button class="nav-tab" onclick="showTab('practice')">✍️ Written Practice</button>
+            <button class="nav-tab" onclick="showTab('conversation')">💬 Conversation Practice</button>
+        </div>
+        
+        <div class="content">
+            <!-- Rules Tab -->
+            <div id="rules" class="tab-content active">
+                <div class="rule-box">
+                    <h3>🎯 Key Rules to Remember</h3>
+                    
+                    <div class="rule-item">
+                        <strong>"Me neither"</strong> - Use with negative statements<br>
+                        <em>Example: "I don't like coffee." → "Me neither!"</em>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <strong>"Me either"</strong> - Use with negative statements (informal)<br>
+                        <em>Example: "I can't swim." → "Me either!"</em>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <strong>Important:</strong> Both are used to agree with negative statements. "Me neither" is more grammatically correct, while "Me either" is common in casual speech.
+                    </div>
+                    
+                    <div class="rule-item">
+                        <strong>Never use with positive statements!</strong><br>
+                        <em>Wrong: "I love pizza." → "Me neither!"</em><br>
+                        <em>Right: "I love pizza." → "Me too!"</em>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Tab -->
+            <div id="practice" class="tab-content">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="score" id="scoreDisplay">Score: 0/0</div>
+                
+                <div class="exercise">
+                    <h4>Choose the correct response:</h4>
+                    <div id="practiceQuestions"></div>
+                    <button class="reset-btn" onclick="resetPractice()">🔄 Reset Practice</button>
+                </div>
+            </div>
+            
+            <!-- Conversation Tab -->
+            <div id="conversation" class="tab-content">
+                <div class="conversation-prompt">
+                    <h4>🎭 Role-Play Scenarios</h4>
+                    <p>Practice these conversations with a partner or imagine the responses:</p>
+                </div>
+                
+                <div id="conversationPrompts"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Practice questions data
+        const practiceQuestions = [
+            {
+                statement: "I don't enjoy horror movies.",
+                options: ["Me too!", "Me neither!", "Me also!"],
+                correct: 1,
+                explanation: "Use 'Me neither!' to agree with negative statements."
+            },
+            {
+                statement: "I can't speak French fluently.",
+                options: ["Me either!", "Me too!", "Me as well!"],
+                correct: 0,
+                explanation: "'Me either!' is the informal way to agree with negative statements."
+            },
+            {
+                statement: "I haven't been to Japan yet.",
+                options: ["Me too!", "Me neither!", "Me yes!"],
+                correct: 1,
+                explanation: "'Me neither!' agrees with the negative statement 'haven't been'."
+            },
+            {
+                statement: "I don't like waking up early.",
+                options: ["Me either!", "Me too!", "Me neither!"],
+                correct: 2,
+                explanation: "Both 'Me either!' and 'Me neither!' work, but 'Me neither!' is more grammatically correct."
+            },
+            {
+                statement: "I won't be attending the meeting tomorrow.",
+                options: ["Me neither!", "Me too!", "Me also!"],
+                correct: 0,
+                explanation: "'Me neither!' agrees with the negative future statement."
+            },
+            {
+                statement: "I didn't finish my homework last night.",
+                options: ["Me too!", "Me either!", "Me yes!"],
+                correct: 1,
+                explanation: "'Me either!' agrees with the negative past statement."
+            },
+            {
+                statement: "I'm not interested in sports.",
+                options: ["Me neither!", "Me too!", "Me as well!"],
+                correct: 0,
+                explanation: "'Me neither!' agrees with the negative statement about interest."
+            },
+            {
+                statement: "I don't have any siblings.",
+                options: ["Me too!", "Me either!", "Me neither!"],
+                correct: 2,
+                explanation: "'Me neither!' is the most appropriate response to this negative statement."
+            }
+        ];
+
+        // Conversation prompts data
+        const conversationPrompts = [
+            {
+                title: "At a Restaurant",
+                scenario: "You're dining with a friend who says they don't like spicy food.",
+                dialogue: [
+                    "Friend: 'I really don't enjoy spicy food at all.'",
+                    "You: _____ (Practice your response)",
+                    "Friend: 'Should we order something mild then?'",
+                    "You: _____ (Continue the conversation)"
+                ]
+            },
+            {
+                title: "Weekend Plans",
+                scenario: "Your colleague mentions they won't be working this weekend.",
+                dialogue: [
+                    "Colleague: 'I'm not planning to work this weekend.'",
+                    "You: _____ (Practice your response)",
+                    "Colleague: 'What are you going to do instead?'",
+                    "You: _____ (Share your plans)"
+                ]
+            },
+            {
+                title: "Movie Discussion",
+                scenario: "A friend says they haven't seen the latest popular movie.",
+                dialogue: [
+                    "Friend: 'I haven't watched that new superhero movie yet.'",
+                    "You: _____ (Practice your response)",
+                    "Friend: 'Maybe we could watch it together sometime?'",
+                    "You: _____ (Respond to the suggestion)"
+                ]
+            },
+            {
+                title: "Travel Talk",
+                scenario: "Someone mentions they don't like flying.",
+                dialogue: [
+                    "Person: 'I really don't like flying. It makes me nervous.'",
+                    "You: _____ (Practice your response)",
+                    "Person: 'How do you usually travel long distances?'",
+                    "You: _____ (Share your preference)"
+                ]
+            },
+            {
+                title: "Morning Routine",
+                scenario: "Your roommate complains about early mornings.",
+                dialogue: [
+                    "Roommate: 'I can't stand getting up before 8 AM.'",
+                    "You: _____ (Practice your response)",
+                    "Roommate: 'I wish I could be a morning person.'",
+                    "You: _____ (Offer encouragement or relate)"
+                ]
+            }
+        ];
+
+        let currentScore = 0;
+        let totalAnswered = 0;
+        let answeredQuestions = new Set();
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        function loadPracticeQuestions() {
+            const container = document.getElementById('practiceQuestions');
+            container.innerHTML = '';
+            
+            practiceQuestions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <p><strong>Statement:</strong> "${question.statement}"</p>
+                    <div class="options">
+                        ${question.options.map((option, optionIndex) => 
+                            `<button class="option-btn" onclick="selectAnswer(${index}, ${optionIndex})">${option}</button>`
+                        ).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${index}"></div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(questionIndex, selectedOption) {
+            if (answeredQuestions.has(questionIndex)) return;
+            
+            const question = practiceQuestions[questionIndex];
+            const questionDiv = document.querySelectorAll('.question')[questionIndex];
+            const buttons = questionDiv.querySelectorAll('.option-btn');
+            const feedback = document.getElementById(`feedback-${questionIndex}`);
+            
+            // Disable all buttons for this question
+            buttons.forEach((btn, index) => {
+                btn.style.pointerEvents = 'none';
+                if (index === question.correct) {
+                    btn.classList.add('correct');
+                } else if (index === selectedOption && index !== question.correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            // Show feedback
+            const isCorrect = selectedOption === question.correct;
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.textContent = isCorrect ? 
+                `✅ Correct! ${question.explanation}` : 
+                `❌ Incorrect. ${question.explanation}`;
+            
+            // Update score
+            answeredQuestions.add(questionIndex);
+            totalAnswered++;
+            if (isCorrect) currentScore++;
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (totalAnswered / practiceQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('scoreDisplay').textContent = `Score: ${currentScore}/${totalAnswered}`;
+        }
+
+        function resetPractice() {
+            currentScore = 0;
+            totalAnswered = 0;
+            answeredQuestions.clear();
+            loadPracticeQuestions();
+            updateProgress();
+        }
+
+        function loadConversationPrompts() {
+            const container = document.getElementById('conversationPrompts');
+            container.innerHTML = '';
+            
+            conversationPrompts.forEach((prompt, index) => {
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'conversation-prompt';
+                promptDiv.innerHTML = `
+                    <h4>🎬 ${prompt.title}</h4>
+                    <div class="scenario">
+                        <strong>Scenario:</strong> ${prompt.scenario}
+                    </div>
+                    <div class="scenario">
+                        <strong>Practice Dialogue:</strong><br>
+                        ${prompt.dialogue.map(line => `• ${line}`).join('<br>')}
+                    </div>
+                `;
+                container.appendChild(promptDiv);
+            });
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPracticeQuestions();
+            loadConversationPrompts();
+            updateProgress();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9811009a24d1e751',t:'MTc1ODIwMDE3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
