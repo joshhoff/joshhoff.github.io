@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Master - Transitive & Intransitive Practice</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .lesson-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .lesson-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .verb-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .verb-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #fff;
+        }
+        
+        .quiz-question {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #e0e6ff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.correct {
+            background: #4ade80;
+            color: white;
+            border-color: #22c55e;
+        }
+        
+        .option-btn.incorrect {
+            background: #f87171;
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .prompt-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .score-display {
+            text-align: center;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .score-display h3 {
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            background: #4ade80;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .writing-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e6ff;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 16px;
+            resize: vertical;
+        }
+        
+        .writing-area:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        
+        .feedback.correct {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .feedback.incorrect {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 200px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 <span data-en="Verb Master" data-es="Maestro de Verbos">Verb Master</span></h1>
+            <p><span data-en="Master Transitive & Intransitive Verbs with Fun Activities!" data-es="¡Domina los Verbos Transitivos e Intransitivos con Actividades Divertidas!">Master Transitive & Intransitive Verbs with Fun Activities!</span></p>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button class="btn-primary" onclick="toggleLanguage()" id="lang-toggle">🌐 Español</button>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('learn')"><span data-en="📚 Learn" data-es="📚 Aprender">📚 Learn</span></button>
+            <button class="tab-btn" onclick="showTab('quiz')"><span data-en="🧩 Quiz" data-es="🧩 Prueba">🧩 Quiz</span></button>
+            <button class="tab-btn" onclick="showTab('writing')"><span data-en="✍️ Writing" data-es="✍️ Escritura">✍️ Writing</span></button>
+            <button class="tab-btn" onclick="showTab('conversation')"><span data-en="💬 Speaking" data-es="💬 Conversación">💬 Speaking</span></button>
+        </div>
+        
+        <!-- Learn Section -->
+        <div id="learn" class="content-section active">
+            <div class="lesson-card">
+                <h3>🎓 <span data-en="Understanding Transitive & Intransitive Verbs" data-es="Entendiendo los Verbos Transitivos e Intransitivos">Understanding Transitive & Intransitive Verbs</span></h3>
+                <div data-en="
+                    <p><strong>Transitive verbs</strong> need a direct object to complete their meaning.</p>
+                    <p><strong>Intransitive verbs</strong> don't need a direct object - they can stand alone!</p>
+                " data-es="
+                    <p><strong>Los verbos transitivos</strong> necesitan un objeto directo para completar su significado.</p>
+                    <p><strong>Los verbos intransitivos</strong> no necesitan un objeto directo - ¡pueden estar solos!</p>
+                ">
+                    <p><strong>Transitive verbs</strong> need a direct object to complete their meaning.</p>
+                    <p><strong>Intransitive verbs</strong> don't need a direct object - they can stand alone!</p>
+                </div>
+            </div>
+            
+            <div class="lesson-card" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">
+                <h3>🌎 <span data-en="For Spanish Speakers" data-es="Para Hispanohablantes">For Spanish Speakers</span></h3>
+                <div data-en="
+                    <p><strong>Good news!</strong> Spanish has the same concept, but English is more strict about it.</p>
+                    <p><strong>In Spanish:</strong> 'Yo leo' (I read) - the object can be implied</p>
+                    <p><strong>In English:</strong> 'I read' sounds incomplete - we need 'I read a book'</p>
+                    <p><strong>Tip:</strong> If you can ask '¿qué?' or '¿a quién?' after the verb, it's probably transitive!</p>
+                " data-es="
+                    <p><strong>¡Buenas noticias!</strong> El español tiene el mismo concepto, pero el inglés es más estricto.</p>
+                    <p><strong>En español:</strong> 'Yo leo' - el objeto puede estar implícito</p>
+                    <p><strong>En inglés:</strong> 'I read' suena incompleto - necesitamos 'I read a book'</p>
+                    <p><strong>Consejo:</strong> Si puedes preguntar '¿qué?' o '¿a quién?' después del verbo, ¡probablemente es transitivo!</p>
+                ">
+                    <p><strong>Good news!</strong> Spanish has the same concept, but English is more strict about it.</p>
+                    <p><strong>In Spanish:</strong> 'Yo leo' (I read) - the object can be implied</p>
+                    <p><strong>In English:</strong> 'I read' sounds incomplete - we need 'I read a book'</p>
+                    <p><strong>Tip:</strong> If you can ask '¿qué?' or '¿a quién?' after the verb, it's probably transitive!</p>
+                </div>
+            </div>
+            
+            <div class="verb-examples">
+                <div class="verb-card">
+                    <h4>🎯 <span data-en="Transitive Verbs" data-es="Verbos Transitivos">Transitive Verbs</span></h4>
+                    <p><strong><span data-en="Pattern:" data-es="Patrón:">Pattern:</span></strong> <span data-en="Subject + Verb + Object" data-es="Sujeto + Verbo + Objeto">Subject + Verb + Object</span></p>
+                    <div data-en="
+                        <ul style='margin-top: 10px; padding-left: 20px;'>
+                            <li>I <strong>read</strong> a book <em>(Leo un libro)</em></li>
+                            <li>She <strong>bought</strong> groceries <em>(Ella compró comestibles)</em></li>
+                            <li>They <strong>watched</strong> a movie <em>(Ellos vieron una película)</em></li>
+                            <li>He <strong>loves</strong> pizza <em>(Él ama la pizza)</em></li>
+                        </ul>
+                    " data-es="
+                        <ul style='margin-top: 10px; padding-left: 20px;'>
+                            <li>I <strong>read</strong> a book <em>(Leo un libro)</em></li>
+                            <li>She <strong>bought</strong> groceries <em>(Ella compró comestibles)</em></li>
+                            <li>They <strong>watched</strong> a movie <em>(Ellos vieron una película)</em></li>
+                            <li>He <strong>loves</strong> pizza <em>(Él ama la pizza)</em></li>
+                        </ul>
+                    ">
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>I <strong>read</strong> a book <em>(Leo un libro)</em></li>
+                            <li>She <strong>bought</strong> groceries <em>(Ella compró comestibles)</em></li>
+                            <li>They <strong>watched</strong> a movie <em>(Ellos vieron una película)</em></li>
+                            <li>He <strong>loves</strong> pizza <em>(Él ama la pizza)</em></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="verb-card">
+                    <h4>🌟 <span data-en="Intransitive Verbs" data-es="Verbos Intransitivos">Intransitive Verbs</span></h4>
+                    <p><strong><span data-en="Pattern:" data-es="Patrón:">Pattern:</span></strong> <span data-en="Subject + Verb" data-es="Sujeto + Verbo">Subject + Verb</span></p>
+                    <div data-en="
+                        <ul style='margin-top: 10px; padding-left: 20px;'>
+                            <li>The baby <strong>sleeps</strong> <em>(El bebé duerme)</em></li>
+                            <li>Birds <strong>fly</strong> <em>(Los pájaros vuelan)</em></li>
+                            <li>We <strong>arrived</strong> early <em>(Llegamos temprano)</em></li>
+                            <li>The sun <strong>shines</strong> <em>(El sol brilla)</em></li>
+                        </ul>
+                    " data-es="
+                        <ul style='margin-top: 10px; padding-left: 20px;'>
+                            <li>The baby <strong>sleeps</strong> <em>(El bebé duerme)</em></li>
+                            <li>Birds <strong>fly</strong> <em>(Los pájaros vuelan)</em></li>
+                            <li>We <strong>arrived</strong> early <em>(Llegamos temprano)</em></li>
+                            <li>The sun <strong>shines</strong> <em>(El sol brilla)</em></li>
+                        </ul>
+                    ">
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>The baby <strong>sleeps</strong> <em>(El bebé duerme)</em></li>
+                            <li>Birds <strong>fly</strong> <em>(Los pájaros vuelan)</em></li>
+                            <li>We <strong>arrived</strong> early <em>(Llegamos temprano)</em></li>
+                            <li>The sun <strong>shines</strong> <em>(El sol brilla)</em></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <h4>💡 <span data-en="Quick Tip!" data-es="¡Consejo Rápido!">Quick Tip!</span></h4>
+                <div data-en="
+                    <p>Ask yourself: 'What?' or 'Who?' after the verb. If there's an answer, it's transitive!</p>
+                    <p><em>Example: 'She bought...' → 'She bought what?' → 'groceries' (transitive)</em></p>
+                " data-es="
+                    <p>Pregúntate: '¿Qué?' o '¿Quién?' después del verbo. ¡Si hay una respuesta, es transitivo!</p>
+                    <p><em>Ejemplo: 'She bought...' → '¿Qué compró?' → 'groceries' (transitivo)</em></p>
+                ">
+                    <p>Ask yourself: "What?" or "Who?" after the verb. If there's an answer, it's transitive!</p>
+                    <p><em>Example: "She bought..." → "She bought what?" → "groceries" (transitive)</em></p>
+                </div>
+            </div>
+            
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 5px solid #ffc107;">
+                <h4>⚠️ <span data-en="Common Mistakes for Spanish Speakers" data-es="Errores Comunes para Hispanohablantes">Common Mistakes for Spanish Speakers</span></h4>
+                <div data-en="
+                    <div style='margin: 15px 0;'>
+                        <p><strong>❌ Wrong:</strong> 'I like' (incomplete)</p>
+                        <p><strong>✅ Correct:</strong> 'I like pizza' (complete)</p>
+                        <p><em>In Spanish: 'Me gusta' is complete, but English needs the object!</em></p>
+                    </div>
+                    <div style='margin: 15px 0;'>
+                        <p><strong>❌ Wrong:</strong> 'She is eating' (when you mean she's eating something specific)</p>
+                        <p><strong>✅ Better:</strong> 'She is eating lunch' (more natural)</p>
+                        <p><em>Spanish: 'Está comiendo' is fine, but English often wants the object!</em></p>
+                    </div>
+                " data-es="
+                    <div style='margin: 15px 0;'>
+                        <p><strong>❌ Incorrecto:</strong> 'I like' (incompleto)</p>
+                        <p><strong>✅ Correcto:</strong> 'I like pizza' (completo)</p>
+                        <p><em>En español: 'Me gusta' está completo, ¡pero el inglés necesita el objeto!</em></p>
+                    </div>
+                    <div style='margin: 15px 0;'>
+                        <p><strong>❌ Incorrecto:</strong> 'She is eating' (cuando quieres decir que come algo específico)</p>
+                        <p><strong>✅ Mejor:</strong> 'She is eating lunch' (más natural)</p>
+                        <p><em>Español: 'Está comiendo' está bien, ¡pero el inglés a menudo quiere el objeto!</em></p>
+                    </div>
+                ">
+                    <div style="margin: 15px 0;">
+                        <p><strong>❌ Wrong:</strong> "I like" (incomplete)</p>
+                        <p><strong>✅ Correct:</strong> "I like pizza" (complete)</p>
+                        <p><em>In Spanish: "Me gusta" is complete, but English needs the object!</em></p>
+                    </div>
+                    <div style="margin: 15px 0;">
+                        <p><strong>❌ Wrong:</strong> "She is eating" (when you mean she's eating something specific)</p>
+                        <p><strong>✅ Better:</strong> "She is eating lunch" (more natural)</p>
+                        <p><em>Spanish: "Está comiendo" is fine, but English often wants the object!</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quiz Section -->
+        <div id="quiz" class="content-section">
+            <div class="score-display">
+                <h3>🏆 <span data-en="Your Progress" data-es="Tu Progreso">Your Progress</span></h3>
+                <p><span data-en="Score:" data-es="Puntuación:">Score:</span> <span id="score">0</span> / <span id="total">0</span></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div id="quiz-container">
+                <!-- Quiz questions will be loaded here -->
+            </div>
+            
+            <button class="btn-primary" onclick="startQuiz()"><span data-en="🎮 Start New Quiz" data-es="🎮 Comenzar Nueva Prueba">🎮 Start New Quiz</span></button>
+        </div>
+        
+        <!-- Writing Section -->
+        <div id="writing" class="content-section">
+            <div class="lesson-card">
+                <h3>✍️ <span data-en="Writing Practice" data-es="Práctica de Escritura">Writing Practice</span></h3>
+                <div data-en="
+                    <p>Complete the writing prompts below. Try to use both transitive and intransitive verbs!</p>
+                " data-es="
+                    <p>¡Completa las actividades de escritura a continuación. Trata de usar verbos transitivos e intransitivos!</p>
+                ">
+                    <p>Complete the writing prompts below. Try to use both transitive and intransitive verbs!</p>
+                </div>
+            </div>
+            
+            <div id="writing-prompts">
+                <!-- Writing prompts will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Conversation Section -->
+        <div id="conversation" class="content-section">
+            <div class="conversation-prompt">
+                <h3>💬 <span data-en="Speaking Practice" data-es="Práctica de Conversación">Speaking Practice</span></h3>
+                <div data-en="
+                    <p>Practice these conversation scenarios with a partner or record yourself!</p>
+                " data-es="
+                    <p>¡Practica estos escenarios de conversación con un compañero o grábate a ti mismo!</p>
+                ">
+                    <p>Practice these conversation scenarios with a partner or record yourself!</p>
+                </div>
+            </div>
+            
+            <div id="conversation-prompts">
+                <!-- Conversation prompts will be loaded here -->
+            </div>
+            
+            <button class="btn-primary" onclick="generateNewPrompts()"><span data-en="🔄 New Prompts" data-es="🔄 Nuevas Actividades">🔄 New Prompts</span></button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data
+        const quizQuestions = {
+            en: [
+                {
+                    question: "Identify the verb type: 'The children played soccer.'",
+                    options: ["Transitive", "Intransitive"],
+                    correct: 0,
+                    explanation: "Correct! 'Played' is transitive because it has a direct object 'soccer'."
+                },
+                {
+                    question: "Identify the verb type: 'The dog barked loudly.'",
+                    options: ["Transitive", "Intransitive"],
+                    correct: 1,
+                    explanation: "Correct! 'Barked' is intransitive - it doesn't need a direct object."
+                },
+                {
+                    question: "Which sentence uses a transitive verb?",
+                    options: ["She laughed at the joke", "She told a joke", "She laughed loudly", "She arrived late"],
+                    correct: 1,
+                    explanation: "Correct! 'Told' is transitive with 'a joke' as the direct object."
+                },
+                {
+                    question: "Complete with the correct verb: 'The baby _____ peacefully.'",
+                    options: ["sleeps", "reads books", "eats food", "watches TV"],
+                    correct: 0,
+                    explanation: "Correct! 'Sleeps' is intransitive and fits the sentence structure."
+                },
+                {
+                    question: "Which is an intransitive verb?",
+                    options: ["write", "arrive", "buy", "make"],
+                    correct: 1,
+                    explanation: "Correct! 'Arrive' is intransitive - you don't arrive something."
+                },
+                {
+                    question: "What's wrong with: 'I like very much'?",
+                    options: ["Nothing wrong", "Missing direct object", "Wrong tense", "Too informal"],
+                    correct: 1,
+                    explanation: "Correct! 'Like' is transitive and needs an object. Say 'I like pizza very much.'"
+                }
+            ],
+            es: [
+                {
+                    question: "Identifica el tipo de verbo: 'The children played soccer.' (Los niños jugaron fútbol)",
+                    options: ["Transitivo", "Intransitivo"],
+                    correct: 0,
+                    explanation: "¡Correcto! 'Played' es transitivo porque tiene un objeto directo 'soccer'."
+                },
+                {
+                    question: "Identifica el tipo de verbo: 'The dog barked loudly.' (El perro ladró fuerte)",
+                    options: ["Transitivo", "Intransitivo"],
+                    correct: 1,
+                    explanation: "¡Correcto! 'Barked' es intransitivo - no necesita un objeto directo."
+                },
+                {
+                    question: "¿Qué oración usa un verbo transitivo?",
+                    options: ["She laughed at the joke", "She told a joke", "She laughed loudly", "She arrived late"],
+                    correct: 1,
+                    explanation: "¡Correcto! 'Told' es transitivo con 'a joke' como objeto directo."
+                },
+                {
+                    question: "Completa con el verbo correcto: 'The baby _____ peacefully.' (El bebé _____ tranquilamente)",
+                    options: ["sleeps", "reads books", "eats food", "watches TV"],
+                    correct: 0,
+                    explanation: "¡Correcto! 'Sleeps' es intransitivo y encaja en la estructura de la oración."
+                },
+                {
+                    question: "¿Cuál es un verbo intransitivo?",
+                    options: ["write", "arrive", "buy", "make"],
+                    correct: 1,
+                    explanation: "¡Correcto! 'Arrive' es intransitivo - no puedes 'llegar algo'."
+                },
+                {
+                    question: "¿Qué está mal con: 'I like very much'?",
+                    options: ["Nada está mal", "Falta el objeto directo", "Tiempo verbal incorrecto", "Muy informal"],
+                    correct: 1,
+                    explanation: "¡Correcto! 'Like' es transitivo y necesita un objeto. Di 'I like pizza very much.'"
+                }
+            ]
+        };
+
+        // Writing prompts
+        const writingPrompts = {
+            en: [
+                {
+                    title: "🏠 Describe Your Morning Routine",
+                    prompt: "Write about what you do every morning. Use at least 3 transitive verbs (like 'brush teeth', 'drink coffee') and 3 intransitive verbs (like 'wake up', 'shower').",
+                    hints: ["What do you do TO something?", "What actions don't need an object?", "Remember: English often requires the object even when Spanish doesn't!"]
+                },
+                {
+                    title: "🍳 Cooking Adventure",
+                    prompt: "Describe making your favorite meal. Focus on the actions - which verbs need objects and which don't?",
+                    hints: ["cook (what?)", "boil (what?)", "simmer (no object needed)", "Don't forget articles: 'cook THE rice', not just 'cook rice'"]
+                },
+                {
+                    title: "🎬 Movie Review",
+                    prompt: "Write a short review of a movie you watched recently. Pay attention to verbs like 'watched' (transitive) vs 'laughed' (intransitive).",
+                    hints: ["What did the actors do?", "How did you react?", "Be specific: 'I enjoyed THE movie', not just 'I enjoyed'"]
+                },
+                {
+                    title: "🛍️ Shopping Experience",
+                    prompt: "Describe your last shopping trip. Focus on transitive verbs (bought, chose, paid) vs intransitive ones (walked, arrived, left).",
+                    hints: ["What did you buy/choose/see?", "How did you move around?", "Remember: 'I bought groceries' not 'I bought'"]
+                }
+            ],
+            es: [
+                {
+                    title: "🏠 Describe tu Rutina Matutina",
+                    prompt: "Escribe sobre lo que haces cada mañana. Usa al menos 3 verbos transitivos (como 'brush teeth', 'drink coffee') y 3 verbos intransitivos (como 'wake up', 'shower').",
+                    hints: ["¿Qué haces A algo?", "¿Qué acciones no necesitan objeto?", "Recuerda: ¡El inglés a menudo requiere el objeto aunque el español no!"]
+                },
+                {
+                    title: "🍳 Aventura Culinaria",
+                    prompt: "Describe cómo preparas tu comida favorita. Enfócate en las acciones - ¿qué verbos necesitan objetos y cuáles no?",
+                    hints: ["cook (¿qué?)", "boil (¿qué?)", "simmer (no necesita objeto)", "No olvides los artículos: 'cook THE rice', no solo 'cook rice'"]
+                },
+                {
+                    title: "🎬 Reseña de Película",
+                    prompt: "Escribe una reseña corta de una película que viste recientemente. Presta atención a verbos como 'watched' (transitivo) vs 'laughed' (intransitivo).",
+                    hints: ["¿Qué hicieron los actores?", "¿Cómo reaccionaste?", "Sé específico: 'I enjoyed THE movie', no solo 'I enjoyed'"]
+                },
+                {
+                    title: "🛍️ Experiencia de Compras",
+                    prompt: "Describe tu último viaje de compras. Enfócate en verbos transitivos (bought, chose, paid) vs intransitivos (walked, arrived, left).",
+                    hints: ["¿Qué compraste/elegiste/viste?", "¿Cómo te moviste?", "Recuerda: 'I bought groceries' no 'I bought'"]
+                }
+            ]
+        };
+
+        // Conversation prompts
+        const conversationPrompts = {
+            en: [
+                {
+                    title: "🛍️ Shopping Trip",
+                    scenario: "You're planning a shopping trip with a friend.",
+                    prompts: [
+                        "What will you buy at the store?",
+                        "When do you usually shop?",
+                        "Do you prefer to walk or drive there?",
+                        "What did you purchase last time?"
+                    ],
+                    focus: "Notice: 'buy' needs an object, but 'shop' and 'walk' don't!"
+                },
+                {
+                    title: "🎵 Music Discussion",
+                    scenario: "Talk about your music preferences.",
+                    prompts: [
+                        "What music do you listen to?",
+                        "Do you play any instruments?",
+                        "When do you usually sing?",
+                        "What songs do you remember from childhood?"
+                    ],
+                    focus: "Pay attention: 'listen to', 'play', 'remember' are transitive; 'sing' can be both!"
+                },
+                {
+                    title: "🌅 Daily Activities",
+                    scenario: "Describe a typical day in your life.",
+                    prompts: [
+                        "What time do you wake up?",
+                        "What do you eat for breakfast?",
+                        "How do you travel to work/school?",
+                        "What do you do in the evening?"
+                    ],
+                    focus: "Mix of both: 'wake up' (intransitive) vs 'eat breakfast' (transitive)"
+                },
+                {
+                    title: "🏠 Home Life",
+                    scenario: "Discuss your living situation and home activities.",
+                    prompts: [
+                        "What do you like about your home?",
+                        "Do you cook often?",
+                        "When do you usually clean?",
+                        "What do you watch on TV?"
+                    ],
+                    focus: "Common mistake: Don't say 'I like' - say 'I like my garden' (complete the thought!)"
+                }
+            ],
+            es: [
+                {
+                    title: "🛍️ Viaje de Compras",
+                    scenario: "Estás planeando un viaje de compras con un amigo.",
+                    prompts: [
+                        "¿Qué vas a comprar en la tienda?",
+                        "¿Cuándo sueles hacer compras?",
+                        "¿Prefieres caminar o manejar hasta allá?",
+                        "¿Qué compraste la última vez?"
+                    ],
+                    focus: "Nota: 'buy' necesita un objeto, ¡pero 'shop' y 'walk' no!"
+                },
+                {
+                    title: "🎵 Discusión Musical",
+                    scenario: "Habla sobre tus preferencias musicales.",
+                    prompts: [
+                        "¿Qué música escuchas?",
+                        "¿Tocas algún instrumento?",
+                        "¿Cuándo sueles cantar?",
+                        "¿Qué canciones recuerdas de la infancia?"
+                    ],
+                    focus: "Presta atención: 'listen to', 'play', 'remember' son transitivos; ¡'sing' puede ser ambos!"
+                },
+                {
+                    title: "🌅 Actividades Diarias",
+                    scenario: "Describe un día típico en tu vida.",
+                    prompts: [
+                        "¿A qué hora te despiertas?",
+                        "¿Qué desayunas?",
+                        "¿Cómo viajas al trabajo/escuela?",
+                        "¿Qué haces en la noche?"
+                    ],
+                    focus: "Mezcla de ambos: 'wake up' (intransitivo) vs 'eat breakfast' (transitivo)"
+                },
+                {
+                    title: "🏠 Vida en Casa",
+                    scenario: "Discute tu situación de vivienda y actividades del hogar.",
+                    prompts: [
+                        "¿Qué te gusta de tu casa?",
+                        "¿Cocinas a menudo?",
+                        "¿Cuándo sueles limpiar?",
+                        "¿Qué ves en la TV?"
+                    ],
+                    focus: "Error común: No digas 'I like' - di 'I like my garden' (¡completa el pensamiento!)"
+                }
+            ]
+        };
+
+        // Language functionality
+        let currentLanguage = 'en';
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+        
+        function updateLanguage() {
+            // Update toggle button
+            const toggleBtn = document.getElementById('lang-toggle');
+            toggleBtn.textContent = currentLanguage === 'en' ? '🌐 Español' : '🌐 English';
+            
+            // Update all elements with data-en and data-es attributes
+            document.querySelectorAll('[data-en][data-es]').forEach(element => {
+                const content = element.getAttribute(`data-${currentLanguage}`);
+                if (content) {
+                    element.innerHTML = content;
+                }
+            });
+            
+            // Reload current content if needed
+            const activeSection = document.querySelector('.content-section.active');
+            if (activeSection) {
+                const sectionId = activeSection.id;
+                if (sectionId === 'writing') {
+                    loadWritingPrompts();
+                } else if (sectionId === 'conversation') {
+                    loadConversationPrompts();
+                }
+            }
+        }
+
+        // Quiz functionality
+        let currentQuiz = [];
+        let currentQuestion = 0;
+        let score = 0;
+
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load content based on tab
+            if (tabName === 'writing') {
+                loadWritingPrompts();
+            } else if (tabName === 'conversation') {
+                loadConversationPrompts();
+            }
+        }
+
+        function startQuiz() {
+            currentQuiz = [...quizQuestions[currentLanguage]].sort(() => Math.random() - 0.5);
+            currentQuestion = 0;
+            score = 0;
+            updateScore();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= currentQuiz.length) {
+                showQuizResults();
+                return;
+            }
+
+            const question = currentQuiz[currentQuestion];
+            const container = document.getElementById('quiz-container');
+            
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <h4>Question ${currentQuestion + 1} of ${currentQuiz.length}</h4>
+                    <p style="font-size: 1.1rem; margin: 15px 0;">${question.question}</p>
+                    <div class="quiz-options">
+                        ${question.options.map((option, index) => 
+                            `<button class="option-btn" onclick="selectAnswer(${index})">${option}</button>`
+                        ).join('')}
+                    </div>
+                    <div id="feedback"></div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = currentQuiz[currentQuestion];
+            const options = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('feedback');
+            
+            // Disable all options
+            options.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            // Show correct/incorrect
+            options[selectedIndex].classList.add(selectedIndex === question.correct ? 'correct' : 'incorrect');
+            if (selectedIndex !== question.correct) {
+                options[question.correct].classList.add('correct');
+            }
+            
+            // Update score
+            if (selectedIndex === question.correct) {
+                score++;
+            }
+            
+            // Show explanation
+            feedback.innerHTML = `
+                <div class="feedback ${selectedIndex === question.correct ? 'correct' : 'incorrect'}">
+                    ${question.explanation}
+                </div>
+                <button class="btn-primary" onclick="nextQuestion()" style="margin-top: 15px;">Next Question →</button>
+            `;
+            
+            updateScore();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showQuizResults() {
+            const container = document.getElementById('quiz-container');
+            const percentage = Math.round((score / currentQuiz.length) * 100);
+            
+            let message = "";
+            if (percentage >= 80) {
+                message = "🎉 Excellent work! You're a verb master!";
+            } else if (percentage >= 60) {
+                message = "👍 Good job! Keep practicing to improve!";
+            } else {
+                message = "💪 Keep learning! Review the lesson and try again!";
+            }
+            
+            container.innerHTML = `
+                <div class="quiz-question" style="text-align: center;">
+                    <h3>Quiz Complete!</h3>
+                    <div style="font-size: 3rem; margin: 20px 0;">${percentage >= 80 ? '🏆' : percentage >= 60 ? '🎯' : '📚'}</div>
+                    <p style="font-size: 1.2rem; margin: 15px 0;">${message}</p>
+                    <p>Final Score: ${score} / ${currentQuiz.length} (${percentage}%)</p>
+                    <button class="btn-primary" onclick="startQuiz()" style="margin-top: 20px;">Try Again</button>
+                </div>
+            `;
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = currentQuiz.length;
+            const progress = currentQuiz.length > 0 ? (score / currentQuiz.length) * 100 : 0;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function loadWritingPrompts() {
+            const container = document.getElementById('writing-prompts');
+            const prompts = writingPrompts[currentLanguage];
+            const hintsLabel = currentLanguage === 'en' ? '💡 Hints:' : '💡 Pistas:';
+            const placeholder = currentLanguage === 'en' ? 'Start writing here...' : 'Empieza a escribir aquí...';
+            const buttonText = currentLanguage === 'en' ? '✅ Check My Writing' : '✅ Revisar mi Escritura';
+            
+            container.innerHTML = prompts.map((prompt, index) => `
+                <div class="quiz-question">
+                    <h4>${prompt.title}</h4>
+                    <p style="margin: 15px 0;">${prompt.prompt}</p>
+                    <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <strong>${hintsLabel}</strong>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            ${prompt.hints.map(hint => `<li>${hint}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <textarea class="writing-area" placeholder="${placeholder}" id="writing-${index}"></textarea>
+                    <button class="btn-primary" onclick="checkWriting(${index})">${buttonText}</button>
+                    <div id="writing-feedback-${index}"></div>
+                </div>
+            `).join('');
+        }
+
+        function checkWriting(index) {
+            const text = document.getElementById(`writing-${index}`).value;
+            const feedback = document.getElementById(`writing-feedback-${index}`);
+            
+            if (text.trim().length < 50) {
+                const message = currentLanguage === 'en' 
+                    ? 'Please write at least 50 characters to get meaningful feedback!'
+                    : '¡Por favor escribe al menos 50 caracteres para obtener comentarios útiles!';
+                feedback.innerHTML = `
+                    <div class="feedback incorrect">
+                        ${message}
+                    </div>
+                `;
+                return;
+            }
+            
+            // Simple analysis
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
+            
+            const messages = {
+                en: {
+                    great: 'Great work! 🎉',
+                    wordCount: 'Word count:',
+                    sentences: 'Sentences:',
+                    tip: 'Now try reading it aloud and identify which verbs are transitive (need objects) and which are intransitive (stand alone)!'
+                },
+                es: {
+                    great: '¡Excelente trabajo! 🎉',
+                    wordCount: 'Número de palabras:',
+                    sentences: 'Oraciones:',
+                    tip: '¡Ahora trata de leerlo en voz alta e identifica qué verbos son transitivos (necesitan objetos) y cuáles son intransitivos (están solos)!'
+                }
+            };
+            
+            const msg = messages[currentLanguage];
+            
+            feedback.innerHTML = `
+                <div class="feedback correct">
+                    <strong>${msg.great}</strong><br>
+                    📝 ${msg.wordCount} ${wordCount}<br>
+                    📄 ${msg.sentences} ${sentences.length}<br>
+                    💡 ${msg.tip}
+                </div>
+            `;
+        }
+
+        function loadConversationPrompts() {
+            const container = document.getElementById('conversation-prompts');
+            const prompts = conversationPrompts[currentLanguage];
+            const questionsLabel = currentLanguage === 'en' ? 'Discussion Questions:' : 'Preguntas de Discusión:';
+            const focusLabel = currentLanguage === 'en' ? '🎯 Grammar Focus:' : '🎯 Enfoque Gramatical:';
+            
+            container.innerHTML = prompts.map(prompt => `
+                <div class="prompt-card">
+                    <h4>${prompt.title}</h4>
+                    <p style="margin: 10px 0; font-style: italic;">${prompt.scenario}</p>
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <strong>${questionsLabel}</strong>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            ${prompt.prompts.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; font-size: 0.9rem;">
+                        <strong>${focusLabel}</strong> ${prompt.focus}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateNewPrompts() {
+            // Shuffle the conversation prompts for current language
+            conversationPrompts[currentLanguage].sort(() => Math.random() - 0.5);
+            loadConversationPrompts();
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWritingPrompts();
+            loadConversationPrompts();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98217c9a025ab589',t:'MTc1ODM3MzAyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
