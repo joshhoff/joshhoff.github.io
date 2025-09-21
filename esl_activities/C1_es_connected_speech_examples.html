@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Habla Conectada en Inglés</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 40px;
+        }
+        
+        .level-selector {
+            margin-bottom: 30px;
+        }
+        
+        .level-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .level-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: #f8f9fa;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+        
+        .level-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .level-btn.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+        
+        .conversation-area {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            min-height: 350px;
+        }
+        
+        .conversation-prompt {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .prompt-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .situation-text {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .english-prompt {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid #28a745;
+        }
+        
+        .english-text {
+            font-size: 1.1rem;
+            color: #155724;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .phonetic-text {
+            font-family: 'Courier New', monospace;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+        
+        .speech-patterns {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .pattern-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .pattern-examples {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .pattern-example {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pattern-type {
+            font-weight: 600;
+            color: #d63031;
+        }
+        
+        .spanish-explanation {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .spanish-title {
+            font-weight: 600;
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+        
+        .spanish-text {
+            color: #1976d2;
+            line-height: 1.5;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #ee5a24;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+        }
+        
+        .btn-accent {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .tips-section {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .tips-title {
+            color: #0c5460;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .tip-item {
+            color: #0c5460;
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .tip-item:before {
+            content: "🎯";
+            position: absolute;
+            left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .level-buttons {
+                flex-direction: column;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .pattern-example {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇺🇸 English Connected Speech Practice</h1>
+            <p>Mejora tu pronunciación natural del inglés con conversaciones guiadas</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="level-selector">
+                <div class="level-buttons">
+                    <button class="level-btn active" data-level="beginner">Principiante</button>
+                    <button class="level-btn" data-level="intermediate">Intermedio</button>
+                    <button class="level-btn" data-level="advanced">Avanzado</button>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            
+            <div class="conversation-area">
+                <div class="conversation-prompt">
+                    <div class="prompt-title">Situation: Introducing yourself at a party</div>
+                    <div class="situation-text">
+                        Imagina que estás en una fiesta y conoces a alguien nuevo. Practica presentarte de manera natural en inglés.
+                    </div>
+                    
+                    <div class="english-prompt">
+                        <div class="english-text">"Hi, I'm Sarah. What's your name?"</div>
+                        <div class="phonetic-text">/haɪ aɪm ˈsɛrə wʌts jər neɪm/</div>
+                    </div>
+                    
+                    <div class="speech-patterns">
+                        <div class="pattern-title">Patrones de habla conectada a practicar:</div>
+                        <div class="pattern-examples">
+                            <div class="pattern-example">
+                                <span><span class="pattern-type">Contraction:</span> "I am" → "I'm" /aɪm/</span>
+                            </div>
+                            <div class="pattern-example">
+                                <span><span class="pattern-type">Linking:</span> "What's your" → /wʌts jər/ (consonant to vowel)</span>
+                            </div>
+                            <div class="pattern-example">
+                                <span><span class="pattern-type">Weak form:</span> "your" → /jər/ (not /jʊr/)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="spanish-explanation">
+                        <div class="spanish-title">💡 Explicación para hispanohablantes:</div>
+                        <div class="spanish-text">
+                            En inglés, las palabras se conectan naturalmente. "What's your" se pronuncia como una sola unidad /wʌts jər/, 
+                            no como palabras separadas. La "r" de "your" se conecta con la vocal siguiente si la hay.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-primary" onclick="nextPrompt()">Siguiente Situación</button>
+                <button class="btn btn-accent" onclick="showTips()">Ver Consejos</button>
+                <button class="btn btn-secondary" onclick="repeatPrompt()">Repetir</button>
+            </div>
+            
+            <div class="tips-section" id="tipsSection" style="display: none;">
+                <div class="tips-title">🎯 Consejos para el habla conectada en inglés:</div>
+                <div class="tip-item">Practica las contracciones comunes: I'm, you're, it's, don't, can't</div>
+                <div class="tip-item">Conecta consonantes finales con vocales iniciales: "turn_on" /tɜrn ɒn/</div>
+                <div class="tip-item">Usa formas débiles para palabras funcionales: "and" /ən/, "of" /əv/, "to" /tə/</div>
+                <div class="tip-item">Practica el "schwa" /ə/ - es el sonido más común en inglés</div>
+                <div class="tip-item">Escucha inglés nativo y nota cómo las palabras se "pegan" entre sí</div>
+                <div class="tip-item">No pronuncies cada palabra por separado - deja que fluyan juntas</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const conversationData = {
+            beginner: [
+                {
+                    title: "Introducing yourself at a party",
+                    situation: "Imagina que estás en una fiesta y conoces a alguien nuevo. Practica presentarte de manera natural en inglés.",
+                    english: "Hi, I'm Sarah. What's your name?",
+                    phonetic: "/haɪ aɪm ˈsɛrə wʌts jər neɪm/",
+                    patterns: [
+                        { type: "Contraction", example: "\"I am\" → \"I'm\" /aɪm/" },
+                        { type: "Linking", example: "\"What's your\" → /wʌts jər/ (consonant to vowel)" },
+                        { type: "Weak form", example: "\"your\" → /jər/ (not /jʊr/)" }
+                    ],
+                    explanation: "En inglés, las palabras se conectan naturalmente. \"What's your\" se pronuncia como una sola unidad /wʌts jər/, no como palabras separadas. La \"r\" de \"your\" se conecta con la vocal siguiente si la hay."
+                },
+                {
+                    title: "Asking for directions",
+                    situation: "Estás perdido en la ciudad y necesitas pedir direcciones en inglés.",
+                    english: "Excuse me, do you know where the bank is?",
+                    phonetic: "/ɪkˈskjuz mi du jə noʊ wɛr ðə bæŋk ɪz/",
+                    patterns: [
+                        { type: "Linking", example: "\"Excuse me\" → /ɪkˈskjuz mi/ (consonant to vowel)" },
+                        { type: "Weak form", example: "\"do you\" → /du jə/ (not /du ju/)" },
+                        { type: "Reduction", example: "\"where the\" → /wɛr ðə/ (schwa sound)" }
+                    ],
+                    explanation: "\"Do you\" se reduce a /du jə/ en habla rápida. El artículo \"the\" se pronuncia /ðə/ antes de consonantes, no /ði/. Nota cómo \"excuse\" y \"me\" se conectan suavemente."
+                },
+                {
+                    title: "Ordering at a restaurant",
+                    situation: "Estás en un restaurante y quieres hacer un pedido en inglés.",
+                    english: "I'd like a cup of coffee, please.",
+                    phonetic: "/aɪd laɪk ə kʌp əv ˈkɔfi pliz/",
+                    patterns: [
+                        { type: "Contraction", example: "\"I would\" → \"I'd\" /aɪd/" },
+                        { type: "Weak form", example: "\"of\" → /əv/ (not /ɒf/)" },
+                        { type: "Linking", example: "\"cup of\" → /kʌp əv/ (consonant to vowel)" }
+                    ],
+                    explanation: "Las preposiciones como \"of\" casi siempre usan formas débiles /əv/. \"I'd like\" es más natural que \"I would like\" en conversación casual. Practica conectar \"cup\" con \"of\"."
+                }
+            ],
+            intermediate: [
+                {
+                    title: "Job interview conversation",
+                    situation: "Estás en una entrevista de trabajo y necesitas hablar sobre tu experiencia profesional.",
+                    english: "I've been working in marketing for about three years, and I'm really passionate about digital campaigns.",
+                    phonetic: "/aɪv bɪn ˈwɜrkɪŋ ɪn ˈmɑrkətɪŋ fər əˈbaʊt θri jɪrz ən aɪm ˈrɪli ˈpæʃənət əˈbaʊt ˈdɪdʒətəl kæmˈpeɪnz/",
+                    patterns: [
+                        { type: "Contraction", example: "\"I have\" → \"I've\" /aɪv/" },
+                        { type: "Weak forms", example: "\"for about\" → /fər əˈbaʊt/" },
+                        { type: "Linking", example: "\"three years and\" → /θri jɪrz ən/" },
+                        { type: "Reduction", example: "\"and I'm\" → /ən aɪm/" }
+                    ],
+                    explanation: "En contextos profesionales, aún usamos habla conectada. \"And\" se reduce a /ən/ entre palabras. \"For\" se pronuncia /fər/ cuando no está enfatizado. Las contracciones son apropiadas incluso en entrevistas."
+                },
+                {
+                    title: "Making plans with friends",
+                    situation: "Estás haciendo planes con amigos para el fin de semana.",
+                    english: "What are you up to this weekend? I was thinking we could go to the movies or grab some dinner.",
+                    phonetic: "/wʌt ər ju ʌp tu ðɪs ˈwikɛnd aɪ wəz ˈθɪŋkɪŋ wi kəd goʊ tə ðə ˈmuviz ər græb səm ˈdɪnər/",
+                    patterns: [
+                        { type: "Contraction", example: "\"What are\" → \"What're\" /wʌt ər/" },
+                        { type: "Linking", example: "\"up to\" → /ʌp tu/ (consonant to vowel)" },
+                        { type: "Weak forms", example: "\"could go to the\" → /kəd goʊ tə ðə/" },
+                        { type: "Reduction", example: "\"some\" → /səm/ (not /sʌm/)" }
+                    ],
+                    explanation: "\"Could\" se reduce a /kəd/ en habla rápida. \"Some\" antes de sustantivos se pronuncia /səm/. \"Go to\" se conecta naturalmente, y \"the\" se pronuncia /ðə/ antes de consonantes."
+                },
+                {
+                    title: "Discussing a problem at work",
+                    situation: "Necesitas discutir un problema con tu supervisor de manera profesional.",
+                    english: "I wanted to talk to you about the project deadline. I don't think we'll be able to finish it on time.",
+                    phonetic: "/aɪ ˈwɑntəd tə tɔk tə ju əˈbaʊt ðə ˈprɑdʒɛkt ˈdɛdlaɪn aɪ doʊnt θɪŋk wil bi ˈeɪbəl tə ˈfɪnɪʃ ɪt ɑn taɪm/",
+                    patterns: [
+                        { type: "Weak forms", example: "\"to you about\" → /tə ju əˈbaʊt/" },
+                        { type: "Contraction", example: "\"don't think\" → /doʊnt θɪŋk/" },
+                        { type: "Linking", example: "\"we'll be able\" → /wil bi ˈeɪbəl/" },
+                        { type: "Reduction", example: "\"finish it on\" → /ˈfɪnɪʃ ɪt ɑn/" }
+                    ],
+                    explanation: "\"To\" se pronuncia /tə/ cuando no está enfatizado. \"We'll\" se conecta suavemente con \"be\". En contextos formales, mantén las contracciones pero habla claramente."
+                }
+            ],
+            advanced: [
+                {
+                    title: "Leading a business presentation",
+                    situation: "Estás dirigiendo una presentación importante para clientes potenciales.",
+                    english: "Good morning, everyone. I'd like to start by showing you how our innovative solution has helped companies increase their efficiency by up to thirty percent.",
+                    phonetic: "/gʊd ˈmɔrnɪŋ ˈɛvriˌwʌn aɪd laɪk tə stɑrt baɪ ˈʃoʊɪŋ ju haʊ aʊər ˈɪnəˌveɪtɪv səˈluʃən həz hɛlpt ˈkʌmpəniz ɪnˈkris ðɛr ɪˈfɪʃənsi baɪ ʌp tə ˈθɜrti pərˈsɛnt/",
+                    patterns: [
+                        { type: "Linking", example: "\"Good morning everyone\" → /gʊd ˈmɔrnɪŋ ˈɛvriˌwʌn/" },
+                        { type: "Weak forms", example: "\"to start by\" → /tə stɑrt baɪ/" },
+                        { type: "Connected speech", example: "\"how our\" → /haʊ aʊər/ (vowel to vowel)" },
+                        { type: "Reduction", example: "\"has helped\" → /həz hɛlpt/" }
+                    ],
+                    explanation: "En presentaciones formales, mantén claridad pero usa habla conectada natural. \"Has\" se reduce a /həz/ y se conecta con \"helped\". \"Up to\" se pronuncia como una unidad /ʌp tə/."
+                },
+                {
+                    title: "Negotiating a business deal",
+                    situation: "Estás negociando un acuerdo comercial importante y necesitas ser persuasivo pero diplomático.",
+                    english: "I understand your concerns, and I think we can work something out. What if we were to adjust the timeline and offer additional support?",
+                    phonetic: "/aɪ ˌʌndərˈstænd jər kənˈsɜrnz ən aɪ θɪŋk wi kən wɜrk ˈsʌmθɪŋ aʊt wʌt ɪf wi wər tʊ əˈdʒʌst ðə ˈtaɪmlaɪn ən ˈɔfər əˈdɪʃənəl səˈpɔrt/",
+                    patterns: [
+                        { type: "Linking", example: "\"understand your\" → /ˌʌndərˈstænd jər/" },
+                        { type: "Weak forms", example: "\"and I think\" → /ən aɪ θɪŋk/" },
+                        { type: "Phrasal verb", example: "\"work something out\" → /wɜrk ˈsʌmθɪŋ aʊt/" },
+                        { type: "Conditional", example: "\"What if we were to\" → /wʌt ɪf wi wər tʊ/" }
+                    ],
+                    explanation: "En negociaciones, usa estructuras condicionales suaves como \"What if we were to...\". \"Your\" se reduce a /jər/. Los phrasal verbs como \"work out\" mantienen su estrés natural."
+                },
+                {
+                    title: "Academic conference presentation",
+                    situation: "Estás presentando tu investigación en una conferencia académica internacional.",
+                    english: "The data we've collected over the past five years suggests that there's a significant correlation between these variables, which we hadn't anticipated.",
+                    phonetic: "/ðə ˈdeɪtə wiv kəˈlɛktəd ˈoʊvər ðə pæst faɪv jɪrz səˈdʒɛsts ðət ðɛrz ə sɪgˈnɪfəkənt ˌkɔrəˈleɪʃən bɪˈtwin ðiz ˈvɛriəbəlz wɪtʃ wi ˈhædənt ænˈtɪsəˌpeɪtəd/",
+                    patterns: [
+                        { type: "Contraction", example: "\"we have\" → \"we've\" /wiv/" },
+                        { type: "Weak forms", example: "\"over the past\" → /ˈoʊvər ðə pæst/" },
+                        { type: "Linking", example: "\"there's a\" → /ðɛrz ə/" },
+                        { type: "Complex reduction", example: "\"hadn't anticipated\" → /ˈhædənt ænˈtɪsəˌpeɪtəd/" }
+                    ],
+                    explanation: "En contextos académicos, usa contracciones naturales pero mantén precisión. \"There's\" se conecta con \"a\". Las palabras largas como \"anticipated\" mantienen su patrón de estrés natural pero se conectan fluidamente."
+                }
+            ]
+        };
+
+        let currentLevel = 'beginner';
+        let currentPromptIndex = 0;
+        let progress = 0;
+
+        function updateProgress() {
+            const totalPrompts = conversationData[currentLevel].length;
+            progress = ((currentPromptIndex + 1) / totalPrompts) * 100;
+            document.querySelector('.progress-fill').style.width = progress + '%';
+        }
+
+        function displayPrompt() {
+            const prompts = conversationData[currentLevel];
+            const current = prompts[currentPromptIndex];
+            
+            const promptArea = document.querySelector('.conversation-prompt');
+            promptArea.innerHTML = `
+                <div class="prompt-title">Situation: ${current.title}</div>
+                <div class="situation-text">
+                    ${current.situation}
+                </div>
+                
+                <div class="english-prompt">
+                    <div class="english-text">"${current.english}"</div>
+                    <div class="phonetic-text">${current.phonetic}</div>
+                </div>
+                
+                <div class="speech-patterns">
+                    <div class="pattern-title">Patrones de habla conectada a practicar:</div>
+                    <div class="pattern-examples">
+                        ${current.patterns.map(pattern => `
+                            <div class="pattern-example">
+                                <span><span class="pattern-type">${pattern.type}:</span> ${pattern.example}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="spanish-explanation">
+                    <div class="spanish-title">💡 Explicación para hispanohablantes:</div>
+                    <div class="spanish-text">
+                        ${current.explanation}
+                    </div>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function nextPrompt() {
+            const prompts = conversationData[currentLevel];
+            currentPromptIndex = (currentPromptIndex + 1) % prompts.length;
+            displayPrompt();
+            hideTips();
+        }
+
+        function repeatPrompt() {
+            displayPrompt();
+            hideTips();
+        }
+
+        function showTips() {
+            const tipsSection = document.getElementById('tipsSection');
+            tipsSection.style.display = tipsSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function hideTips() {
+            document.getElementById('tipsSection').style.display = 'none';
+        }
+
+        // Level selection
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentLevel = this.dataset.level;
+                currentPromptIndex = 0;
+                displayPrompt();
+                hideTips();
+            });
+        });
+
+        // Initialize
+        displayPrompt();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982abe3381a72b6f',t:'MTc1ODQ3MDA4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
