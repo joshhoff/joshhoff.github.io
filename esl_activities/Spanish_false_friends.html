@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>False Friends Vocabulary Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .card-flip {
+            transition: transform 0.3s ease;
+        }
+        
+        .card-flip:hover {
+            transform: translateY(-2px);
+        }
+        
+        .matched {
+            animation: matchSuccess 0.6s ease;
+        }
+        
+        .wrong-match {
+            animation: wrongMatch 0.5s ease;
+        }
+        
+        @keyframes matchSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background-color: #10b981; }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongMatch {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); background-color: #ef4444; }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .selected {
+            border: 3px solid #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Spanish False Friends Game</h1>
+            <p class="text-lg text-gray-600 mb-4">Match Spanish words with their correct meanings, not their English false cognates!</p>
+            <div class="flex justify-center items-center gap-6 text-sm">
+                <div class="bg-white px-4 py-2 rounded-lg shadow">
+                    <span class="font-semibold text-blue-600">Score: </span>
+                    <span id="score" class="font-bold">0</span>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-lg shadow">
+                    <span class="font-semibold text-green-600">Matches: </span>
+                    <span id="matches" class="font-bold">0</span> / <span id="total">28</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Instructions -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+            <div class="flex">
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <strong>How to play:</strong> Click on a Spanish word, then click on its correct meaning. Be careful - these words look similar to English words but have different meanings!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Board -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Spanish Words Column -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center border-b pb-3">Spanish Words</h2>
+                <div class="grid grid-cols-1 gap-3" id="spanishWords">
+                    <!-- Spanish word cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Meanings Column -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center border-b pb-3">Correct Meanings</h2>
+                <div class="grid grid-cols-1 gap-3" id="meanings">
+                    <!-- Meaning cards will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Sections -->
+        <div class="mt-12 space-y-8">
+            <!-- Written Practice Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    ✍️ Written Practice Exercises
+                </h2>
+                
+                <!-- Sentence Completion -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-4">Complete the Sentences</h3>
+                    <div class="space-y-4" id="sentenceExercises">
+                        <!-- Sentence exercises will be inserted here -->
+                    </div>
+                    <button id="checkSentences" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Check Answers
+                    </button>
+                    <div id="sentenceResults" class="mt-4 hidden"></div>
+                </div>
+
+                <!-- Translation Practice -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-green-700 mb-4">Translation Challenge</h3>
+                    <p class="text-gray-600 mb-4">Translate these sentences, being careful with false friends:</p>
+                    <div class="space-y-4" id="translationExercises">
+                        <!-- Translation exercises will be inserted here -->
+                    </div>
+                    <button id="showTranslations" class="mt-4 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Show Sample Translations
+                    </button>
+                    <div id="translationResults" class="mt-4 hidden"></div>
+                </div>
+
+                <!-- Error Correction -->
+                <div>
+                    <h3 class="text-lg font-semibold text-red-700 mb-4">Find and Correct the Mistakes</h3>
+                    <p class="text-gray-600 mb-4">These sentences contain false friend errors. Rewrite them correctly:</p>
+                    <div class="space-y-4" id="errorExercises">
+                        <!-- Error correction exercises will be inserted here -->
+                    </div>
+                    <button id="showCorrections" class="mt-4 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Show Corrections
+                    </button>
+                    <div id="correctionResults" class="mt-4 hidden"></div>
+                </div>
+            </div>
+
+            <!-- Conversation Practice Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    💬 Conversation Practice
+                </h2>
+
+                <!-- Role Play Scenarios -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-purple-700 mb-4">Role Play Scenarios</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="rolePlayScenarios">
+                        <!-- Role play cards will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Discussion Questions -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold text-indigo-700 mb-4">Discussion Questions</h3>
+                    <div class="space-y-4" id="discussionQuestions">
+                        <!-- Discussion questions will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Pronunciation Practice -->
+                <div>
+                    <h3 class="text-lg font-semibold text-orange-700 mb-4">Pronunciation & Usage Tips</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="pronunciationTips">
+                        <!-- Pronunciation tips will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="text-center mt-8">
+            <button id="resetBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg">
+                🔄 New Game
+            </button>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-xl p-8 max-w-md mx-4 text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Congratulations!</h3>
+                <p class="text-gray-600 mb-4">You've successfully matched all the false friends!</p>
+                <p class="text-lg font-semibold text-blue-600 mb-6">Final Score: <span id="finalScore">0</span></p>
+                <button id="playAgainBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+                    Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game data - Spanish words that are false friends with English
+        const gameData = [
+            {
+                spanish: "actual",
+                meaning: "current, present-day",
+                falseFriend: "actual (English: real/true)",
+                id: 1
+            },
+            {
+                spanish: "librería",
+                meaning: "bookstore, place to buy books",
+                falseFriend: "library (English: place to borrow books)",
+                id: 2
+            },
+            {
+                spanish: "embarazada",
+                meaning: "pregnant",
+                falseFriend: "embarrassed (English: ashamed)",
+                id: 3
+            },
+            {
+                spanish: "éxito",
+                meaning: "success, achievement",
+                falseFriend: "exit (English: way out)",
+                id: 4
+            },
+            {
+                spanish: "fábrica",
+                meaning: "factory, manufacturing plant",
+                falseFriend: "fabric (English: cloth/textile)",
+                id: 5
+            },
+            {
+                spanish: "ropa",
+                meaning: "clothes, clothing",
+                falseFriend: "rope (English: thick cord)",
+                id: 6
+            },
+            {
+                spanish: "realizar",
+                meaning: "to carry out, to perform",
+                falseFriend: "realize (English: to understand)",
+                id: 7
+            },
+            {
+                spanish: "contestar",
+                meaning: "to answer, to reply",
+                falseFriend: "contest (English: competition)",
+                id: 8
+            },
+            {
+                spanish: "atender",
+                meaning: "to serve, to help customers",
+                falseFriend: "attend (English: to be present)",
+                id: 9
+            },
+            {
+                spanish: "pretender",
+                meaning: "to intend, to try to achieve",
+                falseFriend: "pretend (English: to act falsely)",
+                id: 10
+            },
+            {
+                spanish: "sensible",
+                meaning: "sensitive, easily affected",
+                falseFriend: "sensible (English: showing good judgment)",
+                id: 11
+            },
+            {
+                spanish: "sensitivo",
+                meaning: "related to the senses",
+                falseFriend: "sensitive (English: emotionally affected)",
+                id: 12
+            },
+            {
+                spanish: "lectura",
+                meaning: "reading, the act of reading",
+                falseFriend: "lecture (English: educational talk)",
+                id: 13
+            },
+            {
+                spanish: "recordar",
+                meaning: "to remember, to recall",
+                falseFriend: "record (English: to capture audio/video)",
+                id: 14
+            },
+            {
+                spanish: "remover",
+                meaning: "to stir, to mix",
+                falseFriend: "remove (English: to take away)",
+                id: 15
+            },
+            {
+                spanish: "suceso",
+                meaning: "event, incident, happening",
+                falseFriend: "success (English: achievement)",
+                id: 16
+            },
+            {
+                spanish: "asistir",
+                meaning: "to attend, to be present at",
+                falseFriend: "assist (English: to help)",
+                id: 17
+            },
+            {
+                spanish: "collar",
+                meaning: "necklace, jewelry for neck",
+                falseFriend: "collar (English: shirt neck part)",
+                id: 18
+            },
+            {
+                spanish: "carpeta",
+                meaning: "folder, file organizer",
+                falseFriend: "carpet (English: floor covering)",
+                id: 19
+            },
+            {
+                spanish: "mayor",
+                meaning: "older, bigger, greater",
+                falseFriend: "mayor (English: city leader)",
+                id: 20
+            },
+            {
+                spanish: "menor",
+                meaning: "younger, smaller, lesser",
+                falseFriend: "minor (English: small importance)",
+                id: 21
+            },
+            {
+                spanish: "parientes",
+                meaning: "relatives, family members",
+                falseFriend: "parents (English: mother and father)",
+                id: 22
+            },
+            {
+                spanish: "relativos",
+                meaning: "relative to, concerning",
+                falseFriend: "relatives (English: family members)",
+                id: 23
+            },
+            {
+                spanish: "argumento",
+                meaning: "plot, storyline of book/movie",
+                falseFriend: "argument (English: disagreement)",
+                id: 24
+            },
+            {
+                spanish: "disgusto",
+                meaning: "annoyance, displeasure",
+                falseFriend: "disgust (English: strong dislike)",
+                id: 25
+            },
+            {
+                spanish: "idioma",
+                meaning: "language, tongue",
+                falseFriend: "idiom (English: special phrase)",
+                id: 26
+            },
+            {
+                spanish: "billón",
+                meaning: "trillion (1,000,000,000,000)",
+                falseFriend: "billion (English: 1,000,000,000)",
+                id: 27
+            },
+            {
+                spanish: "preservativo",
+                meaning: "condom, contraceptive",
+                falseFriend: "preservative (English: food additive)",
+                id: 28
+            }
+        ];
+
+        // Practice exercises data
+        const practiceData = {
+            sentences: [
+                {
+                    text: "El precio _______ del proyecto fue más alto de lo esperado.",
+                    options: ["actual", "real", "verdadero"],
+                    correct: "actual",
+                    explanation: "'Actual' in Spanish means current/present, not 'real' (which would be 'actual' in English)"
+                },
+                {
+                    text: "Necesito ir a la _______ para comprar un libro.",
+                    options: ["biblioteca", "librería", "tienda"],
+                    correct: "librería",
+                    explanation: "'Librería' is bookstore in Spanish, not 'library' (which would be 'biblioteca')"
+                },
+                {
+                    text: "Mi hermana está _______ de su primer hijo.",
+                    options: ["avergonzada", "embarazada", "confundida"],
+                    correct: "embarazada",
+                    explanation: "'Embarazada' means pregnant in Spanish, not 'embarrassed' (which would be 'avergonzada')"
+                },
+                {
+                    text: "El _______ de la empresa fue increíble este año.",
+                    options: ["salida", "éxito", "entrada"],
+                    correct: "éxito",
+                    explanation: "'Éxito' means success in Spanish, not 'exit' (which would be 'salida')"
+                }
+            ],
+            translations: [
+                {
+                    english: "The current cost of the project is very high.",
+                    spanish: "El costo actual del proyecto es muy alto.",
+                    common_error: "El costo real del proyecto es muy alto."
+                },
+                {
+                    english: "I'm going to the bookstore to buy a book.",
+                    spanish: "Voy a la librería a comprar un libro.",
+                    common_error: "Voy a la biblioteca a comprar un libro."
+                },
+                {
+                    english: "My sister is pregnant with her first child.",
+                    spanish: "Mi hermana está embarazada de su primer hijo.",
+                    common_error: "Mi hermana está avergonzada de su primer hijo."
+                }
+            ],
+            errors: [
+                {
+                    incorrect: "Estoy muy avergonzada porque estoy esperando un bebé.",
+                    correct: "Estoy muy emocionada porque estoy embarazada.",
+                    explanation: "Confused 'avergonzada' (embarrassed) with 'embarazada' (pregnant)"
+                },
+                {
+                    incorrect: "La biblioteca vende muchos libros interesantes.",
+                    correct: "La librería vende muchos libros interesantes.",
+                    explanation: "Confused 'biblioteca' (library) with 'librería' (bookstore)"
+                },
+                {
+                    incorrect: "¿Cuál es la temperatura real hoy?",
+                    correct: "¿Cuál es la temperatura actual hoy?",
+                    explanation: "Confused 'real' (true/real) with 'actual' (current) in Spanish"
+                }
+            ],
+            rolePlay: [
+                {
+                    title: "En la Librería",
+                    scenario: "You're helping an English-speaking friend navigate a Spanish bookstore. Practice using 'librería' vs 'biblioteca' correctly.",
+                    prompts: [
+                        "Explain the difference between librería and biblioteca",
+                        "Help them find the salida (exit)",
+                        "Discuss the horario actual (current hours)"
+                    ]
+                },
+                {
+                    title: "Comprando en la Fábrica",
+                    scenario: "You're at a manufacturing plant with a friend who keeps confusing 'fábrica' and 'fabric'.",
+                    prompts: [
+                        "Explain what a fábrica produces",
+                        "Discuss the tela (fabric) they make",
+                        "Help them realizar (carry out) their order"
+                    ]
+                },
+                {
+                    title: "Anuncio de Éxito",
+                    scenario: "You're announcing a company's success and need to explain clearly in Spanish.",
+                    prompts: [
+                        "Announce the éxito (success) details",
+                        "Explain how to contestar (answer) questions",
+                        "Discuss the situación actual (current situation)"
+                    ]
+                }
+            ],
+            discussions: [
+                {
+                    question: "¿Alguna vez te has sentido avergonzado por usar un falso amigo? Comparte tu experiencia.",
+                    follow_up: "¿Cómo te diste cuenta de tu error? ¿Qué aprendiste?"
+                },
+                {
+                    question: "¿Cuál es la diferencia entre una librería y una biblioteca en tu país?",
+                    follow_up: "¿Cuál visitas más a menudo y por qué?"
+                },
+                {
+                    question: "Describe un éxito que hayas tenido. ¿Cómo fue la experiencia actual?",
+                    follow_up: "¿Pudiste realizar todos tus objetivos?"
+                },
+                {
+                    question: "Cuando compras ropa, ¿qué buscas? ¿Dónde se fabrica normalmente?",
+                    follow_up: "¿Has visitado alguna vez una fábrica textil?"
+                }
+            ],
+            pronunciation: [
+                {
+                    word: "actual",
+                    phonetic: "/ak.ˈtwal/",
+                    tip: "Stress on second syllable. Means 'current' not 'real'",
+                    example: "El precio actual es de $50."
+                },
+                {
+                    word: "librería",
+                    phonetic: "/li.βɾe.ˈɾi.a/",
+                    tip: "Four syllables. A place to buy books, not borrow them",
+                    example: "Compré este libro en la librería."
+                },
+                {
+                    word: "embarazada",
+                    phonetic: "/em.ba.ɾa.ˈsa.da/",
+                    tip: "Stress on fourth syllable. Means pregnant, not ashamed",
+                    example: "Mi hermana está embarazada."
+                },
+                {
+                    word: "realizar",
+                    phonetic: "/re.a.li.ˈsaɾ/",
+                    tip: "Means 'to carry out' not 'to understand'",
+                    example: "Voy a realizar este proyecto."
+                }
+            ]
+        };
+
+        // Game state
+        let selectedSpanish = null;
+        let selectedMeaning = null;
+        let score = 0;
+        let matches = 0;
+        let matchedPairs = new Set();
+
+        // Initialize game
+        function initGame() {
+            score = 0;
+            matches = 0;
+            matchedPairs.clear();
+            selectedSpanish = null;
+            selectedMeaning = null;
+            
+            updateScore();
+            createGameCards();
+        }
+
+        // Create game cards
+        function createGameCards() {
+            const spanishContainer = document.getElementById('spanishWords');
+            const meaningsContainer = document.getElementById('meanings');
+            
+            // Clear containers
+            spanishContainer.innerHTML = '';
+            meaningsContainer.innerHTML = '';
+            
+            // Shuffle the meanings for random order
+            const shuffledMeanings = [...gameData].sort(() => Math.random() - 0.5);
+            
+            // Create Spanish word cards
+            gameData.forEach(item => {
+                const card = createSpanishCard(item);
+                spanishContainer.appendChild(card);
+            });
+            
+            // Create meaning cards (shuffled)
+            shuffledMeanings.forEach(item => {
+                const card = createMeaningCard(item);
+                meaningsContainer.appendChild(card);
+            });
+        }
+
+        // Create Spanish word card
+        function createSpanishCard(item) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg p-4 shadow-md cursor-pointer card-flip border-2 border-transparent';
+            card.dataset.id = item.id;
+            card.innerHTML = `
+                <div class="text-center">
+                    <div class="text-xl font-bold text-blue-700 mb-2">${item.spanish}</div>
+                    <div class="text-xs text-gray-500 italic mb-1">Not: ${item.falseFriend}</div>
+                    <div class="text-sm text-gray-500">Spanish word</div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => selectSpanishWord(card, item));
+            return card;
+        }
+
+        // Create meaning card
+        function createMeaningCard(item) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg p-4 shadow-md cursor-pointer card-flip border-2 border-transparent';
+            card.dataset.id = item.id;
+            card.innerHTML = `
+                <div class="text-center">
+                    <div class="text-lg font-semibold text-green-700 mb-2">${item.meaning}</div>
+                    <div class="text-sm text-gray-500">Correct meaning</div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => selectMeaning(card, item));
+            return card;
+        }
+
+        // Select Spanish word
+        function selectSpanishWord(card, item) {
+            if (matchedPairs.has(item.id)) return;
+            
+            // Remove previous selection
+            if (selectedSpanish) {
+                selectedSpanish.classList.remove('selected');
+            }
+            
+            selectedSpanish = card;
+            selectedSpanish.classList.add('selected');
+            
+            // Check for match if meaning is also selected
+            if (selectedMeaning) {
+                checkMatch();
+            }
+        }
+
+        // Select meaning
+        function selectMeaning(card, item) {
+            if (matchedPairs.has(item.id)) return;
+            
+            // Remove previous selection
+            if (selectedMeaning) {
+                selectedMeaning.classList.remove('selected');
+            }
+            
+            selectedMeaning = card;
+            selectedMeaning.classList.add('selected');
+            
+            // Check for match if Spanish word is also selected
+            if (selectedSpanish) {
+                checkMatch();
+            }
+        }
+
+        // Check if selected cards match
+        function checkMatch() {
+            const spanishId = parseInt(selectedSpanish.dataset.id);
+            const meaningId = parseInt(selectedMeaning.dataset.id);
+            
+            if (spanishId === meaningId) {
+                // Correct match!
+                handleCorrectMatch();
+            } else {
+                // Wrong match
+                handleWrongMatch();
+            }
+        }
+
+        // Handle correct match
+        function handleCorrectMatch() {
+            const matchId = parseInt(selectedSpanish.dataset.id);
+            
+            // Add to matched pairs
+            matchedPairs.add(matchId);
+            
+            // Update score
+            score += 10;
+            matches++;
+            
+            // Visual feedback
+            selectedSpanish.classList.add('matched');
+            selectedMeaning.classList.add('matched');
+            
+            // Remove selection styling and disable cards
+            setTimeout(() => {
+                selectedSpanish.classList.remove('selected', 'matched');
+                selectedMeaning.classList.remove('selected', 'matched');
+                selectedSpanish.style.opacity = '0.6';
+                selectedMeaning.style.opacity = '0.6';
+                selectedSpanish.style.pointerEvents = 'none';
+                selectedMeaning.style.pointerEvents = 'none';
+                
+                // Add checkmark
+                selectedSpanish.innerHTML += '<div class="absolute top-2 right-2 text-green-500 text-xl">✓</div>';
+                selectedMeaning.innerHTML += '<div class="absolute top-2 right-2 text-green-500 text-xl">✓</div>';
+                selectedSpanish.style.position = 'relative';
+                selectedMeaning.style.position = 'relative';
+            }, 600);
+            
+            // Clear selections
+            selectedSpanish = null;
+            selectedMeaning = null;
+            
+            updateScore();
+            
+            // Check if game is complete
+            if (matches === gameData.length) {
+                setTimeout(showSuccessModal, 1000);
+            }
+        }
+
+        // Handle wrong match
+        function handleWrongMatch() {
+            // Decrease score for wrong match
+            score = Math.max(0, score - 2);
+            
+            // Visual feedback
+            selectedSpanish.classList.add('wrong-match');
+            selectedMeaning.classList.add('wrong-match');
+            
+            // Remove effects and selections
+            setTimeout(() => {
+                selectedSpanish.classList.remove('selected', 'wrong-match');
+                selectedMeaning.classList.remove('selected', 'wrong-match');
+                selectedSpanish = null;
+                selectedMeaning = null;
+            }, 500);
+            
+            updateScore();
+        }
+
+        // Update score display
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('matches').textContent = matches;
+            document.getElementById('total').textContent = gameData.length;
+        }
+
+        // Show success modal
+        function showSuccessModal() {
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        // Hide success modal
+        function hideSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        // Event listeners
+        document.getElementById('resetBtn').addEventListener('click', initGame);
+        document.getElementById('playAgainBtn').addEventListener('click', () => {
+            hideSuccessModal();
+            initGame();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', (e) => {
+            if (e.target.id === 'successModal') {
+                hideSuccessModal();
+            }
+        });
+
+        // Initialize practice exercises
+        function initPracticeExercises() {
+            createSentenceExercises();
+            createTranslationExercises();
+            createErrorExercises();
+            createRolePlayScenarios();
+            createDiscussionQuestions();
+            createPronunciationTips();
+        }
+
+        // Create sentence completion exercises
+        function createSentenceExercises() {
+            const container = document.getElementById('sentenceExercises');
+            container.innerHTML = '';
+            
+            practiceData.sentences.forEach((exercise, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-50 p-4 rounded-lg';
+                div.innerHTML = `
+                    <p class="mb-3 text-gray-800">${index + 1}. ${exercise.text}</p>
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        ${exercise.options.map(option => `
+                            <button class="sentence-option px-3 py-1 bg-blue-100 hover:bg-blue-200 rounded-md text-sm transition-colors" 
+                                    data-exercise="${index}" data-option="${option}">
+                                ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="sentence-feedback hidden mt-2 p-2 rounded text-sm"></div>
+                `;
+                container.appendChild(div);
+            });
+
+            // Add click handlers for sentence options
+            document.querySelectorAll('.sentence-option').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const exerciseIndex = e.target.dataset.exercise;
+                    const selectedOption = e.target.dataset.option;
+                    const exercise = practiceData.sentences[exerciseIndex];
+                    
+                    // Remove previous selections
+                    const siblings = e.target.parentNode.querySelectorAll('.sentence-option');
+                    siblings.forEach(btn => btn.classList.remove('bg-green-200', 'bg-red-200'));
+                    
+                    // Mark selection
+                    if (selectedOption === exercise.correct) {
+                        e.target.classList.add('bg-green-200');
+                    } else {
+                        e.target.classList.add('bg-red-200');
+                    }
+                });
+            });
+        }
+
+        // Create translation exercises
+        function createTranslationExercises() {
+            const container = document.getElementById('translationExercises');
+            container.innerHTML = '';
+            
+            practiceData.translations.forEach((exercise, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-50 p-4 rounded-lg';
+                div.innerHTML = `
+                    <p class="mb-3 text-gray-800 font-medium">${index + 1}. Spanish: "${exercise.spanish}"</p>
+                    <textarea class="w-full p-2 border rounded-md resize-none" rows="2" 
+                              placeholder="Write your English translation here..."></textarea>
+                    <div class="translation-feedback hidden mt-2 p-2 rounded text-sm"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Create error correction exercises
+        function createErrorExercises() {
+            const container = document.getElementById('errorExercises');
+            container.innerHTML = '';
+            
+            practiceData.errors.forEach((exercise, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-50 p-4 rounded-lg';
+                div.innerHTML = `
+                    <p class="mb-3 text-gray-800">${index + 1}. <span class="text-red-600 font-medium">"${exercise.incorrect}"</span></p>
+                    <textarea class="w-full p-2 border rounded-md resize-none" rows="2" 
+                              placeholder="Write the corrected sentence here..."></textarea>
+                    <div class="error-feedback hidden mt-2 p-2 rounded text-sm"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Create role play scenarios
+        function createRolePlayScenarios() {
+            const container = document.getElementById('rolePlayScenarios');
+            container.innerHTML = '';
+            
+            practiceData.rolePlay.forEach(scenario => {
+                const div = document.createElement('div');
+                div.className = 'bg-purple-50 p-4 rounded-lg border border-purple-200';
+                div.innerHTML = `
+                    <h4 class="font-semibold text-purple-800 mb-2">${scenario.title}</h4>
+                    <p class="text-gray-700 mb-3 text-sm">${scenario.scenario}</p>
+                    <div class="space-y-1">
+                        <p class="text-xs font-medium text-purple-700">Practice prompts:</p>
+                        ${scenario.prompts.map(prompt => `
+                            <p class="text-xs text-gray-600">• ${prompt}</p>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Create discussion questions
+        function createDiscussionQuestions() {
+            const container = document.getElementById('discussionQuestions');
+            container.innerHTML = '';
+            
+            practiceData.discussions.forEach((discussion, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-indigo-50 p-4 rounded-lg border border-indigo-200';
+                div.innerHTML = `
+                    <p class="font-medium text-indigo-800 mb-2">${index + 1}. ${discussion.question}</p>
+                    <p class="text-sm text-indigo-600 italic">Follow-up: ${discussion.follow_up}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Create pronunciation tips
+        function createPronunciationTips() {
+            const container = document.getElementById('pronunciationTips');
+            container.innerHTML = '';
+            
+            practiceData.pronunciation.forEach(tip => {
+                const div = document.createElement('div');
+                div.className = 'bg-orange-50 p-4 rounded-lg border border-orange-200';
+                div.innerHTML = `
+                    <h4 class="font-semibold text-orange-800 mb-1">${tip.word} <span class="text-sm font-normal">${tip.phonetic}</span></h4>
+                    <p class="text-sm text-gray-700 mb-2">${tip.tip}</p>
+                    <p class="text-xs text-orange-700 italic">"${tip.example}"</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Check sentence answers
+        document.getElementById('checkSentences').addEventListener('click', () => {
+            const container = document.getElementById('sentenceResults');
+            let correctCount = 0;
+            let totalCount = practiceData.sentences.length;
+            
+            practiceData.sentences.forEach((exercise, index) => {
+                const exerciseDiv = document.querySelectorAll('#sentenceExercises > div')[index];
+                const selectedButton = exerciseDiv.querySelector('.sentence-option.bg-green-200, .sentence-option.bg-red-200');
+                const feedbackDiv = exerciseDiv.querySelector('.sentence-feedback');
+                
+                if (selectedButton) {
+                    const isCorrect = selectedButton.classList.contains('bg-green-200');
+                    if (isCorrect) correctCount++;
+                    
+                    feedbackDiv.className = `sentence-feedback mt-2 p-2 rounded text-sm ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+                    feedbackDiv.textContent = exercise.explanation;
+                    feedbackDiv.classList.remove('hidden');
+                }
+            });
+            
+            container.innerHTML = `
+                <div class="bg-blue-100 border border-blue-300 rounded-lg p-4">
+                    <p class="font-semibold text-blue-800">Results: ${correctCount}/${totalCount} correct</p>
+                </div>
+            `;
+            container.classList.remove('hidden');
+        });
+
+        // Show translation answers
+        document.getElementById('showTranslations').addEventListener('click', () => {
+            const container = document.getElementById('translationResults');
+            let html = '<div class="space-y-4">';
+            
+            practiceData.translations.forEach((exercise, index) => {
+                html += `
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <p class="font-medium text-green-800 mb-1">Sample Translation ${index + 1}:</p>
+                        <p class="text-green-700 mb-2">"${exercise.english}"</p>
+                        <p class="text-sm text-red-600">❌ Common error: "${exercise.common_error}"</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+            container.classList.remove('hidden');
+        });
+
+        // Show error corrections
+        document.getElementById('showCorrections').addEventListener('click', () => {
+            const container = document.getElementById('correctionResults');
+            let html = '<div class="space-y-4">';
+            
+            practiceData.errors.forEach((exercise, index) => {
+                html += `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <p class="font-medium text-red-800 mb-1">Correction ${index + 1}:</p>
+                        <p class="text-red-700 mb-2">"${exercise.correct}"</p>
+                        <p class="text-sm text-gray-600">${exercise.explanation}</p>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+            container.classList.remove('hidden');
+        });
+
+        // Initialize game and practice exercises on page load
+        initGame();
+        initPracticeExercises();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9835d5dfb0323969',t:'MTc1ODU4NjM5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
