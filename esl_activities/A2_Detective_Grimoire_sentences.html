@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detective Grammar Academy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #2c1810 0%, #4a2c1a 100%);
+            color: #f4f1e8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #8b6914;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #8b6914;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #c9b037;
+            font-style: italic;
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(139, 105, 20, 0.2);
+            border-radius: 10px;
+            border: 1px solid #8b6914;
+        }
+        
+        .score-item {
+            text-align: center;
+        }
+        
+        .score-item h3 {
+            color: #d4af37;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .score-item span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f4f1e8;
+        }
+        
+        .question-card {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #8b6914;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            background: #8b6914;
+            color: #f4f1e8;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .tense-indicator {
+            background: #2c5530;
+            color: #90ee90;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .story-context {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d4af37;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .sentence-builder {
+            margin-bottom: 20px;
+        }
+        
+        .sentence-parts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            font-size: 1.2rem;
+            line-height: 2;
+        }
+        
+        .sentence-part {
+            padding: 8px 12px;
+            background: rgba(139, 105, 20, 0.3);
+            border-radius: 6px;
+            border: 1px solid #8b6914;
+        }
+        
+        .verb-input {
+            background: rgba(212, 175, 55, 0.2);
+            border: 2px solid #d4af37;
+            border-radius: 6px;
+            padding: 10px 15px;
+            color: #f4f1e8;
+            font-size: 1.2rem;
+            font-family: 'Crimson Text', serif;
+            min-width: 150px;
+        }
+        
+        .verb-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .verb-hint {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(44, 85, 48, 0.3);
+            border-radius: 6px;
+            border-left: 3px solid #90ee90;
+            font-size: 0.95rem;
+            color: #c0c0c0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .btn-primary {
+            background: #8b6914;
+            color: #f4f1e8;
+        }
+        
+        .btn-primary:hover {
+            background: #a67c1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 105, 20, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #2c5530;
+            color: #90ee90;
+        }
+        
+        .btn-secondary:hover {
+            background: #3a6b3f;
+            transform: translateY(-2px);
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: rgba(144, 238, 144, 0.2);
+            border: 2px solid #90ee90;
+            color: #90ee90;
+        }
+        
+        .feedback.incorrect {
+            background: rgba(220, 20, 60, 0.2);
+            border: 2px solid #dc143c;
+            color: #ff6b6b;
+        }
+        
+        .completion-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .completion-screen h2 {
+            color: #d4af37;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .final-score {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(139, 105, 20, 0.2);
+            border-radius: 10px;
+            border: 1px solid #8b6914;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .score-board {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .sentence-parts {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Detective Grammar Academy</h1>
+            <p>Master present and past tense while solving mysteries</p>
+        </div>
+        
+        <div class="score-board">
+            <div class="score-item">
+                <h3>Cases Solved</h3>
+                <span id="correct-count">0</span>
+            </div>
+            <div class="score-item">
+                <h3>Current Case</h3>
+                <span id="question-counter">1 / 10</span>
+            </div>
+            <div class="score-item">
+                <h3>Success Rate</h3>
+                <span id="accuracy">0%</span>
+            </div>
+        </div>
+        
+        <div id="quiz-container">
+            <div class="question-card">
+                <div class="question-header">
+                    <div class="question-number" id="question-number">Case #1</div>
+                    <div class="tense-indicator" id="tense-indicator">Present Tense</div>
+                </div>
+                
+                <div class="story-context" id="story-context">
+                    The detective examines the mysterious footprints in the library...
+                </div>
+                
+                <div class="sentence-builder">
+                    <div class="sentence-parts" id="sentence-parts">
+                        <!-- Sentence parts will be inserted here -->
+                    </div>
+                    <div class="verb-hint" id="verb-hint">
+                        💡 Hint: Use the present tense form of the verb "investigate"
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="check-btn">Check Answer</button>
+                    <button class="btn btn-secondary" id="next-btn" style="display: none;">Next Case</button>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+        
+        <div class="completion-screen" id="completion-screen">
+            <h2>🎉 Investigation Complete!</h2>
+            <div class="final-score" id="final-score"></div>
+            <button class="btn btn-primary" id="restart-btn">Start New Investigation</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                context: "The detective examines the mysterious footprints in the office...",
+                sentence: ["The detective", "VERB", "the evidence carefully."],
+                verb: "investigate",
+                tense: "present",
+                answer: "investigates",
+                hint: "Use the present tense form of 'investigate' (3rd person singular)"
+            },
+            {
+                context: "Yesterday, the suspect left behind crucial evidence...",
+                sentence: ["The suspect", "VERB", "a torn piece of curtain in the window."],
+                verb: "leave",
+                tense: "past",
+                answer: "left",
+                hint: "Use the past tense form of 'leave'"
+            },
+            {
+                context: "The detective always follows proper procedure...",
+                sentence: ["He", "VERB", "detailed notes during every interview."],
+                verb: "take",
+                tense: "present",
+                answer: "takes",
+                hint: "Use the present tense form of 'take' (3rd person singular)"
+            },
+            {
+                context: "Yesterday, the witness noticed something important...",
+                sentence: ["The witness", "VERB", "a shadowy figure near the office."],
+                verb: "see",
+                tense: "past",
+                answer: "saw",
+                hint: "Use the past tense form of 'see'"
+            },
+            {
+                context: "The detective studies the crime scene carefully...",
+                sentence: ["He", "VERB", "every clue with great attention."],
+                verb: "examine",
+                tense: "present",
+                answer: "examines",
+                hint: "Use the present tense form of 'examine' (3rd person singular)"
+            },
+            {
+                context: "Earlier today, Lady Weybridge revealed a secret...",
+                sentence: ["Lady Webridge", "VERB", "about the history of Boggie Land in the swamp."],
+                verb: "confess",
+                tense: "past",
+                answer: "confessed",
+                hint: "Use the past tense form of 'confess'"
+            },
+            {
+                context: "The detective always questions suspects thoroughly...",
+                sentence: ["He", "VERB", "each person about their history."],
+                verb: "ask",
+                tense: "present",
+                answer: "asks",
+                hint: "Use the present tense form of 'ask' (3rd person singular)"
+            },
+            {
+                context: "Yesterday evening, the murderer made a crucial mistake...",
+                sentence: ["The murderer", "VERB", "their lock pick at the scene."],
+                verb: "drop",
+                tense: "past",
+                answer: "dropped",
+                hint: "Use the past tense form of 'drop'"
+            },
+            {
+                context: "The detective carefully analyzes all the evidence...",
+                sentence: ["He", "VERB", "the evidence under a magnifying glass."],
+                verb: "study",
+                tense: "present",
+                answer: "studies",
+                hint: "Use the present tense form of 'study' (3rd person singular)"
+            },
+            {
+                context: "The museum was in a different location in the past",
+                sentence: ["Last year, the Boggie Musuem", "VERB", "to a new place."],
+                verb: "move",
+                tense: "past",
+                answer: "moved",
+                hint: "Use the past tense form of 'move'"
+            },
+            {
+                context: "The detective always works with precision...",
+                sentence: ["He", "VERB", "clues from the crime scene."],
+                verb: "collect",
+                tense: "present",
+                answer: "collects",
+                hint: "Use the present tense form of 'collect' (3rd person singular)"
+            },
+            {
+                context: "Yesterday, Agent Folder learned information in the museum...",
+                sentence: ["Agent Folder", "VERB", "information about Boggie."],
+                verb: "research",
+                tense: "past",
+                answer: "researched",
+                hint: "Use the past tense form of 'research'"
+            },
+            {
+                context: "The detective never misses important details...",
+                sentence: ["He", "VERB", "every piece of evidence methodically."],
+                verb: "analyze",
+                tense: "present",
+                answer: "analyzes",
+                hint: "Use the present tense form of 'analyze' (3rd person singular)"
+            },
+            {
+                context: "Last month, the criminal made their first mistake...",
+                sentence: ["The suspect", "VERB", "a distinctive footprint in the mud."],
+                verb: "create",
+                tense: "past",
+                answer: "created",
+                hint: "Use the past tense form of 'create'"
+            },
+            {
+                context: "The interrogation specialist uses proven techniques...",
+                sentence: ["She", "VERB", "the truth from reluctant witnesses."],
+                verb: "extract",
+                tense: "present",
+                answer: "extracts",
+                hint: "Use the present tense form of 'extract' (3rd person singular)"
+            },
+            {
+                context: "Yesterday afternoon, the witness remembered something crucial...",
+                sentence: ["The witness", "VERB", "a strange smell in the room."],
+                verb: "notice",
+                tense: "past",
+                answer: "noticed",
+                hint: "Use the past tense form of 'notice'"
+            },
+            {
+                context: "The detective always maintains professional composure...",
+                sentence: ["He", "VERB", "calm under pressure during investigations."],
+                verb: "remain",
+                tense: "present",
+                answer: "remains",
+                hint: "Use the present tense form of 'remain' (3rd person singular)"
+            },
+            {
+                context: "In the past, the suspect tried to cover their tracks...",
+                sentence: ["The suspect", "VERB", "the murder weapon in the swamp."],
+                verb: "hide",
+                tense: "past",
+                answer: "hid",
+                hint: "Use the past tense form of 'hide'"
+            },
+            {
+                context: "Bobby Burle and Van-De-Pier document everything...",
+                sentence: ["They", "VERB", "detailed photos and videos of the swamp at every angle."],
+                verb: "capture",
+                tense: "present",
+                answer: "capture",
+                hint: "Use the present tense form of 'capture' (3rd person singular)"
+            },
+            {
+                context: "Last evening, the witness finally came forward...",
+                sentence: ["The witness", "VERB", "what they saw that night."],
+                verb: "reveal",
+                tense: "past",
+                answer: "revealed",
+                hint: "Use the past tense form of 'reveal'"
+            },
+            {
+                context: "The detective always follows clues...",
+                sentence: ["He", "VERB", "each clue to its logical conclusion."],
+                verb: "pursue",
+                tense: "present",
+                answer: "pursues",
+                hint: "Use the present tense form of 'pursue' (3rd person singular)"
+            },
+            {
+                context: "Earlier this morning, the lab tests came back...",
+                sentence: ["The lab tests", "VERB", "the suspect's identity."],
+                verb: "confirm",
+                tense: "past",
+                answer: "confirmed",
+                hint: "Use the past tense form of 'confirm'"
+            },
+            {
+                context: "The detective carefully observes body language...",
+                sentence: ["The detective", "VERB", "when suspects are lying."],
+                verb: "detect",
+                tense: "present",
+                answer: "detects",
+                hint: "Use the present tense form of 'detect' (3rd person singular)"
+            },
+            {
+                context: "Yesterday afternoon, the criminal dropped the lockpick...",
+                sentence: ["The suspect", "VERB", "the lockpick in the reeds."],
+                verb: "drop",
+                tense: "past",
+                answer: "dropped",
+                hint: "Use the past tense form of 'drop'"
+            },
+            {
+                context: "The detective always works with great care...",
+                sentence: ["Dectective Grimoire", "VERB", "evidence to keep it fresh."],
+                verb: "preserve",
+                tense: "present",
+                answer: "preserves",
+                hint: "Use the present tense form of 'preserve' (plural subject)"
+            },
+            {
+                context: "Yesterday, Bobby Burle heard something unusual...",
+                sentence: ["The cameraman, Bobby Burle,", "VERB", "footsteps near the office."],
+                verb: "hear",
+                tense: "past",
+                answer: "heard",
+                hint: "Use the past tense form of 'hear'"
+            },
+            {
+                context: "The detective always verifies witness statements...",
+                sentence: ["He", "VERB", "the stories of witnesses before making arrests."],
+                verb: "check",
+                tense: "present",
+                answer: "checks",
+                hint: "Use the present tense form of 'check' (3rd person singular)"
+            },
+            {
+                context: "Yesterday, the case took an unexpected turn...",
+                sentence: ["Yesterday, new evidence", "VERB", "in the Boggie Museum."],
+                verb: "appear",
+                tense: "past",
+                answer: "appeared",
+                hint: "Use the past tense form of 'appear'"
+            },
+            {
+                context: "The detective carefully remakes crime scenes...",
+                sentence: ["She", "VERB", "the sequence of events carefully."],
+                verb: "remake",
+                tense: "present",
+                answer: "remakes",
+                hint: "Use the present tense form of 'reconstruct' (3rd person singular)"
+            },
+            {
+                context: "Last Friday, the breakthrough finally came...",
+                sentence: ["The detective", "VERB", "the answer using all the clues."],
+                verb: "discover",
+                tense: "past",
+                answer: "discovered",
+                hint: "Use the past tense form of 'discover'"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let totalAnswered = 0;
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            
+            document.getElementById('question-number').textContent = `Case #${currentQuestion + 1}`;
+            document.getElementById('question-counter').textContent = `${currentQuestion + 1} / ${questions.length}`;
+            document.getElementById('tense-indicator').textContent = `${question.tense.charAt(0).toUpperCase() + question.tense.slice(1)} Tense`;
+            document.getElementById('story-context').textContent = question.context;
+            document.getElementById('verb-hint').innerHTML = `💡 Hint: ${question.hint}`;
+            
+            // Build sentence with input field
+            const sentenceParts = document.getElementById('sentence-parts');
+            sentenceParts.innerHTML = '';
+            
+            question.sentence.forEach((part, index) => {
+                if (part === 'VERB') {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'verb-input';
+                    input.id = 'verb-input';
+                    input.placeholder = 'Enter verb...';
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            checkAnswer();
+                        }
+                    });
+                    sentenceParts.appendChild(input);
+                } else {
+                    const span = document.createElement('span');
+                    span.className = 'sentence-part';
+                    span.textContent = part;
+                    sentenceParts.appendChild(span);
+                }
+            });
+            
+            // Reset UI
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('check-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('verb-input').focus();
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('verb-input').value.trim().toLowerCase();
+            const correctAnswer = questions[currentQuestion].answer.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            totalAnswered++;
+            
+            if (userAnswer === correctAnswer) {
+                correctAnswers++;
+                feedback.textContent = '🎉 Excellent detective work! Case solved correctly!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `🔍 Not quite right. The correct answer is "${questions[currentQuestion].answer}". Keep investigating!`;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            
+            updateScoreboard();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            
+            if (currentQuestion >= questions.length) {
+                showCompletion();
+            } else {
+                displayQuestion();
+            }
+        }
+
+        function updateScoreboard() {
+            document.getElementById('correct-count').textContent = correctAnswers;
+            const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function showCompletion() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('completion-screen').style.display = 'block';
+            
+            const accuracy = Math.round((correctAnswers / questions.length) * 100);
+            let message = '';
+            
+            if (accuracy >= 90) {
+                message = '🏆 Master Detective! Outstanding grammar skills!';
+            } else if (accuracy >= 70) {
+                message = '🔍 Skilled Investigator! Great job on your grammar!';
+            } else if (accuracy >= 50) {
+                message = '📝 Junior Detective! Keep practicing to improve!';
+            } else {
+                message = '📚 Trainee Detective! More practice will help you solve cases!';
+            }
+            
+            document.getElementById('final-score').innerHTML = `
+                <div style="margin-bottom: 15px;">${message}</div>
+                <div>Cases Solved: ${correctAnswers} / ${questions.length}</div>
+                <div>Success Rate: ${accuracy}%</div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            totalAnswered = 0;
+            
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('completion-screen').style.display = 'none';
+            
+            updateScoreboard();
+            displayQuestion();
+        }
+
+        // Event listeners
+        document.getElementById('check-btn').addEventListener('click', checkAnswer);
+        document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+
+        // Initialize the quiz
+        displayQuestion();
+        updateScoreboard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9843987b62da50a9',t:'MTc1ODczMDY4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
