@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Czech-English False Friends Practice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4facfe;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .game-area {
+            padding: 40px;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #4facfe;
+        }
+        
+        .czech-word {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .czech-meaning {
+            font-size: 1.1rem;
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .option:hover {
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+        
+        .option.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+        
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            min-width: 150px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .next-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .next-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-btn:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .tab-btn.active {
+            color: #4facfe;
+            border-bottom-color: #4facfe;
+            background: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .writing-exercise {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
+        }
+        
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .word-pair {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .czech-side, .english-side {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .word {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .meaning {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .writing-prompt {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .prompt-text {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .text-area {
+            width: 100%;
+            min-height: 120px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        
+        .text-area:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+        
+        .conversation-prompt {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .conversation-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .conversation-scenario {
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .key-phrases {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .key-phrases h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .phrase-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .phrase {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .matching-column {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .matching-column h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .matching-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .matching-item:hover {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+        
+        .matching-item.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+        
+        .matching-item.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .matching-item.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .matching-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .game-area {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇨🇿 ↔️ 🇬🇧 False Friends</h1>
+            <p>Master the tricky words that look similar but mean different things</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('quiz')">📝 Quiz</button>
+            <button class="tab-btn" onclick="showTab('writing')">✍️ Writing</button>
+            <button class="tab-btn" onclick="showTab('conversation')">💬 Speaking</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="correct-count">0</div>
+                <div class="stat-label">Correct</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="total-count">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="accuracy">0%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+        </div>
+        
+        <div class="game-area">
+            <!-- Quiz Tab -->
+            <div id="quiz-tab" class="tab-content active">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
+                
+                <div class="question-card">
+                    <div class="czech-word" id="czech-word"></div>
+                    <div class="czech-meaning" id="czech-meaning"></div>
+                    <div class="question" id="question"></div>
+                    
+                    <div class="options" id="options"></div>
+                    
+                    <button class="submit-btn" id="submit-btn" onclick="checkAnswer()">Check Answer</button>
+                    
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            </div>
+            
+            <!-- Writing Tab -->
+            <div id="writing-tab" class="tab-content">
+                <div class="writing-exercise">
+                    <div class="exercise-title">📚 False Friends Reference</div>
+                    <div id="word-pairs-list"></div>
+                </div>
+                
+                <div class="writing-exercise">
+                    <div class="exercise-title">✍️ Sentence Creation</div>
+                    <div class="writing-prompt">
+                        <div class="prompt-text">
+                            Create sentences using both the Czech and English meanings of these false friends. 
+                            Try to show the difference clearly in context.
+                        </div>
+                        <div id="writing-word-focus"></div>
+                        <textarea class="text-area" placeholder="Write your sentences here... For example:
+Czech: 'Aktuální informace jsou velmi důležité.' (Current information is very important.)
+English: 'The actual reason was different.' (The real reason was different.)"></textarea>
+                    </div>
+                </div>
+                
+                <div class="writing-exercise">
+                    <div class="exercise-title">🎯 Interactive Matching</div>
+                    <div class="writing-prompt">
+                        <div class="prompt-text">
+                            Match the Czech false friends with their correct English meanings. Click on a Czech word, then click on its correct English meaning.
+                        </div>
+                        <div id="matching-game"></div>
+                        <div id="matching-feedback" style="margin-top: 15px; padding: 10px; border-radius: 8px; display: none;"></div>
+                        <button class="submit-btn" onclick="resetMatching()" style="margin-top: 15px;">Reset Game</button>
+                    </div>
+                </div>
+                
+                <div class="writing-exercise">
+                    <div class="exercise-title">📝 Translation Practice</div>
+                    <div class="writing-prompt">
+                        <div class="prompt-text">
+                            Translate these Czech sentences to English, being careful with false friends:
+                        </div>
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <strong>Czech:</strong> "Můj profesor na gymnáziu byl velmi sympatický."<br>
+                            <strong>Czech:</strong> "Potřebuji aktuální informace o projektu."<br>
+                            <strong>Czech:</strong> "V ambulanci čekalo mnoho pacientů."
+                        </div>
+                        <textarea class="text-area" placeholder="Write your English translations here..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="writing-exercise">
+                    <div class="exercise-title">🔄 Error Correction</div>
+                    <div class="writing-prompt">
+                        <div class="prompt-text">
+                            Correct the false friend errors in these sentences:
+                        </div>
+                        <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            1. "I need to realize this project by next month."<br>
+                            2. "The professor at the gymnasium was very sympathetic."<br>
+                            3. "Please give me the actual information about the meeting."<br>
+                            4. "The ambulance is closed on weekends."
+                        </div>
+                        <textarea class="text-area" placeholder="Write the corrected sentences here..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conversation Tab -->
+            <div id="conversation-tab" class="tab-content">
+                <div class="conversation-prompt">
+                    <div class="conversation-title">
+                        🎭 Role Play: Job Interview
+                    </div>
+                    <div class="conversation-scenario">
+                        You're interviewing for a position at an international company. Practice using these false friends correctly in professional contexts.
+                    </div>
+                    <div class="key-phrases">
+                        <h4>Key False Friends to Practice:</h4>
+                        <div class="phrase-list">
+                            <div class="phrase">"actual results" (real results)</div>
+                            <div class="phrase">"realize goals" (become aware of goals)</div>
+                            <div class="phrase">"control the situation" (manage)</div>
+                            <div class="phrase">"eventual success" (final success)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="conversation-title">
+                        🏥 Role Play: Medical Appointment
+                    </div>
+                    <div class="conversation-scenario">
+                        Practice booking and discussing a medical appointment. Be careful with medical false friends!
+                    </div>
+                    <div class="key-phrases">
+                        <h4>Key Vocabulary:</h4>
+                        <div class="phrase-list">
+                            <div class="phrase">"doctor's office" (not ordinance)</div>
+                            <div class="phrase">"emergency vehicle" (ambulance)</div>
+                            <div class="phrase">"medical prescription" (not recept)</div>
+                            <div class="phrase">"sympathetic doctor" (understanding)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="conversation-title">
+                        🛍️ Role Play: Shopping & Services
+                    </div>
+                    <div class="conversation-scenario">
+                        You're shopping for clothes and asking about services. Practice everyday false friends in context.
+                    </div>
+                    <div class="key-phrases">
+                        <h4>Useful Phrases:</h4>
+                        <div class="phrase-list">
+                            <div class="phrase">"fabric quality" (textile material)</div>
+                            <div class="phrase">"comfortable clothes" (ease/relief)</div>
+                            <div class="phrase">"receipt for purchase" (proof of payment)</div>
+                            <div class="phrase">"mobile phone" (not just "mobile")</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="conversation-title">
+                        🎓 Role Play: University Discussion
+                    </div>
+                    <div class="conversation-scenario">
+                        Discuss your education and university experience with international students.
+                    </div>
+                    <div class="key-phrases">
+                        <h4>Academic Vocabulary:</h4>
+                        <div class="phrase-list">
+                            <div class="phrase">"university professor" (not any teacher)</div>
+                            <div class="phrase">"sports facility" (gymnasium)</div>
+                            <div class="phrase">"graduate from university" (not absolvent)</div>
+                            <div class="phrase">"concrete examples" (specific examples)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="conversation-title">
+                        💼 Discussion Topics
+                    </div>
+                    <div class="conversation-scenario">
+                        Practice these conversation starters and try to naturally use false friends correctly:
+                    </div>
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-top: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>1. Education:</strong> "Tell me about your educational background. What type of school did you attend?"
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>2. Work:</strong> "Describe a challenging project you had to complete. How did you manage it?"
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>3. Health:</strong> "Have you ever had to visit a doctor in a foreign country? What was it like?"
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>4. Technology:</strong> "How has mobile technology changed the way we communicate?"
+                        </div>
+                        <div>
+                            <strong>5. Culture:</strong> "What differences have you noticed between Czech and English-speaking cultures?"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const falseFriends = [
+            {
+                czech: "aktuální",
+                czechMeaning: "current, present",
+                question: "What does the English word 'actual' mean?",
+                options: ["current, present", "real, genuine", "recent, new", "important, significant"],
+                correct: 1,
+                explanation: "'Actual' means real or genuine, while Czech 'aktuální' means current or present."
+            },
+            {
+                czech: "eventuální",
+                czechMeaning: "possible, potential",
+                question: "What does the English word 'eventual' mean?",
+                options: ["possible, potential", "happening at the end", "accidental", "temporary"],
+                correct: 1,
+                explanation: "'Eventual' means happening at the end or finally, while Czech 'eventuální' means possible."
+            },
+            {
+                czech: "kontrola",
+                czechMeaning: "inspection, check",
+                question: "What does the English word 'control' primarily mean?",
+                options: ["inspection, check", "power to direct", "supervision", "examination"],
+                correct: 1,
+                explanation: "'Control' means power to direct or manage, while Czech 'kontrola' means inspection or check."
+            },
+            {
+                czech: "sympatický",
+                czechMeaning: "nice, likeable",
+                question: "What does the English word 'sympathetic' mean?",
+                options: ["nice, likeable", "showing compassion", "attractive", "friendly"],
+                correct: 1,
+                explanation: "'Sympathetic' means showing compassion or understanding, while Czech 'sympatický' means nice or likeable."
+            },
+            {
+                czech: "realizovat",
+                czechMeaning: "to carry out, implement",
+                question: "What does the English word 'realize' primarily mean?",
+                options: ["to carry out", "to become aware of", "to make real", "to achieve"],
+                correct: 1,
+                explanation: "'Realize' primarily means to become aware of, while Czech 'realizovat' means to carry out or implement."
+            },
+            {
+                czech: "ordinace",
+                czechMeaning: "doctor's office",
+                question: "What does the English word 'ordinance' mean?",
+                options: ["doctor's office", "local law or regulation", "religious ceremony", "medical prescription"],
+                correct: 1,
+                explanation: "'Ordinance' means a local law or regulation, while Czech 'ordinace' means doctor's office."
+            },
+            {
+                czech: "fabrika",
+                czechMeaning: "factory",
+                question: "What does the English word 'fabric' mean?",
+                options: ["factory", "cloth, textile", "structure", "building material"],
+                correct: 1,
+                explanation: "'Fabric' means cloth or textile, while Czech 'fabrika' means factory."
+            },
+            {
+                czech: "argument",
+                czechMeaning: "reasoning, point",
+                question: "What does the English word 'argument' often imply?",
+                options: ["reasoning, logical point", "heated disagreement", "discussion", "evidence"],
+                correct: 1,
+                explanation: "English 'argument' often implies disagreement or conflict, while Czech 'argument' is more neutral (reasoning/point)."
+            },
+            {
+                czech: "konzervativní",
+                czechMeaning: "traditional, cautious",
+                question: "What does 'conservative' mean in English politics?",
+                options: ["traditional, cautious", "right-wing political view", "preserving nature", "careful with money"],
+                correct: 1,
+                explanation: "Both can mean traditional, but English 'conservative' has strong political connotations that Czech 'konzervativní' may not always carry."
+            },
+            {
+                czech: "konkrétní",
+                czechMeaning: "specific, particular",
+                question: "What does the English word 'concrete' primarily mean?",
+                options: ["specific, particular", "building material", "solid, firm", "real, tangible"],
+                correct: 1,
+                explanation: "'Concrete' primarily means the building material, while Czech 'konkrétní' means specific or particular."
+            },
+            {
+                czech: "prezentovat",
+                czechMeaning: "to present, show",
+                question: "What does the English word 'present' as a verb mean?",
+                options: ["to give as a gift", "to present, show", "to be present", "to introduce"],
+                correct: 1,
+                explanation: "Both can mean 'to show,' but English 'present' as a verb often means 'to give as a gift.'"
+            },
+            {
+                czech: "profesor",
+                czechMeaning: "teacher (any level)",
+                question: "What does 'professor' mean in English?",
+                options: ["teacher (any level)", "university teacher", "school principal", "expert"],
+                correct: 1,
+                explanation: "English 'professor' specifically means university teacher, while Czech 'profesor' can mean teacher at any level."
+            },
+            {
+                czech: "gymnasium",
+                czechMeaning: "academic high school",
+                question: "What does 'gymnasium' mean in English?",
+                options: ["academic high school", "sports facility", "dance studio", "fitness center"],
+                correct: 1,
+                explanation: "English 'gymnasium' means sports facility, while Czech 'gymnasium' means academic high school."
+            },
+            {
+                czech: "ambulance",
+                czechMeaning: "outpatient clinic",
+                question: "What does 'ambulance' mean in English?",
+                options: ["outpatient clinic", "emergency vehicle", "hospital ward", "medical equipment"],
+                correct: 1,
+                explanation: "English 'ambulance' means emergency vehicle, while Czech 'ambulance' means outpatient clinic."
+            },
+            {
+                czech: "dirigent",
+                czechMeaning: "conductor (music)",
+                question: "What does 'dirigent' mean in English?",
+                options: ["conductor (music)", "director", "This word doesn't exist", "manager"],
+                correct: 2,
+                explanation: "'Dirigent' doesn't exist in English. The correct word is 'conductor' for music."
+            },
+            {
+                czech: "absolvent",
+                czechMeaning: "graduate",
+                question: "What does 'absolvent' mean in English?",
+                options: ["graduate", "This word doesn't exist", "student", "expert"],
+                correct: 1,
+                explanation: "'Absolvent' doesn't exist in English. The correct word is 'graduate.'"
+            },
+            {
+                czech: "recept",
+                czechMeaning: "recipe",
+                question: "What does the English word 'receipt' mean?",
+                options: ["recipe", "proof of purchase", "medical prescription", "instructions"],
+                correct: 1,
+                explanation: "'Receipt' means proof of purchase, while Czech 'recept' means recipe (English: recipe)."
+            },
+            {
+                czech: "chef",
+                czechMeaning: "boss, manager",
+                question: "What does 'chef' mean in English?",
+                options: ["boss, manager", "professional cook", "restaurant owner", "supervisor"],
+                correct: 1,
+                explanation: "English 'chef' means professional cook, while Czech 'chef' means boss or manager."
+            },
+            {
+                czech: "komfort",
+                czechMeaning: "comfort, convenience",
+                question: "What does 'comfort' mean in English?",
+                options: ["luxury amenities", "comfort, convenience", "ease, relief", "all of the above"],
+                correct: 3,
+                explanation: "English 'comfort' has similar meaning to Czech 'komfort,' but English emphasizes emotional ease more."
+            },
+            {
+                czech: "kondice",
+                czechMeaning: "physical fitness",
+                question: "What does 'condition' mean in English?",
+                options: ["physical fitness", "state or situation", "requirement", "health status"],
+                correct: 1,
+                explanation: "'Condition' means state or situation, while Czech 'kondice' specifically means physical fitness."
+            },
+            {
+                czech: "konfekce",
+                czechMeaning: "ready-made clothing",
+                question: "What does 'confection' mean in English?",
+                options: ["ready-made clothing", "sweet candy or dessert", "mixture", "creation"],
+                correct: 1,
+                explanation: "'Confection' means sweet candy or dessert, while Czech 'konfekce' means ready-made clothing."
+            },
+            {
+                czech: "deska",
+                czechMeaning: "board, plate, record",
+                question: "What does 'desk' mean in English?",
+                options: ["board, plate", "work table", "storage unit", "flat surface"],
+                correct: 1,
+                explanation: "'Desk' means work table, while Czech 'deska' means board, plate, or record."
+            },
+            {
+                czech: "smoking",
+                czechMeaning: "tuxedo, formal suit",
+                question: "What does 'smoking' mean in English?",
+                options: ["tuxedo, formal suit", "the act of smoking", "cigarette", "formal event"],
+                correct: 1,
+                explanation: "'Smoking' means the act of smoking tobacco, while Czech 'smoking' means tuxedo or formal suit."
+            },
+            {
+                czech: "mobil",
+                czechMeaning: "mobile phone",
+                question: "What does 'mobile' mean in English?",
+                options: ["mobile phone", "able to move", "hanging decoration", "vehicle"],
+                correct: 1,
+                explanation: "'Mobile' means able to move (or hanging decoration), while Czech 'mobil' specifically means mobile phone."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let totalAnswers = 0;
+        let selectedOption = null;
+        let answered = false;
+
+        function loadQuestion() {
+            const question = falseFriends[currentQuestion];
+            
+            document.getElementById('czech-word').textContent = question.czech;
+            document.getElementById('czech-meaning').textContent = `Czech meaning: "${question.czechMeaning}"`;
+            document.getElementById('question').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            // Create array of options with their original indices
+            const optionsWithIndices = question.options.map((option, index) => ({
+                text: option,
+                originalIndex: index
+            }));
+            
+            // Shuffle the options array
+            for (let i = optionsWithIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsWithIndices[i], optionsWithIndices[j]] = [optionsWithIndices[j], optionsWithIndices[i]];
+            }
+            
+            // Store the shuffled options for answer checking
+            window.currentShuffledOptions = optionsWithIndices;
+            
+            optionsWithIndices.forEach((option, displayIndex) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option.text;
+                optionDiv.onclick = () => selectOption(displayIndex);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').textContent = 'Check Answer';
+            document.getElementById('feedback').style.display = 'none';
+            
+            selectedOption = null;
+            answered = false;
+            
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            selectedOption = index;
+            document.getElementById('submit-btn').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (answered) {
+                nextQuestion();
+                return;
+            }
+            
+            if (selectedOption === null) return;
+            
+            answered = true;
+            totalAnswers++;
+            
+            const question = falseFriends[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            
+            // Find the correct answer in the shuffled options
+            const correctAnswerIndex = window.currentShuffledOptions.findIndex(
+                option => option.originalIndex === question.correct
+            );
+            
+            // Check if selected option is correct
+            const isCorrect = window.currentShuffledOptions[selectedOption].originalIndex === question.correct;
+            
+            options.forEach((opt, index) => {
+                opt.classList.remove('selected');
+                if (index === correctAnswerIndex) {
+                    opt.classList.add('correct');
+                } else if (index === selectedOption && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            if (isCorrect) {
+                correctAnswers++;
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `
+                    <strong>Correct! 🎉</strong><br>
+                    ${question.explanation}
+                `;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `
+                    <strong>Not quite right 😔</strong><br>
+                    ${question.explanation}
+                `;
+            }
+            
+            feedback.style.display = 'block';
+            
+            if (currentQuestion < falseFriends.length - 1) {
+                feedback.innerHTML += '<button class="next-btn" onclick="nextQuestion()">Next Question</button>';
+            } else {
+                feedback.innerHTML += '<button class="next-btn" onclick="restartQuiz()">Start Over</button>';
+            }
+            
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < falseFriends.length) {
+                loadQuestion();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            totalAnswers = 0;
+            loadQuestion();
+            updateStats();
+        }
+
+        function showFinalResults() {
+            const accuracy = Math.round((correctAnswers / totalAnswers) * 100);
+            const feedback = document.getElementById('feedback');
+            
+            let message = '';
+            if (accuracy >= 90) {
+                message = 'Outstanding! You\'ve mastered these false friends! 🌟';
+            } else if (accuracy >= 70) {
+                message = 'Great job! You\'re getting the hang of these tricky words! 👏';
+            } else if (accuracy >= 50) {
+                message = 'Good effort! Keep practicing to improve your accuracy! 💪';
+            } else {
+                message = 'Don\'t worry! These are tricky words. Try again to improve! 🎯';
+            }
+            
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = `
+                <strong>Quiz Complete!</strong><br>
+                ${message}<br>
+                Final Score: ${correctAnswers}/${totalAnswers} (${accuracy}%)<br>
+                <button class="next-btn" onclick="restartQuiz()">Try Again</button>
+            `;
+            feedback.style.display = 'block';
+        }
+
+        function updateStats() {
+            document.getElementById('correct-count').textContent = correctAnswers;
+            document.getElementById('total-count').textContent = totalAnswers;
+            
+            const accuracy = totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / falseFriends.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Load content for specific tabs
+            if (tabName === 'writing') {
+                loadWordPairsList();
+                loadWritingWordFocus();
+                initializeMatching();
+            }
+        }
+        
+        // Get English false friend word
+        function getEnglishFalseFriend(czechWord) {
+            const mapping = {
+                'aktuální': 'actual',
+                'eventuální': 'eventual', 
+                'kontrola': 'control',
+                'sympatický': 'sympathetic',
+                'realizovat': 'realize',
+                'ordinace': 'ordinance',
+                'fabrika': 'fabric',
+                'argument': 'argument',
+                'konzervativní': 'conservative',
+                'konkrétní': 'concrete',
+                'prezentovat': 'present',
+                'profesor': 'professor',
+                'gymnasium': 'gymnasium',
+                'ambulance': 'ambulance',
+                'dirigent': 'dirigent (doesn\'t exist)',
+                'absolvent': 'absolvent (doesn\'t exist)',
+                'recept': 'receipt',
+                'chef': 'chef',
+                'komfort': 'comfort',
+                'kondice': 'condition',
+                'konfekce': 'confection',
+                'deska': 'desk',
+                'smoking': 'smoking',
+                'mobil': 'mobile'
+            };
+            return mapping[czechWord] || czechWord;
+        }
+        
+        // Load word pairs reference list
+        function loadWordPairsList() {
+            const container = document.getElementById('word-pairs-list');
+            if (container.innerHTML !== '') return; // Already loaded
+            
+            falseFriends.forEach(pair => {
+                const wordPairDiv = document.createElement('div');
+                wordPairDiv.className = 'word-pair';
+                wordPairDiv.innerHTML = `
+                    <div class="czech-side">
+                        <div class="word">${pair.czech}</div>
+                        <div class="meaning">${pair.czechMeaning}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; color: #4facfe; font-size: 1.5rem;">↔️</div>
+                    <div class="english-side">
+                        <div class="word">${getEnglishFalseFriend(pair.czech)}</div>
+                        <div class="meaning">Different meaning in English</div>
+                    </div>
+                `;
+                container.appendChild(wordPairDiv);
+            });
+        }
+        
+        // Load random word for writing focus
+        function loadWritingWordFocus() {
+            const container = document.getElementById('writing-word-focus');
+            const randomPair = falseFriends[Math.floor(Math.random() * falseFriends.length)];
+            
+            container.innerHTML = `
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>Focus Words:</strong><br>
+                    <strong>Czech:</strong> ${randomPair.czech} (${randomPair.czechMeaning})<br>
+                    <strong>English:</strong> Similar-looking word with different meaning
+                </div>
+            `;
+        }
+        
+        // Matching game variables
+        let selectedCzechWord = null;
+        let matchingPairs = [];
+        let correctMatches = 0;
+        
+        // Initialize matching game
+        function initializeMatching() {
+            // Select 6 random false friends for the matching game
+            const shuffled = [...falseFriends].sort(() => 0.5 - Math.random());
+            matchingPairs = shuffled.slice(0, 6);
+            
+            const container = document.getElementById('matching-game');
+            container.innerHTML = `
+                <div class="matching-container">
+                    <div class="matching-column">
+                        <h4>🇨🇿 Czech Words</h4>
+                        <div id="czech-words"></div>
+                    </div>
+                    <div class="matching-column">
+                        <h4>🇬🇧 English Meanings</h4>
+                        <div id="english-meanings"></div>
+                    </div>
+                </div>
+            `;
+            
+            const czechContainer = document.getElementById('czech-words');
+            const englishContainer = document.getElementById('english-meanings');
+            
+            // Add Czech words
+            matchingPairs.forEach((pair, index) => {
+                const czechItem = document.createElement('div');
+                czechItem.className = 'matching-item';
+                czechItem.textContent = pair.czech;
+                czechItem.dataset.index = index;
+                czechItem.onclick = () => selectCzechWord(index);
+                czechContainer.appendChild(czechItem);
+            });
+            
+            // Add English meanings (shuffled)
+            const shuffledMeanings = [...matchingPairs].sort(() => 0.5 - Math.random());
+            shuffledMeanings.forEach((pair) => {
+                const englishItem = document.createElement('div');
+                englishItem.className = 'matching-item';
+                englishItem.innerHTML = `<strong>${getCorrectEnglishMeaning(pair.czech)}</strong><br><small>${getCorrectEnglishDefinition(pair.czech)}</small>`;
+                englishItem.dataset.czech = pair.czech;
+                englishItem.onclick = () => selectEnglishMeaning(pair.czech);
+                englishContainer.appendChild(englishItem);
+            });
+            
+            selectedCzechWord = null;
+            correctMatches = 0;
+            document.getElementById('matching-feedback').style.display = 'none';
+        }
+        
+        function selectCzechWord(index) {
+            // Clear previous selections
+            document.querySelectorAll('#czech-words .matching-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Select new word
+            const czechItems = document.querySelectorAll('#czech-words .matching-item');
+            czechItems[index].classList.add('selected');
+            selectedCzechWord = matchingPairs[index].czech;
+        }
+        
+        function selectEnglishMeaning(czechWord) {
+            if (!selectedCzechWord) {
+                showMatchingFeedback('Please select a Czech word first!', 'incorrect');
+                return;
+            }
+            
+            const isCorrect = selectedCzechWord === czechWord;
+            const czechItem = document.querySelector(`#czech-words .matching-item[data-index="${matchingPairs.findIndex(p => p.czech === selectedCzechWord)}"]`);
+            const englishItem = document.querySelector(`#english-meanings .matching-item[data-czech="${czechWord}"]`);
+            
+            if (isCorrect) {
+                czechItem.classList.add('correct', 'disabled');
+                englishItem.classList.add('correct', 'disabled');
+                czechItem.onclick = null;
+                englishItem.onclick = null;
+                correctMatches++;
+                
+                if (correctMatches === matchingPairs.length) {
+                    showMatchingFeedback('🎉 Excellent! You matched all the words correctly!', 'correct');
+                } else {
+                    showMatchingFeedback('✅ Correct match!', 'correct');
+                }
+            } else {
+                czechItem.classList.add('incorrect');
+                englishItem.classList.add('incorrect');
+                
+                setTimeout(() => {
+                    czechItem.classList.remove('incorrect', 'selected');
+                    englishItem.classList.remove('incorrect');
+                }, 1500);
+                
+                showMatchingFeedback(`❌ Not quite right. "${selectedCzechWord}" doesn't match with that meaning.`, 'incorrect');
+            }
+            
+            selectedCzechWord = null;
+        }
+        
+        function showMatchingFeedback(message, type) {
+            const feedback = document.getElementById('matching-feedback');
+            feedback.textContent = message;
+            feedback.className = type === 'correct' ? 'feedback correct' : 'feedback incorrect';
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                if (type !== 'correct' || correctMatches !== matchingPairs.length) {
+                    feedback.style.display = 'none';
+                }
+            }, 3000);
+        }
+        
+        function resetMatching() {
+            initializeMatching();
+        }
+        
+        // Get correct English equivalent
+        function getCorrectEnglishMeaning(czechWord) {
+            const meanings = {
+                'aktuální': 'current',
+                'eventuální': 'possible', 
+                'kontrola': 'inspection',
+                'sympatický': 'nice',
+                'realizovat': 'implement',
+                'ordinace': 'doctor\'s office',
+                'fabrika': 'factory',
+                'argument': 'reasoning',
+                'konzervativní': 'traditional',
+                'konkrétní': 'specific',
+                'prezentovat': 'present',
+                'profesor': 'teacher',
+                'gymnasium': 'high school',
+                'ambulance': 'clinic',
+                'dirigent': 'conductor',
+                'absolvent': 'graduate',
+                'recept': 'recipe',
+                'chef': 'boss',
+                'komfort': 'comfort',
+                'kondice': 'fitness',
+                'konfekce': 'clothing',
+                'deska': 'board',
+                'smoking': 'tuxedo',
+                'mobil': 'phone'
+            };
+            return meanings[czechWord] || czechWord;
+        }
+        
+        function getCorrectEnglishDefinition(czechWord) {
+            const definitions = {
+                'aktuální': 'present, up-to-date',
+                'eventuální': 'potential, might happen', 
+                'kontrola': 'check, examination',
+                'sympatický': 'likeable, pleasant',
+                'realizovat': 'carry out, execute',
+                'ordinace': 'medical practice',
+                'fabrika': 'manufacturing plant',
+                'argument': 'logical point',
+                'konzervativní': 'cautious, traditional',
+                'konkrétní': 'particular, exact',
+                'prezentovat': 'show, display',
+                'profesor': 'educator (any level)',
+                'gymnasium': 'academic secondary school',
+                'ambulance': 'outpatient facility',
+                'dirigent': 'orchestra leader',
+                'absolvent': 'person who completed studies',
+                'recept': 'cooking instructions',
+                'chef': 'manager, supervisor',
+                'komfort': 'convenience, ease',
+                'kondice': 'physical condition',
+                'konfekce': 'ready-made garments',
+                'deska': 'flat piece, record',
+                'smoking': 'formal evening wear',
+                'mobil': 'cellular device'
+            };
+            return definitions[czechWord] || 'meaning varies';
+        }
+        
+        // Initialize the application
+        loadQuestion();
+        updateStats();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98437b7a40d2f7dd',t:'MTc1ODcyOTQ5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
