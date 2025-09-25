@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Indefinite Pronouns Trainer</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            background: white;
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+
+        .tab-panel {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .pronoun-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pronoun-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .pronoun-spanish {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .pronoun-english {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .pronoun-example {
+            font-style: italic;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .pronunciation-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pronunciation-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .pronunciation-text {
+            flex: 1;
+        }
+
+        .spanish-word {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .phonetic {
+            color: #666;
+            font-style: italic;
+            margin-left: 10px;
+        }
+
+        .play-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: #218838;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .prompt-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .prompt-scenario {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .prompt-questions {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .prompt-questions h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .prompt-questions ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .prompt-questions li {
+            margin-bottom: 8px;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .pronoun-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-buttons {
+                flex-direction: column;
+            }
+
+            .pronunciation-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇪🇸 Spanish Indefinite Pronouns Trainer</h1>
+            <p>Master Spanish indefinite pronouns with interactive practice</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('reference')">📚 Quick Reference</button>
+            <button class="tab-button" onclick="showTab('pronunciation')">🔊 Pronunciation</button>
+            <button class="tab-button" onclick="showTab('practice')">💬 Conversation Practice</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- Quick Reference Tab -->
+            <div id="reference" class="tab-panel active">
+                <h2>Spanish Indefinite Pronouns Reference Guide</h2>
+                
+                <!-- People Pronouns -->
+                <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.4rem;">👥 People (Personas)</h3>
+                <div class="pronoun-grid">
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="pronoun-spanish">alguien</div>
+                        <div class="pronoun-english">someone, somebody</div>
+                        <div class="pronoun-example">Alguien está llamando. - Someone is calling.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="pronoun-spanish">nadie</div>
+                        <div class="pronoun-english">no one, nobody</div>
+                        <div class="pronoun-example">Nadie sabe la respuesta. - Nobody knows the answer.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="pronoun-spanish">cualquiera</div>
+                        <div class="pronoun-english">anyone, anybody</div>
+                        <div class="pronoun-example">Cualquiera puede participar. - Anyone can participate.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="pronoun-spanish">todos/todas</div>
+                        <div class="pronoun-english">everyone, everybody</div>
+                        <div class="pronoun-example">Todos están aquí. - Everyone is here.</div>
+                    </div>
+                </div>
+
+                <!-- Things Pronouns -->
+                <h3 style="color: #f093fb; margin: 30px 0 15px 0; font-size: 1.4rem;">📦 Things (Cosas)</h3>
+                <div class="pronoun-grid">
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="pronoun-spanish">algo</div>
+                        <div class="pronoun-english">something</div>
+                        <div class="pronoun-example">¿Necesitas algo? - Do you need something?</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="pronoun-spanish">nada</div>
+                        <div class="pronoun-english">nothing</div>
+                        <div class="pronoun-example">No tengo nada. - I have nothing.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="pronoun-spanish">todo</div>
+                        <div class="pronoun-english">everything</div>
+                        <div class="pronoun-example">Todo está listo. - Everything is ready.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="pronoun-spanish">alguno/a/os/as</div>
+                        <div class="pronoun-english">some, any (specific items)</div>
+                        <div class="pronoun-example">¿Tienes algunos libros? - Do you have some books?</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="pronoun-spanish">ninguno/a</div>
+                        <div class="pronoun-english">none, not any</div>
+                        <div class="pronoun-example">No me gusta ninguno. - I don't like any of them.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="pronoun-spanish">cualquier cosa</div>
+                        <div class="pronoun-english">anything</div>
+                        <div class="pronoun-example">Haré cualquier cosa. - I'll do anything.</div>
+                    </div>
+                </div>
+
+                <!-- Places Pronouns -->
+                <h3 style="color: #4facfe; margin: 30px 0 15px 0; font-size: 1.4rem;">📍 Places (Lugares)</h3>
+                <div class="pronoun-grid">
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="pronoun-spanish">algún lugar</div>
+                        <div class="pronoun-english">somewhere</div>
+                        <div class="pronoun-example">Vamos a algún lugar. - Let's go somewhere.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="pronoun-spanish">ningún lugar</div>
+                        <div class="pronoun-english">nowhere</div>
+                        <div class="pronoun-example">No voy a ningún lugar. - I'm not going anywhere.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="pronoun-spanish">cualquier lugar</div>
+                        <div class="pronoun-english">anywhere</div>
+                        <div class="pronoun-example">Podemos ir a cualquier lugar. - We can go anywhere.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="pronoun-spanish">todas partes</div>
+                        <div class="pronoun-english">everywhere</div>
+                        <div class="pronoun-example">He buscado en todas partes. - I've looked everywhere.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="pronoun-spanish">en alguna parte</div>
+                        <div class="pronoun-english">somewhere (location)</div>
+                        <div class="pronoun-example">Está en alguna parte de la casa. - It's somewhere in the house.</div>
+                    </div>
+                    <div class="pronoun-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div class="pronoun-spanish">en ninguna parte</div>
+                        <div class="pronoun-english">nowhere (location)</div>
+                        <div class="pronoun-example">No lo encuentro en ninguna parte. - I can't find it anywhere.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pronunciation Tab -->
+            <div id="pronunciation" class="tab-panel">
+                <h2>Pronunciation Guide</h2>
+                
+                <!-- People Pronunciations -->
+                <div class="pronunciation-section">
+                    <h3 style="color: #667eea;">👥 People Pronouns</h3>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">alguien</span>
+                            <span class="phonetic">[ahl-GYEN]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('alguien')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">nadie</span>
+                            <span class="phonetic">[NAH-dyeh]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('nadie')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">cualquiera</span>
+                            <span class="phonetic">[kwal-KYEH-rah]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('cualquiera')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">todos</span>
+                            <span class="phonetic">[TOH-dohs]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('todos')">🔊 Play</button>
+                    </div>
+                </div>
+
+                <!-- Things Pronunciations -->
+                <div class="pronunciation-section">
+                    <h3 style="color: #f093fb;">📦 Things Pronouns</h3>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">algo</span>
+                            <span class="phonetic">[AHL-goh]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('algo')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">nada</span>
+                            <span class="phonetic">[NAH-dah]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('nada')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">todo</span>
+                            <span class="phonetic">[TOH-doh]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('todo')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">ninguno</span>
+                            <span class="phonetic">[neen-GOO-noh]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('ninguno')">🔊 Play</button>
+                    </div>
+                </div>
+
+                <!-- Places Pronunciations -->
+                <div class="pronunciation-section">
+                    <h3 style="color: #4facfe;">📍 Places Pronouns</h3>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">algún lugar</span>
+                            <span class="phonetic">[ahl-GOON loo-GAHR]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('algun-lugar')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">ningún lugar</span>
+                            <span class="phonetic">[neen-GOON loo-GAHR]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('ningun-lugar')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">cualquier lugar</span>
+                            <span class="phonetic">[kwal-KYEHR loo-GAHR]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('cualquier-lugar')">🔊 Play</button>
+                    </div>
+                    <div class="pronunciation-item">
+                        <div class="pronunciation-text">
+                            <span class="spanish-word">todas partes</span>
+                            <span class="phonetic">[TOH-dahs PAHR-tehs]</span>
+                        </div>
+                        <button class="play-button" onclick="playPronunciation('todas-partes')">🔊 Play</button>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <h4>💡 Pronunciation Tips:</h4>
+                    <ul>
+                        <li><strong>Roll your R's:</strong> Practice the "rr" sound in "cualquiera"</li>
+                        <li><strong>Soft G:</strong> In "algo" and "alguien", the 'g' is pronounced like in "go"</li>
+                        <li><strong>Silent H:</strong> The 'h' in Spanish is always silent</li>
+                        <li><strong>Stress:</strong> Pay attention to which syllable is emphasized</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Conversation Practice Tab -->
+            <div id="practice" class="tab-panel">
+                <h2>Conversation Practice</h2>
+                
+                <div class="score-display">
+                    Practice Score: <span id="score">0</span>/10
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="control-buttons">
+                    <button class="btn btn-primary" onclick="generateNewPrompt()">🎲 New Scenario</button>
+                    <button class="btn btn-secondary" onclick="resetProgress()">🔄 Reset Progress</button>
+                </div>
+
+                <div id="conversationPrompt" class="conversation-prompt">
+                    <div class="prompt-title">Scenario: At a Restaurant</div>
+                    <div class="prompt-scenario">
+                        You're at a Spanish restaurant and the waiter is asking about your preferences. Use indefinite pronouns to respond naturally to their questions.
+                    </div>
+                    <div class="prompt-questions">
+                        <h4>Practice Questions:</h4>
+                        <ul>
+                            <li>¿Quiere <strong>algo</strong> de beber? (Do you want something to drink?)</li>
+                            <li>¿Hay <strong>alguien</strong> más en su mesa? (Is there someone else at your table?)</li>
+                            <li>¿Le gusta <strong>alguna</strong> de estas opciones? (Do you like any of these options?)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: #d1ecf1; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h3>🎯 Practice Instructions:</h3>
+                    <ol>
+                        <li>Read the scenario and questions carefully</li>
+                        <li>Practice responding out loud using the indefinite pronouns</li>
+                        <li>Try to create natural, complete sentences</li>
+                        <li>Click "Mark as Practiced" when you feel confident</li>
+                        <li>Generate new scenarios to practice different contexts</li>
+                    </ol>
+                    <button class="btn btn-primary" onclick="markAsPracticed()" style="margin-top: 15px;">✅ Mark as Practiced</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let totalPracticed = 0;
+
+        const scenarios = [
+            {
+                title: "At a Restaurant",
+                category: "People & Things",
+                scenario: "You're at a Spanish restaurant and the waiter is asking about your preferences. Use indefinite pronouns to respond naturally to their questions.",
+                questions: [
+                    "¿Quiere <strong>algo</strong> de beber? (Do you want something to drink?)",
+                    "¿Hay <strong>alguien</strong> más en su mesa? (Is there someone else at your table?)",
+                    "¿Le gusta <strong>alguna</strong> de estas opciones? (Do you like any of these options?)",
+                    "¿<strong>Todos</strong> van a pedir postre? (Is everyone going to order dessert?)"
+                ]
+            },
+            {
+                title: "Shopping at the Market",
+                category: "Things & People",
+                scenario: "You're shopping at a local market in Spain. The vendor is helping you find what you need.",
+                questions: [
+                    "¿Busca <strong>algo</strong> en particular? (Are you looking for something in particular?)",
+                    "¿<strong>Alguien</strong> le recomendó este producto? (Did someone recommend this product to you?)",
+                    "¿No le gusta <strong>ninguna</strong> de estas frutas? (Don't you like any of these fruits?)",
+                    "¿Puede encontrar <strong>todo</strong> lo que necesita? (Can you find everything you need?)"
+                ]
+            },
+            {
+                title: "Lost in the City",
+                category: "Places & People",
+                scenario: "You're lost in a Spanish city and asking for directions. Practice using place-related indefinite pronouns.",
+                questions: [
+                    "¿Conoce <strong>algún lugar</strong> para comer cerca? (Do you know somewhere to eat nearby?)",
+                    "¿<strong>Alguien</strong> puede ayudarme con direcciones? (Can someone help me with directions?)",
+                    "¿Hay un banco en <strong>alguna parte</strong> por aquí? (Is there a bank somewhere around here?)",
+                    "No puedo encontrar mi hotel en <strong>ninguna parte</strong>. (I can't find my hotel anywhere.)"
+                ]
+            },
+            {
+                title: "Planning a Trip",
+                category: "Places & Things",
+                scenario: "You're planning a vacation with Spanish-speaking friends and discussing destinations.",
+                questions: [
+                    "¿Podemos ir a <strong>cualquier lugar</strong> que queramos? (Can we go anywhere we want?)",
+                    "¿Hay <strong>algo</strong> especial que quieren ver? (Is there something special you want to see?)",
+                    "¿<strong>Todos</strong> están de acuerdo con el plan? (Does everyone agree with the plan?)",
+                    "¿No les gusta <strong>ningún lugar</strong> de la lista? (Don't you like any place on the list?)"
+                ]
+            },
+            {
+                title: "At the Office",
+                category: "People & Things",
+                scenario: "You're in a Spanish-speaking workplace discussing a project with colleagues.",
+                questions: [
+                    "¿Necesita <strong>algo</strong> para la presentación? (Do you need something for the presentation?)",
+                    "¿<strong>Nadie</strong> puede ayudar con esto? (Can't anyone help with this?)",
+                    "¿Tiene <strong>alguna</strong> idea mejor? (Do you have any better ideas?)",
+                    "¿<strong>Todos</strong> entienden el proyecto? (Does everyone understand the project?)"
+                ]
+            },
+            {
+                title: "Moving to a New Apartment",
+                category: "Places & Things",
+                scenario: "You're moving and need to organize your belongings and find places for everything.",
+                questions: [
+                    "¿Hay <strong>algún lugar</strong> para poner esto? (Is there somewhere to put this?)",
+                    "No encuentro mis llaves en <strong>ninguna parte</strong>. (I can't find my keys anywhere.)",
+                    "¿Necesitamos <strong>algo</strong> más para la mudanza? (Do we need anything else for the move?)",
+                    "¿<strong>Todo</strong> está en su lugar correcto? (Is everything in its right place?)"
+                ]
+            },
+            {
+                title: "At a Party",
+                category: "People & Things",
+                scenario: "You're at a Spanish-speaking party and socializing with other guests.",
+                questions: [
+                    "¿Conoce a <strong>alguien</strong> aquí? (Do you know someone here?)",
+                    "¿No quiere <strong>nada</strong> de comer? (Don't you want anything to eat?)",
+                    "¿<strong>Cualquiera</strong> puede unirse al juego? (Can anyone join the game?)",
+                    "¿<strong>Todos</strong> se están divirtiendo? (Is everyone having fun?)"
+                ]
+            },
+            {
+                title: "Exploring the Neighborhood",
+                category: "Places & People",
+                scenario: "You've just moved to a new Spanish-speaking neighborhood and are getting to know the area.",
+                questions: [
+                    "¿Hay <strong>algún lugar</strong> bueno para hacer ejercicio? (Is there somewhere good to exercise?)",
+                    "¿<strong>Alguien</strong> puede recomendarme un médico? (Can someone recommend a doctor to me?)",
+                    "¿Se puede caminar a <strong>todas partes</strong> desde aquí? (Can you walk everywhere from here?)",
+                    "¿No hay <strong>nada</strong> abierto los domingos? (Is nothing open on Sundays?)"
+                ]
+            }
+        ];
+
+        let currentScenarioIndex = 0;
+
+        function showTab(tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected panel and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function playPronunciation(word) {
+            // Since we can't play actual audio, we'll show a visual feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '🔊 Playing...';
+            button.style.background = '#17a2b8';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#28a745';
+            }, 1500);
+        }
+
+        function generateNewPrompt() {
+            currentScenarioIndex = Math.floor(Math.random() * scenarios.length);
+            const scenario = scenarios[currentScenarioIndex];
+            
+            const promptHtml = `
+                <div class="prompt-title">Scenario: ${scenario.title}</div>
+                <div style="background: rgba(255,255,255,0.3); padding: 8px 12px; border-radius: 15px; display: inline-block; margin-bottom: 15px; font-size: 0.9rem; font-weight: bold;">
+                    📚 Focus: ${scenario.category}
+                </div>
+                <div class="prompt-scenario">${scenario.scenario}</div>
+                <div class="prompt-questions">
+                    <h4>Practice Questions:</h4>
+                    <ul>
+                        ${scenario.questions.map(q => `<li>${q}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('conversationPrompt').innerHTML = promptHtml;
+        }
+
+        function markAsPracticed() {
+            if (currentScore < 10) {
+                currentScore++;
+                totalPracticed++;
+                updateScore();
+                updateProgress();
+                
+                // Show success feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Great job!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+                
+                // Auto-generate new prompt after marking as practiced
+                setTimeout(() => {
+                    generateNewPrompt();
+                }, 1000);
+            }
+        }
+
+        function resetProgress() {
+            currentScore = 0;
+            totalPracticed = 0;
+            updateScore();
+            updateProgress();
+            generateNewPrompt();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = currentScore;
+        }
+
+        function updateProgress() {
+            const progressPercent = (currentScore / 10) * 100;
+            document.getElementById('progressFill').style.width = progressPercent + '%';
+        }
+
+        // Initialize the app
+        generateNewPrompt();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984e020be75c262b',t:'MTc1ODgzOTg2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
