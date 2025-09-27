@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Preposition Practice - In, On, At</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 15px 15px 0 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+        
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .explanation-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+        }
+        
+        .preposition-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+        }
+        
+        .preposition-title {
+            color: #667eea;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .example {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .exercise {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .option-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .option-btn.correct {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .prompt-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .prompt-questions {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .prompt-questions li {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .prompt-questions li:before {
+            content: "💬";
+            position: absolute;
+            left: 0;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 20px;
+        }
+        
+        .reset-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Preposition Practice</h1>
+            <p>Master spatial prepositions: IN, ON, AT</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('learn')">📚 Learn</button>
+            <button class="nav-tab" onclick="showTab('practice')">✏️ Practice</button>
+            <button class="nav-tab" onclick="showTab('conversation')">💬 Conversation</button>
+        </div>
+        
+        <div class="content">
+            <!-- Learn Tab -->
+            <div id="learn" class="tab-content active">
+                <div class="explanation-card">
+                    <h2>🎯 Understanding Spatial Prepositions</h2>
+                    <p>Prepositions show the relationship between objects in space. Let's learn when to use IN, ON, and AT!</p>
+                </div>
+                
+                <div class="preposition-section">
+                    <div class="preposition-title">📦 IN - Inside or enclosed spaces</div>
+                    <p><strong>Use "IN" when something is inside or enclosed by something else.</strong></p>
+                    <div class="examples">
+                        <div class="example">
+                            <strong>🏠 Buildings & Rooms:</strong><br>
+                            • The book is <em>in</em> the library<br>
+                            • She's <em>in</em> the kitchen<br>
+                            • We live <em>in</em> New York
+                        </div>
+                        <div class="example">
+                            <strong>📦 Containers:</strong><br>
+                            • The milk is <em>in</em> the fridge<br>
+                            • Put the letter <em>in</em> the envelope<br>
+                            • The keys are <em>in</em> my bag
+                        </div>
+                        <div class="example">
+                            <strong>🌍 Large Areas:</strong><br>
+                            • Fish swim <em>in</em> the ocean<br>
+                            • Birds fly <em>in</em> the sky<br>
+                            • We walked <em>in</em> the park
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preposition-section">
+                    <div class="preposition-title">📋 ON - Surfaces and contact</div>
+                    <p><strong>Use "ON" when something is touching a surface or is attached to something.</strong></p>
+                    <div class="examples">
+                        <div class="example">
+                            <strong>🪑 Surfaces:</strong><br>
+                            • The cup is <em>on</em> the table<br>
+                            • Hang the picture <em>on</em> the wall<br>
+                            • She sits <em>on</em> the chair
+                        </div>
+                        <div class="example">
+                            <strong>🚌 Transportation:</strong><br>
+                            • We traveled <em>on</em> the bus<br>
+                            • He's <em>on</em> the train<br>
+                            • They sailed <em>on</em> the ship
+                        </div>
+                        <div class="example">
+                            <strong>📍 Specific Locations:</strong><br>
+                            • The store is <em>on</em> Main Street<br>
+                            • We live <em>on</em> the second floor<br>
+                            • Meet me <em>on</em> the corner
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preposition-section">
+                    <div class="preposition-title">📍 AT - Specific points and locations</div>
+                    <p><strong>Use "AT" for specific points, addresses, and exact locations.</strong></p>
+                    <div class="examples">
+                        <div class="example">
+                            <strong>🏢 Specific Places:</strong><br>
+                            • Meet me <em>at</em> the library<br>
+                            • She works <em>at</em> the hospital<br>
+                            • We're <em>at</em> home
+                        </div>
+                        <div class="example">
+                            <strong>🏠 Addresses:</strong><br>
+                            • I live <em>at</em> 123 Oak Street<br>
+                            • The party is <em>at</em> Sarah's house<br>
+                            • Meet <em>at</em> the bus stop
+                        </div>
+                        <div class="example">
+                            <strong>🎯 Exact Points:</strong><br>
+                            • Stand <em>at</em> the door<br>
+                            • Wait <em>at</em> the traffic light<br>
+                            • She's <em>at</em> the front desk
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Practice Tab -->
+            <div id="practice" class="tab-content">
+                <h2>✏️ Practice Exercises</h2>
+                <p>Choose the correct preposition for each sentence. Click your answer to see if you're right!</p>
+                
+                <div class="score">Score: <span id="score">0</span> / <span id="total">0</span></div>
+                
+                <div id="exercises"></div>
+                
+                <button class="reset-btn" onclick="resetPractice()">🔄 Reset Practice</button>
+            </div>
+            
+            <!-- Conversation Tab -->
+            <div id="conversation" class="tab-content">
+                <h2>💬 Conversation Practice</h2>
+                <p>Use these prompts to practice speaking with prepositions. Try to answer each question using IN, ON, or AT correctly!</p>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">🏠 Describing Your Home</div>
+                    <ul class="prompt-questions">
+                        <li>Where do you keep your books? (Use "in")</li>
+                        <li>What's hanging on your bedroom wall? (Use "on")</li>
+                        <li>Where do you usually eat dinner at home? (Use "at")</li>
+                        <li>What room are you in right now?</li>
+                    </ul>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">🌆 Around the City</div>
+                    <ul class="prompt-questions">
+                        <li>Where do you go to buy groceries? (Use "at")</li>
+                        <li>What street is your favorite restaurant on? (Use "on")</li>
+                        <li>What do you like to do in the park? (Use "in")</li>
+                        <li>Where do you wait for the bus?</li>
+                    </ul>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">🎒 Daily Activities</div>
+                    <ul class="prompt-questions">
+                        <li>Where do you put your phone when you sleep? (Use "on" or "in")</li>
+                        <li>Where do you usually study? (Use "at" or "in")</li>
+                        <li>What do you carry in your bag?</li>
+                        <li>Where do you meet your friends?</li>
+                    </ul>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">🚗 Transportation & Travel</div>
+                    <ul class="prompt-questions">
+                        <li>How do you get to work or school? (on the bus, in a car, etc.)</li>
+                        <li>Where do you sit when you're on public transportation?</li>
+                        <li>What's the best place to visit in your city?</li>
+                        <li>Where do you like to go on weekends?</li>
+                    </ul>
+                </div>
+                
+                <div class="explanation-card">
+                    <h3>💡 Speaking Tips</h3>
+                    <p><strong>Practice out loud!</strong> Try recording yourself answering these questions, or practice with a friend. Pay attention to which preposition feels natural in each context.</p>
+                    <p><strong>Remember:</strong> IN = inside/enclosed, ON = surface/contact, AT = specific point/location</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Practice exercises data
+        const exercises = [
+            {
+                question: "The cat is sleeping ___ the bed.",
+                options: ["in", "on", "at"],
+                correct: "on",
+                explanation: "Use 'on' because the cat is on the surface of the bed."
+            },
+            {
+                question: "We met ___ the coffee shop yesterday.",
+                options: ["in", "on", "at"],
+                correct: "at",
+                explanation: "Use 'at' for specific locations where you meet someone."
+            },
+            {
+                question: "The books are ___ the shelf.",
+                options: ["in", "on", "at"],
+                correct: "on",
+                explanation: "Use 'on' because books sit on the surface of a shelf."
+            },
+            {
+                question: "She lives ___ Tokyo.",
+                options: ["in", "on", "at"],
+                correct: "in",
+                explanation: "Use 'in' for cities, countries, and large areas."
+            },
+            {
+                question: "The keys are ___ my pocket.",
+                options: ["in", "on", "at"],
+                correct: "in",
+                explanation: "Use 'in' because the pocket is like a container."
+            },
+            {
+                question: "We're waiting ___ the bus stop.",
+                options: ["in", "on", "at"],
+                correct: "at",
+                explanation: "Use 'at' for specific points or locations."
+            },
+            {
+                question: "The picture is hanging ___ the wall.",
+                options: ["in", "on", "at"],
+                correct: "on",
+                explanation: "Use 'on' because the picture is attached to the wall surface."
+            },
+            {
+                question: "They work ___ the hospital.",
+                options: ["in", "on", "at"],
+                correct: "at",
+                explanation: "Use 'at' when referring to a workplace as a specific location."
+            },
+            {
+                question: "The fish are swimming ___ the aquarium.",
+                options: ["in", "on", "at"],
+                correct: "in",
+                explanation: "Use 'in' because the fish are inside the enclosed space of the aquarium."
+            },
+            {
+                question: "My apartment is ___ the third floor.",
+                options: ["in", "on", "at"],
+                correct: "on",
+                explanation: "Use 'on' for floors of buildings."
+            }
+        ];
+
+        let currentScore = 0;
+        let totalAnswered = 0;
+        let answeredQuestions = new Set();
+
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize practice exercises
+        function initializePractice() {
+            const exercisesContainer = document.getElementById('exercises');
+            exercisesContainer.innerHTML = '';
+            
+            exercises.forEach((exercise, index) => {
+                const exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'exercise';
+                exerciseDiv.innerHTML = `
+                    <div class="question">${index + 1}. ${exercise.question}</div>
+                    <div class="options">
+                        ${exercise.options.map(option => 
+                            `<button class="option-btn" onclick="checkAnswer(${index}, '${option}')">${option}</button>`
+                        ).join('')}
+                    </div>
+                    <div id="feedback-${index}" class="feedback" style="display: none;"></div>
+                `;
+                exercisesContainer.appendChild(exerciseDiv);
+            });
+        }
+
+        // Check answer functionality
+        function checkAnswer(exerciseIndex, selectedAnswer) {
+            if (answeredQuestions.has(exerciseIndex)) return;
+            
+            const exercise = exercises[exerciseIndex];
+            const isCorrect = selectedAnswer === exercise.correct;
+            const feedbackDiv = document.getElementById(`feedback-${exerciseIndex}`);
+            const optionButtons = document.querySelectorAll(`.exercise:nth-child(${exerciseIndex + 1}) .option-btn`);
+            
+            // Update score
+            totalAnswered++;
+            if (isCorrect) currentScore++;
+            answeredQuestions.add(exerciseIndex);
+            
+            // Style buttons
+            optionButtons.forEach(btn => {
+                if (btn.textContent === exercise.correct) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+                btn.style.pointerEvents = 'none';
+            });
+            
+            // Show feedback
+            feedbackDiv.style.display = 'block';
+            feedbackDiv.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackDiv.innerHTML = `
+                <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</strong><br>
+                ${exercise.explanation}
+            `;
+            
+            // Update score display
+            document.getElementById('score').textContent = currentScore;
+            document.getElementById('total').textContent = totalAnswered;
+        }
+
+        // Reset practice
+        function resetPractice() {
+            currentScore = 0;
+            totalAnswered = 0;
+            answeredQuestions.clear();
+            document.getElementById('score').textContent = '0';
+            document.getElementById('total').textContent = '0';
+            initializePractice();
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePractice();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9856d7c6a43b83f1',t:'MTc1ODkzMjUwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
