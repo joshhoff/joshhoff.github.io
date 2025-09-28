@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spatial Prepositions Practice - ESL Learning</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .scene-container {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #e2e8f0;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(to bottom, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #cbd5e0;
+        }
+
+        /* Office Building */
+        .building {
+            position: absolute;
+            bottom: 50px;
+            left: 30px;
+            width: 140px;
+            height: 200px;
+            background: #4a5568;
+            border-radius: 5px;
+        }
+
+        .building-windows {
+            position: absolute;
+            top: 20px;
+            left: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 110px;
+        }
+
+        .building-window {
+            width: 25px;
+            height: 25px;
+            background: #ffd700;
+            border: 2px solid #2d3748;
+        }
+
+        /* Desk */
+        .desk {
+            position: absolute;
+            bottom: 80px;
+            right: 80px;
+            width: 120px;
+            height: 60px;
+            background: #8b4513;
+            border-radius: 8px;
+        }
+
+        .desk-leg {
+            position: absolute;
+            bottom: -25px;
+            width: 12px;
+            height: 25px;
+            background: #654321;
+        }
+
+        .desk-leg:nth-child(2) { left: 10px; }
+        .desk-leg:nth-child(3) { right: 10px; }
+
+        /* Laptop */
+        .laptop {
+            position: absolute;
+            top: -5px;
+            left: 20px;
+            width: 50px;
+            height: 35px;
+            background: #2d3748;
+            border-radius: 3px;
+        }
+
+        .laptop-screen {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 50px;
+            height: 20px;
+            background: #1a202c;
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* Coffee Cup */
+        .coffee-cup {
+            position: absolute;
+            top: 5px;
+            right: 20px;
+            width: 20px;
+            height: 25px;
+            background: #ffffff;
+            border-radius: 0 0 10px 10px;
+            border: 2px solid #4a5568;
+        }
+
+        .coffee {
+            position: absolute;
+            top: 3px;
+            left: 2px;
+            width: 14px;
+            height: 15px;
+            background: #8b4513;
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* Bookshelf */
+        .bookshelf {
+            position: absolute;
+            bottom: 50px;
+            left: 200px;
+            width: 80px;
+            height: 120px;
+            background: #8b4513;
+            border-radius: 5px;
+        }
+
+        .shelf {
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            height: 3px;
+            background: #654321;
+        }
+
+        .shelf:nth-child(1) { top: 30px; }
+        .shelf:nth-child(2) { top: 60px; }
+        .shelf:nth-child(3) { top: 90px; }
+
+        .book-spine {
+            position: absolute;
+            width: 8px;
+            height: 25px;
+            border-radius: 2px;
+        }
+
+        .book1 { top: 35px; left: 10px; background: #e53e3e; }
+        .book2 { top: 35px; left: 20px; background: #3182ce; }
+        .book3 { top: 35px; left: 30px; background: #38a169; }
+        .book4 { top: 65px; left: 15px; background: #805ad5; }
+        .book5 { top: 65px; left: 25px; background: #d69e2e; }
+
+        /* Plant */
+        .plant-pot {
+            position: absolute;
+            bottom: 50px;
+            right: 200px;
+            width: 30px;
+            height: 25px;
+            background: #8b4513;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .plant {
+            position: absolute;
+            top: -20px;
+            left: 5px;
+            width: 20px;
+            height: 30px;
+            background: #22543d;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        /* Picture Frame */
+        .picture-frame {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            width: 60px;
+            height: 45px;
+            background: #8b4513;
+            border-radius: 3px;
+            border: 3px solid #654321;
+        }
+
+        .picture {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            background: linear-gradient(45deg, #4299e1, #48bb78);
+            border-radius: 2px;
+        }
+
+        /* Chair */
+        .chair {
+            position: absolute;
+            bottom: 30px;
+            right: 120px;
+            width: 40px;
+            height: 45px;
+            background: #2d3748;
+            border-radius: 5px;
+        }
+
+        .chair-back {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            width: 40px;
+            height: 35px;
+            background: #2d3748;
+            border-radius: 5px 5px 0 0;
+        }
+
+        /* Phone */
+        .phone {
+            position: absolute;
+            top: 10px;
+            left: 70px;
+            width: 15px;
+            height: 25px;
+            background: #1a202c;
+            border-radius: 3px;
+        }
+
+        /* Calendar */
+        .calendar {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 35px;
+            height: 40px;
+            background: #ffffff;
+            border: 2px solid #4a5568;
+            border-radius: 3px;
+        }
+
+        .calendar-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: #e53e3e;
+            border-radius: 1px 1px 0 0;
+        }
+
+        .description-panel {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #e2e8f0;
+        }
+
+        .current-description {
+            background: #4299e1;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preposition-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .prep-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .prep-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        .prep-btn:active {
+            transform: translateY(0);
+        }
+
+        .prep-btn.correct {
+            background: #22543d;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .prep-btn.incorrect {
+            background: #e53e3e;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .next-btn {
+            background: #805ad5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #6b46c1;
+        }
+
+        .next-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+        }
+
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .scene {
+                height: 300px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Spatial Prepositions Practice</h1>
+            <p>Look at the picture and choose the correct preposition: <strong>in</strong>, <strong>on</strong>, or <strong>at</strong></p>
+        </div>
+
+        <div class="game-area">
+            <div class="scene-container">
+                <h3 style="text-align: center; color: #4a5568; margin-bottom: 15px;">Study the Scene</h3>
+                <div class="scene">
+                    <div class="building">
+                        <div class="building-windows">
+                            <div class="building-window"></div>
+                            <div class="building-window"></div>
+                            <div class="building-window"></div>
+                            <div class="building-window"></div>
+                            <div class="building-window"></div>
+                            <div class="building-window"></div>
+                        </div>
+                    </div>
+                    <div class="desk">
+                        <div class="desk-leg"></div>
+                        <div class="desk-leg"></div>
+                        <div class="laptop">
+                            <div class="laptop-screen"></div>
+                        </div>
+                        <div class="coffee-cup">
+                            <div class="coffee"></div>
+                        </div>
+                        <div class="phone"></div>
+                    </div>
+                    <div class="bookshelf">
+                        <div class="shelf"></div>
+                        <div class="shelf"></div>
+                        <div class="shelf"></div>
+                        <div class="book-spine book1"></div>
+                        <div class="book-spine book2"></div>
+                        <div class="book-spine book3"></div>
+                        <div class="book-spine book4"></div>
+                        <div class="book-spine book5"></div>
+                    </div>
+                    <div class="plant-pot">
+                        <div class="plant"></div>
+                    </div>
+                    <div class="picture-frame">
+                        <div class="picture"></div>
+                    </div>
+                    <div class="chair">
+                        <div class="chair-back"></div>
+                    </div>
+                    <div class="calendar">
+                        <div class="calendar-header"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="description-panel">
+                <h3 style="text-align: center; color: #4a5568; margin-bottom: 15px;">Choose the Correct Preposition</h3>
+                <div class="current-description" id="description">
+                    Click "Next Question" to start!
+                </div>
+                
+                <div class="preposition-buttons">
+                    <button class="prep-btn" onclick="checkAnswer('in')">IN</button>
+                    <button class="prep-btn" onclick="checkAnswer('on')">ON</button>
+                    <button class="prep-btn" onclick="checkAnswer('at')">AT</button>
+                </div>
+
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="score">
+                Score: <span id="score">0</span> / <span id="total">0</span>
+            </div>
+            <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                description: "The laptop is ___ the desk.",
+                answer: "on",
+                explanation: "We use 'ON' when something is resting on top of a surface."
+            },
+            {
+                description: "The coffee is ___ the cup.",
+                answer: "in",
+                explanation: "We use 'IN' when something is inside a container."
+            },
+            {
+                description: "The books are ___ the bookshelf.",
+                answer: "on",
+                explanation: "We use 'ON' when items are placed on shelves."
+            },
+            {
+                description: "The plant is ___ the pot.",
+                answer: "in",
+                explanation: "We use 'IN' when something is contained within something else."
+            },
+            {
+                description: "The picture is ___ the wall.",
+                answer: "on",
+                explanation: "We use 'ON' when something is attached to or hanging on a surface."
+            },
+            {
+                description: "The chair is positioned ___ the desk.",
+                answer: "at",
+                explanation: "We use 'AT' to show position near or beside something for work."
+            },
+            {
+                description: "The phone is ___ the desk.",
+                answer: "on",
+                explanation: "We use 'ON' when something is resting on top of a surface."
+            },
+            {
+                description: "The calendar is hanging ___ the wall.",
+                answer: "on",
+                explanation: "We use 'ON' when something is attached to a wall surface."
+            },
+            {
+                description: "The windows are ___ the building.",
+                answer: "in",
+                explanation: "We use 'IN' when something is part of or within a structure."
+            },
+            {
+                description: "The employee works ___ the office building.",
+                answer: "in",
+                explanation: "We use 'IN' when someone is inside a building or enclosed space."
+            },
+            {
+                description: "The meeting is scheduled ___ 3 PM.",
+                answer: "at",
+                explanation: "We use 'AT' with specific times."
+            },
+            {
+                description: "The documents are stored ___ the filing cabinet.",
+                answer: "in",
+                explanation: "We use 'IN' when items are contained within furniture or storage."
+            },
+            {
+                description: "The presentation will be held ___ the conference room.",
+                answer: "in",
+                explanation: "We use 'IN' when referring to enclosed spaces or rooms."
+            },
+            {
+                description: "The coffee break is ___ 10:30 AM.",
+                answer: "at",
+                explanation: "We use 'AT' with specific times."
+            },
+            {
+                description: "The report is ___ the computer screen.",
+                answer: "on",
+                explanation: "We use 'ON' when something is displayed on a screen or surface."
+            },
+            {
+                description: "The office supplies are kept ___ the drawer.",
+                answer: "in",
+                explanation: "We use 'IN' when items are stored inside containers or compartments."
+            },
+            {
+                description: "The team meeting is ___ the boardroom.",
+                answer: "in",
+                explanation: "We use 'IN' when referring to enclosed meeting spaces."
+            },
+            {
+                description: "The deadline is ___ Friday.",
+                answer: "on",
+                explanation: "We use 'ON' with days of the week."
+            },
+            {
+                description: "The client will arrive ___ the reception desk.",
+                answer: "at",
+                explanation: "We use 'AT' to indicate a specific location or point of arrival."
+            },
+            {
+                description: "The important files are saved ___ the cloud storage.",
+                answer: "in",
+                explanation: "We use 'IN' when data is stored within digital systems or platforms."
+            }
+        ];
+
+        let currentQuestion = -1;
+        let score = 0;
+        let answered = false;
+
+        function nextQuestion() {
+            if (currentQuestion >= 0 && !answered) {
+                return; // Don't advance if current question hasn't been answered
+            }
+
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                showFinalScore();
+                return;
+            }
+
+            answered = false;
+            const question = questions[currentQuestion];
+            document.getElementById('description').textContent = question.description;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('total').textContent = questions.length;
+
+            // Reset button styles
+            const buttons = document.querySelectorAll('.prep-btn');
+            buttons.forEach(btn => {
+                btn.className = 'prep-btn';
+                btn.disabled = false;
+            });
+        }
+
+        function checkAnswer(selectedPrep) {
+            if (answered) return;
+
+            answered = true;
+            const question = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.prep-btn');
+            const feedback = document.getElementById('feedback');
+
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedPrep === question.answer) {
+                score++;
+                document.getElementById('score').textContent = score;
+                
+                // Highlight correct button
+                event.target.classList.add('correct');
+                
+                feedback.textContent = `Correct! ${question.explanation}`;
+                feedback.className = 'feedback correct';
+            } else {
+                // Highlight incorrect button
+                event.target.classList.add('incorrect');
+                
+                // Show correct answer
+                buttons.forEach(btn => {
+                    if (btn.textContent.toLowerCase() === question.answer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                feedback.textContent = `Incorrect. The correct answer is "${question.answer.toUpperCase()}". ${question.explanation}`;
+                feedback.className = 'feedback incorrect';
+            }
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = `🎉 Excellent work! You scored ${score}/${questions.length} (${percentage}%)`;
+            } else if (percentage >= 60) {
+                message = `👍 Good job! You scored ${score}/${questions.length} (${percentage}%)`;
+            } else {
+                message = `📚 Keep practicing! You scored ${score}/${questions.length} (${percentage}%)`;
+            }
+
+            document.getElementById('description').innerHTML = `
+                <div style="text-align: center;">
+                    <h3>${message}</h3>
+                    <p>Great work learning spatial prepositions!</p>
+                    <button onclick="restartGame()" style="background: #48bb78; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">Play Again</button>
+                </div>
+            `;
+            
+            document.getElementById('feedback').textContent = '';
+            
+            // Disable preposition buttons
+            const buttons = document.querySelectorAll('.prep-btn');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            document.querySelector('.next-btn').disabled = true;
+        }
+
+        function restartGame() {
+            currentQuestion = -1;
+            score = 0;
+            answered = false;
+            document.getElementById('score').textContent = '0';
+            document.querySelector('.next-btn').disabled = false;
+            
+            // Reset buttons
+            const buttons = document.querySelectorAll('.prep-btn');
+            buttons.forEach(btn => {
+                btn.className = 'prep-btn';
+                btn.disabled = false;
+            });
+            
+            document.getElementById('description').textContent = "Click 'Next Question' to start!";
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+        }
+
+        // Initialize the game
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('total').textContent = questions.length;
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98636098e54e2ad8',t:'MTc1OTA2Mzk0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
