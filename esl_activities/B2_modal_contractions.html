@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Contraction Master</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+        }
+
+        .tab-btn:hover {
+            background: #e9ecef;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .level-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .level-btn {
+            padding: 12px 24px;
+            border: 2px solid #4facfe;
+            background: white;
+            color: #4facfe;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .level-btn.active {
+            background: #4facfe;
+            color: white;
+        }
+
+        .exercise-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contraction-input {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .contraction-input:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .check-btn {
+            padding: 12px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #218838;
+        }
+
+        .feedback {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .reference-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #6f42c1;
+        }
+
+        .reference-card h3 {
+            color: #6f42c1;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .contraction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contraction-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .contraction-list li:last-child {
+            border-bottom: none;
+        }
+
+        .score-display {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .score-display h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .score-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .next-btn {
+            padding: 15px 30px;
+            background: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #3d8bfe;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .level-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .contraction-input {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 ESL Contraction Master</h1>
+            <p>Master English contractions from basic to advanced level</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('practice')">Practice</button>
+            <button class="tab-btn" onclick="switchTab('reference')">Reference Guide</button>
+        </div>
+
+        <div class="content">
+            <!-- Practice Tab -->
+            <div id="practice" class="tab-content active">
+                <div class="level-selector">
+                    <button class="level-btn active" onclick="setLevel('common')">Common Contractions</button>
+                    <button class="level-btn" onclick="setLevel('uncommon')">Uncommon Contractions</button>
+                    <button class="level-btn" onclick="setLevel('mixed')">Mixed Challenge</button>
+                </div>
+
+                <div class="score-display">
+                    <h3>Your Progress</h3>
+                    <div class="score-number"><span id="score">0</span> / <span id="total">0</span></div>
+                    <p>Correct Answers</p>
+                </div>
+
+                <div id="exercise-container">
+                    <!-- Exercises will be generated here -->
+                </div>
+
+                <button class="next-btn" onclick="generateExercises()" style="display: block; margin: 20px auto;">
+                    🚀 Start Practice
+                </button>
+            </div>
+
+            <!-- Reference Tab -->
+            <div id="reference" class="tab-content">
+                <div class="reference-grid">
+                    <div class="reference-card">
+                        <h3>📚 Common Contractions</h3>
+                        <ul class="contraction-list">
+                            <li><span><strong>I am</strong></span> <span>I'm</span></li>
+                            <li><span><strong>You are</strong></span> <span>you're</span></li>
+                            <li><span><strong>He is</strong></span> <span>he's</span></li>
+                            <li><span><strong>She is</strong></span> <span>she's</span></li>
+                            <li><span><strong>It is</strong></span> <span>it's</span></li>
+                            <li><span><strong>We are</strong></span> <span>we're</span></li>
+                            <li><span><strong>They are</strong></span> <span>they're</span></li>
+                            <li><span><strong>Cannot</strong></span> <span>can't</span></li>
+                            <li><span><strong>Will not</strong></span> <span>won't</span></li>
+                            <li><span><strong>Do not</strong></span> <span>don't</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>🎓 Uncommon Contractions</h3>
+                        <ul class="contraction-list">
+                            <li><span><strong>I would have</strong></span> <span>I'd've</span></li>
+                            <li><span><strong>You all</strong></span> <span>y'all</span></li>
+                            <li><span><strong>Should have</strong></span> <span>should've</span></li>
+                            <li><span><strong>Could have</strong></span> <span>could've</span></li>
+                            <li><span><strong>Would have</strong></span> <span>would've</span></li>
+                            <li><span><strong>Might have</strong></span> <span>might've</span></li>
+                            <li><span><strong>Must have</strong></span> <span>must've</span></li>
+                            <li><span><strong>Need not</strong></span> <span>needn't</span></li>
+                            <li><span><strong>Ought not</strong></span> <span>oughtn't</span></li>
+                            <li><span><strong>Dare not</strong></span> <span>daren't</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>⚡ Advanced Contractions</h3>
+                        <ul class="contraction-list">
+                            <li><span><strong>I had</strong></span> <span>I'd</span></li>
+                            <li><span><strong>You had</strong></span> <span>you'd</span></li>
+                            <li><span><strong>We had</strong></span> <span>we'd</span></li>
+                            <li><span><strong>What is</strong></span> <span>what's</span></li>
+                            <li><span><strong>Where is</strong></span> <span>where's</span></li>
+                            <li><span><strong>How is</strong></span> <span>how's</span></li>
+                            <li><span><strong>When is</strong></span> <span>when's</span></li>
+                            <li><span><strong>Why is</strong></span> <span>why's</span></li>
+                            <li><span><strong>That will</strong></span> <span>that'll</span></li>
+                            <li><span><strong>This will</strong></span> <span>this'll</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="reference-card">
+                        <h3>💡 Tips for Success</h3>
+                        <ul style="list-style: disc; padding-left: 20px;">
+                            <li>Listen to native speakers to hear contractions in context</li>
+                            <li>Practice writing contractions in sentences</li>
+                            <li>Remember: contractions are informal - avoid in formal writing</li>
+                            <li>Pay attention to apostrophe placement</li>
+                            <li>Some contractions sound the same but mean different things (it's vs its)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLevel = 'common';
+        let score = 0;
+        let totalQuestions = 0;
+        let currentExercises = [];
+
+        const contractions = {
+            common: [
+                { full: "I am", contracted: "I'm" },
+                { full: "you are", contracted: "you're" },
+                { full: "he is", contracted: "he's" },
+                { full: "she is", contracted: "she's" },
+                { full: "it is", contracted: "it's" },
+                { full: "we are", contracted: "we're" },
+                { full: "they are", contracted: "they're" },
+                { full: "I will", contracted: "I'll" },
+                { full: "you will", contracted: "you'll" },
+                { full: "he will", contracted: "he'll" },
+                { full: "cannot", contracted: "can't" },
+                { full: "will not", contracted: "won't" },
+                { full: "do not", contracted: "don't" },
+                { full: "does not", contracted: "doesn't" },
+                { full: "did not", contracted: "didn't" }
+            ],
+            uncommon: [
+                { full: "I would have", contracted: "I'd've" },
+                { full: "you all", contracted: "y'all" },
+                { full: "should have", contracted: "should've" },
+                { full: "could have", contracted: "could've" },
+                { full: "would have", contracted: "would've" },
+                { full: "might have", contracted: "might've" },
+                { full: "must have", contracted: "must've" },
+                { full: "need not", contracted: "needn't" },
+                { full: "ought not", contracted: "oughtn't" },
+                { full: "dare not", contracted: "daren't" },
+                { full: "I had", contracted: "I'd" },
+                { full: "you had", contracted: "you'd" },
+                { full: "we had", contracted: "we'd" },
+                { full: "that will", contracted: "that'll" },
+                { full: "this will", contracted: "this'll" }
+            ]
+        };
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function setLevel(level) {
+            currentLevel = level;
+            
+            // Update level buttons
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="setLevel('${level}')"]`).classList.add('active');
+
+            // Reset score
+            score = 0;
+            totalQuestions = 0;
+            updateScore();
+
+            // Clear exercises and regenerate
+            document.getElementById('exercise-container').innerHTML = '';
+            generateExercises();
+        }
+
+        function generateExercises() {
+            const container = document.getElementById('exercise-container');
+            container.innerHTML = '';
+
+            let exerciseData = [];
+            
+            if (currentLevel === 'mixed') {
+                exerciseData = [...contractions.common, ...contractions.uncommon];
+            } else {
+                exerciseData = contractions[currentLevel];
+            }
+
+            // Shuffle and take 8 exercises
+            const shuffled = exerciseData.sort(() => 0.5 - Math.random());
+            currentExercises = shuffled.slice(0, 8);
+
+            currentExercises.forEach((item, index) => {
+                const exerciseCard = document.createElement('div');
+                exerciseCard.className = 'exercise-card';
+                
+                const isReverse = Math.random() > 0.5; // Randomly decide direction
+                
+                exerciseCard.innerHTML = `
+                    <div class="question">
+                        ${isReverse ? 
+                            `Convert the contraction to full form: <strong>"${item.contracted}"</strong>` :
+                            `Convert to contraction: <strong>"${item.full}"</strong>`
+                        }
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="contraction-input" id="input-${index}" 
+                               placeholder="Type your answer here..."
+                               onkeypress="if(event.key==='Enter') checkAnswer(${index}, '${(isReverse ? item.full : item.contracted).replace(/'/g, "\\'")}', ${isReverse})">
+                        <button class="check-btn" onclick="checkAnswer(${index}, '${(isReverse ? item.full : item.contracted).replace(/'/g, "\\'")}', ${isReverse})">
+                            Check Answer
+                        </button>
+                    </div>
+                    <div id="feedback-${index}"></div>
+                `;
+                
+                container.appendChild(exerciseCard);
+            });
+
+            totalQuestions = currentExercises.length;
+            updateScore();
+        }
+
+        function checkAnswer(index, correctAnswer, isReverse) {
+            const input = document.getElementById(`input-${index}`);
+            const feedback = document.getElementById(`feedback-${index}`);
+            const button = input.parentElement.querySelector('.check-btn');
+            const userAnswer = input.value.trim().toLowerCase();
+            const correct = correctAnswer.toLowerCase();
+
+            if (userAnswer === correct) {
+                feedback.innerHTML = `<div class="feedback correct">✅ Correct! Great job!</div>`;
+                if (!input.hasAttribute('data-answered')) {
+                    score++;
+                    input.setAttribute('data-answered', 'true');
+                }
+                input.disabled = true;
+                button.disabled = true;
+                button.style.background = '#6c757d';
+                button.textContent = 'Correct!';
+            } else {
+                feedback.innerHTML = `<div class="feedback incorrect">❌ Not quite right. The correct answer is: <strong>${correctAnswer}</strong></div>`;
+            }
+
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = totalQuestions;
+        }
+
+        // Initialize with first exercise set
+        window.addEventListener('load', () => {
+            // Auto-generate first set of exercises
+            setTimeout(() => {
+                generateExercises();
+            }, 500);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9864c64627973dc4',t:'MTc1OTA3ODU5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
