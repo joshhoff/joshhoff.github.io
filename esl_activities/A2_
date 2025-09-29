@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person & Child Grammar Practice</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 5px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .reference-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .reference-card h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .form-examples {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .form-examples strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .quiz-container {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .score-display {
+            text-align: center;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .score-display h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .conversation-prompts {
+            display: grid;
+            gap: 20px;
+        }
+
+        .prompt-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .prompt-card h4 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .prompt-card p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .tips-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tips-section h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+
+        .tips-section ul {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button class="btn btn-secondary" onclick="toggleLanguage()" id="lang-toggle">🇪🇸 Español</button>
+            </div>
+            <h1 id="main-title">📚 Person & Child Grammar Practice</h1>
+            <p id="main-subtitle">Master the singular and plural forms with interactive exercises</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('reference')" id="tab-reference">📖 Reference Guide</button>
+            <button class="nav-tab" onclick="showSection('written')" id="tab-written">✍️ Written Practice</button>
+            <button class="nav-tab" onclick="showSection('conversation')" id="tab-conversation">💬 Conversation Practice</button>
+        </div>
+
+        <!-- Reference Section -->
+        <div id="reference" class="content-section active">
+            <h2 id="ref-title">📖 Reference Guide</h2>
+            
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h3 id="person-title">👤 Person</h3>
+                    <div class="form-examples">
+                        <strong id="singular-label">Singular:</strong> person
+                        <p><em id="person-singular-example">"There is one person waiting."</em></p>
+                    </div>
+                    <div class="form-examples">
+                        <strong id="plural-label">Plural:</strong> people
+                        <p><em id="person-plural-example">"There are many people here."</em></p>
+                    </div>
+                </div>
+
+                <div class="reference-card">
+                    <h3 id="child-title">👶 Child</h3>
+                    <div class="form-examples">
+                        <strong id="singular-label2">Singular:</strong> child
+                        <p><em id="child-singular-example">"The child is playing."</em></p>
+                    </div>
+                    <div class="form-examples">
+                        <strong id="plural-label2">Plural:</strong> children
+                        <p><em id="child-plural-example">"The children are laughing."</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-section">
+                <h4 id="tips-title">💡 Important Tips</h4>
+                <ul id="tips-list">
+                    <li><strong>Person → People:</strong> <span id="tip1">This is an irregular plural. Never say "persons" in everyday English.</span></li>
+                    <li><strong>Child → Children:</strong> <span id="tip2">Another irregular plural. The word "childs" doesn't exist.</span></li>
+                    <li><strong id="verb-agreement">Verb Agreement:</strong> <span id="tip3">Use "is" with singular forms and "are" with plural forms.</span></li>
+                    <li><strong id="articles">Articles:</strong> <span id="tip4">Use "a" or "an" with singular forms, no article needed for plural forms when speaking generally.</span></li>
+                </ul>
+            </div>
+
+            <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; border-left: 5px solid #2196f3;">
+                <h4 style="color: #1976d2; margin-top: 0;" id="examples-title">Common Usage Examples</h4>
+                <div style="display: grid; gap: 15px;" id="examples-content">
+                    <div>
+                        <strong>✅ <span id="correct-label">Correct:</span></strong> <span id="example1">"That person is very kind."</span><br>
+                        <strong>❌ <span id="incorrect-label">Incorrect:</span></strong> <span id="example1-wrong">"That people is very kind."</span>
+                    </div>
+                    <div>
+                        <strong>✅ <span id="correct-label2">Correct:</span></strong> <span id="example2">"Those people are waiting."</span><br>
+                        <strong>❌ <span id="incorrect-label2">Incorrect:</span></strong> <span id="example2-wrong">"Those person are waiting."</span>
+                    </div>
+                    <div>
+                        <strong>✅ <span id="correct-label3">Correct:</span></strong> <span id="example3">"Every child needs love."</span><br>
+                        <strong>❌ <span id="incorrect-label3">Incorrect:</span></strong> <span id="example3-wrong">"Every children needs love."</span>
+                    </div>
+                    <div>
+                        <strong>✅ <span id="correct-label4">Correct:</span></strong> <span id="example4">"All children deserve happiness."</span><br>
+                        <strong>❌ <span id="incorrect-label4">Incorrect:</span></strong> <span id="example4-wrong">"All child deserve happiness."</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Written Practice Section -->
+        <div id="written" class="content-section">
+            <h2 id="written-title">✍️ Written Practice</h2>
+            
+            <div class="score-display">
+                <h3 id="score-title">Your Score</h3>
+                <p id="score">0 / 0</p>
+            </div>
+
+            <div id="quiz-container">
+                <!-- Quiz questions will be loaded here -->
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="resetQuiz()" id="start-over-btn">🔄 Start Over</button>
+            </div>
+        </div>
+
+        <!-- Conversation Practice Section -->
+        <div id="conversation" class="content-section">
+            <h2 id="conversation-title">💬 Conversation Practice</h2>
+            <p style="color: #666; margin-bottom: 30px;" id="conversation-subtitle">Practice these conversation scenarios to improve your fluency with person/people and child/children.</p>
+
+            <div class="conversation-prompts" id="conversation-content">
+                <!-- Content will be loaded dynamically based on language -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language system
+        let currentLanguage = 'en';
+        
+        const translations = {
+            en: {
+                // Header
+                mainTitle: "📚 Person & Child Grammar Practice",
+                mainSubtitle: "Master the singular and plural forms with interactive exercises",
+                langToggle: "🇪🇸 Español",
+                
+                // Navigation
+                tabReference: "📖 Reference Guide",
+                tabWritten: "✍️ Written Practice", 
+                tabConversation: "💬 Conversation Practice",
+                
+                // Reference section
+                refTitle: "📖 Reference Guide",
+                personTitle: "👤 Person",
+                childTitle: "👶 Child",
+                singularLabel: "Singular:",
+                pluralLabel: "Plural:",
+                personSingularExample: '"There is one person waiting."',
+                personPluralExample: '"There are many people here."',
+                childSingularExample: '"The child is playing."',
+                childPluralExample: '"The children are laughing."',
+                tipsTitle: "💡 Important Tips",
+                tip1: "This is an irregular plural. Never say \"persons\" in everyday English.",
+                tip2: "Another irregular plural. The word \"childs\" doesn't exist.",
+                verbAgreement: "Verb Agreement:",
+                tip3: "Use \"is\" with singular forms and \"are\" with plural forms.",
+                articles: "Articles:",
+                tip4: "Use \"a\" or \"an\" with singular forms, no article needed for plural forms when speaking generally.",
+                examplesTitle: "Common Usage Examples",
+                correctLabel: "Correct:",
+                incorrectLabel: "Incorrect:",
+                example1: '"That person is very kind."',
+                example1Wrong: '"That people is very kind."',
+                example2: '"Those people are waiting."',
+                example2Wrong: '"Those person are waiting."',
+                example3: '"Every child needs love."',
+                example3Wrong: '"Every children needs love."',
+                example4: '"All children deserve happiness."',
+                example4Wrong: '"All child deserve happiness."',
+                
+                // Written practice
+                writtenTitle: "✍️ Written Practice",
+                scoreTitle: "Your Score",
+                startOverBtn: "🔄 Start Over",
+                submitBtn: "Submit Answer",
+                nextBtn: "Next Question",
+                
+                // Conversation practice
+                conversationTitle: "💬 Conversation Practice",
+                conversationSubtitle: "Practice these conversation scenarios to improve your fluency with person/people and child/children."
+            },
+            es: {
+                // Header
+                mainTitle: "📚 Práctica de Gramática: Person & Child",
+                mainSubtitle: "Domina las formas singular y plural con ejercicios interactivos",
+                langToggle: "🇺🇸 English",
+                
+                // Navigation
+                tabReference: "📖 Guía de Referencia",
+                tabWritten: "✍️ Práctica Escrita",
+                tabConversation: "💬 Práctica de Conversación",
+                
+                // Reference section
+                refTitle: "📖 Guía de Referencia",
+                personTitle: "👤 Person (Persona)",
+                childTitle: "👶 Child (Niño/a)",
+                singularLabel: "Singular:",
+                pluralLabel: "Plural:",
+                personSingularExample: '"Hay una persona esperando."',
+                personPluralExample: '"Hay mucha gente aquí."',
+                childSingularExample: '"El niño está jugando."',
+                childPluralExample: '"Los niños se están riendo."',
+                tipsTitle: "💡 Consejos Importantes",
+                tip1: "Este es un plural irregular. Nunca digas \"persons\" en inglés cotidiano.",
+                tip2: "Otro plural irregular. La palabra \"childs\" no existe.",
+                verbAgreement: "Concordancia Verbal:",
+                tip3: "Usa \"is\" con formas singulares y \"are\" con formas plurales.",
+                articles: "Artículos:",
+                tip4: "Usa \"a\" o \"an\" con formas singulares, no se necesita artículo para plurales al hablar en general.",
+                examplesTitle: "Ejemplos de Uso Común",
+                correctLabel: "Correcto:",
+                incorrectLabel: "Incorrecto:",
+                example1: '"Esa persona es muy amable."',
+                example1Wrong: '"Esa gente es muy amable."',
+                example2: '"Esas personas están esperando."',
+                example2Wrong: '"Esa persona están esperando."',
+                example3: '"Cada niño necesita amor."',
+                example3Wrong: '"Cada niños necesita amor."',
+                example4: '"Todos los niños merecen felicidad."',
+                example4Wrong: '"Todo niño merecen felicidad."',
+                
+                // Written practice
+                writtenTitle: "✍️ Práctica Escrita",
+                scoreTitle: "Tu Puntuación",
+                startOverBtn: "🔄 Empezar de Nuevo",
+                submitBtn: "Enviar Respuesta",
+                nextBtn: "Siguiente Pregunta",
+                
+                // Conversation practice
+                conversationTitle: "💬 Práctica de Conversación",
+                conversationSubtitle: "Practica estos escenarios de conversación para mejorar tu fluidez con person/people y child/children."
+            }
+        };
+
+        // Quiz questions data
+        const quizQuestions = {
+            en: [
+                {
+                    question: "Choose the correct word: 'There is one _____ waiting outside.'",
+                    options: ["person", "people"],
+                    correct: 0,
+                    explanation: "Use 'person' for singular (one individual)."
+                },
+                {
+                    question: "Choose the correct word: 'Many _____ attended the meeting.'",
+                    options: ["person", "people"],
+                    correct: 1,
+                    explanation: "Use 'people' for plural (more than one individual)."
+                },
+                {
+                    question: "Choose the correct word: 'The _____ is playing in the garden.'",
+                    options: ["child", "children"],
+                    correct: 0,
+                    explanation: "Use 'child' for singular (one young person)."
+                },
+                {
+                    question: "Choose the correct word: 'All the _____ are sleeping.'",
+                    options: ["child", "children"],
+                    correct: 1,
+                    explanation: "Use 'children' for plural (more than one young person)."
+                },
+                {
+                    question: "Choose the correct sentence:",
+                    options: [
+                        "That person are very kind.",
+                        "That person is very kind."
+                    ],
+                    correct: 1,
+                    explanation: "Use 'is' with singular 'person'."
+                },
+                {
+                    question: "Choose the correct sentence:",
+                    options: [
+                        "Those people is waiting.",
+                        "Those people are waiting."
+                    ],
+                    correct: 1,
+                    explanation: "Use 'are' with plural 'people'."
+                },
+                {
+                    question: "Choose the correct word: 'Every _____ deserves respect.'",
+                    options: ["person", "people"],
+                    correct: 0,
+                    explanation: "Use 'person' with 'every' (refers to individuals one by one)."
+                },
+                {
+                    question: "Choose the correct word: 'The _____ were laughing loudly.'",
+                    options: ["child", "children"],
+                    correct: 1,
+                    explanation: "Use 'children' with 'were' (plural verb form)."
+                },
+                {
+                    question: "Choose the correct sentence:",
+                    options: [
+                        "A child are playing outside.",
+                        "A child is playing outside."
+                    ],
+                    correct: 1,
+                    explanation: "Use 'is' with singular 'child'."
+                },
+                {
+                    question: "Choose the correct word: 'How many _____ live in this building?'",
+                    options: ["person", "people"],
+                    correct: 1,
+                    explanation: "Use 'people' with 'how many' (asking about quantity of individuals)."
+                }
+            ],
+            es: [
+                {
+                    question: "Elige la palabra correcta: 'There is one _____ waiting outside.' (Hay una _____ esperando afuera.)",
+                    options: ["person", "people"],
+                    correct: 0,
+                    explanation: "Usa 'person' para singular (una persona individual)."
+                },
+                {
+                    question: "Elige la palabra correcta: 'Many _____ attended the meeting.' (Muchas _____ asistieron a la reunión.)",
+                    options: ["person", "people"],
+                    correct: 1,
+                    explanation: "Usa 'people' para plural (más de una persona)."
+                },
+                {
+                    question: "Elige la palabra correcta: 'The _____ is playing in the garden.' (El _____ está jugando en el jardín.)",
+                    options: ["child", "children"],
+                    correct: 0,
+                    explanation: "Usa 'child' para singular (una persona joven)."
+                },
+                {
+                    question: "Elige la palabra correcta: 'All the _____ are sleeping.' (Todos los _____ están durmiendo.)",
+                    options: ["child", "children"],
+                    correct: 1,
+                    explanation: "Usa 'children' para plural (más de una persona joven)."
+                },
+                {
+                    question: "Elige la oración correcta:",
+                    options: [
+                        "That person are very kind. (Esa persona son muy amable.)",
+                        "That person is very kind. (Esa persona es muy amable.)"
+                    ],
+                    correct: 1,
+                    explanation: "Usa 'is' con 'person' singular."
+                },
+                {
+                    question: "Elige la oración correcta:",
+                    options: [
+                        "Those people is waiting. (Esas personas está esperando.)",
+                        "Those people are waiting. (Esas personas están esperando.)"
+                    ],
+                    correct: 1,
+                    explanation: "Usa 'are' con 'people' plural."
+                },
+                {
+                    question: "Elige la palabra correcta: 'Every _____ deserves respect.' (Cada _____ merece respeto.)",
+                    options: ["person", "people"],
+                    correct: 0,
+                    explanation: "Usa 'person' con 'every' (se refiere a individuos uno por uno)."
+                },
+                {
+                    question: "Elige la palabra correcta: 'The _____ were laughing loudly.' (Los _____ se reían fuerte.)",
+                    options: ["child", "children"],
+                    correct: 1,
+                    explanation: "Usa 'children' con 'were' (forma verbal plural)."
+                },
+                {
+                    question: "Elige la oración correcta:",
+                    options: [
+                        "A child are playing outside. (Un niño están jugando afuera.)",
+                        "A child is playing outside. (Un niño está jugando afuera.)"
+                    ],
+                    correct: 1,
+                    explanation: "Usa 'is' con 'child' singular."
+                },
+                {
+                    question: "Elige la palabra correcta: 'How many _____ live in this building?' (¿Cuántas _____ viven en este edificio?)",
+                    options: ["person", "people"],
+                    correct: 1,
+                    explanation: "Usa 'people' con 'how many' (preguntando sobre cantidad de individuos)."
+                }
+            ]
+        };
+
+        const conversationContent = {
+            en: `
+                <div class="prompt-card">
+                    <h4>🏪 At the Store</h4>
+                    <p><strong>Scenario:</strong> You're describing what you see at a busy shopping center.</p>
+                    <p><strong>Practice saying:</strong></p>
+                    <ul>
+                        <li>"I can see many <em>people</em> shopping today."</li>
+                        <li>"That <em>person</em> over there needs help."</li>
+                        <li>"There are several <em>children</em> with their parents."</li>
+                        <li>"One <em>child</em> is crying near the toy section."</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🎪 At the Park</h4>
+                    <p><strong>Scenario:</strong> You're describing a busy park scene to a friend.</p>
+                    <p><strong>Practice saying:</strong></p>
+                    <ul>
+                        <li>"Every <em>child</em> here seems so happy."</li>
+                        <li>"Look at all those <em>people</em> having picnics."</li>
+                        <li>"That <em>person</em> is walking their dog."</li>
+                        <li>"The <em>children</em> are playing on the swings."</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🏫 Talking About School</h4>
+                    <p><strong>Scenario:</strong> You're discussing your child's school with another parent.</p>
+                    <p><strong>Practice saying:</strong></p>
+                    <ul>
+                        <li>"My <em>child</em> loves going to school."</li>
+                        <li>"The teacher says all the <em>children</em> are doing well."</li>
+                        <li>"There's one <em>person</em> I'd like you to meet."</li>
+                        <li>"Many <em>people</em> volunteer at our school."</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🎉 Planning a Party</h4>
+                    <p><strong>Scenario:</strong> You're organizing a birthday party and discussing the guest list.</p>
+                    <p><strong>Practice saying:</strong></p>
+                    <ul>
+                        <li>"How many <em>people</em> should we invite?"</li>
+                        <li>"Each <em>person</em> can bring a friend."</li>
+                        <li>"We need activities for the <em>children</em>."</li>
+                        <li>"Every <em>child</em> will get a party favor."</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🗣️ Discussion Questions</h4>
+                    <p><strong>Practice answering these questions out loud:</strong></p>
+                    <ul>
+                        <li>"What kind of <em>person</em> do you admire most?"</li>
+                        <li>"How do <em>people</em> in your country celebrate birthdays?"</li>
+                        <li>"What activities do <em>children</em> enjoy in your neighborhood?"</li>
+                        <li>"When you were a <em>child</em>, what was your favorite game?"</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🎯 Challenge Exercise</h4>
+                    <p><strong>Create your own sentences using:</strong></p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>person</strong><br>
+                            <small>Make 3 sentences</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>people</strong><br>
+                            <small>Make 3 sentences</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>child</strong><br>
+                            <small>Make 3 sentences</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>children</strong><br>
+                            <small>Make 3 sentences</small>
+                        </div>
+                    </div>
+                </div>
+            `,
+            es: `
+                <div class="prompt-card">
+                    <h4>🏪 En la Tienda</h4>
+                    <p><strong>Escenario:</strong> Estás describiendo lo que ves en un centro comercial ocupado.</p>
+                    <p><strong>Practica diciendo:</strong></p>
+                    <ul>
+                        <li>"I can see many <em>people</em> shopping today." (Puedo ver mucha <em>gente</em> comprando hoy.)</li>
+                        <li>"That <em>person</em> over there needs help." (Esa <em>persona</em> de allá necesita ayuda.)</li>
+                        <li>"There are several <em>children</em> with their parents." (Hay varios <em>niños</em> con sus padres.)</li>
+                        <li>"One <em>child</em> is crying near the toy section." (Un <em>niño</em> está llorando cerca de la sección de juguetes.)</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🎪 En el Parque</h4>
+                    <p><strong>Escenario:</strong> Estás describiendo una escena ocupada del parque a un amigo.</p>
+                    <p><strong>Practica diciendo:</strong></p>
+                    <ul>
+                        <li>"Every <em>child</em> here seems so happy." (Cada <em>niño</em> aquí parece muy feliz.)</li>
+                        <li>"Look at all those <em>people</em> having picnics." (Mira toda esa <em>gente</em> haciendo picnics.)</li>
+                        <li>"That <em>person</em> is walking their dog." (Esa <em>persona</em> está paseando a su perro.)</li>
+                        <li>"The <em>children</em> are playing on the swings." (Los <em>niños</em> están jugando en los columpios.)</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🏫 Hablando de la Escuela</h4>
+                    <p><strong>Escenario:</strong> Estás discutiendo la escuela de tu hijo con otro padre.</p>
+                    <p><strong>Practica diciendo:</strong></p>
+                    <ul>
+                        <li>"My <em>child</em> loves going to school." (A mi <em>hijo</em> le encanta ir a la escuela.)</li>
+                        <li>"The teacher says all the <em>children</em> are doing well." (La maestra dice que todos los <em>niños</em> lo están haciendo bien.)</li>
+                        <li>"There's one <em>person</em> I'd like you to meet." (Hay una <em>persona</em> que me gustaría que conocieras.)</li>
+                        <li>"Many <em>people</em> volunteer at our school." (Mucha <em>gente</em> hace voluntariado en nuestra escuela.)</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🎉 Planeando una Fiesta</h4>
+                    <p><strong>Escenario:</strong> Estás organizando una fiesta de cumpleaños y discutiendo la lista de invitados.</p>
+                    <p><strong>Practica diciendo:</strong></p>
+                    <ul>
+                        <li>"How many <em>people</em> should we invite?" (¿A cuánta <em>gente</em> deberíamos invitar?)</li>
+                        <li>"Each <em>person</em> can bring a friend." (Cada <em>persona</em> puede traer un amigo.)</li>
+                        <li>"We need activities for the <em>children</em>." (Necesitamos actividades para los <em>niños</em>.)</li>
+                        <li>"Every <em>child</em> will get a party favor." (Cada <em>niño</em> recibirá un recuerdo de la fiesta.)</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🗣️ Preguntas de Discusión</h4>
+                    <p><strong>Practica respondiendo estas preguntas en voz alta:</strong></p>
+                    <ul>
+                        <li>"What kind of <em>person</em> do you admire most?" (¿Qué tipo de <em>persona</em> admiras más?)</li>
+                        <li>"How do <em>people</em> in your country celebrate birthdays?" (¿Cómo celebra la <em>gente</em> los cumpleaños en tu país?)</li>
+                        <li>"What activities do <em>children</em> enjoy in your neighborhood?" (¿Qué actividades disfrutan los <em>niños</em> en tu vecindario?)</li>
+                        <li>"When you were a <em>child</em>, what was your favorite game?" (Cuando eras <em>niño</em>, ¿cuál era tu juego favorito?)</li>
+                    </ul>
+                </div>
+
+                <div class="prompt-card">
+                    <h4>🎯 Ejercicio de Desafío</h4>
+                    <p><strong>Crea tus propias oraciones usando:</strong></p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>person</strong><br>
+                            <small>Haz 3 oraciones</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>people</strong><br>
+                            <small>Haz 3 oraciones</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>child</strong><br>
+                            <small>Haz 3 oraciones</small>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.7); padding: 10px; border-radius: 8px;">
+                            <strong>children</strong><br>
+                            <small>Haz 3 oraciones</small>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        // Language functions
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // Update header
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('main-subtitle').textContent = t.mainSubtitle;
+            document.getElementById('lang-toggle').textContent = t.langToggle;
+            
+            // Update navigation tabs
+            document.getElementById('tab-reference').textContent = t.tabReference;
+            document.getElementById('tab-written').textContent = t.tabWritten;
+            document.getElementById('tab-conversation').textContent = t.tabConversation;
+            
+            // Update reference section
+            document.getElementById('ref-title').textContent = t.refTitle;
+            document.getElementById('person-title').textContent = t.personTitle;
+            document.getElementById('child-title').textContent = t.childTitle;
+            document.getElementById('singular-label').textContent = t.singularLabel;
+            document.getElementById('plural-label').textContent = t.pluralLabel;
+            document.getElementById('singular-label2').textContent = t.singularLabel;
+            document.getElementById('plural-label2').textContent = t.pluralLabel;
+            document.getElementById('person-singular-example').textContent = t.personSingularExample;
+            document.getElementById('person-plural-example').textContent = t.personPluralExample;
+            document.getElementById('child-singular-example').textContent = t.childSingularExample;
+            document.getElementById('child-plural-example').textContent = t.childPluralExample;
+            document.getElementById('tips-title').textContent = t.tipsTitle;
+            document.getElementById('tip1').textContent = t.tip1;
+            document.getElementById('tip2').textContent = t.tip2;
+            document.getElementById('verb-agreement').textContent = t.verbAgreement;
+            document.getElementById('tip3').textContent = t.tip3;
+            document.getElementById('articles').textContent = t.articles;
+            document.getElementById('tip4').textContent = t.tip4;
+            document.getElementById('examples-title').textContent = t.examplesTitle;
+            
+            // Update example labels
+            document.getElementById('correct-label').textContent = t.correctLabel;
+            document.getElementById('incorrect-label').textContent = t.incorrectLabel;
+            document.getElementById('correct-label2').textContent = t.correctLabel;
+            document.getElementById('incorrect-label2').textContent = t.incorrectLabel;
+            document.getElementById('correct-label3').textContent = t.correctLabel;
+            document.getElementById('incorrect-label3').textContent = t.incorrectLabel;
+            document.getElementById('correct-label4').textContent = t.correctLabel;
+            document.getElementById('incorrect-label4').textContent = t.incorrectLabel;
+            
+            // Update examples
+            document.getElementById('example1').textContent = t.example1;
+            document.getElementById('example1-wrong').textContent = t.example1Wrong;
+            document.getElementById('example2').textContent = t.example2;
+            document.getElementById('example2-wrong').textContent = t.example2Wrong;
+            document.getElementById('example3').textContent = t.example3;
+            document.getElementById('example3-wrong').textContent = t.example3Wrong;
+            document.getElementById('example4').textContent = t.example4;
+            document.getElementById('example4-wrong').textContent = t.example4Wrong;
+            
+            // Update written practice section
+            document.getElementById('written-title').textContent = t.writtenTitle;
+            document.getElementById('score-title').textContent = t.scoreTitle;
+            document.getElementById('start-over-btn').textContent = t.startOverBtn;
+            
+            // Update conversation section
+            document.getElementById('conversation-title').textContent = t.conversationTitle;
+            document.getElementById('conversation-subtitle').textContent = t.conversationSubtitle;
+            document.getElementById('conversation-content').innerHTML = conversationContent[currentLanguage];
+            
+            // Reset quiz if on written section
+            if (document.getElementById('written').classList.contains('active')) {
+                initializeQuiz();
+            }
+        }
+
+        // Navigation functions
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Initialize quiz if written section is selected
+            if (sectionName === 'written') {
+                initializeQuiz();
+            }
+            
+            // Load conversation content if conversation section is selected
+            if (sectionName === 'conversation') {
+                document.getElementById('conversation-content').innerHTML = conversationContent[currentLanguage];
+            }
+        }
+
+        // Quiz functions
+        function initializeQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            updateScore();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const questions = quizQuestions[currentLanguage];
+            if (currentQuestion >= questions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            const quizContainer = document.getElementById('quiz-container');
+            const t = translations[currentLanguage];
+            
+            const questionLabel = currentLanguage === 'en' ? 'Question' : 'Pregunta';
+            const ofLabel = currentLanguage === 'en' ? 'of' : 'de';
+            
+            quizContainer.innerHTML = `
+                <div class="quiz-container">
+                    <div class="question">
+                        ${questionLabel} ${currentQuestion + 1} ${ofLabel} ${questions.length}
+                    </div>
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => 
+                            `<div class="option" onclick="selectOption(${index})">${option}</div>`
+                        ).join('')}
+                    </div>
+                    <div id="feedback" style="display: none;"></div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-primary" onclick="submitAnswer()" id="submit-btn" disabled>${t.submitBtn}</button>
+                        <button class="btn btn-secondary" onclick="nextQuestion()" id="next-btn" style="display: none;">${t.nextBtn}</button>
+                    </div>
+                </div>
+            `;
+            
+            answered = false;
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Select current option
+            document.querySelectorAll('.option')[index].classList.add('selected');
+            document.getElementById('submit-btn').disabled = false;
+            
+            // Store selected answer
+            window.selectedAnswer = index;
+        }
+
+        function submitAnswer() {
+            if (answered || window.selectedAnswer === undefined) return;
+            
+            answered = true;
+            const questions = quizQuestions[currentLanguage];
+            const question = questions[currentQuestion];
+            const isCorrect = window.selectedAnswer === question.correct;
+            
+            // Update score
+            if (isCorrect) {
+                score++;
+                updateScore();
+            }
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            
+            const correctText = currentLanguage === 'en' ? '✅ Correct!' : '✅ ¡Correcto!';
+            const incorrectText = currentLanguage === 'en' ? '❌ Incorrect' : '❌ Incorrecto';
+            
+            feedback.innerHTML = `
+                <strong>${isCorrect ? correctText : incorrectText}</strong><br>
+                ${question.explanation}
+            `;
+            
+            // Update option styles
+            document.querySelectorAll('.option').forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === window.selectedAnswer && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.cursor = 'default';
+            });
+            
+            // Show next button
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            window.selectedAnswer = undefined;
+            loadQuestion();
+        }
+
+        function updateScore() {
+            const questions = quizQuestions[currentLanguage];
+            document.getElementById('score').textContent = `${score} / ${questions.length}`;
+        }
+
+        function showFinalScore() {
+            const questions = quizQuestions[currentLanguage];
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = '';
+            
+            if (currentLanguage === 'en') {
+                if (percentage >= 90) {
+                    message = '🎉 Excellent! You have mastered these forms!';
+                } else if (percentage >= 70) {
+                    message = '👍 Good job! Keep practicing to improve further.';
+                } else {
+                    message = '📚 Keep studying! Review the reference guide and try again.';
+                }
+            } else {
+                if (percentage >= 90) {
+                    message = '🎉 ¡Excelente! ¡Has dominado estas formas!';
+                } else if (percentage >= 70) {
+                    message = '👍 ¡Buen trabajo! Sigue practicando para mejorar más.';
+                } else {
+                    message = '📚 ¡Sigue estudiando! Revisa la guía de referencia e inténtalo de nuevo.';
+                }
+            }
+            
+            const completeText = currentLanguage === 'en' ? '🏁 Quiz Complete!' : '🏁 ¡Cuestionario Completado!';
+            const finalScoreText = currentLanguage === 'en' ? 'Final Score' : 'Puntuación Final';
+            const tryAgainText = currentLanguage === 'en' ? '🔄 Try Again' : '🔄 Intentar de Nuevo';
+            
+            document.getElementById('quiz-container').innerHTML = `
+                <div class="quiz-container" style="text-align: center;">
+                    <h3>${completeText}</h3>
+                    <div class="score-display">
+                        <h3>${finalScoreText}</h3>
+                        <p style="font-size: 2rem; margin: 10px 0;">${score} / ${questions.length}</p>
+                        <p style="font-size: 1.5rem; margin: 0;">${percentage}%</p>
+                    </div>
+                    <p style="font-size: 1.2rem; margin: 20px 0;">${message}</p>
+                    <button class="btn btn-primary" onclick="resetQuiz()">${tryAgainText}</button>
+                </div>
+            `;
+        }
+
+        function resetQuiz() {
+            initializeQuiz();
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load conversation content for default language
+            document.getElementById('conversation-content').innerHTML = conversationContent[currentLanguage];
+            // Quiz will be initialized when the written section is first accessed
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986f3da9b16cf8cf',t:'MTc1OTE4ODMzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

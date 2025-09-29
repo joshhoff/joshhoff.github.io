@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Tense Master</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .tense-card {
+            background: #f8f9ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .tense-card h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        .example {
+            background: #e8f2ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        .quiz-question {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .quiz-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .quiz-option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        
+        .quiz-option.correct {
+            border-color: #4caf50;
+            background: #4caf50;
+            color: white;
+        }
+        
+        .quiz-option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 10px;
+            color: #2e7d32;
+        }
+        
+        .verb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .verb-card {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .verb-forms {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .form-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .conversation-prompt {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .prompt-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 English Tense Master</h1>
+            <p>Master Simple Past, Present Perfect & Past Perfect</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('reference')">📚 Reference Guide</button>
+            <button class="tab-btn" onclick="showTab('quiz')">✏️ Written Practice</button>
+            <button class="tab-btn" onclick="showTab('conversation')">💬 Conversation Practice</button>
+        </div>
+        
+        <!-- Reference Guide -->
+        <div id="reference" class="content-section active">
+            <h2>📖 Grammar Reference & Common Verbs</h2>
+            
+            <div class="tense-card">
+                <h3>Simple Past</h3>
+                <p><strong>Use:</strong> Actions completed in the past at a specific time</p>
+                <p><strong>Form:</strong> Subject + Past form of verb</p>
+                <div class="example">
+                    ✓ I <strong>walked</strong> to school yesterday.<br>
+                    ✓ She <strong>finished</strong> her homework at 8 PM.
+                </div>
+            </div>
+            
+            <div class="tense-card">
+                <h3>Present Perfect</h3>
+                <p><strong>Use:</strong> Actions that started in the past and continue to present, or past actions with present relevance</p>
+                <p><strong>Form:</strong> Subject + have/has + Past participle</p>
+                <div class="example">
+                    ✓ I <strong>have lived</strong> here for five years.<br>
+                    ✓ She <strong>has finished</strong> her project.
+                </div>
+            </div>
+            
+            <div class="tense-card">
+                <h3>Past Perfect</h3>
+                <p><strong>Use:</strong> Actions completed before another past action</p>
+                <p><strong>Form:</strong> Subject + had + Past participle</p>
+                <div class="example">
+                    ✓ I <strong>had eaten</strong> before she arrived.<br>
+                    ✓ They <strong>had left</strong> by the time we got there.
+                </div>
+            </div>
+            
+            <h3>🔤 20 Most Common Verbs</h3>
+            <div class="verb-grid" id="verbGrid"></div>
+        </div>
+        
+        <!-- Written Practice -->
+        <div id="quiz" class="content-section">
+            <h2>✏️ Written Practice Quiz</h2>
+            <div class="score-display" id="scoreDisplay">Score: 0/0</div>
+            
+            <div id="quizContainer"></div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="checkAnswers()">Check Answers</button>
+                <button class="btn" onclick="generateNewQuiz()">New Quiz</button>
+            </div>
+        </div>
+        
+        <!-- Conversation Practice -->
+        <div id="conversation" class="content-section">
+            <h2>💬 Conversation Practice</h2>
+            <p>Practice using these tenses in conversation with these prompts:</p>
+            
+            <div class="conversation-prompt">
+                <span class="prompt-icon">🎯</span>
+                <strong>Simple Past Practice:</strong><br>
+                Tell me about what you did last weekend. Use at least 5 different verbs in simple past tense.
+            </div>
+            
+            <div class="conversation-prompt">
+                <span class="prompt-icon">⭐</span>
+                <strong>Present Perfect Practice:</strong><br>
+                Describe your life experiences. What places have you visited? What skills have you learned? What achievements have you accomplished?
+            </div>
+            
+            <div class="conversation-prompt">
+                <span class="prompt-icon">🔄</span>
+                <strong>Past Perfect Practice:</strong><br>
+                Tell a story about arriving somewhere and finding that something had already happened. Example: "When I got to the party, most people had already left."
+            </div>
+            
+            <div class="conversation-prompt">
+                <span class="prompt-icon">🎭</span>
+                <strong>Mixed Tenses Challenge:</strong><br>
+                Describe a memorable day from your past. Include: what you had planned to do (past perfect), what actually happened (simple past), and how it has affected you since then (present perfect).
+            </div>
+            
+            <div class="conversation-prompt">
+                <span class="prompt-icon">📱</span>
+                <strong>Daily Routine Comparison:</strong><br>
+                Compare your routine now with your routine 5 years ago. What had you never done before that time? What have you started doing since then?
+            </div>
+            
+            <div class="conversation-prompt">
+                <span class="prompt-icon">🌟</span>
+                <strong>Achievement Story:</strong><br>
+                Tell about a goal you achieved. What had you done to prepare? What steps did you take? How has this achievement changed your life?
+            </div>
+            
+            <button class="btn" onclick="generateNewPrompts()">🔄 Generate New Prompts</button>
+        </div>
+    </div>
+
+    <script>
+        // Common verbs data
+        const commonVerbs = [
+            {base: 'be', past: 'was/were', pastParticiple: 'been'},
+            {base: 'have', past: 'had', pastParticiple: 'had'},
+            {base: 'do', past: 'did', pastParticiple: 'done'},
+            {base: 'say', past: 'said', pastParticiple: 'said'},
+            {base: 'get', past: 'got', pastParticiple: 'gotten'},
+            {base: 'make', past: 'made', pastParticiple: 'made'},
+            {base: 'go', past: 'went', pastParticiple: 'gone'},
+            {base: 'know', past: 'knew', pastParticiple: 'known'},
+            {base: 'take', past: 'took', pastParticiple: 'taken'},
+            {base: 'see', past: 'saw', pastParticiple: 'seen'},
+            {base: 'come', past: 'came', pastParticiple: 'come'},
+            {base: 'think', past: 'thought', pastParticiple: 'thought'},
+            {base: 'look', past: 'looked', pastParticiple: 'looked'},
+            {base: 'want', past: 'wanted', pastParticiple: 'wanted'},
+            {base: 'give', past: 'gave', pastParticiple: 'given'},
+            {base: 'use', past: 'used', pastParticiple: 'used'},
+            {base: 'find', past: 'found', pastParticiple: 'found'},
+            {base: 'tell', past: 'told', pastParticiple: 'told'},
+            {base: 'ask', past: 'asked', pastParticiple: 'asked'},
+            {base: 'work', past: 'worked', pastParticiple: 'worked'}
+        ];
+
+        // Quiz questions
+        const quizQuestions = [
+            // Simple Past Questions
+            {
+                question: "Yesterday, I _____ to the store.",
+                options: ["go", "went", "have gone", "had gone"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "We _____ our homework yesterday evening.",
+                options: ["finished", "have finished", "had finished", "finish"],
+                correct: 0,
+                tense: "Simple Past"
+            },
+            {
+                question: "She _____ her job last month.",
+                options: ["quits", "quit", "has quit", "had quit"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "They _____ soccer every weekend when they were kids.",
+                options: ["play", "played", "have played", "had played"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "I _____ him at the party on Saturday.",
+                options: ["meet", "met", "have met", "had met"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "The train _____ at 3:15 PM yesterday.",
+                options: ["arrives", "arrived", "has arrived", "had arrived"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "My grandmother _____ delicious cookies when I was young.",
+                options: ["makes", "made", "has made", "had made"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "We _____ to the beach last summer.",
+                options: ["go", "went", "have gone", "had gone"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "He _____ his phone and couldn't call anyone.",
+                options: ["loses", "lost", "has lost", "had lost"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            {
+                question: "The movie _____ at 8 o'clock last night.",
+                options: ["starts", "started", "has started", "had started"],
+                correct: 1,
+                tense: "Simple Past"
+            },
+            
+            // Present Perfect Questions
+            {
+                question: "She _____ in Paris for three years.",
+                options: ["lived", "has lived", "had lived", "lives"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "They _____ three books this month.",
+                options: ["read", "have read", "had read", "were reading"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "I _____ my keys! I can't find them anywhere.",
+                options: ["lost", "have lost", "had lost", "lose"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "We _____ to Japan twice.",
+                options: ["went", "have been", "had been", "go"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "He _____ his homework yet.",
+                options: ["didn't finish", "hasn't finished", "hadn't finished", "doesn't finish"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "_____ you ever _____ Indian food?",
+                options: ["Did / eat", "Have / eaten", "Had / eaten", "Do / eat"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "The company _____ many new employees this year.",
+                options: ["hired", "has hired", "had hired", "hires"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "I _____ that movie several times.",
+                options: ["saw", "have seen", "had seen", "see"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "She _____ her degree and is now looking for work.",
+                options: ["finished", "has finished", "had finished", "finishes"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "Technology _____ rapidly in recent years.",
+                options: ["changed", "has changed", "had changed", "changes"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "We _____ in this house since 2010.",
+                options: ["lived", "have lived", "had lived", "live"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            {
+                question: "_____ you _____ your lunch yet?",
+                options: ["Did / eat", "Have / eaten", "Had / eaten", "Do / eat"],
+                correct: 1,
+                tense: "Present Perfect"
+            },
+            
+            // Past Perfect Questions
+            {
+                question: "By the time we arrived, the movie _____ already _____.",
+                options: ["has started", "had started", "started", "was starting"],
+                correct: 1,
+                tense: "Past Perfect"
+            },
+            {
+                question: "I _____ never _____ sushi before last night.",
+                options: ["have eaten", "had eaten", "ate", "was eating"],
+                correct: 1,
+                tense: "Past Perfect"
+            },
+            {
+                question: "After she _____ dinner, she watched TV.",
+                options: ["cooked", "has cooked", "had cooked", "cooks"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "When I got to the station, the train _____ already _____.",
+                options: ["has left", "had left", "left", "was leaving"],
+                correct: 1,
+                tense: "Past Perfect"
+            },
+            {
+                question: "She realized she _____ her wallet at home.",
+                options: ["forgot", "has forgotten", "had forgotten", "forgets"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "Before moving to New York, he _____ in a small town.",
+                options: ["lived", "has lived", "had lived", "lives"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "The students _____ the lesson before the teacher arrived.",
+                options: ["finished", "have finished", "had finished", "finish"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "I was tired because I _____ all night.",
+                options: ["worked", "have worked", "had worked", "work"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "When we got to the restaurant, they _____ our table away.",
+                options: ["gave", "have given", "had given", "give"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "She _____ three languages before she turned 18.",
+                options: ["learned", "has learned", "had learned", "learns"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "After he _____ the book, he wrote a review.",
+                options: ["read", "has read", "had read", "reads"],
+                correct: 2,
+                tense: "Past Perfect"
+            },
+            {
+                question: "The concert _____ by the time we found parking.",
+                options: ["started", "has started", "had started", "starts"],
+                correct: 2,
+                tense: "Past Perfect"
+            }
+        ];
+
+        let currentQuiz = [];
+        let userAnswers = [];
+        let score = 0;
+
+        // Initialize the app
+        function init() {
+            displayVerbs();
+            generateNewQuiz();
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and activate tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Display verb reference
+        function displayVerbs() {
+            const verbGrid = document.getElementById('verbGrid');
+            verbGrid.innerHTML = commonVerbs.map(verb => `
+                <div class="verb-card">
+                    <h4>${verb.base}</h4>
+                    <div class="verb-forms">
+                        <div><span class="form-label">Base:</span> ${verb.base}</div>
+                        <div><span class="form-label">Past:</span> ${verb.past}</div>
+                        <div><span class="form-label">Past Participle:</span> ${verb.pastParticiple}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Generate new quiz
+        function generateNewQuiz() {
+            currentQuiz = [...quizQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+            userAnswers = new Array(currentQuiz.length).fill(-1);
+            score = 0;
+            displayQuiz();
+            updateScore();
+        }
+
+        // Display quiz questions
+        function displayQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = currentQuiz.map((q, index) => `
+                <div class="quiz-question">
+                    <h4>Question ${index + 1} (${q.tense})</h4>
+                    <p>${q.question}</p>
+                    <div class="quiz-options">
+                        ${q.options.map((option, optIndex) => `
+                            <div class="quiz-option" onclick="selectAnswer(${index}, ${optIndex})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Select answer
+        function selectAnswer(questionIndex, optionIndex) {
+            userAnswers[questionIndex] = optionIndex;
+            
+            // Update visual selection
+            const questionDiv = document.querySelectorAll('.quiz-question')[questionIndex];
+            const options = questionDiv.querySelectorAll('.quiz-option');
+            
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === optionIndex) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+
+        // Check answers
+        function checkAnswers() {
+            score = 0;
+            
+            currentQuiz.forEach((question, qIndex) => {
+                const questionDiv = document.querySelectorAll('.quiz-question')[qIndex];
+                const options = questionDiv.querySelectorAll('.quiz-option');
+                
+                options.forEach((option, optIndex) => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                    
+                    if (optIndex === question.correct) {
+                        option.classList.add('correct');
+                    } else if (optIndex === userAnswers[qIndex] && optIndex !== question.correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (userAnswers[qIndex] === question.correct) {
+                    score++;
+                }
+            });
+            
+            updateScore();
+        }
+
+        // Update score display
+        function updateScore() {
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.textContent = `Score: ${score}/${currentQuiz.length}`;
+            
+            if (score === currentQuiz.length && score > 0) {
+                scoreDisplay.innerHTML += ' 🎉 Perfect!';
+                scoreDisplay.style.background = '#e8f5e8';
+            } else if (score > 0) {
+                scoreDisplay.style.background = '#fff3e0';
+            }
+        }
+
+        // Generate new conversation prompts
+        function generateNewPrompts() {
+            const prompts = [
+                // Simple Past Prompts
+                {
+                    icon: '🎯',
+                    title: 'Simple Past Practice:',
+                    text: 'Describe your last vacation. Where did you go? What did you see? Who did you meet?'
+                },
+                {
+                    icon: '🏫',
+                    title: 'School Memories:',
+                    text: 'Tell me about your favorite teacher from school. What subject did they teach? Why did you like them? What did you learn?'
+                },
+                {
+                    icon: '🎂',
+                    title: 'Birthday Story:',
+                    text: 'Describe your most memorable birthday. How old did you turn? Who came to celebrate? What gifts did you receive?'
+                },
+                {
+                    icon: '🌧️',
+                    title: 'Weather Memory:',
+                    text: 'Tell about a time when bad weather affected your plans. What happened? How did you adapt? What did you do instead?'
+                },
+                {
+                    icon: '🍳',
+                    title: 'Cooking Disaster:',
+                    text: 'Describe a time when you tried to cook something and it went wrong. What did you make? What happened? How did it taste?'
+                },
+                {
+                    icon: '🚗',
+                    title: 'Transportation Tale:',
+                    text: 'Tell about an interesting journey you took. How did you travel? What did you see along the way? Who did you meet?'
+                },
+                {
+                    icon: '🎪',
+                    title: 'Childhood Event:',
+                    text: 'Describe a special event from your childhood (circus, fair, festival). What did you do there? What did you eat? How did you feel?'
+                },
+                {
+                    icon: '📚',
+                    title: 'Book or Movie:',
+                    text: 'Tell about the last book you read or movie you watched. What was it about? Did you enjoy it? Would you recommend it?'
+                },
+                
+                // Present Perfect Prompts
+                {
+                    icon: '⭐',
+                    title: 'Present Perfect Practice:',
+                    text: 'Talk about changes in your city or hometown. What has improved? What has gotten worse? What new places have opened?'
+                },
+                {
+                    icon: '🌍',
+                    title: 'Travel Experiences:',
+                    text: 'Discuss places you have visited in your life. Which countries have you been to? What cultures have you experienced? What has surprised you most?'
+                },
+                {
+                    icon: '🎓',
+                    title: 'Learning Journey:',
+                    text: 'Talk about skills you have developed over the years. What languages have you studied? What hobbies have you picked up? What has been most challenging?'
+                },
+                {
+                    icon: '💼',
+                    title: 'Career Progress:',
+                    text: 'Describe your work experience. What jobs have you had? What skills have you gained? How has your career evolved?'
+                },
+                {
+                    icon: '🏠',
+                    title: 'Home Changes:',
+                    text: 'Talk about how your living situation has changed. Where have you lived? What improvements have you made to your home? What has stayed the same?'
+                },
+                {
+                    icon: '👥',
+                    title: 'Relationships:',
+                    text: 'Discuss important people in your life. Who have you met recently? What friendships have lasted the longest? How have your relationships changed?'
+                },
+                {
+                    icon: '🎨',
+                    title: 'Creative Pursuits:',
+                    text: 'Talk about creative activities you have tried. What art forms have you explored? What projects have you completed? What has inspired you?'
+                },
+                {
+                    icon: '🏃',
+                    title: 'Health & Fitness:',
+                    text: 'Describe changes in your health habits. What sports have you tried? How has your diet changed? What healthy habits have you developed?'
+                },
+                
+                // Past Perfect Prompts
+                {
+                    icon: '🔄',
+                    title: 'Past Perfect Practice:',
+                    text: 'Tell about a time you were late for something important. What had you planned to do? What had gone wrong?'
+                },
+                {
+                    icon: '🎓',
+                    title: 'Educational Background:',
+                    text: 'Describe your preparation for an important exam or interview. What had you studied? How had you prepared? What experience had helped you?'
+                },
+                {
+                    icon: '✈️',
+                    title: 'Travel Preparation:',
+                    text: 'Tell about a trip where your plans changed. What had you originally planned? What preparations had you made? What had you not expected?'
+                },
+                {
+                    icon: '🏆',
+                    title: 'Achievement Story:',
+                    text: 'Describe reaching a goal. What had you done to prepare? What obstacles had you overcome? What experience had prepared you for success?'
+                },
+                {
+                    icon: '💔',
+                    title: 'Disappointment:',
+                    text: 'Tell about a time when something you had planned fell through. What had you been looking forward to? What preparations had you made? How did you feel?'
+                },
+                {
+                    icon: '🎪',
+                    title: 'Surprise Encounter:',
+                    text: 'Describe meeting someone unexpectedly. Where had you been going? What had you been doing? How had you known this person before?'
+                },
+                {
+                    icon: '🔧',
+                    title: 'Problem Solving:',
+                    text: 'Tell about fixing something that had broken. What had happened to it? What had you tried before? What solution had you not thought of initially?'
+                },
+                {
+                    icon: '🎁',
+                    title: 'Gift Story:',
+                    text: 'Describe giving or receiving a meaningful gift. What had the person done to deserve it? What had you been hoping for? How had you chosen it?'
+                },
+                
+                // Mixed Tenses Challenges
+                {
+                    icon: '🎭',
+                    title: 'Mixed Tenses Challenge:',
+                    text: 'Describe learning a new skill. What had you tried before? What did you do differently? How has it helped you?'
+                },
+                {
+                    icon: '📱',
+                    title: 'Technology Evolution:',
+                    text: 'Compare how you used technology 10 years ago vs now. What devices have you started using? What had you never imagined possible? What changed your daily routine?'
+                },
+                {
+                    icon: '🌟',
+                    title: 'Life Transformation:',
+                    text: 'Discuss a major decision you made. What had influenced your choice? What happened after? How has your life changed since then?'
+                },
+                {
+                    icon: '🏠',
+                    title: 'Moving Story:',
+                    text: 'Tell about relocating to a new place. What had you heard about it before? What did you discover when you arrived? How has living there affected you?'
+                },
+                {
+                    icon: '💼',
+                    title: 'Career Change:',
+                    text: 'Describe changing jobs or careers. What had you been doing before? What motivated the change? How has your new path developed?'
+                },
+                {
+                    icon: '🎯',
+                    title: 'Goal Achievement:',
+                    text: 'Talk about accomplishing something important. What had you dreamed of doing? What steps did you take? How has success changed your perspective?'
+                },
+                {
+                    icon: '🌱',
+                    title: 'Personal Growth:',
+                    text: 'Describe overcoming a fear or challenge. What had you been afraid of? What did you do to face it? How has this experience helped you grow?'
+                },
+                {
+                    icon: '🎨',
+                    title: 'Creative Project:',
+                    text: 'Tell about completing a creative project. What had inspired you to start? What challenges did you face? How has finishing it affected your confidence?'
+                }
+            ];
+            
+            const shuffled = prompts.sort(() => Math.random() - 0.5).slice(0, 8);
+            const conversationSection = document.getElementById('conversation');
+            const promptsHTML = shuffled.map(prompt => `
+                <div class="conversation-prompt">
+                    <span class="prompt-icon">${prompt.icon}</span>
+                    <strong>${prompt.title}</strong><br>
+                    ${prompt.text}
+                </div>
+            `).join('');
+            
+            conversationSection.innerHTML = `
+                <h2>💬 Conversation Practice</h2>
+                <p>Practice using these tenses in conversation with these prompts:</p>
+                ${promptsHTML}
+                <button class="btn" onclick="generateNewPrompts()">🔄 Generate New Prompts</button>
+            `;
+        }
+
+        // Initialize app when page loads
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'986f2efbf1b6f8cf',t:'MTc1OTE4NzczNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
