@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Articles for Czech Speakers - Complete Learning System</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .lesson-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .nav-tab:hover {
+            border-color: #667eea;
+        }
+
+        .conversation-prompt {
+            background: #fff5f5;
+            border-left: 4px solid #f56565;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .conversation-title {
+            font-weight: bold;
+            color: #742a2a;
+            margin-bottom: 10px;
+        }
+
+        .explanation-section {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .explanation-section h3 {
+            color: #22543d;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .rule-box {
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .czech-note {
+            background: #fef5e7;
+            border: 1px solid #f6ad55;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .czech-note::before {
+            content: "🇨🇿 ";
+            font-style: normal;
+        }
+
+        .lesson-title {
+            font-size: 1.4rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .difficulty-badge {
+            background: #ffd700;
+            color: #8b6914;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .sentence {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 60px;
+            height: 30px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 5px;
+            margin: 0 5px;
+            text-align: center;
+            line-height: 26px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .blank.filled {
+            border: 2px solid #667eea;
+            background: #edf2f7;
+            font-weight: bold;
+        }
+
+        .blank.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+            color: #22543d;
+        }
+
+        .blank.incorrect {
+            border-color: #f56565;
+            background: #fff5f5;
+            color: #742a2a;
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .option {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            min-width: 60px;
+        }
+
+        .option:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .option.used {
+            background: #cbd5e0;
+            color: #4a5568;
+            cursor: not-allowed;
+        }
+
+        .check-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 20px 10px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #38a169;
+        }
+
+        .next-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 20px 0 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #5a67d8;
+        }
+
+        .explanation {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .explanation h4 {
+            color: #234e52;
+            margin-top: 0;
+        }
+
+        .explanation p {
+            color: #2d3748;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #f0fff4;
+            color: #22543d;
+            border: 2px solid #48bb78;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #fff5f5;
+            color: #742a2a;
+            border: 2px solid #f56565;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .options {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 English Articles for Czech Speakers</h1>
+            <p class="subtitle">Complete guide to "a", "an", and "the" - from basics to advanced usage</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="score">0</div>
+                    <div class="stat-label">Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="current-lesson">1</div>
+                    <div class="stat-label">Activity</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="accuracy">100%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('explanations')">📚 Grammar Rules</button>
+            <button class="nav-tab" onclick="switchTab('practice')">✏️ Practice (15 Activities)</button>
+            <button class="nav-tab" onclick="switchTab('conversation')">💬 Conversation Prompts</button>
+        </div>
+
+        <!-- Grammar Rules Section -->
+        <div id="explanations-section" class="lesson-card">
+            <div class="explanation-section">
+                <h3>Understanding English Articles for Czech Speakers</h3>
+                
+                <div class="czech-note">
+                    Czech doesn't have articles, so this concept is completely new! Think of articles as "word helpers" that give extra information about nouns.
+                </div>
+
+                <div class="rule-box">
+                    <h4>📖 "A" and "An" (Indefinite Articles)</h4>
+                    <p><strong>Use with:</strong> Singular countable nouns when talking about "one of many" or "any example"</p>
+                    <p><strong>"A"</strong> before consonant sounds: <em>a book, a university, a European</em></p>
+                    <p><strong>"An"</strong> before vowel sounds: <em>an apple, an hour, an honest person</em></p>
+                    <div class="czech-note">Czech equivalent: Think like "jeden/jedna/jedno" but much more common in English</div>
+                </div>
+
+                <div class="rule-box">
+                    <h4>🎯 "The" (Definite Article)</h4>
+                    <p><strong>Use when:</strong> Both speaker and listener know which specific thing you mean</p>
+                    <ul>
+                        <li>Unique things: <em>the sun, the President</em></li>
+                        <li>Previously mentioned: <em>I saw a dog. The dog was big.</em></li>
+                        <li>Superlatives: <em>the best, the tallest</em></li>
+                        <li>Specific groups: <em>the Czech Republic, the elderly</em></li>
+                    </ul>
+                    <div class="czech-note">Czech equivalent: Similar to "ten/ta/to" but used much more frequently</div>
+                </div>
+
+                <div class="rule-box">
+                    <h4>🚫 No Article (Zero Article)</h4>
+                    <p><strong>Use with:</strong></p>
+                    <ul>
+                        <li>Plural countable nouns (general): <em>Dogs are friendly</em></li>
+                        <li>Uncountable nouns (general): <em>Water is essential</em></li>
+                        <li>Abstract concepts: <em>Love is important</em></li>
+                        <li>Most proper names: <em>Prague, Czech Republic</em></li>
+                        <li>Academic subjects: <em>mathematics, history</em></li>
+                    </ul>
+                    <div class="czech-note">This is most similar to Czech - no extra words needed!</div>
+                </div>
+
+                <div class="rule-box">
+                    <h4>⚠️ Common Czech Speaker Mistakes</h4>
+                    <ul>
+                        <li>❌ "I go to school" → ✅ "I go to school" (no article with institutions)</li>
+                        <li>❌ "The life is beautiful" → ✅ "Life is beautiful" (abstract concepts)</li>
+                        <li>❌ "I play the football" → ✅ "I play football" (sports)</li>
+                        <li>❌ "In the Czech Republic we speak Czech" → ✅ "In the Czech Republic we speak Czech" (languages)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice-section" class="lesson-card" style="display: none;">
+            <div class="lesson-title">
+                <span id="lesson-topic">Basic Articles</span>
+                <span class="difficulty-badge">Beginner</span>
+            </div>
+            
+            <div class="question" id="question-text">
+                Choose the correct article for each blank. Pay attention to the context and Czech speaker tips.
+            </div>
+
+            <div class="sentence" id="sentence-container">
+                <!-- Sentence will be populated by JavaScript -->
+            </div>
+
+            <div class="options" id="options-container">
+                <!-- Options will be populated by JavaScript -->
+            </div>
+
+            <button class="check-btn" id="check-btn" onclick="checkAnswers()">Check Answers</button>
+            <button class="next-btn" id="next-btn" onclick="nextLesson()" style="display: none;">Next Activity</button>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="explanation" id="explanation">
+                <!-- Explanation will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation-section" class="lesson-card" style="display: none;">
+            <div class="lesson-title">
+                <span>💬 Conversation Practice</span>
+                <span class="difficulty-badge">Interactive</span>
+            </div>
+            
+            <div class="question">
+                Practice using articles in real conversations. Focus on the highlighted article choices and think about why each one is used.
+            </div>
+
+            <div id="conversation-container">
+                <!-- Conversation prompts will be populated by JavaScript -->
+            </div>
+
+            <button class="next-btn" onclick="nextConversation()">Next Conversation</button>
+        </div>
+    </div>
+
+    <script>
+        let currentLesson = 0;
+        let currentConversation = 0;
+        let currentTab = 'explanations';
+        let score = 0;
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+        let selectedAnswers = {};
+
+        const lessons = [
+            {
+                topic: "Basic Indefinite Articles",
+                difficulty: "Beginner",
+                sentence: "I need __ pen and __ eraser for __ exam tomorrow.",
+                blanks: ["a", "an", "the"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Basic A/An Usage",
+                    content: "🇨🇿 Czech tip: Unlike Czech, English needs articles before singular countable nouns!<br>• 'A pen' - consonant sound /p/<br>• 'An eraser' - vowel sound /ɪ/<br>• 'The exam' - specific exam mentioned (tomorrow's)"
+                }
+            },
+            {
+                topic: "Countries & Languages",
+                difficulty: "Beginner", 
+                sentence: "In __ Czech Republic, people speak __ Czech and many also know __ German.",
+                blanks: ["the", "∅", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Countries & Languages",
+                    content: "🇨🇿 Czech tip: This is different from Czech grammar!<br>• 'The Czech Republic' - countries with 'Republic' need 'the'<br>• 'Czech' (language) - no article for languages<br>• 'German' (language) - no article for languages"
+                }
+            },
+            {
+                topic: "Jobs & Professions",
+                difficulty: "Beginner",
+                sentence: "My sister is __ doctor and my brother wants to become __ engineer at __ university.",
+                blanks: ["a", "an", "a"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Professions",
+                    content: "🇨🇿 Czech tip: Always use 'a/an' before professions in English!<br>• 'A doctor' - profession, consonant sound<br>• 'An engineer' - profession, vowel sound<br>• 'A university' - sounds like 'you-niversity' (consonant sound)"
+                }
+            },
+            {
+                topic: "Food & Meals",
+                difficulty: "Beginner",
+                sentence: "For __ breakfast, I usually have __ apple and __ coffee with __ milk.",
+                blanks: ["∅", "an", "∅", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Meals & Food",
+                    content: "🇨🇿 Czech tip: Meals don't need articles, but specific foods do!<br>• 'Breakfast' - meal names don't need articles<br>• 'An apple' - countable food, vowel sound<br>• 'Coffee' & 'milk' - uncountable, general meaning"
+                }
+            },
+            {
+                topic: "Transportation",
+                difficulty: "Intermediate",
+                sentence: "I go to work by __ bus, but yesterday I took __ taxi because __ weather was terrible.",
+                blanks: ["∅", "a", "the"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Transportation & Weather",
+                    content: "🇨🇿 Czech tip: 'By + transport' = no article, but specific instances need articles!<br>• 'By bus' - transportation method, no article<br>• 'A taxi' - one specific taxi<br>• 'The weather' - general weather concept, always 'the'"
+                }
+            },
+            {
+                topic: "School Subjects",
+                difficulty: "Intermediate",
+                sentence: "At __ school, I study __ mathematics, __ history, and __ English language.",
+                blanks: ["∅", "∅", "∅", "the"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Education & Subjects",
+                    content: "🇨🇿 Czech tip: School subjects usually don't need articles!<br>• 'School' - institution, no article<br>• 'Mathematics' & 'history' - academic subjects<br>• 'The English language' - when you say 'language', use 'the'"
+                }
+            },
+            {
+                topic: "Time Expressions",
+                difficulty: "Intermediate",
+                sentence: "In __ morning I read __ newspaper, and in __ evening I watch __ television.",
+                blanks: ["the", "the", "the", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Time & Media",
+                    content: "🇨🇿 Czech tip: Time periods need 'the', but media can vary!<br>• 'The morning/evening' - specific times of day<br>• 'The newspaper' - specific publication<br>• 'Television' - medium in general, no article"
+                }
+            },
+            {
+                topic: "Body Parts & Health",
+                difficulty: "Intermediate",
+                sentence: "__ doctor examined my __ head and said I have __ headache caused by __ stress.",
+                blanks: ["The", "∅", "a", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Health & Body",
+                    content: "🇨🇿 Czech tip: Body parts with possessives don't need articles!<br>• 'The doctor' - specific doctor examining you<br>• 'My head' - possessive, no article needed<br>• 'A headache' - one type of pain<br>• 'Stress' - abstract concept, no article"
+                }
+            },
+            {
+                topic: "Shopping & Money",
+                difficulty: "Intermediate",
+                sentence: "__ price of __ bread has increased, so I need __ extra money for __ shopping.",
+                blanks: ["The", "∅", "∅", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Commerce & Economics",
+                    content: "🇨🇿 Czech tip: 'Price of' needs 'the', but general concepts don't!<br>• 'The price of' - specific price being discussed<br>• 'Bread' - food in general<br>• 'Money' & 'shopping' - general concepts"
+                }
+            },
+            {
+                topic: "Nature & Environment",
+                difficulty: "Intermediate",
+                sentence: "__ sun was shining, __ birds were singing, and __ air smelled like __ flowers.",
+                blanks: ["The", "∅", "the", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Nature Elements",
+                    content: "🇨🇿 Czech tip: Unique natural things need 'the'!<br>• 'The sun' - only one sun<br>• 'Birds' - birds in general<br>• 'The air' - specific air around you<br>• 'Flowers' - flowers in general"
+                }
+            },
+            {
+                topic: "Technology & Internet",
+                difficulty: "Advanced",
+                sentence: "__ Internet has changed how we access __ information, but __ digital divide affects __ elderly people.",
+                blanks: ["The", "∅", "the", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Modern Technology",
+                    content: "🇨🇿 Czech tip: Unique systems need 'the', but general groups don't always!<br>• 'The Internet' - unique global network<br>• 'Information' - uncountable, general<br>• 'The digital divide' - specific social phenomenon<br>• 'Elderly people' - general group"
+                }
+            },
+            {
+                topic: "Czech Culture & Traditions",
+                difficulty: "Advanced",
+                sentence: "__ Czech beer is famous worldwide, and __ Christmas markets in __ Prague attract __ tourists from __ Europe.",
+                blanks: ["∅", "∅", "∅", "∅", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Cultural References",
+                    content: "🇨🇿 Czech tip: National products and general concepts don't need articles!<br>• 'Czech beer' - national product category<br>• 'Christmas markets' - general type of market<br>• 'Prague' - city name<br>• 'Tourists' & 'Europe' - general references"
+                }
+            },
+            {
+                topic: "Abstract Concepts",
+                difficulty: "Advanced",
+                sentence: "__ happiness depends on __ health, __ relationships, and __ sense of __ purpose in __ life.",
+                blanks: ["∅", "∅", "∅", "a", "∅", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Abstract Ideas",
+                    content: "🇨🇿 Czech tip: Abstract concepts usually don't need articles!<br>• 'Happiness', 'health', 'relationships' - abstract concepts<br>• 'A sense of' - countable expression<br>• 'Purpose' & 'life' - abstract concepts"
+                }
+            },
+            {
+                topic: "Scientific & Academic",
+                difficulty: "Advanced",
+                sentence: "__ research shows that __ climate change affects __ biodiversity, requiring __ urgent action from __ scientists.",
+                blanks: ["∅", "∅", "∅", "∅", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Scientific Language",
+                    content: "🇨🇿 Czech tip: Scientific concepts are usually general!<br>• 'Research' - general scientific activity<br>• 'Climate change' & 'biodiversity' - scientific concepts<br>• 'Urgent action' - abstract concept<br>• 'Scientists' - profession in general"
+                }
+            },
+            {
+                topic: "Complex Mixed Usage",
+                difficulty: "Advanced",
+                sentence: "__ President of __ Czech Republic announced __ new policy about __ education that will affect __ future of __ young people.",
+                blanks: ["The", "the", "a", "∅", "the", "∅"],
+                options: ["a", "an", "the", "∅"],
+                explanation: {
+                    title: "Complex Structures",
+                    content: "🇨🇿 Czech tip: Mix of specific roles, countries, and abstract concepts!<br>• 'The President of the Czech Republic' - specific person, specific country<br>• 'A new policy' - one of many possible policies<br>• 'Education' - abstract concept<br>• 'The future' - specific future being discussed<br>• 'Young people' - general group"
+                }
+            }
+        ];
+
+        const conversations = [
+            {
+                title: "At a Czech Restaurant",
+                dialogue: [
+                    "Waiter: Good evening! Would you like <strong>a</strong> table for two?",
+                    "Customer: Yes, please. Do you have <strong>the</strong> menu in English?", 
+                    "Waiter: Of course! <strong>The</strong> Czech specialties are on <strong>the</strong> first page.",
+                    "Customer: Great! I'd like <strong>a</strong> beer and <strong>the</strong> goulash, please.",
+                    "Waiter: Excellent choice! <strong>The</strong> goulash comes with bread or dumplings."
+                ],
+                notes: "🇨🇿 Notice: 'A table' (any table), 'the menu' (specific menu), 'a beer' (one beer), 'the goulash' (specific dish from menu)"
+            },
+            {
+                title: "Talking About Prague",
+                dialogue: [
+                    "Tourist: I'm visiting <strong>∅</strong> Prague for <strong>the</strong> first time!",
+                    "Local: Welcome! Have you seen <strong>the</strong> Charles Bridge yet?",
+                    "Tourist: No, but I visited <strong>the</strong> Prague Castle yesterday.",
+                    "Local: <strong>The</strong> castle is beautiful! You should also try <strong>∅</strong> Czech beer.",
+                    "Tourist: I had <strong>a</strong> Pilsner at <strong>a</strong> pub near <strong>the</strong> Old Town Square."
+                ],
+                notes: "🇨🇿 Notice: City names (Prague) = no article, but famous landmarks (the Charles Bridge) = 'the'"
+            },
+            {
+                title: "Job Interview",
+                dialogue: [
+                    "Interviewer: What's your experience with <strong>∅</strong> computers?",
+                    "Candidate: I'm <strong>a</strong> software engineer with <strong>∅</strong> five years of experience.",
+                    "Interviewer: Do you speak <strong>∅</strong> Czech fluently?",
+                    "Candidate: Yes, and I also speak <strong>∅</strong> German and <strong>∅</strong> English.",
+                    "Interviewer: <strong>The</strong> position requires working with <strong>∅</strong> international clients."
+                ],
+                notes: "🇨🇿 Notice: Professions need 'a/an', languages need no article, but 'the position' is specific"
+            },
+            {
+                title: "At the Doctor's Office",
+                dialogue: [
+                    "Doctor: What seems to be <strong>the</strong> problem today?",
+                    "Patient: I have <strong>a</strong> terrible headache and <strong>∅</strong> fever.",
+                    "Doctor: How long have you had <strong>the</strong> headache?",
+                    "Patient: Since <strong>the</strong> morning. I think it's <strong>the</strong> flu.",
+                    "Doctor: Let me check your temperature and <strong>∅</strong> blood pressure."
+                ],
+                notes: "🇨🇿 Notice: 'The problem' (specific), 'a headache' (type of pain), illnesses can vary in article usage"
+            },
+            {
+                title: "Planning Weekend Activities",
+                dialogue: [
+                    "Friend 1: What should we do <strong>the</strong> weekend?",
+                    "Friend 2: We could go to <strong>the</strong> cinema or visit <strong>a</strong> museum.",
+                    "Friend 1: <strong>The</strong> weather forecast says it will rain.",
+                    "Friend 2: Then let's go to <strong>the</strong> National Museum - it's indoors!",
+                    "Friend 1: Good idea! I love <strong>∅</strong> history and <strong>∅</strong> art."
+                ],
+                notes: "🇨🇿 Notice: 'The weekend' (specific), 'a museum' (any museum), but 'the National Museum' (specific one)"
+            }
+        ];
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all sections
+            document.getElementById('explanations-section').style.display = 'none';
+            document.getElementById('practice-section').style.display = 'none';
+            document.getElementById('conversation-section').style.display = 'none';
+            
+            // Show selected section
+            if (tab === 'explanations') {
+                document.getElementById('explanations-section').style.display = 'block';
+            } else if (tab === 'practice') {
+                document.getElementById('practice-section').style.display = 'block';
+                initializeLesson();
+            } else if (tab === 'conversation') {
+                document.getElementById('conversation-section').style.display = 'block';
+                initializeConversation();
+            }
+        }
+
+        function initializeLesson() {
+            const lesson = lessons[currentLesson];
+            document.getElementById('lesson-topic').textContent = lesson.topic;
+            document.querySelector('.difficulty-badge').textContent = lesson.difficulty;
+            document.getElementById('current-lesson').textContent = currentLesson + 1;
+            
+            // Create sentence with blanks
+            const parts = lesson.sentence.split('__');
+            let sentenceHTML = parts[0];
+            
+            for (let i = 1; i < parts.length; i++) {
+                sentenceHTML += `<span class="blank" data-index="${i-1}" onclick="selectBlank(${i-1})"></span>${parts[i]}`;
+            }
+            
+            document.getElementById('sentence-container').innerHTML = sentenceHTML;
+            
+            // Create options
+            const optionsHTML = lesson.options.map(option => 
+                `<button class="option" onclick="selectOption('${option}')">${option === '∅' ? '(no article)' : option}</button>`
+            ).join('');
+            
+            document.getElementById('options-container').innerHTML = optionsHTML;
+            
+            // Reset state
+            selectedAnswers = {};
+            document.getElementById('check-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('explanation').classList.remove('show');
+            
+            // Update progress
+            const progress = ((currentLesson) / lessons.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function initializeConversation() {
+            const conversation = conversations[currentConversation];
+            
+            let conversationHTML = `
+                <div class="conversation-prompt">
+                    <div class="conversation-title">${conversation.title}</div>
+                    ${conversation.dialogue.map(line => `<p>${line}</p>`).join('')}
+                    <div class="czech-note">${conversation.notes}</div>
+                </div>
+            `;
+            
+            document.getElementById('conversation-container').innerHTML = conversationHTML;
+        }
+
+        let selectedBlank = null;
+
+        function selectBlank(index) {
+            // Remove previous selection
+            document.querySelectorAll('.blank').forEach(blank => {
+                blank.style.backgroundColor = blank.classList.contains('filled') ? '#edf2f7' : 'white';
+            });
+            
+            // Highlight selected blank
+            const blank = document.querySelector(`[data-index="${index}"]`);
+            blank.style.backgroundColor = '#bee3f8';
+            selectedBlank = index;
+        }
+
+        function selectOption(option) {
+            if (selectedBlank === null) {
+                alert('Please select a blank first by clicking on it!');
+                return;
+            }
+            
+            const blank = document.querySelector(`[data-index="${selectedBlank}"]`);
+            blank.textContent = option === '∅' ? '∅' : option;
+            blank.classList.add('filled');
+            blank.style.backgroundColor = '#edf2f7';
+            
+            selectedAnswers[selectedBlank] = option;
+            selectedBlank = null;
+        }
+
+        function checkAnswers() {
+            const lesson = lessons[currentLesson];
+            let correct = 0;
+            let total = lesson.blanks.length;
+            
+            // Check each answer
+            lesson.blanks.forEach((correctAnswer, index) => {
+                const blank = document.querySelector(`[data-index="${index}"]`);
+                const userAnswer = selectedAnswers[index];
+                
+                if (userAnswer === correctAnswer) {
+                    blank.classList.add('correct');
+                    blank.classList.remove('incorrect');
+                    correct++;
+                } else {
+                    blank.classList.add('incorrect');
+                    blank.classList.remove('correct');
+                    // Show correct answer
+                    blank.textContent = correctAnswer === '∅' ? '∅' : correctAnswer;
+                }
+            });
+            
+            // Update stats
+            totalQuestions += total;
+            correctAnswers += correct;
+            score += correct * 10;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('accuracy').textContent = Math.round((correctAnswers / totalQuestions) * 100) + '%';
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            if (correct === total) {
+                feedback.textContent = '🎉 Perfect! All answers correct!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `✨ Good effort! You got ${correct} out of ${total} correct.`;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            // Show explanation
+            const explanation = document.getElementById('explanation');
+            explanation.innerHTML = `
+                <h4>${lesson.explanation.title}</h4>
+                <p>${lesson.explanation.content}</p>
+            `;
+            explanation.classList.add('show');
+            
+            // Show next button
+            document.getElementById('check-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+        }
+
+        function nextLesson() {
+            currentLesson++;
+            if (currentLesson >= lessons.length) {
+                // Course completed
+                document.getElementById('practice-section').innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h2>🎓 Congratulations!</h2>
+                        <p style="font-size: 1.2rem; margin: 20px 0;">You've completed all 15 practice activities!</p>
+                        <div style="background: #f0fff4; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                            <div style="font-size: 1.1rem; margin-bottom: 10px;"><strong>Final Score: ${score} points</strong></div>
+                            <div style="font-size: 1.1rem;"><strong>Final Accuracy: ${Math.round((correctAnswers / totalQuestions) * 100)}%</strong></div>
+                        </div>
+                        <p>🇨🇿 Great job! You now understand English articles much better. Try the conversation prompts to practice in real situations!</p>
+                        <button class="next-btn" onclick="restartCourse()">Restart Practice</button>
+                    </div>
+                `;
+                document.getElementById('progress').style.width = '100%';
+            } else {
+                initializeLesson();
+            }
+        }
+
+        function nextConversation() {
+            currentConversation++;
+            if (currentConversation >= conversations.length) {
+                currentConversation = 0; // Loop back to first conversation
+            }
+            initializeConversation();
+        }
+
+        function restartCourse() {
+            currentLesson = 0;
+            score = 0;
+            totalQuestions = 0;
+            correctAnswers = 0;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('accuracy').textContent = '100%';
+            
+            // Rebuild the practice section
+            document.getElementById('practice-section').innerHTML = `
+                <div class="lesson-title">
+                    <span id="lesson-topic">Basic Articles</span>
+                    <span class="difficulty-badge">Beginner</span>
+                </div>
+                
+                <div class="question" id="question-text">
+                    Choose the correct article for each blank. Pay attention to the context and Czech speaker tips.
+                </div>
+
+                <div class="sentence" id="sentence-container">
+                    <!-- Sentence will be populated by JavaScript -->
+                </div>
+
+                <div class="options" id="options-container">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <button class="check-btn" id="check-btn" onclick="checkAnswers()">Check Answers</button>
+                <button class="next-btn" id="next-btn" onclick="nextLesson()" style="display: none;">Next Activity</button>
+
+                <div class="feedback" id="feedback"></div>
+
+                <div class="explanation" id="explanation">
+                    <!-- Explanation will be populated by JavaScript -->
+                </div>
+            `;
+            
+            initializeLesson();
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start with explanations tab active
+            initializeConversation();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98867a33e7f59d92',t:'MTc1OTQzMTk5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
