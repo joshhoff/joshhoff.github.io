@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Prepositions Master</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .preposition-category {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #007bff;
+        }
+
+        .category-title {
+            color: #007bff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preposition-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #28a745;
+        }
+
+        .preposition-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .usage-rule {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-weight: 600;
+            color: #1565c0;
+        }
+
+        .example {
+            background: #f1f8e9;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-style: italic;
+            border-left: 3px solid #4caf50;
+        }
+
+        .english-note {
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            color: #e65100;
+            font-size: 0.9rem;
+        }
+
+        .exercise-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            background: #e9ecef;
+            border: 2px solid #dee2e6;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background: #dee2e6;
+        }
+
+        .option-btn.selected {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .option-btn.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .option-btn.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            color: #2c3e50;
+        }
+
+        .conversation-prompt h4 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .written-exercise {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            height: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #495057;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 200px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇪🇸 Spanish Prepositions Master</h1>
+            <p>Master prepositions of time, space, and manner with interactive lessons</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('explanations')">📚 Explanations</button>
+            <button class="tab-btn" onclick="showTab('practice')">🎯 Practice Quiz</button>
+            <button class="tab-btn" onclick="showTab('conversation')">💬 Conversation</button>
+            <button class="tab-btn" onclick="showTab('writing')">✍️ Writing</button>
+        </div>
+
+        <!-- Explanations Section -->
+        <div id="explanations" class="content-section active">
+            <h2>📖 Spanish Prepositions Guide</h2>
+            
+            <!-- TIME PREPOSITIONS -->
+            <div class="preposition-category">
+                <h3 class="category-title">⏰ TIME PREPOSITIONS</h3>
+                
+                <div class="preposition-item">
+                    <div class="preposition-name">A</div>
+                    <div class="usage-rule">Use for specific times and ages</div>
+                    <div class="example">• A las tres = At three o'clock<br>• A los veinte años = At twenty years old</div>
+                    <div class="english-note">💡 English speakers: Always use "a" before specific times, not "en"</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">EN</div>
+                    <div class="usage-rule">Use for months, years, seasons, and general time periods</div>
+                    <div class="example">• En enero = In January<br>• En 2024 = In 2024<br>• En verano = In summer</div>
+                    <div class="english-note">💡 Never use "en" for specific times like "3 o'clock"</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">POR</div>
+                    <div class="usage-rule">Use for parts of the day and duration</div>
+                    <div class="example">• Por la mañana = In the morning<br>• Por la noche = At night<br>• Por dos horas = For two hours</div>
+                    <div class="english-note">💡 "Por la mañana/tarde/noche" are fixed expressions</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">DESDE / HASTA</div>
+                    <div class="usage-rule">Use for time ranges (from/until)</div>
+                    <div class="example">• Desde las 9 hasta las 5 = From 9 until 5<br>• Desde ayer = Since yesterday</div>
+                    <div class="english-note">💡 Always use together for complete time ranges</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">HACE</div>
+                    <div class="usage-rule">Use for "ago" and ongoing duration</div>
+                    <div class="example">• Hace dos años = Two years ago<br>• Estudio español hace tres meses = I've been studying Spanish for three months</div>
+                    <div class="english-note">💡 Different from English: "hace" goes before the time period</div>
+                </div>
+            </div>
+
+            <!-- SPACE PREPOSITIONS -->
+            <div class="preposition-category">
+                <h3 class="category-title">📍 SPACE PREPOSITIONS</h3>
+                
+                <div class="preposition-item">
+                    <div class="preposition-name">EN</div>
+                    <div class="usage-rule">Use for "in" and "on" (general location)</div>
+                    <div class="example">• En la casa = In the house<br>• En la mesa = On the table<br>• En Madrid = In Madrid</div>
+                    <div class="english-note">💡 Spanish uses "en" where English uses both "in" and "on"</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">SOBRE</div>
+                    <div class="usage-rule">Use for "on top of" (physical contact)</div>
+                    <div class="example">• El libro está sobre la mesa = The book is on the table<br>• Sobre mi cabeza = Above my head</div>
+                    <div class="english-note">💡 More specific than "en" - emphasizes direct contact</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">BAJO / DEBAJO DE</div>
+                    <div class="usage-rule">Use for "under" or "below"</div>
+                    <div class="example">• Bajo el árbol = Under the tree<br>• Debajo de la cama = Under the bed</div>
+                    <div class="english-note">💡 "Debajo de" is more common in everyday speech</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">ENTRE</div>
+                    <div class="usage-rule">Use for "between" or "among"</div>
+                    <div class="example">• Entre tú y yo = Between you and me<br>• Entre los árboles = Among the trees</div>
+                    <div class="english-note">💡 Same usage as English "between"</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">A / HACIA</div>
+                    <div class="usage-rule">Use for direction and movement</div>
+                    <div class="example">• Voy a casa = I'm going home<br>• Camino hacia el norte = I walk toward the north</div>
+                    <div class="english-note">💡 "A" = to a destination, "hacia" = toward a direction</div>
+                </div>
+            </div>
+
+            <!-- MANNER PREPOSITIONS -->
+            <div class="preposition-category">
+                <h3 class="category-title">🎭 MANNER PREPOSITIONS</h3>
+                
+                <div class="preposition-item">
+                    <div class="preposition-name">CON</div>
+                    <div class="usage-rule">Use for "with" (accompaniment or means)</div>
+                    <div class="example">• Con mis amigos = With my friends<br>• Con cuidado = Carefully (with care)<br>• Escribo con lápiz = I write with a pencil</div>
+                    <div class="english-note">💡 Same as English "with"</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">SIN</div>
+                    <div class="usage-rule">Use for "without"</div>
+                    <div class="example">• Sin azúcar = Without sugar<br>• Sin prisa = Without hurry<br>• Sin problemas = Without problems</div>
+                    <div class="english-note">💡 Opposite of "con"</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">POR</div>
+                    <div class="usage-rule">Use for means of communication/transport</div>
+                    <div class="example">• Por teléfono = By phone<br>• Por email = By email<br>• Por avión = By plane</div>
+                    <div class="english-note">💡 Different from "con" - shows the method used</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">SEGÚN</div>
+                    <div class="usage-rule">Use for "according to"</div>
+                    <div class="example">• Según María = According to María<br>• Según el periódico = According to the newspaper</div>
+                    <div class="english-note">💡 Same usage as English</div>
+                </div>
+
+                <div class="preposition-item">
+                    <div class="preposition-name">DE</div>
+                    <div class="usage-rule">Use for manner, material, or origin</div>
+                    <div class="example">• De memoria = By heart<br>• Una mesa de madera = A wooden table<br>• Soy de México = I'm from Mexico</div>
+                    <div class="english-note">💡 Very versatile - context determines meaning</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Quiz Section -->
+        <div id="practice" class="content-section">
+            <h2>🎯 Practice Quiz</h2>
+            <div class="score">Score: <span id="score">0</span>/12</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            
+            <div id="quiz-container">
+                <!-- Quiz questions will be generated here -->
+            </div>
+            
+            <button class="btn" onclick="startQuiz()" id="start-quiz-btn">Start New Quiz</button>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="content-section">
+            <h2>💬 Conversation Practice</h2>
+            <p>Practice using prepositions in realistic conversations. Read the scenarios and practice the dialogues!</p>
+            
+            <div class="conversation-prompt">
+                <h4>⏰ Scenario: Making Appointments</h4>
+                <p><strong>Practice this dialogue:</strong></p>
+                <p><strong>A:</strong> "¿Cuándo tienes tiempo?"<br>
+                <strong>B:</strong> "Estoy libre <strong>a</strong> las dos <strong>de</strong> la tarde."<br>
+                <strong>A:</strong> "Perfecto. Nos vemos <strong>en</strong> el café <strong>a</strong> las dos."<br>
+                <strong>B:</strong> "¿El que está <strong>al lado del</strong> banco?"<br>
+                <strong>A:</strong> "Sí, ese. Trabajo <strong>hasta</strong> las cinco, así que tenemos tiempo."</p>
+            </div>
+
+            <div class="conversation-prompt">
+                <h4>🏠 Scenario: Describing Your Room</h4>
+                <p><strong>Practice describing:</strong></p>
+                <ul>
+                    <li>"Mi cama está <strong>entre</strong> la ventana y el armario"</li>
+                    <li>"Tengo libros <strong>sobre</strong> el escritorio"</li>
+                    <li>"Mi ropa está <strong>dentro del</strong> armario"</li>
+                    <li>"Hay una alfombra <strong>debajo de</strong> la cama"</li>
+                    <li>"Estudio <strong>en</strong> mi habitación <strong>por</strong> las noches"</li>
+                </ul>
+            </div>
+
+            <div class="conversation-prompt">
+                <h4>🚗 Scenario: Giving Directions</h4>
+                <p><strong>Practice this conversation:</strong></p>
+                <p><strong>Tourist:</strong> "¿Cómo llego <strong>al</strong> museo?"<br>
+                <strong>You:</strong> "Camina <strong>hacia</strong> el centro <strong>por</strong> esta calle."<br>
+                <strong>Tourist:</strong> "¿Está lejos?"<br>
+                <strong>You:</strong> "No, está <strong>a</strong> cinco minutos <strong>de</strong> aquí. Está <strong>entre</strong> el banco y la farmacia."</p>
+            </div>
+
+            <div class="written-exercise">
+                <h4>🎤 Speaking Challenge</h4>
+                <p>Create your own 2-minute conversation using these scenarios. Try to use at least 8 different prepositions naturally. Focus on:</p>
+                <ul>
+                    <li>Time expressions (a las, por la, desde, hasta)</li>
+                    <li>Location descriptions (en, sobre, entre, al lado de)</li>
+                    <li>Movement and direction (a, hacia, por)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Writing Section -->
+        <div id="writing" class="content-section">
+            <h2>✍️ Writing Exercises</h2>
+            
+            <div class="written-exercise">
+                <h4>📝 Exercise 1: Time Prepositions</h4>
+                <p>Complete with the correct time preposition (a, en, por, desde, hasta, hace):</p>
+                <div style="margin: 15px 0;">
+                    <p>1. La clase empieza ___ las nueve ___ la mañana.</p>
+                    <input type="text" class="text-input" id="time1" placeholder="a, por">
+                </div>
+                <div style="margin: 15px 0;">
+                    <p>2. Vivo aquí ___ cinco años. Llegué ___ 2019.</p>
+                    <input type="text" class="text-input" id="time2" placeholder="hace, en">
+                </div>
+                <div style="margin: 15px 0;">
+                    <p>3. Trabajo ___ lunes ___ viernes, ___ las 8 ___ las 6.</p>
+                    <input type="text" class="text-input" id="time3" placeholder="desde, hasta, desde, hasta">
+                </div>
+                <button class="btn" onclick="checkTimeExercise()">Check Answers</button>
+                <div id="time-feedback"></div>
+            </div>
+
+            <div class="written-exercise">
+                <h4>🏠 Exercise 2: Space Prepositions</h4>
+                <p>Complete with the correct space preposition (en, sobre, bajo, entre, a, hacia):</p>
+                <div style="margin: 15px 0;">
+                    <p>1. El gato está ___ la mesa, ___ las sillas.</p>
+                    <input type="text" class="text-input" id="space1" placeholder="bajo/debajo de, entre">
+                </div>
+                <div style="margin: 15px 0;">
+                    <p>2. Voy ___ casa. Camino ___ el sur.</p>
+                    <input type="text" class="text-input" id="space2" placeholder="a, hacia">
+                </div>
+                <div style="margin: 15px 0;">
+                    <p>3. Los libros están ___ el escritorio ___ mi habitación.</p>
+                    <input type="text" class="text-input" id="space3" placeholder="sobre, en">
+                </div>
+                <button class="btn" onclick="checkSpaceExercise()">Check Answers</button>
+                <div id="space-feedback"></div>
+            </div>
+
+            <div class="written-exercise">
+                <h4>✍️ Exercise 3: Write Your Daily Routine</h4>
+                <p>Write 6-8 sentences about your daily routine using prepositions from all three categories. Include specific times, locations, and how you do things.</p>
+                <textarea class="text-input" id="routine-text" rows="6" placeholder="Example: Me levanto a las siete de la mañana. Desayuno en la cocina con mi familia..."></textarea>
+                <button class="btn" onclick="analyzeRoutine()">Analyze My Writing</button>
+                <div id="routine-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Updated quiz with better categorized questions
+        const quizQuestions = [
+            // Time questions
+            {
+                question: "La reunión es ___ las tres ___ la tarde.",
+                options: ["a...de", "en...por", "a...por", "en...de"],
+                correct: 0,
+                explanation: "Use 'a' for specific times and 'de' for parts of the day when being specific.",
+                category: "time"
+            },
+            {
+                question: "Estudio español ___ dos años.",
+                options: ["por", "desde", "hace", "en"],
+                correct: 2,
+                explanation: "'Hace' indicates ongoing duration up to now.",
+                category: "time"
+            },
+            {
+                question: "Trabajo ___ lunes ___ viernes.",
+                options: ["de...a", "desde...hasta", "por...en", "en...de"],
+                correct: 1,
+                explanation: "'Desde...hasta' shows a complete time range.",
+                category: "time"
+            },
+            {
+                question: "Nací ___ 1995 ___ diciembre.",
+                options: ["en...en", "a...de", "por...en", "de...a"],
+                correct: 0,
+                explanation: "Use 'en' for both years and months.",
+                category: "time"
+            },
+            // Space questions
+            {
+                question: "El libro está ___ la mesa.",
+                options: ["en", "sobre", "bajo", "entre"],
+                correct: 1,
+                explanation: "'Sobre' indicates direct physical contact on top.",
+                category: "space"
+            },
+            {
+                question: "Vivo ___ Madrid, ___ España.",
+                options: ["en...en", "a...de", "por...en", "de...a"],
+                correct: 0,
+                explanation: "Use 'en' for cities and countries.",
+                category: "space"
+            },
+            {
+                question: "El gato está ___ el sofá y la mesa.",
+                options: ["sobre", "entre", "bajo", "hacia"],
+                correct: 1,
+                explanation: "'Entre' means 'between'.",
+                category: "space"
+            },
+            {
+                question: "Camino ___ el parque todos los días.",
+                options: ["hacia", "hasta", "por", "en"],
+                correct: 2,
+                explanation: "'Por' indicates movement through a place.",
+                category: "space"
+            },
+            // Manner questions
+            {
+                question: "Hablo ___ mi madre ___ teléfono.",
+                options: ["con...por", "a...en", "de...con", "para...a"],
+                correct: 0,
+                explanation: "'Con' shows who you're with, 'por' shows the means of communication.",
+                category: "manner"
+            },
+            {
+                question: "Voy al trabajo ___ autobús.",
+                options: ["en", "por", "con", "a"],
+                correct: 0,
+                explanation: "Use 'en' for means of transportation.",
+                category: "manner"
+            },
+            {
+                question: "Lo hago ___ cuidado, ___ prisa.",
+                options: ["con...sin", "por...de", "en...por", "a...con"],
+                correct: 0,
+                explanation: "'Con' = with, 'sin' = without.",
+                category: "manner"
+            },
+            {
+                question: "___ María, la película es excelente.",
+                options: ["Por", "Según", "Con", "De"],
+                correct: 1,
+                explanation: "'Según' means 'according to'.",
+                category: "manner"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let quizActive = false;
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Quiz functions
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            quizActive = true;
+            updateScore();
+            updateProgress();
+            showQuestion();
+            document.getElementById('start-quiz-btn').style.display = 'none';
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                endQuiz();
+                return;
+            }
+
+            const question = quizQuestions[currentQuestion];
+            const container = document.getElementById('quiz-container');
+            
+            container.innerHTML = `
+                <div class="exercise-container">
+                    <div class="question">Question ${currentQuestion + 1} (${question.category}): ${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => 
+                            `<button class="option-btn" onclick="selectAnswer(${index})">${option}</button>`
+                        ).join('')}
+                    </div>
+                    <div id="question-feedback"></div>
+                </div>
+            `;
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (!quizActive) return;
+
+            const question = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('question-feedback');
+            
+            options.forEach(btn => btn.style.pointerEvents = 'none');
+            
+            options[question.correct].classList.add('correct');
+            if (selectedIndex !== question.correct) {
+                options[selectedIndex].classList.add('incorrect');
+            } else {
+                score++;
+                updateScore();
+            }
+            
+            const isCorrect = selectedIndex === question.correct;
+            feedback.innerHTML = `
+                <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                    ${isCorrect ? '¡Correcto!' : '¡Incorrecto!'} ${question.explanation}
+                </div>
+            `;
+            
+            setTimeout(() => {
+                currentQuestion++;
+                updateProgress();
+                showQuestion();
+            }, 3000);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / quizQuestions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function endQuiz() {
+            quizActive = false;
+            const container = document.getElementById('quiz-container');
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            
+            let message = '';
+            if (percentage >= 85) {
+                message = '¡Excelente! You have mastered Spanish prepositions!';
+            } else if (percentage >= 70) {
+                message = '¡Muy bien! Good understanding. Review the tricky ones.';
+            } else if (percentage >= 50) {
+                message = '¡Bien! You\'re getting there. Focus on the explanations.';
+            } else {
+                message = 'Keep practicing! Review each category carefully.';
+            }
+            
+            container.innerHTML = `
+                <div class="exercise-container">
+                    <h3>Quiz Complete!</h3>
+                    <p>Your score: ${score}/${quizQuestions.length} (${percentage}%)</p>
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            document.getElementById('start-quiz-btn').style.display = 'block';
+        }
+
+        // Writing exercise functions
+        function checkTimeExercise() {
+            const feedback = `
+                <div class="feedback correct">
+                    <h4>Correct Answers:</h4>
+                    <p>1. La clase empieza <strong>a</strong> las nueve <strong>por</strong> la mañana.</p>
+                    <p>2. Vivo aquí <strong>hace</strong> cinco años. Llegué <strong>en</strong> 2019.</p>
+                    <p>3. Trabajo <strong>desde</strong> lunes <strong>hasta</strong> viernes, <strong>desde</strong> las 8 <strong>hasta</strong> las 6.</p>
+                    <br>
+                    <p><strong>Remember:</strong> 'A' for specific times, 'por' for parts of day, 'hace' for duration, 'en' for years, 'desde...hasta' for ranges.</p>
+                </div>
+            `;
+            document.getElementById('time-feedback').innerHTML = feedback;
+        }
+
+        function checkSpaceExercise() {
+            const feedback = `
+                <div class="feedback correct">
+                    <h4>Correct Answers:</h4>
+                    <p>1. El gato está <strong>bajo/debajo de</strong> la mesa, <strong>entre</strong> las sillas.</p>
+                    <p>2. Voy <strong>a</strong> casa. Camino <strong>hacia</strong> el sur.</p>
+                    <p>3. Los libros están <strong>sobre</strong> el escritorio <strong>en</strong> mi habitación.</p>
+                    <br>
+                    <p><strong>Remember:</strong> 'A' for destinations, 'hacia' for directions, 'sobre' for on top, 'en' for general location.</p>
+                </div>
+            `;
+            document.getElementById('space-feedback').innerHTML = feedback;
+        }
+
+        function analyzeRoutine() {
+            const text = document.getElementById('routine-text').value.toLowerCase();
+            
+            // Check for different types of prepositions
+            const timePreps = ['a las', 'por la', 'en', 'desde', 'hasta', 'hace'];
+            const spacePreps = ['en', 'sobre', 'bajo', 'entre', 'hacia', 'debajo de'];
+            const mannerPreps = ['con', 'sin', 'por', 'según', 'de'];
+            
+            let foundTime = timePreps.filter(prep => text.includes(prep));
+            let foundSpace = spacePreps.filter(prep => text.includes(prep));
+            let foundManner = mannerPreps.filter(prep => text.includes(prep));
+            
+            let feedback = '<div class="feedback correct"><h4>Analysis of Your Writing:</h4>';
+            feedback += `<p><strong>Time prepositions found:</strong> ${foundTime.join(', ')} (${foundTime.length})</p>`;
+            feedback += `<p><strong>Space prepositions found:</strong> ${foundSpace.join(', ')} (${foundSpace.length})</p>`;
+            feedback += `<p><strong>Manner prepositions found:</strong> ${foundManner.join(', ')} (${foundManner.length})</p>`;
+            
+            const total = foundTime.length + foundSpace.length + foundManner.length;
+            
+            if (total >= 8) {
+                feedback += '<p>¡Excelente! Great variety of prepositions from all categories!</p>';
+            } else if (total >= 6) {
+                feedback += '<p>¡Bien! Good use of prepositions. Try to include more variety.</p>';
+            } else {
+                feedback += '<p>Try to include more prepositions from each category (time, space, manner).</p>';
+            }
+            
+            feedback += '</div>';
+            document.getElementById('routine-feedback').innerHTML = feedback;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateScore();
+            updateProgress();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9887361526b52f7d',t:'MTc1OTQzOTY4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
