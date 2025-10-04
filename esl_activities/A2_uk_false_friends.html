@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ukrainian-English False Friends Trainer</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .nav-tab.active {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Flashcard Styles */
+        .flashcard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .flashcard {
+            width: 400px;
+            height: 250px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .flashcard p {
+            font-size: 1.1rem;
+            margin: 5px 0;
+        }
+
+        .flashcard-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Practice Styles */
+        .practice-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            border-color: #f093fb;
+            background: rgba(240, 147, 251, 0.2);
+        }
+
+        .option.correct {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.2);
+        }
+
+        .option.incorrect {
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.2);
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        /* Conversation Styles */
+        .conversation-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .conversation-prompt h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .words-to-use {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .word-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .word-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .response-area {
+            margin-top: 20px;
+        }
+
+        .response-area textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .response-area textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .flashcard {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇺🇦 Ukrainian-English False Friends 🇬🇧</h1>
+            <p>Master the tricky words that look similar but mean different things!</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('flashcards')">📚 Flashcards</button>
+            <button class="nav-tab" onclick="showSection('practice')">✏️ Practice Quiz</button>
+            <button class="nav-tab" onclick="showSection('conversation')">💬 Conversation</button>
+        </div>
+
+        <!-- Flashcards Section -->
+        <div id="flashcards" class="content-section active">
+            <div class="flashcard-container">
+                <div class="score-display">
+                    Card <span id="current-card">1</span> of <span id="total-cards">40</span>
+                </div>
+                
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <h3 id="ukrainian-word">актуальний</h3>
+                            <p>Ukrainian word</p>
+                            <p style="font-size: 0.9rem; opacity: 0.8;">Click to see English meaning</p>
+                        </div>
+                        <div class="flashcard-back">
+                            <h3 id="english-meaning">current, relevant</h3>
+                            <p><strong>False friend:</strong> <span id="false-friend">actual</span></p>
+                            <p id="example">Example: Це актуальна проблема (This is a current problem)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls">
+                    <button class="btn btn-secondary" onclick="previousCard()">← Previous</button>
+                    <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Section -->
+        <div id="practice" class="content-section">
+            <div class="practice-container">
+                <div class="score-display">
+                    Score: <span id="practice-score">0</span> / <span id="practice-total">0</span>
+                </div>
+
+                <div class="question-card">
+                    <h3 id="practice-question">What does the Ukrainian word "актуальний" mean in English?</h3>
+                    <div class="options" id="practice-options">
+                        <div class="option" onclick="selectOption(0)">actual</div>
+                        <div class="option" onclick="selectOption(1)">current, relevant</div>
+                        <div class="option" onclick="selectOption(2)">active</div>
+                        <div class="option" onclick="selectOption(3)">factual</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="btn btn-primary" onclick="nextQuestion()" id="next-question-btn" style="display: none;">Next Question</button>
+                    <button class="btn btn-secondary" onclick="restartPractice()" id="restart-btn" style="display: none;">Restart Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="content-section">
+            <div class="conversation-container">
+                <div class="conversation-prompt">
+                    <h3 id="conversation-title">Business Meeting Scenario</h3>
+                    <p id="conversation-scenario">You're in a business meeting discussing a new project. Use the false friends below correctly in your response to show you understand their proper meanings.</p>
+                    
+                    <div class="words-to-use">
+                        <strong>Words to use correctly:</strong>
+                        <div class="word-tags" id="conversation-words">
+                            <span class="word-tag">актуальний (current)</span>
+                            <span class="word-tag">декорація (decoration)</span>
+                            <span class="word-tag">фабрика (factory)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="response-area">
+                    <textarea placeholder="Write your response here using the words above correctly..." id="conversation-response"></textarea>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="nextConversation()">Next Scenario</button>
+                        <button class="btn btn-secondary" onclick="clearResponse()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // False Friends Data
+        const falseFriends = [
+            {
+                ukrainian: "актуальний",
+                english: "current, relevant",
+                falseFriend: "actual",
+                example: "Це актуальна проблема (This is a current problem)"
+            },
+            {
+                ukrainian: "декорація",
+                english: "decoration, scenery",
+                falseFriend: "decoration (same meaning, but pronunciation differs)",
+                example: "Театральна декорація (Theater scenery)"
+            },
+            {
+                ukrainian: "фабрика",
+                english: "factory",
+                falseFriend: "fabric",
+                example: "Текстильна фабрика (Textile factory)"
+            },
+            {
+                ukrainian: "магазин",
+                english: "store, shop",
+                falseFriend: "magazine",
+                example: "Продуктовий магазин (Grocery store)"
+            },
+            {
+                ukrainian: "кабінет",
+                english: "office, study room",
+                falseFriend: "cabinet",
+                example: "Лікарський кабінет (Doctor's office)"
+            },
+            {
+                ukrainian: "інтелігентний",
+                english: "cultured, refined",
+                falseFriend: "intelligent",
+                example: "Інтелігентна людина (Cultured person)"
+            },
+            {
+                ukrainian: "симпатичний",
+                english: "nice, likeable",
+                falseFriend: "sympathetic",
+                example: "Симпатична дівчина (Nice girl)"
+            },
+            {
+                ukrainian: "конкретний",
+                english: "specific, particular",
+                falseFriend: "concrete",
+                example: "Конкретний приклад (Specific example)"
+            },
+            {
+                ukrainian: "реалізувати",
+                english: "to implement, carry out",
+                falseFriend: "to realize (understand)",
+                example: "Реалізувати проект (Implement a project)"
+            },
+            {
+                ukrainian: "претендувати",
+                english: "to claim, apply for",
+                falseFriend: "to pretend",
+                example: "Претендувати на посаду (Apply for a position)"
+            },
+            {
+                ukrainian: "амбіція",
+                english: "ambition (positive)",
+                falseFriend: "ambition (can be negative in English)",
+                example: "Здорові амбіції (Healthy ambitions)"
+            },
+            {
+                ukrainian: "комплекс",
+                english: "complex (building/system)",
+                falseFriend: "complex (psychological issue)",
+                example: "Спортивний комплекс (Sports complex)"
+            },
+            {
+                ukrainian: "перспектива",
+                english: "prospect, future opportunity",
+                falseFriend: "perspective (viewpoint)",
+                example: "Хороші перспективи (Good prospects)"
+            },
+            {
+                ukrainian: "прогресивний",
+                english: "progressive, advanced",
+                falseFriend: "progressive (political)",
+                example: "Прогресивні технології (Advanced technologies)"
+            },
+            {
+                ukrainian: "консерватор",
+                english: "conservator, curator",
+                falseFriend: "conservative (political)",
+                example: "Консерватор музею (Museum curator)"
+            },
+            {
+                ukrainian: "директор",
+                english: "director, principal",
+                falseFriend: "director (film)",
+                example: "Директор школи (School principal)"
+            },
+            {
+                ukrainian: "контроль",
+                english: "supervision, check",
+                falseFriend: "control (power over)",
+                example: "Контроль якості (Quality check)"
+            },
+            {
+                ukrainian: "дискусія",
+                english: "discussion, debate",
+                falseFriend: "discussion (casual talk)",
+                example: "Наукова дискусія (Scientific debate)"
+            },
+            {
+                ukrainian: "інформація",
+                english: "information, data",
+                falseFriend: "information (same but broader in Ukrainian)",
+                example: "Корисна інформація (Useful information)"
+            },
+            {
+                ukrainian: "комфорт",
+                english: "comfort, convenience",
+                falseFriend: "comfort (emotional support)",
+                example: "Домашній комфорт (Home comfort)"
+            },
+            {
+                ukrainian: "лібералізм",
+                english: "liberalism (economic)",
+                falseFriend: "liberalism (social)",
+                example: "Економічний лібералізм (Economic liberalism)"
+            },
+            {
+                ukrainian: "оригінал",
+                english: "original (document/artwork)",
+                falseFriend: "original (creative person)",
+                example: "Оригінал документа (Original document)"
+            },
+            {
+                ukrainian: "патріот",
+                english: "patriot (love of country)",
+                falseFriend: "patriot (political party member)",
+                example: "Справжній патріот (True patriot)"
+            },
+            {
+                ukrainian: "принцип",
+                english: "principle, rule",
+                falseFriend: "principal (school head)",
+                example: "Моральні принципи (Moral principles)"
+            },
+            {
+                ukrainian: "процедура",
+                english: "procedure, process",
+                falseFriend: "procedure (medical only)",
+                example: "Юридична процедура (Legal procedure)"
+            },
+            {
+                ukrainian: "революція",
+                english: "revolution (political change)",
+                falseFriend: "revolution (rotation)",
+                example: "Промислова революція (Industrial revolution)"
+            },
+            {
+                ukrainian: "секретар",
+                english: "secretary, clerk",
+                falseFriend: "secretary (government official)",
+                example: "Секретар офісу (Office secretary)"
+            },
+            {
+                ukrainian: "спеціаліст",
+                english: "specialist, expert",
+                falseFriend: "specialist (medical only)",
+                example: "IT-спеціаліст (IT specialist)"
+            },
+            {
+                ukrainian: "стандарт",
+                english: "standard, norm",
+                falseFriend: "standard (flag)",
+                example: "Міжнародний стандарт (International standard)"
+            },
+            {
+                ukrainian: "студент",
+                english: "university student",
+                falseFriend: "student (any level)",
+                example: "Студент університету (University student)"
+            },
+            {
+                ukrainian: "талант",
+                english: "talent, gift",
+                falseFriend: "talent (entertainment industry)",
+                example: "Музичний талант (Musical talent)"
+            },
+            {
+                ukrainian: "техніка",
+                english: "technology, equipment",
+                falseFriend: "technique (method)",
+                example: "Сучасна техніка (Modern technology)"
+            },
+            {
+                ukrainian: "традиція",
+                english: "tradition, custom",
+                falseFriend: "tradition (same but stricter in Ukrainian)",
+                example: "Народна традиція (Folk tradition)"
+            },
+            {
+                ukrainian: "транспорт",
+                english: "transportation, vehicles",
+                falseFriend: "transport (to carry)",
+                example: "Громадський транспорт (Public transportation)"
+            },
+            {
+                ukrainian: "університет",
+                english: "university",
+                falseFriend: "university (same but more formal in Ukrainian)",
+                example: "Київський університет (Kyiv University)"
+            },
+            {
+                ukrainian: "фінанси",
+                english: "finances, money matters",
+                falseFriend: "finance (to fund)",
+                example: "Особисті фінанси (Personal finances)"
+            },
+            {
+                ukrainian: "характер",
+                english: "character, personality",
+                falseFriend: "character (fictional person)",
+                example: "Сильний характер (Strong character)"
+            },
+            {
+                ukrainian: "центр",
+                english: "center, middle",
+                falseFriend: "centre (British spelling)",
+                example: "Міський центр (City center)"
+            },
+            {
+                ukrainian: "шанс",
+                english: "chance, opportunity",
+                falseFriend: "chance (luck/probability)",
+                example: "Хороший шанс (Good opportunity)"
+            },
+            {
+                ukrainian: "економіка",
+                english: "economics, economy",
+                falseFriend: "economy (saving money)",
+                example: "Національна економіка (National economy)"
+            }
+        ];
+
+        // Conversation scenarios
+        const conversationScenarios = [
+            {
+                title: "Business Meeting Scenario",
+                scenario: "You're in a business meeting discussing a new project. Use the false friends below correctly in your response.",
+                words: ["актуальний (current)", "декорація (decoration)", "фабрика (factory)"]
+            },
+            {
+                title: "University Discussion",
+                scenario: "You're talking with classmates about your studies and future career plans.",
+                words: ["студент (university student)", "спеціаліст (expert)", "перспектива (prospects)"]
+            },
+            {
+                title: "Shopping Experience",
+                scenario: "You're helping a friend navigate shopping in Ukraine and explaining local terms.",
+                words: ["магазин (store)", "центр (center)", "транспорт (transportation)"]
+            },
+            {
+                title: "Cultural Exchange",
+                scenario: "You're explaining Ukrainian culture and traditions to international visitors.",
+                words: ["традиція (tradition)", "характер (personality)", "патріот (patriot)"]
+            },
+            {
+                title: "Technology Discussion",
+                scenario: "You're discussing modern technology and its impact on society.",
+                words: ["техніка (technology)", "прогресивний (advanced)", "інформація (information)"]
+            }
+        ];
+
+        // Current states
+        let currentCardIndex = 0;
+        let currentQuestionIndex = 0;
+        let practiceScore = 0;
+        let selectedOption = -1;
+        let currentConversationIndex = 0;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFlashcard();
+            generatePracticeQuestion();
+            updateConversation();
+            document.getElementById('total-cards').textContent = falseFriends.length;
+        });
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Flashcard functions
+        function updateFlashcard() {
+            const card = falseFriends[currentCardIndex];
+            document.getElementById('ukrainian-word').textContent = card.ukrainian;
+            document.getElementById('english-meaning').textContent = card.english;
+            document.getElementById('false-friend').textContent = card.falseFriend;
+            document.getElementById('example').textContent = card.example;
+            document.getElementById('current-card').textContent = currentCardIndex + 1;
+            
+            // Reset flip state
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % falseFriends.length;
+            updateFlashcard();
+        }
+
+        function previousCard() {
+            currentCardIndex = currentCardIndex === 0 ? falseFriends.length - 1 : currentCardIndex - 1;
+            updateFlashcard();
+        }
+
+        // Practice functions
+        function generatePracticeQuestion() {
+            const correctAnswer = falseFriends[currentQuestionIndex];
+            const options = [correctAnswer.english];
+            
+            // Add 3 random wrong answers
+            while (options.length < 4) {
+                const randomCard = falseFriends[Math.floor(Math.random() * falseFriends.length)];
+                if (!options.includes(randomCard.english)) {
+                    options.push(randomCard.english);
+                }
+            }
+            
+            // Shuffle options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            // Update question
+            document.getElementById('practice-question').textContent = 
+                `What does the Ukrainian word "${correctAnswer.ukrainian}" mean in English?`;
+            
+            // Update options
+            const optionsContainer = document.getElementById('practice-options');
+            optionsContainer.innerHTML = '';
+            options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index, option, correctAnswer.english);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            selectedOption = -1;
+            document.getElementById('next-question-btn').style.display = 'none';
+        }
+
+        function selectOption(index, selectedText, correctAnswer) {
+            if (selectedOption !== -1) return; // Already answered
+            
+            selectedOption = index;
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((option, i) => {
+                if (i === index) {
+                    option.classList.add('selected');
+                    if (selectedText === correctAnswer) {
+                        option.classList.add('correct');
+                        practiceScore++;
+                    } else {
+                        option.classList.add('incorrect');
+                    }
+                } else if (option.textContent === correctAnswer) {
+                    option.classList.add('correct');
+                }
+            });
+            
+            document.getElementById('practice-score').textContent = practiceScore;
+            document.getElementById('practice-total').textContent = currentQuestionIndex + 1;
+            document.getElementById('next-question-btn').style.display = 'inline-block';
+            
+            if (currentQuestionIndex >= falseFriends.length - 1) {
+                document.getElementById('next-question-btn').style.display = 'none';
+                document.getElementById('restart-btn').style.display = 'inline-block';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < falseFriends.length - 1) {
+                currentQuestionIndex++;
+                generatePracticeQuestion();
+            }
+        }
+
+        function restartPractice() {
+            currentQuestionIndex = 0;
+            practiceScore = 0;
+            document.getElementById('practice-score').textContent = '0';
+            document.getElementById('practice-total').textContent = '0';
+            document.getElementById('restart-btn').style.display = 'none';
+            generatePracticeQuestion();
+        }
+
+        // Conversation functions
+        function updateConversation() {
+            const scenario = conversationScenarios[currentConversationIndex];
+            document.getElementById('conversation-title').textContent = scenario.title;
+            document.getElementById('conversation-scenario').textContent = scenario.scenario;
+            
+            const wordsContainer = document.getElementById('conversation-words');
+            wordsContainer.innerHTML = '';
+            scenario.words.forEach(word => {
+                const wordTag = document.createElement('span');
+                wordTag.className = 'word-tag';
+                wordTag.textContent = word;
+                wordsContainer.appendChild(wordTag);
+            });
+        }
+
+        function nextConversation() {
+            currentConversationIndex = (currentConversationIndex + 1) % conversationScenarios.length;
+            updateConversation();
+            document.getElementById('conversation-response').value = '';
+        }
+
+        function clearResponse() {
+            document.getElementById('conversation-response').value = '';
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98906c8cb2f42f7d',t:'MTc1OTUzNjI4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
