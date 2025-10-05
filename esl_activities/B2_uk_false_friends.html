@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English False Friends Practice for Ukrainian Speakers</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            background: #f8f9fa;
+            color: #495057;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .mode-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .exercise-area {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+        
+        .question {
+            font-size: 1.3em;
+            font-weight: 500;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .word-highlight {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .conversation-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        
+        .conversation-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .feedback {
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .ukrainian-hint {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            .mode-selector {
+                flex-direction: column;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇺🇦 ↔️ 🇺🇸 False Friends Practice</h1>
+            <p>Master tricky English words that look like Ukrainian but mean something different!</p>
+        </div>
+        
+        <div class="content">
+            <div class="score">
+                Score: <span id="score">0</span> / <span id="total">0</span>
+            </div>
+            
+            <div class="mode-selector">
+                <button class="mode-btn active" onclick="setMode('quiz')">📝 Quiz Mode</button>
+                <button class="mode-btn" onclick="setMode('conversation')">💬 Conversation Practice</button>
+            </div>
+            
+            <div class="exercise-area">
+                <div id="quiz-mode">
+                    <div class="question" id="question">
+                        Click "Next Question" to start practicing!
+                    </div>
+                    <div class="options" id="options"></div>
+                    <div id="feedback"></div>
+                </div>
+                
+                <div id="conversation-mode" style="display: none;">
+                    <div class="question" id="conversation-prompt">
+                        Write a short paragraph using the word "actual" correctly in English context.
+                    </div>
+                    <div class="ukrainian-hint">
+                        💡 Remember: "actual" in English means "real/true", not "current" (актуальний)
+                    </div>
+                    <textarea class="conversation-input" id="conversation-input" 
+                              placeholder="Write your response here..."></textarea>
+                    <div id="conversation-feedback"></div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="nextQuestion()" id="next-btn">Next Question</button>
+                <button class="btn btn-secondary" onclick="submitConversation()" id="submit-btn" style="display: none;">Submit Response</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const falseFriends = [
+            {
+                word: "actual",
+                ukrainian: "актуальний",
+                englishMeaning: "real, true, existing in fact",
+                ukrainianMeaning: "current, relevant, up-to-date",
+                question: "What does 'actual' mean in English?",
+                options: [
+                    "Current or up-to-date",
+                    "Real or true",
+                    "Important or significant",
+                    "Recent or new"
+                ],
+                correct: 1,
+                example: "The actual cost was higher than expected.",
+                conversationPrompt: "Describe a situation where you discovered the 'actual' truth about something."
+            },
+            {
+                word: "accurate",
+                ukrainian: "акуратний",
+                englishMeaning: "correct, precise, without errors",
+                ukrainianMeaning: "neat, tidy, careful",
+                question: "In English, 'accurate' means:",
+                options: [
+                    "Neat and tidy",
+                    "Careful and precise",
+                    "Correct and without errors",
+                    "Clean and organized"
+                ],
+                correct: 2,
+                example: "Please provide accurate information on the form.",
+                conversationPrompt: "Explain why it's important to be accurate when giving directions to someone."
+            },
+            {
+                word: "fabric",
+                ukrainian: "фабрика",
+                englishMeaning: "cloth, textile material",
+                ukrainianMeaning: "factory, manufacturing plant",
+                question: "What is 'fabric' in English?",
+                options: [
+                    "A factory building",
+                    "A manufacturing process",
+                    "Cloth or textile material",
+                    "Industrial equipment"
+                ],
+                correct: 2,
+                example: "She chose a beautiful fabric for her dress.",
+                conversationPrompt: "Describe your favorite type of fabric and what you would make with it."
+            },
+            {
+                word: "magazine",
+                ukrainian: "магазин",
+                englishMeaning: "a periodical publication with articles and pictures",
+                ukrainianMeaning: "shop, store",
+                question: "A 'magazine' in English is:",
+                options: [
+                    "A large store",
+                    "A shopping center",
+                    "A periodical publication",
+                    "A warehouse"
+                ],
+                correct: 2,
+                example: "I read an interesting article in a science magazine.",
+                conversationPrompt: "What type of magazine would you like to create and what topics would it cover?"
+            },
+            {
+                word: "artist",
+                ukrainian: "артист",
+                englishMeaning: "someone who creates art (paintings, sculptures, etc.)",
+                ukrainianMeaning: "performer, actor, entertainer",
+                question: "An 'artist' in English typically refers to:",
+                options: [
+                    "A stage performer or actor",
+                    "A musician or singer",
+                    "Someone who creates visual art",
+                    "Any type of entertainer"
+                ],
+                correct: 2,
+                example: "The artist displayed her paintings in the gallery.",
+                conversationPrompt: "Describe an artist whose work you admire and explain what makes their art special."
+            },
+            {
+                word: "cabinet",
+                ukrainian: "кабінет",
+                englishMeaning: "a piece of furniture with shelves or drawers",
+                ukrainianMeaning: "office, study room",
+                question: "What is a 'cabinet' in English?",
+                options: [
+                    "An office or study room",
+                    "A government department",
+                    "A piece of furniture with shelves",
+                    "A medical examination room"
+                ],
+                correct: 2,
+                example: "She stored the dishes in the kitchen cabinet.",
+                conversationPrompt: "Describe what you keep in the cabinets in your kitchen or bedroom."
+            },
+            {
+                word: "control",
+                ukrainian: "контроль",
+                englishMeaning: "to manage, direct, or command",
+                ukrainianMeaning: "inspection, checking, supervision",
+                question: "In English, 'control' primarily means:",
+                options: [
+                    "To inspect or check something",
+                    "To supervise or monitor",
+                    "To manage or direct",
+                    "To examine carefully"
+                ],
+                correct: 2,
+                example: "She learned to control her emotions during stressful situations.",
+                conversationPrompt: "Explain a situation where you had to control something difficult."
+            },
+            {
+                word: "argument",
+                ukrainian: "аргумент",
+                englishMeaning: "a disagreement or quarrel between people",
+                ukrainianMeaning: "a reason or evidence supporting a point",
+                question: "An 'argument' in English usually means:",
+                options: [
+                    "A logical reason or proof",
+                    "A disagreement or fight",
+                    "A mathematical formula",
+                    "A supporting evidence"
+                ],
+                correct: 1,
+                example: "They had a heated argument about politics.",
+                conversationPrompt: "Describe how to resolve an argument peacefully with a friend."
+            },
+            {
+                word: "conductor",
+                ukrainian: "кондуктор",
+                englishMeaning: "someone who directs an orchestra or a train official",
+                ukrainianMeaning: "ticket collector on public transport",
+                question: "A 'conductor' in English can be:",
+                options: [
+                    "Only a ticket collector",
+                    "Someone who directs music or trains",
+                    "A bus or tram driver",
+                    "A transportation inspector"
+                ],
+                correct: 1,
+                example: "The conductor raised his baton to start the symphony.",
+                conversationPrompt: "Imagine you're a conductor of an orchestra. Describe your first performance."
+            },
+            {
+                word: "prospect",
+                ukrainian: "проспект",
+                englishMeaning: "a possibility or potential for future success",
+                ukrainianMeaning: "a wide street or avenue",
+                question: "What does 'prospect' mean in English?",
+                options: [
+                    "A wide street or boulevard",
+                    "A future possibility or opportunity",
+                    "A city center area",
+                    "A commercial district"
+                ],
+                correct: 1,
+                example: "The job interview went well, so the prospect of getting hired looks good.",
+                conversationPrompt: "What are your prospects for learning English, and what motivates you?"
+            },
+            {
+                word: "intelligent",
+                ukrainian: "інтелігентний",
+                englishMeaning: "smart, having good mental ability",
+                ukrainianMeaning: "cultured, well-educated, refined",
+                question: "'Intelligent' in English means:",
+                options: [
+                    "Cultured and refined",
+                    "Well-educated and polite",
+                    "Smart and mentally capable",
+                    "Sophisticated and elegant"
+                ],
+                correct: 2,
+                example: "She's very intelligent and solved the problem quickly.",
+                conversationPrompt: "Describe someone you consider intelligent and explain why."
+            },
+            {
+                word: "genial",
+                ukrainian: "геніальний",
+                englishMeaning: "friendly, cheerful, and pleasant",
+                ukrainianMeaning: "brilliant, genius-like",
+                question: "In English, 'genial' describes someone who is:",
+                options: [
+                    "Brilliant or genius-like",
+                    "Friendly and cheerful",
+                    "Creative and innovative",
+                    "Exceptionally talented"
+                ],
+                correct: 1,
+                example: "Our host was genial and made everyone feel welcome.",
+                conversationPrompt: "Describe a genial person you know and how they make others feel comfortable."
+            },
+            {
+                word: "principal",
+                ukrainian: "принципал",
+                englishMeaning: "main, most important, or school headmaster",
+                ukrainianMeaning: "employer, boss, client",
+                question: "'Principal' in English means:",
+                options: [
+                    "An employer or boss",
+                    "A business client",
+                    "Main or most important",
+                    "A company owner"
+                ],
+                correct: 2,
+                example: "The principal reason for the meeting was to discuss the budget.",
+                conversationPrompt: "What do you think are the principal qualities of a good leader?"
+            },
+            {
+                word: "sympathetic",
+                ukrainian: "симпатичний",
+                englishMeaning: "showing compassion and understanding",
+                ukrainianMeaning: "attractive, nice-looking, likeable",
+                question: "A 'sympathetic' person in English is:",
+                options: [
+                    "Attractive and good-looking",
+                    "Nice and likeable",
+                    "Compassionate and understanding",
+                    "Friendly and charming"
+                ],
+                correct: 2,
+                example: "The doctor was very sympathetic when delivering the bad news.",
+                conversationPrompt: "Describe a time when someone was sympathetic to you during a difficult moment."
+            },
+            {
+                word: "compositor",
+                ukrainian: "композитор",
+                englishMeaning: "someone who arranges type for printing",
+                ukrainianMeaning: "someone who writes music",
+                question: "A 'compositor' in English is:",
+                options: [
+                    "Someone who writes music",
+                    "Someone who arranges printed text",
+                    "Someone who creates art",
+                    "Someone who conducts orchestras"
+                ],
+                correct: 1,
+                example: "The compositor carefully arranged the text for the newspaper.",
+                conversationPrompt: "Explain the difference between a compositor and a composer in English."
+            }
+        ];
+
+        let currentMode = 'quiz';
+        let currentQuestion = -1;
+        let score = 0;
+        let total = 0;
+        let answered = false;
+
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide appropriate sections
+            if (mode === 'quiz') {
+                document.getElementById('quiz-mode').style.display = 'block';
+                document.getElementById('conversation-mode').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'inline-block';
+                document.getElementById('submit-btn').style.display = 'none';
+            } else {
+                document.getElementById('quiz-mode').style.display = 'none';
+                document.getElementById('conversation-mode').style.display = 'block';
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('submit-btn').style.display = 'inline-block';
+                loadConversationPrompt();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentMode !== 'quiz') return;
+            
+            currentQuestion = (currentQuestion + 1) % falseFriends.length;
+            const question = falseFriends[currentQuestion];
+            answered = false;
+            
+            // Update question
+            document.getElementById('question').innerHTML = `
+                What does the English word <span class="word-highlight">${question.word}</span> mean?
+                <div class="ukrainian-hint">
+                    💡 In Ukrainian, "${question.ukrainian}" means: ${question.ukrainianMeaning}
+                </div>
+            `;
+            
+            // Update options
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Clear feedback
+            document.getElementById('feedback').innerHTML = '';
+        }
+
+        function selectOption(selectedIndex) {
+            if (answered) return;
+            
+            const question = falseFriends[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            answered = true;
+            total++;
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            const isCorrect = selectedIndex === question.correct;
+            if (isCorrect) score++;
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = `
+                <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</strong><br>
+                <strong>English meaning:</strong> ${question.englishMeaning}<br>
+                <strong>Example:</strong> "${question.example}"<br>
+                <strong>Remember:</strong> Unlike Ukrainian "${question.ukrainian}" (${question.ukrainianMeaning}), 
+                English "${question.word}" means ${question.englishMeaning}.
+            `;
+            
+            updateScore();
+        }
+
+        function loadConversationPrompt() {
+            const randomQuestion = falseFriends[Math.floor(Math.random() * falseFriends.length)];
+            document.getElementById('conversation-prompt').innerHTML = `
+                <strong>Conversation Practice:</strong> ${randomQuestion.conversationPrompt}
+                <div class="ukrainian-hint">
+                    💡 Use the word "<strong>${randomQuestion.word}</strong>" correctly. 
+                    Remember: it means "${randomQuestion.englishMeaning}", not "${randomQuestion.ukrainianMeaning}"
+                </div>
+            `;
+            
+            document.getElementById('conversation-input').value = '';
+            document.getElementById('conversation-feedback').innerHTML = '';
+        }
+
+        function submitConversation() {
+            const input = document.getElementById('conversation-input').value.trim();
+            const feedback = document.getElementById('conversation-feedback');
+            
+            if (input.length < 20) {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = '❌ Please write a more detailed response (at least 20 characters).';
+                return;
+            }
+            
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = `
+                ✅ <strong>Great job!</strong> You've practiced using English false friends in context. 
+                This kind of practice helps you remember the correct English meanings.<br><br>
+                <strong>Tip:</strong> Keep practicing with these tricky words in different sentences to master them!
+            `;
+            
+            // Load new prompt after a delay
+            setTimeout(() => {
+                loadConversationPrompt();
+            }, 3000);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = total;
+        }
+
+        // Initialize
+        nextQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a050f7c1219d92',t:'MTc1OTcwMjkzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
