@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Pronunciation Practice - Para Estudiantes Hispanohablantes</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pattern-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .pattern-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .easy { background: #d4edda; color: #155724; }
+        .medium { background: #fff3cd; color: #856404; }
+        .hard { background: #f8d7da; color: #721c24; }
+
+        .explanation {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .spanish-tip {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .spanish-tip strong {
+            color: #28a745;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .example-word {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .example-word:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .word {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .phonetic {
+            color: #667eea;
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .spanish {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .practice-section {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 25px;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .exercise {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .prompt-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #d63384;
+        }
+
+        .prompt-scenario {
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .key-phrases {
+            background: rgba(255,255,255,0.6);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .examples {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗣️ English Pronunciation Practice</h1>
+            <p>Práctica de Pronunciación en Inglés para Estudiantes Hispanohablantes</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('patterns')">📚 Pronunciation Patterns</button>
+            <button class="tab-btn" onclick="showTab('practice')">✏️ Practice Exercises</button>
+            <button class="tab-btn" onclick="showTab('conversation')">💬 Conversation Practice</button>
+        </div>
+
+        <!-- Pronunciation Patterns Section -->
+        <div id="patterns" class="content-section active">
+            <div class="pattern-card">
+                <div class="pattern-title">
+                    🔤 The "TH" Sound <span class="difficulty easy">Fácil</span>
+                </div>
+                <div class="explanation">
+                    <p><strong>English:</strong> The "th" sound doesn't exist in Spanish, making it challenging for Spanish speakers.</p>
+                    <div class="spanish-tip">
+                        <strong>Consejo en Español:</strong> Coloca la lengua entre los dientes y sopla suavemente. No es como la "d" o "t" en español.
+                    </div>
+                    <p><strong>Two types:</strong></p>
+                    <ul>
+                        <li><strong>Voiced /ð/:</strong> Vocal cords vibrate (like in "this")</li>
+                        <li><strong>Voiceless /θ/:</strong> No vocal cord vibration (like in "think")</li>
+                    </ul>
+                </div>
+                <div class="examples">
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Think</div>
+                        <div class="phonetic">/θɪŋk/</div>
+                        <div class="spanish">Pensar</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">This</div>
+                        <div class="phonetic">/ðɪs/</div>
+                        <div class="spanish">Este/Esta</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Three</div>
+                        <div class="phonetic">/θriː/</div>
+                        <div class="spanish">Tres</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Mother</div>
+                        <div class="phonetic">/ˈmʌðər/</div>
+                        <div class="spanish">Madre</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-title">
+                    🎵 The Schwa Sound /ə/ <span class="difficulty medium">Medio</span>
+                </div>
+                <div class="explanation">
+                    <p><strong>English:</strong> The schwa is the most common vowel sound in English, appearing in unstressed syllables.</p>
+                    <div class="spanish-tip">
+                        <strong>Consejo en Español:</strong> Es un sonido muy relajado, como una "e" muy suave. No existe en español, pero es crucial para sonar natural.
+                    </div>
+                    <p><strong>Key point:</strong> It's the "lazy" vowel - your mouth is completely relaxed.</p>
+                </div>
+                <div class="examples">
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">About</div>
+                        <div class="phonetic">/əˈbaʊt/</div>
+                        <div class="spanish">Acerca de</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Teacher</div>
+                        <div class="phonetic">/ˈtiːtʃər/</div>
+                        <div class="spanish">Profesor/a</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Computer</div>
+                        <div class="phonetic">/kəmˈpjuːtər/</div>
+                        <div class="spanish">Computadora</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">America</div>
+                        <div class="phonetic">/əˈmerɪkə/</div>
+                        <div class="spanish">América</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-title">
+                    🔊 The /v/ vs /b/ Distinction <span class="difficulty hard">Difícil</span>
+                </div>
+                <div class="explanation">
+                    <p><strong>English:</strong> Spanish speakers often confuse /v/ and /b/ because Spanish "b" and "v" sound the same.</p>
+                    <div class="spanish-tip">
+                        <strong>Consejo en Español:</strong> Para /v/, muerde ligeramente el labio inferior con los dientes superiores. Para /b/, junta ambos labios.
+                    </div>
+                    <p><strong>/v/ sound:</strong> Upper teeth touch lower lip<br>
+                    <strong>/b/ sound:</strong> Both lips come together</p>
+                </div>
+                <div class="examples">
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Very</div>
+                        <div class="phonetic">/ˈveri/</div>
+                        <div class="spanish">Muy</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Berry</div>
+                        <div class="phonetic">/ˈberi/</div>
+                        <div class="spanish">Baya</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Vote</div>
+                        <div class="phonetic">/voʊt/</div>
+                        <div class="spanish">Votar</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Boat</div>
+                        <div class="phonetic">/boʊt/</div>
+                        <div class="spanish">Barco</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pattern-card">
+                <div class="pattern-title">
+                    🎯 Silent Letters <span class="difficulty medium">Medio</span>
+                </div>
+                <div class="explanation">
+                    <p><strong>English:</strong> Many English words have letters that aren't pronounced, unlike Spanish where most letters are pronounced.</p>
+                    <div class="spanish-tip">
+                        <strong>Consejo en Español:</strong> A diferencia del español, muchas letras en inglés no se pronuncian. Hay que memorizar estos patrones.
+                    </div>
+                </div>
+                <div class="examples">
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Knee</div>
+                        <div class="phonetic">/niː/</div>
+                        <div class="spanish">Rodilla (k silente)</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Lamb</div>
+                        <div class="phonetic">/læm/</div>
+                        <div class="spanish">Cordero (b silente)</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Castle</div>
+                        <div class="phonetic">/ˈkæsəl/</div>
+                        <div class="spanish">Castillo (t silente)</div>
+                    </div>
+                    <div class="example-word" onclick="highlightWord(this)">
+                        <div class="word">Island</div>
+                        <div class="phonetic">/ˈaɪlənd/</div>
+                        <div class="spanish">Isla (s silente)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Exercises Section -->
+        <div id="practice" class="content-section">
+            <div class="practice-section">
+                <div class="practice-title">🎯 Pronunciation Practice Exercises</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+                <p style="text-align: center; color: #666;">Progreso: <span id="progressText">0/8</span> ejercicios completados</p>
+
+                <div class="exercise" id="exercise1">
+                    <div class="question">1. Which word has the voiceless "th" sound /θ/?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">This</div>
+                        <div class="option" onclick="selectOption(this, true)">Think</div>
+                        <div class="option" onclick="selectOption(this, false)">That</div>
+                        <div class="option" onclick="selectOption(this, false)">Mother</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise2">
+                    <div class="question">2. In which syllable do you hear the schwa /ə/ in "computer"?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, true)">First syllable (com-)</div>
+                        <div class="option" onclick="selectOption(this, false)">Second syllable (-pu-)</div>
+                        <div class="option" onclick="selectOption(this, false)">Third syllable (-ter)</div>
+                        <div class="option" onclick="selectOption(this, false)">No schwa sound</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise3">
+                    <div class="question">3. Which pair shows the /v/ vs /b/ distinction correctly?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">Vine /baɪn/ - Bind /vaɪnd/</div>
+                        <div class="option" onclick="selectOption(this, true)">Vine /vaɪn/ - Bind /baɪnd/</div>
+                        <div class="option" onclick="selectOption(this, false)">Both have /b/ sound</div>
+                        <div class="option" onclick="selectOption(this, false)">Both have /v/ sound</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise4">
+                    <div class="question">4. Which letter is silent in "knee"?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, true)">K</div>
+                        <div class="option" onclick="selectOption(this, false)">N</div>
+                        <div class="option" onclick="selectOption(this, false)">E</div>
+                        <div class="option" onclick="selectOption(this, false)">No silent letters</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise5">
+                    <div class="question">5. How many schwa sounds are in "America" /əˈmerɪkə/?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">One</div>
+                        <div class="option" onclick="selectOption(this, true)">Two</div>
+                        <div class="option" onclick="selectOption(this, false)">Three</div>
+                        <div class="option" onclick="selectOption(this, false)">None</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise6">
+                    <div class="question">6. Which word has a voiced "th" sound /ð/?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">Think</div>
+                        <div class="option" onclick="selectOption(this, false)">Three</div>
+                        <div class="option" onclick="selectOption(this, true)">This</div>
+                        <div class="option" onclick="selectOption(this, false)">Thick</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise7">
+                    <div class="question">7. In "castle" /ˈkæsəl/, which letter is silent?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">C</div>
+                        <div class="option" onclick="selectOption(this, true)">T</div>
+                        <div class="option" onclick="selectOption(this, false)">L</div>
+                        <div class="option" onclick="selectOption(this, false)">E</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <div class="exercise" id="exercise8">
+                    <div class="question">8. Which is the correct pronunciation of "very"?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, false)">/ˈberi/ (with /b/ sound)</div>
+                        <div class="option" onclick="selectOption(this, true)">/ˈveri/ (with /v/ sound)</div>
+                        <div class="option" onclick="selectOption(this, false)">/ˈweri/ (with /w/ sound)</div>
+                        <div class="option" onclick="selectOption(this, false)">/ˈferi/ (with /f/ sound)</div>
+                    </div>
+                    <div class="feedback"></div>
+                </div>
+
+                <button class="btn" onclick="resetExercises()">🔄 Reset Exercises</button>
+            </div>
+        </div>
+
+        <!-- Conversation Practice Section -->
+        <div id="conversation" class="content-section">
+            <div class="conversation-prompt">
+                <div class="prompt-title">🏪 At the Store - En la Tienda</div>
+                <div class="prompt-scenario">
+                    <strong>Scenario:</strong> You're buying groceries and need to ask for help finding items. Practice the /v/ vs /b/ sounds and "th" sounds.
+                </div>
+                <div class="key-phrases">
+                    <strong>Key phrases to practice:</strong><br>
+                    • "I need some <strong>vegetables</strong>" /ˈvedʒtəbəlz/<br>
+                    • "Where are the <strong>berries</strong>?" /ˈberiz/<br>
+                    • "Do you have <strong>three</strong> bananas?" /θriː/<br>
+                    • "<strong>Thank you very much</strong>" /θæŋk juː ˈveri mʌtʃ/
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">🏫 At School - En la Escuela</div>
+                <div class="prompt-scenario">
+                    <strong>Scenario:</strong> You're talking to your teacher about homework. Focus on schwa sounds and silent letters.
+                </div>
+                <div class="key-phrases">
+                    <strong>Key phrases to practice:</strong><br>
+                    • "I have a <strong>question about</strong> the homework" /əˈbaʊt/<br>
+                    • "The <strong>answer</strong> is difficult" /ˈænsər/<br>
+                    • "Can you help me with <strong>number</strong> seven?" /ˈnʌmbər/<br>
+                    • "I don't <strong>understand</strong> this problem" /ˌʌndərˈstænd/
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">🏥 At the Doctor - En el Doctor</div>
+                <div class="prompt-scenario">
+                    <strong>Scenario:</strong> You're describing symptoms to a doctor. Practice difficult consonant combinations and medical vocabulary.
+                </div>
+                <div class="key-phrases">
+                    <strong>Key phrases to practice:</strong><br>
+                    • "My <strong>throat</strong> hurts" /θroʊt/ (silent 'h')<br>
+                    • "I have a <strong>headache</strong>" /ˈhedeɪk/<br>
+                    • "The pain is <strong>very</strong> bad" /ˈveri/<br>
+                    • "I <strong>breathe</strong> with difficulty" /briːð/
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">🍕 Ordering Food - Pidiendo Comida</div>
+                <div class="prompt-scenario">
+                    <strong>Scenario:</strong> You're ordering at a restaurant. Practice food vocabulary with challenging sounds.
+                </div>
+                <div class="key-phrases">
+                    <strong>Key phrases to practice:</strong><br>
+                    • "I'd like a <strong>vegetable</strong> pizza" /ˈvedʒtəbəl/<br>
+                    • "With <strong>mushrooms</strong> and peppers" /ˈmʌʃrumz/<br>
+                    • "And a <strong>bottle</strong> of water" /ˈbɑtəl/<br>
+                    • "<strong>That's</strong> everything, <strong>thank you</strong>" /ðæts/ /θæŋk/
+                </div>
+            </div>
+
+            <div class="conversation-prompt">
+                <div class="prompt-title">🎬 Talking About Movies - Hablando de Películas</div>
+                <div class="prompt-scenario">
+                    <strong>Scenario:</strong> You're discussing your favorite movies with friends. Practice entertainment vocabulary and opinion expressions.
+                </div>
+                <div class="key-phrases">
+                    <strong>Key phrases to practice:</strong><br>
+                    • "I <strong>think</strong> it's a great movie" /θɪŋk/<br>
+                    • "The <strong>characters</strong> are interesting" /ˈkærəktərz/<br>
+                    • "It's <strong>better than</strong> the book" /ˈbetər ðæn/<br>
+                    • "Have you seen <strong>anything</strong> good lately?" /ˈeniθɪŋ/
+                </div>
+            </div>
+
+            <div class="practice-section">
+                <div class="practice-title">💡 Conversation Tips - Consejos para Conversación</div>
+                <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <h3>🎯 Practice Strategies:</h3>
+                    <ul>
+                        <li><strong>Record yourself:</strong> Use your phone to record these phrases and compare with native speakers</li>
+                        <li><strong>Mirror practice:</strong> Watch your mouth movements in a mirror</li>
+                        <li><strong>Slow down:</strong> It's better to speak slowly and clearly than fast and unclear</li>
+                        <li><strong>Focus on one sound:</strong> Pick one difficult sound per conversation</li>
+                    </ul>
+                    
+                    <h3>🗣️ Estrategias de Práctica:</h3>
+                    <ul>
+                        <li><strong>Grábate:</strong> Usa tu teléfono para grabarte y compara con hablantes nativos</li>
+                        <li><strong>Practica frente al espejo:</strong> Observa los movimientos de tu boca</li>
+                        <li><strong>Habla despacio:</strong> Es mejor hablar lento y claro que rápido y confuso</li>
+                        <li><strong>Enfócate en un sonido:</strong> Elige un sonido difícil por conversación</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let completedExercises = 0;
+        const totalExercises = 8;
+
+        function showTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section and activate tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function highlightWord(element) {
+            // Remove highlight from all words
+            const words = document.querySelectorAll('.example-word');
+            words.forEach(word => word.style.background = 'white');
+            
+            // Highlight clicked word
+            element.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            element.style.color = 'white';
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                element.style.background = 'white';
+                element.style.color = '#333';
+            }, 2000);
+        }
+
+        function selectOption(element, isCorrect) {
+            const exercise = element.closest('.exercise');
+            const options = exercise.querySelectorAll('.option');
+            const feedback = exercise.querySelector('.feedback');
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+                if (option === element) {
+                    option.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else if (option.onclick.toString().includes('true')) {
+                    option.classList.add('correct');
+                }
+            });
+            
+            // Show feedback
+            feedback.style.display = 'block';
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = '✅ ¡Correcto! Great job!';
+                
+                // Update progress if this exercise wasn't completed before
+                if (!exercise.classList.contains('completed')) {
+                    exercise.classList.add('completed');
+                    completedExercises++;
+                    updateProgress();
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = '❌ Incorrect. Try to listen carefully to the difference in sounds. ¡Inténtalo de nuevo!';
+            }
+        }
+
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const percentage = (completedExercises / totalExercises) * 100;
+            
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = `${completedExercises}/${totalExercises}`;
+            
+            if (completedExercises === totalExercises) {
+                setTimeout(() => {
+                    alert('🎉 ¡Felicidades! You completed all pronunciation exercises! Keep practicing with the conversation prompts.');
+                }, 500);
+            }
+        }
+
+        function resetExercises() {
+            completedExercises = 0;
+            const exercises = document.querySelectorAll('.exercise');
+            
+            exercises.forEach(exercise => {
+                exercise.classList.remove('completed');
+                const options = exercise.querySelectorAll('.option');
+                const feedback = exercise.querySelector('.feedback');
+                
+                options.forEach(option => {
+                    option.style.pointerEvents = 'auto';
+                    option.className = 'option';
+                });
+                
+                feedback.style.display = 'none';
+            });
+            
+            updateProgress();
+        }
+
+        // Initialize progress
+        updateProgress();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a24258c24e2f1d',t:'MTc1OTcyMzMwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
