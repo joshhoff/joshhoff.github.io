@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Sound Practice - Práctica de Sonidos en Inglés</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 20px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-button {
+            background: #e2e8f0;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sound-pairs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .sound-pair {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .sound-pair:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .sound-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .sound-btn {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+        }
+
+        .sound-btn:active {
+            transform: scale(0.95);
+        }
+
+        .record-btn {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            margin-top: 10px;
+        }
+
+        .game-area {
+            background: #f7fafc;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .game-question {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            color: #2d3748;
+        }
+
+        .game-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+        }
+
+        .speaking-prompts {
+            display: grid;
+            gap: 20px;
+        }
+
+        .prompt-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .prompt-question {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .prompt-hint {
+            font-size: 0.9rem;
+            color: #718096;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translate(-50%, -50%) scale(0.3); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            70% { transform: translate(-50%, -50%) scale(0.9); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .feedback-emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .feedback-text {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .feedback-subtext {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #2d3748;
+            color: #fff;
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .timer {
+            font-size: 2rem;
+            color: #e53e3e;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .sound-pairs {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-button {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 English Sound Practice</h1>
+            <p class="subtitle">Práctica de Sonidos en Inglés</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="wordsCount">0</span>
+                    <span>Words Practiced<br>Palabras Practicadas</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="starsCount">0</span>
+                    <span>⭐ Stars Earned<br>Estrellas Ganadas</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('sounds')">
+                <div class="tooltip">
+                    🔊 Sound Practice
+                    <span class="tooltiptext">Practice pronunciation of difficult sound pairs<br>Practica la pronunciación de sonidos difíciles</span>
+                </div>
+            </button>
+            <button class="tab-button" onclick="showTab('games')">
+                <div class="tooltip">
+                    🎮 Mini Games
+                    <span class="tooltiptext">Fun games to test your listening skills<br>Juegos divertidos para probar tu oído</span>
+                </div>
+            </button>
+            <button class="tab-button" onclick="showTab('speaking')">
+                <div class="tooltip">
+                    💬 Speaking Practice
+                    <span class="tooltiptext">Practice conversations and speaking<br>Practica conversaciones y habla</span>
+                </div>
+            </button>
+        </div>
+
+        <!-- Sound Practice Tab -->
+        <div id="sounds" class="tab-content active">
+            <div class="sound-pairs">
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">B vs V Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('bat')">🦇 BAT</button>
+                        <button class="sound-btn" onclick="playSound('vat')">🏺 VAT</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('bat-vat')">🎤 Record Yourself</button>
+                </div>
+                
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">TH vs T Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('think')">🤔 THINK</button>
+                        <button class="sound-btn" onclick="playSound('tin')">🥫 TIN</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('think-tin')">🎤 Record Yourself</button>
+                </div>
+                
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">SH vs S Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('ship')">🚢 SHIP</button>
+                        <button class="sound-btn" onclick="playSound('sheep')">🐑 SHEEP</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('ship-sheep')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">CH vs SH Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('chair')">🪑 CHAIR</button>
+                        <button class="sound-btn" onclick="playSound('share')">🤝 SHARE</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('chair-share')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">L vs R Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('light')">💡 LIGHT</button>
+                        <button class="sound-btn" onclick="playSound('right')">➡️ RIGHT</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('light-right')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">W vs V Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('wine')">🍷 WINE</button>
+                        <button class="sound-btn" onclick="playSound('vine')">🍇 VINE</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('wine-vine')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">P vs B Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('park')">🏞️ PARK</button>
+                        <button class="sound-btn" onclick="playSound('bark')">🐕 BARK</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('park-bark')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">F vs P Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('fan')">🪭 FAN</button>
+                        <button class="sound-btn" onclick="playSound('pan')">🍳 PAN</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('fan-pan')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">J vs Y Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('jam')">🍯 JAM</button>
+                        <button class="sound-btn" onclick="playSound('yam')">🍠 YAM</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('jam-yam')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">Short vs Long Vowels</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('bit')">🔧 BIT</button>
+                        <button class="sound-btn" onclick="playSound('beat')">🥁 BEAT</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('bit-beat')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">A vs E Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('cat')">🐱 CAT</button>
+                        <button class="sound-btn" onclick="playSound('cut')">✂️ CUT</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('cat-cut')">🎤 Record Yourself</button>
+                </div>
+
+                <div class="sound-pair">
+                    <h3 style="text-align: center; color: #4a5568;">Z vs S Sounds</h3>
+                    <div class="sound-buttons">
+                        <button class="sound-btn" onclick="playSound('zoo')">🦁 ZOO</button>
+                        <button class="sound-btn" onclick="playSound('sue')">⚖️ SUE</button>
+                    </div>
+                    <button class="sound-btn record-btn" onclick="startRecording('zoo-sue')">🎤 Record Yourself</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mini Games Tab -->
+        <div id="games" class="tab-content">
+            <div class="game-area">
+                <h2>🎯 Sound Match Game</h2>
+                <p>Listen carefully and choose the correct word!<br><em>¡Escucha con atención y elige la palabra correcta!</em></p>
+                
+                <div class="game-question" id="gameQuestion">Click "New Round" to start!</div>
+                <div class="game-options" id="gameOptions"></div>
+                <button class="sound-btn" onclick="newGameRound()" style="margin: 20px 10px;">🎲 New Round</button>
+                <button class="sound-btn" onclick="playGameSound()" id="playGameBtn" style="display: none;">🔊 Play Again</button>
+            </div>
+
+            <div class="game-area" style="margin-top: 30px;">
+                <h2>⏰ Tongue Twister Time</h2>
+                <p>Repeat the tongue twister as many times as you can!<br><em>¡Repite el trabalenguas tantas veces como puedas!</em></p>
+                
+                <div class="timer" id="timer">30</div>
+                <div class="game-question" id="tonguetwister">"She sells seashells by the seashore"</div>
+                <button class="sound-btn" onclick="startTonguetwister()">▶️ Start Challenge</button>
+                <button class="sound-btn record-btn" onclick="recordTonguetwister()" id="recordTwister" style="display: none;">🎤 Say It!</button>
+            </div>
+        </div>
+
+        <!-- Speaking Practice Tab -->
+        <div id="speaking" class="tab-content">
+            <div class="speaking-prompts">
+                <div class="prompt-card">
+                    <div class="prompt-question">🐾 What's your favorite animal and why?</div>
+                    <div class="prompt-hint">Practice: "My favorite animal is..." (Focus on 'v' sound in 'favorite')<br><em>Practica: "Mi animal favorito es..." (Enfócate en el sonido 'v' en 'favorite')</em></div>
+                    <button class="sound-btn record-btn" onclick="recordResponse('animal')">🎤 Record Answer</button>
+                </div>
+                
+                <div class="prompt-card">
+                    <div class="prompt-question">🏠 Describe your house or apartment</div>
+                    <div class="prompt-hint">Practice: "I think my house is..." (Focus on 'th' sound in 'think')<br><em>Practica: "Creo que mi casa es..." (Enfócate en el sonido 'th' en 'think')</em></div>
+                    <button class="sound-btn record-btn" onclick="recordResponse('house')">🎤 Record Answer</button>
+                </div>
+                
+                <div class="prompt-card">
+                    <div class="prompt-question">🛍️ What do you like to shop for?</div>
+                    <div class="prompt-hint">Practice: "I like to shop for..." (Focus on 'sh' sound in 'shop')<br><em>Practica: "Me gusta comprar..." (Enfócate en el sonido 'sh' en 'shop')</em></div>
+                    <button class="sound-btn record-btn" onclick="recordResponse('shop')">🎤 Record Answer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="feedback" id="feedback">
+        <div class="feedback-emoji" id="feedbackEmoji">🎉</div>
+        <div class="feedback-text" id="feedbackText">Great job!</div>
+        <div class="feedback-subtext" id="feedbackSubtext">¡Buen trabajo!</div>
+    </div>
+
+    <script>
+        let wordsCount = 0;
+        let starsCount = 0;
+        let currentGameWord = '';
+        let gameOptions = [];
+        let tonguetwisterTimer = null;
+        let tonguetwisterTime = 30;
+
+        const soundPairs = {
+            'bat-vat': ['bat', 'vat'],
+            'think-tin': ['think', 'tin'],
+            'ship-sheep': ['ship', 'sheep']
+        };
+
+        const gameWords = [
+            { word: 'bat', options: ['bat', 'vat', 'cat'], correct: 'bat' },
+            { word: 'vat', options: ['bat', 'vat', 'cat'], correct: 'vat' },
+            { word: 'think', options: ['think', 'tin', 'thin'], correct: 'think' },
+            { word: 'tin', options: ['think', 'tin', 'thin'], correct: 'tin' },
+            { word: 'ship', options: ['ship', 'sheep', 'shop'], correct: 'ship' },
+            { word: 'sheep', options: ['ship', 'sheep', 'shop'], correct: 'sheep' },
+            { word: 'chair', options: ['chair', 'share', 'care'], correct: 'chair' },
+            { word: 'share', options: ['chair', 'share', 'care'], correct: 'share' },
+            { word: 'light', options: ['light', 'right', 'night'], correct: 'light' },
+            { word: 'right', options: ['light', 'right', 'night'], correct: 'right' },
+            { word: 'wine', options: ['wine', 'vine', 'fine'], correct: 'wine' },
+            { word: 'vine', options: ['wine', 'vine', 'fine'], correct: 'vine' },
+            { word: 'park', options: ['park', 'bark', 'dark'], correct: 'park' },
+            { word: 'bark', options: ['park', 'bark', 'dark'], correct: 'bark' },
+            { word: 'fan', options: ['fan', 'pan', 'can'], correct: 'fan' },
+            { word: 'pan', options: ['fan', 'pan', 'can'], correct: 'pan' },
+            { word: 'jam', options: ['jam', 'yam', 'ham'], correct: 'jam' },
+            { word: 'yam', options: ['jam', 'yam', 'ham'], correct: 'yam' },
+            { word: 'bit', options: ['bit', 'beat', 'bet'], correct: 'bit' },
+            { word: 'beat', options: ['bit', 'beat', 'bet'], correct: 'beat' },
+            { word: 'cat', options: ['cat', 'cut', 'cot'], correct: 'cat' },
+            { word: 'cut', options: ['cat', 'cut', 'cot'], correct: 'cut' },
+            { word: 'zoo', options: ['zoo', 'sue', 'too'], correct: 'zoo' },
+            { word: 'sue', options: ['zoo', 'sue', 'too'], correct: 'sue' }
+        ];
+
+        const feedbackMessages = {
+            correct: {
+                emoji: '🎉',
+                text: 'Excellent!',
+                subtext: '¡Excelente!'
+            },
+            incorrect: {
+                emoji: '🤔',
+                text: 'Try again!',
+                subtext: '¡Inténtalo de nuevo!'
+            },
+            practice: {
+                emoji: '⭐',
+                text: 'Great practice!',
+                subtext: '¡Buena práctica!'
+            },
+            record: {
+                emoji: '🎤',
+                text: 'Nice recording!',
+                subtext: '¡Buena grabación!'
+            }
+        };
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.add('active');
+            event.target.closest('.tab-button').classList.add('active');
+        }
+
+        function playSound(word) {
+            // Simulate sound playing with visual feedback
+            const button = event.target;
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 150);
+            }, 100);
+            
+            updateProgress();
+            showFeedback('practice');
+        }
+
+        function startRecording(pairType) {
+            // Simulate recording functionality
+            const button = event.target;
+            button.textContent = '🔴 Recording...';
+            button.style.background = 'linear-gradient(135deg, #e53e3e, #c53030)';
+            
+            setTimeout(() => {
+                button.textContent = '🎤 Record Yourself';
+                button.style.background = 'linear-gradient(135deg, #f56565, #e53e3e)';
+                updateProgress();
+                showFeedback('record');
+            }, 2000);
+        }
+
+        function newGameRound() {
+            const randomGame = gameWords[Math.floor(Math.random() * gameWords.length)];
+            currentGameWord = randomGame.word;
+            gameOptions = [...randomGame.options];
+            
+            document.getElementById('gameQuestion').textContent = `Which word do you hear? / ¿Qué palabra escuchas?`;
+            
+            const optionsContainer = document.getElementById('gameOptions');
+            optionsContainer.innerHTML = '';
+            
+            gameOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option.toUpperCase();
+                button.onclick = () => checkGameAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('playGameBtn').style.display = 'inline-block';
+            playGameSound();
+        }
+
+        function playGameSound() {
+            // Simulate playing the word sound
+            const playBtn = document.getElementById('playGameBtn');
+            playBtn.textContent = '🔊 Playing...';
+            setTimeout(() => {
+                playBtn.textContent = '🔊 Play Again';
+            }, 1000);
+        }
+
+        function checkGameAnswer(selectedWord) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent.toLowerCase() === currentGameWord) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent.toLowerCase() === selectedWord && selectedWord !== currentGameWord) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedWord === currentGameWord) {
+                updateProgress();
+                addStar();
+                showFeedback('correct');
+            } else {
+                showFeedback('incorrect');
+            }
+            
+            setTimeout(() => {
+                buttons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+            }, 2000);
+        }
+
+        function startTonguetwister() {
+            tonguetwisterTime = 30;
+            document.getElementById('timer').textContent = tonguetwisterTime;
+            document.getElementById('recordTwister').style.display = 'inline-block';
+            
+            tonguetwisterTimer = setInterval(() => {
+                tonguetwisterTime--;
+                document.getElementById('timer').textContent = tonguetwisterTime;
+                
+                if (tonguetwisterTime <= 0) {
+                    clearInterval(tonguetwisterTimer);
+                    document.getElementById('recordTwister').style.display = 'none';
+                    showFeedback('practice');
+                }
+            }, 1000);
+        }
+
+        function recordTonguetwister() {
+            const button = event.target;
+            button.textContent = '🔴 Recording...';
+            
+            setTimeout(() => {
+                button.textContent = '🎤 Say It!';
+                updateProgress();
+            }, 1500);
+        }
+
+        function recordResponse(topic) {
+            const button = event.target;
+            button.textContent = '🔴 Recording...';
+            button.style.background = 'linear-gradient(135deg, #e53e3e, #c53030)';
+            
+            setTimeout(() => {
+                button.textContent = '🎤 Record Answer';
+                button.style.background = 'linear-gradient(135deg, #f56565, #e53e3e)';
+                updateProgress();
+                addStar();
+                showFeedback('record');
+            }, 3000);
+        }
+
+        function updateProgress() {
+            wordsCount++;
+            document.getElementById('wordsCount').textContent = wordsCount;
+            
+            const progress = Math.min((wordsCount / 20) * 100, 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function addStar() {
+            starsCount++;
+            document.getElementById('starsCount').textContent = starsCount;
+        }
+
+        function showFeedback(type) {
+            const feedback = document.getElementById('feedback');
+            const message = feedbackMessages[type];
+            
+            document.getElementById('feedbackEmoji').textContent = message.emoji;
+            document.getElementById('feedbackText').textContent = message.text;
+            document.getElementById('feedbackSubtext').textContent = message.subtext;
+            
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 2000);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            showFeedback('practice');
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a27632c31c2f7d',t:'MTc1OTcyNTQyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
