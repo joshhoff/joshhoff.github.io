@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Connector & Filler Words Practice</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .word-category {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .category-title {
+            color: #667eea;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .word-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px solid #e0e7ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .word-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .explanation {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .practice-area {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .exercise {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e7ff;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            background: #f8f9ff;
+            padding: 12px;
+            border: 2px solid #e0e7ff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #e0e7ff;
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .option.incorrect {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .prompt-title {
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #10b981;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .word-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 data-en="🎯 ESL Connector & Filler Words Practice" data-es="🎯 Práctica de Conectores y Muletillas en Inglés">🎯 ESL Connector & Filler Words Practice</h1>
+            <p data-en="Master advanced English connectors and natural conversation flow" data-es="Domina los conectores avanzados del inglés y el flujo natural de conversación">Master advanced English connectors and natural conversation flow</p>
+        </div>
+
+        <div class="language-toggle" style="text-align: center; margin-bottom: 20px;">
+            <button class="btn" onclick="toggleLanguage()" id="lang-toggle">🇪🇸 Español</button>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('learn')" data-en="📚 Learn" data-es="📚 Aprender">📚 Learn</button>
+            <button class="tab-btn" onclick="showTab('practice')" data-en="✍️ Written Practice" data-es="✍️ Práctica Escrita">✍️ Written Practice</button>
+            <button class="tab-btn" onclick="showTab('conversation')" data-en="💬 Conversation Practice" data-es="💬 Práctica de Conversación">💬 Conversation Practice</button>
+            <button class="tab-btn" onclick="showTab('quiz')" data-en="🎯 Quiz" data-es="🎯 Examen">🎯 Quiz</button>
+        </div>
+
+        <!-- Learn Section -->
+        <div id="learn" class="content-section active">
+            <h2 data-en="📖 Connector Phrases & Filler Words Guide" data-es="📖 Guía de Conectores y Muletillas">📖 Connector Phrases & Filler Words Guide</h2>
+            
+            <div class="word-category">
+                <div class="category-title" data-en="🔗 Logical Connectors" data-es="🔗 Conectores Lógicos">🔗 Logical Connectors</div>
+                <div class="word-list">
+                    <div class="word-item" onclick="showExplanation('moreover')">Moreover</div>
+                    <div class="word-item" onclick="showExplanation('furthermore')">Furthermore</div>
+                    <div class="word-item" onclick="showExplanation('nevertheless')">Nevertheless</div>
+                    <div class="word-item" onclick="showExplanation('consequently')">Consequently</div>
+                    <div class="word-item" onclick="showExplanation('therefore')">Therefore</div>
+                    <div class="word-item" onclick="showExplanation('however')">However</div>
+                </div>
+                <div class="explanation" style="display: none;">
+                    <strong>Usage:</strong> These words connect ideas logically and show relationships between sentences or paragraphs.
+                </div>
+            </div>
+
+            <div class="word-category">
+                <div class="category-title">🎯 Purpose & Result Connectors</div>
+                <div class="word-list">
+                    <div class="word-item" onclick="showExplanation('so-that')">So that</div>
+                    <div class="word-item" onclick="showExplanation('in-order-to')">In order to</div>
+                    <div class="word-item" onclick="showExplanation('as-a-result')">As a result</div>
+                    <div class="word-item" onclick="showExplanation('due-to')">Due to</div>
+                    <div class="word-item" onclick="showExplanation('because-of')">Because of</div>
+                </div>
+                <div class="explanation" style="display: none;">
+                    <strong>Usage:</strong> These phrases explain why something happens or what the intended outcome is.
+                </div>
+            </div>
+
+            <div class="word-category">
+                <div class="category-title">💭 Natural Filler Words</div>
+                <div class="word-list">
+                    <div class="word-item" onclick="showExplanation('well')">Well</div>
+                    <div class="word-item" onclick="showExplanation('so')">So</div>
+                    <div class="word-item" onclick="showExplanation('you-know')">You know</div>
+                    <div class="word-item" onclick="showExplanation('i-mean')">I mean</div>
+                    <div class="word-item" onclick="showExplanation('actually')">Actually</div>
+                    <div class="word-item" onclick="showExplanation('basically')">Basically</div>
+                </div>
+                <div class="explanation" style="display: none;">
+                    <strong>Usage:</strong> These words help you sound more natural and give you time to think while speaking.
+                </div>
+            </div>
+
+            <div id="word-explanations" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Written Practice Section -->
+        <div id="practice" class="content-section">
+            <h2>✍️ Written Practice Exercises</h2>
+            
+            <div class="practice-area">
+                <h3>Fill in the Blanks</h3>
+                <div id="written-exercises">
+                    <!-- Exercises will be loaded here -->
+                </div>
+                <div class="score" id="written-score">Score: 0/0</div>
+                <button class="btn" onclick="generateWrittenExercises()">New Exercises</button>
+            </div>
+        </div>
+
+        <!-- Conversation Practice Section -->
+        <div id="conversation" class="content-section">
+            <h2>💬 Conversation Practice</h2>
+            
+            <div class="practice-area">
+                <h3>Speaking Prompts</h3>
+                <p>Practice using connectors and fillers in natural conversation. Click for new prompts!</p>
+                
+                <div id="conversation-prompts">
+                    <!-- Prompts will be loaded here -->
+                </div>
+                
+                <button class="btn" onclick="generateConversationPrompts()">New Conversation Topics</button>
+                <button class="btn btn-secondary" onclick="showFillerTips()" style="margin-left: 10px;">Filler Word Tips</button>
+            </div>
+
+            <div id="filler-tips" style="display: none; margin-top: 20px; background: #fff3cd; padding: 20px; border-radius: 12px; border: 2px solid #ffc107;">
+                <h4>💡 Natural Filler Word Tips:</h4>
+                <ul>
+                    <li><strong>"Well..."</strong> - Use when you need time to think or when changing topics</li>
+                    <li><strong>"So..."</strong> - Great for starting explanations or summaries</li>
+                    <li><strong>"You know..."</strong> - Helps check if your listener understands</li>
+                    <li><strong>"I mean..."</strong> - Perfect for clarifying or rephrasing</li>
+                    <li><strong>"Actually..."</strong> - Use when correcting or adding new information</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz" class="content-section">
+            <h2>🎯 Interactive Quiz</h2>
+            
+            <div class="practice-area">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="quiz-progress" style="width: 0%"></div>
+                </div>
+                
+                <div id="quiz-container">
+                    <!-- Quiz questions will be loaded here -->
+                </div>
+                
+                <div class="score" id="quiz-score">Score: 0/0</div>
+                <button class="btn" onclick="startQuiz()">Start New Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current language
+        let currentLanguage = 'en';
+
+        // Data for exercises and explanations
+        const connectorData = {
+            'moreover': {
+                explanation: {
+                    en: "Moreover adds extra information to support your point. It's more formal than 'also'.",
+                    es: "Moreover añade información extra para apoyar tu punto. Es más formal que 'also'."
+                },
+                example: {
+                    en: "The weather was terrible. Moreover, we forgot our umbrellas.",
+                    es: "El clima estaba terrible. Moreover, olvidamos nuestros paraguas."
+                },
+                moreExamples: {
+                    en: [
+                        "The hotel was expensive. Moreover, the service was poor.",
+                        "She speaks three languages fluently. Moreover, she's learning a fourth.",
+                        "The exam was difficult. Moreover, we had very little time to prepare."
+                    ],
+                    es: [
+                        "El hotel era caro. Moreover, el servicio era malo.",
+                        "Ella habla tres idiomas con fluidez. Moreover, está aprendiendo un cuarto.",
+                        "El examen fue difícil. Moreover, tuvimos muy poco tiempo para prepararnos."
+                    ]
+                },
+                tip: {
+                    en: "Use 'moreover' in formal writing or presentations to add supporting points.",
+                    es: "Usa 'moreover' en escritura formal o presentaciones para añadir puntos de apoyo."
+                }
+            },
+            'furthermore': {
+                explanation: {
+                    en: "Furthermore introduces additional evidence or reasons. Very formal.",
+                    es: "Furthermore introduce evidencia o razones adicionales. Muy formal."
+                },
+                example: {
+                    en: "The project is behind schedule. Furthermore, we're over budget.",
+                    es: "El proyecto está atrasado. Furthermore, estamos sobre presupuesto."
+                },
+                moreExamples: {
+                    en: [
+                        "The restaurant has excellent food. Furthermore, the prices are reasonable.",
+                        "This method is more efficient. Furthermore, it costs less money.",
+                        "The location is perfect. Furthermore, the rent is affordable."
+                    ],
+                    es: [
+                        "El restaurante tiene comida excelente. Furthermore, los precios son razonables.",
+                        "Este método es más eficiente. Furthermore, cuesta menos dinero.",
+                        "La ubicación es perfecta. Furthermore, el alquiler es asequible."
+                    ]
+                },
+                tip: {
+                    en: "Use 'furthermore' in academic writing or formal business contexts.",
+                    es: "Usa 'furthermore' en escritura académica o contextos de negocios formales."
+                }
+            },
+            'nevertheless': {
+                explanation: {
+                    en: "Nevertheless shows contrast despite what was just said. Similar to 'however'.",
+                    es: "Nevertheless muestra contraste a pesar de lo que se acaba de decir. Similar a 'however'."
+                },
+                example: {
+                    en: "It was raining heavily. Nevertheless, we decided to go hiking.",
+                    es: "Estaba lloviendo fuerte. Nevertheless, decidimos ir de excursión."
+                },
+                moreExamples: {
+                    en: [
+                        "The movie got bad reviews. Nevertheless, I enjoyed it.",
+                        "He was tired. Nevertheless, he finished his homework.",
+                        "The task seemed impossible. Nevertheless, they succeeded."
+                    ],
+                    es: [
+                        "La película recibió malas críticas. Nevertheless, la disfruté.",
+                        "Estaba cansado. Nevertheless, terminó su tarea.",
+                        "La tarea parecía imposible. Nevertheless, tuvieron éxito."
+                    ]
+                },
+                tip: {
+                    en: "Use 'nevertheless' to show determination or unexpected outcomes.",
+                    es: "Usa 'nevertheless' para mostrar determinación o resultados inesperados."
+                }
+            },
+            'consequently': {
+                explanation: {
+                    en: "Consequently shows a result or effect of something mentioned before.",
+                    es: "Consequently muestra un resultado o efecto de algo mencionado antes."
+                },
+                example: {
+                    en: "Traffic was heavy. Consequently, we arrived late to the meeting.",
+                    es: "El tráfico estaba pesado. Consequently, llegamos tarde a la reunión."
+                },
+                moreExamples: {
+                    en: [
+                        "She studied hard all semester. Consequently, she got excellent grades.",
+                        "The company lost money. Consequently, they had to lay off workers.",
+                        "It rained for days. Consequently, the river flooded."
+                    ],
+                    es: [
+                        "Estudió mucho todo el semestre. Consequently, obtuvo calificaciones excelentes.",
+                        "La empresa perdió dinero. Consequently, tuvieron que despedir trabajadores.",
+                        "Llovió por días. Consequently, el río se desbordó."
+                    ]
+                },
+                tip: {
+                    en: "Use 'consequently' to show clear cause-and-effect relationships.",
+                    es: "Usa 'consequently' para mostrar relaciones claras de causa y efecto."
+                }
+            },
+            'therefore': {
+                explanation: "Therefore indicates a logical conclusion based on previous information.",
+                example: "All the evidence points to his innocence. Therefore, he should be released.",
+                moreExamples: [
+                    "The weather forecast shows rain. Therefore, we should bring umbrellas.",
+                    "She has the most experience. Therefore, she got the promotion.",
+                    "The data shows clear trends. Therefore, we can make predictions."
+                ],
+                tip: "Use 'therefore' when making logical conclusions or decisions."
+            },
+            'however': {
+                explanation: "However introduces a contrasting idea or shows an exception.",
+                example: "The plan sounds good. However, we need to consider the costs.",
+                moreExamples: [
+                    "I wanted to go to the party. However, I had too much work.",
+                    "The weather was perfect. However, the event was cancelled.",
+                    "She's very talented. However, she lacks experience."
+                ],
+                tip: "Use 'however' to present opposing viewpoints or limitations."
+            },
+            'so-that': {
+                explanation: "So that explains the purpose or goal of an action.",
+                example: "I'm studying hard so that I can pass the exam.",
+                moreExamples: [
+                    "She saved money so that she could travel to Europe.",
+                    "We left early so that we wouldn't be late.",
+                    "He speaks slowly so that everyone can understand."
+                ],
+                tip: "Use 'so that' to explain why you're doing something."
+            },
+            'in-order-to': {
+                explanation: "In order to shows purpose, similar to 'so that' but more formal.",
+                example: "She moved to London in order to improve her English.",
+                moreExamples: [
+                    "We need to work together in order to succeed.",
+                    "He woke up early in order to catch the first train.",
+                    "They hired a consultant in order to solve the problem."
+                ],
+                tip: "Use 'in order to' in formal writing or professional contexts."
+            },
+            'as-a-result': {
+                explanation: "As a result shows the outcome or consequence of something.",
+                example: "The store had a big sale. As a result, many people came shopping.",
+                moreExamples: [
+                    "She practiced every day. As a result, her English improved quickly.",
+                    "The company invested in new technology. As a result, productivity increased.",
+                    "It rained heavily. As a result, the game was postponed."
+                ],
+                tip: "Use 'as a result' to clearly show outcomes and consequences."
+            },
+            'due-to': {
+                explanation: "Due to explains the reason or cause of something.",
+                example: "The flight was delayed due to bad weather.",
+                moreExamples: [
+                    "The meeting was cancelled due to technical problems.",
+                    "Sales increased due to the new marketing campaign.",
+                    "The road was closed due to construction work."
+                ],
+                tip: "Use 'due to' followed by a noun or noun phrase to explain causes."
+            },
+            'because-of': {
+                explanation: "Because of shows the reason for something, similar to 'due to'.",
+                example: "We stayed home because of the storm.",
+                moreExamples: [
+                    "She was late because of traffic.",
+                    "The event was successful because of good planning.",
+                    "He couldn't sleep because of the noise."
+                ],
+                tip: "Use 'because of' in casual conversation; 'due to' is more formal."
+            },
+            'well': {
+                explanation: "Well is a natural filler that gives you thinking time and sounds conversational.",
+                example: "Well, I think we should consider other options.",
+                moreExamples: [
+                    "Well, that's an interesting question.",
+                    "Well, let me think about that for a moment.",
+                    "Well, I suppose we could try a different approach."
+                ],
+                tip: "Use 'well' at the beginning of responses to sound more natural and thoughtful."
+            },
+            'so': {
+                explanation: "So can start explanations, conclusions, or new topics in conversation.",
+                example: "So, what do you think about the new proposal?",
+                moreExamples: [
+                    "So, here's what happened yesterday.",
+                    "So, the main point is that we need more time.",
+                    "So, shall we get started with the meeting?"
+                ],
+                tip: "Use 'so' to transition between topics or start summaries in casual conversation."
+            },
+            'you-know': {
+                explanation: "You know checks understanding and creates connection with your listener.",
+                example: "It's really important to be on time, you know?",
+                moreExamples: [
+                    "The weather has been crazy lately, you know?",
+                    "I think we should be more careful, you know what I mean?",
+                    "It's not easy to learn a new language, you know."
+                ],
+                tip: "Use 'you know' to check if your listener agrees or understands you."
+            },
+            'i-mean': {
+                explanation: "I mean helps clarify or rephrase what you just said.",
+                example: "The movie was okay. I mean, it wasn't terrible, but it wasn't great either.",
+                moreExamples: [
+                    "She's really smart. I mean, she speaks five languages!",
+                    "The test was hard. I mean, nobody finished on time.",
+                    "I like the idea. I mean, it could really work if we plan it right."
+                ],
+                tip: "Use 'I mean' when you want to explain or clarify your previous statement."
+            },
+            'actually': {
+                explanation: "Actually introduces corrections, surprises, or additional information.",
+                example: "I thought the meeting was at 3 PM. Actually, it's at 2 PM.",
+                moreExamples: [
+                    "The restaurant looks expensive, but actually, it's quite affordable.",
+                    "I was worried about the exam, but actually, it was easier than expected.",
+                    "She seems quiet, but actually, she's very funny when you get to know her."
+                ],
+                tip: "Use 'actually' to correct misconceptions or add surprising information."
+            },
+            'basically': {
+                explanation: "Basically simplifies complex ideas or gives the main point.",
+                example: "The new system is complicated, but basically, it will save us time.",
+                moreExamples: [
+                    "There are many rules, but basically, just be respectful to everyone.",
+                    "The process has several steps, but basically, you just follow the instructions.",
+                    "The theory is complex, but basically, it explains how memory works."
+                ],
+                tip: "Use 'basically' to summarize or simplify complicated explanations."
+            }
+        };
+
+        const writtenExercises = [
+            {
+                question: "I studied all night for the exam. _______, I still felt nervous.",
+                options: ["Moreover", "Nevertheless", "Consequently", "So that"],
+                correct: 1,
+                explanation: "Nevertheless shows contrast - despite studying, you still felt nervous."
+            },
+            {
+                question: "She saved money for months _______ she could buy a new laptop.",
+                options: ["moreover", "so that", "however", "consequently"],
+                correct: 1,
+                explanation: "So that shows purpose - the reason for saving money was to buy a laptop."
+            },
+            {
+                question: "The restaurant was expensive. _______, the food was delicious.",
+                options: ["Consequently", "Moreover", "Nevertheless", "Therefore"],
+                correct: 2,
+                explanation: "Nevertheless shows contrast - despite being expensive, the food was good."
+            },
+            {
+                question: "_______, I think we should postpone the meeting until next week.",
+                options: ["Consequently", "Well", "Moreover", "So that"],
+                correct: 1,
+                explanation: "Well is a natural way to start expressing your opinion in conversation."
+            }
+        ];
+
+        const conversationPrompts = [
+            {
+                title: "Describing Your Hometown",
+                prompt: "Describe your hometown to someone who has never been there. Use connectors like 'moreover' and 'furthermore' to add details.",
+                fillers: "Try using: Well, you know, I mean, actually"
+            },
+            {
+                title: "Explaining a Problem",
+                prompt: "Explain a problem you had recently and how you solved it. Use 'consequently', 'therefore', and 'as a result'.",
+                fillers: "Natural starters: So, well, actually"
+            },
+            {
+                title: "Giving Advice",
+                prompt: "Give advice to someone learning your native language. Use 'so that', 'in order to' to explain purposes.",
+                fillers: "Use: I mean, you know, basically"
+            },
+            {
+                title: "Comparing Two Cities",
+                prompt: "Compare two cities you've visited. Use 'however', 'nevertheless', 'on the other hand'.",
+                fillers: "Try: Well, actually, you know what I mean"
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                question: "Which connector shows additional supporting information?",
+                options: ["However", "Moreover", "Nevertheless", "Consequently"],
+                correct: 1
+            },
+            {
+                question: "Complete: 'I'm learning English _____ I can get a better job.'",
+                options: ["moreover", "so that", "however", "nevertheless"],
+                correct: 1
+            },
+            {
+                question: "Which filler word is best for starting to express an opinion?",
+                options: ["Consequently", "Moreover", "Well", "Furthermore"],
+                correct: 2
+            },
+            {
+                question: "What does 'nevertheless' express?",
+                options: ["Addition", "Contrast", "Result", "Purpose"],
+                correct: 1
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let writtenScore = 0;
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and activate tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Show word explanations
+        function showExplanation(word) {
+            const explanationDiv = document.getElementById('word-explanations');
+            const data = connectorData[word];
+            
+            if (data) {
+                const meaningLabel = currentLanguage === 'en' ? 'Meaning:' : 'Significado:';
+                const exampleLabel = currentLanguage === 'en' ? 'Example in Context:' : 'Ejemplo en Contexto:';
+                const moreExamplesLabel = currentLanguage === 'en' ? 'More Examples:' : 'Más Ejemplos:';
+                const tipLabel = currentLanguage === 'en' ? '💡 Usage Tip:' : '💡 Consejo de Uso:';
+                
+                explanationDiv.innerHTML = `
+                    <div class="word-category">
+                        <div class="category-title">💡 ${word.replace('-', ' ').toUpperCase()}</div>
+                        <div class="explanation">
+                            <strong>${meaningLabel}</strong> ${data.explanation[currentLanguage]}<br><br>
+                            <strong>${exampleLabel}</strong><br>
+                            "${data.example[currentLanguage]}"<br><br>
+                            <strong>${moreExamplesLabel}</strong><br>
+                            ${data.moreExamples[currentLanguage].map(ex => `• ${ex}`).join('<br>')}
+                            <br><br>
+                            <strong>${tipLabel}</strong> ${data.tip[currentLanguage]}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Generate written exercises
+        function generateWrittenExercises() {
+            const container = document.getElementById('written-exercises');
+            container.innerHTML = '';
+            writtenScore = 0;
+            
+            writtenExercises.forEach((exercise, index) => {
+                const exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'exercise';
+                exerciseDiv.innerHTML = `
+                    <div class="question">${index + 1}. ${exercise.question}</div>
+                    <div class="options">
+                        ${exercise.options.map((option, optIndex) => 
+                            `<div class="option" onclick="selectWrittenAnswer(${index}, ${optIndex})">${option}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${index}" style="display: none;"></div>
+                `;
+                container.appendChild(exerciseDiv);
+            });
+            
+            updateWrittenScore();
+        }
+
+        function selectWrittenAnswer(exerciseIndex, optionIndex) {
+            const exercise = writtenExercises[exerciseIndex];
+            const options = document.querySelectorAll(`#written-exercises .exercise:nth-child(${exerciseIndex + 1}) .option`);
+            const feedback = document.getElementById(`feedback-${exerciseIndex}`);
+            
+            // Reset all options
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            options[optionIndex].classList.add('selected');
+            
+            if (optionIndex === exercise.correct) {
+                options[optionIndex].classList.add('correct');
+                feedback.className = 'feedback correct';
+                feedback.textContent = `✅ Correct! ${exercise.explanation}`;
+                writtenScore++;
+            } else {
+                options[optionIndex].classList.add('incorrect');
+                options[exercise.correct].classList.add('correct');
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Incorrect. ${exercise.explanation}`;
+            }
+            
+            feedback.style.display = 'block';
+            updateWrittenScore();
+        }
+
+        function updateWrittenScore() {
+            document.getElementById('written-score').textContent = `Score: ${writtenScore}/${writtenExercises.length}`;
+        }
+
+        // Generate conversation prompts
+        function generateConversationPrompts() {
+            const container = document.getElementById('conversation-prompts');
+            container.innerHTML = '';
+            
+            // Shuffle and take 2 random prompts
+            const shuffled = [...conversationPrompts].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 2);
+            
+            selected.forEach(prompt => {
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'conversation-prompt';
+                promptDiv.innerHTML = `
+                    <div class="prompt-title">🎯 ${prompt.title}</div>
+                    <div><strong>Task:</strong> ${prompt.prompt}</div>
+                    <div style="margin-top: 10px;"><strong>Suggested fillers:</strong> ${prompt.fillers}</div>
+                `;
+                container.appendChild(promptDiv);
+            });
+        }
+
+        function showFillerTips() {
+            const tips = document.getElementById('filler-tips');
+            tips.style.display = tips.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Quiz functionality
+        function startQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const question = quizQuestions[currentQuizIndex];
+            const container = document.getElementById('quiz-container');
+            
+            container.innerHTML = `
+                <div class="exercise">
+                    <div class="question">${currentQuizIndex + 1}. ${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => 
+                            `<div class="option" onclick="selectQuizAnswer(${index})">${option}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="feedback" id="quiz-feedback" style="display: none;"></div>
+                </div>
+            `;
+            
+            updateQuizProgress();
+        }
+
+        function selectQuizAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuizIndex];
+            const options = document.querySelectorAll('#quiz-container .option');
+            const feedback = document.getElementById('quiz-feedback');
+            
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                quizScore++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✅ Correct! Well done!';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `❌ Incorrect. The correct answer is: ${question.options[question.correct]}`;
+            }
+            
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                currentQuizIndex++;
+                showQuizQuestion();
+            }, 2000);
+        }
+
+        function updateQuizProgress() {
+            const progress = (currentQuizIndex / quizQuestions.length) * 100;
+            document.getElementById('quiz-progress').style.width = progress + '%';
+            document.getElementById('quiz-score').textContent = `Score: ${quizScore}/${currentQuizIndex}`;
+        }
+
+        function showQuizResults() {
+            const container = document.getElementById('quiz-container');
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            
+            let message = '';
+            if (percentage >= 80) {
+                message = '🎉 Excellent! You have a great understanding of connectors and fillers!';
+            } else if (percentage >= 60) {
+                message = '👍 Good job! Keep practicing to improve further.';
+            } else {
+                message = '📚 Keep studying! Review the learning section and try again.';
+            }
+            
+            container.innerHTML = `
+                <div class="exercise" style="text-align: center;">
+                    <h3>Quiz Complete!</h3>
+                    <div style="font-size: 2rem; margin: 20px 0;">${percentage}%</div>
+                    <div style="font-size: 1.2rem; color: #667eea;">${message}</div>
+                </div>
+            `;
+            
+            document.getElementById('quiz-score').textContent = `Final Score: ${quizScore}/${quizQuestions.length}`;
+        }
+
+        // Language toggle functionality
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            // Update toggle button
+            const toggleBtn = document.getElementById('lang-toggle');
+            toggleBtn.textContent = currentLanguage === 'en' ? '🇪🇸 Español' : '🇺🇸 English';
+
+            // Update all elements with data-en and data-es attributes
+            document.querySelectorAll('[data-en][data-es]').forEach(element => {
+                element.textContent = element.getAttribute(`data-${currentLanguage}`);
+            });
+
+            // Refresh current content
+            if (document.getElementById('learn').classList.contains('active')) {
+                // Clear current explanation
+                document.getElementById('word-explanations').innerHTML = '';
+            }
+            
+            if (document.getElementById('practice').classList.contains('active')) {
+                generateWrittenExercises();
+            }
+            
+            if (document.getElementById('conversation').classList.contains('active')) {
+                generateConversationPrompts();
+            }
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            generateWrittenExercises();
+            generateConversationPrompts();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98ae8cd023187c61',t:'MTc1OTg1MjE4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
