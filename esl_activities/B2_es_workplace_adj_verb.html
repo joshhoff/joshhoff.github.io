@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Workplace Vocabulary Tutor</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .vocabulary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .vocab-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .vocab-spanish {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .vocab-english {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .vocab-context {
+            font-size: 0.9rem;
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .activity-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .activity-title {
+            color: #667eea;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .prompt-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .prompt-scenario {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .prompt-questions {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .vocabulary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Spanish Workplace Vocabulary</h1>
+            <p>Master essential workplace Spanish with interactive lessons and practice</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('vocabulary')">📚 Vocabulary</button>
+            <button class="tab-btn" onclick="showTab('activities')">✏️ Activities</button>
+            <button class="tab-btn" onclick="showTab('conversation')">💬 Conversation</button>
+        </div>
+
+        <!-- Vocabulary Section -->
+        <div id="vocabulary" class="content-section active">
+            <h2 style="color: #667eea; text-align: center; margin-bottom: 30px;">Essential Workplace Vocabulary</h2>
+            
+            <h3 style="color: #764ba2; margin-bottom: 20px;">🏷️ Workplace Adjectives</h3>
+            <div class="vocabulary-grid" id="adjectives-grid">
+                <!-- Adjectives will be populated by JavaScript -->
+            </div>
+
+            <h3 style="color: #764ba2; margin-bottom: 20px; margin-top: 40px;">⚡ Workplace Verbs</h3>
+            <div class="vocabulary-grid" id="verbs-grid">
+                <!-- Verbs will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div id="activities" class="content-section">
+            <h2 style="color: #667eea; text-align: center; margin-bottom: 30px;">Practice Activities</h2>
+            <div class="score-display">Score: <span id="score">0</span>/10</div>
+
+            <div class="activity-container">
+                <div class="activity-title">🎯 Translation Challenge</div>
+                <div id="translation-activity">
+                    <!-- Translation questions will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="activity-container">
+                <div class="activity-title">🔤 Fill in the Blanks</div>
+                <div id="fillblank-activity">
+                    <!-- Fill in the blank questions will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <button class="btn" onclick="resetActivities()">🔄 Reset Activities</button>
+        </div>
+
+        <!-- Conversation Section -->
+        <div id="conversation" class="content-section">
+            <h2 style="color: #667eea; text-align: center; margin-bottom: 30px;">Conversation Practice</h2>
+            
+            <div id="conversation-prompts">
+                <!-- Conversation prompts will be populated by JavaScript -->
+            </div>
+
+            <button class="btn" onclick="generateNewPrompt()">🎲 New Conversation Scenario</button>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulary data
+        const adjectives = [
+            {
+                spanish: "eficiente",
+                english: "efficient",
+                context: "Ella es muy eficiente en su trabajo. (She is very efficient in her work.)"
+            },
+            {
+                spanish: "responsable",
+                english: "responsible",
+                context: "Necesitamos un empleado responsable. (We need a responsible employee.)"
+            },
+            {
+                spanish: "profesional",
+                english: "professional",
+                context: "Mantén una actitud profesional. (Maintain a professional attitude.)"
+            },
+            {
+                spanish: "organizado/a",
+                english: "organized",
+                context: "Su escritorio está muy organizado. (His desk is very organized.)"
+            },
+            {
+                spanish: "puntual",
+                english: "punctual",
+                context: "Siempre llega puntual a las reuniones. (He always arrives punctual to meetings.)"
+            },
+            {
+                spanish: "creativo/a",
+                english: "creative",
+                context: "Buscamos soluciones creativas. (We look for creative solutions.)"
+            }
+        ];
+
+        const verbs = [
+            {
+                spanish: "trabajar",
+                english: "to work",
+                context: "Trabajo en una oficina moderna. (I work in a modern office.)"
+            },
+            {
+                spanish: "colaborar",
+                english: "to collaborate",
+                context: "Necesitamos colaborar en este proyecto. (We need to collaborate on this project.)"
+            },
+            {
+                spanish: "presentar",
+                english: "to present",
+                context: "Voy a presentar el informe mañana. (I'm going to present the report tomorrow.)"
+            },
+            {
+                spanish: "negociar",
+                english: "to negotiate",
+                context: "Debemos negociar el contrato. (We must negotiate the contract.)"
+            },
+            {
+                spanish: "administrar",
+                english: "to manage/administer",
+                context: "Ella administra el departamento. (She manages the department.)"
+            },
+            {
+                spanish: "comunicar",
+                english: "to communicate",
+                context: "Es importante comunicar claramente. (It's important to communicate clearly.)"
+            }
+        ];
+
+        // Activity data
+        let currentScore = 0;
+        let activityQuestions = [];
+        let currentQuestionIndex = 0;
+
+        // Conversation prompts
+        const conversationScenarios = [
+            {
+                title: "Job Interview",
+                scenario: "You're in a job interview for a marketing position. The interviewer wants to know about your work style and experience.",
+                questions: [
+                    "¿Cómo se describe usted profesionalmente?",
+                    "¿Qué experiencia tiene trabajando en equipo?",
+                    "¿Se considera una persona organizada? ¿Por qué?"
+                ]
+            },
+            {
+                title: "Team Meeting",
+                scenario: "You're in a team meeting discussing a new project. Your colleagues want your input on the timeline and responsibilities.",
+                questions: [
+                    "¿Cómo podemos colaborar mejor en este proyecto?",
+                    "¿Qué tareas puede administrar usted?",
+                    "¿Cuándo puede presentar su parte del trabajo?"
+                ]
+            },
+            {
+                title: "Performance Review",
+                scenario: "Your supervisor is conducting your annual performance review and wants to discuss your strengths and areas for improvement.",
+                questions: [
+                    "¿Cuáles son sus fortalezas como empleado?",
+                    "¿Cómo ha sido su comunicación con los clientes?",
+                    "¿Qué objetivos tiene para el próximo año?"
+                ]
+            }
+        ];
+
+        // Initialize the application
+        function init() {
+            populateVocabulary();
+            generateActivities();
+            generateConversationPrompt();
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Populate vocabulary cards
+        function populateVocabulary() {
+            const adjectivesGrid = document.getElementById('adjectives-grid');
+            const verbsGrid = document.getElementById('verbs-grid');
+
+            adjectives.forEach(adj => {
+                const card = createVocabCard(adj);
+                adjectivesGrid.appendChild(card);
+            });
+
+            verbs.forEach(verb => {
+                const card = createVocabCard(verb);
+                verbsGrid.appendChild(card);
+            });
+        }
+
+        function createVocabCard(vocab) {
+            const card = document.createElement('div');
+            card.className = 'vocab-card';
+            card.innerHTML = `
+                <div class="vocab-spanish">${vocab.spanish}</div>
+                <div class="vocab-english">${vocab.english}</div>
+                <div class="vocab-context">${vocab.context}</div>
+            `;
+            return card;
+        }
+
+        // Generate activities
+        function generateActivities() {
+            generateTranslationActivity();
+            generateFillBlankActivity();
+        }
+
+        function generateTranslationActivity() {
+            const container = document.getElementById('translation-activity');
+            const allVocab = [...adjectives, ...verbs];
+            const selectedWords = shuffleArray(allVocab).slice(0, 5);
+
+            container.innerHTML = '';
+            selectedWords.forEach((word, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <p><strong>Translate to Spanish:</strong> ${word.english}</p>
+                    <div class="input-group">
+                        <input type="text" id="translation-${index}" placeholder="Enter Spanish translation">
+                    </div>
+                    <button class="btn" onclick="checkTranslation(${index}, '${word.spanish}')">Check Answer</button>
+                    <div id="feedback-translation-${index}"></div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function generateFillBlankActivity() {
+            const container = document.getElementById('fillblank-activity');
+            const sentences = [
+                { text: "Necesitamos un empleado muy _____ para este puesto.", answer: "responsable", hint: "(responsible)" },
+                { text: "Vamos a _____ el nuevo proyecto mañana.", answer: "presentar", hint: "(to present)" },
+                { text: "Es importante _____ bien con los clientes.", answer: "comunicar", hint: "(to communicate)" },
+                { text: "Ella es muy _____ y siempre llega a tiempo.", answer: "puntual", hint: "(punctual)" },
+                { text: "Debemos _____ en este proyecto juntos.", answer: "colaborar", hint: "(to collaborate)" }
+            ];
+
+            container.innerHTML = '';
+            sentences.forEach((sentence, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <p><strong>Fill in the blank:</strong> ${sentence.text}</p>
+                    <p><em>Hint: ${sentence.hint}</em></p>
+                    <div class="input-group">
+                        <input type="text" id="fillblank-${index}" placeholder="Enter the missing word">
+                    </div>
+                    <button class="btn" onclick="checkFillBlank(${index}, '${sentence.answer}')">Check Answer</button>
+                    <div id="feedback-fillblank-${index}"></div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        // Check answers
+        function checkTranslation(index, correctAnswer) {
+            const userAnswer = document.getElementById(`translation-${index}`).value.toLowerCase().trim();
+            const feedbackDiv = document.getElementById(`feedback-translation-${index}`);
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                feedbackDiv.innerHTML = '<div class="feedback correct">¡Correcto! Well done!</div>';
+                updateScore(1);
+            } else {
+                feedbackDiv.innerHTML = `<div class="feedback incorrect">Incorrect. The correct answer is: ${correctAnswer}</div>`;
+            }
+        }
+
+        function checkFillBlank(index, correctAnswer) {
+            const userAnswer = document.getElementById(`fillblank-${index}`).value.toLowerCase().trim();
+            const feedbackDiv = document.getElementById(`feedback-fillblank-${index}`);
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                feedbackDiv.innerHTML = '<div class="feedback correct">¡Excelente! Perfect!</div>';
+                updateScore(1);
+            } else {
+                feedbackDiv.innerHTML = `<div class="feedback incorrect">Try again. The correct answer is: ${correctAnswer}</div>`;
+            }
+        }
+
+        function updateScore(points) {
+            currentScore += points;
+            document.getElementById('score').textContent = currentScore;
+        }
+
+        function resetActivities() {
+            currentScore = 0;
+            document.getElementById('score').textContent = currentScore;
+            generateActivities();
+        }
+
+        // Conversation prompts
+        function generateConversationPrompt() {
+            const container = document.getElementById('conversation-prompts');
+            const randomScenario = conversationScenarios[Math.floor(Math.random() * conversationScenarios.length)];
+            
+            container.innerHTML = `
+                <div class="conversation-prompt">
+                    <div class="prompt-title">🎭 Scenario: ${randomScenario.title}</div>
+                    <div class="prompt-scenario">${randomScenario.scenario}</div>
+                    <div class="prompt-questions">
+                        <strong>Practice these questions:</strong>
+                        <ul>
+                            ${randomScenario.questions.map(q => `<li>${q}</li>`).join('')}
+                        </ul>
+                        <p><em>💡 Tip: Use the vocabulary you've learned to answer these questions. Practice speaking out loud!</em></p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateNewPrompt() {
+            generateConversationPrompt();
+        }
+
+        // Utility functions
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Initialize the app when page loads
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c19113f715250d',t:'MTc2MDA1MTU4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
