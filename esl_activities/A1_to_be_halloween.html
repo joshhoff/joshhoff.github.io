@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween "To Be" / Halloween "Ser/Estar"</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2d1b69 0%, #11052c 100%);
+            min-height: 100%;
+            color: #fff;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+            border: 3px solid #ff4500;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #2d1b69;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #4a1810;
+            margin: 10px 0 0 0;
+            font-weight: bold;
+        }
+        
+        .language-toggle {
+            margin: 20px 0;
+        }
+        
+        .lang-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .lang-btn:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: #059669;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tab-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: #2d1b69;
+            border: 3px solid #ff4500;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-color: #047857;
+        }
+        
+        .content-section {
+            display: none;
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            border: 2px solid #ff6b35;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .verb-card {
+            background: linear-gradient(135deg, #7c2d12 0%, #dc2626 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+            border: 2px solid #991b1b;
+        }
+        
+        .verb-forms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .form-card {
+            background: linear-gradient(135deg, #4c1d95 0%, #6b21a8 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 3px solid #8b5cf6;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+        
+        .form-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .practice-item {
+            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 3px solid #10b981;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ecfdf5;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option-btn {
+            background: linear-gradient(135deg, #7c2d12 0%, #dc2626 100%);
+            border: 2px solid #991b1b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.3);
+        }
+        
+        .option-btn:hover {
+            background: linear-gradient(135deg, #991b1b 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.correct {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-color: #047857;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.4);
+        }
+        
+        .option-btn.incorrect {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            border-color: #b91c1c;
+            box-shadow: 0 3px 10px rgba(239, 68, 68, 0.4);
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            color: #ecfdf5;
+            border: 2px solid #10b981;
+        }
+        
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+            color: #fef2f2;
+            border: 2px solid #dc2626;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3);
+            border: 2px solid #c2410c;
+        }
+        
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .floating-ghost {
+            position: fixed;
+            font-size: 3rem;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(-10px) rotate(-5deg); }
+            75% { transform: translateY(-15px) rotate(3deg); }
+        }
+        
+        .pumpkin-decoration {
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 200px;
+            }
+            
+            .verb-forms {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-ghost" style="top: 10%; left: 5%;">👻</div>
+    <div class="floating-ghost" style="top: 20%; right: 10%; animation-delay: -2s;">🦇</div>
+    <div class="floating-ghost" style="top: 60%; left: 8%; animation-delay: -4s;">🕷️</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="title">
+                <span class="pumpkin-decoration">🎃</span>
+                Halloween "To Be" / Halloween "Ser/Estar"
+                <span class="pumpkin-decoration">🎃</span>
+            </h1>
+            <p class="subtitle">Spooky English-Spanish Learning Adventure!</p>
+            
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')" id="en-btn">English 🇺🇸</button>
+                <button class="lang-btn" onclick="setLanguage('es')" id="es-btn">Español 🇪🇸</button>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showSection('learn')" id="learn-tab">
+                📚 <span data-en="Learn" data-es="Aprender">Learn</span> 🧙‍♀️
+            </button>
+            <button class="tab-btn" onclick="showSection('practice')" id="practice-tab">
+                🎯 <span data-en="Practice" data-es="Practicar">Practice</span> 🕸️
+            </button>
+            <button class="tab-btn" onclick="showSection('conversation')" id="conversation-tab">
+                💬 <span data-en="Conversation" data-es="Conversación">Conversation</span> 👻
+            </button>
+        </div>
+        
+        <!-- Learn Section -->
+        <div class="content-section active" id="learn-section">
+            <div class="verb-card">
+                <h2>
+                    <span class="emoji">🧛‍♂️</span>
+                    <span data-en="The Spooky Verb 'To Be'" data-es="El Verbo Espeluznante 'Ser/Estar'">The Spooky Verb "To Be"</span>
+                    <span class="emoji">🧛‍♀️</span>
+                </h2>
+                <p data-en="The most magical verb for Halloween! It tells us WHO the monsters are or HOW they feel!" data-es="¡El verbo más mágico para Halloween! ¡Nos dice QUIÉN son los monstruos o CÓMO se sienten!">
+                    The most magical verb for Halloween! It tells us WHO the monsters are or HOW they feel!
+                </p>
+            </div>
+            
+            <div class="verb-forms">
+                <div class="form-card">
+                    <h3>👻 I am / Yo soy/estoy</h3>
+                    <p><strong data-en="Spooky Examples:" data-es="Ejemplos Espeluznantes:">Spooky Examples:</strong></p>
+                    <p>• I am a ghost 👻 / Yo soy un fantasma</p>
+                    <p>• I am scared 😱 / Yo estoy asustado</p>
+                    <p>• I am wearing a costume 🎭 / Llevo un disfraz</p>
+                </div>
+                
+                <div class="form-card">
+                    <h3>🧙‍♀️ You are / Tú eres/estás</h3>
+                    <p><strong data-en="Spooky Examples:" data-es="Ejemplos Espeluznantes:">Spooky Examples:</strong></p>
+                    <p>• You are a witch 🧙‍♀️ / Tú eres una bruja</p>
+                    <p>• You are brave 💪 / Tú eres valiente</p>
+                    <p>• You are trick-or-treating 🍬 / Estás pidiendo dulces</p>
+                </div>
+                
+                <div class="form-card">
+                    <h3>🧟‍♂️ He/She is / Él/Ella es/está</h3>
+                    <p><strong data-en="Spooky Examples:" data-es="Ejemplos Espeluznantes:">Spooky Examples:</strong></p>
+                    <p>• She is a vampire 🧛‍♀️ / Ella es una vampira</p>
+                    <p>• He is hiding 🙈 / Él se está escondiendo</p>
+                    <p>• She is carving pumpkins 🎃 / Ella está tallando calabazas</p>
+                </div>
+                
+                <div class="form-card">
+                    <h3>👥 We are / Nosotros somos/estamos</h3>
+                    <p><strong data-en="Spooky Examples:" data-es="Ejemplos Espeluznantes:">Spooky Examples:</strong></p>
+                    <p>• We are monsters 👹 / Somos monstruos</p>
+                    <p>• We are excited 🎉 / Estamos emocionados</p>
+                    <p>• We are going to a party 🎊 / Vamos a una fiesta</p>
+                </div>
+                
+                <div class="form-card">
+                    <h3>🕷️ They are / Ellos son/están</h3>
+                    <p><strong data-en="Spooky Examples:" data-es="Ejemplos Espeluznantes:">Spooky Examples:</strong></p>
+                    <p>• They are spiders 🕷️ / Son arañas</p>
+                    <p>• They are creepy 😨 / Están espeluznantes</p>
+                    <p>• They are collecting candy 🍭 / Están recolectando dulces</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Practice Section -->
+        <div class="content-section" id="practice-section">
+            <h2 data-en="🎯 Spooky Practice Time!" data-es="🎯 ¡Hora de Práctica Espeluznante!">🎯 Spooky Practice Time!</h2>
+            <div class="score" id="score">Score: 0/0</div>
+            
+            <div class="practice-item">
+                <div class="question" data-en="1. Complete: I ___ a scary monster! 👹" data-es="1. Completa: I ___ a scary monster! 👹">1. Complete: I ___ a scary monster! 👹</div>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 0)">is</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 0)">am</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 0)">are</button>
+                </div>
+                <div class="feedback" id="feedback-0"></div>
+            </div>
+            
+            <div class="practice-item">
+                <div class="question" data-en="2. Complete: You ___ wearing a great costume! 🎭" data-es="2. Completa: You ___ wearing a great costume! 🎭">2. Complete: You ___ wearing a great costume! 🎭</div>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 1)">am</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 1)">are</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 1)">is</button>
+                </div>
+                <div class="feedback" id="feedback-1"></div>
+            </div>
+            
+            <div class="practice-item">
+                <div class="question" data-en="3. Complete: The witch ___ flying on her broomstick! 🧙‍♀️" data-es="3. Completa: The witch ___ flying on her broomstick! 🧙‍♀️">3. Complete: The witch ___ flying on her broomstick! 🧙‍♀️</div>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 2)">are</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 2)">is</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 2)">am</button>
+                </div>
+                <div class="feedback" id="feedback-2"></div>
+            </div>
+            
+            <div class="practice-item">
+                <div class="question" data-en="4. Complete: We ___ ready for trick-or-treating! 🍬" data-es="4. Completa: We ___ ready for trick-or-treating! 🍬">4. Complete: We ___ ready for trick-or-treating! 🍬</div>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, false, 3)">is</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 3)">am</button>
+                    <button class="option-btn" onclick="checkAnswer(this, true, 3)">are</button>
+                </div>
+                <div class="feedback" id="feedback-3"></div>
+            </div>
+            
+            <div class="practice-item">
+                <div class="question" data-en="5. Complete: The ghosts ___ floating in the haunted house! 👻" data-es="5. Completa: The ghosts ___ floating in the haunted house! 👻">5. Complete: The ghosts ___ floating in the haunted house! 👻</div>
+                <div class="options">
+                    <button class="option-btn" onclick="checkAnswer(this, true, 4)">are</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 4)">is</button>
+                    <button class="option-btn" onclick="checkAnswer(this, false, 4)">am</button>
+                </div>
+                <div class="feedback" id="feedback-4"></div>
+            </div>
+        </div>
+        
+        <!-- Conversation Section -->
+        <div class="content-section" id="conversation-section">
+            <h2 data-en="💬 Spooky Conversation Practice" data-es="💬 Práctica de Conversación Espeluznante">💬 Spooky Conversation Practice</h2>
+            
+            <div class="conversation-prompt">
+                <h3>🎭 <span data-en="Describe Your Halloween Costume" data-es="Describe Tu Disfraz de Halloween">Describe Your Halloween Costume</span></h3>
+                <p data-en="Practice saying these sentences about your costume:" data-es="Practica diciendo estas oraciones sobre tu disfraz:">Practice saying these sentences about your costume:</p>
+                <ul>
+                    <li data-en="I am a [ghost/witch/vampire/zombie]" data-es="I am a [fantasma/bruja/vampiro/zombie]">I am a [ghost/witch/vampire/zombie]</li>
+                    <li data-en="I am wearing [black clothes/a cape/a mask]" data-es="I am wearing [ropa negra/una capa/una máscara]">I am wearing [black clothes/a cape/a mask]</li>
+                    <li data-en="I am scary/funny/creative" data-es="I am scary/funny/creative">I am scary/funny/creative</li>
+                    <li data-en="I am ready for Halloween!" data-es="I am ready for Halloween!">I am ready for Halloween!</li>
+                </ul>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h3>👻 <span data-en="Describe Halloween Characters" data-es="Describe Personajes de Halloween">Describe Halloween Characters</span></h3>
+                <p data-en="Talk about spooky characters you see:" data-es="Habla sobre personajes espeluznantes que ves:">Talk about spooky characters you see:</p>
+                <ul>
+                    <li data-en="She is a beautiful witch 🧙‍♀️" data-es="She is a beautiful witch 🧙‍♀️">She is a beautiful witch 🧙‍♀️</li>
+                    <li data-en="He is a scary vampire 🧛‍♂️" data-es="He is a scary vampire 🧛‍♂️">He is a scary vampire 🧛‍♂️</li>
+                    <li data-en="They are friendly ghosts 👻" data-es="They are friendly ghosts 👻">They are friendly ghosts 👻</li>
+                    <li data-en="We are all monsters tonight! 👹" data-es="We are all monsters tonight! 👹">We are all monsters tonight! 👹</li>
+                </ul>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h3>🎃 <span data-en="Express Halloween Feelings" data-es="Expresa Sentimientos de Halloween">Express Halloween Feelings</span></h3>
+                <p data-en="Talk about how you feel during Halloween:" data-es="Habla sobre cómo te sientes durante Halloween:">Talk about how you feel during Halloween:</p>
+                <ul>
+                    <li data-en="I am excited 🎉 / scared 😱 / happy 😊" data-es="I am excited 🎉 / scared 😱 / happy 😊">I am excited 🎉 / scared 😱 / happy 😊</li>
+                    <li data-en="You are brave 💪 / nervous 😰 / curious 🤔" data-es="You are brave 💪 / nervous 😰 / curious 🤔">You are brave 💪 / nervous 😰 / curious 🤔</li>
+                    <li data-en="She is surprised 😲 / frightened 😨" data-es="She is surprised 😲 / frightened 😨">She is surprised 😲 / frightened 😨</li>
+                    <li data-en="We are having fun 🎊 / being spooky 👻" data-es="We are having fun 🎊 / being spooky 👻">We are having fun 🎊 / being spooky 👻</li>
+                </ul>
+            </div>
+            
+            <div class="conversation-prompt">
+                <h3>🍭 <span data-en="Halloween Challenge Questions" data-es="Preguntas Desafío de Halloween">Halloween Challenge Questions</span></h3>
+                <p data-en="Try to answer these spooky questions using 'to be':" data-es="Trata de responder estas preguntas espeluznantes usando 'to be':">Try to answer these spooky questions using "to be":</p>
+                <ul>
+                    <li data-en="What is your favorite Halloween candy? 🍬" data-es="What is your favorite Halloween candy? 🍬">What is your favorite Halloween candy? 🍬</li>
+                    <li data-en="Where are you going trick-or-treating? 🏠" data-es="Where are you going trick-or-treating? 🏠">Where are you going trick-or-treating? 🏠</li>
+                    <li data-en="How are you feeling about Halloween? 🎃" data-es="How are you feeling about Halloween? 🎃">How are you feeling about Halloween? 🎃</li>
+                    <li data-en="Who is your favorite Halloween character? 🧛‍♂️" data-es="Who is your favorite Halloween character? 🧛‍♂️">Who is your favorite Halloween character? 🧛‍♂️</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentLanguage = 'en';
+        let score = 0;
+        let totalQuestions = 5;
+        let answeredQuestions = new Set();
+        
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language buttons
+            document.getElementById('en-btn').classList.toggle('active', lang === 'en');
+            document.getElementById('es-btn').classList.toggle('active', lang === 'es');
+            
+            // Update all text elements
+            const elements = document.querySelectorAll('[data-en][data-es]');
+            elements.forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+            
+            updateScore();
+        }
+        
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(sectionName + '-tab').classList.add('active');
+        }
+        
+        function checkAnswer(button, isCorrect, questionIndex) {
+            // Prevent multiple answers for the same question
+            if (answeredQuestions.has(questionIndex)) {
+                return;
+            }
+            
+            answeredQuestions.add(questionIndex);
+            
+            // Disable all buttons for this question
+            const questionButtons = button.parentElement.querySelectorAll('.option-btn');
+            questionButtons.forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                if (btn === button) {
+                    btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+                } else if (btn.onclick.toString().includes('true')) {
+                    btn.classList.add('correct');
+                }
+            });
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback-' + questionIndex);
+            feedback.style.display = 'block';
+            feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = currentLanguage === 'en' ? 
+                    '🎉 Boo-tiful! That\'s correct! 👻' : 
+                    '🎉 ¡Espeluznantemente correcto! 👻';
+            } else {
+                feedback.innerHTML = currentLanguage === 'en' ? 
+                    '👻 Oops! That\'s not quite right. Try again, little ghost!' : 
+                    '👻 ¡Ups! No es correcto. ¡Inténtalo de nuevo, pequeño fantasma!';
+            }
+            
+            updateScore();
+        }
+        
+        function updateScore() {
+            const scoreElement = document.getElementById('score');
+            const scoreText = currentLanguage === 'en' ? 'Spooky Score' : 'Puntuación Espeluznante';
+            scoreElement.textContent = `${scoreText}: ${score}/${answeredQuestions.size} 🎃`;
+        }
+        
+        // Add some spooky sound effects on interactions (visual feedback only)
+        function addSpookyEffect(element) {
+            element.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 200);
+        }
+        
+        // Add click effects to buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('option-btn') || e.target.classList.contains('tab-btn') || e.target.classList.contains('lang-btn')) {
+                addSpookyEffect(e.target);
+            }
+        });
+        
+        // Initialize the app
+        setLanguage('en');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98e8cd6720743969',t:'MTc2MDQ2MzAwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
