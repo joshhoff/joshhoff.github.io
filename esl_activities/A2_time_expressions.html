@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Periods Practice / Práctica de Períodos de Tiempo</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .practice-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option-btn {
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .option-btn.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #48bb78;
+        }
+        
+        .option-btn.incorrect {
+            background: #f56565;
+            color: white;
+            border-color: #f56565;
+        }
+        
+        .feedback {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 20px;
+        }
+        
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .next-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .next-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .next-btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">⏰ Time Practice</h1>
+            <p class="subtitle">Learn time periods in English and Spanish!</p>
+        </div>
+        
+        <div class="language-toggle">
+            <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="score" id="score">Score: 0/0</div>
+        
+        <div class="practice-area">
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 0;
+        let answered = false;
+
+        const translations = {
+            en: {
+                title: "⏰ Time Practice",
+                subtitle: "Learn time periods in English and Spanish!",
+                score: "Score",
+                nextQuestion: "Next Question",
+                correct: "Correct! Great job! 🎉",
+                incorrect: "Not quite right. Try again! 💪",
+                whenDo: "When do you usually",
+                whatTime: "What time period is",
+                howOften: "How often do you"
+            },
+            es: {
+                title: "⏰ Práctica de Tiempo",
+                subtitle: "¡Aprende períodos de tiempo en inglés y español!",
+                score: "Puntuación",
+                nextQuestion: "Siguiente Pregunta",
+                correct: "¡Correcto! ¡Buen trabajo! 🎉",
+                incorrect: "No del todo. ¡Inténtalo de nuevo! 💪",
+                whenDo: "¿Cuándo sueles",
+                whatTime: "¿Qué período de tiempo es",
+                howOften: "¿Con qué frecuencia"
+            }
+        };
+
+        const timePeriodsData = {
+            en: {
+                weekend: "weekend",
+                weekday: "weekday", 
+                morning: "morning",
+                afternoon: "afternoon",
+                evening: "evening",
+                night: "night",
+                daily: "daily",
+                weekly: "weekly",
+                monthly: "monthly",
+                yearly: "yearly",
+                sometimes: "sometimes",
+                often: "often",
+                rarely: "rarely",
+                always: "always",
+                never: "never"
+            },
+            es: {
+                weekend: "fin de semana",
+                weekday: "día de semana",
+                morning: "mañana", 
+                afternoon: "tarde",
+                evening: "noche temprana",
+                night: "noche",
+                daily: "diariamente",
+                weekly: "semanalmente", 
+                monthly: "mensualmente",
+                yearly: "anualmente",
+                sometimes: "a veces",
+                often: "a menudo",
+                rarely: "raramente", 
+                always: "siempre",
+                never: "nunca"
+            }
+        };
+
+        const questions = [
+            {
+                en: "go to school?",
+                es: "ir a la escuela?",
+                correct: "weekday",
+                options: ["weekend", "weekday", "night", "yearly"]
+            },
+            {
+                en: "have breakfast?", 
+                es: "desayunar?",
+                correct: "morning",
+                options: ["morning", "evening", "weekend", "monthly"]
+            },
+            {
+                en: "go to bed?",
+                es: "ir a dormir?", 
+                correct: "night",
+                options: ["morning", "afternoon", "night", "weekly"]
+            },
+            {
+                en: "play with friends on Saturday?",
+                es: "jugar con amigos el sábado?",
+                correct: "weekend", 
+                options: ["weekday", "weekend", "daily", "never"]
+            },
+            {
+                en: "eat lunch?",
+                es: "almorzar?",
+                correct: "afternoon",
+                options: ["morning", "afternoon", "weekend", "rarely"]
+            },
+            {
+                en: "brush your teeth?",
+                es: "cepillarte los dientes?",
+                correct: "daily",
+                options: ["weekly", "monthly", "daily", "yearly"]
+            },
+            {
+                en: "visit your grandparents?",
+                es: "visitar a tus abuelos?", 
+                correct: "sometimes",
+                options: ["always", "never", "sometimes", "daily"]
+            },
+            {
+                en: "go on vacation?",
+                es: "ir de vacaciones?",
+                correct: "yearly", 
+                options: ["daily", "weekly", "monthly", "yearly"]
+            }
+        ];
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelector('.title').textContent = translations[lang].title;
+            document.querySelector('.subtitle').textContent = translations[lang].subtitle;
+            
+            updateQuestion();
+            updateScore();
+        }
+
+        function updateQuestion() {
+            if (currentQuestion >= questions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            const questionText = currentLanguage === 'en' ? question.en : question.es;
+            const prefix = translations[currentLanguage].whenDo;
+            
+            document.getElementById('question').textContent = `${prefix} ${questionText}`;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = timePeriodsData[currentLanguage][option];
+                btn.onclick = () => selectAnswer(option, btn);
+                optionsContainer.appendChild(btn);
+            });
+            
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('nextBtn').disabled = true;
+            answered = false;
+            
+            updateProgress();
+        }
+
+        function selectAnswer(selected, btnElement) {
+            if (answered) return;
+            
+            answered = true;
+            const question = questions[currentQuestion];
+            const isCorrect = selected === question.correct;
+            
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                const btnText = btn.textContent;
+                const correctText = timePeriodsData[currentLanguage][question.correct];
+                
+                if (btnText === correctText) {
+                    btn.classList.add('correct');
+                } else if (btn === btnElement && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('feedback');
+            if (isCorrect) {
+                feedback.textContent = translations[currentLanguage].correct;
+                feedback.className = 'feedback correct';
+                score++;
+            } else {
+                feedback.textContent = translations[currentLanguage].incorrect;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            totalQuestions++;
+            updateScore();
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            updateQuestion();
+        }
+
+        function updateScore() {
+            const scoreText = translations[currentLanguage].score;
+            document.getElementById('score').textContent = `${scoreText}: ${score}/${totalQuestions}`;
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const message = currentLanguage === 'en' 
+                ? `🎉 Great job! You scored ${score}/${totalQuestions} (${percentage}%)`
+                : `🎉 ¡Buen trabajo! Obtuviste ${score}/${totalQuestions} (${percentage}%)`;
+            
+            document.getElementById('question').textContent = message;
+            document.getElementById('options').innerHTML = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        // Initialize the app
+        updateQuestion();
+        updateScore();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f10af2954adcc7',t:'MTc2MDU0OTQwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
