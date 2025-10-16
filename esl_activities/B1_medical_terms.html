@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Vocabulario Médico</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ee5a24;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .quiz-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .question {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .word-type {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .option.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #229954;
+        }
+
+        .option.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            background: #ee5a24;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #d63031;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.incorrect {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .final-score h2 {
+            margin: 0 0 15px 0;
+            font-size: 2rem;
+        }
+
+        .score-details {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .activity-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: #f8f9fa;
+            color: #495057;
+            border: 2px solid #dee2e6;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: #ee5a24;
+            color: white;
+            border-color: #ee5a24;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .activity-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .activity-card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .fill-blank {
+            border: none;
+            border-bottom: 2px solid #3498db;
+            background: transparent;
+            padding: 5px 10px;
+            font-size: 1rem;
+            min-width: 120px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        .fill-blank:focus {
+            outline: none;
+            border-bottom-color: #ee5a24;
+            background: #f8f9fa;
+        }
+
+        .fill-blank.correct {
+            border-bottom-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .fill-blank.incorrect {
+            border-bottom-color: #e74c3c;
+            background: #fadbd8;
+        }
+
+        .sentence-item {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .check-writing-btn {
+            background: #3498db;
+            margin-top: 20px;
+        }
+
+        .check-writing-btn:hover {
+            background: #2980b9;
+        }
+
+        .writing-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        #freeWriting {
+            width: 100%;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        #freeWriting:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .word-bank {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            font-style: italic;
+        }
+
+        .dialogue-container {
+            margin-bottom: 30px;
+        }
+
+        .dialogue-scenario {
+            margin-bottom: 30px;
+        }
+
+        .dialogue-scenario h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .dialogue-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .dialogue-line {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .dialogue-line.doctor {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+
+        .dialogue-line.patient {
+            background: #f3e5f5;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .dialogue-line.pharmacist {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+
+        .conversation-prompts {
+            margin-top: 20px;
+        }
+
+        .prompt-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ee5a24;
+        }
+
+        .prompt-phrases {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .scenario-container {
+            margin-top: 20px;
+        }
+
+        .scenario-item {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #dee2e6;
+        }
+
+        .scenario-item h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .scenario-questions {
+            margin: 15px 0;
+        }
+
+        .scenario-questions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .scenario-questions li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .vocabulary-help {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .activity-navigation {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .activity-navigation button {
+            margin: 0 10px;
+        }
+
+        .final-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            main {
+                padding: 20px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .activity-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab-btn {
+                width: 200px;
+                margin-bottom: 10px;
+            }
+
+            .activity-card {
+                padding: 20px;
+            }
+
+            .final-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .final-buttons button {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Quiz de Vocabulario Médico</h1>
+            <p class="subtitle">Pon a prueba tu conocimiento de términos médicos en español</p>
+        </header>
+
+        <main>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="currentQuestion">1</div>
+                    <div class="stat-label">Pregunta Actual</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="correctAnswers">0</div>
+                    <div class="stat-label">Respuestas Correctas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="totalQuestions">15</div>
+                    <div class="stat-label">Total de Preguntas</div>
+                </div>
+            </div>
+
+            <div class="quiz-card" id="quizCard">
+                <div class="word-type" id="wordType">Sustantivo</div>
+                <div class="question" id="question">¿Cuál es la traducción correcta de "hospital"?</div>
+                <div class="options" id="options">
+                    <div class="option" onclick="selectOption(0)">Hospital</div>
+                    <div class="option" onclick="selectOption(1)">Clínica</div>
+                    <div class="option" onclick="selectOption(2)">Farmacia</div>
+                    <div class="option" onclick="selectOption(3)">Consultorio</div>
+                </div>
+                <div class="buttons">
+                    <button onclick="checkAnswer()" id="checkBtn">Verificar Respuesta</button>
+                    <button onclick="nextQuestion()" id="nextBtn" style="display: none;">Siguiente Pregunta</button>
+                </div>
+                <div class="feedback" id="feedback" style="display: none;"></div>
+            </div>
+
+            <div class="activities-section" id="activitiesSection" style="display: none;">
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">📝 Actividades de Práctica</h2>
+                
+                <div class="activity-tabs">
+                    <button class="tab-btn active" onclick="showActivity('writing')">Ejercicios Escritos</button>
+                    <button class="tab-btn" onclick="showActivity('conversation')">Diálogos</button>
+                    <button class="tab-btn" onclick="showActivity('scenarios')">Situaciones</button>
+                </div>
+
+                <div class="activity-content" id="writingActivity">
+                    <div class="activity-card">
+                        <h3>✍️ Completa las Oraciones</h3>
+                        <div class="writing-exercise" id="writingExercise">
+                            <div class="sentence-item">
+                                <p><strong>1.</strong> El paciente tiene mucho <input type="text" class="fill-blank" data-answer="dolor" placeholder="______"> en el estómago.</p>
+                            </div>
+                            <div class="sentence-item">
+                                <p><strong>2.</strong> La doctora va a <input type="text" class="fill-blank" data-answer="examinar" placeholder="______"> al enfermo.</p>
+                            </div>
+                            <div class="sentence-item">
+                                <p><strong>3.</strong> Esta enfermedad es muy <input type="text" class="fill-blank" data-answer="contagiosa" placeholder="______">, debemos tener cuidado.</p>
+                            </div>
+                            <div class="sentence-item">
+                                <p><strong>4.</strong> El médico me va a <input type="text" class="fill-blank" data-answer="recetar" placeholder="______"> una medicina nueva.</p>
+                            </div>
+                            <div class="sentence-item">
+                                <p><strong>5.</strong> Mi abuela tiene una condición <input type="text" class="fill-blank" data-answer="crónica" placeholder="______"> que requiere tratamiento constante.</p>
+                            </div>
+                        </div>
+                        <button onclick="checkWritingAnswers()" class="check-writing-btn">Verificar Respuestas</button>
+                        <div id="writingFeedback" class="writing-feedback"></div>
+                    </div>
+
+                    <div class="activity-card">
+                        <h3>📖 Redacción Libre</h3>
+                        <p><strong>Instrucciones:</strong> Escribe un párrafo corto (4-5 oraciones) describiendo una visita al médico. Usa al menos 5 términos del vocabulario médico.</p>
+                        <textarea id="freeWriting" placeholder="Escribe tu párrafo aquí..." rows="6"></textarea>
+                        <div class="word-bank">
+                            <strong>Banco de palabras:</strong> hospital, médico, enfermo, dolor, examinar, recetar, medicina, grave, respirar, alérgico
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-content" id="conversationActivity" style="display: none;">
+                    <div class="activity-card">
+                        <h3>💬 Diálogos Médicos</h3>
+                        <div class="dialogue-container">
+                            <div class="dialogue-scenario">
+                                <h4>Escenario 1: En la consulta médica</h4>
+                                <div class="dialogue-box">
+                                    <div class="dialogue-line doctor">
+                                        <strong>Médico:</strong> Buenos días. ¿Cómo se siente hoy?
+                                    </div>
+                                    <div class="dialogue-line patient">
+                                        <strong>Paciente:</strong> Doctor, me siento muy <span class="highlight">enfermo</span>. Tengo mucho <span class="highlight">dolor</span> de cabeza.
+                                    </div>
+                                    <div class="dialogue-line doctor">
+                                        <strong>Médico:</strong> Voy a <span class="highlight">examinar</span>lo. ¿Puede <span class="highlight">respirar</span> bien?
+                                    </div>
+                                    <div class="dialogue-line patient">
+                                        <strong>Paciente:</strong> Sí, pero también tengo tos. ¿Es <span class="highlight">contagioso</span>?
+                                    </div>
+                                    <div class="dialogue-line doctor">
+                                        <strong>Médico:</strong> No se preocupe. Le voy a <span class="highlight">recetar</span> una <span class="highlight">medicina</span> para la tos.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dialogue-scenario">
+                                <h4>Escenario 2: En la farmacia</h4>
+                                <div class="dialogue-box">
+                                    <div class="dialogue-line pharmacist">
+                                        <strong>Farmacéutico:</strong> ¿En qué puedo ayudarle?
+                                    </div>
+                                    <div class="dialogue-line patient">
+                                        <strong>Cliente:</strong> Necesito esta <span class="highlight">medicina</span> que me recetó el <span class="highlight">médico</span>.
+                                    </div>
+                                    <div class="dialogue-line pharmacist">
+                                        <strong>Farmacéutico:</strong> ¿Es usted <span class="highlight">alérgico</span> a algún medicamento?
+                                    </div>
+                                    <div class="dialogue-line patient">
+                                        <strong>Cliente:</strong> No, pero tengo una condición <span class="highlight">crónica</span> del corazón.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity-card">
+                        <h3>🎭 Práctica de Conversación</h3>
+                        <div class="conversation-prompts">
+                            <div class="prompt-item">
+                                <strong>Situación A:</strong> Eres un paciente que llega al hospital con fiebre y dolor de garganta. Habla con el médico.
+                                <div class="prompt-phrases">
+                                    <em>Frases útiles:</em> "Me duele...", "Estoy enfermo/a", "¿Es grave?", "¿Qué medicina necesito?"
+                                </div>
+                            </div>
+                            <div class="prompt-item">
+                                <strong>Situación B:</strong> Eres un médico examinando a un paciente con síntomas de gripe. Haz preguntas y da recomendaciones.
+                                <div class="prompt-phrases">
+                                    <em>Frases útiles:</em> "Voy a examinarlo", "¿Le duele cuando...?", "Le voy a recetar...", "Debe descansar"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-content" id="scenariosActivity" style="display: none;">
+                    <div class="activity-card">
+                        <h3>🏥 Situaciones Reales</h3>
+                        <div class="scenario-container">
+                            <div class="scenario-item">
+                                <h4>Situación 1: Emergencia en el Hospital</h4>
+                                <p><strong>Contexto:</strong> Llegas al hospital porque tu hijo tiene fiebre muy alta y está vomitando.</p>
+                                <div class="scenario-questions">
+                                    <p><strong>¿Qué dirías?</strong></p>
+                                    <ul>
+                                        <li>¿Cómo describirías los síntomas?</li>
+                                        <li>¿Qué preguntas harías al médico?</li>
+                                        <li>¿Cómo expresarías tu preocupación?</li>
+                                    </ul>
+                                </div>
+                                <div class="vocabulary-help">
+                                    <strong>Vocabulario útil:</strong> enfermo, grave, vomitar, fiebre, dolor, examinar, médico
+                                </div>
+                            </div>
+
+                            <div class="scenario-item">
+                                <h4>Situación 2: Consulta de Rutina</h4>
+                                <p><strong>Contexto:</strong> Tienes una cita médica anual y el doctor quiere saber sobre tu salud general.</p>
+                                <div class="scenario-questions">
+                                    <p><strong>Prepárate para hablar sobre:</strong></p>
+                                    <ul>
+                                        <li>Enfermedades crónicas en tu familia</li>
+                                        <li>Alergias que puedas tener</li>
+                                        <li>Medicinas que tomas regularmente</li>
+                                    </ul>
+                                </div>
+                                <div class="vocabulary-help">
+                                    <strong>Vocabulario útil:</strong> crónico, alérgico, medicina, saludable, respirar, examinar
+                                </div>
+                            </div>
+
+                            <div class="scenario-item">
+                                <h4>Situación 3: Explicando Síntomas</h4>
+                                <p><strong>Contexto:</strong> Has estado sintiéndote mal por varios días y necesitas explicar todos tus síntomas al médico.</p>
+                                <div class="scenario-questions">
+                                    <p><strong>Practica describir:</strong></p>
+                                    <ul>
+                                        <li>Cuándo comenzaron los síntomas</li>
+                                        <li>Qué tipo de dolor sientes</li>
+                                        <li>Si los síntomas son constantes o van y vienen</li>
+                                    </ul>
+                                </div>
+                                <div class="vocabulary-help">
+                                    <strong>Vocabulario útil:</strong> dolor, enfermedad, síntoma, doler, grave, crónico
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-navigation">
+                    <button onclick="showQuiz()">← Volver al Quiz</button>
+                    <button onclick="restartQuiz()">Reiniciar Todo</button>
+                </div>
+            </div>
+
+            <div class="final-score" id="finalScore" style="display: none;">
+                <h2>¡Quiz Completado! 🎉</h2>
+                <div class="score-details" id="scoreDetails"></div>
+                <div class="final-buttons">
+                    <button onclick="showActivities()">Ver Actividades de Práctica</button>
+                    <button onclick="restartQuiz()">Reiniciar Quiz</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const vocabulary = [
+            // Sustantivos (Nouns)
+            { word: "hospital", type: "Sustantivo", question: "¿Cuál es la traducción correcta de 'hospital'?", correct: 0, options: ["Hospital", "Clínica", "Farmacia", "Consultorio"] },
+            { word: "médico", type: "Sustantivo", question: "¿Cómo se dice 'doctor' en español?", correct: 1, options: ["Enfermero", "Médico", "Paciente", "Cirujano"] },
+            { word: "enfermedad", type: "Sustantivo", question: "¿Cuál es la palabra para 'illness' en español?", correct: 2, options: ["Salud", "Medicina", "Enfermedad", "Síntoma"] },
+            { word: "medicina", type: "Sustantivo", question: "¿Cómo se dice 'medicine' en español?", correct: 0, options: ["Medicina", "Pastilla", "Jarabe", "Inyección"] },
+            { word: "dolor", type: "Sustantivo", question: "¿Cuál es la traducción de 'pain'?", correct: 3, options: ["Fiebre", "Tos", "Mareo", "Dolor"] },
+            
+            // Verbos (Verbs)
+            { word: "doler", type: "Verbo", question: "¿Cuál es el verbo que significa 'to hurt'?", correct: 1, options: ["Curar", "Doler", "Sanar", "Operar"] },
+            { word: "examinar", type: "Verbo", question: "¿Cómo se dice 'to examine' en español?", correct: 0, options: ["Examinar", "Recetar", "Diagnosticar", "Tratar"] },
+            { word: "recetar", type: "Verbo", question: "¿Cuál es el verbo para 'to prescribe'?", correct: 2, options: ["Curar", "Operar", "Recetar", "Inyectar"] },
+            { word: "respirar", type: "Verbo", question: "¿Cómo se dice 'to breathe'?", correct: 1, options: ["Toser", "Respirar", "Estornudar", "Tragar"] },
+            { word: "vomitar", type: "Verbo", question: "¿Cuál es el verbo que significa 'to vomit'?", correct: 3, options: ["Desmayar", "Sangrar", "Sudar", "Vomitar"] },
+            
+            // Adjetivos (Adjectives)
+            { word: "enfermo", type: "Adjetivo", question: "¿Cómo se dice 'sick' en español?", correct: 0, options: ["Enfermo", "Sano", "Débil", "Cansado"] },
+            { word: "grave", type: "Adjetivo", question: "¿Cuál es la traducción de 'serious' (condición médica)?", correct: 2, options: ["Leve", "Crónico", "Grave", "Agudo"] },
+            { word: "contagioso", type: "Adjetivo", question: "¿Cómo se dice 'contagious'?", correct: 1, options: ["Hereditario", "Contagioso", "Curable", "Terminal"] },
+            { word: "alérgico", type: "Adjetivo", question: "¿Cuál es la palabra para 'allergic'?", correct: 3, options: ["Inmune", "Sensible", "Resistente", "Alérgico"] },
+            { word: "crónico", type: "Adjetivo", question: "¿Cómo se dice 'chronic' en español?", correct: 0, options: ["Crónico", "Temporal", "Súbito", "Periódico"] }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let selectedOption = -1;
+        let answered = false;
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        let shuffledVocabulary = shuffleArray(vocabulary);
+
+        function displayQuestion() {
+            const current = shuffledVocabulary[currentQuestionIndex];
+            
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('wordType').textContent = current.type;
+            document.getElementById('question').textContent = current.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            current.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('checkBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('feedback').style.display = 'none';
+            
+            selectedOption = -1;
+            answered = false;
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[index].classList.add('selected');
+            selectedOption = index;
+        }
+
+        function checkAnswer() {
+            if (selectedOption === -1) {
+                alert('Por favor, selecciona una respuesta antes de verificar.');
+                return;
+            }
+            
+            answered = true;
+            const current = shuffledVocabulary[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === current.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption && index !== current.correct) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedOption === current.correct) {
+                correctAnswers++;
+                document.getElementById('correctAnswers').textContent = correctAnswers;
+                feedback.className = 'feedback correct';
+                feedback.textContent = '¡Correcto! 🎉 Excelente conocimiento del vocabulario médico.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `Incorrecto. La respuesta correcta es: "${current.options[current.correct]}"`;
+            }
+            
+            feedback.style.display = 'block';
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= shuffledVocabulary.length) {
+                showFinalScore();
+            } else {
+                displayQuestion();
+            }
+        }
+
+        function showFinalScore() {
+            document.getElementById('quizCard').style.display = 'none';
+            
+            const percentage = Math.round((correctAnswers / shuffledVocabulary.length) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = '¡Excelente! Tienes un dominio excepcional del vocabulario médico en español. 🏆';
+            } else if (percentage >= 70) {
+                message = '¡Muy bien! Tienes un buen conocimiento del vocabulario médico. 👏';
+            } else if (percentage >= 50) {
+                message = 'Bien hecho. Hay espacio para mejorar tu vocabulario médico. 📚';
+            } else {
+                message = 'Sigue practicando. El vocabulario médico requiere estudio constante. 💪';
+            }
+            
+            document.getElementById('scoreDetails').innerHTML = `
+                <div>Respuestas correctas: ${correctAnswers} de ${shuffledVocabulary.length}</div>
+                <div>Porcentaje: ${percentage}%</div>
+                <div style="margin-top: 15px;">${message}</div>
+            `;
+            
+            document.getElementById('finalScore').style.display = 'block';
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            selectedOption = -1;
+            answered = false;
+            
+            shuffledVocabulary = shuffleArray(vocabulary);
+            
+            document.getElementById('correctAnswers').textContent = '0';
+            document.getElementById('quizCard').style.display = 'block';
+            document.getElementById('finalScore').style.display = 'none';
+            
+            displayQuestion();
+        }
+
+        function showActivities() {
+            document.getElementById('finalScore').style.display = 'none';
+            document.getElementById('quizCard').style.display = 'none';
+            document.getElementById('activitiesSection').style.display = 'block';
+            showActivity('writing');
+        }
+
+        function showQuiz() {
+            document.getElementById('activitiesSection').style.display = 'none';
+            document.getElementById('quizCard').style.display = 'block';
+        }
+
+        function showActivity(activityType) {
+            // Hide all activity contents
+            document.getElementById('writingActivity').style.display = 'none';
+            document.getElementById('conversationActivity').style.display = 'none';
+            document.getElementById('scenariosActivity').style.display = 'none';
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected activity and activate tab
+            if (activityType === 'writing') {
+                document.getElementById('writingActivity').style.display = 'block';
+                tabs[0].classList.add('active');
+            } else if (activityType === 'conversation') {
+                document.getElementById('conversationActivity').style.display = 'block';
+                tabs[1].classList.add('active');
+            } else if (activityType === 'scenarios') {
+                document.getElementById('scenariosActivity').style.display = 'block';
+                tabs[2].classList.add('active');
+            }
+        }
+
+        function checkWritingAnswers() {
+            const fillBlanks = document.querySelectorAll('.fill-blank');
+            let correctCount = 0;
+            let totalCount = fillBlanks.length;
+            
+            fillBlanks.forEach(input => {
+                const userAnswer = input.value.toLowerCase().trim();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                
+                input.classList.remove('correct', 'incorrect');
+                
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('correct');
+                    correctCount++;
+                } else {
+                    input.classList.add('incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('writingFeedback');
+            const percentage = Math.round((correctCount / totalCount) * 100);
+            
+            if (percentage === 100) {
+                feedback.className = 'writing-feedback';
+                feedback.style.background = '#d5f4e6';
+                feedback.style.color = '#27ae60';
+                feedback.style.border = '2px solid #27ae60';
+                feedback.textContent = `¡Perfecto! ${correctCount}/${totalCount} respuestas correctas. ¡Excelente dominio del vocabulario! 🎉`;
+            } else if (percentage >= 60) {
+                feedback.className = 'writing-feedback';
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.style.border = '2px solid #ffc107';
+                feedback.textContent = `Bien hecho: ${correctCount}/${totalCount} respuestas correctas (${percentage}%). ¡Sigue practicando! 👍`;
+            } else {
+                feedback.className = 'writing-feedback';
+                feedback.style.background = '#fadbd8';
+                feedback.style.color = '#e74c3c';
+                feedback.style.border = '2px solid #e74c3c';
+                feedback.textContent = `${correctCount}/${totalCount} respuestas correctas (${percentage}%). Revisa el vocabulario y vuelve a intentarlo. 📚`;
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        // Initialize the quiz
+        displayQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98fb4860e61c2bbd',t:'MTc2MDY1Njc4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
