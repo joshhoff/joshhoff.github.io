@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Voice Learning App</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 15px 15px 0 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .tab-button:hover:not(.active) {
+            background: #e9ecef;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .lesson-section {
+            margin-bottom: 30px;
+        }
+
+        .lesson-section h2 {
+            color: #4f46e5;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #e0e7ff;
+            padding-bottom: 10px;
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-box h3 {
+            color: #0369a1;
+            margin-top: 0;
+        }
+
+        .sentence-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .active-sentence, .passive-sentence {
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .active-sentence {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .passive-sentence {
+            background: #dcfce7;
+            border-left: 4px solid #22c55e;
+        }
+
+        .formula-box {
+            background: #fef7ff;
+            border: 2px solid #d946ef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .formula {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #a21caf;
+        }
+
+        .quiz-question {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: #4f46e5;
+            background: #f8fafc;
+        }
+
+        .option.selected {
+            border-color: #4f46e5;
+            background: #eef2ff;
+        }
+
+        .option.correct {
+            border-color: #22c55e;
+            background: #dcfce7;
+        }
+
+        .option.incorrect {
+            border-color: #ef4444;
+            background: #fee2e2;
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #22c55e;
+        }
+
+        .feedback.incorrect {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4f46e5;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sentence-pair {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content-area {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 Passive Voice Mastery</h1>
+            <p>Learn and practice the passive voice in English</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('learn')">📖 Learn</button>
+            <button class="tab-button" onclick="showTab('practice')">🎯 Practice</button>
+            <button class="tab-button" onclick="showTab('test')">📝 Test</button>
+        </nav>
+
+        <main class="content-area">
+            <!-- Learn Tab -->
+            <div id="learn" class="tab-content active">
+                <div class="lesson-section">
+                    <h2>What is the Passive Voice?</h2>
+                    <p>The passive voice is used when we want to focus on the action or the person/thing receiving the action, rather than who performs the action.</p>
+                    
+                    <div class="example-box">
+                        <h3>Compare Active vs Passive:</h3>
+                        <div class="sentence-pair">
+                            <div class="active-sentence">
+                                <strong>Active:</strong> The chef cooks the meal.
+                                <br><small>(Focus on who does the action)</small>
+                            </div>
+                            <div class="passive-sentence">
+                                <strong>Passive:</strong> The meal is cooked by the chef.
+                                <br><small>(Focus on what receives the action)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-section">
+                    <h2>How to Form the Passive Voice</h2>
+                    <div class="formula-box">
+                        <div class="formula">Subject + BE + Past Participle + (by + agent)</div>
+                        <p>The form of "BE" changes based on tense and subject</p>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Examples in Different Tenses:</h3>
+                        <div class="sentence-pair">
+                            <div class="active-sentence">
+                                <strong>Present Simple:</strong> They build houses.
+                            </div>
+                            <div class="passive-sentence">
+                                <strong>Present Simple:</strong> Houses are built (by them).
+                            </div>
+                        </div>
+                        <div class="sentence-pair">
+                            <div class="active-sentence">
+                                <strong>Past Simple:</strong> She wrote the letter.
+                            </div>
+                            <div class="passive-sentence">
+                                <strong>Past Simple:</strong> The letter was written (by her).
+                            </div>
+                        </div>
+                        <div class="sentence-pair">
+                            <div class="active-sentence">
+                                <strong>Present Perfect:</strong> We have finished the project.
+                            </div>
+                            <div class="passive-sentence">
+                                <strong>Present Perfect:</strong> The project has been finished (by us).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-section">
+                    <h2>When to Use Passive Voice</h2>
+                    <ul style="font-size: 1.1rem; line-height: 1.8;">
+                        <li><strong>Unknown agent:</strong> "My bike was stolen." (We don't know who did it)</li>
+                        <li><strong>Obvious agent:</strong> "The criminal was arrested." (Obviously by police)</li>
+                        <li><strong>Focus on action:</strong> "The bridge was built in 1995." (The bridge is more important than who built it)</li>
+                        <li><strong>Formal writing:</strong> "Mistakes were made." (More formal than "We made mistakes")</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Practice Tab -->
+            <div id="practice" class="tab-content">
+                <h2>Practice Exercises</h2>
+                <p>Convert these active sentences to passive voice:</p>
+                
+                <div id="practiceArea">
+                    <div class="quiz-question">
+                        <div class="question-text">Convert: "The teacher explains the lesson."</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">The lesson explains by the teacher.</div>
+                            <div class="option" onclick="selectOption(this, true)">The lesson is explained by the teacher.</div>
+                            <div class="option" onclick="selectOption(this, false)">The lesson was explained by the teacher.</div>
+                        </div>
+                        <div class="feedback" id="feedback1" style="display: none;"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">Convert: "They will complete the project tomorrow."</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">The project will complete tomorrow.</div>
+                            <div class="option" onclick="selectOption(this, true)">The project will be completed tomorrow.</div>
+                            <div class="option" onclick="selectOption(this, false)">The project is completed tomorrow.</div>
+                        </div>
+                        <div class="feedback" id="feedback2" style="display: none;"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <div class="question-text">Convert: "Someone has stolen my wallet."</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">My wallet has stolen.</div>
+                            <div class="option" onclick="selectOption(this, true)">My wallet has been stolen.</div>
+                            <div class="option" onclick="selectOption(this, false)">My wallet was stolen.</div>
+                        </div>
+                        <div class="feedback" id="feedback3" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Tab -->
+            <div id="test" class="tab-content">
+                <h2>Comprehension Test</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+                </div>
+                
+                <div id="testArea">
+                    <div class="quiz-question" id="question1">
+                        <div class="question-text">Which sentence is in passive voice?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectTestOption(this, false, 1)">The dog chased the cat.</div>
+                            <div class="option" onclick="selectTestOption(this, true, 1)">The cat was chased by the dog.</div>
+                            <div class="option" onclick="selectTestOption(this, false, 1)">The cat is chasing the dog.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-controls">
+                    <div class="score-display">Score: <span id="score">0</span>/5</div>
+                    <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+                    <button class="btn btn-secondary" onclick="resetTest()">Reset Test</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentTab = 'learn';
+        let testQuestions = [
+            {
+                question: "Which sentence is in passive voice?",
+                options: ["The dog chased the cat.", "The cat was chased by the dog.", "The cat is chasing the dog."],
+                correct: 1,
+                explanation: "Correct! 'The cat was chased by the dog' uses the passive structure: subject + was + past participle."
+            },
+            {
+                question: "What is the passive form of 'They are building a new school'?",
+                options: ["A new school is being built.", "A new school builds.", "They build a new school."],
+                correct: 0,
+                explanation: "Perfect! Present continuous passive uses 'is/are being + past participle'."
+            },
+            {
+                question: "Choose the correct passive sentence:",
+                options: ["The book was wrote by the author.", "The book was written by the author.", "The book wrote by the author."],
+                correct: 1,
+                explanation: "Excellent! We use 'was written' (past participle of 'write'), not 'was wrote'."
+            },
+            {
+                question: "Which sentence focuses on the action rather than the doer?",
+                options: ["John painted the house.", "The house was painted.", "John is painting."],
+                correct: 1,
+                explanation: "Right! 'The house was painted' focuses on what happened to the house, not who did it."
+            },
+            {
+                question: "What's the passive form of 'Someone will fix the computer'?",
+                options: ["The computer will fix.", "The computer will be fixed.", "The computer is fixed."],
+                correct: 1,
+                explanation: "Correct! Future passive uses 'will be + past participle'."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            currentTab = tabName;
+        }
+
+        function selectOption(element, isCorrect) {
+            // Remove previous selections
+            element.parentNode.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selection
+            element.classList.add('selected');
+            
+            // Show feedback
+            const questionDiv = element.closest('.quiz-question');
+            const feedbackDiv = questionDiv.querySelector('.feedback');
+            
+            if (isCorreect) {
+                element.classList.add('correct');
+                feedbackDiv.textContent = "Correct! Well done!";
+                feedbackDiv.className = "feedback correct";
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                element.parentNode.querySelectorAll('.option').forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedbackDiv.textContent = "Not quite right. The correct answer is highlighted in green.";
+                feedbackDiv.className = "feedback incorrect";
+            }
+            
+            feedbackDiv.style.display = 'block';
+        }
+
+        function selectTestOption(element, isCorrect, questionNum) {
+            if (answered) return;
+            
+            answered = true;
+            
+            // Remove previous selections
+            element.parentNode.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Mark selection
+            element.classList.add('selected');
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                score++;
+                document.getElementById('score').textContent = score;
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                element.parentNode.children[testQuestions[currentQuestion].correct].classList.add('correct');
+            }
+            
+            // Show explanation
+            const questionDiv = element.closest('.quiz-question');
+            const explanation = document.createElement('div');
+            explanation.className = isCorrect ? 'feedback correct' : 'feedback incorrect';
+            explanation.textContent = testQuestions[currentQuestion].explanation;
+            questionDiv.appendChild(explanation);
+            
+            // Show next button or finish
+            if (currentQuestion < testQuestions.length - 1) {
+                document.getElementById('nextBtn').style.display = 'block';
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            answered = false;
+            
+            if (currentQuestion < testQuestions.length) {
+                loadQuestion();
+                document.getElementById('nextBtn').style.display = 'none';
+                updateProgress();
+            }
+        }
+
+        function loadQuestion() {
+            const question = testQuestions[currentQuestion];
+            const testArea = document.getElementById('testArea');
+            
+            testArea.innerHTML = `
+                <div class="quiz-question">
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">
+                        ${question.options.map((option, index) => 
+                            `<div class="option" onclick="selectTestOption(this, ${index === question.correct}, ${currentQuestion + 1})">${option}</div>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / testQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showFinalScore() {
+            const testArea = document.getElementById('testArea');
+            const percentage = Math.round((score / testQuestions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = "Excellent work! You have a strong understanding of the passive voice! 🎉";
+            } else if (percentage >= 60) {
+                message = "Good job! You're getting the hang of it. Review the lesson and try again! 👍";
+            } else {
+                message = "Keep practicing! Review the lesson materials and try the test again. 📚";
+            }
+            
+            testArea.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <h2 style="color: #4f46e5;">Test Complete!</h2>
+                    <div style="font-size: 3rem; margin: 20px 0;">${percentage >= 80 ? '🏆' : percentage >= 60 ? '👍' : '📚'}</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #4f46e5; margin: 20px 0;">
+                        ${score}/${testQuestions.length} (${percentage}%)
+                    </div>
+                    <p style="font-size: 1.2rem; color: #666;">${message}</p>
+                </div>
+            `;
+            
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function resetTest() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('nextBtn').style.display = 'none';
+            loadQuestion();
+        }
+
+        // Initialize the test
+        updateProgress();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98f9a0e342802b58',t:'MTc2MDYzOTQzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
