@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Present Practice / Práctica del Presente Simple</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .activity-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 12px 24px;
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .activity {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .activity.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .exercise-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .question {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .check-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .toy-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .toy-option {
+            text-align: center;
+            padding: 15px;
+            border: 3px solid #e1e5e9;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .toy-option:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .toy-option.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .toy-emoji {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #e17055;
+        }
+        
+        .prompt-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 20px;
+        }
+        
+        .toy-powers {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .story-section {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+            </div>
+            <h1 id="main-title">Simple Present Practice</h1>
+            <p id="subtitle">Master affirmative, negative, and interrogative forms</p>
+        </header>
+
+        <nav class="activity-nav">
+            <button class="nav-btn" onclick="showActivity('rules')" id="nav-rules">Grammar Rules</button>
+            <button class="nav-btn active" onclick="showActivity('grammar')" id="nav-grammar">Grammar Practice</button>
+            <button class="nav-btn" onclick="showActivity('toy')" id="nav-toy">Toy Description</button>
+            <button class="nav-btn" onclick="showActivity('conversation')" id="nav-conversation">Conversation</button>
+        </nav>
+
+        <!-- Grammar Rules Activity -->
+        <div id="rules" class="activity">
+            <div class="exercise-card">
+                <div class="question" id="rules-title">Simple Present Tense Rules</div>
+                
+                <div style="display: grid; gap: 20px;">
+                    <div style="background: #e8f5e8; padding: 20px; border-radius: 12px; border-left: 5px solid #28a745;">
+                        <h3 style="color: #28a745; margin-top: 0;" id="affirmative-title">✅ Affirmative Form</h3>
+                        <div id="affirmative-rules">
+                            <p><strong>Structure:</strong> Subject + Verb (+ s/es for 3rd person singular)</p>
+                            <p><strong>Examples:</strong></p>
+                            <ul>
+                                <li>I <strong>play</strong> soccer.</li>
+                                <li>She <strong>plays</strong> soccer.</li>
+                                <li>They <strong>work</strong> hard.</li>
+                                <li>He <strong>watches</strong> TV.</li>
+                            </ul>
+                            <p><strong>Remember:</strong> Add -s or -es to verbs with he/she/it!</p>
+                        </div>
+                    </div>
+
+                    <div style="background: #ffe8e8; padding: 20px; border-radius: 12px; border-left: 5px solid #dc3545;">
+                        <h3 style="color: #dc3545; margin-top: 0;" id="negative-title">❌ Negative Form</h3>
+                        <div id="negative-rules">
+                            <p><strong>Structure:</strong> Subject + do/does + not + base verb</p>
+                            <p><strong>Examples:</strong></p>
+                            <ul>
+                                <li>I <strong>do not</strong> (don't) like coffee.</li>
+                                <li>She <strong>does not</strong> (doesn't) speak French.</li>
+                                <li>We <strong>do not</strong> (don't) work on Sundays.</li>
+                                <li>It <strong>does not</strong> (doesn't) rain much here.</li>
+                            </ul>
+                            <p><strong>Remember:</strong> Use "does not" with he/she/it, "do not" with I/you/we/they!</p>
+                        </div>
+                    </div>
+
+                    <div style="background: #e8f0ff; padding: 20px; border-radius: 12px; border-left: 5px solid #007bff;">
+                        <h3 style="color: #007bff; margin-top: 0;" id="interrogative-title">❓ Interrogative Form</h3>
+                        <div id="interrogative-rules">
+                            <p><strong>Structure:</strong> Do/Does + subject + base verb + ?</p>
+                            <p><strong>Examples:</strong></p>
+                            <ul>
+                                <li><strong>Do</strong> you like pizza?</li>
+                                <li><strong>Does</strong> she speak English?</li>
+                                <li><strong>Do</strong> they live here?</li>
+                                <li><strong>Does</strong> it work properly?</li>
+                            </ul>
+                            <p><strong>Remember:</strong> Use "Does" with he/she/it, "Do" with I/you/we/they!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grammar Practice Activity -->
+        <div id="grammar" class="activity">
+            <div class="exercise-card">
+                <div class="question" id="grammar-title">Complete the sentences with the correct form:</div>
+                
+                <div class="input-group">
+                    <label id="q1-label">1. She _____ (play) tennis every Sunday.</label>
+                    <input type="text" id="q1" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q1', 'plays')" id="check1">Check</button>
+                    <div id="feedback1" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q2-label">2. They _____ (not/like) spicy food.</label>
+                    <input type="text" id="q2" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q2', 'do not like')" id="check2">Check</button>
+                    <div id="feedback2" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q3-label">3. _____ you _____ (speak) French?</label>
+                    <input type="text" id="q3" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q3', 'Do you speak')" id="check3">Check</button>
+                    <div id="feedback3" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q4-label">4. My brother _____ (not/work) on weekends.</label>
+                    <input type="text" id="q4" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q4', 'does not work')" id="check4">Check</button>
+                    <div id="feedback4" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q5-label">5. _____ your sister _____ (study) medicine?</label>
+                    <input type="text" id="q5" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q5', 'Does your sister study')" id="check5">Check</button>
+                    <div id="feedback5" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q6-label">6. We _____ (not/eat) meat.</label>
+                    <input type="text" id="q6" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q6', 'do not eat')" id="check6">Check</button>
+                    <div id="feedback6" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q7-label">7. The cat _____ (sleep) all day.</label>
+                    <input type="text" id="q7" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q7', 'sleeps')" id="check7">Check</button>
+                    <div id="feedback7" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q8-label">8. _____ you _____ (live) in this city?</label>
+                    <input type="text" id="q8" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q8', 'Do you live')" id="check8">Check</button>
+                    <div id="feedback8" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q9-label">9. My parents _____ (not/watch) television.</label>
+                    <input type="text" id="q9" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q9', 'do not watch')" id="check9">Check</button>
+                    <div id="feedback9" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="input-group">
+                    <label id="q10-label">10. _____ the store _____ (close) at 9 PM?</label>
+                    <input type="text" id="q10" placeholder="Type your answer...">
+                    <button class="check-btn" onclick="checkAnswer('q10', 'Does the store close')" id="check10">Check</button>
+                    <div id="feedback10" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="score" id="score">Score: 0/10</div>
+            </div>
+        </div>
+
+        <!-- Toy Description Activity -->
+        <div id="toy" class="activity">
+            <div class="exercise-card">
+                <div class="question" id="toy-title">🎮 Toy Adventure Game</div>
+                <p id="toy-subtitle">Choose your magical toy companion and bring it to life with words!</p>
+                
+                <div class="toy-selector">
+                    <div class="toy-option" onclick="selectToy('robot', '🤖', 'beeps and lights up', 'does not get tired', 'Does it need charging')">
+                        <div class="toy-emoji">🤖</div>
+                        <div id="toy-robot">Super Robot</div>
+                        <div class="toy-powers" id="robot-powers">Powers: Laser eyes, super strength</div>
+                    </div>
+                    <div class="toy-option" onclick="selectToy('doll', '🪆', 'talks and sings', 'does not break easily', 'Does it have magical powers')">
+                        <div class="toy-emoji">🪆</div>
+                        <div id="toy-doll">Magic Doll</div>
+                        <div class="toy-powers" id="doll-powers">Powers: Grants wishes, tells stories</div>
+                    </div>
+                    <div class="toy-option" onclick="selectToy('car', '🚗', 'races super fast', 'does not need gas', 'Does it fly in the air')">
+                        <div class="toy-emoji">🚗</div>
+                        <div id="toy-car">Speed Racer</div>
+                        <div class="toy-powers" id="car-powers">Powers: Turbo boost, invisible mode</div>
+                    </div>
+                    <div class="toy-option" onclick="selectToy('bear', '🧸', 'gives warm hugs', 'does not feel scared', 'Does it protect you at night')">
+                        <div class="toy-emoji">🧸</div>
+                        <div id="toy-bear">Guardian Bear</div>
+                        <div class="toy-powers" id="bear-powers">Powers: Healing hugs, dream protection</div>
+                    </div>
+                </div>
+
+                <div id="toy-description" style="display: none;">
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div id="selected-toy-display" style="font-size: 60px; margin-bottom: 10px;"></div>
+                        <div id="selected-toy-name" style="font-size: 24px; font-weight: bold; color: #667eea;"></div>
+                    </div>
+
+                    <div class="question" id="describe-prompt">✨ Create your toy's story using simple present tense:</div>
+                    
+                    <div class="story-section" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                        <h4 id="story-title" style="margin-top: 0; color: #2d3436;">📖 Your Toy's Adventure Story</h4>
+                        
+                        <div class="input-group">
+                            <label id="affirmative-label">✅ What your toy DOES (Affirmative):</label>
+                            <input type="text" id="affirmative" placeholder="e.g., flies through the clouds">
+                            <div class="hint" id="affirmative-hint">Hint: My robot _____ (action verb)</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label id="negative-label">❌ What your toy DOESN'T DO (Negative):</label>
+                            <input type="text" id="negative" placeholder="e.g., does not get lost">
+                            <div class="hint" id="negative-hint">Hint: My robot does not _____ (base verb)</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label id="interrogative-label">❓ ASK about your toy (Question):</label>
+                            <input type="text" id="interrogative" placeholder="e.g., Does your robot save the day">
+                            <div class="hint" id="interrogative-hint">Hint: Does your robot _____ (base verb)?</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <button class="check-btn" onclick="generateStory()" id="generate-story" style="background: #ff6b6b;">🎲 Generate Random Story</button>
+                        <button class="check-btn" onclick="saveToyDescription()" id="save-toy" style="background: #4ecdc4;">💾 Save My Story</button>
+                        <button class="check-btn" onclick="shareStory()" id="share-story" style="background: #45b7d1;">📢 Read Story Aloud</button>
+                    </div>
+                    
+                    <div id="toy-feedback" class="feedback" style="display: none;"></div>
+                    <div id="complete-story" style="display: none; margin-top: 20px; padding: 20px; background: #f8f9ff; border-radius: 15px; border-left: 5px solid #667eea;">
+                        <h4 id="story-result-title">📚 Your Complete Story:</h4>
+                        <div id="story-text" style="font-size: 16px; line-height: 1.6;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversation Activity -->
+        <div id="conversation" class="activity">
+            <div class="conversation-prompt">
+                <div class="prompt-title" id="conv-title">Daily Routine Conversation</div>
+                <p id="conv-prompt">Practice these conversation starters with a friend or speak aloud:</p>
+                <ul id="conv-list">
+                    <li>"What time do you wake up?"</li>
+                    <li>"Do you drink coffee in the morning?"</li>
+                    <li>"Where do you work?"</li>
+                    <li>"What do you do on weekends?"</li>
+                    <li>"Do you like to cook?"</li>
+                </ul>
+            </div>
+
+            <div class="exercise-card">
+                <div class="question" id="conv-exercise">Create your own questions using simple present:</div>
+                
+                <div class="input-group">
+                    <label id="custom-q1">Your question 1:</label>
+                    <input type="text" id="custom1" placeholder="Write a question using 'do/does'">
+                </div>
+
+                <div class="input-group">
+                    <label id="custom-q2">Your question 2:</label>
+                    <input type="text" id="custom2" placeholder="Write another question">
+                </div>
+
+                <button class="check-btn" onclick="saveConversation()" id="save-conv">Save Questions</button>
+                <div id="conv-feedback" class="feedback" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let score = 0;
+        let selectedToy = null;
+
+        const translations = {
+            en: {
+                'main-title': 'Simple Present Practice',
+                'subtitle': 'Master affirmative, negative, and interrogative forms',
+                'nav-rules': 'Grammar Rules',
+                'nav-grammar': 'Grammar Practice',
+                'nav-toy': 'Toy Description',
+                'nav-conversation': 'Conversation',
+                'rules-title': 'Simple Present Tense Rules',
+                'affirmative-title': '✅ Affirmative Form',
+                'negative-title': '❌ Negative Form',
+                'interrogative-title': '❓ Interrogative Form',
+                'grammar-title': 'Complete the sentences with the correct form:',
+                'q1-label': '1. She _____ (play) tennis every Sunday.',
+                'q2-label': '2. They _____ (not/like) spicy food.',
+                'q3-label': '3. _____ you _____ (speak) French?',
+                'q4-label': '4. My brother _____ (not/work) on weekends.',
+                'q5-label': '5. _____ your sister _____ (study) medicine?',
+                'q6-label': '6. We _____ (not/eat) meat.',
+                'q7-label': '7. The cat _____ (sleep) all day.',
+                'q8-label': '8. _____ you _____ (live) in this city?',
+                'q9-label': '9. My parents _____ (not/watch) television.',
+                'q10-label': '10. _____ the store _____ (close) at 9 PM?',
+                'check1': 'Check', 'check2': 'Check', 'check3': 'Check', 'check4': 'Check', 'check5': 'Check', 'check6': 'Check', 'check7': 'Check', 'check8': 'Check', 'check9': 'Check', 'check10': 'Check',
+                'toy-title': '🎮 Toy Adventure Game',
+                'toy-subtitle': 'Choose your magical toy companion and bring it to life with words!',
+                'toy-robot': 'Super Robot',
+                'robot-powers': 'Powers: Laser eyes, super strength',
+                'toy-doll': 'Magic Doll',
+                'doll-powers': 'Powers: Grants wishes, tells stories',
+                'toy-car': 'Speed Racer',
+                'car-powers': 'Powers: Turbo boost, invisible mode',
+                'toy-bear': 'Guardian Bear',
+                'bear-powers': 'Powers: Healing hugs, dream protection',
+                'describe-prompt': '✨ Create your toy\'s story using simple present tense:',
+                'story-title': '📖 Your Toy\'s Adventure Story',
+                'affirmative-label': '✅ What your toy DOES (Affirmative):',
+                'negative-label': '❌ What your toy DOESN\'T DO (Negative):',
+                'interrogative-label': '❓ ASK about your toy (Question):',
+                'affirmative-hint': 'Hint: My robot _____ (action verb)',
+                'negative-hint': 'Hint: My robot does not _____ (base verb)',
+                'interrogative-hint': 'Hint: Does your robot _____ (base verb)?',
+                'generate-story': '🎲 Generate Random Story',
+                'save-toy': '💾 Save My Story',
+                'share-story': '📢 Read Story Aloud',
+                'story-result-title': '📚 Your Complete Story:',
+                'conv-title': 'Daily Routine Conversation',
+                'conv-prompt': 'Practice these conversation starters with a friend or speak aloud:',
+                'conv-exercise': 'Create your own questions using simple present:',
+                'custom-q1': 'Your question 1:',
+                'custom-q2': 'Your question 2:',
+                'save-conv': 'Save Questions',
+                'correct-msg': 'Correct! Well done!',
+                'incorrect-msg': 'Try again. Remember the simple present rules.',
+                'toy-saved': 'Great description! You used simple present correctly.',
+                'conv-saved': 'Excellent questions! Keep practicing conversations.'
+            },
+            es: {
+                'main-title': 'Práctica del Presente Simple',
+                'subtitle': 'Domina las formas afirmativa, negativa e interrogativa',
+                'nav-rules': 'Reglas Gramaticales',
+                'nav-grammar': 'Práctica Gramatical',
+                'nav-toy': 'Descripción de Juguete',
+                'nav-conversation': 'Conversación',
+                'rules-title': 'Reglas del Presente Simple',
+                'affirmative-title': '✅ Forma Afirmativa',
+                'negative-title': '❌ Forma Negativa',
+                'interrogative-title': '❓ Forma Interrogativa',
+                'grammar-title': 'Completa las oraciones con la forma correcta:',
+                'q1-label': '1. Ella _____ (jugar) tenis todos los domingos.',
+                'q2-label': '2. Ellos _____ (no/gustar) la comida picante.',
+                'q3-label': '3. ¿_____ tú _____ (hablar) francés?',
+                'q4-label': '4. Mi hermano _____ (no/trabajar) los fines de semana.',
+                'q5-label': '5. ¿_____ tu hermana _____ (estudiar) medicina?',
+                'q6-label': '6. Nosotros _____ (no/comer) carne.',
+                'q7-label': '7. El gato _____ (dormir) todo el día.',
+                'q8-label': '8. ¿_____ tú _____ (vivir) en esta ciudad?',
+                'q9-label': '9. Mis padres _____ (no/mirar) televisión.',
+                'q10-label': '10. ¿_____ la tienda _____ (cerrar) a las 9 PM?',
+                'check1': 'Verificar', 'check2': 'Verificar', 'check3': 'Verificar', 'check4': 'Verificar', 'check5': 'Verificar', 'check6': 'Verificar', 'check7': 'Verificar', 'check8': 'Verificar', 'check9': 'Verificar', 'check10': 'Verificar',
+                'toy-title': '🎮 Juego de Aventura de Juguetes',
+                'toy-subtitle': '¡Elige tu compañero de juguete mágico y dale vida con palabras!',
+                'toy-robot': 'Súper Robot',
+                'robot-powers': 'Poderes: Ojos láser, súper fuerza',
+                'toy-doll': 'Muñeca Mágica',
+                'doll-powers': 'Poderes: Concede deseos, cuenta historias',
+                'toy-car': 'Corredor Veloz',
+                'car-powers': 'Poderes: Turbo impulso, modo invisible',
+                'toy-bear': 'Oso Guardián',
+                'bear-powers': 'Poderes: Abrazos curativos, protección de sueños',
+                'describe-prompt': '✨ Crea la historia de tu juguete usando presente simple:',
+                'story-title': '📖 La Historia de Aventura de tu Juguete',
+                'affirmative-label': '✅ Lo que tu juguete HACE (Afirmativo):',
+                'negative-label': '❌ Lo que tu juguete NO HACE (Negativo):',
+                'interrogative-label': '❓ PREGUNTA sobre tu juguete (Interrogativo):',
+                'affirmative-hint': 'Pista: Mi robot _____ (verbo de acción)',
+                'negative-hint': 'Pista: Mi robot no _____ (verbo base)',
+                'interrogative-hint': 'Pista: ¿Tu robot _____ (verbo base)?',
+                'generate-story': '🎲 Generar Historia Aleatoria',
+                'save-toy': '💾 Guardar Mi Historia',
+                'share-story': '📢 Leer Historia en Voz Alta',
+                'story-result-title': '📚 Tu Historia Completa:',
+                'conv-title': 'Conversación de Rutina Diaria',
+                'conv-prompt': 'Practica estas frases de conversación con un amigo o habla en voz alta:',
+                'conv-exercise': 'Crea tus propias preguntas usando presente simple:',
+                'custom-q1': 'Tu pregunta 1:',
+                'custom-q2': 'Tu pregunta 2:',
+                'save-conv': 'Guardar Preguntas',
+                'correct-msg': '¡Correcto! ¡Bien hecho!',
+                'incorrect-msg': 'Inténtalo de nuevo. Recuerda las reglas del presente simple.',
+                'toy-saved': '¡Excelente descripción! Usaste el presente simple correctamente.',
+                'conv-saved': '¡Excelentes preguntas! Sigue practicando conversaciones.'
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all text content
+            Object.keys(translations[lang]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'INPUT') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Update conversation list
+            const convList = document.getElementById('conv-list');
+            if (lang === 'es') {
+                convList.innerHTML = `
+                    <li>"¿A qué hora te despiertas?"</li>
+                    <li>"¿Tomas café por la mañana?"</li>
+                    <li>"¿Dónde trabajas?"</li>
+                    <li>"¿Qué haces los fines de semana?"</li>
+                    <li>"¿Te gusta cocinar?"</li>
+                `;
+            } else {
+                convList.innerHTML = `
+                    <li>"What time do you wake up?"</li>
+                    <li>"Do you drink coffee in the morning?"</li>
+                    <li>"Where do you work?"</li>
+                    <li>"What do you do on weekends?"</li>
+                    <li>"Do you like to cook?"</li>
+                `;
+            }
+
+            // Update grammar rules content
+            const affirmativeRules = document.getElementById('affirmative-rules');
+            const negativeRules = document.getElementById('negative-rules');
+            const interrogativeRules = document.getElementById('interrogative-rules');
+            
+            if (lang === 'es') {
+                affirmativeRules.innerHTML = `
+                    <p><strong>Estructura:</strong> Sujeto + Verbo (+ s/es para tercera persona singular)</p>
+                    <p><strong>Ejemplos:</strong></p>
+                    <ul>
+                        <li>Yo <strong>juego</strong> fútbol. (I <strong>play</strong> soccer.)</li>
+                        <li>Ella <strong>juega</strong> fútbol. (She <strong>plays</strong> soccer.)</li>
+                        <li>Ellos <strong>trabajan</strong> duro. (They <strong>work</strong> hard.)</li>
+                        <li>Él <strong>mira</strong> TV. (He <strong>watches</strong> TV.)</li>
+                    </ul>
+                    <p><strong>Recuerda:</strong> ¡Agrega -s o -es a los verbos con he/she/it!</p>
+                `;
+                negativeRules.innerHTML = `
+                    <p><strong>Estructura:</strong> Sujeto + do/does + not + verbo base</p>
+                    <p><strong>Ejemplos:</strong></p>
+                    <ul>
+                        <li>Yo <strong>no</strong> me gusta el café. (I <strong>do not</strong> like coffee.)</li>
+                        <li>Ella <strong>no</strong> habla francés. (She <strong>does not</strong> speak French.)</li>
+                        <li>Nosotros <strong>no</strong> trabajamos los domingos. (We <strong>do not</strong> work on Sundays.)</li>
+                        <li>No llueve mucho aquí. (It <strong>does not</strong> rain much here.)</li>
+                    </ul>
+                    <p><strong>Recuerda:</strong> ¡Usa "does not" con he/she/it, "do not" con I/you/we/they!</p>
+                `;
+                interrogativeRules.innerHTML = `
+                    <p><strong>Estructura:</strong> Do/Does + sujeto + verbo base + ?</p>
+                    <p><strong>Ejemplos:</strong></p>
+                    <ul>
+                        <li>¿Te gusta la pizza? (<strong>Do</strong> you like pizza?)</li>
+                        <li>¿Ella habla inglés? (<strong>Does</strong> she speak English?)</li>
+                        <li>¿Viven aquí? (<strong>Do</strong> they live here?)</li>
+                        <li>¿Funciona bien? (<strong>Does</strong> it work properly?)</li>
+                    </ul>
+                    <p><strong>Recuerda:</strong> ¡Usa "Does" con he/she/it, "Do" con I/you/we/they!</p>
+                `;
+            } else {
+                affirmativeRules.innerHTML = `
+                    <p><strong>Structure:</strong> Subject + Verb (+ s/es for 3rd person singular)</p>
+                    <p><strong>Examples:</strong></p>
+                    <ul>
+                        <li>I <strong>play</strong> soccer.</li>
+                        <li>She <strong>plays</strong> soccer.</li>
+                        <li>They <strong>work</strong> hard.</li>
+                        <li>He <strong>watches</strong> TV.</li>
+                    </ul>
+                    <p><strong>Remember:</strong> Add -s or -es to verbs with he/she/it!</p>
+                `;
+                negativeRules.innerHTML = `
+                    <p><strong>Structure:</strong> Subject + do/does + not + base verb</p>
+                    <p><strong>Examples:</strong></p>
+                    <ul>
+                        <li>I <strong>do not</strong> like coffee.</li>
+                        <li>She <strong>does not</strong> speak French.</li>
+                        <li>We <strong>do not</strong> work on Sundays.</li>
+                        <li>It <strong>does not</strong> rain much here.</li>
+                    </ul>
+                    <p><strong>Remember:</strong> Use "does not" with he/she/it, "do not" with I/you/we/they!</p>
+                `;
+                interrogativeRules.innerHTML = `
+                    <p><strong>Structure:</strong> Do/Does + subject + base verb + ?</p>
+                    <p><strong>Examples:</strong></p>
+                    <ul>
+                        <li><strong>Do</strong> you like pizza?</li>
+                        <li><strong>Does</strong> she speak English?</li>
+                        <li><strong>Do</strong> they live here?</li>
+                        <li><strong>Does</strong> it work properly?</li>
+                    </ul>
+                    <p><strong>Remember:</strong> Use "Does" with he/she/it, "Do" with I/you/we/they!</p>
+                `;
+            }
+
+            // Update placeholders
+            const placeholders = {
+                en: {
+                    'q1': 'Type your answer...',
+                    'q2': 'Type your answer...',
+                    'q3': 'Type your answer...',
+                    'q4': 'Type your answer...',
+                    'affirmative': 'e.g., walks around the room',
+                    'negative': 'e.g., does not make noise',
+                    'interrogative': 'e.g., Does your toy need batteries',
+                    'custom1': 'Write a question using \'do/does\'',
+                    'custom2': 'Write another question'
+                },
+                es: {
+                    'q1': 'Escribe tu respuesta...',
+                    'q2': 'Escribe tu respuesta...',
+                    'q3': 'Escribe tu respuesta...',
+                    'q4': 'Escribe tu respuesta...',
+                    'affirmative': 'ej., camina por la habitación',
+                    'negative': 'ej., no hace ruido',
+                    'interrogative': 'ej., ¿Tu juguete necesita baterías?',
+                    'custom1': 'Escribe una pregunta usando \'do/does\'',
+                    'custom2': 'Escribe otra pregunta'
+                }
+            };
+
+            Object.keys(placeholders[lang]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.placeholder = placeholders[lang][key];
+                }
+            });
+        }
+
+        function showActivity(activityName) {
+            document.querySelectorAll('.activity').forEach(activity => {
+                activity.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(activityName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function checkAnswer(questionId, correctAnswer) {
+            const userAnswer = document.getElementById(questionId).value.trim().toLowerCase();
+            const feedback = document.getElementById('feedback' + questionId.slice(-1));
+            const correctAnswers = correctAnswer.toLowerCase().split('/');
+            
+            let isCorrect = false;
+            for (let answer of correctAnswers) {
+                if (userAnswer === answer.trim()) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+            
+            feedback.style.display = 'block';
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = translations[currentLanguage]['correct-msg'];
+                if (!feedback.dataset.scored) {
+                    score++;
+                    feedback.dataset.scored = 'true';
+                }
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = translations[currentLanguage]['incorrect-msg'];
+            }
+            
+            document.getElementById('score').textContent = `Score: ${score}/10`;
+        }
+
+        function selectToy(toyName, emoji, sampleAff, sampleNeg, sampleInt) {
+            selectedToy = { 
+                name: toyName, 
+                emoji: emoji,
+                sampleAffirmative: sampleAff,
+                sampleNegative: sampleNeg,
+                sampleInterrogative: sampleInt
+            };
+            
+            document.querySelectorAll('.toy-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            
+            // Update display
+            document.getElementById('selected-toy-display').textContent = emoji;
+            document.getElementById('selected-toy-name').textContent = 
+                translations[currentLanguage]['toy-' + toyName] || toyName;
+            
+            // Update hints based on selected toy
+            const toyDisplayName = translations[currentLanguage]['toy-' + toyName] || toyName;
+            document.getElementById('affirmative-hint').textContent = 
+                currentLanguage === 'en' ? 
+                `Hint: My ${toyDisplayName.toLowerCase()} _____ (action verb)` :
+                `Pista: Mi ${toyDisplayName.toLowerCase()} _____ (verbo de acción)`;
+            document.getElementById('negative-hint').textContent = 
+                currentLanguage === 'en' ? 
+                `Hint: My ${toyDisplayName.toLowerCase()} does not _____ (base verb)` :
+                `Pista: Mi ${toyDisplayName.toLowerCase()} no _____ (verbo base)`;
+            document.getElementById('interrogative-hint').textContent = 
+                currentLanguage === 'en' ? 
+                `Hint: Does your ${toyDisplayName.toLowerCase()} _____ (base verb)?` :
+                `Pista: ¿Tu ${toyDisplayName.toLowerCase()} _____ (verbo base)?`;
+            
+            document.getElementById('toy-description').style.display = 'block';
+        }
+
+        function generateStory() {
+            if (!selectedToy) return;
+            
+            // Fill in sample sentences
+            document.getElementById('affirmative').value = selectedToy.sampleAffirmative;
+            document.getElementById('negative').value = selectedToy.sampleNegative;
+            document.getElementById('interrogative').value = selectedToy.sampleInterrogative;
+            
+            // Show the complete story
+            saveToyDescription();
+        }
+
+        function saveToyDescription() {
+            const affirmative = document.getElementById('affirmative').value;
+            const negative = document.getElementById('negative').value;
+            const interrogative = document.getElementById('interrogative').value;
+            
+            const feedback = document.getElementById('toy-feedback');
+            const storyDiv = document.getElementById('complete-story');
+            const storyText = document.getElementById('story-text');
+            
+            if (affirmative && negative && interrogative && selectedToy) {
+                feedback.style.display = 'block';
+                feedback.className = 'feedback correct';
+                feedback.textContent = translations[currentLanguage]['toy-saved'];
+                
+                // Create complete story
+                const toyName = translations[currentLanguage]['toy-' + selectedToy.name] || selectedToy.name;
+                const story = currentLanguage === 'en' ? 
+                    `${selectedToy.emoji} <strong>Meet my ${toyName}!</strong><br><br>
+                     ✅ <strong>What it does:</strong> My ${toyName.toLowerCase()} ${affirmative}.<br>
+                     ❌ <strong>What it doesn't do:</strong> My ${toyName.toLowerCase()} ${negative}.<br>
+                     ❓ <strong>Question:</strong> ${interrogative}?<br><br>
+                     <em>This magical ${toyName.toLowerCase()} is truly special!</em>` :
+                    `${selectedToy.emoji} <strong>¡Conoce mi ${toyName}!</strong><br><br>
+                     ✅ <strong>Lo que hace:</strong> Mi ${toyName.toLowerCase()} ${affirmative}.<br>
+                     ❌ <strong>Lo que no hace:</strong> Mi ${toyName.toLowerCase()} ${negative}.<br>
+                     ❓ <strong>Pregunta:</strong> ¿${interrogative}?<br><br>
+                     <em>¡Este ${toyName.toLowerCase()} mágico es verdaderamente especial!</em>`;
+                
+                storyText.innerHTML = story;
+                storyDiv.style.display = 'block';
+            } else {
+                feedback.style.display = 'block';
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = currentLanguage === 'en' ? 
+                    'Please fill in all three descriptions.' : 
+                    'Por favor completa las tres descripciones.';
+                storyDiv.style.display = 'none';
+            }
+        }
+
+        function shareStory() {
+            const storyText = document.getElementById('story-text');
+            if (storyText.innerHTML && 'speechSynthesis' in window) {
+                const textToRead = storyText.textContent;
+                const utterance = new SpeechSynthesisUtterance(textToRead);
+                utterance.lang = currentLanguage === 'en' ? 'en-US' : 'es-ES';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                const feedback = document.getElementById('toy-feedback');
+                feedback.style.display = 'block';
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = currentLanguage === 'en' ? 
+                    'Please save your story first!' : 
+                    '¡Por favor guarda tu historia primero!';
+            }
+        }
+
+        function saveConversation() {
+            const custom1 = document.getElementById('custom1').value;
+            const custom2 = document.getElementById('custom2').value;
+            
+            const feedback = document.getElementById('conv-feedback');
+            
+            if (custom1 && custom2) {
+                feedback.style.display = 'block';
+                feedback.className = 'feedback correct';
+                feedback.textContent = translations[currentLanguage]['conv-saved'];
+            } else {
+                feedback.style.display = 'block';
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = currentLanguage === 'en' ? 
+                    'Please write both questions.' : 
+                    'Por favor escribe ambas preguntas.';
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'991a5ba3a2042b5c',t:'MTc2MDk4MjYzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
