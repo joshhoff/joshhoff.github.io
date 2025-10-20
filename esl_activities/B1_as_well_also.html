@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering "As Well" and "Also" - Interactive Grammar Guide</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+        
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .explanation-card {
+            background: #f8f9ff;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .explanation-card h3 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        
+        .example-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .example-box .correct {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .example-box .incorrect {
+            color: #d32f2f;
+            font-weight: 600;
+            text-decoration: line-through;
+        }
+        
+        .practice-item {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .practice-question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #e65100;
+        }
+        
+        .options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .option-btn {
+            background: #fff;
+            border: 2px solid #ff9800;
+            color: #e65100;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-btn:hover {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .option-btn.selected {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .option-btn.correct {
+            background: #4caf50;
+            border-color: #4caf50;
+            color: white;
+        }
+        
+        .option-btn.incorrect {
+            background: #f44336;
+            border-color: #f44336;
+            color: white;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+        
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+        
+        .conversation-prompt {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+        }
+        
+        .conversation-prompt h4 {
+            color: #7b1fa2;
+            margin-top: 0;
+        }
+        
+        .prompt-scenario {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: #4a148c;
+        }
+        
+        .sample-responses {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .response-example {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9ff;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .score-display {
+            text-align: center;
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        
+        .reset-btn {
+            background: #ff5722;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            background: #d84315;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 25px;
+            }
+            
+            .options {
+                flex-direction: column;
+            }
+            
+            .option-btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📚 Mastering "As Well" and "Also"</h1>
+            <p>Learn the subtle differences and perfect your English grammar</p>
+        </header>
+        
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('explanations')">📖 Explanations</button>
+            <button class="tab-btn" onclick="showTab('practice')">✏️ Practice</button>
+            <button class="tab-btn" onclick="showTab('conversations')">💬 Conversations</button>
+        </nav>
+        
+        <main>
+            <!-- Explanations Section -->
+            <section id="explanations" class="content-section active">
+                <h2>Understanding "As Well" and "Also"</h2>
+                
+                <div class="explanation-card">
+                    <h3>🎯 "Also" - The Versatile Addition</h3>
+                    <p><strong>Position:</strong> Usually comes before the main verb or after "to be"</p>
+                    <p><strong>Formality:</strong> Works in both formal and informal contexts</p>
+                    <p><strong>Usage:</strong> Adds information, shows similarity, or includes additional items</p>
+                    
+                    <div class="example-box">
+                        <p><span class="correct">✓ I also like pizza.</span></p>
+                        <p><span class="correct">✓ She is also coming to the party.</span></p>
+                        <p><span class="correct">✓ We also need to buy milk.</span></p>
+                        <p><span class="incorrect">✗ I like pizza also.</span> (less natural in this position)</p>
+                    </div>
+                </div>
+                
+                <div class="explanation-card">
+                    <h3>🎯 "As Well" - The End-of-Sentence Addition</h3>
+                    <p><strong>Position:</strong> Always comes at the end of a sentence or clause</p>
+                    <p><strong>Formality:</strong> Slightly more informal than "also"</p>
+                    <p><strong>Usage:</strong> Adds information as an afterthought or additional point</p>
+                    
+                    <div class="example-box">
+                        <p><span class="correct">✓ I like pizza as well.</span></p>
+                        <p><span class="correct">✓ She's coming to the party as well.</span></p>
+                        <p><span class="correct">✓ We need to buy milk as well.</span></p>
+                        <p><span class="incorrect">✗ I as well like pizza.</span> (incorrect position)</p>
+                    </div>
+                </div>
+                
+                <div class="explanation-card">
+                    <h3>🔄 Key Differences</h3>
+                    <ul>
+                        <li><strong>Position:</strong> "Also" is flexible in position; "as well" only goes at the end</li>
+                        <li><strong>Emphasis:</strong> "As well" often sounds more like an afterthought</li>
+                        <li><strong>Formality:</strong> "Also" is more formal; "as well" is more conversational</li>
+                        <li><strong>Frequency:</strong> "Also" is more commonly used in writing</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Practice Section -->
+            <section id="practice" class="content-section">
+                <h2>Practice Exercises</h2>
+                <div class="score-display">
+                    <div>Score: <span id="score">0</span> / <span id="total">0</span></div>
+                    <button class="reset-btn" onclick="resetPractice()">Reset Practice</button>
+                </div>
+                
+                <div class="practice-item">
+                    <div class="practice-question">1. Choose the most natural option:</div>
+                    <p>"I love chocolate ice cream. I enjoy vanilla ___."</p>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 1)">also</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 1)">as well</button>
+                    </div>
+                    <div class="feedback" id="feedback-1"></div>
+                </div>
+                
+                <div class="practice-item">
+                    <div class="practice-question">2. Which sentence is more formal?</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 2)">She also speaks French fluently.</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 2)">She speaks French fluently as well.</button>
+                    </div>
+                    <div class="feedback" id="feedback-2"></div>
+                </div>
+                
+                <div class="practice-item">
+                    <div class="practice-question">3. Complete the sentence: "John ___ wants to join our team."</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 3)">also</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 3)">as well</button>
+                    </div>
+                    <div class="feedback" id="feedback-3"></div>
+                </div>
+                
+                <div class="practice-item">
+                    <div class="practice-question">4. Which sounds more natural as a response to "I'm going to the store"?</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 4)">I also am going.</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 4)">I'm going as well.</button>
+                    </div>
+                    <div class="feedback" id="feedback-4"></div>
+                </div>
+                
+                <div class="practice-item">
+                    <div class="practice-question">5. In academic writing, which is preferred?</div>
+                    <p>"The study examined temperature effects. It ___ analyzed humidity levels."</p>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 5)">also</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 5)">as well</button>
+                    </div>
+                    <div class="feedback" id="feedback-5"></div>
+                </div>
+            </section>
+            
+            <!-- Conversations Section -->
+            <section id="conversations" class="content-section">
+                <h2>Conversation Practice</h2>
+                
+                <div class="conversation-prompt">
+                    <h4>🍕 Scenario 1: Ordering Food</h4>
+                    <div class="prompt-scenario">
+                        You're at a restaurant with friends. Practice using "also" and "as well" when discussing your orders.
+                    </div>
+                    <p><strong>Conversation starter:</strong> "I think I'll have the pasta. What about you?"</p>
+                    
+                    <div class="sample-responses">
+                        <div class="response-example">
+                            <strong>Using "also":</strong> "I also want pasta, but the seafood version."
+                        </div>
+                        <div class="response-example">
+                            <strong>Using "as well":</strong> "I'm thinking about pasta as well, actually."
+                        </div>
+                        <div class="response-example">
+                            <strong>Extended response:</strong> "Pasta sounds great! I also need to decide on a drink. Are you getting wine as well?"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <h4>🎬 Scenario 2: Discussing Hobbies</h4>
+                    <div class="prompt-scenario">
+                        You're meeting someone new and talking about your interests and hobbies.
+                    </div>
+                    <p><strong>Conversation starter:</strong> "I love reading mystery novels in my free time."</p>
+                    
+                    <div class="sample-responses">
+                        <div class="response-example">
+                            <strong>Using "also":</strong> "That's cool! I also enjoy mysteries. I also like science fiction."
+                        </div>
+                        <div class="response-example">
+                            <strong>Using "as well":</strong> "I'm into mysteries as well! Do you watch mystery shows as well?"
+                        </div>
+                        <div class="response-example">
+                            <strong>Mixed usage:</strong> "I also love reading! I enjoy thrillers as well. Do you have any favorite authors?"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <h4>💼 Scenario 3: Work Discussion</h4>
+                    <div class="prompt-scenario">
+                        You're in a business meeting discussing project responsibilities and tasks.
+                    </div>
+                    <p><strong>Conversation starter:</strong> "I can handle the marketing presentation for next week."</p>
+                    
+                    <div class="sample-responses">
+                        <div class="response-example">
+                            <strong>Using "also":</strong> "Great! I can also prepare the budget analysis. Should I also review the timeline?"
+                        </div>
+                        <div class="response-example">
+                            <strong>Using "as well":</strong> "Perfect. I'll work on the client research as well."
+                        </div>
+                        <div class="response-example">
+                            <strong>Formal context:</strong> "Excellent. I will also coordinate with the design team and handle client communications as well."
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <h4>🏠 Scenario 4: Making Plans</h4>
+                    <div class="prompt-scenario">
+                        You're planning a weekend with family or friends, discussing activities and logistics.
+                    </div>
+                    <p><strong>Conversation starter:</strong> "Let's go to the beach on Saturday morning."</p>
+                    
+                    <div class="sample-responses">
+                        <div class="response-example">
+                            <strong>Using "also":</strong> "Sounds fun! We could also visit the boardwalk. Should we also pack lunch?"
+                        </div>
+                        <div class="response-example">
+                            <strong>Using "as well":</strong> "I'd love that! Can we stop by the ice cream shop as well?"
+                        </div>
+                        <div class="response-example">
+                            <strong>Natural flow:</strong> "Great idea! I also want to try that new café nearby. We could go there for breakfast as well."
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="explanation-card">
+                    <h3>💡 Conversation Tips</h3>
+                    <ul>
+                        <li><strong>Listen for context:</strong> Use "as well" when responding to someone's statement</li>
+                        <li><strong>Vary your language:</strong> Don't use the same phrase repeatedly in one conversation</li>
+                        <li><strong>Consider formality:</strong> Use "also" in professional settings, "as well" in casual chats</li>
+                        <li><strong>Practice naturally:</strong> Try these scenarios with friends or family</li>
+                        <li><strong>Pay attention to rhythm:</strong> "As well" often feels more natural at the end of responses</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        let score = 0;
+        let totalQuestions = 5;
+        let answeredQuestions = new Set();
+        
+        function showTab(tabName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        function checkAnswer(button, isCorrect, questionNumber) {
+            // Prevent multiple answers for the same question
+            if (answeredQuestions.has(questionNumber)) {
+                return;
+            }
+            
+            const options = button.parentElement.querySelectorAll('.option-btn');
+            const feedback = document.getElementById(`feedback-${questionNumber}`);
+            
+            // Disable all options for this question
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === button) {
+                    if (isCorrect) {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('incorrect');
+                    }
+                }
+            });
+            
+            // Show correct answer if user was wrong
+            if (!isCorrect) {
+                options.forEach(opt => {
+                    if (opt !== button && !opt.classList.contains('incorrect')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            // Update score
+            answeredQuestions.add(questionNumber);
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Show feedback
+            feedback.style.display = 'block';
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = getCorrectFeedback(questionNumber);
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = getIncorrectFeedback(questionNumber);
+            }
+            
+            // Update score display
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = answeredQuestions.size;
+        }
+        
+        function getCorrectFeedback(questionNumber) {
+            const feedbacks = {
+                1: "✓ Correct! 'As well' is more natural at the end of a sentence, especially as a response.",
+                2: "✓ Correct! 'Also' is generally more formal and preferred in academic or professional writing.",
+                3: "✓ Correct! 'Also' fits naturally in the middle of the sentence before the main verb.",
+                4: "✓ Correct! 'As well' sounds more natural as a casual response in conversation.",
+                5: "✓ Correct! In academic writing, 'also' is preferred for its formal tone."
+            };
+            return feedbacks[questionNumber];
+        }
+        
+        function getIncorrectFeedback(questionNumber) {
+            const feedbacks = {
+                1: "✗ 'Also' would be less natural here. 'As well' works better at the end of responses.",
+                2: "✗ While both are correct, 'also' is more formal and preferred in professional contexts.",
+                3: "✗ 'As well' can only go at the end of sentences. 'Also' fits better in the middle.",
+                4: "✗ 'I also am going' sounds awkward. 'As well' flows better in casual responses.",
+                5: "✗ In academic writing, 'also' is preferred for its more formal register."
+            };
+            return feedbacks[questionNumber];
+        }
+        
+        function resetPractice() {
+            score = 0;
+            answeredQuestions.clear();
+            
+            // Reset all buttons and feedback
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect', 'selected');
+                opt.style.pointerEvents = 'auto';
+            });
+            
+            const feedbacks = document.querySelectorAll('.feedback');
+            feedbacks.forEach(feedback => {
+                feedback.style.display = 'none';
+            });
+            
+            // Update score display
+            document.getElementById('score').textContent = '0';
+            document.getElementById('total').textContent = '0';
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'991b3d76d1540adb',t:'MTc2MDk5MTg4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
