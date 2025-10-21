@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Present Questions - ESL Learning</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #ff6b6b;
+            border-bottom: 3px solid #ff6b6b;
+        }
+        
+        .tab-button:hover {
+            background: #e9ecef;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .explanation-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .formula-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .example-card {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .activity-card {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option-btn {
+            padding: 12px 20px;
+            border: 2px solid #007bff;
+            background: white;
+            color: #007bff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+        
+        .option-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+        
+        .option-btn.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .option-btn.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .conversation-prompt {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .prompt-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .score-display {
+            background: #17a2b8;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .reset-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 15px;
+        }
+        
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+        
+        .input-exercise {
+            margin: 20px 0;
+        }
+        
+        .input-field {
+            width: 200px;
+            padding: 8px 12px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-size: 1em;
+            margin: 0 5px;
+        }
+        
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+        }
+        
+        .check-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🤔 Simple Present Questions</h1>
+            <p>Learn to ask questions in English!</p>
+        </header>
+        
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('explanation')">📚 Learn</button>
+            <button class="tab-button" onclick="showTab('activities')">✏️ Practice</button>
+            <button class="tab-button" onclick="showTab('conversation')">💬 Talk</button>
+        </nav>
+        
+        <main>
+            <!-- Explanation Tab -->
+            <div id="explanation" class="tab-content active">
+                <div class="explanation-box">
+                    <h2>🎯 What are Simple Present Questions?</h2>
+                    <p>Simple present questions help us ask about things that happen regularly, facts, or habits. We use them every day!</p>
+                </div>
+                
+                <div class="formula-box">
+                    <strong>Formula:</strong> Do/Does + Subject + Base Verb + ?
+                </div>
+                
+                <h3>📋 The Rules:</h3>
+                <div class="example-grid">
+                    <div class="example-card">
+                        <h4>With I, You, We, They</h4>
+                        <p><strong>Use "DO"</strong></p>
+                        <p>✅ Do you like pizza?</p>
+                        <p>✅ Do they play soccer?</p>
+                    </div>
+                    <div class="example-card">
+                        <h4>With He, She, It</h4>
+                        <p><strong>Use "DOES"</strong></p>
+                        <p>✅ Does she speak English?</p>
+                        <p>✅ Does it work?</p>
+                    </div>
+                </div>
+                
+                <div class="explanation-box">
+                    <h3>🔄 Statement → Question</h3>
+                    <p><strong>Statement:</strong> You like music. → <strong>Question:</strong> Do you like music?</p>
+                    <p><strong>Statement:</strong> She works here. → <strong>Question:</strong> Does she work here?</p>
+                    <p><em>Notice: The main verb becomes the base form (work, not works) in questions!</em></p>
+                </div>
+                
+                <h3>🌟 Common Question Words:</h3>
+                <div class="example-grid">
+                    <div class="example-card">
+                        <p><strong>What</strong> do you eat for breakfast?</p>
+                        <p><strong>Where</strong> does he live?</p>
+                    </div>
+                    <div class="example-card">
+                        <p><strong>When</strong> do they arrive?</p>
+                        <p><strong>Why</strong> does she study English?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Activities Tab -->
+            <div id="activities" class="tab-content">
+                <div class="score-display">
+                    Score: <span id="score">0</span>/6
+                    <button class="reset-btn" onclick="resetActivities()">Reset</button>
+                </div>
+                
+                <div class="activity-card">
+                    <h3>Activity 1: Choose the Correct Question</h3>
+                    <div class="question">Transform this statement: "She plays tennis."</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 1)">Do she plays tennis?</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 1)">Does she play tennis?</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 1)">Does she plays tennis?</button>
+                    </div>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3>Activity 2: Pick the Right Helper</h3>
+                    <div class="question">_____ you speak Spanish?</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, true, 2)">Do</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 2)">Does</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 2)">Are</button>
+                    </div>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3>Activity 3: Complete the Question</h3>
+                    <div class="question">_____ your brother _____ in a bank?</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 3)">Do / works</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 3)">Does / work</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 3)">Does / works</button>
+                    </div>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3>Activity 4: Question Word Practice</h3>
+                    <div class="question">_____ does she live? (asking about location)</div>
+                    <div class="options">
+                        <button class="option-btn" onclick="checkAnswer(this, false, 4)">What</button>
+                        <button class="option-btn" onclick="checkAnswer(this, true, 4)">Where</button>
+                        <button class="option-btn" onclick="checkAnswer(this, false, 4)">When</button>
+                    </div>
+                    <div class="feedback" id="feedback4"></div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3>Activity 5: Fill in the Blanks</h3>
+                    <div class="question">Write the correct form:</div>
+                    <div class="input-exercise">
+                        <p>_____ they _____ coffee every morning?</p>
+                        <input type="text" class="input-field" id="blank1" placeholder="Do/Does">
+                        <input type="text" class="input-field" id="blank2" placeholder="drink/drinks">
+                        <button class="check-btn" onclick="checkFillBlanks()">Check</button>
+                    </div>
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+                
+                <div class="activity-card">
+                    <h3>Activity 6: Transform the Sentence</h3>
+                    <div class="question">Change to a question: "It rains a lot here."</div>
+                    <div class="input-exercise">
+                        <input type="text" class="input-field" id="transform" placeholder="Your answer" style="width: 300px;">
+                        <button class="check-btn" onclick="checkTransform()">Check</button>
+                    </div>
+                    <div class="feedback" id="feedback6"></div>
+                </div>
+            </div>
+            
+            <!-- Conversation Tab -->
+            <div id="conversation" class="tab-content">
+                <div class="conversation-prompt">
+                    <div class="prompt-title">
+                        🗣️ Daily Routine Questions
+                    </div>
+                    <p><strong>Practice asking about daily activities:</strong></p>
+                    <ul>
+                        <li>Do you wake up early?</li>
+                        <li>What time do you eat breakfast?</li>
+                        <li>Does your family watch TV together?</li>
+                        <li>Where do you usually have lunch?</li>
+                    </ul>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">
+                        🎯 Hobby & Interest Questions
+                    </div>
+                    <p><strong>Ask about hobbies and interests:</strong></p>
+                    <ul>
+                        <li>Do you play any sports?</li>
+                        <li>What kind of music does your friend like?</li>
+                        <li>Does your teacher speak other languages?</li>
+                        <li>Do you read books in your free time?</li>
+                    </ul>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">
+                        🏠 Family & Friends Questions
+                    </div>
+                    <p><strong>Learn about people around you:</strong></p>
+                    <ul>
+                        <li>Does your mother work?</li>
+                        <li>Where do your grandparents live?</li>
+                        <li>Do your friends study English too?</li>
+                        <li>What does your father do for work?</li>
+                    </ul>
+                </div>
+                
+                <div class="conversation-prompt">
+                    <div class="prompt-title">
+                        🎲 Practice Challenge
+                    </div>
+                    <p><strong>Try this with a partner:</strong></p>
+                    <p>Take turns asking and answering these questions. Remember to use complete sentences in your answers!</p>
+                    <p><em>Example: "Do you like pizza?" → "Yes, I do. I like pizza very much!" or "No, I don't. I prefer pasta."</em></p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        let score = 0;
+        let answeredQuestions = new Set();
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        function checkAnswer(button, isCorrect, questionNum) {
+            // Prevent multiple answers for same question
+            if (answeredQuestions.has(questionNum)) return;
+            
+            const options = button.parentElement.querySelectorAll('.option-btn');
+            const feedback = document.getElementById(`feedback${questionNum}`);
+            
+            // Disable all options
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            if (isCorrect) {
+                button.classList.add('correct');
+                feedback.textContent = '🎉 Excellent! That\'s the correct answer!';
+                feedback.className = 'feedback correct';
+                score++;
+                answeredQuestions.add(questionNum);
+            } else {
+                button.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.textContent = '❌ Not quite right. The correct answer is highlighted in green.';
+                feedback.className = 'feedback incorrect';
+                answeredQuestions.add(questionNum);
+            }
+            
+            feedback.style.display = 'block';
+            updateScore();
+        }
+        
+        function checkFillBlanks() {
+            if (answeredQuestions.has(5)) return;
+            
+            const blank1 = document.getElementById('blank1').value.toLowerCase().trim();
+            const blank2 = document.getElementById('blank2').value.toLowerCase().trim();
+            const feedback = document.getElementById('feedback5');
+            
+            if (blank1 === 'do' && blank2 === 'drink') {
+                feedback.textContent = '🎉 Perfect! "Do they drink coffee every morning?" is correct!';
+                feedback.className = 'feedback correct';
+                score++;
+            } else {
+                feedback.textContent = '❌ The correct answer is: "Do they drink coffee every morning?"';
+                feedback.className = 'feedback incorrect';
+            }
+            
+            feedback.style.display = 'block';
+            answeredQuestions.add(5);
+            updateScore();
+        }
+        
+        function checkTransform() {
+            if (answeredQuestions.has(6)) return;
+            
+            const answer = document.getElementById('transform').value.toLowerCase().trim();
+            const feedback = document.getElementById('feedback6');
+            
+            if (answer === 'does it rain a lot here?' || answer === 'does it rain a lot here') {
+                feedback.textContent = '🎉 Excellent! "Does it rain a lot here?" is perfect!';
+                feedback.className = 'feedback correct';
+                score++;
+            } else {
+                feedback.textContent = '❌ The correct answer is: "Does it rain a lot here?"';
+                feedback.className = 'feedback incorrect';
+            }
+            
+            feedback.style.display = 'block';
+            answeredQuestions.add(6);
+            updateScore();
+        }
+        
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+        
+        function resetActivities() {
+            score = 0;
+            answeredQuestions.clear();
+            updateScore();
+            
+            // Reset all buttons and feedback
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach(opt => {
+                opt.className = 'option-btn';
+                opt.style.pointerEvents = 'auto';
+            });
+            
+            const feedbacks = document.querySelectorAll('.feedback');
+            feedbacks.forEach(fb => fb.style.display = 'none');
+            
+            // Clear input fields
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach(input => input.value = '');
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9921f97273e32abc',t:'MTc2MTA2MjQ5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
