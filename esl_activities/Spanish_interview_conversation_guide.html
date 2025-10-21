@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Entrevistas en Español</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100%;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .main-content {
+            flex: 2;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .sidebar {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-height: calc(100% - 40px);
+            overflow-y: auto;
+        }
+        
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .question-card {
+            background: #f7fafc;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            font-size: 1.3em;
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .answer-area {
+            margin-bottom: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+        
+        .sample-answer {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .sample-answer.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sidebar h2 {
+            color: #4a5568;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+        
+        .term-category {
+            margin-bottom: 25px;
+        }
+        
+        .term-category h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        
+        .term-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .term-list li {
+            background: white;
+            margin-bottom: 8px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .term-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        
+        .spanish {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .english {
+            color: #718096;
+            font-size: 0.9em;
+            margin-left: 8px;
+        }
+        
+        .progress {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-counter {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .sidebar {
+                order: -1;
+                max-height: 300px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main class="main-content">
+            <h1>🎯 Práctica de Entrevistas</h1>
+            
+            <div class="question-counter">
+                <span id="currentQuestion">1</span> de <span id="totalQuestions">10</span> preguntas
+            </div>
+            
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question" id="questionText">
+                    Cuéntame sobre ti y tu experiencia profesional.
+                </div>
+                
+                <div class="answer-area">
+                    <label for="userAnswer" style="display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568;">Tu respuesta:</label>
+                    <textarea id="userAnswer" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-primary" onclick="showSampleAnswer()">Ver Respuesta Ejemplo</button>
+                    <button class="btn-secondary" onclick="nextQuestion()">Siguiente Pregunta</button>
+                    <button class="btn-secondary" onclick="resetPractice()">Reiniciar</button>
+                </div>
+                
+                <div class="sample-answer" id="sampleAnswer">
+                    <h4 style="color: #2d3748; margin-bottom: 15px;">💡 Respuesta de ejemplo:</h4>
+                    <p id="sampleText">Soy un profesional con X años de experiencia en [tu campo]. He trabajado en empresas como [nombres] donde desarrollé habilidades en [competencias clave]. Me considero una persona proactiva y orientada a resultados. Busco nuevos desafíos que me permitan crecer profesionalmente y aportar valor a la organización.</p>
+                </div>
+            </div>
+        </main>
+        
+        <aside class="sidebar">
+            <h2>📚 Términos Útiles</h2>
+            
+            <div class="term-category">
+                <h3>Experiencia Profesional</h3>
+                <ul class="term-list">
+                    <li onclick="insertTerm('tengo experiencia en')">
+                        <span class="spanish">tengo experiencia en</span>
+                        <span class="english">I have experience in</span>
+                    </li>
+                    <li onclick="insertTerm('he trabajado como')">
+                        <span class="spanish">he trabajado como</span>
+                        <span class="english">I have worked as</span>
+                    </li>
+                    <li onclick="insertTerm('mis responsabilidades incluían')">
+                        <span class="spanish">mis responsabilidades incluían</span>
+                        <span class="english">my responsibilities included</span>
+                    </li>
+                    <li onclick="insertTerm('logré desarrollar')">
+                        <span class="spanish">logré desarrollar</span>
+                        <span class="english">I managed to develop</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="term-category">
+                <h3>Habilidades y Fortalezas</h3>
+                <ul class="term-list">
+                    <li onclick="insertTerm('soy una persona')">
+                        <span class="spanish">soy una persona</span>
+                        <span class="english">I am a person</span>
+                    </li>
+                    <li onclick="insertTerm('mi mayor fortaleza es')">
+                        <span class="spanish">mi mayor fortaleza es</span>
+                        <span class="english">my greatest strength is</span>
+                    </li>
+                    <li onclick="insertTerm('tengo facilidad para')">
+                        <span class="spanish">tengo facilidad para</span>
+                        <span class="english">I have a knack for</span>
+                    </li>
+                    <li onclick="insertTerm('me destaco en')">
+                        <span class="spanish">me destaco en</span>
+                        <span class="english">I excel at</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="term-category">
+                <h3>Motivación y Objetivos</h3>
+                <ul class="term-list">
+                    <li onclick="insertTerm('me interesa esta posición porque')">
+                        <span class="spanish">me interesa esta posición porque</span>
+                        <span class="english">I'm interested in this position because</span>
+                    </li>
+                    <li onclick="insertTerm('mi objetivo es')">
+                        <span class="spanish">mi objetivo es</span>
+                        <span class="english">my goal is</span>
+                    </li>
+                    <li onclick="insertTerm('busco oportunidades para')">
+                        <span class="spanish">busco oportunidades para</span>
+                        <span class="english">I seek opportunities to</span>
+                    </li>
+                    <li onclick="insertTerm('me motiva')">
+                        <span class="spanish">me motiva</span>
+                        <span class="english">I'm motivated by</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="term-category">
+                <h3>Expresiones Útiles</h3>
+                <ul class="term-list">
+                    <li onclick="insertTerm('por ejemplo')">
+                        <span class="spanish">por ejemplo</span>
+                        <span class="english">for example</span>
+                    </li>
+                    <li onclick="insertTerm('además de eso')">
+                        <span class="spanish">además de eso</span>
+                        <span class="english">in addition to that</span>
+                    </li>
+                    <li onclick="insertTerm('en mi experiencia')">
+                        <span class="spanish">en mi experiencia</span>
+                        <span class="english">in my experience</span>
+                    </li>
+                    <li onclick="insertTerm('me gustaría destacar que')">
+                        <span class="spanish">me gustaría destacar que</span>
+                        <span class="english">I'd like to highlight that</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Cuéntame sobre ti y tu experiencia profesional.",
+                sample: "Soy un profesional con X años de experiencia en [tu campo]. He trabajado en empresas como [nombres] donde desarrollé habilidades en [competencias clave]. Me considero una persona proactiva y orientada a resultados. Busco nuevos desafíos que me permitan crecer profesionalmente y aportar valor a la organización."
+            },
+            {
+                question: "¿Por qué te interesa trabajar en nuestra empresa?",
+                sample: "Me interesa esta posición porque su empresa tiene una excelente reputación en el sector y valores que se alinean con los míos. He investigado sobre sus proyectos recientes y me emociona la posibilidad de contribuir con mi experiencia en [área específica]. Además, veo grandes oportunidades de crecimiento profesional aquí."
+            },
+            {
+                question: "¿Cuáles son tus principales fortalezas?",
+                sample: "Mi mayor fortaleza es mi capacidad de adaptación y aprendizaje rápido. También me destaco en el trabajo en equipo y la comunicación efectiva. Por ejemplo, en mi trabajo anterior logré mejorar la eficiencia del equipo en un 20% implementando nuevos procesos de colaboración."
+            },
+            {
+                question: "Háblame de una situación difícil que hayas enfrentado en el trabajo.",
+                sample: "En mi trabajo anterior, tuvimos un proyecto con un plazo muy ajustado y recursos limitados. Organicé reuniones diarias para coordinar el equipo, redistribuí las tareas según las fortalezas de cada persona y mantuve comunicación constante con el cliente. Al final, entregamos el proyecto a tiempo y el cliente quedó muy satisfecho."
+            },
+            {
+                question: "¿Dónde te ves en cinco años?",
+                sample: "En cinco años me veo como un profesional consolidado en mi área, habiendo contribuido significativamente al crecimiento de la empresa. Me gustaría haber desarrollado habilidades de liderazgo y estar mentoreando a nuevos talentos. También espero haber completado certificaciones adicionales que me permitan aportar aún más valor."
+            },
+            {
+                question: "¿Por qué dejaste tu trabajo anterior?",
+                sample: "Dejé mi trabajo anterior porque busco nuevos desafíos profesionales y oportunidades de crecimiento. Aunque aprendí mucho y tuve buenas experiencias, siento que he alcanzado un punto donde necesito expandir mis habilidades en un entorno más dinámico como el que ofrece su empresa."
+            },
+            {
+                question: "¿Cómo manejas el estrés y la presión?",
+                sample: "Manejo el estrés organizando mis tareas por prioridades y estableciendo plazos realistas. Cuando siento presión, tomo un momento para analizar la situación, divido los problemas grandes en tareas más pequeñas y me enfoco en las soluciones. También practico técnicas de respiración y mantengo una comunicación abierta con mi equipo."
+            },
+            {
+                question: "¿Qué te motiva en el trabajo?",
+                sample: "Me motiva poder resolver problemas complejos y ver el impacto positivo de mi trabajo. Disfruto aprendiendo cosas nuevas y colaborando con equipos diversos. También me inspira contribuir al éxito de la empresa y saber que mi trabajo hace una diferencia real para los clientes y la organización."
+            },
+            {
+                question: "¿Tienes alguna pregunta sobre la empresa o el puesto?",
+                sample: "Sí, me gustaría saber más sobre las oportunidades de desarrollo profesional que ofrece la empresa. También me interesa conocer cómo es un día típico en este puesto y qué proyectos estaría manejando inicialmente. ¿Podrían contarme sobre la cultura de trabajo en equipo aquí?"
+            },
+            {
+                question: "¿Cuál consideras que es tu mayor debilidad?",
+                sample: "Una área en la que he estado trabajando es mi tendencia a ser muy detallista, lo que a veces me hace invertir más tiempo del necesario en tareas. He aprendido a establecer límites de tiempo y a priorizar qué nivel de detalle es realmente necesario para cada proyecto, lo que me ha ayudado a ser más eficiente."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = questions.length;
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('sampleText').textContent = question.sample;
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('sampleAnswer').classList.remove('show');
+            updateProgress();
+        }
+
+        function showSampleAnswer() {
+            const sampleDiv = document.getElementById('sampleAnswer');
+            sampleDiv.classList.toggle('show');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            showQuestion();
+        }
+
+        function resetPractice() {
+            currentQuestionIndex = 0;
+            showQuestion();
+        }
+
+        function insertTerm(term) {
+            const textarea = document.getElementById('userAnswer');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            
+            const before = text.substring(0, start);
+            const after = text.substring(end, text.length);
+            
+            textarea.value = before + term + ' ' + after;
+            textarea.focus();
+            textarea.setSelectionRange(start + term.length + 1, start + term.length + 1);
+        }
+
+        // Initialize the app
+        showQuestion();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9923703d07d8cba6',t:'MTc2MTA3Nzg0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
