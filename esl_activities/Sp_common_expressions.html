@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Phrasal Verbs Master</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 15px 15px 0 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+
+        .tab:hover:not(.active) {
+            background: #e9ecef;
+        }
+
+        .content {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+
+        .phrasal-verb-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .verb-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .verb-meaning {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .examples {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .example {
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .example:last-child {
+            margin-bottom: 0;
+        }
+
+        .verb-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .verb-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .verb-item:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .verb-item.selected {
+            background: #667eea;
+            color: white;
+            border-color: #5a6fd8;
+        }
+
+        .practice-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .prompt-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .prompt-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-bottom: 1px solid #dee2e6;
+                border-radius: 0;
+            }
+            
+            .tab.active {
+                border-bottom-color: #667eea;
+            }
+            
+            .content {
+                border-radius: 15px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇪🇸 Spanish Phrasal Verbs Master</h1>
+            <p class="subtitle">Learn, Practice, and Master Spanish Phrasal Verbs in Context</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('learn')">📚 Learn</button>
+            <button class="tab" onclick="showTab('practice')">✍️ Practice</button>
+            <button class="tab" onclick="showTab('conversation')">💬 Conversation</button>
+        </div>
+
+        <div class="content">
+            <!-- Learn Tab -->
+            <div id="learn-tab" class="tab-content">
+                <div class="verb-list">
+                    <div class="verb-item" onclick="showVerbDetails('llevarse')">
+                        <h3>llevarse bien/mal</h3>
+                        <p>to get along well/badly</p>
+                    </div>
+                    <div class="verb-item" onclick="showVerbDetails('darse')">
+                        <h3>darse cuenta</h3>
+                        <p>to realize</p>
+                    </div>
+                    <div class="verb-item" onclick="showVerbDetails('ponerse')">
+                        <h3>ponerse de acuerdo</h3>
+                        <p>to agree</p>
+                    </div>
+                    <div class="verb-item" onclick="showVerbDetails('hacerse')">
+                        <h3>hacerse cargo</h3>
+                        <p>to take charge</p>
+                    </div>
+                    <div class="verb-item" onclick="showVerbDetails('quedarse')">
+                        <h3>quedarse sin</h3>
+                        <p>to run out of</p>
+                    </div>
+                    <div class="verb-item" onclick="showVerbDetails('salir')">
+                        <h3>salir adelante</h3>
+                        <p>to get ahead/succeed</p>
+                    </div>
+                </div>
+
+                <div id="verb-details" class="phrasal-verb-card" style="display: none;">
+                    <div class="verb-title" id="verb-title"></div>
+                    <div class="verb-meaning" id="verb-meaning"></div>
+                    <div class="examples" id="verb-examples"></div>
+                </div>
+            </div>
+
+            <!-- Practice Tab -->
+            <div id="practice-tab" class="tab-content" style="display: none;">
+                <div class="score" id="practice-score">Score: 0/0</div>
+                
+                <div class="practice-section">
+                    <div class="question" id="practice-question">Click "New Question" to start practicing!</div>
+                    <div class="options" id="practice-options"></div>
+                    <div id="practice-feedback" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="btn" onclick="generatePracticeQuestion()">New Question</button>
+                    <button class="btn btn-secondary" onclick="resetPracticeScore()">Reset Score</button>
+                </div>
+            </div>
+
+            <!-- Conversation Tab -->
+            <div id="conversation-tab" class="tab-content" style="display: none;">
+                <div id="conversation-prompts">
+                    <!-- Conversation prompts will be generated here -->
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn" onclick="generateConversationPrompt()">New Conversation Prompt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const phrasalVerbs = {
+            'llevarse': {
+                title: 'llevarse bien/mal',
+                meaning: 'to get along well/badly with someone',
+                explanation: 'Used to describe relationships between people. "Bien" means well, "mal" means badly.',
+                examples: [
+                    'Me llevo muy bien con mi hermana. (I get along very well with my sister.)',
+                    'Ellos se llevan mal desde la infancia. (They have gotten along badly since childhood.)',
+                    '¿Te llevas bien con tus compañeros de trabajo? (Do you get along well with your coworkers?)'
+                ]
+            },
+            'darse': {
+                title: 'darse cuenta',
+                meaning: 'to realize, to become aware of something',
+                explanation: 'This reflexive verb expresses the moment when you understand or become conscious of something.',
+                examples: [
+                    'Me di cuenta de que había olvidado las llaves. (I realized I had forgotten the keys.)',
+                    'Ella se dio cuenta del error inmediatamente. (She realized the mistake immediately.)',
+                    '¿Te das cuenta de lo importante que es esto? (Do you realize how important this is?)'
+                ]
+            },
+            'ponerse': {
+                title: 'ponerse de acuerdo',
+                meaning: 'to agree, to reach an agreement',
+                explanation: 'Used when two or more people come to a mutual understanding or agreement about something.',
+                examples: [
+                    'Nos pusimos de acuerdo sobre el precio. (We agreed on the price.)',
+                    'Es difícil ponerse de acuerdo con él. (It\'s difficult to agree with him.)',
+                    'Se pusieron de acuerdo para encontrarse a las ocho. (They agreed to meet at eight.)'
+                ]
+            },
+            'hacerse': {
+                title: 'hacerse cargo',
+                meaning: 'to take charge, to take responsibility',
+                explanation: 'Expresses taking control or responsibility for a situation, person, or task.',
+                examples: [
+                    'Me hago cargo de la situación. (I\'m taking charge of the situation.)',
+                    'Ella se hizo cargo de sus hermanos menores. (She took charge of her younger siblings.)',
+                    '¿Quién se va a hacer cargo del proyecto? (Who is going to take charge of the project?)'
+                ]
+            },
+            'quedarse': {
+                title: 'quedarse sin',
+                meaning: 'to run out of, to be left without',
+                explanation: 'Used when something is completely used up or when you no longer have something.',
+                examples: [
+                    'Me quedé sin dinero. (I ran out of money.)',
+                    'Nos quedamos sin gasolina en la carretera. (We ran out of gas on the highway.)',
+                    'Se quedó sin palabras cuando vio el regalo. (He was left speechless when he saw the gift.)'
+                ]
+            },
+            'salir': {
+                title: 'salir adelante',
+                meaning: 'to get ahead, to succeed, to overcome difficulties',
+                explanation: 'Expresses overcoming challenges and achieving success despite obstacles.',
+                examples: [
+                    'A pesar de las dificultades, logró salir adelante. (Despite the difficulties, he managed to get ahead.)',
+                    'Con trabajo duro, siempre se puede salir adelante. (With hard work, you can always succeed.)',
+                    'La empresa salió adelante después de la crisis. (The company got ahead after the crisis.)'
+                ]
+            }
+        };
+
+        const practiceQuestions = [
+            {
+                question: 'Complete: "Me _____ cuenta de que era muy tarde."',
+                options: ['di', 'puse', 'hice', 'quedé'],
+                correct: 0,
+                explanation: '"Darse cuenta" means to realize. The correct form is "me di cuenta".'
+            },
+            {
+                question: 'What does "llevarse bien" mean?',
+                options: ['to take something', 'to get along well', 'to carry well', 'to bring something'],
+                correct: 1,
+                explanation: '"Llevarse bien" means to get along well with someone.'
+            },
+            {
+                question: 'Complete: "Nos _____ de acuerdo sobre el plan."',
+                options: ['pusimos', 'dimos', 'hicimos', 'quedamos'],
+                correct: 0,
+                explanation: '"Ponerse de acuerdo" means to agree. The correct form is "nos pusimos de acuerdo".'
+            },
+            {
+                question: 'Choose the correct translation for "Se quedó sin trabajo":',
+                options: ['He stayed without working', 'He ran out of work', 'He left work', 'He worked without staying'],
+                correct: 1,
+                explanation: '"Quedarse sin" means to run out of or be left without something.'
+            },
+            {
+                question: 'What does "hacerse cargo" mean?',
+                options: ['to make a charge', 'to become expensive', 'to take charge', 'to make cargo'],
+                correct: 2,
+                explanation: '"Hacerse cargo" means to take charge or take responsibility for something.'
+            },
+            {
+                question: 'Complete: "A pesar de todo, logró _____ adelante."',
+                options: ['ir', 'venir', 'salir', 'entrar'],
+                correct: 2,
+                explanation: '"Salir adelante" means to get ahead or succeed despite difficulties.'
+            }
+        ];
+
+        const conversationPrompts = [
+            {
+                title: 'Family Relationships',
+                prompt: 'Describe your relationship with a family member using "llevarse bien/mal". Then ask your conversation partner about their family relationships.',
+                example: 'Example: "Me llevo muy bien con mi hermana mayor, pero a veces me llevo mal con mi hermano pequeño. ¿Cómo te llevas con tus hermanos?"'
+            },
+            {
+                title: 'Recent Realizations',
+                prompt: 'Share something you recently realized using "darse cuenta". It could be about yourself, work, or life in general.',
+                example: 'Example: "Ayer me di cuenta de que necesito organizar mejor mi tiempo. ¿De qué te has dado cuenta últimamente?"'
+            },
+            {
+                title: 'Making Agreements',
+                prompt: 'Describe a situation where you had to reach an agreement with someone using "ponerse de acuerdo".',
+                example: 'Example: "Mi compañero de cuarto y yo nos pusimos de acuerdo sobre las tareas domésticas. ¿Has tenido que ponerte de acuerdo con alguien recientemente?"'
+            },
+            {
+                title: 'Taking Responsibility',
+                prompt: 'Talk about a time when you had to take charge of something using "hacerse cargo".',
+                example: 'Example: "Cuando mi jefe se enfermó, me hice cargo de la presentación importante. ¿Te has hecho cargo de algo difícil alguna vez?"'
+            },
+            {
+                title: 'Running Out of Things',
+                prompt: 'Describe a situation where you ran out of something using "quedarse sin".',
+                example: 'Example: "El mes pasado me quedé sin café y fue terrible. ¿De qué te has quedado sin recientemente?"'
+            },
+            {
+                title: 'Overcoming Challenges',
+                prompt: 'Share a story about overcoming difficulties using "salir adelante".',
+                example: 'Example: "Después de perder mi trabajo, trabajé duro y logré salir adelante. ¿Cómo has logrado salir adelante en situaciones difíciles?"'
+            }
+        ];
+
+        let practiceScore = { correct: 0, total: 0 };
+        let currentQuestion = null;
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').style.display = 'block';
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function showVerbDetails(verbKey) {
+            const verb = phrasalVerbs[verbKey];
+            const detailsDiv = document.getElementById('verb-details');
+            
+            // Remove selected class from all verb items
+            document.querySelectorAll('.verb-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked item
+            event.target.classList.add('selected');
+            
+            document.getElementById('verb-title').textContent = verb.title;
+            document.getElementById('verb-meaning').textContent = verb.meaning;
+            
+            const examplesDiv = document.getElementById('verb-examples');
+            examplesDiv.innerHTML = `
+                <h4>📝 Explanation:</h4>
+                <p>${verb.explanation}</p>
+                <h4>💡 Examples:</h4>
+                ${verb.examples.map(example => `<div class="example">${example}</div>`).join('')}
+            `;
+            
+            detailsDiv.style.display = 'block';
+        }
+
+        function generatePracticeQuestion() {
+            currentQuestion = practiceQuestions[Math.floor(Math.random() * practiceQuestions.length)];
+            
+            document.getElementById('practice-question').textContent = currentQuestion.question;
+            
+            const optionsDiv = document.getElementById('practice-options');
+            optionsDiv.innerHTML = '';
+            
+            currentQuestion.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => checkAnswer(index);
+                optionsDiv.appendChild(optionDiv);
+            });
+            
+            document.getElementById('practice-feedback').style.display = 'none';
+        }
+
+        function checkAnswer(selectedIndex) {
+            const options = document.querySelectorAll('.option');
+            const feedbackDiv = document.getElementById('practice-feedback');
+            
+            practiceScore.total++;
+            
+            if (selectedIndex === currentQuestion.correct) {
+                practiceScore.correct++;
+                options[selectedIndex].classList.add('correct');
+                feedbackDiv.className = 'feedback correct';
+                feedbackDiv.textContent = '¡Correcto! ' + currentQuestion.explanation;
+            } else {
+                options[selectedIndex].classList.add('incorrect');
+                options[currentQuestion.correct].classList.add('correct');
+                feedbackDiv.className = 'feedback incorrect';
+                feedbackDiv.textContent = 'Incorrecto. ' + currentQuestion.explanation;
+            }
+            
+            // Disable all options
+            options.forEach(option => {
+                option.onclick = null;
+                option.style.cursor = 'default';
+            });
+            
+            feedbackDiv.style.display = 'block';
+            updatePracticeScore();
+        }
+
+        function updatePracticeScore() {
+            const percentage = practiceScore.total > 0 ? Math.round((practiceScore.correct / practiceScore.total) * 100) : 0;
+            document.getElementById('practice-score').textContent = 
+                `Score: ${practiceScore.correct}/${practiceScore.total} (${percentage}%)`;
+        }
+
+        function resetPracticeScore() {
+            practiceScore = { correct: 0, total: 0 };
+            updatePracticeScore();
+            document.getElementById('practice-question').textContent = 'Click "New Question" to start practicing!';
+            document.getElementById('practice-options').innerHTML = '';
+            document.getElementById('practice-feedback').style.display = 'none';
+        }
+
+        function generateConversationPrompt() {
+            const prompt = conversationPrompts[Math.floor(Math.random() * conversationPrompts.length)];
+            
+            const promptsDiv = document.getElementById('conversation-prompts');
+            promptsDiv.innerHTML = `
+                <div class="conversation-prompt">
+                    <div class="prompt-title">🎯 ${prompt.title}</div>
+                    <div class="prompt-text">
+                        <strong>Your task:</strong> ${prompt.prompt}
+                        <br><br>
+                        <strong>${prompt.example}</strong>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePracticeScore();
+            generateConversationPrompt();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'991b4a2ee62d0adb',t:'MTc2MDk5MjQwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
