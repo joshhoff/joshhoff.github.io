@@ -252,6 +252,24 @@
             font-weight: 600;
         }
         
+        .lang-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -283,27 +301,30 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>📊 Quantitative Adjectives</h1>
-            <p>Learn to express amounts and quantities in English</p>
+            <div style="text-align: right; margin-bottom: 10px;">
+                <button id="langToggle" class="lang-toggle" onclick="toggleLanguage()">🌐 Español</button>
+            </div>
+            <h1 id="mainTitle">📊 Quantitative Adjectives</h1>
+            <p id="mainSubtitle">Learn to express amounts and quantities in English</p>
         </header>
         
         <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('explanation')">📚 Learn</button>
-            <button class="nav-tab" onclick="showSection('practice')">✏️ Practice</button>
-            <button class="nav-tab" onclick="showSection('conversation')">💬 Speak</button>
+            <button class="nav-tab active" onclick="showSection('explanation')" id="learnTab">📚 Learn</button>
+            <button class="nav-tab" onclick="showSection('practice')" id="practiceTab">✏️ Practice</button>
+            <button class="nav-tab" onclick="showSection('conversation')" id="speakTab">💬 Speak</button>
         </nav>
         
         <main class="content-area">
             <!-- Explanation Section -->
             <section id="explanation" class="section active">
-                <h2>Understanding Quantitative Adjectives</h2>
-                <p>Quantitative adjectives tell us <strong>how much</strong> or <strong>how many</strong> of something there is. They help us describe amounts and quantities.</p>
+                <h2 id="explanationTitle">Understanding Quantitative Adjectives</h2>
+                <p id="explanationIntro">Quantitative adjectives tell us <strong>how much</strong> or <strong>how many</strong> of something there is. They help us describe amounts and quantities.</p>
                 
                 <div class="explanation-grid">
                     <div class="explanation-card">
-                        <h3>🔢 For Countable Nouns</h3>
-                        <p>Use these with things you can count (books, people, cars):</p>
-                        <ul>
+                        <h3 id="countableTitle">🔢 For Countable Nouns</h3>
+                        <p id="countableDesc">Use these with things you can count (books, people, cars):</p>
+                        <ul id="countableList">
                             <li><strong>Many</strong> - a large number</li>
                             <li><strong>Few</strong> - a small number</li>
                             <li><strong>Several</strong> - more than two but not many</li>
@@ -312,9 +333,9 @@
                     </div>
                     
                     <div class="explanation-card">
-                        <h3>🌊 For Uncountable Nouns</h3>
-                        <p>Use these with things you cannot count (water, money, time):</p>
-                        <ul>
+                        <h3 id="uncountableTitle">🌊 For Uncountable Nouns</h3>
+                        <p id="uncountableDesc">Use these with things you cannot count (water, money, time):</p>
+                        <ul id="uncountableList">
                             <li><strong>Much</strong> - a large amount</li>
                             <li><strong>Little</strong> - a small amount</li>
                             <li><strong>Some</strong> - an unspecified amount</li>
@@ -323,9 +344,9 @@
                     </div>
                     
                     <div class="explanation-card">
-                        <h3>🎯 For Both Types</h3>
-                        <p>These work with countable AND uncountable nouns:</p>
-                        <ul>
+                        <h3 id="bothTitle">🎯 For Both Types</h3>
+                        <p id="bothDesc">These work with countable AND uncountable nouns:</p>
+                        <ul id="bothList">
                             <li><strong>All</strong> - the complete amount</li>
                             <li><strong>Most</strong> - the majority</li>
                             <li><strong>No</strong> - zero amount</li>
@@ -335,19 +356,19 @@
                 </div>
                 
                 <div class="examples">
-                    <h3>💡 Examples in Context</h3>
+                    <h3 id="examplesTitle">💡 Examples in Context</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
                         <div>
-                            <strong>Countable:</strong><br>
-                            • "I have <em>many</em> friends."<br>
+                            <strong id="countableExampleTitle">Countable:</strong><br>
+                            <span id="countableExamples">• "I have <em>many</em> friends."<br>
                             • "There are <em>few</em> students today."<br>
-                            • "She bought <em>several</em> books."
+                            • "She bought <em>several</em> books."</span>
                         </div>
                         <div>
-                            <strong>Uncountable:</strong><br>
-                            • "We don't have <em>much</em> time."<br>
+                            <strong id="uncountableExampleTitle">Uncountable:</strong><br>
+                            <span id="uncountableExamples">• "We don't have <em>much</em> time."<br>
                             • "There's <em>little</em> water left."<br>
-                            • "I need <em>some</em> help."
+                            • "I need <em>some</em> help."</span>
                         </div>
                     </div>
                 </div>
@@ -355,9 +376,9 @@
             
             <!-- Practice Section -->
             <section id="practice" class="section">
-                <h2>Practice Activities</h2>
+                <h2 id="practiceTitle">Practice Activities</h2>
                 <div id="score" class="score-display" style="display: none;">
-                    Score: <span id="scoreValue">0</span>/20
+                    <span id="scoreLabel">Score:</span> <span id="scoreValue">0</span>/20
                 </div>
                 
                 <div id="practiceQuestions">
@@ -365,18 +386,18 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <button class="check-btn" onclick="resetPractice()">🔄 Start New Practice</button>
+                    <button class="check-btn" onclick="resetPractice()" id="resetBtn">🔄 Start New Practice</button>
                 </div>
             </section>
             
             <!-- Conversation Section -->
             <section id="conversation" class="section">
-                <h2>Conversation Prompts</h2>
-                <p>Practice using quantitative adjectives in real conversations. Use these prompts with a partner or practice speaking alone.</p>
+                <h2 id="conversationTitle">Conversation Prompts</h2>
+                <p id="conversationIntro">Practice using quantitative adjectives in real conversations. Use these prompts with a partner or practice speaking alone.</p>
                 
                 <div class="conversation-prompt">
-                    <div class="prompt-title">🏠 Daily Life & Routines</div>
-                    <ul class="prompt-questions">
+                    <div class="prompt-title" id="dailyLifeTitle">🏠 Daily Life & Routines</div>
+                    <ul class="prompt-questions" id="dailyLifeQuestions">
                         <li>How <strong>much</strong> time do you spend on social media each day?</li>
                         <li>Do you have <strong>many</strong> household chores to do?</li>
                         <li>How <strong>many</strong> meals do you cook at home per week?</li>
@@ -385,8 +406,8 @@
                 </div>
                 
                 <div class="conversation-prompt">
-                    <div class="prompt-title">🛒 Shopping & Money</div>
-                    <ul class="prompt-questions">
+                    <div class="prompt-title" id="shoppingTitle">🛒 Shopping & Money</div>
+                    <ul class="prompt-questions" id="shoppingQuestions">
                         <li>Do you spend <strong>much</strong> money on clothes?</li>
                         <li>How <strong>many</strong> times do you go grocery shopping per month?</li>
                         <li>Do you have <strong>enough</strong> savings for emergencies?</li>
@@ -395,8 +416,8 @@
                 </div>
                 
                 <div class="conversation-prompt">
-                    <div class="prompt-title">👥 Relationships & Social Life</div>
-                    <ul class="prompt-questions">
+                    <div class="prompt-title" id="relationshipsTitle">👥 Relationships & Social Life</div>
+                    <ul class="prompt-questions" id="relationshipsQuestions">
                         <li>Do you have <strong>many</strong> close friends?</li>
                         <li>How <strong>much</strong> time do you spend with family?</li>
                         <li>Are there <strong>several</strong> people you can trust completely?</li>
@@ -405,8 +426,8 @@
                 </div>
                 
                 <div class="conversation-prompt">
-                    <div class="prompt-title">📚 Learning & Work</div>
-                    <ul class="prompt-questions">
+                    <div class="prompt-title" id="learningTitle">📚 Learning & Work</div>
+                    <ul class="prompt-questions" id="learningQuestions">
                         <li>How <strong>many</strong> languages are you studying?</li>
                         <li>Do you have <strong>much</strong> experience with public speaking?</li>
                         <li>Are there <strong>enough</strong> opportunities for growth in your job?</li>
@@ -415,8 +436,8 @@
                 </div>
                 
                 <div class="conversation-prompt">
-                    <div class="prompt-title">🎯 Goals & Future Plans</div>
-                    <ul class="prompt-questions">
+                    <div class="prompt-title" id="goalsTitle">🎯 Goals & Future Plans</div>
+                    <ul class="prompt-questions" id="goalsQuestions">
                         <li>Do you have <strong>many</strong> goals for next year?</li>
                         <li>How <strong>much</strong> planning do you do for the future?</li>
                         <li>Are there <strong>several</strong> places you want to visit?</li>
@@ -425,8 +446,8 @@
                 </div>
                 
                 <div style="background: #e0f2fe; padding: 20px; border-radius: 10px; margin-top: 20px;">
-                    <h3>💡 Speaking Tips</h3>
-                    <ul>
+                    <h3 id="speakingTipsTitle">💡 Speaking Tips</h3>
+                    <ul id="speakingTipsList">
                         <li>Take your time to think about which quantitative adjective fits best</li>
                         <li>Practice explaining your answers with examples</li>
                         <li>Try to use different quantitative adjectives in each response</li>
@@ -441,6 +462,165 @@
         let currentScore = 0;
         let questionsAnswered = 0;
         let practiceQuestions = [];
+        let currentLanguage = 'en';
+        
+        const translations = {
+            en: {
+                langToggle: '🌐 Español',
+                mainTitle: '📊 Quantitative Adjectives',
+                mainSubtitle: 'Learn to express amounts and quantities in English',
+                learnTab: '📚 Learn',
+                practiceTab: '✏️ Practice',
+                speakTab: '💬 Speak',
+                explanationTitle: 'Understanding Quantitative Adjectives',
+                explanationIntro: 'Quantitative adjectives tell us <strong>how much</strong> or <strong>how many</strong> of something there is. They help us describe amounts and quantities.',
+                countableTitle: '🔢 For Countable Nouns',
+                countableDesc: 'Use these with things you can count (books, people, cars):',
+                countableList: '<li><strong>Many</strong> - a large number</li><li><strong>Few</strong> - a small number</li><li><strong>Several</strong> - more than two but not many</li><li><strong>Some</strong> - an unspecified amount</li>',
+                uncountableTitle: '🌊 For Uncountable Nouns',
+                uncountableDesc: 'Use these with things you cannot count (water, money, time):',
+                uncountableList: '<li><strong>Much</strong> - a large amount</li><li><strong>Little</strong> - a small amount</li><li><strong>Some</strong> - an unspecified amount</li><li><strong>Enough</strong> - sufficient amount</li>',
+                bothTitle: '🎯 For Both Types',
+                bothDesc: 'These work with countable AND uncountable nouns:',
+                bothList: '<li><strong>All</strong> - the complete amount</li><li><strong>Most</strong> - the majority</li><li><strong>No</strong> - zero amount</li><li><strong>Any</strong> - used in questions/negatives</li>',
+                examplesTitle: '💡 Examples in Context',
+                countableExampleTitle: 'Countable:',
+                countableExamples: '• "I have <em>many</em> friends."<br>• "There are <em>few</em> students today."<br>• "She bought <em>several</em> books."',
+                uncountableExampleTitle: 'Uncountable:',
+                uncountableExamples: '• "We don\'t have <em>much</em> time."<br>• "There\'s <em>little</em> water left."<br>• "I need <em>some</em> help."',
+                practiceTitle: 'Practice Activities',
+                scoreLabel: 'Score:',
+                resetBtn: '🔄 Start New Practice',
+                conversationTitle: 'Conversation Prompts',
+                conversationIntro: 'Practice using quantitative adjectives in real conversations. Use these prompts with a partner or practice speaking alone.',
+                dailyLifeTitle: '🏠 Daily Life & Routines',
+                shoppingTitle: '🛒 Shopping & Money',
+                relationshipsTitle: '👥 Relationships & Social Life',
+                learningTitle: '📚 Learning & Work',
+                goalsTitle: '🎯 Goals & Future Plans',
+                speakingTipsTitle: '💡 Speaking Tips',
+                checkAnswer: 'Check Answer',
+                correct: '✅ Correct',
+                incorrect: '❌ Incorrect'
+            },
+            es: {
+                langToggle: '🌐 English',
+                mainTitle: '📊 Adjetivos Cuantitativos',
+                mainSubtitle: 'Aprende a expresar cantidades en inglés',
+                learnTab: '📚 Aprender',
+                practiceTab: '✏️ Practicar',
+                speakTab: '💬 Hablar',
+                explanationTitle: 'Entendiendo los Adjetivos Cuantitativos',
+                explanationIntro: 'Los adjetivos cuantitativos nos dicen <strong>cuánto</strong> o <strong>cuántos</strong> hay de algo. Nos ayudan a describir cantidades.',
+                countableTitle: '🔢 Para Sustantivos Contables',
+                countableDesc: 'Úsalos con cosas que puedes contar (libros, personas, carros):',
+                countableList: '<li><strong>Many</strong> - un gran número</li><li><strong>Few</strong> - un número pequeño</li><li><strong>Several</strong> - más de dos pero no muchos</li><li><strong>Some</strong> - una cantidad no especificada</li>',
+                uncountableTitle: '🌊 Para Sustantivos Incontables',
+                uncountableDesc: 'Úsalos con cosas que no puedes contar (agua, dinero, tiempo):',
+                uncountableList: '<li><strong>Much</strong> - una gran cantidad</li><li><strong>Little</strong> - una pequeña cantidad</li><li><strong>Some</strong> - una cantidad no especificada</li><li><strong>Enough</strong> - cantidad suficiente</li>',
+                bothTitle: '🎯 Para Ambos Tipos',
+                bothDesc: 'Estos funcionan con sustantivos contables E incontables:',
+                bothList: '<li><strong>All</strong> - la cantidad completa</li><li><strong>Most</strong> - la mayoría</li><li><strong>No</strong> - cantidad cero</li><li><strong>Any</strong> - usado en preguntas/negativos</li>',
+                examplesTitle: '💡 Ejemplos en Contexto',
+                countableExampleTitle: 'Contables:',
+                countableExamples: '• "Tengo <em>muchos</em> amigos."<br>• "Hay <em>pocos</em> estudiantes hoy."<br>• "Ella compró <em>varios</em> libros."',
+                uncountableExampleTitle: 'Incontables:',
+                uncountableExamples: '• "No tenemos <em>mucho</em> tiempo."<br>• "Queda <em>poca</em> agua."<br>• "Necesito <em>algo de</em> ayuda."',
+                practiceTitle: 'Actividades de Práctica',
+                scoreLabel: 'Puntuación:',
+                resetBtn: '🔄 Comenzar Nueva Práctica',
+                conversationTitle: 'Preguntas de Conversación',
+                conversationIntro: 'Practica usando adjetivos cuantitativos en conversaciones reales. Usa estas preguntas con un compañero o practica hablando solo.',
+                dailyLifeTitle: '🏠 Vida Diaria y Rutinas',
+                shoppingTitle: '🛒 Compras y Dinero',
+                relationshipsTitle: '👥 Relaciones y Vida Social',
+                learningTitle: '📚 Aprendizaje y Trabajo',
+                goalsTitle: '🎯 Metas y Planes Futuros',
+                speakingTipsTitle: '💡 Consejos para Hablar',
+                checkAnswer: 'Verificar Respuesta',
+                correct: '✅ Correcto',
+                incorrect: '❌ Incorrecto'
+            }
+        };
+        
+        const conversationQuestions = {
+            en: {
+                dailyLife: [
+                    'How <strong>much</strong> time do you spend on social media each day?',
+                    'Do you have <strong>many</strong> household chores to do?',
+                    'How <strong>many</strong> meals do you cook at home per week?',
+                    'Is there <strong>enough</strong> storage space in your home?'
+                ],
+                shopping: [
+                    'Do you spend <strong>much</strong> money on clothes?',
+                    'How <strong>many</strong> times do you go grocery shopping per month?',
+                    'Do you have <strong>enough</strong> savings for emergencies?',
+                    'Are there <strong>many</strong> expensive items on your wish list?'
+                ],
+                relationships: [
+                    'Do you have <strong>many</strong> close friends?',
+                    'How <strong>much</strong> time do you spend with family?',
+                    'Are there <strong>several</strong> people you can trust completely?',
+                    'Do you get <strong>enough</strong> social interaction in your daily life?'
+                ],
+                learning: [
+                    'How <strong>many</strong> languages are you studying?',
+                    'Do you have <strong>much</strong> experience with public speaking?',
+                    'Are there <strong>enough</strong> opportunities for growth in your job?',
+                    'How <strong>many</strong> skills would you like to develop this year?'
+                ],
+                goals: [
+                    'Do you have <strong>many</strong> goals for next year?',
+                    'How <strong>much</strong> planning do you do for the future?',
+                    'Are there <strong>several</strong> places you want to visit?',
+                    'Do you have <strong>enough</strong> motivation to achieve your dreams?'
+                ],
+                speakingTips: [
+                    'Take your time to think about which quantitative adjective fits best',
+                    'Practice explaining your answers with examples',
+                    'Try to use different quantitative adjectives in each response',
+                    'Record yourself speaking to practice pronunciation'
+                ]
+            },
+            es: {
+                dailyLife: [
+                    '¿<strong>Cuánto</strong> tiempo pasas en redes sociales cada día?',
+                    '¿Tienes <strong>muchas</strong> tareas domésticas que hacer?',
+                    '¿<strong>Cuántas</strong> comidas cocinas en casa por semana?',
+                    '¿Hay <strong>suficiente</strong> espacio de almacenamiento en tu casa?'
+                ],
+                shopping: [
+                    '¿Gastas <strong>mucho</strong> dinero en ropa?',
+                    '¿<strong>Cuántas</strong> veces vas al supermercado por mes?',
+                    '¿Tienes <strong>suficientes</strong> ahorros para emergencias?',
+                    '¿Hay <strong>muchos</strong> artículos caros en tu lista de deseos?'
+                ],
+                relationships: [
+                    '¿Tienes <strong>muchos</strong> amigos cercanos?',
+                    '¿<strong>Cuánto</strong> tiempo pasas con la familia?',
+                    '¿Hay <strong>varias</strong> personas en las que confías completamente?',
+                    '¿Tienes <strong>suficiente</strong> interacción social en tu vida diaria?'
+                ],
+                learning: [
+                    '¿<strong>Cuántos</strong> idiomas estás estudiando?',
+                    '¿Tienes <strong>mucha</strong> experiencia hablando en público?',
+                    '¿Hay <strong>suficientes</strong> oportunidades de crecimiento en tu trabajo?',
+                    '¿<strong>Cuántas</strong> habilidades te gustaría desarrollar este año?'
+                ],
+                goals: [
+                    '¿Tienes <strong>muchas</strong> metas para el próximo año?',
+                    '¿<strong>Cuánta</strong> planificación haces para el futuro?',
+                    '¿Hay <strong>varios</strong> lugares que quieres visitar?',
+                    '¿Tienes <strong>suficiente</strong> motivación para lograr tus sueños?'
+                ],
+                speakingTips: [
+                    'Tómate tu tiempo para pensar qué adjetivo cuantitativo encaja mejor',
+                    'Practica explicando tus respuestas con ejemplos',
+                    'Trata de usar diferentes adjetivos cuantitativos en cada respuesta',
+                    'Grábate hablando para practicar la pronunciación'
+                ]
+            }
+        };
         
         const questions = [
             {
@@ -610,7 +790,7 @@
                             `<div class="option" onclick="selectOption(${index}, ${optIndex})">${option}</div>`
                         ).join('')}
                     </div>
-                    <button class="check-btn" id="check-${index}" onclick="checkAnswer(${index})" disabled>Check Answer</button>
+                    <button class="check-btn" id="check-${index}" onclick="checkAnswer(${index})" disabled>${translations[currentLanguage].checkAnswer}</button>
                     <div class="feedback" id="feedback-${index}" style="display: none;"></div>
                 `;
                 container.appendChild(questionDiv);
@@ -657,9 +837,10 @@
             // Show feedback
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            const t = translations[currentLanguage];
             feedback.textContent = isCorrect ? 
-                `✅ Correct! ${question.explanation}` : 
-                `❌ Incorrect. ${question.explanation}`;
+                `${t.correct}! ${question.explanation}` : 
+                `${t.incorrect}. ${question.explanation}`;
             
             // Update score
             if (isCorrect) {
@@ -669,7 +850,7 @@
             
             // Disable check button
             checkBtn.disabled = true;
-            checkBtn.textContent = isCorrect ? '✅ Correct' : '❌ Incorrect';
+            checkBtn.textContent = isCorrect ? t.correct : t.incorrect;
             
             updateScore();
         }
@@ -689,10 +870,98 @@
             initializePractice();
         }
         
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+        
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            // Update main elements
+            document.getElementById('langToggle').textContent = t.langToggle;
+            document.getElementById('mainTitle').textContent = t.mainTitle;
+            document.getElementById('mainSubtitle').textContent = t.mainSubtitle;
+            
+            // Update navigation tabs
+            document.getElementById('learnTab').innerHTML = t.learnTab;
+            document.getElementById('practiceTab').innerHTML = t.practiceTab;
+            document.getElementById('speakTab').innerHTML = t.speakTab;
+            
+            // Update explanation section
+            document.getElementById('explanationTitle').textContent = t.explanationTitle;
+            document.getElementById('explanationIntro').innerHTML = t.explanationIntro;
+            document.getElementById('countableTitle').innerHTML = t.countableTitle;
+            document.getElementById('countableDesc').textContent = t.countableDesc;
+            document.getElementById('countableList').innerHTML = t.countableList;
+            document.getElementById('uncountableTitle').innerHTML = t.uncountableTitle;
+            document.getElementById('uncountableDesc').textContent = t.uncountableDesc;
+            document.getElementById('uncountableList').innerHTML = t.uncountableList;
+            document.getElementById('bothTitle').innerHTML = t.bothTitle;
+            document.getElementById('bothDesc').textContent = t.bothDesc;
+            document.getElementById('bothList').innerHTML = t.bothList;
+            document.getElementById('examplesTitle').innerHTML = t.examplesTitle;
+            document.getElementById('countableExampleTitle').textContent = t.countableExampleTitle;
+            document.getElementById('countableExamples').innerHTML = t.countableExamples;
+            document.getElementById('uncountableExampleTitle').textContent = t.uncountableExampleTitle;
+            document.getElementById('uncountableExamples').innerHTML = t.uncountableExamples;
+            
+            // Update practice section
+            document.getElementById('practiceTitle').textContent = t.practiceTitle;
+            document.getElementById('scoreLabel').textContent = t.scoreLabel;
+            document.getElementById('resetBtn').innerHTML = t.resetBtn;
+            
+            // Update conversation section
+            document.getElementById('conversationTitle').textContent = t.conversationTitle;
+            document.getElementById('conversationIntro').textContent = t.conversationIntro;
+            document.getElementById('dailyLifeTitle').innerHTML = t.dailyLifeTitle;
+            document.getElementById('shoppingTitle').innerHTML = t.shoppingTitle;
+            document.getElementById('relationshipsTitle').innerHTML = t.relationshipsTitle;
+            document.getElementById('learningTitle').innerHTML = t.learningTitle;
+            document.getElementById('goalsTitle').innerHTML = t.goalsTitle;
+            document.getElementById('speakingTipsTitle').innerHTML = t.speakingTipsTitle;
+            
+            // Update conversation questions
+            const cq = conversationQuestions[currentLanguage];
+            updateQuestionList('dailyLifeQuestions', cq.dailyLife);
+            updateQuestionList('shoppingQuestions', cq.shopping);
+            updateQuestionList('relationshipsQuestions', cq.relationships);
+            updateQuestionList('learningQuestions', cq.learning);
+            updateQuestionList('goalsQuestions', cq.goals);
+            updateQuestionList('speakingTipsList', cq.speakingTips);
+            
+            // Update existing practice buttons if they exist
+            updatePracticeButtons();
+        }
+        
+        function updateQuestionList(elementId, questions) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = questions.map(q => `<li>${q}</li>`).join('');
+            }
+        }
+        
+        function updatePracticeButtons() {
+            const checkButtons = document.querySelectorAll('.check-btn');
+            const t = translations[currentLanguage];
+            
+            checkButtons.forEach(button => {
+                if (button.id !== 'resetBtn') {
+                    if (button.textContent.includes('✅')) {
+                        button.textContent = t.correct;
+                    } else if (button.textContent.includes('❌')) {
+                        button.textContent = t.incorrect;
+                    } else if (!button.disabled) {
+                        button.textContent = t.checkAnswer;
+                    }
+                }
+            });
+        }
+
         // Initialize practice on page load
         document.addEventListener('DOMContentLoaded', function() {
             initializePractice();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994a1db9733accd1',t:'MTc2MTQ4MzQxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994a2217675eccd1',t:'MTc2MTQ4MzU5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
