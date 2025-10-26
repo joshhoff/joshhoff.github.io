@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Hiking Terms Practice</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 100%);
+            min-height: 100%;
+            color: #333;
+        }
+        
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            color: #666;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: #4a7c59;
+            color: #4a7c59;
+        }
+
+        .lang-btn.active {
+            background: #4a7c59;
+            border-color: #4a7c59;
+            color: white;
+        }
+
+        h1 {
+            color: #2d5a27;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.3);
+        }
+
+        .nav-btn:hover {
+            background: #2d5a27;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 124, 89, 0.4);
+        }
+
+        .nav-btn.active {
+            background: #2d5a27;
+            transform: translateY(-1px);
+        }
+
+        main {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .term-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .term-card:hover {
+            border-color: #4a7c59;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 124, 89, 0.2);
+        }
+
+        .term-name {
+            font-weight: bold;
+            color: #2d5a27;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .term-definition {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .category-header {
+            background: #4a7c59;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 30px 0 20px 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .activity-card {
+            background: #f8f9fa;
+            border-left: 4px solid #4a7c59;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .activity-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d5a27;
+            margin-bottom: 15px;
+        }
+
+        .activity-instructions {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4a7c59;
+        }
+
+        .btn {
+            background: #4a7c59;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #2d5a27;
+            transform: translateY(-1px);
+        }
+
+        .conversation-prompt {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            border: 2px solid #4a7c59;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .conversation-prompt::before {
+            content: "💬";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .prompt-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d5a27;
+            margin-bottom: 10px;
+        }
+
+        .prompt-context {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .prompt-tips {
+            background: rgba(74, 124, 89, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .tips-title {
+            font-weight: 600;
+            color: #2d5a27;
+            margin-bottom: 8px;
+        }
+
+        .quiz-container {
+            margin-top: 20px;
+        }
+
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quiz-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #4a7c59;
+            background: #f0f8f0;
+        }
+
+        .quiz-option.selected {
+            border-color: #4a7c59;
+            background: #e8f5e8;
+        }
+
+        .quiz-option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .quiz-feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .quiz-feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 200px;
+            }
+            
+            .term-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="language-toggle">
+                <button class="lang-btn active" onclick="switchLanguage('en')">EN</button>
+                <button class="lang-btn" onclick="switchLanguage('es')">ES</button>
+            </div>
+            <h1 data-en="🥾 Advanced Hiking Terms Practice 🏔️" data-es="🥾 Práctica de Términos Avanzados de Senderismo 🏔️">🥾 Advanced Hiking Terms Practice 🏔️</h1>
+            <p class="subtitle" data-en="Master the vocabulary of long-distance hiking" data-es="Domina el vocabulario del senderismo de larga distancia">Master the vocabulary of long-distance hiking</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" onclick="showSection('terms')" data-en="📚 Terms Library" data-es="📚 Biblioteca de Términos">📚 Terms Library</button>
+            <button class="nav-btn" onclick="showSection('activities')" data-en="✍️ Written Activities" data-es="✍️ Actividades Escritas">✍️ Written Activities</button>
+            <button class="nav-btn" onclick="showSection('conversations')" data-en="💬 Conversation Prompts" data-es="💬 Temas de Conversación">💬 Conversation Prompts</button>
+            <button class="nav-btn" onclick="showSection('quiz')" data-en="🎯 Quick Quiz" data-es="🎯 Quiz Rápido">🎯 Quick Quiz</button>
+        </nav>
+
+        <main>
+            <!-- Terms Library Section -->
+            <section id="terms" class="section active">
+                <h2 data-en="📚 Hiking Terms Library" data-es="📚 Biblioteca de Términos de Senderismo">📚 Hiking Terms Library</h2>
+                
+                <div class="category-header" data-en="🎒 Equipment & Gear" data-es="🎒 Equipo y Material">🎒 Equipment & Gear</div>
+                <div class="term-grid">
+                    <div class="term-card">
+                        <div class="term-name" data-en="Base Weight" data-es="Peso Base">Base Weight</div>
+                        <div class="term-definition" data-en="The weight of your backpack and all gear, excluding consumables like food, water, and fuel." data-es="El peso de tu mochila y todo el equipo, excluyendo consumibles como comida, agua y combustible.">The weight of your backpack and all gear, excluding consumables like food, water, and fuel.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Ultralight" data-es="Ultraligero">Ultralight</div>
+                        <div class="term-definition" data-en="A hiking philosophy focused on carrying the lightest possible gear, typically with a base weight under 10 pounds." data-es="Una filosofía de senderismo enfocada en llevar el equipo más ligero posible, típicamente con un peso base menor a 4.5 kg.">A hiking philosophy focused on carrying the lightest possible gear, typically with a base weight under 10 pounds.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Gaiters" data-es="Polainas">Gaiters</div>
+                        <div class="term-definition" data-en="Protective coverings worn over boots and lower legs to keep debris, water, and snow out of footwear." data-es="Cubiertas protectoras que se usan sobre las botas y la parte inferior de las piernas para mantener fuera escombros, agua y nieve.">Protective coverings worn over boots and lower legs to keep debris, water, and snow out of footwear.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Trekking Poles" data-es="Bastones de Trekking">Trekking Poles</div>
+                        <div class="term-definition" data-en="Adjustable walking sticks that provide stability, reduce impact on joints, and can double as tent poles." data-es="Bastones de caminar ajustables que proporcionan estabilidad, reducen el impacto en las articulaciones y pueden servir como postes de tienda.">Adjustable walking sticks that provide stability, reduce impact on joints, and can double as tent poles.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Stuff Sack" data-es="Saco de Compresión">Stuff Sack</div>
+                        <div class="term-definition" data-en="A lightweight bag used to compress and organize gear inside a backpack, often made of ripstop nylon." data-es="Una bolsa ligera usada para comprimir y organizar equipo dentro de una mochila, a menudo hecha de nylon ripstop.">A lightweight bag used to compress and organize gear inside a backpack, often made of ripstop nylon.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Bivy" data-es="Vivac">Bivy</div>
+                        <div class="term-definition" data-en="Short for bivouac sack; a minimalist, waterproof shelter that covers just a sleeping bag." data-es="Abreviatura de saco de vivac; un refugio minimalista e impermeable que cubre solo un saco de dormir.">Short for bivouac sack; a minimalist, waterproof shelter that covers just a sleeping bag.</div>
+                    </div>
+                </div>
+
+                <div class="category-header" data-en="🧭 Navigation & Trail Terms" data-es="🧭 Términos de Navegación y Senderos">🧭 Navigation & Trail Terms</div>
+                <div class="term-grid">
+                    <div class="term-card">
+                        <div class="term-name" data-en="Switchback" data-es="Zigzag">Switchback</div>
+                        <div class="term-definition" data-en="A zigzag path up a steep slope that reduces the gradient and makes climbing easier." data-es="Un sendero en zigzag por una pendiente empinada que reduce la inclinación y facilita la subida.">A zigzag path up a steep slope that reduces the gradient and makes climbing easier.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Cairn" data-es="Mojón">Cairn</div>
+                        <div class="term-definition" data-en="A stack of rocks used as a trail marker, especially in areas above treeline or where the path is unclear." data-es="Una pila de rocas usada como marcador de sendero, especialmente en áreas sobre la línea de árboles o donde el camino no está claro.">A stack of rocks used as a trail marker, especially in areas above treeline or where the path is unclear.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Blaze" data-es="Marca de Sendero">Blaze</div>
+                        <div class="term-definition" data-en="A painted mark on trees or rocks indicating the trail route, often rectangular and colored." data-es="Una marca pintada en árboles o rocas que indica la ruta del sendero, a menudo rectangular y de color.">A painted mark on trees or rocks indicating the trail route, often rectangular and colored.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Bushwhacking" data-es="Abrirse Paso">Bushwhacking</div>
+                        <div class="term-definition" data-en="Hiking through dense vegetation or off-trail terrain without a marked path." data-es="Caminar a través de vegetación densa o terreno fuera del sendero sin un camino marcado.">Hiking through dense vegetation or off-trail terrain without a marked path.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Scree" data-es="Pedregal">Scree</div>
+                        <div class="term-definition" data-en="Loose rock debris on a slope that can be challenging and dangerous to traverse." data-es="Escombros de roca suelta en una pendiente que pueden ser desafiantes y peligrosos de atravesar.">Loose rock debris on a slope that can be challenging and dangerous to traverse.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Saddle" data-es="Collado">Saddle</div>
+                        <div class="term-definition" data-en="A low point along a ridge between two higher peaks, often used as a mountain pass." data-es="Un punto bajo a lo largo de una cresta entre dos picos más altos, a menudo usado como paso de montaña.">A low point along a ridge between two higher peaks, often used as a mountain pass.</div>
+                    </div>
+                </div>
+
+                <div class="category-header" data-en="💭 Feelings & Experiences" data-es="💭 Sentimientos y Experiencias">💭 Feelings & Experiences</div>
+                <div class="term-grid">
+                    <div class="term-card">
+                        <div class="term-name" data-en="Trail Magic" data-es="Magia del Sendero">Trail Magic</div>
+                        <div class="term-definition" data-en="Unexpected acts of kindness from strangers, like food, drinks, or rides offered to hikers." data-es="Actos inesperados de bondad de extraños, como comida, bebidas o aventones ofrecidos a senderistas.">Unexpected acts of kindness from strangers, like food, drinks, or rides offered to hikers.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Hiker Hunger" data-es="Hambre de Senderista">Hiker Hunger</div>
+                        <div class="term-definition" data-en="The intense appetite that develops after days of hiking and burning thousands of calories daily." data-es="El apetito intenso que se desarrolla después de días de caminar y quemar miles de calorías diariamente.">The intense appetite that develops after days of hiking and burning thousands of calories daily.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Trail Legs" data-es="Piernas de Sendero">Trail Legs</div>
+                        <div class="term-definition" data-en="The physical conditioning and muscle memory that develops after weeks of consistent hiking." data-es="El acondicionamiento físico y la memoria muscular que se desarrolla después de semanas de caminata constante.">The physical conditioning and muscle memory that develops after weeks of consistent hiking.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Bonking" data-es="Pájara">Bonking</div>
+                        <div class="term-definition" data-en="Sudden fatigue and energy depletion caused by insufficient food or water intake." data-es="Fatiga repentina y agotamiento de energía causado por ingesta insuficiente de comida o agua.">Sudden fatigue and energy depletion caused by insufficient food or water intake.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Summit Fever" data-es="Fiebre de Cumbre">Summit Fever</div>
+                        <div class="term-definition" data-en="The dangerous obsession with reaching a peak despite deteriorating conditions or safety concerns." data-es="La obsesión peligrosa de alcanzar una cumbre a pesar del deterioro de las condiciones o preocupaciones de seguridad.">The dangerous obsession with reaching a peak despite deteriorating conditions or safety concerns.</div>
+                    </div>
+                    <div class="term-card">
+                        <div class="term-name" data-en="Type 2 Fun" data-es="Diversión Tipo 2">Type 2 Fun</div>
+                        <div class="term-definition" data-en="An experience that's miserable while happening but becomes a cherished memory afterward." data-es="Una experiencia que es miserable mientras sucede pero se convierte en un recuerdo preciado después.">An experience that's miserable while happening but becomes a cherished memory afterward.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Written Activities Section -->
+            <section id="activities" class="section">
+                <h2 data-en="✍️ Written Activities" data-es="✍️ Actividades Escritas">✍️ Written Activities</h2>
+
+                <div class="activity-card">
+                    <div class="activity-title" data-en="📝 Scenario Writing" data-es="📝 Escritura de Escenarios">📝 Scenario Writing</div>
+                    <div class="activity-instructions" data-en="Write a short story (150-200 words) about a challenging hiking situation. Use at least 5 advanced hiking terms from the library. Focus on describing the equipment needed, navigation challenges, and the hiker's emotional state." data-es="Escribe una historia corta (150-200 palabras) sobre una situación desafiante de senderismo. Usa al menos 5 términos avanzados de senderismo de la biblioteca. Enfócate en describir el equipo necesario, desafíos de navegación y el estado emocional del senderista.">
+                        Write a short story (150-200 words) about a challenging hiking situation. Use at least 5 advanced hiking terms from the library. Focus on describing the equipment needed, navigation challenges, and the hiker's emotional state.
+                    </div>
+                    <textarea data-en="Start your hiking story here... Remember to include advanced terminology!" data-es="Comienza tu historia de senderismo aquí... ¡Recuerda incluir terminología avanzada!" placeholder="Start your hiking story here... Remember to include advanced terminology!"></textarea>
+                    <button class="btn" onclick="checkTermUsage(this)" data-en="Check Term Usage" data-es="Verificar Uso de Términos">Check Term Usage</button>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-title" data-en="🎒 Gear List Creation" data-es="🎒 Creación de Lista de Equipo">🎒 Gear List Creation</div>
+                    <div class="activity-instructions" data-en="Create a detailed gear list for a 5-day backpacking trip. Categorize items and explain your choices using proper hiking terminology. Consider base weight, weather conditions, and ultralight principles." data-es="Crea una lista detallada de equipo para un viaje de mochilero de 5 días. Categoriza los artículos y explica tus elecciones usando terminología apropiada de senderismo. Considera el peso base, condiciones climáticas y principios ultraligeros.">
+                        Create a detailed gear list for a 5-day backpacking trip. Categorize items and explain your choices using proper hiking terminology. Consider base weight, weather conditions, and ultralight principles.
+                    </div>
+                    <textarea data-en="Essential Gear:&#10;- &#10;&#10;Optional Gear:&#10;- &#10;&#10;Justification for choices:" data-es="Equipo Esencial:&#10;- &#10;&#10;Equipo Opcional:&#10;- &#10;&#10;Justificación de elecciones:" placeholder="Essential Gear:&#10;- &#10;&#10;Optional Gear:&#10;- &#10;&#10;Justification for choices:"></textarea>
+                    <button class="btn" onclick="analyzeGearList(this)" data-en="Analyze Gear List" data-es="Analizar Lista de Equipo">Analyze Gear List</button>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-title" data-en="🗺️ Trail Description" data-es="🗺️ Descripción del Sendero">🗺️ Trail Description</div>
+                    <div class="activity-instructions" data-en="Describe a challenging section of trail using advanced navigation and terrain terminology. Include elevation changes, trail markers, and potential hazards. Make it detailed enough for another hiker to visualize the route." data-es="Describe una sección desafiante del sendero usando terminología avanzada de navegación y terreno. Incluye cambios de elevación, marcadores de sendero y peligros potenciales. Hazlo lo suficientemente detallado para que otro senderista pueda visualizar la ruta.">
+                        Describe a challenging section of trail using advanced navigation and terrain terminology. Include elevation changes, trail markers, and potential hazards. Make it detailed enough for another hiker to visualize the route.
+                    </div>
+                    <textarea data-en="Trail begins at the trailhead and immediately..." data-es="El sendero comienza en el punto de partida e inmediatamente..." placeholder="Trail begins at the trailhead and immediately..."></textarea>
+                    <button class="btn" onclick="evaluateDescription(this)" data-en="Evaluate Description" data-es="Evaluar Descripción">Evaluate Description</button>
+                </div>
+
+                <div class="activity-card">
+                    <div class="activity-title" data-en="💭 Reflection Journal" data-es="💭 Diario de Reflexión">💭 Reflection Journal</div>
+                    <div class="activity-instructions" data-en="Write a journal entry from the perspective of a long-distance hiker experiencing both physical and emotional challenges. Use terminology related to hiking feelings and experiences." data-es="Escribe una entrada de diario desde la perspectiva de un senderista de larga distancia experimentando desafíos físicos y emocionales. Usa terminología relacionada con sentimientos y experiencias de senderismo.">
+                        Write a journal entry from the perspective of a long-distance hiker experiencing both physical and emotional challenges. Use terminology related to hiking feelings and experiences.
+                    </div>
+                    <textarea data-en="Day 15 on the trail..." data-es="Día 15 en el sendero..." placeholder="Day 15 on the trail..."></textarea>
+                    <button class="btn" onclick="reviewJournal(this)" data-en="Review Journal" data-es="Revisar Diario">Review Journal</button>
+                </div>
+            </section>
+
+            <!-- Conversation Prompts Section -->
+            <section id="conversations" class="section">
+                <h2 data-en="💬 Conversation Prompts" data-es="💬 Temas de Conversación">💬 Conversation Prompts</h2>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-question" data-en="Planning a Long-Distance Hike" data-es="Planificando una Caminata de Larga Distancia">Planning a Long-Distance Hike</div>
+                    <div class="prompt-context" data-en="You're helping a friend plan their first multi-day backpacking trip." data-es="Estás ayudando a un amigo a planificar su primer viaje de mochilero de varios días.">You're helping a friend plan their first multi-day backpacking trip.</div>
+                    <p><strong data-en="Discuss:" data-es="Discute:">Discuss:</strong> <span data-en="What factors should they consider when calculating their base weight? How would you explain the difference between ultralight and traditional backpacking approaches?" data-es="¿Qué factores deberían considerar al calcular su peso base? ¿Cómo explicarías la diferencia entre enfoques de mochilero ultraligero y tradicional?">What factors should they consider when calculating their base weight? How would you explain the difference between ultralight and traditional backpacking approaches?</span></p>
+                    <div class="prompt-tips">
+                        <div class="tips-title" data-en="Key Terms to Use:" data-es="Términos Clave a Usar:">Key Terms to Use:</div>
+                        <span data-en="Base weight, ultralight, stuff sacks, trekking poles, bivy vs tent" data-es="Peso base, ultraligero, sacos de compresión, bastones de trekking, vivac vs tienda">Base weight, ultralight, stuff sacks, trekking poles, bivy vs tent</span>
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-question" data-en="Navigation Challenge" data-es="Desafío de Navegación">Navigation Challenge</div>
+                    <div class="prompt-context" data-en="You're hiking with someone who's never used trail markers before." data-es="Estás caminando con alguien que nunca ha usado marcadores de sendero antes.">You're hiking with someone who's never used trail markers before.</div>
+                    <p><strong data-en="Explain:" data-es="Explica:">Explain:</strong> <span data-en="How to read different types of trail markers and what to do when the trail becomes unclear. Describe various terrain features that can help with navigation." data-es="Cómo leer diferentes tipos de marcadores de sendero y qué hacer cuando el sendero se vuelve poco claro. Describe varias características del terreno que pueden ayudar con la navegación.">How to read different types of trail markers and what to do when the trail becomes unclear. Describe various terrain features that can help with navigation.</span></p>
+                    <div class="prompt-tips">
+                        <div class="tips-title" data-en="Key Terms to Use:" data-es="Términos Clave a Usar:">Key Terms to Use:</div>
+                        <span data-en="Blazes, cairns, switchbacks, saddle, bushwhacking, scree" data-es="Marcas de sendero, mojones, zigzags, collado, abrirse paso, pedregal">Blazes, cairns, switchbacks, saddle, bushwhacking, scree</span>
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-question" data-en="Trail Experience Sharing" data-es="Compartir Experiencias del Sendero">Trail Experience Sharing</div>
+                    <div class="prompt-context" data-en="You're at a hiking meetup sharing stories from your recent long-distance hike." data-es="Estás en una reunión de senderistas compartiendo historias de tu reciente caminata de larga distancia.">You're at a hiking meetup sharing stories from your recent long-distance hike.</div>
+                    <p><strong data-en="Share:" data-es="Comparte:">Share:</strong> <span data-en="Describe a memorable moment that exemplifies the emotional and physical journey of long-distance hiking. Include both challenges and rewards." data-es="Describe un momento memorable que ejemplifique el viaje emocional y físico del senderismo de larga distancia. Incluye tanto desafíos como recompensas.">Describe a memorable moment that exemplifies the emotional and physical journey of long-distance hiking. Include both challenges and rewards.</span></p>
+                    <div class="prompt-tips">
+                        <div class="tips-title" data-en="Key Terms to Use:" data-es="Términos Clave a Usar:">Key Terms to Use:</div>
+                        <span data-en="Trail magic, hiker hunger, trail legs, bonking, Type 2 fun, summit fever" data-es="Magia del sendero, hambre de senderista, piernas de sendero, pájara, diversión tipo 2, fiebre de cumbre">Trail magic, hiker hunger, trail legs, bonking, Type 2 fun, summit fever</span>
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-question" data-en="Gear Recommendation" data-es="Recomendación de Equipo">Gear Recommendation</div>
+                    <div class="prompt-context" data-en="A novice hiker asks for advice on essential vs. optional gear." data-es="Un senderista novato pide consejo sobre equipo esencial vs. opcional.">A novice hiker asks for advice on essential vs. optional gear.</div>
+                    <p><strong data-en="Advise:" data-es="Aconseja:">Advise:</strong> <span data-en="How to prioritize gear purchases and explain the trade-offs between weight, comfort, and safety. Discuss when certain specialized equipment becomes necessary." data-es="Cómo priorizar las compras de equipo y explicar las compensaciones entre peso, comodidad y seguridad. Discute cuándo cierto equipo especializado se vuelve necesario.">How to prioritize gear purchases and explain the trade-offs between weight, comfort, and safety. Discuss when certain specialized equipment becomes necessary.</span></p>
+                    <div class="prompt-tips">
+                        <div class="tips-title" data-en="Key Terms to Use:" data-es="Términos Clave a Usar:">Key Terms to Use:</div>
+                        <span data-en="Gaiters, stuff sacks, bivy, trekking poles, base weight considerations" data-es="Polainas, sacos de compresión, vivac, bastones de trekking, consideraciones de peso base">Gaiters, stuff sacks, bivy, trekking poles, base weight considerations</span>
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-question" data-en="Safety Discussion" data-es="Discusión de Seguridad">Safety Discussion</div>
+                    <div class="prompt-context" data-en="You're leading a group discussion about hiking safety and decision-making." data-es="Estás liderando una discusión grupal sobre seguridad en senderismo y toma de decisiones.">You're leading a group discussion about hiking safety and decision-making.</div>
+                    <p><strong data-en="Discuss:" data-es="Discute:">Discuss:</strong> <span data-en="How to recognize and respond to dangerous situations on the trail. When should hikers turn back or change their plans?" data-es="Cómo reconocer y responder a situaciones peligrosas en el sendero. ¿Cuándo deberían los senderistas regresar o cambiar sus planes?">How to recognize and respond to dangerous situations on the trail. When should hikers turn back or change their plans?</span></p>
+                    <div class="prompt-tips">
+                        <div class="tips-title" data-en="Key Terms to Use:" data-es="Términos Clave a Usar:">Key Terms to Use:</div>
+                        <span data-en="Summit fever, bonking, scree, bushwhacking, Type 2 fun" data-es="Fiebre de cumbre, pájara, pedregal, abrirse paso, diversión tipo 2">Summit fever, bonking, scree, bushwhacking, Type 2 fun</span>
+                    </div>
+                </div>
+
+                <div class="conversation-prompt">
+                    <div class="prompt-question" data-en="Cultural Aspects of Hiking" data-es="Aspectos Culturales del Senderismo">Cultural Aspects of Hiking</div>
+                    <div class="prompt-context" data-en="You're explaining hiking culture to someone from a different background." data-es="Estás explicando la cultura del senderismo a alguien de un trasfondo diferente.">You're explaining hiking culture to someone from a different background.</div>
+                    <p><strong data-en="Explain:" data-es="Explica:">Explain:</strong> <span data-en="The unwritten rules and cultural aspects of the hiking community. What makes the hiking experience special beyond just the physical activity?" data-es="Las reglas no escritas y aspectos culturales de la comunidad de senderismo. ¿Qué hace especial la experiencia de senderismo más allá de solo la actividad física?">The unwritten rules and cultural aspects of the hiking community. What makes the hiking experience special beyond just the physical activity?</span></p>
+                    <div class="prompt-tips">
+                        <div class="tips-title" data-en="Key Terms to Use:" data-es="Términos Clave a Usar:">Key Terms to Use:</div>
+                        <span data-en="Trail magic, trail legs, hiker hunger, Type 2 fun, ultralight philosophy" data-es="Magia del sendero, piernas de sendero, hambre de senderista, diversión tipo 2, filosofía ultraligera">Trail magic, trail legs, hiker hunger, Type 2 fun, ultralight philosophy</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz" class="section">
+                <h2 data-en="🎯 Quick Quiz" data-es="🎯 Quiz Rápido">🎯 Quick Quiz</h2>
+                <p data-en="Test your knowledge of advanced hiking terminology!" data-es="¡Pon a prueba tu conocimiento de terminología avanzada de senderismo!">Test your knowledge of advanced hiking terminology!</p>
+
+                <div class="quiz-container">
+                    <div class="quiz-question" data-question="0">
+                        <h3 data-en="What is 'base weight' in hiking?" data-es="¿Qué es el 'peso base' en senderismo?">What is "base weight" in hiking?</h3>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="The total weight of your fully loaded backpack" data-es="El peso total de tu mochila completamente cargada">The total weight of your fully loaded backpack</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)" data-en="The weight of your pack and gear excluding consumables" data-es="El peso de tu mochila y equipo excluyendo consumibles">The weight of your pack and gear excluding consumables</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="The weight of your backpack when empty" data-es="El peso de tu mochila cuando está vacía">The weight of your backpack when empty</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="The minimum weight needed for safety" data-es="El peso mínimo necesario para seguridad">The minimum weight needed for safety</div>
+                        </div>
+                        <div class="quiz-feedback" style="display: none;"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="1">
+                        <h3 data-en="What are cairns used for?" data-es="¿Para qué se usan los mojones?">What are cairns used for?</h3>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Storing food away from animals" data-es="Almacenar comida lejos de animales">Storing food away from animals</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)" data-en="Marking trails, especially above treeline" data-es="Marcar senderos, especialmente sobre la línea de árboles">Marking trails, especially above treeline</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Building emergency shelters" data-es="Construir refugios de emergencia">Building emergency shelters</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Collecting rainwater" data-es="Recolectar agua de lluvia">Collecting rainwater</div>
+                        </div>
+                        <div class="quiz-feedback" style="display: none;"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="2">
+                        <h3 data-en="What is 'Type 2 Fun'?" data-es="¿Qué es la 'Diversión Tipo 2'?">What is "Type 2 Fun"?</h3>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Fun activities you do twice" data-es="Actividades divertidas que haces dos veces">Fun activities you do twice</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)" data-en="Miserable experiences that become good memories" data-es="Experiencias miserables que se vuelven buenos recuerdos">Miserable experiences that become good memories</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="The second most enjoyable part of hiking" data-es="La segunda parte más disfrutable del senderismo">The second most enjoyable part of hiking</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Fun shared with exactly two people" data-es="Diversión compartida con exactamente dos personas">Fun shared with exactly two people</div>
+                        </div>
+                        <div class="quiz-feedback" style="display: none;"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="3">
+                        <h3 data-en="What does 'bonking' mean in hiking?" data-es="¿Qué significa 'pájara' en senderismo?">What does "bonking" mean in hiking?</h3>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Hitting your head on a low branch" data-es="Golpearte la cabeza con una rama baja">Hitting your head on a low branch</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Making noise to scare away bears" data-es="Hacer ruido para ahuyentar osos">Making noise to scare away bears</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, true)" data-en="Sudden energy depletion from insufficient fuel" data-es="Agotamiento repentino de energía por combustible insuficiente">Sudden energy depletion from insufficient fuel</div>
+                            <div class="quiz-option" onclick="selectAnswer(this, false)" data-en="Sleeping poorly on the trail" data-es="Dormir mal en el sendero">Sleeping poorly on the trail</div>
+                        </div>
+                        <div class="quiz-feedback" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="resetQuiz()" style="margin-top: 20px;" data-en="Reset Quiz" data-es="Reiniciar Quiz">Reset Quiz</button>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language button states
+            const langBtns = document.querySelectorAll('.lang-btn');
+            langBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update all elements with data attributes
+            const elements = document.querySelectorAll('[data-en][data-es]');
+            elements.forEach(element => {
+                if (element.tagName === 'TEXTAREA') {
+                    element.placeholder = element.getAttribute(`data-${lang}`);
+                } else {
+                    element.textContent = element.getAttribute(`data-${lang}`);
+                }
+            });
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Remove active class from all nav buttons
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function checkTermUsage(button) {
+            const textarea = button.previousElementSibling;
+            const text = textarea.value.toLowerCase();
+            
+            const terms = [
+                'base weight', 'peso base', 'ultralight', 'ultraligero', 'gaiters', 'polainas', 
+                'trekking poles', 'bastones de trekking', 'stuff sack', 'saco de compresión', 'bivy', 'vivac',
+                'switchback', 'zigzag', 'cairn', 'mojón', 'blaze', 'marca de sendero', 'bushwhacking', 'abrirse paso', 
+                'scree', 'pedregal', 'saddle', 'collado', 'trail magic', 'magia del sendero', 
+                'hiker hunger', 'hambre de senderista', 'trail legs', 'piernas de sendero', 'bonking', 'pájara', 
+                'summit fever', 'fiebre de cumbre', 'type 2 fun', 'diversión tipo 2'
+            ];
+            
+            const foundTerms = terms.filter(term => text.includes(term));
+            
+            const messages = {
+                en: {
+                    none: 'Try incorporating some advanced hiking terms from the library into your story!',
+                    success: `Great work! You used ${foundTerms.length} advanced hiking terms: ${foundTerms.join(', ')}`
+                },
+                es: {
+                    none: '¡Intenta incorporar algunos términos avanzados de senderismo de la biblioteca en tu historia!',
+                    success: `¡Excelente trabajo! Usaste ${foundTerms.length} términos avanzados de senderismo: ${foundTerms.join(', ')}`
+                }
+            };
+            
+            if (foundTerms.length === 0) {
+                showCustomAlert(messages[currentLanguage].none);
+            } else {
+                showCustomAlert(messages[currentLanguage].success);
+            }
+        }
+
+        function showCustomAlert(message) {
+            // Create custom alert overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.5); z-index: 1000; display: flex; 
+                align-items: center; justify-content: center;
+            `;
+            
+            const alertBox = document.createElement('div');
+            alertBox.style.cssText = `
+                background: white; padding: 30px; border-radius: 15px; 
+                max-width: 500px; margin: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                text-align: center; font-family: inherit;
+            `;
+            
+            const messageP = document.createElement('p');
+            messageP.textContent = message;
+            messageP.style.cssText = 'margin-bottom: 20px; line-height: 1.5; color: #333;';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = currentLanguage === 'en' ? 'OK' : 'Aceptar';
+            closeBtn.style.cssText = `
+                background: #4a7c59; color: white; border: none; padding: 10px 20px; 
+                border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;
+            `;
+            closeBtn.onclick = () => document.body.removeChild(overlay);
+            
+            alertBox.appendChild(messageP);
+            alertBox.appendChild(closeBtn);
+            overlay.appendChild(alertBox);
+            document.body.appendChild(overlay);
+        }
+
+        function analyzeGearList(button) {
+            const textarea = button.previousElementSibling;
+            const text = textarea.value.toLowerCase();
+            
+            const gearTerms = ['base weight', 'peso base', 'ultralight', 'ultraligero', 'stuff sack', 'saco de compresión', 'bivy', 'vivac', 'trekking poles', 'bastones de trekking', 'gaiters', 'polainas'];
+            const foundTerms = gearTerms.filter(term => text.includes(term));
+            
+            const messages = {
+                en: {
+                    complete: 'Analysis complete! ',
+                    excellent: `Excellent use of technical terminology (${foundTerms.length} terms found). Your gear list shows advanced understanding.`,
+                    good: 'Good start! Consider adding more technical terms to demonstrate deeper knowledge.',
+                    tryMore: 'Try incorporating more advanced gear terminology from the library.'
+                },
+                es: {
+                    complete: '¡Análisis completo! ',
+                    excellent: `Excelente uso de terminología técnica (${foundTerms.length} términos encontrados). Tu lista de equipo muestra comprensión avanzada.`,
+                    good: '¡Buen comienzo! Considera agregar más términos técnicos para demostrar conocimiento más profundo.',
+                    tryMore: 'Intenta incorporar más terminología avanzada de equipo de la biblioteca.'
+                }
+            };
+            
+            let feedback = messages[currentLanguage].complete;
+            if (foundTerms.length >= 3) {
+                feedback += messages[currentLanguage].excellent;
+            } else if (foundTerms.length >= 1) {
+                feedback += messages[currentLanguage].good;
+            } else {
+                feedback += messages[currentLanguage].tryMore;
+            }
+            
+            showCustomAlert(feedback);
+        }
+
+        function evaluateDescription(button) {
+            const textarea = button.previousElementSibling;
+            const text = textarea.value.toLowerCase();
+            
+            const navigationTerms = ['switchback', 'cairn', 'blaze', 'bushwhacking', 'scree', 'saddle'];
+            const foundTerms = navigationTerms.filter(term => text.includes(term));
+            
+            let feedback = `Trail description evaluated! `;
+            if (foundTerms.length >= 3) {
+                feedback += `Excellent detail with ${foundTerms.length} navigation terms. Other hikers could easily follow this description.`;
+            } else {
+                feedback += `Good foundation. Try adding more specific terrain and navigation terminology.`;
+            }
+            
+            alert(feedback);
+        }
+
+        function reviewJournal(button) {
+            const textarea = button.previousElementSibling;
+            const text = textarea.value.toLowerCase();
+            
+            const experienceTerms = ['trail magic', 'hiker hunger', 'trail legs', 'bonking', 'summit fever', 'type 2 fun'];
+            const foundTerms = experienceTerms.filter(term => text.includes(term));
+            
+            let feedback = `Journal reviewed! `;
+            if (foundTerms.length >= 2) {
+                feedback += `Authentic hiking experience captured with ${foundTerms.length} experience terms. Very relatable!`;
+            } else {
+                feedback += `Nice reflection. Consider adding more terms that capture the emotional aspects of hiking.`;
+            }
+            
+            alert(feedback);
+        }
+
+        function selectAnswer(option, isCorrect) {
+            const question = option.closest('.quiz-question');
+            const options = question.querySelectorAll('.quiz-option');
+            const feedback = question.querySelector('.quiz-feedback');
+            
+            // Remove previous selections
+            options.forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected option
+            option.classList.add('selected');
+            
+            // Show correct/incorrect styling
+            if (isCorrect) {
+                option.classList.add('correct');
+                feedback.textContent = '✅ Correct! Well done!';
+                feedback.className = 'quiz-feedback correct';
+            } else {
+                option.classList.add('incorrect');
+                // Find and highlight correct answer
+                options.forEach(opt => {
+                    if (opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.textContent = '❌ Not quite right. The correct answer is highlighted above.';
+                feedback.className = 'quiz-feedback incorrect';
+            }
+            
+            feedback.style.display = 'block';
+        }
+
+        function resetQuiz() {
+            const questions = document.querySelectorAll('.quiz-question');
+            questions.forEach(question => {
+                const options = question.querySelectorAll('.quiz-option');
+                const feedback = question.querySelector('.quiz-feedback');
+                
+                options.forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                feedback.style.display = 'none';
+            });
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994b20ea87c5df15',t:'MTc2MTQ5NDAyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
