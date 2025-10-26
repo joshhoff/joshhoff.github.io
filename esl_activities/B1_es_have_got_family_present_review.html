@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Grammar Learning Hub</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .language-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            padding: 8px 16px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .language-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+        
+        .topic-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .topic-icon {
+            font-size: 1.8rem;
+        }
+        
+        .topic-description {
+            color: #718096;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .learn-btn, .test-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .learn-btn {
+            background: #4299e1;
+            color: white;
+        }
+        
+        .learn-btn:hover {
+            background: #3182ce;
+        }
+        
+        .test-btn {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .test-btn:hover {
+            background: #38a169;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #718096;
+        }
+        
+        .close-btn:hover {
+            color: #4a5568;
+        }
+        
+        .lesson-content h4 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .example-box {
+            background: #f7fafc;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quiz-container {
+            margin-top: 20px;
+        }
+        
+        .question {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .question h5 {
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .option.selected {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .option.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .option.incorrect {
+            border-color: #f56565;
+            background: #fed7d7;
+        }
+        
+        .submit-quiz {
+            background: #48bb78;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .submit-quiz:hover {
+            background: #38a169;
+        }
+        
+        .quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .quiz-result.good {
+            background: #f0fff4;
+            color: #38a169;
+            border: 2px solid #48bb78;
+        }
+        
+        .quiz-result.okay {
+            background: #fffbeb;
+            color: #d69e2e;
+            border: 2px solid #ed8936;
+        }
+        
+        .quiz-result.poor {
+            background: #fed7d7;
+            color: #e53e3e;
+            border: 2px solid #f56565;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4299e1, #48bb78);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <button class="language-toggle" onclick="toggleLanguage()" id="langToggle">🇪🇸 Español</button>
+            <h1 id="mainTitle">🎓 ESL Grammar Learning Hub</h1>
+            <p id="mainSubtitle">Master essential English grammar topics with interactive lessons and quizzes</p>
+        </header>
+        
+        <section class="topics-grid">
+            <article class="topic-card" data-topic="have-got">
+                <h3><span class="topic-icon">✋</span><span data-translate="haveGotTitle">Have Got</span></h3>
+                <p class="topic-description" data-translate="haveGotDesc">Learn how to use "have got" to talk about possession, relationships, and characteristics.</p>
+                <button class="learn-btn" onclick="openLesson('have-got')" data-translate="learnBtn">Learn</button>
+                <button class="test-btn" onclick="openQuiz('have-got')" data-translate="testBtn">Test</button>
+            </article>
+            
+            <article class="topic-card" data-topic="present-simple">
+                <h3><span class="topic-icon">⏰</span><span data-translate="presentSimpleTitle">Present Simple</span></h3>
+                <p class="topic-description" data-translate="presentSimpleDesc">Master the present simple tense for habits, facts, and regular activities.</p>
+                <button class="learn-btn" onclick="openLesson('present-simple')" data-translate="learnBtn">Learn</button>
+                <button class="test-btn" onclick="openQuiz('present-simple')" data-translate="testBtn">Test</button>
+            </article>
+            
+            <article class="topic-card" data-topic="question-words">
+                <h3><span class="topic-icon">❓</span><span data-translate="questionWordsTitle">Question Words</span></h3>
+                <p class="topic-description" data-translate="questionWordsDesc">Learn to ask questions using who, what, where, when, why, and how.</p>
+                <button class="learn-btn" onclick="openLesson('question-words')" data-translate="learnBtn">Learn</button>
+                <button class="test-btn" onclick="openQuiz('question-words')" data-translate="testBtn">Test</button>
+            </article>
+            
+            <article class="topic-card" data-topic="family-members">
+                <h3><span class="topic-icon">👨‍👩‍👧‍👦</span><span data-translate="familyMembersTitle">Family Members</span></h3>
+                <p class="topic-description" data-translate="familyMembersDesc">Vocabulary and expressions for talking about family relationships.</p>
+                <button class="learn-btn" onclick="openLesson('family-members')" data-translate="learnBtn">Learn</button>
+                <button class="test-btn" onclick="openQuiz('family-members')" data-translate="testBtn">Test</button>
+            </article>
+            
+            <article class="topic-card" data-topic="daily-activities">
+                <h3><span class="topic-icon">🌅</span><span data-translate="dailyActivitiesTitle">Daily Activities</span></h3>
+                <p class="topic-description" data-translate="dailyActivitiesDesc">Common verbs and expressions for describing everyday routines and activities.</p>
+                <button class="learn-btn" onclick="openLesson('daily-activities')" data-translate="learnBtn">Learn</button>
+                <button class="test-btn" onclick="openQuiz('daily-activities')" data-translate="testBtn">Test</button>
+            </article>
+        </section>
+    </main>
+    
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        let currentLanguage = 'en';
+        
+        const translations = {
+            en: {
+                mainTitle: "🎓 ESL Grammar Learning Hub",
+                mainSubtitle: "Master essential English grammar topics with interactive lessons and quizzes",
+                haveGotTitle: "Have Got",
+                haveGotDesc: "Learn how to use \"have got\" to talk about possession, relationships, and characteristics.",
+                presentSimpleTitle: "Present Simple",
+                presentSimpleDesc: "Master the present simple tense for habits, facts, and regular activities.",
+                questionWordsTitle: "Question Words",
+                questionWordsDesc: "Learn to ask questions using who, what, where, when, why, and how.",
+                familyMembersTitle: "Family Members",
+                familyMembersDesc: "Vocabulary and expressions for talking about family relationships.",
+                dailyActivitiesTitle: "Daily Activities",
+                dailyActivitiesDesc: "Common verbs and expressions for describing everyday routines and activities.",
+                learnBtn: "Learn",
+                testBtn: "Test",
+                langToggle: "🇪🇸 Español",
+                submitQuiz: "Submit Quiz",
+                questionLabel: "Question"
+            },
+            es: {
+                mainTitle: "🎓 Centro de Aprendizaje de Gramática ESL",
+                mainSubtitle: "Domina temas esenciales de gramática inglesa con lecciones interactivas y cuestionarios",
+                haveGotTitle: "Have Got",
+                haveGotDesc: "Aprende a usar \"have got\" para hablar de posesión, relaciones y características.",
+                presentSimpleTitle: "Presente Simple",
+                presentSimpleDesc: "Domina el tiempo presente simple para hábitos, hechos y actividades regulares.",
+                questionWordsTitle: "Palabras Interrogativas",
+                questionWordsDesc: "Aprende a hacer preguntas usando who, what, where, when, why y how.",
+                familyMembersTitle: "Miembros de la Familia",
+                familyMembersDesc: "Vocabulario y expresiones para hablar sobre relaciones familiares.",
+                dailyActivitiesTitle: "Actividades Diarias",
+                dailyActivitiesDesc: "Verbos comunes y expresiones para describir rutinas y actividades cotidianas.",
+                learnBtn: "Aprender",
+                testBtn: "Evaluar",
+                langToggle: "🇺🇸 English",
+                submitQuiz: "Enviar Cuestionario",
+                questionLabel: "Pregunta"
+            }
+        };
+        
+        const lessons = {
+            'have-got': {
+                en: {
+                    title: 'Have Got',
+                    content: `
+                        <h4>What is "Have Got"?</h4>
+                        <p>"Have got" is used to talk about possession, relationships, and characteristics. It's more common in British English.</p>
+                        
+                        <div class="example-box">
+                            <strong>Positive:</strong><br>
+                            I have got a car. (I've got a car.)<br>
+                            She has got brown eyes. (She's got brown eyes.)
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Negative:</strong><br>
+                            I haven't got a car.<br>
+                            She hasn't got brown eyes.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Questions:</strong><br>
+                            Have you got a car?<br>
+                            Has she got brown eyes?
+                        </div>
+                        
+                        <h4>Common Uses:</h4>
+                        <ul>
+                            <li><strong>Possession:</strong> I've got a new phone.</li>
+                            <li><strong>Family:</strong> She's got two sisters.</li>
+                            <li><strong>Physical features:</strong> He's got blue eyes.</li>
+                            <li><strong>Illnesses:</strong> I've got a headache.</li>
+                        </ul>
+                    `
+                },
+                es: {
+                    title: 'Have Got',
+                    content: `
+                        <h4>¿Qué es "Have Got"?</h4>
+                        <p>"Have got" se usa para hablar de posesión, relaciones y características. Es más común en inglés británico.</p>
+                        
+                        <div class="example-box">
+                            <strong>Positivo:</strong><br>
+                            I have got a car. (I've got a car.) - Tengo un carro.<br>
+                            She has got brown eyes. (She's got brown eyes.) - Ella tiene ojos marrones.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Negativo:</strong><br>
+                            I haven't got a car. - No tengo un carro.<br>
+                            She hasn't got brown eyes. - Ella no tiene ojos marrones.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Preguntas:</strong><br>
+                            Have you got a car? - ¿Tienes un carro?<br>
+                            Has she got brown eyes? - ¿Tiene ella ojos marrones?
+                        </div>
+                        
+                        <h4>Usos Comunes:</h4>
+                        <ul>
+                            <li><strong>Posesión:</strong> I've got a new phone. - Tengo un teléfono nuevo.</li>
+                            <li><strong>Familia:</strong> She's got two sisters. - Ella tiene dos hermanas.</li>
+                            <li><strong>Características físicas:</strong> He's got blue eyes. - Él tiene ojos azules.</li>
+                            <li><strong>Enfermedades:</strong> I've got a headache. - Tengo dolor de cabeza.</li>
+                        </ul>
+                    `
+                }
+            },
+            'present-simple': {
+                en: {
+                    title: 'Present Simple',
+                    content: `
+                        <h4>When do we use Present Simple?</h4>
+                        <p>The present simple is used for habits, facts, and things that happen regularly.</p>
+                        
+                        <div class="example-box">
+                            <strong>Positive:</strong><br>
+                            I work every day.<br>
+                            She likes coffee.<br>
+                            They live in London.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Negative:</strong><br>
+                            I don't work on Sundays.<br>
+                            She doesn't like tea.<br>
+                            They don't live in Paris.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Questions:</strong><br>
+                            Do you work every day?<br>
+                            Does she like coffee?<br>
+                            Do they live in London?
+                        </div>
+                        
+                        <h4>Remember:</h4>
+                        <ul>
+                            <li>Add -s/-es to verbs with he/she/it</li>
+                            <li>Use "do/does" for questions and negatives</li>
+                            <li>Common time expressions: always, usually, often, sometimes, never</li>
+                        </ul>
+                    `
+                },
+                es: {
+                    title: 'Presente Simple',
+                    content: `
+                        <h4>¿Cuándo usamos el Presente Simple?</h4>
+                        <p>El presente simple se usa para hábitos, hechos y cosas que suceden regularmente.</p>
+                        
+                        <div class="example-box">
+                            <strong>Positivo:</strong><br>
+                            I work every day. - Trabajo todos los días.<br>
+                            She likes coffee. - A ella le gusta el café.<br>
+                            They live in London. - Ellos viven en Londres.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Negativo:</strong><br>
+                            I don't work on Sundays. - No trabajo los domingos.<br>
+                            She doesn't like tea. - A ella no le gusta el té.<br>
+                            They don't live in Paris. - Ellos no viven en París.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>Preguntas:</strong><br>
+                            Do you work every day? - ¿Trabajas todos los días?<br>
+                            Does she like coffee? - ¿Le gusta el café a ella?<br>
+                            Do they live in London? - ¿Viven ellos en Londres?
+                        </div>
+                        
+                        <h4>Recuerda:</h4>
+                        <ul>
+                            <li>Agregar -s/-es a los verbos con he/she/it</li>
+                            <li>Usar "do/does" para preguntas y negativos</li>
+                            <li>Expresiones de tiempo comunes: always, usually, often, sometimes, never</li>
+                        </ul>
+                    `
+                }
+            },
+            'question-words': {
+                en: {
+                    title: 'Question Words',
+                    content: `
+                        <h4>The Main Question Words:</h4>
+                        
+                        <div class="example-box">
+                            <strong>WHO</strong> - asks about people<br>
+                            Who is your teacher? → Mr. Smith is my teacher.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHAT</strong> - asks about things/actions<br>
+                            What do you like? → I like pizza.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHERE</strong> - asks about places<br>
+                            Where do you live? → I live in New York.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHEN</strong> - asks about time<br>
+                            When do you wake up? → I wake up at 7 AM.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHY</strong> - asks about reasons<br>
+                            Why are you happy? → Because it's my birthday.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>HOW</strong> - asks about manner/method<br>
+                            How do you go to work? → I go by bus.
+                        </div>
+                    `
+                },
+                es: {
+                    title: 'Palabras Interrogativas',
+                    content: `
+                        <h4>Las Principales Palabras Interrogativas:</h4>
+                        
+                        <div class="example-box">
+                            <strong>WHO</strong> - pregunta sobre personas<br>
+                            Who is your teacher? → Mr. Smith is my teacher.<br>
+                            ¿Quién es tu maestro? → El Sr. Smith es mi maestro.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHAT</strong> - pregunta sobre cosas/acciones<br>
+                            What do you like? → I like pizza.<br>
+                            ¿Qué te gusta? → Me gusta la pizza.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHERE</strong> - pregunta sobre lugares<br>
+                            Where do you live? → I live in New York.<br>
+                            ¿Dónde vives? → Vivo en Nueva York.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHEN</strong> - pregunta sobre tiempo<br>
+                            When do you wake up? → I wake up at 7 AM.<br>
+                            ¿Cuándo te despiertas? → Me despierto a las 7 AM.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>WHY</strong> - pregunta sobre razones<br>
+                            Why are you happy? → Because it's my birthday.<br>
+                            ¿Por qué estás feliz? → Porque es mi cumpleaños.
+                        </div>
+                        
+                        <div class="example-box">
+                            <strong>HOW</strong> - pregunta sobre manera/método<br>
+                            How do you go to work? → I go by bus.<br>
+                            ¿Cómo vas al trabajo? → Voy en autobús.
+                        </div>
+                    `
+                }
+            },
+            'family-members': {
+                en: {
+                    title: 'Family Members',
+                    content: `
+                        <h4>Immediate Family:</h4>
+                        <div class="example-box">
+                            <strong>Parents:</strong> mother/mom, father/dad<br>
+                            <strong>Children:</strong> son, daughter<br>
+                            <strong>Siblings:</strong> brother, sister
+                        </div>
+                        
+                        <h4>Extended Family:</h4>
+                        <div class="example-box">
+                            <strong>Grandparents:</strong> grandmother/grandma, grandfather/grandpa<br>
+                            <strong>Aunts & Uncles:</strong> aunt, uncle<br>
+                            <strong>Cousins:</strong> cousin (male/female)
+                        </div>
+                        
+                        <h4>In-Laws (Marriage):</h4>
+                        <div class="example-box">
+                            <strong>Spouse:</strong> husband, wife<br>
+                            <strong>In-laws:</strong> mother-in-law, father-in-law<br>
+                            <strong>Step-family:</strong> stepmother, stepfather, stepbrother, stepsister
+                        </div>
+                        
+                        <h4>Useful Expressions:</h4>
+                        <ul>
+                            <li>I have got two brothers.</li>
+                            <li>My sister is older than me.</li>
+                            <li>We are a family of five.</li>
+                            <li>I'm the youngest in my family.</li>
+                        </ul>
+                    `
+                },
+                es: {
+                    title: 'Miembros de la Familia',
+                    content: `
+                        <h4>Familia Inmediata:</h4>
+                        <div class="example-box">
+                            <strong>Padres:</strong> mother/mom (madre/mamá), father/dad (padre/papá)<br>
+                            <strong>Hijos:</strong> son (hijo), daughter (hija)<br>
+                            <strong>Hermanos:</strong> brother (hermano), sister (hermana)
+                        </div>
+                        
+                        <h4>Familia Extendida:</h4>
+                        <div class="example-box">
+                            <strong>Abuelos:</strong> grandmother/grandma (abuela), grandfather/grandpa (abuelo)<br>
+                            <strong>Tíos:</strong> aunt (tía), uncle (tío)<br>
+                            <strong>Primos:</strong> cousin (primo/prima)
+                        </div>
+                        
+                        <h4>Familia Política (Matrimonio):</h4>
+                        <div class="example-box">
+                            <strong>Cónyuge:</strong> husband (esposo), wife (esposa)<br>
+                            <strong>Suegros:</strong> mother-in-law (suegra), father-in-law (suegro)<br>
+                            <strong>Familia adoptiva:</strong> stepmother (madrastra), stepfather (padrastro), stepbrother (hermanastro), stepsister (hermanastra)
+                        </div>
+                        
+                        <h4>Expresiones Útiles:</h4>
+                        <ul>
+                            <li>I have got two brothers. - Tengo dos hermanos.</li>
+                            <li>My sister is older than me. - Mi hermana es mayor que yo.</li>
+                            <li>We are a family of five. - Somos una familia de cinco.</li>
+                            <li>I'm the youngest in my family. - Soy el menor de mi familia.</li>
+                        </ul>
+                    `
+                }
+            },
+            'daily-activities': {
+                en: {
+                    title: 'Daily Activities',
+                    content: `
+                        <h4>Morning Activities:</h4>
+                        <div class="example-box">
+                            wake up, get up, brush teeth, take a shower, have breakfast, get dressed, go to work/school
+                        </div>
+                        
+                        <h4>Afternoon Activities:</h4>
+                        <div class="example-box">
+                            have lunch, work, study, do homework, exercise, meet friends, go shopping
+                        </div>
+                        
+                        <h4>Evening Activities:</h4>
+                        <div class="example-box">
+                            come home, have dinner, watch TV, read a book, do housework, relax, go to bed
+                        </div>
+                        
+                        <h4>Example Daily Routine:</h4>
+                        <div class="example-box">
+                            I wake up at 7:00 AM.<br>
+                            I have breakfast at 8:00 AM.<br>
+                            I go to work at 9:00 AM.<br>
+                            I have lunch at 12:30 PM.<br>
+                            I come home at 6:00 PM.<br>
+                            I go to bed at 10:00 PM.
+                        </div>
+                        
+                        <h4>Time Expressions:</h4>
+                        <ul>
+                            <li>in the morning/afternoon/evening</li>
+                            <li>at night, at 7 o'clock</li>
+                            <li>every day, on weekdays, on weekends</li>
+                        </ul>
+                    `
+                },
+                es: {
+                    title: 'Actividades Diarias',
+                    content: `
+                        <h4>Actividades Matutinas:</h4>
+                        <div class="example-box">
+                            wake up (despertarse), get up (levantarse), brush teeth (cepillarse los dientes), take a shower (ducharse), have breakfast (desayunar), get dressed (vestirse), go to work/school (ir al trabajo/escuela)
+                        </div>
+                        
+                        <h4>Actividades de la Tarde:</h4>
+                        <div class="example-box">
+                            have lunch (almorzar), work (trabajar), study (estudiar), do homework (hacer tarea), exercise (hacer ejercicio), meet friends (encontrarse con amigos), go shopping (ir de compras)
+                        </div>
+                        
+                        <h4>Actividades Nocturnas:</h4>
+                        <div class="example-box">
+                            come home (llegar a casa), have dinner (cenar), watch TV (ver televisión), read a book (leer un libro), do housework (hacer quehaceres), relax (relajarse), go to bed (irse a la cama)
+                        </div>
+                        
+                        <h4>Ejemplo de Rutina Diaria:</h4>
+                        <div class="example-box">
+                            I wake up at 7:00 AM. - Me despierto a las 7:00 AM.<br>
+                            I have breakfast at 8:00 AM. - Desayuno a las 8:00 AM.<br>
+                            I go to work at 9:00 AM. - Voy al trabajo a las 9:00 AM.<br>
+                            I have lunch at 12:30 PM. - Almuerzo a las 12:30 PM.<br>
+                            I come home at 6:00 PM. - Llego a casa a las 6:00 PM.<br>
+                            I go to bed at 10:00 PM. - Me voy a la cama a las 10:00 PM.
+                        </div>
+                        
+                        <h4>Expresiones de Tiempo:</h4>
+                        <ul>
+                            <li>in the morning/afternoon/evening (en la mañana/tarde/noche)</li>
+                            <li>at night, at 7 o'clock (en la noche, a las 7 en punto)</li>
+                            <li>every day, on weekdays, on weekends (todos los días, entre semana, los fines de semana)</li>
+                        </ul>
+                    `
+                }
+            }
+        };
+        
+        const quizzes = {
+            'have-got': {
+                en: [
+                    {
+                        question: "Choose the correct sentence:",
+                        options: ["I have got a dog.", "I has got a dog.", "I got have a dog.", "I have get a dog."],
+                        correct: 0
+                    },
+                    {
+                        question: "Make this negative: 'She has got a car.'",
+                        options: ["She doesn't got a car.", "She hasn't got a car.", "She not has got a car.", "She haven't got a car."],
+                        correct: 1
+                    },
+                    {
+                        question: "What's the question form of 'You have got a brother'?",
+                        options: ["Do you got a brother?", "Are you got a brother?", "Have you got a brother?", "Has you got a brother?"],
+                        correct: 2
+                    },
+                    {
+                        question: "Complete: 'My friend _____ blue eyes.'",
+                        options: ["have got", "has got", "got has", "have get"],
+                        correct: 1
+                    },
+                    {
+                        question: "Which is correct?",
+                        options: ["We hasn't got time.", "We haven't got time.", "We don't got time.", "We not have got time."],
+                        correct: 1
+                    }
+                ],
+                es: [
+                    {
+                        question: "Elige la oración correcta:",
+                        options: ["I have got a dog.", "I has got a dog.", "I got have a dog.", "I have get a dog."],
+                        correct: 0
+                    },
+                    {
+                        question: "Haz esta oración negativa: 'She has got a car.'",
+                        options: ["She doesn't got a car.", "She hasn't got a car.", "She not has got a car.", "She haven't got a car."],
+                        correct: 1
+                    },
+                    {
+                        question: "¿Cuál es la forma interrogativa de 'You have got a brother'?",
+                        options: ["Do you got a brother?", "Are you got a brother?", "Have you got a brother?", "Has you got a brother?"],
+                        correct: 2
+                    },
+                    {
+                        question: "Completa: 'My friend _____ blue eyes.'",
+                        options: ["have got", "has got", "got has", "have get"],
+                        correct: 1
+                    },
+                    {
+                        question: "¿Cuál es correcta?",
+                        options: ["We hasn't got time.", "We haven't got time.", "We don't got time.", "We not have got time."],
+                        correct: 1
+                    }
+                ]
+            },
+            'present-simple': {
+                en: [
+                    {
+                        question: "Choose the correct sentence:",
+                        options: ["She work every day.", "She works every day.", "She working every day.", "She is work every day."],
+                        correct: 1
+                    },
+                    {
+                        question: "Make this negative: 'He likes pizza.'",
+                        options: ["He not likes pizza.", "He doesn't like pizza.", "He don't like pizza.", "He isn't like pizza."],
+                        correct: 1
+                    },
+                    {
+                        question: "What's the question form of 'They live in Paris'?",
+                        options: ["Are they live in Paris?", "Do they live in Paris?", "Does they live in Paris?", "They live in Paris?"],
+                        correct: 1
+                    },
+                    {
+                        question: "Complete: 'My sister _____ to school every day.'",
+                        options: ["go", "goes", "going", "is go"],
+                        correct: 1
+                    },
+                    {
+                        question: "Which frequency adverb means 100%?",
+                        options: ["sometimes", "often", "always", "usually"],
+                        correct: 2
+                    }
+                ],
+                es: [
+                    {
+                        question: "Elige la oración correcta:",
+                        options: ["She work every day.", "She works every day.", "She working every day.", "She is work every day."],
+                        correct: 1
+                    },
+                    {
+                        question: "Haz esta oración negativa: 'He likes pizza.'",
+                        options: ["He not likes pizza.", "He doesn't like pizza.", "He don't like pizza.", "He isn't like pizza."],
+                        correct: 1
+                    },
+                    {
+                        question: "¿Cuál es la forma interrogativa de 'They live in Paris'?",
+                        options: ["Are they live in Paris?", "Do they live in Paris?", "Does they live in Paris?", "They live in Paris?"],
+                        correct: 1
+                    },
+                    {
+                        question: "Completa: 'My sister _____ to school every day.'",
+                        options: ["go", "goes", "going", "is go"],
+                        correct: 1
+                    },
+                    {
+                        question: "¿Qué adverbio de frecuencia significa 100%?",
+                        options: ["sometimes", "often", "always", "usually"],
+                        correct: 2
+                    }
+                ]
+            },
+            'question-words': {
+                en: [
+                    {
+                        question: "_____ is your name?",
+                        options: ["Who", "What", "Where", "When"],
+                        correct: 1
+                    },
+                    {
+                        question: "_____ do you live?",
+                        options: ["Who", "What", "Where", "Why"],
+                        correct: 2
+                    },
+                    {
+                        question: "_____ are you sad?",
+                        options: ["What", "Where", "When", "Why"],
+                        correct: 3
+                    },
+                    {
+                        question: "_____ is your teacher?",
+                        options: ["Who", "What", "Where", "How"],
+                        correct: 0
+                    },
+                    {
+                        question: "_____ do you go to work?",
+                        options: ["What", "Where", "When", "How"],
+                        correct: 3
+                    }
+                ],
+                es: [
+                    {
+                        question: "_____ is your name? (¿Cómo te llamas?)",
+                        options: ["Who", "What", "Where", "When"],
+                        correct: 1
+                    },
+                    {
+                        question: "_____ do you live? (¿Dónde vives?)",
+                        options: ["Who", "What", "Where", "Why"],
+                        correct: 2
+                    },
+                    {
+                        question: "_____ are you sad? (¿Por qué estás triste?)",
+                        options: ["What", "Where", "When", "Why"],
+                        correct: 3
+                    },
+                    {
+                        question: "_____ is your teacher? (¿Quién es tu maestro?)",
+                        options: ["Who", "What", "Where", "How"],
+                        correct: 0
+                    },
+                    {
+                        question: "_____ do you go to work? (¿Cómo vas al trabajo?)",
+                        options: ["What", "Where", "When", "How"],
+                        correct: 3
+                    }
+                ]
+            },
+            'family-members': {
+                en: [
+                    {
+                        question: "Your mother's sister is your:",
+                        options: ["cousin", "aunt", "grandmother", "sister-in-law"],
+                        correct: 1
+                    },
+                    {
+                        question: "Your father's father is your:",
+                        options: ["uncle", "brother", "grandfather", "father-in-law"],
+                        correct: 2
+                    },
+                    {
+                        question: "Your aunt's children are your:",
+                        options: ["siblings", "cousins", "nephews", "nieces"],
+                        correct: 1
+                    },
+                    {
+                        question: "Your husband's mother is your:",
+                        options: ["aunt", "grandmother", "mother-in-law", "stepmother"],
+                        correct: 2
+                    },
+                    {
+                        question: "Complete: 'I have got two _____. One is older and one is younger than me.'",
+                        options: ["parents", "brothers", "cousins", "uncles"],
+                        correct: 1
+                    }
+                ],
+                es: [
+                    {
+                        question: "La hermana de tu madre es tu:",
+                        options: ["cousin (prima)", "aunt (tía)", "grandmother (abuela)", "sister-in-law (cuñada)"],
+                        correct: 1
+                    },
+                    {
+                        question: "El padre de tu padre es tu:",
+                        options: ["uncle (tío)", "brother (hermano)", "grandfather (abuelo)", "father-in-law (suegro)"],
+                        correct: 2
+                    },
+                    {
+                        question: "Los hijos de tu tía son tus:",
+                        options: ["siblings (hermanos)", "cousins (primos)", "nephews (sobrinos)", "nieces (sobrinas)"],
+                        correct: 1
+                    },
+                    {
+                        question: "La madre de tu esposo es tu:",
+                        options: ["aunt (tía)", "grandmother (abuela)", "mother-in-law (suegra)", "stepmother (madrastra)"],
+                        correct: 2
+                    },
+                    {
+                        question: "Completa: 'I have got two _____. One is older and one is younger than me.'",
+                        options: ["parents (padres)", "brothers (hermanos)", "cousins (primos)", "uncles (tíos)"],
+                        correct: 1
+                    }
+                ]
+            },
+            'daily-activities': {
+                en: [
+                    {
+                        question: "What do you do first in the morning?",
+                        options: ["have breakfast", "wake up", "go to work", "brush teeth"],
+                        correct: 1
+                    },
+                    {
+                        question: "When do most people have lunch?",
+                        options: ["in the morning", "at night", "in the afternoon", "in the evening"],
+                        correct: 2
+                    },
+                    {
+                        question: "Complete: 'I _____ my teeth every morning.'",
+                        options: ["wash", "brush", "clean", "make"],
+                        correct: 1
+                    },
+                    {
+                        question: "What's another way to say 'go to sleep'?",
+                        options: ["go to bed", "go home", "wake up", "get up"],
+                        correct: 0
+                    },
+                    {
+                        question: "Which activity do you do in the evening?",
+                        options: ["have breakfast", "go to work", "watch TV", "wake up"],
+                        correct: 2
+                    }
+                ],
+                es: [
+                    {
+                        question: "¿Qué haces primero en la mañana?",
+                        options: ["have breakfast (desayunar)", "wake up (despertarse)", "go to work (ir al trabajo)", "brush teeth (cepillarse los dientes)"],
+                        correct: 1
+                    },
+                    {
+                        question: "¿Cuándo almuerza la mayoría de la gente?",
+                        options: ["in the morning (en la mañana)", "at night (en la noche)", "in the afternoon (en la tarde)", "in the evening (en la noche)"],
+                        correct: 2
+                    },
+                    {
+                        question: "Completa: 'I _____ my teeth every morning.'",
+                        options: ["wash", "brush", "clean", "make"],
+                        correct: 1
+                    },
+                    {
+                        question: "¿Cuál es otra forma de decir 'go to sleep' (irse a dormir)?",
+                        options: ["go to bed", "go home", "wake up", "get up"],
+                        correct: 0
+                    },
+                    {
+                        question: "¿Qué actividad haces en la noche?",
+                        options: ["have breakfast (desayunar)", "go to work (ir al trabajo)", "watch TV (ver televisión)", "wake up (despertarse)"],
+                        correct: 2
+                    }
+                ]
+            }
+        };
+        
+        let currentQuiz = null;
+        let userAnswers = [];
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            updateLanguage();
+        }
+        
+        function updateLanguage() {
+            const lang = translations[currentLanguage];
+            
+            // Update main interface
+            document.getElementById('mainTitle').textContent = lang.mainTitle;
+            document.getElementById('mainSubtitle').textContent = lang.mainSubtitle;
+            document.getElementById('langToggle').textContent = lang.langToggle;
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (lang[key]) {
+                    element.textContent = lang[key];
+                }
+            });
+        }
+        
+        function openLesson(topic) {
+            const lesson = lessons[topic][currentLanguage];
+            document.getElementById('modal-body').innerHTML = `
+                <h2>${lesson.title}</h2>
+                <div class="lesson-content">
+                    ${lesson.content}
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+        
+        function openQuiz(topic) {
+            currentQuiz = topic;
+            userAnswers = [];
+            const quiz = quizzes[topic][currentLanguage];
+            const lessonTitle = lessons[topic][currentLanguage].title;
+            const questionLabel = translations[currentLanguage].questionLabel;
+            const submitText = translations[currentLanguage].submitQuiz;
+            
+            let quizHTML = `<h2>${lessonTitle} - ${currentLanguage === 'en' ? 'Quiz' : 'Cuestionario'}</h2>`;
+            
+            quiz.forEach((q, index) => {
+                quizHTML += `
+                    <div class="question" data-question="${index}">
+                        <h5>${questionLabel} ${index + 1}: ${q.question}</h5>
+                        <div class="options">
+                            ${q.options.map((option, optIndex) => `
+                                <div class="option" onclick="selectOption(${index}, ${optIndex})" data-option="${optIndex}">
+                                    ${option}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            quizHTML += `
+                <button class="submit-quiz" onclick="submitQuiz()">${submitText}</button>
+                <div id="quiz-result"></div>
+            `;
+            
+            document.getElementById('modal-body').innerHTML = quizHTML;
+            document.getElementById('modal').style.display = 'block';
+        }
+        
+        function selectOption(questionIndex, optionIndex) {
+            // Clear previous selections for this question
+            const questionDiv = document.querySelector(`[data-question="${questionIndex}"]`);
+            questionDiv.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Select the clicked option
+            const selectedOption = questionDiv.querySelector(`[data-option="${optionIndex}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Store the answer
+            userAnswers[questionIndex] = optionIndex;
+        }
+        
+        function submitQuiz() {
+            const quiz = quizzes[currentQuiz][currentLanguage];
+            let correct = 0;
+            
+            quiz.forEach((q, index) => {
+                const questionDiv = document.querySelector(`[data-question="${index}"]`);
+                const options = questionDiv.querySelectorAll('.option');
+                
+                options.forEach((option, optIndex) => {
+                    option.classList.remove('selected');
+                    if (optIndex === q.correct) {
+                        option.classList.add('correct');
+                    } else if (optIndex === userAnswers[index] && optIndex !== q.correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (userAnswers[index] === q.correct) {
+                    correct++;
+                }
+            });
+            
+            const percentage = Math.round((correct / quiz.length) * 100);
+            let resultClass = 'poor';
+            let message = '';
+            
+            if (currentLanguage === 'en') {
+                if (percentage >= 80) {
+                    resultClass = 'good';
+                    message = 'Excellent work! ';
+                } else if (percentage >= 60) {
+                    resultClass = 'okay';
+                    message = 'Good job! ';
+                } else {
+                    message = 'Keep practicing! ';
+                }
+                message += `You scored ${correct}/${quiz.length} (${percentage}%)`;
+            } else {
+                if (percentage >= 80) {
+                    resultClass = 'good';
+                    message = '¡Excelente trabajo! ';
+                } else if (percentage >= 60) {
+                    resultClass = 'okay';
+                    message = '¡Buen trabajo! ';
+                } else {
+                    message = '¡Sigue practicando! ';
+                }
+                message += `Obtuviste ${correct}/${quiz.length} (${percentage}%)`;
+            }
+            
+            document.getElementById('quiz-result').innerHTML = `
+                <div class="quiz-result ${resultClass}">
+                    ${message}
+                </div>
+            `;
+            
+            // Hide submit button
+            document.querySelector('.submit-quiz').style.display = 'none';
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentQuiz = null;
+            userAnswers = [];
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'994baf2442cff16e',t:'MTc2MTQ5OTg1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
