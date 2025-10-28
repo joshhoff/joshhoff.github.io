@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Family Tree Builder</title>
-  <script src="/_sdk/data_sdk.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
         body {
@@ -68,6 +66,8 @@
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
  <body class="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 font-sans">
   <div class="container mx-auto p-6 max-w-7xl"><!-- Header -->
@@ -242,159 +242,8 @@
             }
         };
 
-        // Default config for Element SDK
-        const defaultConfig = {
-            app_title: "Family Tree Builder",
-            instructions_text: "Drag family members to build your tree",
-            background_color: "#f0f4ff",
-            surface_color: "#ffffff",
-            text_color: "#1f2937",
-            primary_action_color: "#2563eb",
-            secondary_action_color: "#6b7280",
-            font_family: "Inter",
-            font_size: 16
-        };
-
-        // Data SDK handler
-        const dataHandler = {
-            onDataChanged(data) {
-                currentMembers = data;
-                recordCount = data.length;
-                renderTreeMembers();
-            }
-        };
-
-        // Element SDK implementation
-        async function onConfigChange(config) {
-            const appTitle = config.app_title || defaultConfig.app_title;
-            const instructionsText = config.instructions_text || defaultConfig.instructions_text;
-            const backgroundColor = config.background_color || defaultConfig.background_color;
-            const surfaceColor = config.surface_color || defaultConfig.surface_color;
-            const textColor = config.text_color || defaultConfig.text_color;
-            const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
-            const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
-            const fontFamily = config.font_family || defaultConfig.font_family;
-            const fontSize = config.font_size || defaultConfig.font_size;
-
-            // Apply colors and fonts
-            document.body.style.background = `linear-gradient(to bottom right, ${backgroundColor}, #e0e7ff)`;
-            document.body.style.fontFamily = `${fontFamily}, -apple-system, BlinkMacSystemFont, sans-serif`;
-            document.body.style.fontSize = `${fontSize}px`;
-
-            // Update text content
-            document.getElementById('app-title').textContent = appTitle;
-            document.getElementById('instructions').textContent = instructionsText;
-
-            // Apply colors to elements
-            const whiteElements = document.querySelectorAll('.bg-white');
-            whiteElements.forEach(el => el.style.backgroundColor = surfaceColor);
-
-            const textElements = document.querySelectorAll('.text-gray-800, .text-gray-700');
-            textElements.forEach(el => el.style.color = textColor);
-
-            const primaryButtons = document.querySelectorAll('.bg-blue-600, .bg-blue-500');
-            primaryButtons.forEach(el => el.style.backgroundColor = primaryActionColor);
-
-            const secondaryButtons = document.querySelectorAll('.bg-gray-300, .bg-gray-400');
-            secondaryButtons.forEach(el => el.style.backgroundColor = secondaryActionColor);
-
-            // Scale fonts proportionally
-            document.getElementById('app-title').style.fontSize = `${fontSize * 2.5}px`;
-            document.querySelector('h2').style.fontSize = `${fontSize * 1.25}px`;
-            document.querySelector('p').style.fontSize = `${fontSize * 1.125}px`;
-        }
-
-        function mapToCapabilities(config) {
-            return {
-                recolorables: [
-                    {
-                        get: () => config.background_color || defaultConfig.background_color,
-                        set: (value) => {
-                            if (window.elementSdk) {
-                                window.elementSdk.setConfig({ background_color: value });
-                            }
-                        }
-                    },
-                    {
-                        get: () => config.surface_color || defaultConfig.surface_color,
-                        set: (value) => {
-                            if (window.elementSdk) {
-                                window.elementSdk.setConfig({ surface_color: value });
-                            }
-                        }
-                    },
-                    {
-                        get: () => config.text_color || defaultConfig.text_color,
-                        set: (value) => {
-                            if (window.elementSdk) {
-                                window.elementSdk.setConfig({ text_color: value });
-                            }
-                        }
-                    },
-                    {
-                        get: () => config.primary_action_color || defaultConfig.primary_action_color,
-                        set: (value) => {
-                            if (window.elementSdk) {
-                                window.elementSdk.setConfig({ primary_action_color: value });
-                            }
-                        }
-                    },
-                    {
-                        get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
-                        set: (value) => {
-                            if (window.elementSdk) {
-                                window.elementSdk.setConfig({ secondary_action_color: value });
-                            }
-                        }
-                    }
-                ],
-                borderables: [],
-                fontEditable: {
-                    get: () => config.font_family || defaultConfig.font_family,
-                    set: (value) => {
-                        if (window.elementSdk) {
-                            window.elementSdk.setConfig({ font_family: value });
-                        }
-                    }
-                },
-                fontSizeable: {
-                    get: () => config.font_size || defaultConfig.font_size,
-                    set: (value) => {
-                        if (window.elementSdk) {
-                            window.elementSdk.setConfig({ font_size: value });
-                        }
-                    }
-                }
-            };
-        }
-
-        function mapToEditPanelValues(config) {
-            return new Map([
-                ["app_title", config.app_title || defaultConfig.app_title],
-                ["instructions_text", config.instructions_text || defaultConfig.instructions_text]
-            ]);
-        }
-
-        // Initialize SDKs
-        async function initializeApp() {
-            // Initialize Element SDK
-            if (window.elementSdk) {
-                await window.elementSdk.init({
-                    defaultConfig,
-                    onConfigChange,
-                    mapToCapabilities,
-                    mapToEditPanelValues
-                });
-            }
-
-            // Initialize Data SDK
-            if (window.dataSdk) {
-                const result = await window.dataSdk.init(dataHandler);
-                if (!result.isOk) {
-                    console.error("Failed to initialize data SDK");
-                }
-            }
-
+        // Initialize the app
+        function initializeApp() {
             setupEventListeners();
             renderFamilyMembers();
             renderTraits();
@@ -450,6 +299,8 @@
         function updateLanguage() {
             const t = translations[currentLanguage];
             
+            document.getElementById('app-title').textContent = t.appTitle;
+            document.getElementById('instructions').textContent = t.instructions;
             document.getElementById('members-title').textContent = t.membersTitle;
             document.getElementById('traits-title').textContent = t.traitsTitle;
             document.getElementById('tree-title').textContent = t.treeTitle;
@@ -572,6 +423,7 @@
 
         function handleDragStart(e) {
             e.dataTransfer.setData('text/plain', e.target.dataset.type);
+            e.dataTransfer.effectAllowed = 'copy';
             e.target.classList.add('dragging');
         }
 
@@ -581,6 +433,7 @@
 
         function handleTraitDragStart(e) {
             e.dataTransfer.setData('application/trait', e.target.dataset.trait);
+            e.dataTransfer.effectAllowed = 'copy';
             e.target.classList.add('dragging');
         }
 
@@ -592,6 +445,7 @@
             e.preventDefault();
             e.stopPropagation();
             if (e.dataTransfer.types.includes('application/trait')) {
+                e.dataTransfer.dropEffect = 'copy';
                 e.currentTarget.classList.add('member-drop-target');
             }
         }
@@ -600,7 +454,7 @@
             e.currentTarget.classList.remove('member-drop-target');
         }
 
-        async function handleMemberDrop(e, member) {
+        function handleMemberDrop(e, member) {
             e.preventDefault();
             e.stopPropagation();
             e.currentTarget.classList.remove('member-drop-target');
@@ -613,11 +467,11 @@
                     currentTraits.push(traitKey);
                     member.traits = currentTraits.join(',');
                     
-                    if (window.dataSdk) {
-                        const result = await window.dataSdk.update(member);
-                        if (!result.isOk) {
-                            showMessage('Failed to add trait');
-                        }
+                    // Update the member in the array
+                    const index = currentMembers.findIndex(m => m.__backendId === member.__backendId);
+                    if (index !== -1) {
+                        currentMembers[index] = member;
+                        renderTreeMembers();
                     }
                 }
             }
@@ -625,10 +479,12 @@
 
         function handleDragOver(e) {
             e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
         }
 
-        async function handleDrop(e) {
+        function handleDrop(e) {
             e.preventDefault();
+            e.stopPropagation();
             
             if (recordCount >= 999) {
                 const t = translations[currentLanguage];
@@ -637,11 +493,14 @@
             }
             
             const memberType = e.dataTransfer.getData('text/plain');
+            if (!memberType) return;
+            
             const rect = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - rect.left - 50; // Center the element
             const y = e.clientY - rect.top - 30;
             
             const newMember = {
+                __backendId: Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 id: Date.now().toString(),
                 type: memberType,
                 name: '',
@@ -651,12 +510,9 @@
                 language: currentLanguage
             };
             
-            if (window.dataSdk) {
-                const result = await window.dataSdk.create(newMember);
-                if (!result.isOk) {
-                    showMessage('Failed to add family member');
-                }
-            }
+            currentMembers.push(newMember);
+            recordCount = currentMembers.length;
+            renderTreeMembers();
         }
 
         function editMember(member) {
@@ -751,33 +607,33 @@
             }
         }
 
-        async function saveMember() {
+        function saveMember() {
             if (!currentEditingMember) return;
             
             const name = document.getElementById('member-name').value.trim();
             currentEditingMember.name = name;
             
-            if (window.dataSdk) {
-                const result = await window.dataSdk.update(currentEditingMember);
-                if (result.isOk) {
-                    closeModal();
-                } else {
-                    showMessage('Failed to save member');
-                }
+            // Update the member in the array
+            const index = currentMembers.findIndex(m => m.__backendId === currentEditingMember.__backendId);
+            if (index !== -1) {
+                currentMembers[index] = currentEditingMember;
+                renderTreeMembers();
             }
+            
+            closeModal();
         }
 
-        async function deleteMember() {
+        function deleteMember() {
             if (!currentEditingMember) return;
             
-            if (window.dataSdk) {
-                const result = await window.dataSdk.delete(currentEditingMember);
-                if (result.isOk) {
-                    closeModal();
-                } else {
-                    showMessage('Failed to delete member');
-                }
+            const index = currentMembers.findIndex(m => m.__backendId === currentEditingMember.__backendId);
+            if (index !== -1) {
+                currentMembers.splice(index, 1);
+                recordCount = currentMembers.length;
+                renderTreeMembers();
             }
+            
+            closeModal();
         }
 
         function closeModal() {
@@ -786,15 +642,13 @@
             currentEditingMember = null;
         }
 
-        async function clearTree() {
+        function clearTree() {
             if (currentMembers.length === 0) return;
             
-            // Delete all members
-            for (const member of currentMembers) {
-                if (window.dataSdk) {
-                    await window.dataSdk.delete(member);
-                }
-            }
+            currentMembers = [];
+            recordCount = 0;
+            connections = [];
+            renderTreeMembers();
         }
 
         function toggleConnectionMode() {
@@ -934,5 +788,5 @@
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995c373fd1fb9091',t:'MTc2MTY3MzIwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995c49cd53d669bb',t:'MTc2MTY3Mzk2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
