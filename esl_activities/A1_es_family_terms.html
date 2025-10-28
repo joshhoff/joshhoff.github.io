@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Vocabulary Practice</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 30px;
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+        
+        .mode-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+        }
+        
+        .mode-btn.active {
+            background: #2d3748;
+        }
+        
+        .content-area {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .flashcard {
+            background: #f7fafc;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .flashcard:hover {
+            border-color: #4299e1;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.2);
+        }
+        
+        .flashcard.flipped {
+            background: #bee3f8;
+            border-color: #4299e1;
+        }
+        
+        .family-emoji {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .english-word {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .spanish-word {
+            font-size: 1.1rem;
+            color: #4a5568;
+            font-style: italic;
+        }
+        
+        .practice-area {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .question-card {
+            background: #f0fff4;
+            border: 3px solid #68d391;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .question-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .question-text {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 30px;
+        }
+        
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .answer-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-btn:hover {
+            background: #3182ce;
+            transform: scale(1.05);
+        }
+        
+        .answer-btn.correct {
+            background: #48bb78;
+        }
+        
+        .answer-btn.incorrect {
+            background: #f56565;
+        }
+        
+        .feedback {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 30px;
+        }
+        
+        .feedback.correct {
+            color: #48bb78;
+        }
+        
+        .feedback.incorrect {
+            color: #f56565;
+        }
+        
+        .next-btn {
+            background: #805ad5;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .next-btn:hover {
+            background: #6b46c1;
+        }
+        
+        .score {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            color: #4a5568;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .mode-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .mode-btn {
+                width: 200px;
+            }
+            
+            .flashcard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main class="container">
+   <header class="header">
+    <h1 class="title" id="app-title">Family Vocabulary Practice</h1>
+    <p class="subtitle" id="subtitle">Learn family words in English and Spanish</p>
+   </header>
+   <nav class="mode-buttons"><button class="mode-btn active" id="flashcard-btn">View Flashcards</button> <button class="mode-btn" id="practice-btn">Start Practice</button>
+   </nav>
+   <section class="content-area" id="content-area">
+    <div class="welcome-message">
+     <p>👨‍👩‍👧‍👦 Welcome to Family Vocabulary Practice! 👨‍👩‍👧‍👦</p>
+     <p>Click on the flashcards to see the Spanish translation, or start practicing to test your knowledge!</p>
+    </div>
+   </section>
+  </main>
+  <script>
+        // Family vocabulary data
+        const familyWords = [
+            { english: 'Mother', spanish: 'Madre', emoji: '👩' },
+            { english: 'Father', spanish: 'Padre', emoji: '👨' },
+            { english: 'Sister', spanish: 'Hermana', emoji: '👧' },
+            { english: 'Brother', spanish: 'Hermano', emoji: '👦' },
+            { english: 'Grandmother', spanish: 'Abuela', emoji: '👵' },
+            { english: 'Grandfather', spanish: 'Abuelo', emoji: '👴' },
+            { english: 'Aunt', spanish: 'Tía', emoji: '👩‍🦱' },
+            { english: 'Uncle', spanish: 'Tío', emoji: '👨‍🦲' },
+            { english: 'Cousin', spanish: 'Primo/Prima', emoji: '👶' },
+            { english: 'Baby', spanish: 'Bebé', emoji: '👶' },
+            { english: 'Family', spanish: 'Familia', emoji: '👨‍👩‍👧‍👦' },
+            { english: 'Parents', spanish: 'Padres', emoji: '👫' }
+        ];
+
+        // Default configuration
+        const defaultConfig = {
+            app_title: "Family Vocabulary Practice",
+            subtitle: "Learn family words in English and Spanish",
+            practice_button_text: "Start Practice",
+            flashcard_button_text: "View Flashcards",
+            primary_color: "#48bb78",
+            secondary_color: "#4299e1",
+            text_color: "#2d3748",
+            background_color: "#667eea",
+            accent_color: "#805ad5"
+        };
+
+        // Current state
+        let currentMode = 'flashcards';
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 0;
+        let practiceQuestions = [];
+        let flippedCards = new Set();
+
+        // Initialize the app
+        function initializeApp() {
+            setupEventListeners();
+            showFlashcards();
+        }
+
+        function setupEventListeners() {
+            document.getElementById('flashcard-btn').addEventListener('click', () => switchMode('flashcards'));
+            document.getElementById('practice-btn').addEventListener('click', () => switchMode('practice'));
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'flashcards') {
+                document.getElementById('flashcard-btn').classList.add('active');
+                showFlashcards();
+            } else {
+                document.getElementById('practice-btn').classList.add('active');
+                startPractice();
+            }
+        }
+
+        function showFlashcards() {
+            const contentArea = document.getElementById('content-area');
+            flippedCards.clear();
+            
+            contentArea.innerHTML = `
+                <div class="flashcard-grid">
+                    ${familyWords.map((word, index) => `
+                        <div class="flashcard" onclick="flipCard(${index})">
+                            <div class="family-emoji">${word.emoji}</div>
+                            <div class="english-word">${word.english}</div>
+                            <div class="spanish-word" id="spanish-${index}" style="opacity: 0;">
+                                ${word.spanish}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function flipCard(index) {
+            const card = document.querySelectorAll('.flashcard')[index];
+            const spanishWord = document.getElementById(`spanish-${index}`);
+            
+            if (flippedCards.has(index)) {
+                // Flip back
+                card.classList.remove('flipped');
+                spanishWord.style.opacity = '0';
+                flippedCards.delete(index);
+            } else {
+                // Flip to show Spanish
+                card.classList.add('flipped');
+                spanishWord.style.opacity = '1';
+                flippedCards.add(index);
+            }
+        }
+
+        function startPractice() {
+            currentQuestion = 0;
+            score = 0;
+            totalQuestions = 8;
+            practiceQuestions = generatePracticeQuestions();
+            showQuestion();
+        }
+
+        function generatePracticeQuestions() {
+            const questions = [];
+            const shuffledWords = [...familyWords].sort(() => Math.random() - 0.5);
+            
+            for (let i = 0; i < Math.min(8, familyWords.length); i++) {
+                const correctWord = shuffledWords[i];
+                const wrongOptions = familyWords
+                    .filter(w => w !== correctWord)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const allOptions = [correctWord, ...wrongOptions]
+                    .sort(() => Math.random() - 0.5);
+                
+                questions.push({
+                    emoji: correctWord.emoji,
+                    english: correctWord.english,
+                    spanish: correctWord.spanish,
+                    options: allOptions,
+                    correctAnswer: correctWord.spanish
+                });
+            }
+            
+            return questions;
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= practiceQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const question = practiceQuestions[currentQuestion];
+            const contentArea = document.getElementById('content-area');
+            
+            contentArea.innerHTML = `
+                <div class="practice-area">
+                    <div class="score">Question ${currentQuestion + 1} of ${totalQuestions} | Score: ${score}/${totalQuestions}</div>
+                    <div class="question-card">
+                        <div class="question-emoji">${question.emoji}</div>
+                        <div class="question-text">What is "${question.english}" in Spanish?</div>
+                        <div class="answer-buttons">
+                            ${question.options.map((option, index) => `
+                                <button class="answer-btn" onclick="selectAnswer('${option.spanish}', ${index})">
+                                    ${option.spanish}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="next-btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
+                        Next Question
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectAnswer(selectedAnswer, buttonIndex) {
+            const question = practiceQuestions[currentQuestion];
+            const buttons = document.querySelectorAll('.answer-btn');
+            const feedback = document.getElementById('feedback');
+            const nextBtn = document.getElementById('next-btn');
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (selectedAnswer === question.correctAnswer) {
+                buttons[buttonIndex].classList.add('correct');
+                feedback.textContent = '¡Correcto! Great job! 🎉';
+                feedback.className = 'feedback correct';
+                score++;
+            } else {
+                buttons[buttonIndex].classList.add('incorrect');
+                // Highlight the correct answer
+                buttons.forEach((btn, index) => {
+                    if (btn.textContent.trim() === question.correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                feedback.textContent = `Not quite! The correct answer is "${question.correctAnswer}" 📚`;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function showResults() {
+            const contentArea = document.getElementById('content-area');
+            const percentage = Math.round((score / totalQuestions) * 100);
+            let message = '';
+            let emoji = '';
+            
+            if (percentage >= 80) {
+                message = '¡Excelente! You know your family vocabulary very well!';
+                emoji = '🌟';
+            } else if (percentage >= 60) {
+                message = '¡Bien! Good job! Keep practicing to improve!';
+                emoji = '👍';
+            } else {
+                message = 'Keep practicing! You\'ll get better with time!';
+                emoji = '💪';
+            }
+            
+            contentArea.innerHTML = `
+                <div class="practice-area">
+                    <div class="question-card">
+                        <div class="question-emoji">${emoji}</div>
+                        <div class="question-text">Practice Complete!</div>
+                        <div style="font-size: 1.2rem; margin: 20px 0;">
+                            Final Score: ${score} out of ${totalQuestions} (${percentage}%)
+                        </div>
+                        <div style="font-size: 1rem; color: #4a5568; margin-bottom: 30px;">
+                            ${message}
+                        </div>
+                        <button class="mode-btn" onclick="startPractice()">
+                            Practice Again
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Element SDK configuration
+        async function onConfigChange(config) {
+            const appTitle = document.getElementById('app-title');
+            const subtitle = document.getElementById('subtitle');
+            const flashcardBtn = document.getElementById('flashcard-btn');
+            const practiceBtn = document.getElementById('practice-btn');
+            
+            if (appTitle) appTitle.textContent = config.app_title || defaultConfig.app_title;
+            if (subtitle) subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+            if (flashcardBtn) flashcardBtn.textContent = config.flashcard_button_text || defaultConfig.flashcard_button_text;
+            if (practiceBtn) practiceBtn.textContent = config.practice_button_text || defaultConfig.practice_button_text;
+            
+            // Apply colors
+            const primaryColor = config.primary_color || defaultConfig.primary_color;
+            const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            const backgroundColor = config.background_color || defaultConfig.background_color;
+            const accentColor = config.accent_color || defaultConfig.accent_color;
+            
+            document.body.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${accentColor} 100%)`;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                .title { color: ${textColor} !important; }
+                .mode-btn { background: ${primaryColor} !important; }
+                .mode-btn:hover { background: ${primaryColor}dd !important; }
+                .mode-btn.active { background: ${textColor} !important; }
+                .answer-btn { background: ${secondaryColor} !important; }
+                .answer-btn:hover { background: ${secondaryColor}dd !important; }
+                .next-btn { background: ${accentColor} !important; }
+                .next-btn:hover { background: ${accentColor}dd !important; }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.primary_color || defaultConfig.primary_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.secondary_color || defaultConfig.secondary_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ secondary_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.background_color || defaultConfig.background_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.accent_color || defaultConfig.accent_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ accent_color: value });
+                            }
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || 'Comic Sans MS',
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || 16,
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ['app_title', config.app_title || defaultConfig.app_title],
+                ['subtitle', config.subtitle || defaultConfig.subtitle],
+                ['practice_button_text', config.practice_button_text || defaultConfig.practice_button_text],
+                ['flashcard_button_text', config.flashcard_button_text || defaultConfig.flashcard_button_text]
+            ]);
+        }
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+
+        // Start the app
+        initializeApp();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995ca422a4cdcdb0',t:'MTc2MTY3NzY2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
