@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Tree Builder</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        .dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        .drop-zone {
+            min-height: 400px;
+            background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .family-member {
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+        .family-member:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .trait-tag {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            margin: 1px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .trait-draggable {
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+        .trait-draggable:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .member-drop-target {
+            border: 2px dashed #3b82f6 !important;
+            background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+        .connection-line {
+            position: absolute;
+            background-color: #6b7280;
+            transform-origin: left center;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .connection-mode .tree-member {
+            border-color: #10b981 !important;
+            cursor: crosshair !important;
+        }
+        .connection-mode .tree-member:hover {
+            border-color: #059669 !important;
+            background-color: rgba(16, 185, 129, 0.1) !important;
+        }
+        .selected-for-connection {
+            border-color: #f59e0b !important;
+            background-color: rgba(245, 158, 11, 0.1) !important;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 font-sans">
+  <div class="container mx-auto p-6 max-w-7xl"><!-- Header -->
+   <header class="text-center mb-8">
+    <h1 id="app-title" class="text-4xl font-bold text-gray-800 mb-2">Family Tree Builder</h1>
+    <p id="instructions" class="text-lg text-gray-600 mb-4">Drag family members to build your tree</p><!-- Language Toggle -->
+    <div class="flex justify-center items-center gap-4 mb-6"><button id="lang-en" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">English</button> <button id="lang-es" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition-colors">Español</button>
+    </div>
+   </header>
+   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6"><!-- Family Members Panel -->
+    <div class="lg:col-span-1">
+     <div class="bg-white rounded-xl shadow-lg p-6">
+      <h2 id="members-title" class="text-xl font-semibold text-gray-800 mb-4">Family Members</h2>
+      <div id="family-members" class="space-y-3"><!-- Family members will be populated by JavaScript -->
+      </div>
+     </div><!-- Traits Panel -->
+     <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+      <h2 id="traits-title" class="text-xl font-semibold text-gray-800 mb-4">Traits</h2>
+      <div id="traits-list" class="flex flex-wrap gap-2"><!-- Traits will be populated by JavaScript -->
+      </div>
+     </div>
+    </div><!-- Family Tree Canvas -->
+    <div class="lg:col-span-3">
+     <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex justify-between items-center mb-4">
+       <h2 id="tree-title" class="text-xl font-semibold text-gray-800">Your Family Tree</h2>
+       <div class="flex gap-2"><button id="connection-mode" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">Connect Members</button> <button id="clear-connections" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">Clear Lines</button> <button id="clear-tree" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Clear Tree</button>
+       </div>
+      </div>
+      <div id="tree-canvas" class="drop-zone border-2 border-dashed border-gray-300 rounded-lg relative overflow-hidden">
+       <div id="empty-message" class="absolute inset-0 flex items-center justify-center text-gray-400 text-lg">
+        Drag family members here to start building your tree
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Member Details Modal -->
+   <div id="member-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+     <h3 id="modal-title" class="text-xl font-semibold mb-4">Edit Family Member</h3>
+     <div class="space-y-4">
+      <div><label id="name-label" class="block text-sm font-medium text-gray-700 mb-1">Name</label> <input type="text" id="member-name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+      <div><label id="traits-label" class="block text-sm font-medium text-gray-700 mb-2">Selected Traits</label>
+       <div id="selected-traits" class="min-h-12 p-3 border border-gray-300 rounded-lg bg-gray-50">
+        <div id="no-traits" class="text-gray-400 text-sm">
+         Click traits below to add them
+        </div>
+       </div>
+      </div>
+      <div><label id="available-traits-label" class="block text-sm font-medium text-gray-700 mb-2">Available Traits</label>
+       <div id="modal-traits" class="flex flex-wrap gap-2 max-h-32 overflow-y-auto"><!-- Traits will be populated -->
+       </div>
+      </div>
+     </div>
+     <div class="flex gap-3 mt-6"><button id="save-member" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Save</button> <button id="cancel-edit" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">Cancel</button> <button id="delete-member" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Delete</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        // Global state
+        let currentLanguage = 'en';
+        let currentMembers = [];
+        let currentEditingMember = null;
+        let recordCount = 0;
+        let connectionMode = false;
+        let selectedMemberForConnection = null;
+        let connections = [];
+
+        // Translations
+        const translations = {
+            en: {
+                appTitle: "Family Tree Builder",
+                instructions: "Drag family members to build your tree",
+                membersTitle: "Family Members",
+                traitsTitle: "Traits",
+                treeTitle: "Your Family Tree",
+                clearTree: "Clear Tree",
+                connectMembers: "Connect Members",
+                clearConnections: "Clear Lines",
+                exitConnectionMode: "Exit Connect Mode",
+                emptyMessage: "Drag family members here to start building your tree",
+                editMember: "Edit Family Member",
+                nameLabel: "Name",
+                traitsLabel: "Selected Traits",
+                availableTraitsLabel: "Available Traits",
+                noTraits: "Click traits below to add them",
+                save: "Save",
+                cancel: "Cancel",
+                delete: "Delete",
+                maxLimit: "Maximum limit of 999 family members reached. Please delete some members first.",
+                familyMembers: {
+                    mother: "Mother",
+                    father: "Father",
+                    son: "Son",
+                    daughter: "Daughter",
+                    grandmother: "Grandmother",
+                    grandfather: "Grandfather",
+                    aunt: "Aunt",
+                    uncle: "Uncle",
+                    cousin: "Cousin",
+                    sister: "Sister",
+                    brother: "Brother",
+                    wife: "Wife",
+                    husband: "Husband"
+                },
+                traits: {
+                    blonde: "Blonde Hair",
+                    black: "Black Hair",
+                    brown: "Brown Hair",
+                    red: "Red Hair",
+                    blue: "Blue Eyes",
+                    green: "Green Eyes",
+                    brown_eyes: "Brown Eyes",
+                    curly: "Curly Hair",
+                    straight: "Straight Hair",
+                    tall: "Tall",
+                    short: "Short",
+                    glasses: "Wears Glasses"
+                }
+            },
+            es: {
+                appTitle: "Constructor de Árbol Genealógico",
+                instructions: "Arrastra miembros de la familia para construir tu árbol",
+                membersTitle: "Miembros de la Familia",
+                traitsTitle: "Características",
+                treeTitle: "Tu Árbol Genealógico",
+                clearTree: "Limpiar Árbol",
+                connectMembers: "Conectar Miembros",
+                clearConnections: "Limpiar Líneas",
+                exitConnectionMode: "Salir del Modo Conectar",
+                emptyMessage: "Arrastra miembros de la familia aquí para comenzar a construir tu árbol",
+                editMember: "Editar Miembro de la Familia",
+                nameLabel: "Nombre",
+                traitsLabel: "Características Seleccionadas",
+                availableTraitsLabel: "Características Disponibles",
+                noTraits: "Haz clic en las características de abajo para agregarlas",
+                save: "Guardar",
+                cancel: "Cancelar",
+                delete: "Eliminar",
+                maxLimit: "Límite máximo de 999 miembros de la familia alcanzado. Por favor elimina algunos miembros primero.",
+                familyMembers: {
+                    mother: "Madre",
+                    father: "Padre",
+                    son: "Hijo",
+                    daughter: "Hija",
+                    grandmother: "Abuela",
+                    grandfather: "Abuelo",
+                    aunt: "Tía",
+                    uncle: "Tío",
+                    cousin: "Primo/a",
+                    sister: "Hermana",
+                    brother: "Hermano",
+                    wife: "Esposa",
+                    husband: "Esposo"
+                },
+                traits: {
+                    blonde: "Cabello Rubio",
+                    black: "Cabello Negro",
+                    brown: "Cabello Castaño",
+                    red: "Cabello Pelirrojo",
+                    blue: "Ojos Azules",
+                    green: "Ojos Verdes",
+                    brown_eyes: "Ojos Marrones",
+                    curly: "Cabello Rizado",
+                    straight: "Cabello Liso",
+                    tall: "Alto/a",
+                    short: "Bajo/a",
+                    glasses: "Usa Anteojos"
+                }
+            }
+        };
+
+        // Default config for Element SDK
+        const defaultConfig = {
+            app_title: "Family Tree Builder",
+            instructions_text: "Drag family members to build your tree",
+            background_color: "#f0f4ff",
+            surface_color: "#ffffff",
+            text_color: "#1f2937",
+            primary_action_color: "#2563eb",
+            secondary_action_color: "#6b7280",
+            font_family: "Inter",
+            font_size: 16
+        };
+
+        // Data SDK handler
+        const dataHandler = {
+            onDataChanged(data) {
+                currentMembers = data;
+                recordCount = data.length;
+                renderTreeMembers();
+            }
+        };
+
+        // Element SDK implementation
+        async function onConfigChange(config) {
+            const appTitle = config.app_title || defaultConfig.app_title;
+            const instructionsText = config.instructions_text || defaultConfig.instructions_text;
+            const backgroundColor = config.background_color || defaultConfig.background_color;
+            const surfaceColor = config.surface_color || defaultConfig.surface_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+            const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+            const fontFamily = config.font_family || defaultConfig.font_family;
+            const fontSize = config.font_size || defaultConfig.font_size;
+
+            // Apply colors and fonts
+            document.body.style.background = `linear-gradient(to bottom right, ${backgroundColor}, #e0e7ff)`;
+            document.body.style.fontFamily = `${fontFamily}, -apple-system, BlinkMacSystemFont, sans-serif`;
+            document.body.style.fontSize = `${fontSize}px`;
+
+            // Update text content
+            document.getElementById('app-title').textContent = appTitle;
+            document.getElementById('instructions').textContent = instructionsText;
+
+            // Apply colors to elements
+            const whiteElements = document.querySelectorAll('.bg-white');
+            whiteElements.forEach(el => el.style.backgroundColor = surfaceColor);
+
+            const textElements = document.querySelectorAll('.text-gray-800, .text-gray-700');
+            textElements.forEach(el => el.style.color = textColor);
+
+            const primaryButtons = document.querySelectorAll('.bg-blue-600, .bg-blue-500');
+            primaryButtons.forEach(el => el.style.backgroundColor = primaryActionColor);
+
+            const secondaryButtons = document.querySelectorAll('.bg-gray-300, .bg-gray-400');
+            secondaryButtons.forEach(el => el.style.backgroundColor = secondaryActionColor);
+
+            // Scale fonts proportionally
+            document.getElementById('app-title').style.fontSize = `${fontSize * 2.5}px`;
+            document.querySelector('h2').style.fontSize = `${fontSize * 1.25}px`;
+            document.querySelector('p').style.fontSize = `${fontSize * 1.125}px`;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.background_color || defaultConfig.background_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.surface_color || defaultConfig.surface_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ surface_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ primary_action_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ secondary_action_color: value });
+                            }
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || defaultConfig.font_family,
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_family: value });
+                        }
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || defaultConfig.font_size,
+                    set: (value) => {
+                        if (window.elementSdk) {
+                            window.elementSdk.setConfig({ font_size: value });
+                        }
+                    }
+                }
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["instructions_text", config.instructions_text || defaultConfig.instructions_text]
+            ]);
+        }
+
+        // Initialize SDKs
+        async function initializeApp() {
+            // Initialize Element SDK
+            if (window.elementSdk) {
+                await window.elementSdk.init({
+                    defaultConfig,
+                    onConfigChange,
+                    mapToCapabilities,
+                    mapToEditPanelValues
+                });
+            }
+
+            // Initialize Data SDK
+            if (window.dataSdk) {
+                const result = await window.dataSdk.init(dataHandler);
+                if (!result.isOk) {
+                    console.error("Failed to initialize data SDK");
+                }
+            }
+
+            setupEventListeners();
+            renderFamilyMembers();
+            renderTraits();
+            updateLanguage();
+        }
+
+        function setupEventListeners() {
+            // Language toggle
+            document.getElementById('lang-en').addEventListener('click', () => switchLanguage('en'));
+            document.getElementById('lang-es').addEventListener('click', () => switchLanguage('es'));
+
+            // Clear tree
+            document.getElementById('clear-tree').addEventListener('click', clearTree);
+
+            // Connection mode
+            document.getElementById('connection-mode').addEventListener('click', toggleConnectionMode);
+            document.getElementById('clear-connections').addEventListener('click', clearConnections);
+
+            // Modal events
+            document.getElementById('cancel-edit').addEventListener('click', closeModal);
+            document.getElementById('save-member').addEventListener('click', saveMember);
+            document.getElementById('delete-member').addEventListener('click', deleteMember);
+
+            // Close modal on backdrop click
+            document.getElementById('member-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'member-modal') closeModal();
+            });
+
+            // Tree canvas drop events
+            const canvas = document.getElementById('tree-canvas');
+            canvas.addEventListener('dragover', handleDragOver);
+            canvas.addEventListener('drop', handleDrop);
+        }
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update button states
+            document.getElementById('lang-en').className = lang === 'en' 
+                ? 'px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors'
+                : 'px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition-colors';
+            
+            document.getElementById('lang-es').className = lang === 'es' 
+                ? 'px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors'
+                : 'px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition-colors';
+
+            updateLanguage();
+            renderFamilyMembers();
+            renderTraits();
+            renderTreeMembers();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            
+            document.getElementById('members-title').textContent = t.membersTitle;
+            document.getElementById('traits-title').textContent = t.traitsTitle;
+            document.getElementById('tree-title').textContent = t.treeTitle;
+            document.getElementById('clear-tree').textContent = t.clearTree;
+            document.getElementById('clear-connections').textContent = t.clearConnections;
+            updateConnectionModeButton();
+            document.getElementById('empty-message').textContent = t.emptyMessage;
+            document.getElementById('modal-title').textContent = t.editMember;
+            document.getElementById('name-label').textContent = t.nameLabel;
+            document.getElementById('traits-label').textContent = t.traitsLabel;
+            document.getElementById('available-traits-label').textContent = t.availableTraitsLabel;
+            document.getElementById('no-traits').textContent = t.noTraits;
+            document.getElementById('save-member').textContent = t.save;
+            document.getElementById('cancel-edit').textContent = t.cancel;
+            document.getElementById('delete-member').textContent = t.delete;
+        }
+
+        function renderFamilyMembers() {
+            const container = document.getElementById('family-members');
+            const t = translations[currentLanguage];
+            
+            container.innerHTML = '';
+            
+            Object.keys(t.familyMembers).forEach(key => {
+                const member = document.createElement('div');
+                member.className = 'family-member bg-blue-100 border border-blue-300 rounded-lg p-3 text-center cursor-move hover:bg-blue-200 transition-colors';
+                member.draggable = true;
+                member.dataset.type = key;
+                member.textContent = t.familyMembers[key];
+                
+                member.addEventListener('dragstart', handleDragStart);
+                member.addEventListener('dragend', handleDragEnd);
+                
+                container.appendChild(member);
+            });
+        }
+
+        function renderTraits() {
+            const container = document.getElementById('traits-list');
+            const t = translations[currentLanguage];
+            
+            container.innerHTML = '';
+            
+            Object.keys(t.traits).forEach(key => {
+                const trait = document.createElement('span');
+                trait.className = 'trait-tag trait-draggable bg-purple-100 text-purple-800 border border-purple-300 rounded-full';
+                trait.draggable = true;
+                trait.dataset.trait = key;
+                trait.textContent = t.traits[key];
+                
+                trait.addEventListener('dragstart', handleTraitDragStart);
+                trait.addEventListener('dragend', handleTraitDragEnd);
+                
+                container.appendChild(trait);
+            });
+        }
+
+        function renderTreeMembers() {
+            const canvas = document.getElementById('tree-canvas');
+            const emptyMessage = document.getElementById('empty-message');
+            
+            // Clear existing members (but keep empty message)
+            const existingMembers = canvas.querySelectorAll('.tree-member');
+            existingMembers.forEach(member => member.remove());
+            
+            if (currentMembers.length === 0) {
+                emptyMessage.style.display = 'flex';
+                return;
+            }
+            
+            emptyMessage.style.display = 'none';
+            
+            currentMembers.forEach(member => {
+                const memberEl = createTreeMemberElement(member);
+                canvas.appendChild(memberEl);
+            });
+
+            // Redraw connections after a short delay to ensure elements are positioned
+            setTimeout(() => {
+                redrawAllConnections();
+            }, 50);
+        }
+
+        function createTreeMemberElement(member) {
+            const t = translations[currentLanguage];
+            const memberEl = document.createElement('div');
+            memberEl.className = 'tree-member absolute bg-white border-2 border-gray-300 rounded-lg p-3 shadow-lg cursor-pointer hover:shadow-xl transition-shadow';
+            memberEl.style.left = member.x + 'px';
+            memberEl.style.top = member.y + 'px';
+            memberEl.dataset.memberId = member.__backendId;
+            
+            const typeText = t.familyMembers[member.type] || member.type;
+            const name = member.name || typeText;
+            
+            memberEl.innerHTML = `
+                <div class="text-sm font-semibold text-gray-800">${name}</div>
+                <div class="text-xs text-gray-600 mt-1">${typeText}</div>
+                <div class="mt-2">
+                    ${member.traits ? member.traits.split(',').map(trait => 
+                        `<span class="trait-tag bg-purple-100 text-purple-700">${t.traits[trait.trim()] || trait.trim()}</span>`
+                    ).join('') : ''}
+                </div>
+            `;
+            
+            memberEl.addEventListener('click', (e) => {
+                if (connectionMode) {
+                    handleMemberConnectionClick(member, memberEl);
+                } else {
+                    editMember(member);
+                }
+            });
+
+            // Add drag and drop for traits
+            memberEl.addEventListener('dragover', handleMemberDragOver);
+            memberEl.addEventListener('drop', (e) => handleMemberDrop(e, member));
+            memberEl.addEventListener('dragleave', handleMemberDragLeave);
+            
+            return memberEl;
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.type);
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleTraitDragStart(e) {
+            e.dataTransfer.setData('application/trait', e.target.dataset.trait);
+            e.target.classList.add('dragging');
+        }
+
+        function handleTraitDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleMemberDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.dataTransfer.types.includes('application/trait')) {
+                e.currentTarget.classList.add('member-drop-target');
+            }
+        }
+
+        function handleMemberDragLeave(e) {
+            e.currentTarget.classList.remove('member-drop-target');
+        }
+
+        async function handleMemberDrop(e, member) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.currentTarget.classList.remove('member-drop-target');
+            
+            const traitKey = e.dataTransfer.getData('application/trait');
+            if (traitKey) {
+                const currentTraits = member.traits ? member.traits.split(',').map(t => t.trim()) : [];
+                
+                if (!currentTraits.includes(traitKey)) {
+                    currentTraits.push(traitKey);
+                    member.traits = currentTraits.join(',');
+                    
+                    if (window.dataSdk) {
+                        const result = await window.dataSdk.update(member);
+                        if (!result.isOk) {
+                            showMessage('Failed to add trait');
+                        }
+                    }
+                }
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        async function handleDrop(e) {
+            e.preventDefault();
+            
+            if (recordCount >= 999) {
+                const t = translations[currentLanguage];
+                showMessage(t.maxLimit);
+                return;
+            }
+            
+            const memberType = e.dataTransfer.getData('text/plain');
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - rect.left - 50; // Center the element
+            const y = e.clientY - rect.top - 30;
+            
+            const newMember = {
+                id: Date.now().toString(),
+                type: memberType,
+                name: '',
+                traits: '',
+                x: Math.max(0, x),
+                y: Math.max(0, y),
+                language: currentLanguage
+            };
+            
+            if (window.dataSdk) {
+                const result = await window.dataSdk.create(newMember);
+                if (!result.isOk) {
+                    showMessage('Failed to add family member');
+                }
+            }
+        }
+
+        function editMember(member) {
+            currentEditingMember = member;
+            
+            document.getElementById('member-name').value = member.name || '';
+            
+            // Clear and populate selected traits
+            const selectedTraitsContainer = document.getElementById('selected-traits');
+            selectedTraitsContainer.innerHTML = '';
+            
+            if (member.traits) {
+                const traits = member.traits.split(',').map(t => t.trim());
+                const t = translations[currentLanguage];
+                
+                traits.forEach(trait => {
+                    const traitEl = document.createElement('span');
+                    traitEl.className = 'trait-tag bg-purple-200 text-purple-800 cursor-pointer';
+                    traitEl.textContent = t.traits[trait] || trait;
+                    traitEl.dataset.trait = trait;
+                    traitEl.addEventListener('click', () => removeTrait(trait));
+                    selectedTraitsContainer.appendChild(traitEl);
+                });
+            }
+            
+            if (selectedTraitsContainer.children.length === 0) {
+                selectedTraitsContainer.innerHTML = '<div id="no-traits" class="text-gray-400 text-sm">' + translations[currentLanguage].noTraits + '</div>';
+            }
+            
+            // Populate available traits
+            populateModalTraits();
+            
+            document.getElementById('member-modal').classList.remove('hidden');
+            document.getElementById('member-modal').classList.add('flex');
+        }
+
+        function populateModalTraits() {
+            const container = document.getElementById('modal-traits');
+            const t = translations[currentLanguage];
+            
+            container.innerHTML = '';
+            
+            Object.keys(t.traits).forEach(key => {
+                const trait = document.createElement('span');
+                trait.className = 'trait-tag bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-200 transition-colors';
+                trait.dataset.trait = key;
+                trait.textContent = t.traits[key];
+                trait.addEventListener('click', () => addTrait(key));
+                
+                container.appendChild(trait);
+            });
+        }
+
+        function addTrait(traitKey) {
+            if (!currentEditingMember) return;
+            
+            const currentTraits = currentEditingMember.traits ? currentEditingMember.traits.split(',').map(t => t.trim()) : [];
+            
+            if (!currentTraits.includes(traitKey)) {
+                currentTraits.push(traitKey);
+                currentEditingMember.traits = currentTraits.join(',');
+                
+                // Update selected traits display
+                const selectedTraitsContainer = document.getElementById('selected-traits');
+                const noTraitsMsg = document.getElementById('no-traits');
+                if (noTraitsMsg) noTraitsMsg.remove();
+                
+                const t = translations[currentLanguage];
+                const traitEl = document.createElement('span');
+                traitEl.className = 'trait-tag bg-purple-200 text-purple-800 cursor-pointer';
+                traitEl.textContent = t.traits[traitKey];
+                traitEl.dataset.trait = traitKey;
+                traitEl.addEventListener('click', () => removeTrait(traitKey));
+                selectedTraitsContainer.appendChild(traitEl);
+            }
+        }
+
+        function removeTrait(traitKey) {
+            if (!currentEditingMember) return;
+            
+            const currentTraits = currentEditingMember.traits ? currentEditingMember.traits.split(',').map(t => t.trim()) : [];
+            const updatedTraits = currentTraits.filter(t => t !== traitKey);
+            currentEditingMember.traits = updatedTraits.join(',');
+            
+            // Update selected traits display
+            const selectedTraitsContainer = document.getElementById('selected-traits');
+            const traitElements = selectedTraitsContainer.querySelectorAll(`[data-trait="${traitKey}"]`);
+            traitElements.forEach(el => el.remove());
+            
+            if (selectedTraitsContainer.children.length === 0) {
+                selectedTraitsContainer.innerHTML = '<div id="no-traits" class="text-gray-400 text-sm">' + translations[currentLanguage].noTraits + '</div>';
+            }
+        }
+
+        async function saveMember() {
+            if (!currentEditingMember) return;
+            
+            const name = document.getElementById('member-name').value.trim();
+            currentEditingMember.name = name;
+            
+            if (window.dataSdk) {
+                const result = await window.dataSdk.update(currentEditingMember);
+                if (result.isOk) {
+                    closeModal();
+                } else {
+                    showMessage('Failed to save member');
+                }
+            }
+        }
+
+        async function deleteMember() {
+            if (!currentEditingMember) return;
+            
+            if (window.dataSdk) {
+                const result = await window.dataSdk.delete(currentEditingMember);
+                if (result.isOk) {
+                    closeModal();
+                } else {
+                    showMessage('Failed to delete member');
+                }
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('member-modal').classList.add('hidden');
+            document.getElementById('member-modal').classList.remove('flex');
+            currentEditingMember = null;
+        }
+
+        async function clearTree() {
+            if (currentMembers.length === 0) return;
+            
+            // Delete all members
+            for (const member of currentMembers) {
+                if (window.dataSdk) {
+                    await window.dataSdk.delete(member);
+                }
+            }
+        }
+
+        function toggleConnectionMode() {
+            connectionMode = !connectionMode;
+            selectedMemberForConnection = null;
+            
+            const canvas = document.getElementById('tree-canvas');
+            if (connectionMode) {
+                canvas.classList.add('connection-mode');
+            } else {
+                canvas.classList.remove('connection-mode');
+                // Remove any selection highlights
+                document.querySelectorAll('.selected-for-connection').forEach(el => {
+                    el.classList.remove('selected-for-connection');
+                });
+            }
+            
+            updateConnectionModeButton();
+        }
+
+        function updateConnectionModeButton() {
+            const button = document.getElementById('connection-mode');
+            const t = translations[currentLanguage];
+            
+            if (connectionMode) {
+                button.textContent = t.exitConnectionMode;
+                button.className = 'px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors';
+            } else {
+                button.textContent = t.connectMembers;
+                button.className = 'px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors';
+            }
+        }
+
+        function handleMemberConnectionClick(member, memberEl) {
+            if (!selectedMemberForConnection) {
+                // Select first member
+                selectedMemberForConnection = { member, element: memberEl };
+                memberEl.classList.add('selected-for-connection');
+            } else if (selectedMemberForConnection.member.__backendId === member.__backendId) {
+                // Deselect if clicking the same member
+                memberEl.classList.remove('selected-for-connection');
+                selectedMemberForConnection = null;
+            } else {
+                // Create connection between two members
+                createConnection(selectedMemberForConnection.member, member);
+                selectedMemberForConnection.element.classList.remove('selected-for-connection');
+                selectedMemberForConnection = null;
+            }
+        }
+
+        function createConnection(member1, member2) {
+            const connectionId = `${member1.__backendId}-${member2.__backendId}`;
+            const reverseId = `${member2.__backendId}-${member1.__backendId}`;
+            
+            // Check if connection already exists
+            if (connections.some(conn => conn.id === connectionId || conn.id === reverseId)) {
+                return;
+            }
+            
+            const connection = {
+                id: connectionId,
+                member1: member1.__backendId,
+                member2: member2.__backendId
+            };
+            
+            connections.push(connection);
+            drawConnection(member1, member2);
+        }
+
+        function drawConnection(member1, member2) {
+            const canvas = document.getElementById('tree-canvas');
+            const member1El = document.querySelector(`[data-member-id="${member1.__backendId}"]`);
+            const member2El = document.querySelector(`[data-member-id="${member2.__backendId}"]`);
+            
+            if (!member1El || !member2El) return;
+            
+            const rect1 = member1El.getBoundingClientRect();
+            const rect2 = member2El.getBoundingClientRect();
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const x1 = rect1.left - canvasRect.left + rect1.width / 2;
+            const y1 = rect1.top - canvasRect.top + rect1.height / 2;
+            const x2 = rect2.left - canvasRect.left + rect2.width / 2;
+            const y2 = rect2.top - canvasRect.top + rect2.height / 2;
+            
+            const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            
+            const line = document.createElement('div');
+            line.className = 'connection-line';
+            line.style.width = length + 'px';
+            line.style.height = '2px';
+            line.style.left = x1 + 'px';
+            line.style.top = y1 + 'px';
+            line.style.transform = `rotate(${angle}deg)`;
+            line.dataset.connectionId = `${member1.__backendId}-${member2.__backendId}`;
+            
+            canvas.appendChild(line);
+        }
+
+        function clearConnections() {
+            connections = [];
+            const canvas = document.getElementById('tree-canvas');
+            const lines = canvas.querySelectorAll('.connection-line');
+            lines.forEach(line => line.remove());
+        }
+
+        function redrawAllConnections() {
+            // Remove existing lines
+            const canvas = document.getElementById('tree-canvas');
+            const lines = canvas.querySelectorAll('.connection-line');
+            lines.forEach(line => line.remove());
+            
+            // Redraw all connections
+            connections.forEach(connection => {
+                const member1 = currentMembers.find(m => m.__backendId === connection.member1);
+                const member2 = currentMembers.find(m => m.__backendId === connection.member2);
+                
+                if (member1 && member2) {
+                    drawConnection(member1, member2);
+                }
+            });
+        }
+
+        function showMessage(message) {
+            // Create a simple toast message
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'995c373fd1fb9091',t:'MTc2MTY3MzIwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
