@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Prepositions &amp; Articles Tutor</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin: 40px auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: #667eea;
+      margin: 0 0 10px 0;
+      font-size: 32px;
+    }
+
+    .header p {
+      color: #666;
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 25px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+    }
+
+    .section-title {
+      color: #667eea;
+      font-size: 22px;
+      margin: 0 0 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-content {
+      color: #333;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .explanation-box {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border: 1px solid #e0e0e0;
+    }
+
+    .question {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 15px 0;
+      border: 2px solid #e0e0e0;
+    }
+
+    .question-text {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      padding: 12px 20px;
+      background: white;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      color: #667eea;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 15px;
+      text-align: left;
+    }
+
+    .option-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .option-btn.correct {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .option-btn.incorrect {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: white;
+    }
+
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .feedback {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .feedback.correct {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #10b981;
+    }
+
+    .feedback.incorrect {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #ef4444;
+    }
+
+    .input-group {
+      margin: 15px 0;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s;
+      margin-top: 15px;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .correction-box {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      border-left: 4px solid #667eea;
+    }
+
+    .correction-box .original {
+      color: #ef4444;
+      text-decoration: line-through;
+      margin-bottom: 5px;
+    }
+
+    .correction-box .corrected {
+      color: #10b981;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .correction-box .explanation {
+      color: #666;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .conversation-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 15px 0;
+      min-height: 200px;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 2px solid #e0e0e0;
+    }
+
+    .message {
+      margin: 15px 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      max-width: 80%;
+      line-height: 1.5;
+    }
+
+    .message.ai {
+      background: #e0e7ff;
+      color: #333;
+      margin-right: auto;
+    }
+
+    .message.user {
+      background: #667eea;
+      color: white;
+      margin-left: auto;
+    }
+
+    .summary-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin: 20px 0;
+    }
+
+    .summary-box h3 {
+      margin: 0 0 15px 0;
+      font-size: 20px;
+    }
+
+    .summary-box ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+
+    .summary-box li {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .progress-indicator {
+      text-align: center;
+      color: #667eea;
+      font-weight: 500;
+      margin: 20px 0;
+      font-size: 16px;
+    }
+
+    .emoji {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+        margin: 20px auto;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .section-title {
+        font-size: 18px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="main-title">Master Prepositions &amp; Articles</h1>
+    <p id="subtitle">Interactive English Practice for Spanish Speakers</p>
+   </div>
+   <div class="section">
+    <div class="section-content">
+     <p id="welcome-message">Welcome! Let's improve your English prepositions and articles through fun, interactive exercises. Click "Start Learning" to begin your journey!</p><button class="btn-primary" onclick="startSession()">Start Learning</button>
+    </div>
+   </div>
+   <div id="lesson-content" class="hidden"><!-- Section 1: Warm-Up -->
+    <div class="section">
+     <h2 class="section-title"><span class="emoji">📚</span>Warm-Up: Quick Review</h2>
+     <div class="section-content">
+      <div class="explanation-box">
+       <h3 style="color: #667eea; margin-top: 0;">Articles (a, an, the, Ø)</h3>
+       <p><strong>a/an:</strong> Use before singular countable nouns when mentioning for the first time (a book, an apple).</p>
+       <p><strong>the:</strong> Use when referring to something specific or already mentioned (the book we discussed).</p>
+       <p><strong>Ø (no article):</strong> Use with plural nouns or uncountable nouns in general (love, happiness, books).</p>
+      </div>
+      <div class="explanation-box">
+       <h3 style="color: #667eea; margin-top: 0;">Common Prepositions</h3>
+       <p><strong>in/on/at:</strong> in (months, years, cities), on (days, dates), at (specific times, places)</p>
+       <p><strong>to/for:</strong> to (direction, recipient), for (purpose, duration)</p>
+       <p><strong>of/about:</strong> of (possession, part of), about (topic, concerning)</p>
+      </div>
+      <div id="warmup-questions">
+       <div class="question">
+        <div class="question-text">
+         1. I'm interested ___ learning English.
+        </div>
+        <div class="options"><button class="option-btn" onclick="checkAnswer(0, 'in', this)">a) in</button> <button class="option-btn" onclick="checkAnswer(0, 'on', this)">b) on</button> <button class="option-btn" onclick="checkAnswer(0, 'at', this)">c) at</button>
+        </div>
+        <div id="feedback-0" class="feedback hidden"></div>
+       </div>
+       <div class="question">
+        <div class="question-text">
+         2. She has ___ meeting at 3 PM.
+        </div>
+        <div class="options"><button class="option-btn" onclick="checkAnswer(1, 'a', this)">a) a</button> <button class="option-btn" onclick="checkAnswer(1, 'an', this)">b) an</button> <button class="option-btn" onclick="checkAnswer(1, 'the', this)">c) the</button>
+        </div>
+        <div id="feedback-1" class="feedback hidden"></div>
+       </div>
+       <div class="question">
+        <div class="question-text">
+         3. We live ___ Madrid.
+        </div>
+        <div class="options"><button class="option-btn" onclick="checkAnswer(2, 'in', this)">a) in</button> <button class="option-btn" onclick="checkAnswer(2, 'on', this)">b) on</button> <button class="option-btn" onclick="checkAnswer(2, 'at', this)">c) at</button>
+        </div>
+        <div id="feedback-2" class="feedback hidden"></div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Section 2: Written Practice -->
+    <div class="section">
+     <h2 class="section-title"><span class="emoji">✍️</span>Written Practice: Fill in the Blanks</h2>
+     <div class="section-content">
+      <p>Complete these sentences with the correct preposition or article:</p>
+      <div class="input-group"><label>1. I'm thinking ___ you.</label> <input type="text" id="written-1" placeholder="Type your answer">
+      </div>
+      <div class="input-group"><label>2. She's married ___ a teacher.</label> <input type="text" id="written-2" placeholder="Type your answer">
+      </div>
+      <div class="input-group"><label>3. Love is important in ___ life.</label> <input type="text" id="written-3" placeholder="Type your answer">
+      </div>
+      <div class="input-group"><label>4. I have a meeting ___ Monday.</label> <input type="text" id="written-4" placeholder="Type your answer">
+      </div>
+      <div class="input-group"><label>5. We went ___ the park yesterday.</label> <input type="text" id="written-5" placeholder="Type your answer">
+      </div><button class="btn-primary" onclick="checkWrittenAnswers()">Check My Answers</button>
+      <div id="written-feedback" class="hidden"></div>
+     </div>
+    </div><!-- Section 3: Conversation Practice -->
+    <div class="section">
+     <h2 class="section-title"><span class="emoji">💬</span>Conversation Practice</h2>
+     <div class="section-content">
+      <p>Let's have a conversation! Choose a topic and respond to my questions. I'll help you with prepositions and articles.</p>
+      <div style="display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap;"><button class="btn-primary" onclick="startConversation('travel')">Travel</button> <button class="btn-primary" onclick="startConversation('daily')">Daily Life</button> <button class="btn-primary" onclick="startConversation('relationships')">Relationships</button>
+      </div>
+      <div id="conversation-area" class="hidden">
+       <div class="conversation-box" id="conversation-box"></div><textarea id="user-response" placeholder="Type your response here..."></textarea> <button class="btn-primary" onclick="submitResponse()">Send Response</button>
+      </div>
+     </div>
+    </div><!-- Section 4: Wrap-Up -->
+    <div class="section">
+     <h2 class="section-title"><span class="emoji">🎯</span>Wrap-Up &amp; Reflection</h2>
+     <div class="section-content"><button class="btn-primary" onclick="showSummary()">Show My Progress</button>
+      <div id="summary-content" class="hidden"></div>
+      <div id="final-practice" class="hidden" style="margin-top: 20px;">
+       <h3 style="color: #667eea;">Extra Practice Challenge</h3>
+       <p>Write 3 sentences about your weekend using at least three prepositions and two articles:</p><textarea id="final-writing" placeholder="Write your sentences here..."></textarea> <button class="btn-primary" onclick="submitFinalPractice()">Submit for Feedback</button>
+       <div id="final-feedback" class="hidden"></div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Master Prepositions & Articles",
+      subtitle: "Interactive English Practice for Spanish Speakers",
+      welcome_message: "Welcome! Let's improve your English prepositions and articles through fun, interactive exercises. Click \"Start Learning\" to begin your journey!",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      surface_color: "#f8f9fa",
+      text_color: "#333333",
+      accent_color: "#10b981"
+    };
+
+    let config = { ...defaultConfig };
+
+    const warmupAnswers = ['in', 'a', 'in'];
+    const writtenAnswers = ['of', 'to', 'Ø', 'on', 'to'];
+    let userErrors = [];
+    let conversationTopic = '';
+    let conversationTurn = 0;
+
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+
+      document.body.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      
+      document.querySelectorAll('.header h1, .section-title, .explanation-box h3').forEach(el => {
+        el.style.color = primaryColor;
+      });
+
+      document.querySelectorAll('.section').forEach(el => {
+        el.style.background = surfaceColor;
+        el.style.borderLeftColor = primaryColor;
+      });
+
+      document.querySelectorAll('.section-content, .question-text, .input-group label').forEach(el => {
+        el.style.color = textColor;
+      });
+
+      document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.style.background = primaryColor;
+      });
+
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        if (!btn.classList.contains('correct') && !btn.classList.contains('incorrect')) {
+          btn.style.borderColor = primaryColor;
+          btn.style.color = primaryColor;
+        }
+      });
+    }
+
+    function startSession() {
+      document.getElementById('lesson-content').classList.remove('hidden');
+      document.querySelector('.section').style.display = 'none';
+    }
+
+    function checkAnswer(questionIndex, selectedAnswer, button) {
+      const correctAnswer = warmupAnswers[questionIndex];
+      const feedbackDiv = document.getElementById(`feedback-${questionIndex}`);
+      const buttons = button.parentElement.querySelectorAll('.option-btn');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (selectedAnswer === correctAnswer) {
+        button.classList.add('correct');
+        feedbackDiv.className = 'feedback correct';
+        feedbackDiv.innerHTML = getCorrectFeedback(questionIndex);
+      } else {
+        button.classList.add('incorrect');
+        feedbackDiv.className = 'feedback incorrect';
+        feedbackDiv.innerHTML = getIncorrectFeedback(questionIndex, selectedAnswer);
+        userErrors.push(`Question ${questionIndex + 1}`);
+      }
+      
+      feedbackDiv.classList.remove('hidden');
+    }
+
+    function getCorrectFeedback(index) {
+      const feedback = [
+        "✅ Excellent! We use 'interested IN' to express interest in something. In Spanish, you might say 'interesado EN', which is similar!",
+        "✅ Perfect! We use 'a' before singular countable nouns when mentioning them for the first time. 'Meeting' starts with a consonant sound.",
+        "✅ Great job! We use 'in' with cities and countries. Remember: IN cities/countries, ON streets, AT specific addresses."
+      ];
+      return feedback[index];
+    }
+
+    function getIncorrectFeedback(index, selected) {
+      const feedback = [
+        `❌ Not quite. The correct answer is 'in'. We say 'interested IN' something. This is a fixed expression in English. Spanish speakers often confuse this because in Spanish you might say 'interesado EN'.`,
+        `❌ Not quite. The correct answer is 'a'. We use 'a' before singular countable nouns when mentioning them for the first time. Use 'an' only before vowel sounds.`,
+        `❌ Not quite. The correct answer is 'in'. We use 'in' with cities and countries. Remember: IN cities/countries, ON streets, AT specific addresses.`
+      ];
+      return feedback[index];
+    }
+
+    function checkWrittenAnswers() {
+      const feedbackDiv = document.getElementById('written-feedback');
+      let html = '<h3 style="color: ' + (config.primary_color || defaultConfig.primary_color) + '; margin-top: 20px;">Your Corrections:</h3>';
+
+      for (let i = 1; i <= 5; i++) {
+        const userAnswer = document.getElementById(`written-${i}`).value.trim().toLowerCase();
+        const correctAnswer = writtenAnswers[i - 1];
+        const isCorrect = userAnswer === correctAnswer.toLowerCase();
+
+        if (!isCorrect) {
+          userErrors.push(`Written question ${i}`);
+        }
+
+        html += `<div class="correction-box">`;
+        html += `<div class="original">Your answer: "${userAnswer || '(empty)'}"</div>`;
+        html += `<div class="corrected">Correct answer: "${correctAnswer === 'Ø' ? '(no article)' : correctAnswer}"</div>`;
+        html += `<div class="explanation">${getWrittenExplanation(i)}</div>`;
+        html += `</div>`;
+      }
+
+      feedbackDiv.innerHTML = html;
+      feedbackDiv.classList.remove('hidden');
+    }
+
+    function getWrittenExplanation(index) {
+      const explanations = [
+        "We use 'of' to show what you're thinking about. 'Think OF' is the correct expression. In Spanish, you say 'pensar EN', but in English it's 'think OF'.",
+        "We use 'married TO' someone. This is a fixed expression. Spanish speakers often say 'married WITH' because in Spanish it's 'casado CON', but in English we say 'married TO'.",
+        "No article needed! When talking about life in general (abstract concept), we don't use an article. Same with love, happiness, freedom, etc.",
+        "We use 'on' with days of the week. Remember: ON Monday, IN January, AT 3 o'clock.",
+        "We use 'to' to show direction or destination. 'Go TO' a place. In Spanish you say 'ir A', and in English it's 'go TO'."
+      ];
+      return explanations[index - 1];
+    }
+
+    function startConversation(topic) {
+      conversationTopic = topic;
+      conversationTurn = 0;
+      const conversationArea = document.getElementById('conversation-area');
+      const conversationBox = document.getElementById('conversation-box');
+      
+      conversationArea.classList.remove('hidden');
+      conversationBox.innerHTML = '';
+
+      const prompts = {
+        travel: "Hi! I'd love to hear about your last vacation. Where did you go? When did you travel? Try to use prepositions like 'in', 'on', 'at', and 'to' in your answer!",
+        daily: "Hello! Tell me about your daily routine. What time do you wake up? What do you do in the morning? Use time prepositions like 'at', 'in', and 'on'!",
+        relationships: "Hi there! Tell me about your family or friends. Who are you close to? Use expressions like 'close to', 'friends with', 'married to', etc."
+      };
+
+      addMessage(prompts[topic], 'ai');
+    }
+
+    function addMessage(text, sender) {
+      const conversationBox = document.getElementById('conversation-box');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      messageDiv.textContent = text;
+      conversationBox.appendChild(messageDiv);
+      conversationBox.scrollTop = conversationBox.scrollHeight;
+    }
+
+    function submitResponse() {
+      const responseInput = document.getElementById('user-response');
+      const userText = responseInput.value.trim();
+
+      if (!userText) return;
+
+      addMessage(userText, 'user');
+      responseInput.value = '';
+
+      setTimeout(() => {
+        const feedback = analyzeResponse(userText);
+        addMessage(feedback, 'ai');
+        conversationTurn++;
+
+        if (conversationTurn < 2) {
+          setTimeout(() => {
+            addMessage(getFollowUpQuestion(), 'ai');
+          }, 1000);
+        }
+      }, 500);
+    }
+
+    function analyzeResponse(text) {
+      const lowerText = text.toLowerCase();
+      let feedback = "Great response! ";
+
+      if (lowerText.includes('in the') || lowerText.includes('on the') || lowerText.includes('at the')) {
+        feedback += "👍 Nice use of prepositions! ";
+      }
+
+      if (lowerText.includes('married with')) {
+        feedback += "Small correction: we say 'married TO' someone, not 'married WITH'. ";
+        userErrors.push('married with');
+      }
+
+      if (lowerText.includes('interested on') || lowerText.includes('interested at')) {
+        feedback += "Small correction: we say 'interested IN' something, not 'interested ON/AT'. ";
+        userErrors.push('interested in');
+      }
+
+      if (lowerText.includes('in monday') || lowerText.includes('in tuesday')) {
+        feedback += "Small correction: we use 'ON' with days of the week (on Monday), not 'IN'. ";
+        userErrors.push('on + day');
+      }
+
+      if (feedback === "Great response! ") {
+        feedback += "Your prepositions and articles look good! Keep it up! 🌟";
+      }
+
+      return feedback;
+    }
+
+    function getFollowUpQuestion() {
+      const questions = {
+        travel: "That sounds interesting! Can you tell me more about what you did there? What activities did you do?",
+        daily: "Thanks for sharing! What do you usually do in the evening or at night?",
+        relationships: "That's nice! How long have you known them? What do you like to do together?"
+      };
+      return questions[conversationTopic];
+    }
+
+    function showSummary() {
+      const summaryDiv = document.getElementById('summary-content');
+      
+      let html = '<div class="summary-box">';
+      html += '<h3>📊 Your Learning Summary</h3>';
+      
+      if (userErrors.length === 0) {
+        html += '<p>🎉 Excellent work! You didn\'t make any errors in the exercises!</p>';
+      } else {
+        html += '<p><strong>Areas to focus on:</strong></p>';
+        html += '<ul>';
+        
+        const errorTypes = [...new Set(userErrors)];
+        errorTypes.forEach(error => {
+          if (error.includes('married')) {
+            html += '<li>Remember: "married TO" someone (not "married WITH")</li>';
+          } else if (error.includes('interested')) {
+            html += '<li>Remember: "interested IN" something (not "interested ON")</li>';
+          } else if (error.includes('on + day')) {
+            html += '<li>Use "ON" with days of the week (on Monday, on Friday)</li>';
+          } else {
+            html += `<li>Review: ${error}</li>`;
+          }
+        });
+        
+        html += '</ul>';
+      }
+      
+      html += '<p><strong>💡 Key Takeaways:</strong></p>';
+      html += '<ul>';
+      html += '<li>Time: IN (months/years), ON (days), AT (specific times)</li>';
+      html += '<li>Place: IN (cities/countries), ON (streets), AT (addresses)</li>';
+      html += '<li>Articles: Use "a/an" for first mention, "the" for specific things</li>';
+      html += '<li>No article with general abstract nouns (love, life, happiness)</li>';
+      html += '</ul>';
+      html += '</div>';
+      
+      summaryDiv.innerHTML = html;
+      summaryDiv.classList.remove('hidden');
+      document.getElementById('final-practice').classList.remove('hidden');
+    }
+
+    function submitFinalPractice() {
+      const finalText = document.getElementById('final-writing').value.trim();
+      const feedbackDiv = document.getElementById('final-feedback');
+
+      if (!finalText) {
+        feedbackDiv.innerHTML = '<div class="feedback incorrect">Please write your sentences first!</div>';
+        feedbackDiv.classList.remove('hidden');
+        return;
+      }
+
+      let feedback = '<div class="correction-box">';
+      feedback += '<h4 style="color: ' + (config.primary_color || defaultConfig.primary_color) + ';">Your Writing Feedback:</h4>';
+      feedback += '<p><strong>Your sentences:</strong></p>';
+      feedback += `<p style="font-style: italic;">"${finalText}"</p>`;
+      feedback += '<p><strong>Feedback:</strong></p>';
+      
+      const lowerText = finalText.toLowerCase();
+      let suggestions = [];
+
+      if (!lowerText.includes(' in ') && !lowerText.includes(' on ') && !lowerText.includes(' at ')) {
+        suggestions.push('Try to include more prepositions like in, on, at, to, for');
+      }
+
+      if (!lowerText.includes(' a ') && !lowerText.includes(' an ') && !lowerText.includes(' the ')) {
+        suggestions.push('Remember to use articles (a, an, the) where appropriate');
+      }
+
+      if (suggestions.length > 0) {
+        feedback += '<ul>';
+        suggestions.forEach(s => feedback += `<li>${s}</li>`);
+        feedback += '</ul>';
+      } else {
+        feedback += '<p>✅ Great job! You\'ve included prepositions and articles. Keep practicing!</p>';
+      }
+
+      feedback += '<p>🌟 Keep up the excellent work! Practice makes perfect!</p>';
+      feedback += '</div>';
+
+      feedbackDiv.innerHTML = feedback;
+      feedbackDiv.classList.remove('hidden');
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9996717615f5ef4b',t:'MTc2MjI4Mzc1OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
