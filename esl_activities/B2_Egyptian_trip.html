@@ -1,0 +1,676 @@
+<!doctype doctype>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Egypt Travel Journal</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #f4e4c1 0%, #e8d4a8 100%);
+      min-height: 100%;
+      height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: #8b6914;
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+    }
+    
+    .header p {
+      margin: 0;
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+    
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .phrases-panel {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      height: fit-content;
+    }
+    
+    .phrases-panel h2 {
+      margin: 0 0 1rem 0;
+      color: #8b6914;
+      font-size: 1.5rem;
+      border-bottom: 2px solid #d4a574;
+      padding-bottom: 0.5rem;
+    }
+    
+    .phrase-category {
+      margin-bottom: 1.5rem;
+    }
+    
+    .phrase-category h3 {
+      color: #c17817;
+      font-size: 1.1rem;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .phrase-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .phrase-list li {
+      padding: 0.5rem;
+      margin: 0.25rem 0;
+      background: #fef9f0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .phrase-list li:hover {
+      background: #f4e4c1;
+    }
+    
+    .journal-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .form-section {
+      margin-bottom: 2rem;
+    }
+    
+    .form-section h2 {
+      margin: 0 0 1.5rem 0;
+      color: #8b6914;
+      font-size: 1.8rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    label {
+      margin-bottom: 0.5rem;
+      color: #5a4a2a;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    input, select, textarea {
+      padding: 0.75rem;
+      border: 2px solid #d4a574;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Georgia', serif;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #8b6914;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .btn {
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Georgia', serif;
+    }
+    
+    .btn-primary {
+      background: #c17817;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #a06513;
+    }
+    
+    .btn-primary:disabled {
+      background: #d4a574;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: #e8d4a8;
+      color: #5a4a2a;
+    }
+    
+    .btn-secondary:hover {
+      background: #d4a574;
+    }
+    
+    .btn-delete {
+      background: #c44536;
+      color: white;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .btn-delete:hover {
+      background: #a03628;
+    }
+    
+    .entries-section {
+      margin-top: 2rem;
+    }
+    
+    .entries-section h2 {
+      margin: 0 0 1.5rem 0;
+      color: #8b6914;
+      font-size: 1.8rem;
+    }
+    
+    .entries-list {
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .entry-card {
+      background: #fef9f0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #c17817;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+    
+    .entry-meta {
+      flex: 1;
+    }
+    
+    .entry-date {
+      color: #8b6914;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .entry-location {
+      color: #c17817;
+      font-size: 0.95rem;
+    }
+    
+    .entry-activity {
+      background: #8b6914;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    
+    .entry-description {
+      color: #5a4a2a;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .entry-phrase {
+      background: white;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border-left: 3px solid #c17817;
+      font-style: italic;
+      color: #8b6914;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #8b6914;
+    }
+    
+    .empty-state p {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .limit-warning {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      color: #856404;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="journal-title">My Egypt Travel Journal</h1>
+    <p id="welcome-message">Practice describing your Egyptian adventure with common travel phrases</p>
+   </div>
+   <div class="main-content">
+    <div class="phrases-panel">
+     <h2>🗣️ Travel Phrases</h2>
+     <div class="phrase-category">
+      <h3>Describing Places</h3>
+      <ul class="phrase-list">
+       <li>The pyramids were absolutely breathtaking</li>
+       <li>It was an unforgettable experience</li>
+       <li>The view was stunning</li>
+       <li>I was amazed by the ancient architecture</li>
+       <li>The atmosphere was incredible</li>
+       <li>The temple stood out against the desert</li>
+       <li>The colors brought out the beauty of the sunset</li>
+      </ul>
+     </div>
+     <div class="phrase-category">
+      <h3>Activities &amp; Phrasal Verbs</h3>
+      <ul class="phrase-list">
+       <li>We set off early in the morning</li>
+       <li>I came across an amazing artifact</li>
+       <li>We checked out the local museum</li>
+       <li>I ran into some friendly locals</li>
+       <li>We looked around the ancient ruins</li>
+       <li>I picked up some souvenirs at the market</li>
+       <li>We ended up staying longer than planned</li>
+       <li>I took in all the sights and sounds</li>
+       <li>We got back to the hotel exhausted</li>
+       <li>I looked forward to visiting the pyramids</li>
+       <li>We turned up at the temple just in time</li>
+       <li>I found out about the history from our guide</li>
+      </ul>
+     </div>
+     <div class="phrase-category">
+      <h3>Travel Experiences</h3>
+      <ul class="phrase-list">
+       <li>We went through security at the airport</li>
+       <li>I got on the plane feeling excited</li>
+       <li>We checked in at a beautiful hotel</li>
+       <li>I woke up to an amazing view</li>
+       <li>We walked around the old city</li>
+       <li>I tried out the local cuisine</li>
+       <li>We hung out with other travelers</li>
+       <li>I took off my shoes before entering</li>
+       <li>We put on sunscreen before exploring</li>
+       <li>I gave up trying to bargain at the market</li>
+      </ul>
+     </div>
+     <div class="phrase-category">
+      <h3>Impressions &amp; Reactions</h3>
+      <ul class="phrase-list">
+       <li>I was struck by the beauty of...</li>
+       <li>It exceeded my expectations</li>
+       <li>The hospitality was wonderful</li>
+       <li>I learned so much about...</li>
+       <li>It was worth every moment</li>
+       <li>The experience blew me away</li>
+       <li>I couldn't get over how magnificent it was</li>
+       <li>The whole trip lived up to my expectations</li>
+       <li>I was taken aback by the size of the pyramids</li>
+      </ul>
+     </div>
+    </div>
+    <div class="journal-section">
+     <div class="form-section">
+      <h2>✍️ Add Journal Entry</h2>
+      <div id="limit-warning" class="limit-warning" style="display: none;">
+       Maximum limit of 999 entries reached. Please delete some entries first.
+      </div>
+      <form id="entry-form">
+       <div class="form-grid">
+        <div class="form-group"><label for="entry-date">Date</label> <input type="date" id="entry-date" required>
+        </div>
+        <div class="form-group"><label for="entry-location">Location</label> <select id="entry-location" required> <option value="">Select a location</option> <option value="Cairo">Cairo</option> <option value="Giza">Giza</option> <option value="Luxor">Luxor</option> <option value="Aswan">Aswan</option> <option value="Alexandria">Alexandria</option> <option value="Nile River">Nile River</option> <option value="Red Sea">Red Sea</option> <option value="Karnak Temple">Karnak Temple</option> <option value="Valley of the Kings">Valley of the Kings</option> </select>
+        </div>
+        <div class="form-group full-width"><label for="entry-activity">Activity</label> <input type="text" id="entry-activity" placeholder="e.g., Visited the Great Pyramid" required>
+        </div>
+        <div class="form-group full-width"><label for="entry-description">Description</label> <textarea id="entry-description" placeholder="Describe your experience in detail..." required></textarea>
+        </div>
+        <div class="form-group full-width"><label for="entry-phrase">Travel Phrase Used</label> <input type="text" id="entry-phrase" placeholder="Click a phrase above or write your own" required>
+        </div>
+       </div><button type="submit" class="btn btn-primary" id="submit-btn">Add Entry</button>
+      </form>
+     </div>
+     <div class="entries-section">
+      <h2>📖 My Entries</h2>
+      <div id="entries-list" class="entries-list">
+       <div class="empty-state">
+        <p>No entries yet. Start documenting your Egypt adventure!</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      journal_title: "My Egypt Travel Journal",
+      welcome_message: "Practice describing your Egyptian adventure with common travel phrases",
+      background_color: "#f4e4c1",
+      surface_color: "#ffffff",
+      text_color: "#5a4a2a",
+      primary_action_color: "#c17817",
+      secondary_action_color: "#8b6914",
+      font_family: "Georgia",
+      font_size: 16
+    };
+    
+    let currentEntries = [];
+    
+    const dataHandler = {
+      onDataChanged(data) {
+        currentEntries = data;
+        renderEntries(data);
+        updateLimitWarning(data.length);
+      }
+    };
+    
+    function updateLimitWarning(count) {
+      const warning = document.getElementById('limit-warning');
+      const submitBtn = document.getElementById('submit-btn');
+      
+      if (count >= 999) {
+        warning.style.display = 'block';
+        submitBtn.disabled = true;
+      } else {
+        warning.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
+    
+    function renderEntries(entries) {
+      const container = document.getElementById('entries-list');
+      
+      if (entries.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No entries yet. Start documenting your Egypt adventure!</p></div>';
+        return;
+      }
+      
+      const sortedEntries = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      container.innerHTML = sortedEntries.map(entry => `
+        <div class="entry-card" data-id="${entry.__backendId}">
+          <div class="entry-header">
+            <div class="entry-meta">
+              <div class="entry-date">${new Date(entry.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+              <div class="entry-location">📍 ${entry.location}</div>
+            </div>
+            <button class="btn btn-delete" onclick="deleteEntry('${entry.__backendId}')">Delete</button>
+          </div>
+          <div class="entry-activity">${entry.activity}</div>
+          <div class="entry-description">${entry.description}</div>
+          <div class="entry-phrase">"${entry.phrase_used}"</div>
+        </div>
+      `).join('');
+    }
+    
+    async function deleteEntry(id) {
+      const entry = currentEntries.find(e => e.__backendId === id);
+      if (!entry) return;
+      
+      const card = document.querySelector(`[data-id="${id}"]`);
+      card.classList.add('loading');
+      
+      const result = await window.dataSdk.delete(entry);
+      
+      if (!result.isOk) {
+        card.classList.remove('loading');
+        const errorMsg = document.createElement('div');
+        errorMsg.style.cssText = 'background: #f8d7da; color: #721c24; padding: 0.75rem; border-radius: 6px; margin-top: 0.5rem;';
+        errorMsg.textContent = 'Failed to delete entry. Please try again.';
+        card.appendChild(errorMsg);
+        setTimeout(() => errorMsg.remove(), 3000);
+      }
+    }
+    
+    document.getElementById('entry-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (currentEntries.length >= 999) {
+        return;
+      }
+      
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Adding...';
+      
+      const formData = {
+        id: Date.now().toString(),
+        date: document.getElementById('entry-date').value,
+        location: document.getElementById('entry-location').value,
+        activity: document.getElementById('entry-activity').value,
+        description: document.getElementById('entry-description').value,
+        phrase_used: document.getElementById('entry-phrase').value,
+        created_at: new Date().toISOString()
+      };
+      
+      const result = await window.dataSdk.create(formData);
+      
+      if (result.isOk) {
+        e.target.reset();
+        submitBtn.textContent = 'Add Entry';
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.textContent = 'Add Entry';
+        submitBtn.disabled = false;
+        const errorMsg = document.createElement('div');
+        errorMsg.style.cssText = 'background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;';
+        errorMsg.textContent = 'Failed to add entry. Please try again.';
+        e.target.appendChild(errorMsg);
+        setTimeout(() => errorMsg.remove(), 3000);
+      }
+    });
+    
+    document.querySelectorAll('.phrase-list li').forEach(item => {
+      item.addEventListener('click', () => {
+        document.getElementById('entry-phrase').value = item.textContent;
+      });
+    });
+    
+    const element = {
+      defaultConfig,
+      onConfigChange: async (config) => {
+        document.getElementById('journal-title').textContent = config.journal_title || defaultConfig.journal_title;
+        document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+        
+        const customFont = config.font_family || defaultConfig.font_family;
+        const baseFontStack = 'serif';
+        document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+        
+        const baseSize = config.font_size || defaultConfig.font_size;
+        document.querySelector('.header h1').style.fontSize = `${baseSize * 2.5}px`;
+        document.querySelector('.header p').style.fontSize = `${baseSize * 1.1}px`;
+        document.querySelectorAll('h2').forEach(el => el.style.fontSize = `${baseSize * 1.8}px`);
+        document.querySelectorAll('h3').forEach(el => el.style.fontSize = `${baseSize * 1.1}px`);
+        document.body.style.fontSize = `${baseSize}px`;
+        
+        document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, ${adjustBrightness(config.background_color || defaultConfig.background_color, -10)} 100%)`;
+        
+        document.querySelectorAll('.phrases-panel, .journal-section, .entry-card').forEach(el => {
+          el.style.background = config.surface_color || defaultConfig.surface_color;
+        });
+        
+        document.querySelectorAll('label, .entry-description, .empty-state').forEach(el => {
+          el.style.color = config.text_color || defaultConfig.text_color;
+        });
+        
+        document.querySelectorAll('.btn-primary').forEach(el => {
+          el.style.background = config.primary_action_color || defaultConfig.primary_action_color;
+        });
+        
+        document.querySelectorAll('.header, .entry-activity').forEach(el => {
+          el.style.background = config.secondary_action_color || defaultConfig.secondary_action_color;
+        });
+      },
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              window.elementSdk.setConfig({ secondary_action_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ["journal_title", config.journal_title || defaultConfig.journal_title],
+        ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+      ])
+    };
+    
+    function adjustBrightness(hex, percent) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = (num >> 8 & 0x00FF) + amt;
+      const B = (num & 0x0000FF) + amt;
+      return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255))
+        .toString(16).slice(1);
+    }
+    
+    async function init() {
+      if (window.elementSdk) {
+        window.elementSdk.init(element);
+      }
+      
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize data SDK');
+        }
+      }
+    }
+    
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99a673a9b7ae6289',t:'MTc2MjQ1MTYyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
