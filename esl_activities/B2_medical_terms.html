@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical English Practice</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .tab:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .tab.active {
+      background: white;
+      color: #667eea;
+    }
+    
+    .content-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      color: #667eea;
+      margin: 0 0 1rem 0;
+      font-weight: 600;
+    }
+    
+    .term-card {
+      background: #f8f9ff;
+      border-left: 4px solid #667eea;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+    
+    .term-word {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .term-definition {
+      color: #555;
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+    
+    .term-example {
+      color: #764ba2;
+      font-style: italic;
+      padding-left: 1rem;
+      border-left: 2px solid #764ba2;
+      margin-top: 0.5rem;
+    }
+    
+    .activity-section {
+      margin-bottom: 2rem;
+    }
+    
+    .question {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.75rem;
+      font-size: 1.05rem;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    textarea.input-field {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: #5568d3;
+    }
+    
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: #764ba2;
+    }
+    
+    .btn-secondary:hover {
+      background: #653a8a;
+    }
+    
+    .conversation-prompt {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .prompt-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .prompt-text {
+      line-height: 1.6;
+    }
+    
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .category-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-4px);
+    }
+    
+    .category-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .category-count {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .progress-info {
+      background: #e8eaf6;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header>
+    <h1 id="app-title">Medical English Practice</h1>
+    <p class="subtitle" id="app-subtitle">Master healthcare vocabulary and expressions</p>
+   </header>
+   <nav class="tabs"><button class="tab active" data-tab="vocabulary">Vocabulary</button> <button class="tab" data-tab="activities">Written Activities</button> <button class="tab" data-tab="conversation">Conversation Practice</button> <button class="tab" data-tab="progress">My Progress</button>
+   </nav>
+   <main id="vocabulary-section">
+    <div class="content-card">
+     <h2 class="section-title">Medical Terminology &amp; Expressions</h2>
+     <div class="category-grid">
+      <div class="category-card" onclick="showCategory('symptoms')">
+       <div class="category-title">
+        Symptoms &amp; Complaints
+       </div>
+       <div class="category-count">
+        12 terms
+       </div>
+      </div>
+      <div class="category-card" onclick="showCategory('diagnosis')">
+       <div class="category-title">
+        Diagnosis &amp; Treatment
+       </div>
+       <div class="category-count">
+        10 terms
+       </div>
+      </div>
+      <div class="category-card" onclick="showCategory('hospital')">
+       <div class="category-title">
+        Hospital Departments
+       </div>
+       <div class="category-count">
+        8 terms
+       </div>
+      </div>
+     </div>
+     <div id="terms-display"></div>
+    </div>
+   </main>
+   <main id="activities-section" class="hidden">
+    <div class="content-card">
+     <h2 class="section-title">Written Activities</h2>
+     <div class="progress-info"><strong>Complete activities to track your progress</strong>
+     </div>
+     <div class="activity-section">
+      <h3 style="color: #667eea; margin-bottom: 1rem;">Fill in the Blanks</h3>
+      <div class="question">
+       1. The patient was admitted to the __________ for emergency surgery.
+      </div><input type="text" class="input-field" id="blank1" placeholder="Your answer">
+      <div class="question">
+       2. She's been experiencing severe __________ in her lower back for three days.
+      </div><input type="text" class="input-field" id="blank2" placeholder="Your answer">
+      <div class="question">
+       3. The doctor ordered a __________ to check for any abnormalities.
+      </div><input type="text" class="input-field" id="blank3" placeholder="Your answer"> <button class="btn" id="submit-blanks">Submit Answers</button>
+      <div id="blanks-feedback"></div>
+     </div>
+     <div class="activity-section">
+      <h3 style="color: #667eea; margin-bottom: 1rem;">Scenario Writing</h3>
+      <div class="question">
+       Write a short dialogue between a patient and a doctor discussing symptoms of the flu. Use at least 5 medical terms.
+      </div><textarea class="input-field" id="scenario-text" placeholder="Write your dialogue here..."></textarea> <button class="btn btn-secondary" id="submit-scenario">Save Response</button>
+      <div id="scenario-feedback"></div>
+     </div>
+    </div>
+   </main>
+   <main id="conversation-section" class="hidden">
+    <div class="content-card">
+     <h2 class="section-title">Conversation Practice Prompts</h2>
+     <div class="conversation-prompt">
+      <div class="prompt-title">
+       🏥 At the Emergency Room
+      </div>
+      <div class="prompt-text">
+       You arrive at the emergency room with severe chest pain. Describe your symptoms to the triage nurse, including when the pain started, its intensity, and any other symptoms you're experiencing.
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-title">
+       💊 Discussing Medication
+      </div>
+      <div class="prompt-text">
+       Your doctor has prescribed new medication. Ask about potential side effects, dosage instructions, and whether it interacts with your current medications.
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-title">
+       🔬 Understanding Test Results
+      </div>
+      <div class="prompt-text">
+       You've received blood test results showing elevated cholesterol. Discuss with your doctor what this means, lifestyle changes you should make, and whether medication is necessary.
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-title">
+       🏃 Post-Surgery Follow-up
+      </div>
+      <div class="prompt-text">
+       You're at a follow-up appointment after knee surgery. Describe your recovery progress, any complications, and ask about when you can resume normal activities.
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-title">
+       🤒 Calling in Sick
+      </div>
+      <div class="prompt-text">
+       Call your workplace to explain you can't come in due to illness. Describe your symptoms professionally and mention you've seen a doctor.
+      </div>
+     </div>
+     <div style="margin-top: 1.5rem;"><label class="question">Practice your response here:</label> <textarea class="input-field" id="conversation-practice" placeholder="Write or practice speaking your response..."></textarea> <button class="btn" id="save-conversation">Save Practice</button>
+      <div id="conversation-feedback"></div>
+     </div>
+    </div>
+   </main>
+   <main id="progress-section" class="hidden">
+    <div class="content-card">
+     <h2 class="section-title">Your Progress</h2>
+     <div class="progress-info" id="progress-stats"><strong>Loading your progress...</strong>
+     </div>
+     <div id="completed-activities"></div>
+    </div>
+   </main>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "Medical English Practice",
+      app_subtitle: "Master healthcare vocabulary and expressions",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#333333",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#764ba2",
+      font_family: "Segoe UI",
+      font_size: 16
+    };
+
+    let currentData = [];
+    let isInitialized = false;
+
+    const medicalTerms = {
+      symptoms: [
+        { word: "Acute pain", definition: "Sudden, severe pain that comes on quickly", example: "The patient reported acute pain in the abdomen that started two hours ago." },
+        { word: "Chronic condition", definition: "A long-lasting or recurrent medical condition", example: "She manages her chronic condition with daily medication." },
+        { word: "Inflammation", definition: "Swelling and redness in body tissue, usually as a response to injury or infection", example: "The inflammation in his knee has reduced significantly after treatment." },
+        { word: "Fatigue", definition: "Extreme tiredness resulting from mental or physical exertion or illness", example: "Persistent fatigue is one of the main symptoms of anemia." },
+        { word: "Nausea", definition: "A feeling of sickness with an inclination to vomit", example: "The medication may cause nausea as a side effect." },
+        { word: "Palpitations", definition: "Noticeably rapid, strong, or irregular heartbeat", example: "He experienced palpitations and shortness of breath during the episode." },
+        { word: "Dizzy spells", definition: "Brief episodes of feeling lightheaded or unsteady", example: "She's been having dizzy spells whenever she stands up too quickly." },
+        { word: "Shortness of breath", definition: "Difficulty breathing or feeling unable to get enough air", example: "Shortness of breath can be a sign of various cardiac or respiratory conditions." },
+        { word: "Swelling", definition: "An abnormal enlargement of a body part, typically as a result of fluid accumulation", example: "There's noticeable swelling around the injured ankle." },
+        { word: "Rash", definition: "An area of irritated or swollen skin", example: "The allergic reaction caused a red rash across her arms." },
+        { word: "Fever", definition: "An abnormally high body temperature, usually accompanied by shivering and headache", example: "A persistent fever above 38°C requires medical attention." },
+        { word: "Discomfort", definition: "A mild form of pain or physical distress", example: "Patients may experience some discomfort during the procedure." }
+      ],
+      diagnosis: [
+        { word: "Diagnosis", definition: "The identification of the nature of an illness through examination", example: "After running several tests, the doctor confirmed the diagnosis of diabetes." },
+        { word: "Prognosis", definition: "The likely course and outcome of a disease", example: "With early treatment, the prognosis for this condition is very good." },
+        { word: "Prescription", definition: "A written instruction from a doctor for medication or treatment", example: "The doctor wrote a prescription for antibiotics." },
+        { word: "Referral", definition: "The act of sending a patient to see a specialist", example: "My GP gave me a referral to see a cardiologist." },
+        { word: "Screening", definition: "Testing for disease in people without symptoms", example: "Regular screening can detect cancer in its early stages." },
+        { word: "Biopsy", definition: "The removal and examination of tissue from the body to diagnose disease", example: "The biopsy results will be available in a week." },
+        { word: "Immunization", definition: "The process of making someone immune to infection, typically by vaccination", example: "Childhood immunization programs have greatly reduced disease rates." },
+        { word: "Rehabilitation", definition: "Treatment to restore health or normal life through training and therapy", example: "He's undergoing rehabilitation after his stroke." },
+        { word: "Remission", definition: "A temporary or permanent decrease or disappearance of disease symptoms", example: "The cancer is in remission after chemotherapy." },
+        { word: "Relapse", definition: "A deterioration in health after a temporary improvement", example: "Unfortunately, the patient suffered a relapse three months later." }
+      ],
+      hospital: [
+        { word: "Emergency Department (A&E)", definition: "The section of a hospital that provides immediate treatment for acute illnesses and injuries", example: "He was rushed to the emergency department after the accident." },
+        { word: "Intensive Care Unit (ICU)", definition: "A specialized department for patients requiring constant monitoring and life support", example: "She spent three days in the ICU following surgery." },
+        { word: "Outpatient clinic", definition: "A medical facility where patients receive treatment without being admitted overnight", example: "I have an appointment at the outpatient clinic next Tuesday." },
+        { word: "Ward", definition: "A separate room or area in a hospital for patients requiring similar types of care", example: "He's recovering in the surgical ward on the third floor." },
+        { word: "Operating theatre", definition: "A room in a hospital where surgical operations are performed", example: "The patient was taken to the operating theatre at 9 AM." },
+        { word: "Radiology department", definition: "The section of a hospital that uses imaging technology to diagnose and treat diseases", example: "Your X-rays will be taken in the radiology department." },
+        { word: "Pharmacy", definition: "The department where medications are prepared and dispensed", example: "You can collect your prescription from the hospital pharmacy." },
+        { word: "Maternity ward", definition: "A hospital department for women giving birth and newborn babies", example: "The maternity ward has excellent facilities for new mothers." }
+      ]
+    };
+
+    function showCategory(category) {
+      const termsDisplay = document.getElementById('terms-display');
+      const terms = medicalTerms[category];
+      
+      let html = `<h3 style="color: #764ba2; margin: 1.5rem 0 1rem 0;">${category.charAt(0).toUpperCase() + category.slice(1)}</h3>`;
+      
+      terms.forEach(term => {
+        html += `
+          <div class="term-card">
+            <div class="term-word">${term.word}</div>
+            <div class="term-definition">${term.definition}</div>
+            <div class="term-example">"${term.example}"</div>
+          </div>
+        `;
+      });
+      
+      termsDisplay.innerHTML = html;
+    }
+
+    showCategory('symptoms');
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        document.querySelectorAll('main').forEach(section => section.classList.add('hidden'));
+        
+        const targetSection = tab.dataset.tab + '-section';
+        document.getElementById(targetSection).classList.remove('hidden');
+        
+        if (tab.dataset.tab === 'progress') {
+          updateProgressDisplay();
+        }
+      });
+    });
+
+    document.getElementById('submit-blanks').addEventListener('click', async function() {
+      const btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      const answer1 = document.getElementById('blank1').value.trim();
+      const answer2 = document.getElementById('blank2').value.trim();
+      const answer3 = document.getElementById('blank3').value.trim();
+      
+      const answers = `1: ${answer1}, 2: ${answer2}, 3: ${answer3}`;
+      
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        activity_type: 'fill_in_blanks',
+        user_answer: answers,
+        completed_at: new Date().toISOString()
+      });
+      
+      btn.disabled = false;
+      btn.textContent = 'Submit Answers';
+      
+      if (result.isOk) {
+        document.getElementById('blanks-feedback').innerHTML = `
+          <div class="success-message">
+            ✓ Your answers have been saved! Suggested answers: 1) hospital/ward, 2) pain/discomfort, 3) blood test/scan/X-ray
+          </div>
+        `;
+      } else {
+        document.getElementById('blanks-feedback').innerHTML = `
+          <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            Failed to save answers. Please try again.
+          </div>
+        `;
+      }
+    });
+
+    document.getElementById('submit-scenario').addEventListener('click', async function() {
+      const btn = this;
+      const scenarioText = document.getElementById('scenario-text').value.trim();
+      
+      if (!scenarioText) {
+        document.getElementById('scenario-feedback').innerHTML = `
+          <div style="background: #fff3cd; color: #856404; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            Please write your dialogue before submitting.
+          </div>
+        `;
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        activity_type: 'scenario_writing',
+        user_answer: scenarioText,
+        completed_at: new Date().toISOString()
+      });
+      
+      btn.disabled = false;
+      btn.textContent = 'Save Response';
+      
+      if (result.isOk) {
+        document.getElementById('scenario-feedback').innerHTML = `
+          <div class="success-message">
+            ✓ Your scenario has been saved successfully!
+          </div>
+        `;
+        document.getElementById('scenario-text').value = '';
+      } else {
+        document.getElementById('scenario-feedback').innerHTML = `
+          <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            Failed to save scenario. Please try again.
+          </div>
+        `;
+      }
+    });
+
+    document.getElementById('save-conversation').addEventListener('click', async function() {
+      const btn = this;
+      const conversationText = document.getElementById('conversation-practice').value.trim();
+      
+      if (!conversationText) {
+        document.getElementById('conversation-feedback').innerHTML = `
+          <div style="background: #fff3cd; color: #856404; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            Please write your practice response before saving.
+          </div>
+        `;
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        activity_type: 'conversation_practice',
+        user_answer: conversationText,
+        completed_at: new Date().toISOString()
+      });
+      
+      btn.disabled = false;
+      btn.textContent = 'Save Practice';
+      
+      if (result.isOk) {
+        document.getElementById('conversation-feedback').innerHTML = `
+          <div class="success-message">
+            ✓ Your practice has been saved!
+          </div>
+        `;
+        document.getElementById('conversation-practice').value = '';
+      } else {
+        document.getElementById('conversation-feedback').innerHTML = `
+          <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+            Failed to save practice. Please try again.
+          </div>
+        `;
+      }
+    });
+
+    function updateProgressDisplay() {
+      const stats = document.getElementById('progress-stats');
+      const activitiesDiv = document.getElementById('completed-activities');
+      
+      const totalActivities = currentData.length;
+      const fillInBlanks = currentData.filter(d => d.activity_type === 'fill_in_blanks').length;
+      const scenarios = currentData.filter(d => d.activity_type === 'scenario_writing').length;
+      const conversations = currentData.filter(d => d.activity_type === 'conversation_practice').length;
+      
+      stats.innerHTML = `
+        <strong>Total Activities Completed: ${totalActivities}</strong><br>
+        Fill in the Blanks: ${fillInBlanks} | Scenario Writing: ${scenarios} | Conversation Practice: ${conversations}
+      `;
+      
+      if (totalActivities === 0) {
+        activitiesDiv.innerHTML = '<p style="text-align: center; color: #666; margin-top: 1rem;">No activities completed yet. Start practicing!</p>';
+        return;
+      }
+      
+      let html = '<div style="margin-top: 1.5rem;">';
+      currentData.slice().reverse().forEach(activity => {
+        const date = new Date(activity.completed_at).toLocaleDateString();
+        const type = activity.activity_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        html += `
+          <div class="term-card">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <strong>${type}</strong>
+              <span style="color: #666; font-size: 0.9rem;">${date}</span>
+            </div>
+            <div style="color: #555; max-height: 100px; overflow: hidden;">${activity.user_answer}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      
+      activitiesDiv.innerHTML = html;
+    }
+
+    const dataHandler = {
+      onDataChanged(data) {
+        currentData = data;
+        if (document.getElementById('progress-section').classList.contains('hidden') === false) {
+          updateProgressDisplay();
+        }
+      }
+    };
+
+    async function onConfigChange(config) {
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('app-subtitle').textContent = config.app_subtitle || defaultConfig.app_subtitle;
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Tahoma, Geneva, Verdana, sans-serif';
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      
+      const baseSize = config.font_size || defaultConfig.font_size;
+      document.querySelector('h1').style.fontSize = `${baseSize * 2.5}px`;
+      document.querySelector('.subtitle').style.fontSize = `${baseSize * 1.1}px`;
+      document.querySelectorAll('.section-title').forEach(el => el.style.fontSize = `${baseSize * 1.5}px`);
+      document.querySelectorAll('.term-word').forEach(el => el.style.fontSize = `${baseSize * 1.2}px`);
+      document.querySelectorAll('.category-title').forEach(el => el.style.fontSize = `${baseSize * 1.2}px`);
+      document.querySelectorAll('.prompt-title').forEach(el => el.style.fontSize = `${baseSize * 1.1}px`);
+      document.body.style.fontSize = `${baseSize}px`;
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${config.secondary_action_color || defaultConfig.secondary_action_color} 100%)`;
+      
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      document.querySelectorAll('.content-card').forEach(el => el.style.background = surfaceColor);
+      
+      const textColor = config.text_color || defaultConfig.text_color;
+      document.querySelectorAll('.term-definition, .question, .progress-info').forEach(el => el.style.color = textColor);
+      
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      document.querySelectorAll('.btn').forEach(el => {
+        if (!el.classList.contains('btn-secondary')) {
+          el.style.background = primaryColor;
+        }
+      });
+      document.querySelectorAll('.section-title').forEach(el => el.style.color = primaryColor);
+      document.querySelectorAll('.term-card').forEach(el => el.style.borderLeftColor = primaryColor);
+      document.querySelectorAll('.tab.active').forEach(el => el.style.color = primaryColor);
+      
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      document.querySelectorAll('.btn-secondary').forEach(el => el.style.background = secondaryColor);
+    }
+
+    (async function init() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  config.background_color = value;
+                  window.elementSdk.setConfig({ background_color: value });
+                }
+              },
+              {
+                get: () => config.surface_color || defaultConfig.surface_color,
+                set: (value) => {
+                  config.surface_color = value;
+                  window.elementSdk.setConfig({ surface_color: value });
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  config.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              },
+              {
+                get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                set: (value) => {
+                  config.primary_action_color = value;
+                  window.elementSdk.setConfig({ primary_action_color: value });
+                }
+              },
+              {
+                get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                set: (value) => {
+                  config.secondary_action_color = value;
+                  window.elementSdk.setConfig({ secondary_action_color: value });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (value) => {
+                config.font_family = value;
+                window.elementSdk.setConfig({ font_family: value });
+              }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (value) => {
+                config.font_size = value;
+                window.elementSdk.setConfig({ font_size: value });
+              }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["app_title", config.app_title || defaultConfig.app_title],
+            ["app_subtitle", config.app_subtitle || defaultConfig.app_subtitle]
+          ])
+        });
+      }
+      
+      if (window.dataSdk) {
+        const initResult = await window.dataSdk.init(dataHandler);
+        if (initResult.isOk) {
+          isInitialized = true;
+        }
+      }
+    })();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99a67a6c500d817f',t:'MTc2MjQ1MTg5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
