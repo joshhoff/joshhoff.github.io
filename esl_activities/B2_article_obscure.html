@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Articles Practice</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      height: 100%;
+      overflow-y: auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: white;
+    }
+    
+    .header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    
+    .header p {
+      margin: 0;
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .nav-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: white;
+      color: #667eea;
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .nav-btn.active {
+      background: #764ba2;
+      color: white;
+    }
+    
+    .content-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      display: none;
+    }
+    
+    .content-card.active {
+      display: block;
+    }
+    
+    .exercise {
+      margin-bottom: 2rem;
+    }
+    
+    .exercise-question {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .blank {
+      display: inline-block;
+      min-width: 80px;
+      border-bottom: 2px solid #667eea;
+      margin: 0 0.5rem;
+      text-align: center;
+    }
+    
+    .answer-input {
+      padding: 0.5rem;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 1rem;
+    }
+    
+    .answer-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .submit-btn {
+      padding: 0.75rem 2rem;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      background: #5568d3;
+    }
+    
+    .submit-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+    }
+    
+    .feedback.correct {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+    
+    .feedback.incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+    
+    .explanation {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: normal;
+      color: #555;
+    }
+    
+    .conversation-prompt {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #667eea;
+    }
+    
+    .conversation-prompt h3 {
+      margin: 0 0 0.5rem 0;
+      color: #667eea;
+      font-size: 1.1rem;
+    }
+    
+    .conversation-prompt p {
+      margin: 0;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .guide-section {
+      margin-bottom: 2rem;
+    }
+    
+    .guide-section h3 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+    
+    .rule {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .rule-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .rule-example {
+      color: #555;
+      font-style: italic;
+      margin-top: 0.5rem;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-card {
+      flex: 1;
+      min-width: 150px;
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+    
+    .next-btn {
+      padding: 0.75rem 2rem;
+      background: #764ba2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-left: 1rem;
+    }
+    
+    .next-btn:hover {
+      background: #6a4291;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="header">
+    <h1 id="app-title">English Articles Practice</h1>
+    <p id="app-subtitle">Master the use of 'the', 'a', and 'an'</p>
+   </header>
+   <div class="nav-buttons"><button class="nav-btn active" id="practice-nav" data-view="practice"> <span id="practice-button-text">Written Practice</span> </button> <button class="nav-btn" id="conversation-nav" data-view="conversation"> <span id="conversation-button-text">Conversation Prompts</span> </button> <button class="nav-btn" id="guide-nav" data-view="guide"> <span id="guide-button-text">Quick Guide</span> </button>
+   </div>
+   <div class="stats" id="stats-container">
+    <div class="stat-card">
+     <div class="stat-number" id="total-attempts">
+      0
+     </div>
+     <div class="stat-label">
+      Total Attempts
+     </div>
+    </div>
+    <div class="stat-card">
+     <div class="stat-number" id="correct-answers">
+      0
+     </div>
+     <div class="stat-label">
+      Correct
+     </div>
+    </div>
+    <div class="stat-card">
+     <div class="stat-number" id="accuracy-rate">
+      0%
+     </div>
+     <div class="stat-label">
+      Accuracy
+     </div>
+    </div>
+   </div>
+   <div class="content-card active" id="practice-view">
+    <div class="exercise" id="current-exercise"></div>
+   </div>
+   <div class="content-card" id="conversation-view">
+    <h2 style="color: #667eea; margin-bottom: 1.5rem;">Conversation Practice</h2>
+    <div id="conversation-prompts"></div>
+   </div>
+   <div class="content-card" id="guide-view">
+    <h2 style="color: #667eea; margin-bottom: 1.5rem;">Articles Quick Guide</h2>
+    <div id="guide-content"></div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#333333",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#764ba2",
+      font_family: "Segoe UI",
+      font_size: 16,
+      app_title: "English Articles Practice",
+      app_subtitle: "Master the use of 'the', 'a', and 'an'",
+      practice_button: "Written Practice",
+      conversation_button: "Conversation Prompts",
+      guide_button: "Quick Guide"
+    };
+
+    const exercises = [
+      {
+        question: "He's studying at ___ university in Scotland.",
+        answer: "a",
+        explanation: "Despite starting with 'u', 'university' begins with a 'you' sound (consonant), so use 'a'."
+      },
+      {
+        question: "She gave me ___ one-dollar bill.",
+        answer: "a",
+        explanation: "'One' starts with a 'w' sound (consonant), not a vowel sound, so use 'a'."
+      },
+      {
+        question: "I'll be there in ___ hour.",
+        answer: "an",
+        explanation: "The 'h' in 'hour' is silent, making it start with a vowel sound, so use 'an'."
+      },
+      {
+        question: "She's ___ European who speaks five languages.",
+        answer: "a",
+        explanation: "'European' starts with a 'you' sound (consonant), despite the 'E', so use 'a'."
+      },
+      {
+        question: "He works as ___ FBI agent.",
+        answer: "an",
+        explanation: "When spelling out 'FBI' (eff-bee-eye), it starts with a vowel sound, so use 'an'."
+      },
+      {
+        question: "I'm going to ___ hospital to visit my friend.",
+        answer: "the",
+        explanation: "In American English, use 'the hospital'. In British English, 'hospital' alone is common."
+      },
+      {
+        question: "She's in ___ prison for theft.",
+        answer: "∅",
+        explanation: "No article needed when referring to the institution's purpose (being imprisoned), not the building."
+      },
+      {
+        question: "The children are at ___ school today.",
+        answer: "∅",
+        explanation: "No article when referring to school as an institution/activity, not a specific building."
+      },
+      {
+        question: "I love ___ classical music.",
+        answer: "∅",
+        explanation: "No article with uncountable nouns when speaking generally about the entire category."
+      },
+      {
+        question: "___ life is beautiful.",
+        answer: "∅",
+        explanation: "Abstract concepts like 'life' take no article when used in a general, philosophical sense."
+      },
+      {
+        question: "He's ___ head of the department.",
+        answer: "the",
+        explanation: "Use 'the' with unique positions or roles, even when preceded by a verb like 'is'."
+      },
+      {
+        question: "She was elected ___ president of the club.",
+        answer: "∅",
+        explanation: "No article after 'elected', 'appointed', 'made' when referring to unique positions."
+      },
+      {
+        question: "I play ___ tennis every weekend.",
+        answer: "∅",
+        explanation: "No article with sports when talking about playing them as activities."
+      },
+      {
+        question: "She plays ___ violin in the orchestra.",
+        answer: "the",
+        explanation: "Use 'the' with musical instruments when talking about playing them."
+      },
+      {
+        question: "We had ___ lunch at noon.",
+        answer: "∅",
+        explanation: "No article with meals when referring to the general time/activity of eating."
+      },
+      {
+        question: "We had ___ delicious lunch at that restaurant.",
+        answer: "a",
+        explanation: "Use 'a' when the meal is modified by an adjective, making it countable."
+      },
+      {
+        question: "I'm going to ___ bed early tonight.",
+        answer: "∅",
+        explanation: "No article with 'bed' when referring to the act of sleeping, not the furniture."
+      },
+      {
+        question: "There's a spider on ___ bed.",
+        answer: "the",
+        explanation: "Use 'the' when referring to the bed as a piece of furniture or specific object."
+      },
+      {
+        question: "___ rich should help ___ poor.",
+        answer: "The, the",
+        explanation: "Use 'the' + adjective to refer to groups of people with that characteristic."
+      },
+      {
+        question: "He's learning ___ Chinese.",
+        answer: "∅",
+        explanation: "No article with languages unless they're modified (e.g., 'the Chinese language')."
+      },
+      {
+        question: "She speaks ___ fluent German.",
+        answer: "∅",
+        explanation: "Even with adjectives like 'fluent', languages typically take no article."
+      },
+      {
+        question: "___ Mount Everest is the world's highest peak.",
+        answer: "∅",
+        explanation: "No article with 'Mount' + mountain name, but use 'the' with mountain ranges."
+      },
+      {
+        question: "We climbed ___ Himalayas last year.",
+        answer: "the",
+        explanation: "Use 'the' with mountain ranges, deserts, and groups of islands."
+      },
+      {
+        question: "I live on ___ Fifth Avenue.",
+        answer: "∅",
+        explanation: "No article with numbered streets (Fifth Avenue, 42nd Street, etc.)."
+      },
+      {
+        question: "The shop is on ___ High Street.",
+        answer: "∅",
+        explanation: "No article with street names, even when they include common words like 'High'."
+      },
+      {
+        question: "She graduated from ___ Harvard University.",
+        answer: "∅",
+        explanation: "No article with university names that include 'University' in the name."
+      },
+      {
+        question: "He studied at ___ University of Cambridge.",
+        answer: "the",
+        explanation: "Use 'the' with 'University of...' constructions."
+      },
+      {
+        question: "I read it in ___ Times newspaper.",
+        answer: "the",
+        explanation: "Use 'the' with newspaper names, even when 'newspaper' is added."
+      },
+      {
+        question: "She works for ___ BBC.",
+        answer: "the",
+        explanation: "Use 'the' with organizations known by their initials (BBC, FBI, UN)."
+      },
+      {
+        question: "He's suffering from ___ flu.",
+        answer: "the",
+        explanation: "Use 'the' with certain illnesses, especially 'the flu', 'the measles', 'the mumps'."
+      },
+      {
+        question: "She has ___ diabetes.",
+        answer: "∅",
+        explanation: "No article with most diseases and medical conditions (diabetes, cancer, pneumonia)."
+      }
+    ];
+
+    const conversationPrompts = [
+      {
+        title: "Zero Article Practice",
+        prompt: "Describe your education and career without using unnecessary articles. Practice: 'I studied at ∅ university, learned ∅ French, and now work in ∅ marketing.' Focus on institutions, languages, and abstract concepts."
+      },
+      {
+        title: "Tricky Pronunciations",
+        prompt: "Practice with words that sound different than they're spelled. Use: 'a university', 'an hour', 'a European', 'an FBI agent', 'a one-way street'. Create sentences with these challenging combinations."
+      },
+      {
+        title: "Institutions vs. Buildings",
+        prompt: "Explain the difference between going to ∅ school (as a student) vs. going to the school (as a visitor). Practice with: hospital, prison, church, court. When do you use articles?"
+      },
+      {
+        title: "Geographic Names",
+        prompt: "Plan a world tour mentioning: ∅ Mount Fuji, the Alps, ∅ Lake Superior, the Mediterranean Sea, ∅ Harvard University, the University of Oxford. Explain why some need 'the' and others don't."
+      },
+      {
+        title: "Professional Roles",
+        prompt: "Describe career changes: 'She was elected ∅ president, appointed the head of marketing, became a manager.' Practice when titles need articles and when they don't."
+      },
+      {
+        title: "Meals and Activities",
+        prompt: "Compare: 'We had ∅ breakfast' vs. 'We had a delicious breakfast.' Discuss when meals, sports, and daily activities need articles and when they don't."
+      },
+      {
+        title: "Abstract vs. Concrete",
+        prompt: "Discuss philosophy using: '∅ life is precious, ∅ love conquers all, but the life he lived was remarkable.' Practice when abstract concepts need articles."
+      },
+      {
+        title: "Groups and Classes",
+        prompt: "Talk about society: 'The rich have responsibilities to the poor, the elderly need support, the young are our future.' Practice using 'the' + adjective for groups."
+      }
+    ];
+
+    const guideRules = [
+      {
+        title: "Zero Article (∅) - Institutions as Purpose",
+        rule: "No article when referring to institutions for their intended purpose, not as buildings.",
+        examples: ["go to ∅ school (as student)", "in ∅ prison (incarcerated)", "at ∅ university (studying)"]
+      },
+      {
+        title: "Zero Article (∅) - Languages & Subjects",
+        rule: "No article with languages, academic subjects, and sports as activities.",
+        examples: ["speak ∅ English", "study ∅ mathematics", "play ∅ tennis"]
+      },
+      {
+        title: "Zero Article (∅) - Abstract Concepts",
+        rule: "No article with abstract nouns used in a general, philosophical sense.",
+        examples: ["∅ life is beautiful", "∅ love conquers all", "∅ freedom is precious"]
+      },
+      {
+        title: "Zero Article (∅) - Meals & Daily Activities",
+        rule: "No article with meals and daily activities when referring to the general time/activity.",
+        examples: ["have ∅ breakfast", "go to ∅ bed", "after ∅ work"]
+      },
+      {
+        title: "Tricky Consonant Sounds",
+        rule: "Use 'a' before words that start with consonant sounds, even if spelled with vowels.",
+        examples: ["a university (you-sound)", "a European (you-sound)", "a one-dollar bill (w-sound)"]
+      },
+      {
+        title: "Tricky Vowel Sounds",
+        rule: "Use 'an' before words starting with vowel sounds, including silent 'h' and acronyms.",
+        examples: ["an hour (silent h)", "an FBI agent (eff-sound)", "an honest person"]
+      },
+      {
+        title: "The + Adjective = Group",
+        rule: "Use 'the' + adjective to refer to groups of people with that characteristic.",
+        examples: ["the rich", "the poor", "the elderly", "the unemployed"]
+      },
+      {
+        title: "Geographic Names - Complex Rules",
+        rule: "Mountains, lakes, and single islands: no article. Ranges, groups, and 'of' constructions: use 'the'.",
+        examples: ["∅ Mount Everest vs. the Himalayas", "∅ Lake Superior vs. the Great Lakes"]
+      },
+      {
+        title: "Universities & Institutions",
+        rule: "No article with 'Name + University'. Use 'the' with 'University of + Place'.",
+        examples: ["∅ Harvard University", "the University of Cambridge", "∅ MIT"]
+      },
+      {
+        title: "Professional Titles After Verbs",
+        rule: "No article after 'elected', 'appointed', 'made' with unique positions. Use 'the' with 'is/was'.",
+        examples: ["elected ∅ president", "appointed ∅ manager", "is the president"]
+      },
+      {
+        title: "Meals with Adjectives",
+        rule: "No article for general meals. Use 'a/an' when meals are modified by adjectives.",
+        examples: ["have ∅ lunch", "had a delicious lunch", "ate a quick breakfast"]
+      },
+      {
+        title: "Diseases & Medical Conditions",
+        rule: "Most diseases: no article. Some traditional diseases use 'the'.",
+        examples: ["has ∅ diabetes", "caught ∅ pneumonia", "has the flu", "got the measles"]
+      }
+    ];
+
+    let currentExerciseIndex = 0;
+    let userStats = { total: 0, correct: 0 };
+    let currentView = 'practice';
+
+    const dataHandler = {
+      onDataChanged(data) {
+        userStats.total = data.length;
+        userStats.correct = data.filter(d => d.is_correct).length;
+        updateStats();
+      }
+    };
+
+    async function initializeApp() {
+      if (window.dataSdk) {
+        const initResult = await window.dataSdk.init(dataHandler);
+        if (!initResult.isOk) {
+          console.error("Failed to initialize data SDK");
+        }
+      }
+
+      if (window.elementSdk) {
+        await window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (config) => {
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseFontStack = 'Tahoma, Geneva, Verdana, sans-serif';
+            const baseSize = config.font_size || defaultConfig.font_size;
+            
+            document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, ${config.secondary_action_color || defaultConfig.secondary_action_color} 100%)`;
+            
+            document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+            document.getElementById('app-title').style.fontSize = `${baseSize * 2.5}px`;
+            document.getElementById('app-title').style.color = config.surface_color || defaultConfig.surface_color;
+            
+            document.getElementById('app-subtitle').textContent = config.app_subtitle || defaultConfig.app_subtitle;
+            document.getElementById('app-subtitle').style.fontSize = `${baseSize * 1.1}px`;
+            document.getElementById('app-subtitle').style.color = config.surface_color || defaultConfig.surface_color;
+            
+            document.getElementById('practice-button-text').textContent = config.practice_button || defaultConfig.practice_button;
+            document.getElementById('conversation-button-text').textContent = config.conversation_button || defaultConfig.conversation_button;
+            document.getElementById('guide-button-text').textContent = config.guide_button || defaultConfig.guide_button;
+            
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+              btn.style.background = config.surface_color || defaultConfig.surface_color;
+              btn.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+              btn.style.fontSize = `${baseSize}px`;
+              if (btn.classList.contains('active')) {
+                btn.style.background = config.secondary_action_color || defaultConfig.secondary_action_color;
+                btn.style.color = config.surface_color || defaultConfig.surface_color;
+              }
+            });
+            
+            const contentCards = document.querySelectorAll('.content-card');
+            contentCards.forEach(card => {
+              card.style.background = config.surface_color || defaultConfig.surface_color;
+            });
+            
+            const submitBtns = document.querySelectorAll('.submit-btn');
+            submitBtns.forEach(btn => {
+              btn.style.background = config.primary_action_color || defaultConfig.primary_action_color;
+              btn.style.fontSize = `${baseSize}px`;
+            });
+            
+            const nextBtns = document.querySelectorAll('.next-btn');
+            nextBtns.forEach(btn => {
+              btn.style.background = config.secondary_action_color || defaultConfig.secondary_action_color;
+              btn.style.fontSize = `${baseSize}px`;
+            });
+            
+            const exerciseQuestions = document.querySelectorAll('.exercise-question');
+            exerciseQuestions.forEach(q => {
+              q.style.color = config.text_color || defaultConfig.text_color;
+              q.style.fontSize = `${baseSize * 1.2}px`;
+            });
+            
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+              card.style.background = config.surface_color || defaultConfig.surface_color;
+            });
+            
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(num => {
+              num.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+              num.style.fontSize = `${baseSize * 2}px`;
+            });
+            
+            const statLabels = document.querySelectorAll('.stat-label');
+            statLabels.forEach(label => {
+              label.style.fontSize = `${baseSize * 0.9}px`;
+            });
+          },
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.background_color = value;
+                    window.elementSdk.setConfig({ background_color: value });
+                  }
+                }
+              },
+              {
+                get: () => config.surface_color || defaultConfig.surface_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.surface_color = value;
+                    window.elementSdk.setConfig({ surface_color: value });
+                  }
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.text_color = value;
+                    window.elementSdk.setConfig({ text_color: value });
+                  }
+                }
+              },
+              {
+                get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.primary_action_color = value;
+                    window.elementSdk.setConfig({ primary_action_color: value });
+                  }
+                }
+              },
+              {
+                get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.secondary_action_color = value;
+                    window.elementSdk.setConfig({ secondary_action_color: value });
+                  }
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.font_family = value;
+                  window.elementSdk.setConfig({ font_family: value });
+                }
+              }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.font_size = value;
+                  window.elementSdk.setConfig({ font_size: value });
+                }
+              }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["app_title", config.app_title || defaultConfig.app_title],
+            ["app_subtitle", config.app_subtitle || defaultConfig.app_subtitle],
+            ["practice_button", config.practice_button || defaultConfig.practice_button],
+            ["conversation_button", config.conversation_button || defaultConfig.conversation_button],
+            ["guide_button", config.guide_button || defaultConfig.guide_button]
+          ])
+        });
+      }
+
+      renderExercise();
+      renderConversationPrompts();
+      renderGuide();
+      setupNavigation();
+    }
+
+    function renderExercise() {
+      const exercise = exercises[currentExerciseIndex];
+      const container = document.getElementById('current-exercise');
+      
+      container.innerHTML = `
+        <div class="exercise-question">${exercise.question}</div>
+        <input type="text" class="answer-input" id="answer-input" placeholder="Type 'a', 'an', 'the', or leave blank for no article">
+        <div>
+          <button class="submit-btn" id="submit-btn">Check Answer</button>
+          <button class="next-btn" id="next-btn" style="display: none;">Next Exercise</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+      `;
+      
+      const input = document.getElementById('answer-input');
+      const submitBtn = document.getElementById('submit-btn');
+      const nextBtn = document.getElementById('next-btn');
+      
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          submitBtn.click();
+        }
+      });
+      
+      submitBtn.addEventListener('click', () => checkAnswer());
+      nextBtn.addEventListener('click', () => nextExercise());
+    }
+
+    async function checkAnswer() {
+      const input = document.getElementById('answer-input');
+      const submitBtn = document.getElementById('submit-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const feedback = document.getElementById('feedback');
+      const exercise = exercises[currentExerciseIndex];
+      
+      let userAnswer = input.value.trim().toLowerCase();
+      let correctAnswer = exercise.answer.toLowerCase();
+      
+      // Handle zero article cases
+      if (correctAnswer === '∅') {
+        correctAnswer = 'no article';
+        if (userAnswer === '' || userAnswer === 'nothing' || userAnswer === 'no article' || userAnswer === 'none' || userAnswer === '∅') {
+          userAnswer = 'no article';
+        }
+      }
+      
+      const isCorrect = userAnswer === correctAnswer;
+      
+      submitBtn.disabled = true;
+      
+      if (window.dataSdk) {
+        const result = await window.dataSdk.create({
+          id: Date.now().toString(),
+          exercise_type: "written",
+          user_answer: userAnswer,
+          correct_answer: correctAnswer,
+          is_correct: isCorrect,
+          timestamp: new Date().toISOString()
+        });
+        
+        if (!result.isOk) {
+          feedback.className = 'feedback incorrect';
+          feedback.innerHTML = 'Error saving your answer. Please try again.';
+          submitBtn.disabled = false;
+          return;
+        }
+      }
+      
+      if (isCorrect) {
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `✓ Correct! <div class="explanation">${exercise.explanation}</div>`;
+      } else {
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = `✗ Not quite. The correct answer is "${exercise.answer}". <div class="explanation">${exercise.explanation}</div>`;
+      }
+      
+      nextBtn.style.display = 'inline-block';
+    }
+
+    function nextExercise() {
+      currentExerciseIndex = (currentExerciseIndex + 1) % exercises.length;
+      renderExercise();
+    }
+
+    function renderConversationPrompts() {
+      const container = document.getElementById('conversation-prompts');
+      container.innerHTML = conversationPrompts.map(prompt => `
+        <div class="conversation-prompt">
+          <h3>${prompt.title}</h3>
+          <p>${prompt.prompt}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderGuide() {
+      const container = document.getElementById('guide-content');
+      container.innerHTML = guideRules.map(rule => `
+        <div class="guide-section">
+          <h3>${rule.title}</h3>
+          <div class="rule">
+            <div class="rule-title">${rule.rule}</div>
+            <div class="rule-example">Examples: ${rule.examples.join(', ')}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setupNavigation() {
+      const navBtns = document.querySelectorAll('.nav-btn');
+      navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const view = btn.dataset.view;
+          switchView(view);
+        });
+      });
+    }
+
+    function switchView(view) {
+      currentView = view;
+      
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (window.elementSdk && window.elementSdk.config) {
+          const config = window.elementSdk.config;
+          btn.style.background = config.surface_color || defaultConfig.surface_color;
+          btn.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+        }
+      });
+      
+      document.querySelectorAll('.content-card').forEach(card => {
+        card.classList.remove('active');
+      });
+      
+      const activeBtn = document.getElementById(`${view}-nav`);
+      activeBtn.classList.add('active');
+      if (window.elementSdk && window.elementSdk.config) {
+        const config = window.elementSdk.config;
+        activeBtn.style.background = config.secondary_action_color || defaultConfig.secondary_action_color;
+        activeBtn.style.color = config.surface_color || defaultConfig.surface_color;
+      }
+      
+      document.getElementById(`${view}-view`).classList.add('active');
+    }
+
+    function updateStats() {
+      document.getElementById('total-attempts').textContent = userStats.total;
+      document.getElementById('correct-answers').textContent = userStats.correct;
+      const accuracy = userStats.total > 0 ? Math.round((userStats.correct / userStats.total) * 100) : 0;
+      document.getElementById('accuracy-rate').textContent = `${accuracy}%`;
+    }
+
+    initializeApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99a5c20f470b6289',t:'MTc2MjQ0NDM0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
