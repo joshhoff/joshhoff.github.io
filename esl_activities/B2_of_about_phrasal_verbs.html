@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESL Grammar Guide</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    h1 {
+      font-size: 48px;
+      margin: 0 0 10px 0;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 20px;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    h2 {
+      color: #667eea;
+      font-size: 32px;
+      margin: 0 0 24px 0;
+      font-weight: 600;
+    }
+    
+    h3 {
+      color: #764ba2;
+      font-size: 24px;
+      margin: 24px 0 16px 0;
+      font-weight: 600;
+    }
+    
+    .rule-box {
+      background: #f8f9ff;
+      border-left: 4px solid #667eea;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 8px;
+    }
+    
+    .rule-title {
+      font-weight: 600;
+      color: #667eea;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    
+    .example {
+      color: #555;
+      font-style: italic;
+      margin: 8px 0;
+      padding-left: 16px;
+    }
+    
+    .activity {
+      background: #fff9e6;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .activity-title {
+      font-weight: 600;
+      color: #f59e0b;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    
+    .question {
+      margin: 16px 0;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+    }
+    
+    .question-text {
+      font-weight: 500;
+      margin-bottom: 12px;
+      color: #333;
+    }
+    
+    .options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .option-btn {
+      padding: 10px 20px;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    
+    .option-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .option-btn.correct {
+      background: #10b981;
+      color: white;
+      border-color: #10b981;
+    }
+    
+    .option-btn.incorrect {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+    
+    .feedback {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: none;
+    }
+    
+    .feedback.show {
+      display: block;
+    }
+    
+    .feedback.correct {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .feedback.incorrect {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .conversation-prompt {
+      background: #f0f9ff;
+      border-left: 4px solid #0ea5e9;
+      padding: 16px 20px;
+      margin: 16px 0;
+      border-radius: 8px;
+    }
+    
+    .prompt-icon {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+    
+    .phrasal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .phrasal-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .phrasal-verb {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .spanish-translation {
+      font-size: 18px;
+      opacity: 0.95;
+      margin-bottom: 12px;
+    }
+    
+    .phrasal-example {
+      font-size: 14px;
+      opacity: 0.9;
+      font-style: italic;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header>
+    <h1 id="main-title">Master "About" vs "Of"</h1>
+    <div class="subtitle" id="subtitle">
+     Advanced ESL Grammar Guide with Activities
+    </div>
+   </header>
+   <main>
+    <div class="card">
+     <h2 id="about-title">Understanding "About" vs "Of"</h2>
+     <div class="rule-box">
+      <div class="rule-title">
+       Use "ABOUT" for:
+      </div>
+      <p><strong>1. Topics and subjects</strong> - when discussing what something concerns</p>
+      <div class="example">
+       ✓ We talked about the environment.
+      </div>
+      <div class="example">
+       ✓ She wrote a book about her travels.
+      </div>
+      <p style="margin-top: 16px;"><strong>2. Approximate numbers or time</strong></p>
+      <div class="example">
+       ✓ There were about 50 people at the party.
+      </div>
+      <div class="example">
+       ✓ I'll arrive at about 3 PM.
+      </div>
+     </div>
+     <div class="rule-box">
+      <div class="rule-title">
+       Use "OF" for:
+      </div>
+      <p><strong>1. Possession or belonging</strong> - showing what something is part of</p>
+      <div class="example">
+       ✓ The color of the sky is beautiful.
+      </div>
+      <div class="example">
+       ✓ She's a friend of mine.
+      </div>
+      <p style="margin-top: 16px;"><strong>2. Material or composition</strong> - what something is made from</p>
+      <div class="example">
+       ✓ A cup of coffee
+      </div>
+      <div class="example">
+       ✓ A piece of cake
+      </div>
+      <p style="margin-top: 16px;"><strong>3. Quantities and measurements</strong></p>
+      <div class="example">
+       ✓ A lot of people
+      </div>
+      <div class="example">
+       ✓ Most of the students
+      </div>
+     </div>
+     <h3>Common Expressions</h3>
+     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+      <div><strong style="color: #667eea;">With "ABOUT":</strong>
+       <ul style="margin-top: 8px;">
+        <li>think about</li>
+        <li>worry about</li>
+        <li>care about</li>
+        <li>complain about</li>
+        <li>dream about</li>
+       </ul>
+      </div>
+      <div><strong style="color: #764ba2;">With "OF":</strong>
+       <ul style="margin-top: 8px;">
+        <li>think of (opinion)</li>
+        <li>consist of</li>
+        <li>remind of</li>
+        <li>approve of</li>
+        <li>die of</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="card">
+     <h2>Practice Activities</h2>
+     <div class="activity">
+      <div class="activity-title">
+       📝 Activity 1: Choose the Correct Preposition
+      </div>
+      <div class="question" data-answer="about">
+       <div class="question-text">
+        1. What do you think ___ climate change?
+       </div>
+       <div class="options"><button class="option-btn" data-value="about">about</button> <button class="option-btn" data-value="of">of</button>
+       </div>
+       <div class="feedback"></div>
+      </div>
+      <div class="question" data-answer="of">
+       <div class="question-text">
+        2. The majority ___ students passed the exam.
+       </div>
+       <div class="options"><button class="option-btn" data-value="about">about</button> <button class="option-btn" data-value="of">of</button>
+       </div>
+       <div class="feedback"></div>
+      </div>
+      <div class="question" data-answer="about">
+       <div class="question-text">
+        3. She's always complaining ___ her job.
+       </div>
+       <div class="options"><button class="option-btn" data-value="about">about</button> <button class="option-btn" data-value="of">of</button>
+       </div>
+       <div class="feedback"></div>
+      </div>
+      <div class="question" data-answer="of">
+       <div class="question-text">
+        4. This table is made ___ solid wood.
+       </div>
+       <div class="options"><button class="option-btn" data-value="about">about</button> <button class="option-btn" data-value="of">of</button>
+       </div>
+       <div class="feedback"></div>
+      </div>
+      <div class="question" data-answer="about">
+       <div class="question-text">
+        5. There were ___ 200 guests at the wedding.
+       </div>
+       <div class="options"><button class="option-btn" data-value="about">about</button> <button class="option-btn" data-value="of">of</button>
+       </div>
+       <div class="feedback"></div>
+      </div>
+     </div>
+     <div class="activity">
+      <div class="activity-title">
+       💬 Conversation Prompts
+      </div>
+      <p style="margin-bottom: 16px;">Practice with a partner or write your responses:</p>
+      <div class="conversation-prompt"><span class="prompt-icon">🗣️</span> <strong>Prompt 1:</strong> Tell me about a book or movie you recently enjoyed. What was it about? What did you think of the ending?
+      </div>
+      <div class="conversation-prompt"><span class="prompt-icon">🗣️</span> <strong>Prompt 2:</strong> Describe your hometown. What's the population of your city? What do most of the people do for work? What do you love most about living there?
+      </div>
+      <div class="conversation-prompt"><span class="prompt-icon">🗣️</span> <strong>Prompt 3:</strong> What are you worried about these days? Is there something you care deeply about that you'd like to change?
+      </div>
+      <div class="conversation-prompt"><span class="prompt-icon">🗣️</span> <strong>Prompt 4:</strong> Think of a memorable meal you've had. What did it consist of? What do you remember most about that experience?
+      </div>
+     </div>
+    </div>
+    <div class="card">
+     <h2 id="phrasal-title">Phrasal Verbs = One Spanish Word</h2>
+     <p style="color: #666; margin-bottom: 20px;">These English phrasal verbs translate to a single word in Spanish, making them easier to remember!</p>
+     <div class="phrasal-grid">
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Give up
+       </div>
+       <div class="spanish-translation">
+        → Rendirse
+       </div>
+       <div class="phrasal-example">
+        "Don't give up on your dreams!"
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Find out
+       </div>
+       <div class="spanish-translation">
+        → Descubrir
+       </div>
+       <div class="phrasal-example">
+        "I need to find out the truth."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Look for
+       </div>
+       <div class="spanish-translation">
+        → Buscar
+       </div>
+       <div class="phrasal-example">
+        "I'm looking for my keys."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Put off
+       </div>
+       <div class="spanish-translation">
+        → Posponer
+       </div>
+       <div class="phrasal-example">
+        "Let's put off the meeting until tomorrow."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Turn down
+       </div>
+       <div class="spanish-translation">
+        → Rechazar
+       </div>
+       <div class="phrasal-example">
+        "She turned down the job offer."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Bring up
+       </div>
+       <div class="spanish-translation">
+        → Mencionar
+       </div>
+       <div class="phrasal-example">
+        "Don't bring up that topic again."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Show up
+       </div>
+       <div class="spanish-translation">
+        → Aparecer
+       </div>
+       <div class="phrasal-example">
+        "He didn't show up to the party."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Get over
+       </div>
+       <div class="spanish-translation">
+        → Superar
+       </div>
+       <div class="phrasal-example">
+        "It took time to get over the loss."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Run into
+       </div>
+       <div class="spanish-translation">
+        → Encontrar
+       </div>
+       <div class="phrasal-example">
+        "I ran into an old friend yesterday."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Take off
+       </div>
+       <div class="spanish-translation">
+        → Despegar
+       </div>
+       <div class="phrasal-example">
+        "The plane will take off soon."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Break down
+       </div>
+       <div class="spanish-translation">
+        → Descomponerse
+       </div>
+       <div class="phrasal-example">
+        "My car broke down on the highway."
+       </div>
+      </div>
+      <div class="phrasal-card">
+       <div class="phrasal-verb">
+        Carry out
+       </div>
+       <div class="spanish-translation">
+        → Realizar
+       </div>
+       <div class="phrasal-example">
+        "We need to carry out this plan carefully."
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Master \"About\" vs \"Of\"",
+      subtitle: "Advanced ESL Grammar Guide with Activities",
+      about_title: "Understanding \"About\" vs \"Of\"",
+      phrasal_title: "Phrasal Verbs = One Spanish Word",
+      background_color: "#667eea",
+      card_background: "#ffffff",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      text_color: "#333333",
+      font_family: "Segoe UI",
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      document.getElementById('about-title').textContent = config.about_title || defaultConfig.about_title;
+      document.getElementById('phrasal-title').textContent = config.phrasal_title || defaultConfig.phrasal_title;
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const fontStack = `${customFont}, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`;
+      document.body.style.fontFamily = fontStack;
+      
+      document.querySelector('h1').style.fontSize = `${baseSize * 3}px`;
+      document.querySelector('.subtitle').style.fontSize = `${baseSize * 1.25}px`;
+      document.querySelectorAll('h2').forEach(h2 => h2.style.fontSize = `${baseSize * 2}px`);
+      document.querySelectorAll('h3').forEach(h3 => h3.style.fontSize = `${baseSize * 1.5}px`);
+      document.body.style.fontSize = `${baseSize}px`;
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const cardBg = config.card_background || defaultConfig.card_background;
+      
+      document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${secondaryColor} 100%)`;
+      document.querySelectorAll('.card').forEach(card => card.style.background = cardBg);
+      document.querySelectorAll('h2').forEach(h2 => h2.style.color = primaryColor);
+      document.querySelectorAll('h3').forEach(h3 => h3.style.color = secondaryColor);
+      document.body.style.color = textColor;
+      
+      document.querySelectorAll('.rule-box').forEach(box => {
+        box.style.borderLeftColor = primaryColor;
+      });
+      
+      document.querySelectorAll('.rule-title').forEach(title => {
+        title.style.color = primaryColor;
+      });
+      
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        if (!btn.classList.contains('correct') && !btn.classList.contains('incorrect')) {
+          btn.style.borderColor = primaryColor;
+          btn.style.color = primaryColor;
+        }
+      });
+      
+      document.querySelectorAll('.phrasal-card').forEach(card => {
+        card.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.card_background || defaultConfig.card_background,
+              set: (value) => {
+                config.card_background = value;
+                window.elementSdk.setConfig({ card_background: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["about_title", config.about_title || defaultConfig.about_title],
+          ["phrasal_title", config.phrasal_title || defaultConfig.phrasal_title]
+        ])
+      });
+    }
+
+    document.querySelectorAll('.question').forEach(question => {
+      const correctAnswer = question.dataset.answer;
+      const buttons = question.querySelectorAll('.option-btn');
+      const feedback = question.querySelector('.feedback');
+      
+      buttons.forEach(button => {
+        button.addEventListener('click', function() {
+          const selectedValue = this.dataset.value;
+          
+          buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.style.cursor = 'default';
+          });
+          
+          if (selectedValue === correctAnswer) {
+            this.classList.add('correct');
+            feedback.textContent = '✓ Correct! Well done!';
+            feedback.classList.add('correct', 'show');
+          } else {
+            this.classList.add('incorrect');
+            buttons.forEach(btn => {
+              if (btn.dataset.value === correctAnswer) {
+                btn.classList.add('correct');
+              }
+            });
+            feedback.textContent = `✗ Not quite. The correct answer is "${correctAnswer}".`;
+            feedback.classList.add('incorrect', 'show');
+          }
+        });
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99bf58f6417af8cb',t:'MTc2MjcxMjY3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
