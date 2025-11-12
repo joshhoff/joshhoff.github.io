@@ -1,0 +1,1270 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESL Sentence Practice Studio</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+      padding: 20px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin: 0 0 10px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 20px;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .activity-card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+
+    .activity-card .icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .activity-card h3 {
+      color: #667eea;
+      margin: 0 0 10px 0;
+      font-size: 22px;
+    }
+
+    .activity-card p {
+      color: #666;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+
+    .close-btn:hover {
+      background: #ff5252;
+    }
+
+    .activity-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .activity-header .icon {
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
+
+    .activity-header h2 {
+      color: #667eea;
+      margin: 0 0 10px 0;
+      font-size: 32px;
+    }
+
+    .activity-header .description {
+      color: #666;
+      font-size: 16px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .input-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      display: inline-block;
+      margin: 5px;
+    }
+
+    .btn:hover {
+      background: #5568d3;
+      transform: scale(1.05);
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #48bb78;
+    }
+
+    .btn-secondary:hover {
+      background: #38a169;
+    }
+
+    .feedback {
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      font-size: 16px;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.correct {
+      background: #c6f6d5;
+      color: #22543d;
+      border: 2px solid #48bb78;
+    }
+
+    .feedback.incorrect {
+      background: #fed7d7;
+      color: #742a2a;
+      border: 2px solid #fc8181;
+    }
+
+    .sentence-display {
+      background: #f7fafc;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-size: 20px;
+      text-align: center;
+      border: 2px solid #e0e0e0;
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .emoji-item {
+      font-size: 48px;
+      text-align: center;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 10px;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .emoji-item:hover {
+      background: #f7fafc;
+      transform: scale(1.1);
+    }
+
+    .emoji-item.selected {
+      background: #667eea;
+      transform: scale(1.15);
+    }
+
+    .spinner-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .spinner {
+      background: #f7fafc;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      min-width: 200px;
+      border: 2px solid #e0e0e0;
+    }
+
+    .spinner h4 {
+      color: #667eea;
+      margin: 0 0 15px 0;
+    }
+
+    .spinner-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .role-play-box {
+      background: #f7fafc;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border-left: 4px solid #667eea;
+    }
+
+    .role-play-box.student {
+      border-left-color: #48bb78;
+    }
+
+    .role-play-box h4 {
+      margin: 0 0 10px 0;
+      color: #667eea;
+    }
+
+    .role-play-box.student h4 {
+      color: #48bb78;
+    }
+
+    .audio-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      background: #e0e0e0;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .progress-fill {
+      background: #48bb78;
+      height: 100%;
+      transition: width 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .activities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+
+      .spinner-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="app-title">🌟 ESL Sentence Practice Studio</h1>
+    <p id="welcome-message">Choose an activity to start learning!</p>
+   </div>
+   <div class="activities-grid" id="activities-grid"><!-- Activities will be rendered here -->
+   </div>
+  </div><!-- Modal for activities -->
+  <div class="modal" id="activity-modal">
+   <div class="modal-content"><button class="close-btn" id="close-modal">×</button>
+    <div id="modal-body"><!-- Activity content will be loaded here -->
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "🌟 ESL Sentence Practice Studio",
+      welcome_message: "Choose an activity to start learning!",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#333333",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#48bb78",
+      font_family: "Comic Sans MS",
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+    let currentRecordCount = 0;
+
+    const activities = [
+      {
+        id: 1,
+        icon: "🔄",
+        title: "Flip the Sentence",
+        description: "Transform sentences between affirmative, negative, and interrogative forms",
+        content: createFlipActivity
+      },
+      {
+        id: 2,
+        icon: "🎬",
+        title: "Mini Movie Scene",
+        description: "Describe what you see in images using different sentence types",
+        content: createMovieActivity
+      },
+      {
+        id: 3,
+        icon: "🎲",
+        title: "Sentence Spinner",
+        description: "Spin the wheel and create sentences based on random prompts",
+        content: createSpinnerActivity
+      },
+      {
+        id: 4,
+        icon: "🎭",
+        title: "Role-Play Remix",
+        description: "Practice conversations with different sentence structures",
+        content: createRolePlayActivity
+      },
+      {
+        id: 5,
+        icon: "😊",
+        title: "Emoji Sentences",
+        description: "Create sentences that match emoji emotions and situations",
+        content: createEmojiActivity
+      },
+      {
+        id: 6,
+        icon: "🔍",
+        title: "Find the Hidden Sentence",
+        description: "Listen and identify the sentence type you hear",
+        content: createHiddenActivity
+      },
+      {
+        id: 7,
+        icon: "📸",
+        title: "My Life in 3 Sentences",
+        description: "Tell your story using all three sentence types",
+        content: createLifeActivity
+      },
+      {
+        id: 8,
+        icon: "✍️",
+        title: "AI Co-Writer",
+        description: "Write a story together, alternating sentence types",
+        content: createCoWriterActivity
+      }
+    ];
+
+    function renderActivities() {
+      const grid = document.getElementById('activities-grid');
+      grid.innerHTML = activities.map(activity => `
+        <div class="activity-card" onclick="openActivity(${activity.id})">
+          <span class="icon">${activity.icon}</span>
+          <h3>${activity.title}</h3>
+          <p>${activity.description}</p>
+        </div>
+      `).join('');
+    }
+
+    function openActivity(id) {
+      const activity = activities.find(a => a.id === id);
+      if (!activity) return;
+
+      const modal = document.getElementById('activity-modal');
+      const modalBody = document.getElementById('modal-body');
+      
+      modalBody.innerHTML = activity.content(activity);
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('activity-modal');
+      modal.classList.remove('active');
+    }
+
+    document.getElementById('close-modal').addEventListener('click', closeModal);
+
+    // Activity 1: Flip the Sentence
+    function createFlipActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+        
+        <div class="input-group">
+          <label for="flip-input">Enter a sentence:</label>
+          <input type="text" id="flip-input" placeholder="I like pizza">
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+          <button class="btn" onclick="flipSentence('affirmative')">✅ Affirmative</button>
+          <button class="btn" onclick="flipSentence('negative')">❌ Negative</button>
+          <button class="btn" onclick="flipSentence('interrogative')">❓ Question</button>
+        </div>
+
+        <div class="sentence-display" id="flip-result" style="display: none;"></div>
+        <div class="feedback" id="flip-feedback"></div>
+      `;
+    }
+
+    function flipSentence(type) {
+      const input = document.getElementById('flip-input').value.trim();
+      const result = document.getElementById('flip-result');
+      const feedback = document.getElementById('flip-feedback');
+
+      if (!input) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please enter a sentence first!';
+        return;
+      }
+
+      let flipped = '';
+      const lowerInput = input.toLowerCase();
+
+      if (type === 'affirmative') {
+        flipped = input.replace(/^(do|does|did|is|are|am|was|were|can|will|would|should)\s+/i, '')
+                       .replace(/\s+(not|n't)\s+/gi, ' ')
+                       .replace(/\?$/, '.');
+        if (!flipped.endsWith('.')) flipped += '.';
+      } else if (type === 'negative') {
+        if (lowerInput.includes('is ') || lowerInput.includes('are ') || lowerInput.includes('am ')) {
+          flipped = input.replace(/\b(is|are|am)\b/i, match => match + " not");
+        } else if (lowerInput.includes('can ') || lowerInput.includes('will ')) {
+          flipped = input.replace(/\b(can|will)\b/i, match => match + " not");
+        } else {
+          flipped = input.replace(/^(\w+)/, "I do not $1").replace(/\?$/, '.');
+        }
+        if (!flipped.endsWith('.')) flipped += '.';
+      } else if (type === 'interrogative') {
+        if (lowerInput.startsWith('i ') || lowerInput.startsWith('you ') || lowerInput.startsWith('we ')) {
+          flipped = "Do " + input.replace(/\.$/, '') + "?";
+        } else if (lowerInput.includes(' is ') || lowerInput.includes(' are ')) {
+          const parts = input.split(/\s+(is|are)\s+/i);
+          flipped = parts[1] + " " + parts[0] + " " + parts.slice(2).join(' ').replace(/\.$/, '') + "?";
+        } else {
+          flipped = "Does " + input.replace(/\.$/, '') + "?";
+        }
+      }
+
+      result.style.display = 'block';
+      result.textContent = flipped;
+      feedback.className = 'feedback show correct';
+      feedback.innerHTML = `✅ Great! You created a ${type} sentence!`;
+
+      saveProgress('Flip the Sentence', flipped, true);
+    }
+
+    // Activity 2: Mini Movie Scene
+    function createMovieActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="sentence-display">
+          <div style="font-size: 80px; margin: 20px 0;">🏖️</div>
+          <p style="margin: 0; color: #666;">A family is at the beach on a sunny day</p>
+        </div>
+
+        <div class="input-group">
+          <label for="movie-sentence">Describe what you see:</label>
+          <textarea id="movie-sentence" placeholder="The family is playing in the sand..."></textarea>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn" onclick="checkMovieSentence('affirmative')">✅ Affirmative</button>
+          <button class="btn" onclick="checkMovieSentence('negative')">❌ Negative</button>
+          <button class="btn" onclick="checkMovieSentence('interrogative')">❓ Question</button>
+        </div>
+
+        <div class="feedback" id="movie-feedback"></div>
+      `;
+    }
+
+    function checkMovieSentence(type) {
+      const sentence = document.getElementById('movie-sentence').value.trim();
+      const feedback = document.getElementById('movie-feedback');
+
+      if (!sentence) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please write a sentence first!';
+        return;
+      }
+
+      const hasQuestion = sentence.includes('?');
+      const hasNegative = sentence.toLowerCase().includes('not') || sentence.toLowerCase().includes("n't");
+      
+      let isCorrect = false;
+      let message = '';
+
+      if (type === 'interrogative' && hasQuestion) {
+        isCorrect = true;
+        message = '✅ Perfect! You wrote a question!';
+      } else if (type === 'negative' && hasNegative && !hasQuestion) {
+        isCorrect = true;
+        message = '✅ Excellent! You wrote a negative sentence!';
+      } else if (type === 'affirmative' && !hasNegative && !hasQuestion) {
+        isCorrect = true;
+        message = '✅ Great job! You wrote an affirmative sentence!';
+      } else {
+        message = `❌ Hmm, that doesn't look like a ${type} sentence. Try again!`;
+      }
+
+      feedback.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+      feedback.textContent = message;
+
+      if (isCorrect) {
+        saveProgress('Mini Movie Scene', sentence, true);
+      }
+    }
+
+    // Activity 3: Sentence Spinner
+    function createSpinnerActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="spinner-container">
+          <div class="spinner">
+            <h4>Sentence Type</h4>
+            <div class="spinner-value" id="type-spinner">?</div>
+            <button class="btn btn-secondary" onclick="spinType()">Spin!</button>
+          </div>
+          <div class="spinner">
+            <h4>Subject</h4>
+            <div class="spinner-value" id="subject-spinner">?</div>
+            <button class="btn btn-secondary" onclick="spinSubject()">Spin!</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="spinner-sentence">Create your sentence:</label>
+          <textarea id="spinner-sentence" placeholder="Write a sentence using the prompts above..."></textarea>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn" onclick="checkSpinnerSentence()">Check My Sentence</button>
+        </div>
+
+        <div class="feedback" id="spinner-feedback"></div>
+      `;
+    }
+
+    const sentenceTypes = ['Affirmative ✅', 'Negative ❌', 'Question ❓'];
+    const subjects = ['I', 'You', 'He/She', 'We', 'They', 'The cat', 'My friend', 'The teacher'];
+
+    let currentType = '';
+    let currentSubject = '';
+
+    function spinType() {
+      const spinner = document.getElementById('type-spinner');
+      currentType = sentenceTypes[Math.floor(Math.random() * sentenceTypes.length)];
+      spinner.textContent = currentType;
+    }
+
+    function spinSubject() {
+      const spinner = document.getElementById('subject-spinner');
+      currentSubject = subjects[Math.floor(Math.random() * subjects.length)];
+      spinner.textContent = currentSubject;
+    }
+
+    function checkSpinnerSentence() {
+      const sentence = document.getElementById('spinner-sentence').value.trim();
+      const feedback = document.getElementById('spinner-feedback');
+
+      if (!currentType || !currentSubject) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please spin both wheels first!';
+        return;
+      }
+
+      if (!sentence) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please write a sentence!';
+        return;
+      }
+
+      const lowerSentence = sentence.toLowerCase();
+      const lowerSubject = currentSubject.toLowerCase();
+      const hasSubject = lowerSentence.includes(lowerSubject.split('/')[0]);
+      
+      let isCorrect = false;
+      if (currentType.includes('Affirmative') && !lowerSentence.includes('not') && !sentence.includes('?') && hasSubject) {
+        isCorrect = true;
+      } else if (currentType.includes('Negative') && lowerSentence.includes('not') && hasSubject) {
+        isCorrect = true;
+      } else if (currentType.includes('Question') && sentence.includes('?') && hasSubject) {
+        isCorrect = true;
+      }
+
+      feedback.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+      feedback.textContent = isCorrect 
+        ? '✅ Perfect! Your sentence matches the prompts!' 
+        : '❌ Try again! Make sure your sentence matches both the type and subject.';
+
+      if (isCorrect) {
+        saveProgress('Sentence Spinner', sentence, true);
+      }
+    }
+
+    // Activity 4: Role-Play Remix
+    function createRolePlayActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="role-play-box">
+          <h4>🎭 Tutor</h4>
+          <p id="tutor-line">Do you like ice cream?</p>
+        </div>
+
+        <div class="role-play-box student">
+          <h4>👤 Student Response</h4>
+          <textarea id="student-response" placeholder="Type your response here..."></textarea>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+          <button class="btn" onclick="nextRolePlay()">Next Line</button>
+          <button class="btn btn-secondary" onclick="checkRolePlay()">Check Response</button>
+        </div>
+
+        <div class="feedback" id="roleplay-feedback"></div>
+      `;
+    }
+
+    const rolePlayLines = [
+      { tutor: "Do you like ice cream?", type: "question" },
+      { tutor: "I love pizza!", type: "affirmative" },
+      { tutor: "I don't like rainy days.", type: "negative" },
+      { tutor: "Can you swim?", type: "question" },
+      { tutor: "She is a great teacher.", type: "affirmative" }
+    ];
+
+    let rolePlayIndex = 0;
+
+    function nextRolePlay() {
+      rolePlayIndex = (rolePlayIndex + 1) % rolePlayLines.length;
+      document.getElementById('tutor-line').textContent = rolePlayLines[rolePlayIndex].tutor;
+      document.getElementById('student-response').value = '';
+      document.getElementById('roleplay-feedback').className = 'feedback';
+    }
+
+    function checkRolePlay() {
+      const response = document.getElementById('student-response').value.trim();
+      const feedback = document.getElementById('roleplay-feedback');
+
+      if (!response) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please type a response!';
+        return;
+      }
+
+      feedback.className = 'feedback show correct';
+      feedback.innerHTML = '✅ Great response! Keep the conversation going!';
+      saveProgress('Role-Play Remix', response, true);
+    }
+
+    // Activity 5: Emoji Sentences
+    function createEmojiActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="emoji-grid">
+          <div class="emoji-item" onclick="selectEmoji('😊', 'happy')">😊</div>
+          <div class="emoji-item" onclick="selectEmoji('😢', 'sad')">😢</div>
+          <div class="emoji-item" onclick="selectEmoji('😴', 'tired')">😴</div>
+          <div class="emoji-item" onclick="selectEmoji('🎉', 'excited')">🎉</div>
+          <div class="emoji-item" onclick="selectEmoji('😡', 'angry')">😡</div>
+          <div class="emoji-item" onclick="selectEmoji('🤔', 'thinking')">🤔</div>
+        </div>
+
+        <div class="sentence-display" id="emoji-selected" style="display: none;">
+          <span id="selected-emoji" style="font-size: 48px;"></span>
+        </div>
+
+        <div class="input-group">
+          <label for="emoji-sentence">Write a sentence about this feeling:</label>
+          <textarea id="emoji-sentence" placeholder="I am happy today..."></textarea>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn" onclick="checkEmojiSentence()">Check Sentence</button>
+        </div>
+
+        <div class="feedback" id="emoji-feedback"></div>
+      `;
+    }
+
+    let selectedEmojiMood = '';
+
+    function selectEmoji(emoji, mood) {
+      document.querySelectorAll('.emoji-item').forEach(item => item.classList.remove('selected'));
+      event.target.classList.add('selected');
+      document.getElementById('emoji-selected').style.display = 'block';
+      document.getElementById('selected-emoji').textContent = emoji;
+      selectedEmojiMood = mood;
+    }
+
+    function checkEmojiSentence() {
+      const sentence = document.getElementById('emoji-sentence').value.trim();
+      const feedback = document.getElementById('emoji-feedback');
+
+      if (!selectedEmojiMood) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please select an emoji first!';
+        return;
+      }
+
+      if (!sentence) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please write a sentence!';
+        return;
+      }
+
+      feedback.className = 'feedback show correct';
+      feedback.innerHTML = '✅ Wonderful! Your sentence captures the emotion perfectly!';
+      saveProgress('Emoji Sentences', sentence, true);
+    }
+
+    // Activity 6: Find the Hidden Sentence
+    function createHiddenActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="sentence-display">
+          <p style="font-size: 48px; margin: 20px 0;">🔊</p>
+          <p style="color: #666;">Listen carefully to the sentence</p>
+        </div>
+
+        <div class="audio-controls">
+          <button class="btn btn-secondary" onclick="playHiddenSentence()">▶️ Play Audio</button>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+          <p style="font-size: 18px; margin-bottom: 15px; color: #333;">What type of sentence did you hear?</p>
+          <button class="btn" onclick="guessHiddenType('affirmative')">✅ Affirmative</button>
+          <button class="btn" onclick="guessHiddenType('negative')">❌ Negative</button>
+          <button class="btn" onclick="guessHiddenType('interrogative')">❓ Question</button>
+        </div>
+
+        <div class="feedback" id="hidden-feedback"></div>
+        <div class="sentence-display" id="hidden-reveal" style="display: none;"></div>
+      `;
+    }
+
+    const hiddenSentences = [
+      { text: "I love reading books.", type: "affirmative" },
+      { text: "She doesn't like coffee.", type: "negative" },
+      { text: "Do you play soccer?", type: "interrogative" },
+      { text: "They are not coming today.", type: "negative" },
+      { text: "Can you help me?", type: "interrogative" }
+    ];
+
+    let currentHiddenSentence = null;
+
+    function playHiddenSentence() {
+      currentHiddenSentence = hiddenSentences[Math.floor(Math.random() * hiddenSentences.length)];
+      
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(currentHiddenSentence.text);
+        utterance.rate = 0.8;
+        speechSynthesis.speak(utterance);
+      }
+      
+      document.getElementById('hidden-feedback').className = 'feedback';
+      document.getElementById('hidden-reveal').style.display = 'none';
+    }
+
+    function guessHiddenType(guess) {
+      const feedback = document.getElementById('hidden-feedback');
+      const reveal = document.getElementById('hidden-reveal');
+
+      if (!currentHiddenSentence) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please play the audio first!';
+        return;
+      }
+
+      const isCorrect = guess === currentHiddenSentence.type;
+      
+      feedback.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+      feedback.textContent = isCorrect 
+        ? '✅ Correct! You identified the sentence type!' 
+        : `❌ Not quite. It was a ${currentHiddenSentence.type} sentence.`;
+
+      reveal.style.display = 'block';
+      reveal.textContent = `"${currentHiddenSentence.text}"`;
+
+      if (isCorrect) {
+        saveProgress('Find the Hidden Sentence', currentHiddenSentence.text, true);
+      }
+    }
+
+    // Activity 7: My Life in 3 Sentences
+    function createLifeActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="sentence-display">
+          <p style="font-size: 64px; margin: 20px 0;">🏠</p>
+          <p style="color: #666;">Tell us about your home, family, or favorite place</p>
+        </div>
+
+        <div class="input-group">
+          <label for="life-affirmative">✅ Affirmative Sentence:</label>
+          <input type="text" id="life-affirmative" placeholder="I live in a big city.">
+        </div>
+
+        <div class="input-group">
+          <label for="life-negative">❌ Negative Sentence:</label>
+          <input type="text" id="life-negative" placeholder="I don't have any pets.">
+        </div>
+
+        <div class="input-group">
+          <label for="life-interrogative">❓ Question:</label>
+          <input type="text" id="life-interrogative" placeholder="Do you want to visit my home?">
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn" onclick="checkLifeSentences()">Check My Story</button>
+        </div>
+
+        <div class="feedback" id="life-feedback"></div>
+      `;
+    }
+
+    function checkLifeSentences() {
+      const affirmative = document.getElementById('life-affirmative').value.trim();
+      const negative = document.getElementById('life-negative').value.trim();
+      const interrogative = document.getElementById('life-interrogative').value.trim();
+      const feedback = document.getElementById('life-feedback');
+
+      if (!affirmative || !negative || !interrogative) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please complete all three sentences!';
+        return;
+      }
+
+      const hasNegative = negative.toLowerCase().includes('not') || negative.toLowerCase().includes("n't");
+      const hasQuestion = interrogative.includes('?');
+
+      if (hasNegative && hasQuestion) {
+        feedback.className = 'feedback show correct';
+        feedback.innerHTML = '✅ Excellent work! You used all three sentence types to tell your story!';
+        saveProgress('My Life in 3 Sentences', `${affirmative} | ${negative} | ${interrogative}`, true);
+      } else {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '❌ Check your sentences. Make sure the negative has "not" and the question ends with "?"';
+      }
+    }
+
+    // Activity 8: AI Co-Writer
+    function createCoWriterActivity(activity) {
+      return `
+        <div class="activity-header">
+          <div class="icon">${activity.icon}</div>
+          <h2>${activity.title}</h2>
+          <p class="description">${activity.description}</p>
+        </div>
+
+        <div class="sentence-display">
+          <p style="color: #666; margin-bottom: 10px;">Story Progress:</p>
+          <div class="progress-bar">
+            <div class="progress-fill" id="story-progress" style="width: 0%;"></div>
+          </div>
+          <p style="color: #666; font-size: 14px;" id="story-count">0 / 6 sentences</p>
+        </div>
+
+        <div class="role-play-box">
+          <h4>📖 Our Story</h4>
+          <div id="story-text" style="line-height: 1.8; color: #333;">
+            <em>Start writing to begin the story...</em>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="cowriter-sentence">Add the next sentence (<span id="next-type">Affirmative</span>):</label>
+          <textarea id="cowriter-sentence" placeholder="Write your sentence here..."></textarea>
+        </div>
+
+        <div style="text-align: center;">
+          <button class="btn" onclick="addToStory()">Add to Story</button>
+          <button class="btn btn-secondary" onclick="resetStory()">Start Over</button>
+        </div>
+
+        <div class="feedback" id="cowriter-feedback"></div>
+      `;
+    }
+
+    let storyParts = [];
+    const storyTypes = ['Affirmative', 'Negative', 'Question', 'Affirmative', 'Negative', 'Question'];
+    let storyIndex = 0;
+
+    function addToStory() {
+      const sentence = document.getElementById('cowriter-sentence').value.trim();
+      const feedback = document.getElementById('cowriter-feedback');
+
+      if (!sentence) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = '⚠️ Please write a sentence!';
+        return;
+      }
+
+      const expectedType = storyTypes[storyIndex];
+      let isCorrect = false;
+
+      if (expectedType === 'Affirmative' && !sentence.includes('?') && !sentence.toLowerCase().includes('not')) {
+        isCorrect = true;
+      } else if (expectedType === 'Negative' && sentence.toLowerCase().includes('not')) {
+        isCorrect = true;
+      } else if (expectedType === 'Question' && sentence.includes('?')) {
+        isCorrect = true;
+      }
+
+      if (!isCorrect) {
+        feedback.className = 'feedback show incorrect';
+        feedback.textContent = `❌ This should be a ${expectedType} sentence. Try again!`;
+        return;
+      }
+
+      storyParts.push(sentence);
+      storyIndex++;
+
+      const storyText = document.getElementById('story-text');
+      storyText.innerHTML = storyParts.map((s, i) => `<p style="margin: 10px 0;">${i + 1}. ${s}</p>`).join('');
+
+      const progress = (storyIndex / 6) * 100;
+      document.getElementById('story-progress').style.width = progress + '%';
+      document.getElementById('story-count').textContent = `${storyIndex} / 6 sentences`;
+
+      document.getElementById('cowriter-sentence').value = '';
+
+      if (storyIndex < 6) {
+        document.getElementById('next-type').textContent = storyTypes[storyIndex];
+        feedback.className = 'feedback show correct';
+        feedback.textContent = '✅ Great! Keep going!';
+      } else {
+        feedback.className = 'feedback show correct';
+        feedback.innerHTML = '🎉 Amazing! You completed the story using all sentence types!';
+        saveProgress('AI Co-Writer', storyParts.join(' '), true);
+      }
+    }
+
+    function resetStory() {
+      storyParts = [];
+      storyIndex = 0;
+      document.getElementById('story-text').innerHTML = '<em>Start writing to begin the story...</em>';
+      document.getElementById('story-progress').style.width = '0%';
+      document.getElementById('story-count').textContent = '0 / 6 sentences';
+      document.getElementById('next-type').textContent = 'Affirmative';
+      document.getElementById('cowriter-sentence').value = '';
+      document.getElementById('cowriter-feedback').className = 'feedback';
+    }
+
+    // Data SDK Integration
+    async function saveProgress(activityName, response, isCorrect) {
+      if (currentRecordCount >= 999) {
+        console.log('Maximum limit of 999 records reached');
+        return;
+      }
+
+      const result = await window.dataSdk.create({
+        id: Date.now().toString(),
+        activity_name: activityName,
+        student_response: response,
+        is_correct: isCorrect,
+        timestamp: new Date().toISOString()
+      });
+
+      if (!result.isOk) {
+        console.error('Failed to save progress');
+      }
+    }
+
+    const dataHandler = {
+      onDataChanged(data) {
+        currentRecordCount = data.length;
+      }
+    };
+
+    // Element SDK Integration
+    async function onConfigChange(newConfig) {
+      const customFont = newConfig.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Comic Sans MS, Arial, sans-serif';
+      const baseSize = newConfig.font_size || defaultConfig.font_size;
+
+      document.body.style.background = `linear-gradient(135deg, ${newConfig.background_color || defaultConfig.background_color} 0%, ${newConfig.primary_action_color || defaultConfig.primary_action_color} 100%)`;
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+
+      document.getElementById('app-title').textContent = newConfig.app_title || defaultConfig.app_title;
+      document.getElementById('app-title').style.fontSize = `${baseSize * 3}px`;
+      document.getElementById('app-title').style.color = newConfig.surface_color || defaultConfig.surface_color;
+
+      document.getElementById('welcome-message').textContent = newConfig.welcome_message || defaultConfig.welcome_message;
+      document.getElementById('welcome-message').style.fontSize = `${baseSize * 1.25}px`;
+      document.getElementById('welcome-message').style.color = newConfig.surface_color || defaultConfig.surface_color;
+
+      document.querySelectorAll('.activity-card').forEach(card => {
+        card.style.background = newConfig.surface_color || defaultConfig.surface_color;
+      });
+
+      document.querySelectorAll('.activity-card h3').forEach(h3 => {
+        h3.style.color = newConfig.primary_action_color || defaultConfig.primary_action_color;
+        h3.style.fontSize = `${baseSize * 1.375}px`;
+      });
+
+      document.querySelectorAll('.activity-card p').forEach(p => {
+        p.style.color = newConfig.text_color || defaultConfig.text_color;
+        p.style.fontSize = `${baseSize * 0.875}px`;
+      });
+
+      document.querySelectorAll('.btn').forEach(btn => {
+        if (btn.classList.contains('btn-secondary')) {
+          btn.style.background = newConfig.secondary_action_color || defaultConfig.secondary_action_color;
+        } else {
+          btn.style.background = newConfig.primary_action_color || defaultConfig.primary_action_color;
+        }
+        btn.style.fontSize = `${baseSize}px`;
+      });
+
+      document.querySelectorAll('.modal-content h2, .activity-header h2').forEach(h2 => {
+        h2.style.color = newConfig.primary_action_color || defaultConfig.primary_action_color;
+        h2.style.fontSize = `${baseSize * 2}px`;
+      });
+
+      document.querySelectorAll('label, .input-group label').forEach(label => {
+        label.style.color = newConfig.text_color || defaultConfig.text_color;
+        label.style.fontSize = `${baseSize}px`;
+      });
+
+      document.querySelectorAll('.description, .activity-card p').forEach(desc => {
+        desc.style.fontSize = `${baseSize}px`;
+      });
+    }
+
+    // Initialize
+    async function init() {
+      const dataSdkResult = await window.dataSdk.init(dataHandler);
+      if (!dataSdkResult.isOk) {
+        console.error('Failed to initialize data SDK');
+      }
+
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  config.background_color = value;
+                  window.elementSdk.setConfig({ background_color: value });
+                }
+              },
+              {
+                get: () => config.surface_color || defaultConfig.surface_color,
+                set: (value) => {
+                  config.surface_color = value;
+                  window.elementSdk.setConfig({ surface_color: value });
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  config.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              },
+              {
+                get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                set: (value) => {
+                  config.primary_action_color = value;
+                  window.elementSdk.setConfig({ primary_action_color: value });
+                }
+              },
+              {
+                get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                set: (value) => {
+                  config.secondary_action_color = value;
+                  window.elementSdk.setConfig({ secondary_action_color: value });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (value) => {
+                config.font_family = value;
+                window.elementSdk.setConfig({ font_family: value });
+              }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (value) => {
+                config.font_size = value;
+                window.elementSdk.setConfig({ font_size: value });
+              }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["app_title", config.app_title || defaultConfig.app_title],
+            ["welcome_message", config.welcome_message || defaultConfig.welcome_message]
+          ])
+        });
+
+        config = window.elementSdk.config;
+      }
+
+      renderActivities();
+      await onConfigChange(config);
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99d6d39e91e097a5',t:'MTc2Mjk1ODg2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
