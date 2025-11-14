@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grammar Practice Hub</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            color: #333;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .instructions {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .practice-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            flex-grow: 1;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 80px;
+            height: 2px;
+            background: #667eea;
+            margin: 0 4px;
+            position: relative;
+            top: -2px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .option-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .option-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .option-btn.correct {
+            background: #48bb78;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .option-btn.incorrect {
+            background: #f56565;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+        }
+
+        .feedback {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #48bb78;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 2px solid #f56565;
+        }
+
+        .next-btn {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .next-btn:hover {
+            background: #6b46c1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        .next-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 2rem;
+            }
+            
+            .stats {
+                gap: 1rem;
+            }
+            
+            .options {
+                justify-content: center;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main class="container">
+   <header class="header">
+    <h1 class="title" id="app-title">Grammar Practice Hub</h1>
+    <p class="instructions" id="instructions">Choose the correct article or pronoun to complete each sentence</p>
+    <div class="stats">
+     <div class="stat-item">
+      <div class="stat-number" id="correct-count">
+       0
+      </div>
+      <div class="stat-label">
+       Correct
+      </div>
+     </div>
+     <div class="stat-item">
+      <div class="stat-number" id="total-count">
+       0
+      </div>
+      <div class="stat-label">
+       Total
+      </div>
+     </div>
+     <div class="stat-item">
+      <div class="stat-number" id="accuracy">
+       0%
+      </div>
+      <div class="stat-label">
+       Accuracy
+      </div>
+     </div>
+    </div>
+   </header>
+   <section class="practice-area">
+    <div id="loading" class="loading">
+     <div class="spinner"></div> Loading practice questions...
+    </div>
+    <div id="question-area" style="display: none;">
+     <div class="question-container">
+      <div class="question-text" id="question-text"></div>
+      <div class="options" id="options"></div>
+     </div>
+     <div class="feedback" id="feedback"></div><button class="next-btn" id="next-btn" onclick="nextQuestion()" disabled> Next Question </button>
+    </div>
+   </section>
+  </main>
+  <script>
+        // Configuration and state
+        const defaultConfig = {
+            app_title: "Grammar Practice Hub",
+            instructions_text: "Choose the correct article or pronoun to complete each sentence",
+            success_message: "Great job!"
+        };
+
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let isAnswered = false;
+
+        // Practice questions focusing on articles and pronouns
+        const questions = [
+            {
+                id: "q1",
+                text: "_____ beautiful sunset painted the sky in brilliant colors.",
+                options: ["The", "A", "An"],
+                correct: "A",
+                explanation: "'A' is used before words that start with consonant sounds."
+            },
+            {
+                id: "q2", 
+                text: "She looked at _____ reflection in the mirror and smiled.",
+                options: ["she", "hers", "her"],
+                correct: "her",
+                explanation: "'Her' is a possessive pronoun showing ownership."
+            },
+            {
+                id: "q3",
+                text: "_____ stars shine brightly in _____ night sky.",
+                options: ["A, a", "The, a", "The, the"],
+                correct: "The, the",
+                explanation: "'The' is used for specific things we're talking about."
+            },
+            {
+                id: "q4",
+                text: "When _____ smile, _____ whole world seems brighter.",
+                options: ["your, a", "you, a", "you, the"],
+                correct: "you, the",
+                explanation: "'You' is the subject pronoun, 'the' refers to the specific world."
+            },
+            {
+                id: "q5",
+                text: "_____ amazing person deserves to know _____ worth.",
+                options: ["A, there", "An, they're", "An, their"],
+                correct: "An, their",
+                explanation: "'An' comes before vowel sounds, 'their' shows possession."
+            },
+            {
+                id: "q6",
+                text: "I could listen to _____ laugh all day long.",
+                options: ["she", "her", "hers"],
+                correct: "her",
+                explanation: "'Her' is used as a possessive pronoun before nouns."
+            },
+            {
+                id: "q7",
+                text: "_____ moon looks especially bright tonight.",
+                options: ["An", "A", "The"],
+                correct: "The",
+                explanation: "'The' is used for unique things like the moon."
+            },
+            {
+                id: "q8",
+                text: "_____ think _____ are perfect just _____ way _____ are.",
+                options: ["Me, your, a, your", "I, your, the, your", "I, you, the, you"],
+                correct: "I, you, the, you",
+                explanation: "Subject pronouns and articles work together in this sentence."
+            },
+            {
+                id: "q9",
+                text: "_____ elephant walked slowly through _____ jungle.",
+                options: ["A, a", "An, the", "The, an"],
+                correct: "An, the",
+                explanation: "'An' comes before vowel sounds, 'the' refers to a specific jungle."
+            },
+            {
+                id: "q10",
+                text: "_____ told me that _____ would be here by noon.",
+                options: ["She, she", "Her, she", "She, her"],
+                correct: "She, she",
+                explanation: "Both instances need the subject pronoun 'she'."
+            },
+            {
+                id: "q11",
+                text: "I need _____ umbrella because _____ weather looks stormy.",
+                options: ["an, the", "a, a", "the, an"],
+                correct: "an, the",
+                explanation: "'An' before vowel sounds, 'the' for specific weather we can see."
+            },
+            {
+                id: "q12",
+                text: "_____ car belongs to _____ and _____ brother.",
+                options: ["The, her, her", "A, she, her", "The, she, she"],
+                correct: "The, her, her",
+                explanation: "'The' for a specific car, 'her' shows possession for both people."
+            },
+            {
+                id: "q13",
+                text: "_____ honest person always tells _____ truth.",
+                options: ["An, the", "A, a", "The, an"],
+                correct: "An, the",
+                explanation: "'An' before 'honest' (vowel sound), 'the' for the specific concept of truth."
+            },
+            {
+                id: "q14",
+                text: "_____ and _____ friends went to _____ movies together.",
+                options: ["Her, her, a", "She, her, the", "She, she, the"],
+                correct: "She, her, the",
+                explanation: "'She' is the subject, 'her' shows possession, 'the' for movies in general."
+            },
+            {
+                id: "q15",
+                text: "_____ hour passed before _____ train finally arrived.",
+                options: ["A, a", "An, the", "The, an"],
+                correct: "An, the",
+                explanation: "'An' before 'hour' (vowel sound), 'the' for the specific expected train."
+            },
+            {
+                id: "q16",
+                text: "_____ gave _____ book to _____ teacher yesterday.",
+                options: ["Her, her, the", "She, her, a", "She, her, the"],
+                correct: "She, her, the",
+                explanation: "'She' is the subject, 'her' shows possession, 'the' for a specific teacher."
+            },
+            {
+                id: "q17",
+                text: "_____ university offers _____ excellent program in _____ arts.",
+                options: ["The, an, the", "A, a, a", "An, the, an"],
+                correct: "The, an, the",
+                explanation: "'The' for a specific university, 'an' before 'excellent', 'the' for arts in general."
+            },
+            {
+                id: "q18",
+                text: "_____ think _____ sister is _____ most talented person _____ know.",
+                options: ["I, my, the, I", "Me, my, a, me", "I, mine, the, me"],
+                correct: "I, my, the, I",
+                explanation: "'I' as subject, 'my' shows possession, 'the' for superlative, 'I' as subject again."
+            },
+            {
+                id: "q19",
+                text: "_____ apple _____ day keeps _____ doctor away.",
+                options: ["An, a, the", "A, the, a", "The, an, the"],
+                correct: "An, a, the",
+                explanation: "'An' before vowel sound, 'a' for any day, 'the' for doctors in general."
+            },
+            {
+                id: "q20",
+                text: "_____ told _____ that _____ homework was due today.",
+                options: ["He, I, my", "Him, me, mine", "He, me, my"],
+                correct: "He, me, my",
+                explanation: "'He' is the subject, 'me' is the object, 'my' shows possession."
+            },
+            {
+                id: "q21",
+                text: "_____ ocean stretches as far as _____ eye can see.",
+                options: ["An, the", "The, the", "A, an"],
+                correct: "The, the",
+                explanation: "'The' for the specific ocean, 'the' for the eye in general."
+            },
+            {
+                id: "q22",
+                text: "_____ and _____ parents are planning _____ vacation to Europe.",
+                options: ["She, her, a", "Her, her, the", "She, she, an"],
+                correct: "She, her, a",
+                explanation: "'She' is the subject, 'her' shows possession, 'a' for any vacation."
+            },
+            {
+                id: "q23",
+                text: "_____ unusual sound came from _____ attic above _____ bedroom.",
+                options: ["An, the, my", "A, an, mine", "The, a, my"],
+                correct: "An, the, my",
+                explanation: "'An' before vowel sound, 'the' for specific attic, 'my' shows possession."
+            },
+            {
+                id: "q24",
+                text: "_____ wonder if _____ will remember to bring _____ lunch tomorrow.",
+                options: ["I, she, her", "Me, her, hers", "I, her, she"],
+                correct: "I, she, her",
+                explanation: "'I' as subject, 'she' as subject, 'her' shows possession."
+            },
+            {
+                id: "q25",
+                text: "_____ ice cream truck plays _____ same melody every day.",
+                options: ["The, the", "An, a", "A, the"],
+                correct: "The, the",
+                explanation: "'The' for the specific truck we know, 'the' for the specific melody."
+            },
+            {
+                id: "q26",
+                text: "_____ asked _____ if _____ could borrow _____ pencil for _____ test.",
+                options: ["I, her, I, her, the", "Me, she, me, hers, a", "I, she, me, her, a"],
+                correct: "I, her, I, her, the",
+                explanation: "Subject 'I', object 'her', subject 'I', possessive 'her', specific 'the' test."
+            },
+            {
+                id: "q27",
+                text: "_____ eagle soared high above _____ mountains in _____ distance.",
+                options: ["An, the, the", "A, a, a", "The, an, the"],
+                correct: "An, the, the",
+                explanation: "'An' before vowel sound, 'the' for specific mountains, 'the' for specific distance."
+            },
+            {
+                id: "q28",
+                text: "_____ believe _____ story _____ told about _____ adventure.",
+                options: ["I, the, she, her", "Me, a, her, hers", "I, a, her, she"],
+                correct: "I, the, she, her",
+                explanation: "'I' as subject, 'the' for specific story, 'she' as subject, 'her' possessive."
+            },
+            {
+                id: "q29",
+                text: "_____ old house at _____ end of _____ street has been empty for years.",
+                options: ["The, the, the", "An, an, a", "A, the, an"],
+                correct: "The, the, the",
+                explanation: "All three use 'the' because they refer to specific, known things."
+            },
+            {
+                id: "q30",
+                text: "_____ gave _____ flowers to _____ mother on _____ special day.",
+                options: ["He, the, his, a", "Him, a, he, the", "He, some, her, that"],
+                correct: "He, the, his, a",
+                explanation: "'He' as subject, 'the' for specific flowers, 'his' possessive, 'a' for any special day."
+            },
+            {
+                id: "q31",
+                text: "_____ interesting book about _____ history of _____ ancient civilizations.",
+                options: ["An, the, the", "A, a, an", "The, an, a"],
+                correct: "An, the, the",
+                explanation: "'An' before vowel sound, 'the' for specific history, 'the' for specific civilizations."
+            },
+            {
+                id: "q32",
+                text: "_____ think _____ dog is _____ smartest pet in _____ neighborhood.",
+                options: ["I, my, the, the", "Me, mine, a, a", "I, mine, the, a"],
+                correct: "I, my, the, the",
+                explanation: "'I' as subject, 'my' possessive, 'the' for superlative, 'the' for specific neighborhood."
+            },
+            {
+                id: "q33",
+                text: "_____ orange cat sat on _____ fence between _____ two houses.",
+                options: ["An, the, the", "A, a, a", "The, an, two"],
+                correct: "An, the, the",
+                explanation: "'An' before vowel sound, 'the' for specific fence, 'the' before 'two houses'."
+            },
+            {
+                id: "q34",
+                text: "_____ told _____ that _____ would meet _____ at _____ library.",
+                options: ["She, me, she, me, the", "Her, I, her, I, a", "She, I, she, I, the"],
+                correct: "She, me, she, me, the",
+                explanation: "'She' as subject, 'me' as object, 'she' as subject, 'me' as object, 'the' for specific library."
+            },
+            {
+                id: "q35",
+                text: "_____ umbrella _____ forgot belongs to _____ and _____ roommate.",
+                options: ["The, she, her, her", "An, her, she, she", "A, she, hers, hers"],
+                correct: "The, she, her, her",
+                explanation: "'The' for specific umbrella, 'she' as subject, 'her' possessive for both people."
+            },
+            {
+                id: "q36",
+                text: "_____ understand why _____ chose _____ difficult path instead of _____ easy one.",
+                options: ["I, she, the, the", "Me, her, a, an", "I, her, that, this"],
+                correct: "I, she, the, the",
+                explanation: "'I' as subject, 'she' as subject, 'the' for specific difficult path, 'the' for specific easy one."
+            },
+            {
+                id: "q37",
+                text: "_____ unusual event happened at _____ exact moment _____ arrived.",
+                options: ["An, the, she", "A, an, her", "The, a, she"],
+                correct: "An, the, she",
+                explanation: "'An' before vowel sound, 'the' for specific moment, 'she' as subject."
+            },
+            {
+                id: "q38",
+                text: "_____ hope _____ remember to bring _____ camera to _____ wedding tomorrow.",
+                options: ["I, you, your, the", "Me, your, you, a", "I, your, you, the"],
+                correct: "I, you, your, the",
+                explanation: "'I' as subject, 'you' as subject, 'your' possessive, 'the' for specific wedding."
+            }
+        ];
+
+        // Data SDK handler
+        const dataHandler = {
+            onDataChanged(data) {
+                updateStats(data);
+            }
+        };
+
+        // Element SDK configuration
+        async function onConfigChange(config) {
+            const title = config.app_title || defaultConfig.app_title;
+            const instructions = config.instructions_text || defaultConfig.instructions_text;
+            
+            document.getElementById('app-title').textContent = title;
+            document.getElementById('instructions').textContent = instructions;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.primary_color || "#667eea",
+                        set: (value) => {
+                            config.primary_color = value;
+                            window.elementSdk.setConfig({ primary_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.secondary_color || "#764ba2", 
+                        set: (value) => {
+                            config.secondary_color = value;
+                            window.elementSdk.setConfig({ secondary_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.background_color || "#ffffff",
+                        set: (value) => {
+                            config.background_color = value;
+                            window.elementSdk.setConfig({ background_color: value });
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || "Segoe UI",
+                    set: (value) => {
+                        config.font_family = value;
+                        window.elementSdk.setConfig({ font_family: value });
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || 16,
+                    set: (value) => {
+                        config.font_size = value;
+                        window.elementSdk.setConfig({ font_size: value });
+                    }
+                }
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["instructions_text", config.instructions_text || defaultConfig.instructions_text],
+                ["success_message", config.success_message || defaultConfig.success_message]
+            ]);
+        }
+
+        // Initialize SDKs
+        async function initializeApp() {
+            try {
+                // Initialize Element SDK
+                if (window.elementSdk) {
+                    await window.elementSdk.init({
+                        defaultConfig,
+                        onConfigChange,
+                        mapToCapabilities,
+                        mapToEditPanelValues
+                    });
+                }
+
+                // Initialize Data SDK
+                if (window.dataSdk) {
+                    const result = await window.dataSdk.init(dataHandler);
+                    if (!result.isOk) {
+                        console.error("Failed to initialize data SDK");
+                    }
+                }
+
+                // Start the quiz
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('question-area').style.display = 'block';
+                    showQuestion();
+                }, 1000);
+
+            } catch (error) {
+                console.error("Failed to initialize app:", error);
+                document.getElementById('loading').innerHTML = "Failed to load. Please refresh the page.";
+            }
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showCompletion();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            isAnswered = false;
+
+            document.getElementById('question-text').textContent = question.text;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(option, question.correct, question.explanation);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('next-btn').disabled = true;
+        }
+
+        async function selectAnswer(selected, correct, explanation) {
+            if (isAnswered) return;
+            
+            isAnswered = true;
+            const isCorrect = selected === correct;
+            
+            // Disable all option buttons and show results
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correct) {
+                    btn.classList.add('correct');
+                } else if (btn.textContent === selected && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = isCorrect ? 
+                (window.elementSdk?.config?.success_message || defaultConfig.success_message) + " " + explanation :
+                "Not quite right. " + explanation;
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+
+            // Save answer to data SDK
+            if (window.dataSdk) {
+                const answerData = {
+                    question_id: questions[currentQuestionIndex].id,
+                    user_answer: selected,
+                    correct_answer: correct,
+                    is_correct: isCorrect,
+                    timestamp: new Date().toISOString()
+                };
+
+                const result = await window.dataSdk.create(answerData);
+                if (!result.isOk) {
+                    console.error("Failed to save answer");
+                }
+            }
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function updateStats(data) {
+            const correctAnswers = data.filter(answer => answer.is_correct).length;
+            const totalAnswers = data.length;
+            const accuracy = totalAnswers > 0 ? Math.round((correctAnswers / totalAnswers) * 100) : 0;
+
+            document.getElementById('correct-count').textContent = correctAnswers;
+            document.getElementById('total-count').textContent = totalAnswers;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function showCompletion() {
+            document.getElementById('question-area').innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <h2 style="color: #667eea; margin-bottom: 1rem;">🎉 Practice Complete!</h2>
+                    <p style="font-size: 1.2rem; margin-bottom: 2rem;">You've completed all the grammar exercises!</p>
+                    <button class="next-btn" onclick="restartQuiz()">Practice Again</button>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            document.getElementById('question-area').innerHTML = `
+                <div class="question-container">
+                    <div class="question-text" id="question-text"></div>
+                    <div class="options" id="options"></div>
+                </div>
+                <div class="feedback" id="feedback"></div>
+                <button class="next-btn" id="next-btn" onclick="nextQuestion()" disabled>Next Question</button>
+            `;
+            showQuestion();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ea20fab16408cc',t:'MTc2MzE2MTI2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
