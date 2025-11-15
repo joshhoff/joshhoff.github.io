@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spanish Comprehension Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .correct-answer {
+            background-color: #10b981;
+            color: white;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+        .incorrect-answer {
+            background-color: #ef4444;
+            color: white;
+            transform: scale(0.98);
+            transition: all 0.3s ease;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-gradient-to-br from-orange-50 to-red-50 font-sans">
+  <main class="min-h-full flex items-center justify-center p-4">
+   <div class="w-full max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden"><!-- Header -->
+    <header class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 text-center">
+     <h1 id="quiz-title" class="text-3xl font-bold mb-2">Spanish Comprehension Quiz</h1>
+     <p id="welcome-message" class="text-orange-100">Test your Spanish comprehension skills!</p>
+    </header><!-- Welcome Screen -->
+    <div id="welcome-screen" class="p-8 text-center">
+     <div class="mb-6">
+      <div class="text-6xl mb-4">
+       🇪🇸
+      </div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ready to Test Your Spanish?</h2>
+      <p class="text-gray-600 mb-6">This quiz will test your understanding of common Spanish phrases and verbs. Choose the best English translation for each Spanish phrase.</p>
+     </div><button id="start-quiz-btn" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"> Start Quiz </button>
+    </div><!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden"><!-- Progress Bar -->
+     <div class="bg-gray-200 h-2">
+      <div id="progress-bar" class="bg-gradient-to-r from-orange-500 to-red-500 h-2 transition-all duration-500" style="width: 0%"></div>
+     </div><!-- Question Counter -->
+     <div class="p-4 bg-gray-50 text-center"><span id="question-counter" class="text-sm font-medium text-gray-600">Question 1 of 10</span>
+     </div><!-- Question Content -->
+     <div class="p-8">
+      <div class="text-center mb-8">
+       <div class="text-4xl mb-4" id="question-emoji">
+        💭
+       </div>
+       <h3 class="text-2xl font-bold text-gray-800 mb-2">What does this mean in English?</h3>
+       <div class="bg-gradient-to-r from-orange-100 to-red-100 rounded-lg p-6 mb-6">
+        <p id="spanish-phrase" class="text-3xl font-semibold text-gray-800">"¿Cómo estás?"</p>
+        <p class="text-sm text-gray-600 mt-2" id="phrase-type">Common Greeting</p>
+       </div>
+      </div><!-- Answer Options -->
+      <div class="space-y-3" id="answer-options"><!-- Options will be populated by JavaScript -->
+      </div><!-- Feedback -->
+      <div id="feedback" class="hidden mt-6 p-4 rounded-lg text-center">
+       <div id="feedback-content"></div><button id="next-question-btn" class="mt-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300"> Next Question </button>
+      </div>
+     </div>
+    </div><!-- Results Screen -->
+    <div id="results-screen" class="hidden p-8 text-center">
+     <div class="mb-6">
+      <div id="results-emoji" class="text-6xl mb-4">
+       🎉
+      </div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Quiz Complete!</h2>
+      <div class="bg-gradient-to-r from-orange-100 to-red-100 rounded-lg p-6 mb-6">
+       <div class="text-4xl font-bold text-gray-800" id="final-score">
+        8/10
+       </div>
+       <p class="text-gray-600 mt-2" id="score-message">Great job!</p>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+       <div class="bg-green-50 p-4 rounded-lg">
+        <div class="text-2xl font-bold text-green-600" id="correct-count">
+         8
+        </div>
+        <div class="text-green-700">
+         Correct
+        </div>
+       </div>
+       <div class="bg-red-50 p-4 rounded-lg">
+        <div class="text-2xl font-bold text-red-600" id="incorrect-count">
+         2
+        </div>
+        <div class="text-red-700">
+         Incorrect
+        </div>
+       </div>
+      </div>
+     </div><button id="restart-quiz-btn" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"> Take Quiz Again </button>
+    </div><!-- Loading State -->
+    <div id="loading-state" class="hidden p-8 text-center">
+     <div class="pulse text-4xl mb-4">
+      ⏳
+     </div>
+     <p class="text-gray-600">Saving your progress...</p>
+    </div>
+   </div>
+  </main>
+  <script>
+        // Configuration
+        const defaultConfig = {
+            quiz_title: "Spanish Comprehension Quiz",
+            welcome_message: "Test your Spanish comprehension skills!",
+            start_button_text: "Start Quiz",
+            next_button_text: "Next Question",
+            background_color: "#fef7f0",
+            primary_color: "#f97316",
+            text_color: "#1f2937",
+            surface_color: "#ffffff",
+            accent_color: "#ef4444",
+            font_family: "Inter",
+            font_size: 16
+        };
+
+        // Quiz Data
+        const quizQuestions = [
+            {
+                id: "q1",
+                spanish: "¿Cómo estás?",
+                type: "Common Greeting",
+                emoji: "👋",
+                correct: "How are you?",
+                options: ["How are you?", "What's your name?", "Where are you from?", "How old are you?"]
+            },
+            {
+                id: "q2",
+                spanish: "Me gusta mucho",
+                type: "Expression of Preference",
+                emoji: "❤️",
+                correct: "I like it a lot",
+                options: ["I like it a lot", "I don't like it", "I need it", "I want it"]
+            },
+            {
+                id: "q3",
+                spanish: "¿Dónde está el baño?",
+                type: "Common Question",
+                emoji: "🚻",
+                correct: "Where is the bathroom?",
+                options: ["Where is the bathroom?", "Where is the kitchen?", "Where is the exit?", "Where is the store?"]
+            },
+            {
+                id: "q4",
+                spanish: "Tengo hambre",
+                type: "Physical State",
+                emoji: "🍽️",
+                correct: "I am hungry",
+                options: ["I am hungry", "I am thirsty", "I am tired", "I am cold"]
+            },
+            {
+                id: "q5",
+                spanish: "¿Cuánto cuesta?",
+                type: "Shopping Phrase",
+                emoji: "💰",
+                correct: "How much does it cost?",
+                options: ["How much does it cost?", "What time is it?", "How many are there?", "What color is it?"]
+            },
+            {
+                id: "q6",
+                spanish: "No hablo español",
+                type: "Communication",
+                emoji: "🗣️",
+                correct: "I don't speak Spanish",
+                options: ["I don't speak Spanish", "I don't understand", "I don't know", "I don't want to"]
+            },
+            {
+                id: "q7",
+                spanish: "¿Puede ayudarme?",
+                type: "Request for Help",
+                emoji: "🤝",
+                correct: "Can you help me?",
+                options: ["Can you help me?", "Can you hear me?", "Can you see me?", "Can you call me?"]
+            },
+            {
+                id: "q8",
+                spanish: "Estoy perdido",
+                type: "Emergency Phrase",
+                emoji: "🗺️",
+                correct: "I am lost",
+                options: ["I am lost", "I am late", "I am ready", "I am busy"]
+            },
+            {
+                id: "q9",
+                spanish: "¿Qué hora es?",
+                type: "Time Question",
+                emoji: "⏰",
+                correct: "What time is it?",
+                options: ["What time is it?", "What day is it?", "What year is it?", "What month is it?"]
+            },
+            {
+                id: "q10",
+                spanish: "Muchas gracias",
+                type: "Polite Expression",
+                emoji: "🙏",
+                correct: "Thank you very much",
+                options: ["Thank you very much", "You're welcome", "Excuse me", "I'm sorry"]
+            }
+        ];
+
+        // Application State
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswered = false;
+
+        // Data SDK Handler
+        const dataHandler = {
+            onDataChanged(data) {
+                // Update UI if needed based on stored quiz results
+                console.log('Quiz data updated:', data.length, 'results stored');
+            }
+        };
+
+        // Element SDK Configuration
+        async function onConfigChange(config) {
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseFontStack = 'system-ui, -apple-system, sans-serif';
+            const baseSize = config.font_size || defaultConfig.font_size;
+            
+            // Apply font family
+            document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            
+            // Apply font sizes
+            document.getElementById('quiz-title').style.fontSize = `${baseSize * 1.875}px`;
+            document.getElementById('welcome-message').style.fontSize = `${baseSize}px`;
+            document.querySelector('h2').style.fontSize = `${baseSize * 1.5}px`;
+            
+            // Apply colors
+            document.body.style.background = `linear-gradient(to bottom right, ${config.background_color || defaultConfig.background_color}, #fef2f2)`;
+            
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.background = `linear-gradient(to right, ${config.primary_color || defaultConfig.primary_color}, ${config.accent_color || defaultConfig.accent_color})`;
+            }
+            
+            // Update text content
+            document.getElementById('quiz-title').textContent = config.quiz_title || defaultConfig.quiz_title;
+            document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+            document.getElementById('start-quiz-btn').textContent = config.start_button_text || defaultConfig.start_button_text;
+            document.getElementById('next-question-btn').textContent = config.next_button_text || defaultConfig.next_button_text;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.background_color || defaultConfig.background_color,
+                        set: (value) => {
+                            config.background_color = value;
+                            window.elementSdk.setConfig({ background_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.primary_color || defaultConfig.primary_color,
+                        set: (value) => {
+                            config.primary_color = value;
+                            window.elementSdk.setConfig({ primary_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            config.text_color = value;
+                            window.elementSdk.setConfig({ text_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.surface_color || defaultConfig.surface_color,
+                        set: (value) => {
+                            config.surface_color = value;
+                            window.elementSdk.setConfig({ surface_color: value });
+                        }
+                    },
+                    {
+                        get: () => config.accent_color || defaultConfig.accent_color,
+                        set: (value) => {
+                            config.accent_color = value;
+                            window.elementSdk.setConfig({ accent_color: value });
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: {
+                    get: () => config.font_family || defaultConfig.font_family,
+                    set: (value) => {
+                        config.font_family = value;
+                        window.elementSdk.setConfig({ font_family: value });
+                    }
+                },
+                fontSizeable: {
+                    get: () => config.font_size || defaultConfig.font_size,
+                    set: (value) => {
+                        config.font_size = value;
+                        window.elementSdk.setConfig({ font_size: value });
+                    }
+                }
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["quiz_title", config.quiz_title || defaultConfig.quiz_title],
+                ["welcome_message", config.welcome_message || defaultConfig.welcome_message],
+                ["start_button_text", config.start_button_text || defaultConfig.start_button_text],
+                ["next_button_text", config.next_button_text || defaultConfig.next_button_text]
+            ]);
+        }
+
+        // Quiz Functions
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function showScreen(screenId) {
+            const screens = ['welcome-screen', 'quiz-screen', 'results-screen', 'loading-state'];
+            screens.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.toggle('hidden', id !== screenId);
+                }
+            });
+        }
+
+        function displayQuestion() {
+            const question = quizQuestions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('question-counter').textContent = `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
+            document.getElementById('question-emoji').textContent = question.emoji;
+            document.getElementById('spanish-phrase').textContent = `"${question.spanish}"`;
+            document.getElementById('phrase-type').textContent = question.type;
+            
+            // Shuffle options and display
+            const shuffledOptions = shuffleArray(question.options);
+            const optionsContainer = document.getElementById('answer-options');
+            optionsContainer.innerHTML = '';
+            
+            shuffledOptions.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full p-4 text-left bg-gray-50 hover:bg-gray-100 rounded-lg border-2 border-transparent hover:border-orange-200 transition-all duration-300 transform hover:scale-102';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(option, button);
+                optionsContainer.appendChild(button);
+            });
+            
+            document.getElementById('feedback').classList.add('hidden');
+            isAnswered = false;
+        }
+
+        async function selectAnswer(selectedAnswer, buttonElement) {
+            if (isAnswered) return;
+            
+            isAnswered = true;
+            const question = quizQuestions[currentQuestionIndex];
+            const isCorrect = selectedAnswer === question.correct;
+            
+            if (isCorrect) {
+                score++;
+                buttonElement.classList.add('correct-answer');
+            } else {
+                buttonElement.classList.add('incorrect-answer');
+                // Highlight correct answer
+                const buttons = document.querySelectorAll('#answer-options button');
+                buttons.forEach(btn => {
+                    if (btn.textContent === question.correct) {
+                        btn.classList.add('correct-answer');
+                    }
+                });
+            }
+            
+            // Store answer data
+            const answerData = {
+                question_id: question.id,
+                user_answer: selectedAnswer,
+                correct_answer: question.correct,
+                is_correct: isCorrect,
+                timestamp: new Date().toISOString(),
+                question_type: question.type
+            };
+            
+            userAnswers.push(answerData);
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            const feedbackContent = document.getElementById('feedback-content');
+            
+            if (isCorrect) {
+                feedbackContent.innerHTML = `
+                    <div class="text-green-600">
+                        <div class="text-2xl mb-2">✅ Correct!</div>
+                        <p class="text-sm">"${question.spanish}" means "${question.correct}"</p>
+                    </div>
+                `;
+            } else {
+                feedbackContent.innerHTML = `
+                    <div class="text-red-600">
+                        <div class="text-2xl mb-2">❌ Incorrect</div>
+                        <p class="text-sm">"${question.spanish}" means "${question.correct}"</p>
+                        <p class="text-xs mt-1 text-gray-600">You selected: "${selectedAnswer}"</p>
+                    </div>
+                `;
+            }
+            
+            feedback.classList.remove('hidden');
+            feedback.classList.add('fade-in');
+            
+            // Save to Data SDK
+            showLoadingState(true);
+            try {
+                const result = await window.dataSdk.create(answerData);
+                if (!result.isOk) {
+                    console.error('Failed to save answer:', result.error);
+                }
+            } catch (error) {
+                console.error('Error saving answer:', error);
+            }
+            showLoadingState(false);
+        }
+
+        function showLoadingState(show) {
+            const loadingState = document.getElementById('loading-state');
+            const quizScreen = document.getElementById('quiz-screen');
+            
+            if (show) {
+                loadingState.classList.remove('hidden');
+                quizScreen.style.opacity = '0.5';
+            } else {
+                loadingState.classList.add('hidden');
+                quizScreen.style.opacity = '1';
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < quizQuestions.length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            let emoji = '🎉';
+            let message = 'Great job!';
+            
+            if (percentage >= 90) {
+                emoji = '🏆';
+                message = 'Excellent! You\'re a Spanish comprehension star!';
+            } else if (percentage >= 70) {
+                emoji = '🎉';
+                message = 'Great job! You have good Spanish comprehension!';
+            } else if (percentage >= 50) {
+                emoji = '👍';
+                message = 'Good effort! Keep practicing to improve!';
+            } else {
+                emoji = '📚';
+                message = 'Keep studying! Practice makes perfect!';
+            }
+            
+            document.getElementById('results-emoji').textContent = emoji;
+            document.getElementById('final-score').textContent = `${score}/${quizQuestions.length}`;
+            document.getElementById('score-message').textContent = message;
+            document.getElementById('correct-count').textContent = score;
+            document.getElementById('incorrect-count').textContent = quizQuestions.length - score;
+            
+            showScreen('results-screen');
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            isAnswered = false;
+            showScreen('welcome-screen');
+        }
+
+        // Event Listeners
+        document.getElementById('start-quiz-btn').addEventListener('click', () => {
+            showScreen('quiz-screen');
+            displayQuestion();
+        });
+
+        document.getElementById('next-question-btn').addEventListener('click', nextQuestion);
+        document.getElementById('restart-quiz-btn').addEventListener('click', restartQuiz);
+
+        // Initialize Application
+        async function initializeApp() {
+            try {
+                // Initialize Data SDK
+                if (window.dataSdk) {
+                    const initResult = await window.dataSdk.init(dataHandler);
+                    if (!initResult.isOk) {
+                        console.error('Failed to initialize Data SDK:', initResult.error);
+                    }
+                }
+
+                // Initialize Element SDK
+                if (window.elementSdk) {
+                    await window.elementSdk.init({
+                        defaultConfig,
+                        onConfigChange,
+                        mapToCapabilities,
+                        mapToEditPanelValues
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to initialize application:', error);
+            }
+        }
+
+        // Start the application
+        initializeApp();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99efa0d3265f6049',t:'MTc2MzIxODkzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
