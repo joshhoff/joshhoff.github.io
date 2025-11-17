@@ -1,0 +1,677 @@
+<!doctype doctype>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESL Grammar Practice</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 32px;
+    }
+    
+    .header h1 {
+      font-size: 42px;
+      margin: 0 0 12px 0;
+      font-weight: 700;
+    }
+    
+    .header p {
+      font-size: 20px;
+      margin: 0;
+      opacity: 0.95;
+    }
+    
+    .grammar-section {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    .grammar-section h2 {
+      color: #667eea;
+      font-size: 28px;
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .grammar-section h3 {
+      color: #764ba2;
+      font-size: 20px;
+      margin: 20px 0 12px 0;
+    }
+    
+    .explanation {
+      background: #f8f9ff;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .explanation p {
+      margin: 8px 0;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    .spanish-note {
+      background: #fff4e6;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 12px 0;
+      border-left: 4px solid #ff9800;
+      font-style: italic;
+      color: #555;
+    }
+    
+    .examples {
+      margin: 16px 0;
+    }
+    
+    .example-item {
+      padding: 10px 16px;
+      margin: 8px 0;
+      background: #e8f5e9;
+      border-radius: 6px;
+      border-left: 3px solid #4caf50;
+    }
+    
+    .activity {
+      background: #fff9e6;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border: 2px solid #ffd54f;
+    }
+    
+    .activity h4 {
+      color: #f57c00;
+      margin: 0 0 16px 0;
+      font-size: 18px;
+    }
+    
+    .question {
+      margin: 16px 0;
+      padding: 12px;
+      background: white;
+      border-radius: 6px;
+    }
+    
+    .question-text {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #333;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .option-btn {
+      padding: 12px 16px;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+      font-size: 15px;
+    }
+    
+    .option-btn:hover {
+      border-color: #667eea;
+      background: #f8f9ff;
+    }
+    
+    .option-btn.correct {
+      background: #4caf50;
+      color: white;
+      border-color: #4caf50;
+    }
+    
+    .option-btn.incorrect {
+      background: #f44336;
+      color: white;
+      border-color: #f44336;
+    }
+    
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .fill-blank {
+      margin: 16px 0;
+    }
+    
+    .fill-blank input {
+      padding: 8px 12px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 15px;
+      margin: 0 8px;
+      min-width: 120px;
+    }
+    
+    .check-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    
+    .check-btn:hover {
+      background: #5568d3;
+    }
+    
+    .feedback {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      display: none;
+    }
+    
+    .feedback.correct {
+      background: #c8e6c9;
+      color: #2e7d32;
+      display: block;
+    }
+    
+    .feedback.incorrect {
+      background: #ffcdd2;
+      color: #c62828;
+      display: block;
+    }
+    
+    .conversation-prompts {
+      background: #e3f2fd;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border: 2px solid #64b5f6;
+    }
+    
+    .conversation-prompts h4 {
+      color: #1976d2;
+      margin: 0 0 16px 0;
+      font-size: 18px;
+    }
+    
+    .prompt-item {
+      padding: 12px;
+      margin: 10px 0;
+      background: white;
+      border-radius: 6px;
+      border-left: 3px solid #2196f3;
+    }
+    
+    .icon {
+      font-size: 28px;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 16px;
+      }
+      
+      .header h1 {
+        font-size: 32px;
+      }
+      
+      .header p {
+        font-size: 18px;
+      }
+      
+      .grammar-section {
+        padding: 20px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="header">
+    <h1 id="main-title">English Grammar Practice</h1>
+    <p id="subtitle">Present Simple, Present Continuous &amp; Have Got</p>
+   </header><!-- Present Simple Section -->
+   <section class="grammar-section">
+    <h2><span class="icon">📝</span> Present Simple</h2>
+    <div class="explanation">
+     <p><strong>Use:</strong> For habits, routines, facts, and things that are always true.</p>
+     <p><strong>Form:</strong> Subject + verb (add -s/-es for he/she/it)</p>
+    </div>
+    <div class="spanish-note">
+     💡 <strong>Para hispanohablantes:</strong> Similar al presente simple en español, pero recuerda añadir -s/-es con he/she/it (él/ella).
+    </div>
+    <h3>Examples:</h3>
+    <div class="examples">
+     <div class="example-item">
+      ✓ I <strong>work</strong> every day. (Yo trabajo todos los días.)
+     </div>
+     <div class="example-item">
+      ✓ She <strong>studies</strong> English. (Ella estudia inglés.)
+     </div>
+     <div class="example-item">
+      ✓ They <strong>live</strong> in Madrid. (Ellos viven en Madrid.)
+     </div>
+     <div class="example-item">
+      ✓ The sun <strong>rises</strong> in the east. (El sol sale por el este.)
+     </div>
+    </div>
+    <div class="activity">
+     <h4>📋 Activity 1: Choose the correct form</h4>
+     <div class="question" id="q1">
+      <div class="question-text">
+       1. Maria _____ to school every morning.
+      </div>
+      <div class="options"><button class="option-btn" data-answer="correct">goes</button> <button class="option-btn" data-answer="incorrect">go</button> <button class="option-btn" data-answer="incorrect">going</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+     <div class="question" id="q2">
+      <div class="question-text">
+       2. We _____ Spanish at home.
+      </div>
+      <div class="options"><button class="option-btn" data-answer="incorrect">speaks</button> <button class="option-btn" data-answer="correct">speak</button> <button class="option-btn" data-answer="incorrect">speaking</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+    </div>
+    <div class="conversation-prompts">
+     <h4>💬 Conversation Practice</h4>
+     <div class="prompt-item">
+      <strong>Ask your partner:</strong> What do you do every day? (¿Qué haces todos los días?)
+     </div>
+     <div class="prompt-item">
+      <strong>Talk about:</strong> Your daily routine - "I wake up at..., I eat breakfast..., I go to..."
+     </div>
+     <div class="prompt-item">
+      <strong>Discuss:</strong> What does your family do on weekends?
+     </div>
+    </div>
+   </section><!-- Present Continuous Section -->
+   <section class="grammar-section">
+    <h2><span class="icon">⏰</span> Present Continuous</h2>
+    <div class="explanation">
+     <p><strong>Use:</strong> For actions happening RIGHT NOW or temporary situations.</p>
+     <p><strong>Form:</strong> Subject + am/is/are + verb-ing</p>
+    </div>
+    <div class="spanish-note">
+     💡 <strong>Para hispanohablantes:</strong> Similar a "estar + gerundio" en español (estoy comiendo, está trabajando).
+    </div>
+    <h3>Examples:</h3>
+    <div class="examples">
+     <div class="example-item">
+      ✓ I <strong>am studying</strong> now. (Estoy estudiando ahora.)
+     </div>
+     <div class="example-item">
+      ✓ She <strong>is reading</strong> a book. (Ella está leyendo un libro.)
+     </div>
+     <div class="example-item">
+      ✓ They <strong>are playing</strong> soccer. (Ellos están jugando fútbol.)
+     </div>
+     <div class="example-item">
+      ✓ We <strong>are learning</strong> English this year. (Estamos aprendiendo inglés este año.)
+     </div>
+    </div>
+    <div class="activity">
+     <h4>📋 Activity 2: Fill in the blanks</h4>
+     <div class="question">
+      <div class="question-text">
+       1. Right now, I <input type="text" id="blank1" placeholder="am/is/are"> <input type="text" id="blank2" placeholder="verb-ing"> (study) English.
+      </div><button class="check-btn" onclick="checkFillBlank1()">Check Answer</button>
+      <div class="feedback" id="feedback1"></div>
+     </div>
+     <div class="question" id="q3">
+      <div class="question-text">
+       2. What are you doing right now?
+      </div>
+      <div class="options"><button class="option-btn" data-answer="incorrect">I study English.</button> <button class="option-btn" data-answer="correct">I am studying English.</button> <button class="option-btn" data-answer="incorrect">I studying English.</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+    </div>
+    <div class="conversation-prompts">
+     <h4>💬 Conversation Practice</h4>
+     <div class="prompt-item">
+      <strong>Ask your partner:</strong> What are you doing right now? (¿Qué estás haciendo ahora?)
+     </div>
+     <div class="prompt-item">
+      <strong>Describe:</strong> What is happening in the classroom right now?
+     </div>
+     <div class="prompt-item">
+      <strong>Talk about:</strong> What are you learning this month?
+     </div>
+    </div>
+   </section><!-- Have Got Section -->
+   <section class="grammar-section">
+    <h2><span class="icon">🎒</span> Have Got</h2>
+    <div class="explanation">
+     <p><strong>Use:</strong> To talk about possession (things you own) and relationships.</p>
+     <p><strong>Form:</strong> Subject + have/has + got</p>
+     <p><strong>Note:</strong> "Have got" = "Have" (same meaning, British English prefers "have got")</p>
+    </div>
+    <div class="spanish-note">
+     💡 <strong>Para hispanohablantes:</strong> Equivale a "tener" en español. "I have got a car" = "Tengo un coche."
+    </div>
+    <h3>Examples:</h3>
+    <div class="examples">
+     <div class="example-item">
+      ✓ I <strong>have got</strong> a dog. (Tengo un perro.)
+     </div>
+     <div class="example-item">
+      ✓ She <strong>has got</strong> two brothers. (Ella tiene dos hermanos.)
+     </div>
+     <div class="example-item">
+      ✓ We <strong>have got</strong> a new teacher. (Tenemos un profesor nuevo.)
+     </div>
+     <div class="example-item">
+      ✓ They <strong>have got</strong> blue eyes. (Ellos tienen ojos azules.)
+     </div>
+    </div>
+    <h3>Questions &amp; Negatives:</h3>
+    <div class="examples">
+     <div class="example-item">
+      ❓ <strong>Have</strong> you <strong>got</strong> a pen? (¿Tienes un bolígrafo?)
+     </div>
+     <div class="example-item">
+      ❓ <strong>Has</strong> she <strong>got</strong> a car? (¿Tiene ella un coche?)
+     </div>
+     <div class="example-item">
+      ✗ I <strong>haven't got</strong> a bike. (No tengo una bicicleta.)
+     </div>
+     <div class="example-item">
+      ✗ He <strong>hasn't got</strong> time. (Él no tiene tiempo.)
+     </div>
+    </div>
+    <div class="activity">
+     <h4>📋 Activity 3: Choose the correct answer</h4>
+     <div class="question" id="q4">
+      <div class="question-text">
+       1. She _____ three cats.
+      </div>
+      <div class="options"><button class="option-btn" data-answer="incorrect">have got</button> <button class="option-btn" data-answer="correct">has got</button> <button class="option-btn" data-answer="incorrect">got</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+     <div class="question" id="q5">
+      <div class="question-text">
+       2. _____ you got a pencil?
+      </div>
+      <div class="options"><button class="option-btn" data-answer="correct">Have</button> <button class="option-btn" data-answer="incorrect">Has</button> <button class="option-btn" data-answer="incorrect">Do</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+     <div class="question">
+      <div class="question-text">
+       3. Write a sentence: I <input type="text" id="blank3" placeholder="have/has"> got a <input type="text" id="blank4" placeholder="thing">.
+      </div><button class="check-btn" onclick="checkFillBlank2()">Check Answer</button>
+      <div class="feedback" id="feedback2"></div>
+     </div>
+    </div>
+    <div class="conversation-prompts">
+     <h4>💬 Conversation Practice</h4>
+     <div class="prompt-item">
+      <strong>Ask your partner:</strong> Have you got any brothers or sisters? (¿Tienes hermanos o hermanas?)
+     </div>
+     <div class="prompt-item">
+      <strong>Talk about:</strong> What have you got in your bag?
+     </div>
+     <div class="prompt-item">
+      <strong>Describe:</strong> Your family - "I have got..., My mother has got..., My father has got..."
+     </div>
+    </div>
+   </section><!-- Comparison Section -->
+   <section class="grammar-section">
+    <h2><span class="icon">🔄</span> Quick Comparison</h2>
+    <div class="explanation">
+     <p><strong>Present Simple:</strong> Habits &amp; facts → "I work every day"</p>
+     <p><strong>Present Continuous:</strong> Now &amp; temporary → "I am working now"</p>
+     <p><strong>Have Got:</strong> Possession → "I have got a job"</p>
+    </div>
+    <div class="activity">
+     <h4>📋 Final Challenge: Choose the correct tense</h4>
+     <div class="question" id="q6">
+      <div class="question-text">
+       1. Look! The teacher _____ to the classroom.
+      </div>
+      <div class="options"><button class="option-btn" data-answer="incorrect">comes</button> <button class="option-btn" data-answer="correct">is coming</button> <button class="option-btn" data-answer="incorrect">has got</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+     <div class="question" id="q7">
+      <div class="question-text">
+       2. My sister _____ a new phone.
+      </div>
+      <div class="options"><button class="option-btn" data-answer="incorrect">is having</button> <button class="option-btn" data-answer="correct">has got</button> <button class="option-btn" data-answer="incorrect">have</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+     <div class="question" id="q8">
+      <div class="question-text">
+       3. We _____ English classes on Mondays.
+      </div>
+      <div class="options"><button class="option-btn" data-answer="correct">have</button> <button class="option-btn" data-answer="incorrect">are having</button> <button class="option-btn" data-answer="incorrect">have got</button>
+      </div>
+      <div class="feedback"></div>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "English Grammar Practice",
+      subtitle: "Present Simple, Present Continuous & Have Got",
+      activity_instructions: "Complete the activities below",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      background_color: "#ffffff",
+      text_color: "#333333",
+      accent_color: "#4caf50"
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      
+      document.body.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      
+      document.querySelectorAll('.grammar-section').forEach(section => {
+        section.style.background = backgroundColor;
+      });
+      
+      document.querySelectorAll('.grammar-section h2').forEach(h2 => {
+        h2.style.color = primaryColor;
+      });
+      
+      document.querySelectorAll('.grammar-section h3').forEach(h3 => {
+        h3.style.color = secondaryColor;
+      });
+      
+      document.querySelectorAll('.explanation').forEach(exp => {
+        exp.style.borderLeftColor = primaryColor;
+      });
+      
+      document.querySelectorAll('.example-item').forEach(item => {
+        item.style.borderLeftColor = accentColor;
+      });
+      
+      document.querySelectorAll('.check-btn').forEach(btn => {
+        btn.style.background = primaryColor;
+      });
+      
+      document.querySelectorAll('p, .question-text, .example-item, .prompt-item').forEach(el => {
+        el.style.color = textColor;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["activity_instructions", config.activity_instructions || defaultConfig.activity_instructions]
+        ])
+      });
+    }
+
+    // Multiple choice question handler
+    document.querySelectorAll('.question').forEach(question => {
+      const buttons = question.querySelectorAll('.option-btn');
+      const feedback = question.querySelector('.feedback');
+      
+      buttons.forEach(button => {
+        button.addEventListener('click', function() {
+          if (this.disabled) return;
+          
+          buttons.forEach(btn => btn.disabled = true);
+          
+          if (this.dataset.answer === 'correct') {
+            this.classList.add('correct');
+            if (feedback) {
+              feedback.textContent = '✓ Correct! ¡Correcto!';
+              feedback.className = 'feedback correct';
+            }
+          } else {
+            this.classList.add('incorrect');
+            buttons.forEach(btn => {
+              if (btn.dataset.answer === 'correct') {
+                btn.classList.add('correct');
+              }
+            });
+            if (feedback) {
+              feedback.textContent = '✗ Try again! The correct answer is highlighted. ¡Intenta de nuevo!';
+              feedback.className = 'feedback incorrect';
+            }
+          }
+        });
+      });
+    });
+
+    // Fill in the blank checkers
+    function checkFillBlank1() {
+      const blank1 = document.getElementById('blank1').value.trim().toLowerCase();
+      const blank2 = document.getElementById('blank2').value.trim().toLowerCase();
+      const feedback = document.getElementById('feedback1');
+      
+      if ((blank1 === 'am') && (blank2 === 'studying')) {
+        feedback.textContent = '✓ Perfect! "I am studying" ¡Perfecto!';
+        feedback.className = 'feedback correct';
+      } else {
+        feedback.textContent = '✗ Not quite. Remember: I + am + verb-ing. Try: "am" and "studying"';
+        feedback.className = 'feedback incorrect';
+      }
+    }
+
+    function checkFillBlank2() {
+      const blank3 = document.getElementById('blank3').value.trim().toLowerCase();
+      const blank4 = document.getElementById('blank4').value.trim();
+      const feedback = document.getElementById('feedback2');
+      
+      if (blank3 === 'have' && blank4.length > 0) {
+        feedback.textContent = '✓ Great sentence! Remember: I/You/We/They use "have got"';
+        feedback.className = 'feedback correct';
+      } else if (blank3 !== 'have') {
+        feedback.textContent = '✗ Remember: "I" uses "have" (not "has"). Try again!';
+        feedback.className = 'feedback incorrect';
+      } else {
+        feedback.textContent = '✗ Please write something you have got!';
+        feedback.className = 'feedback incorrect';
+      }
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a000ef6a0742b64',t:'MTc2MzM5MTIxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
