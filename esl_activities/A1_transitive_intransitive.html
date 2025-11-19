@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verb Master</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      height: 100%;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      margin: 0 0 0.5rem 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      margin: 0;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .card h2 {
+      color: #667eea;
+      font-size: 1.8rem;
+      margin: 0 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .icon {
+      font-size: 1.5rem;
+    }
+    
+    .definition-box {
+      background: #f8f9ff;
+      border-left: 4px solid #667eea;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+    
+    .definition-box h3 {
+      color: #667eea;
+      margin: 0 0 0.5rem 0;
+      font-size: 1.2rem;
+    }
+    
+    .definition-box p {
+      margin: 0.5rem 0;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .example {
+      background: #fff4e6;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      font-style: italic;
+    }
+    
+    .quiz-question {
+      background: #f8f9ff;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      border: 2px solid #e0e7ff;
+    }
+    
+    .quiz-question p {
+      font-size: 1.1rem;
+      margin: 0 0 1rem 0;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .option-btn {
+      background: white;
+      border: 2px solid #667eea;
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      text-align: left;
+      color: #333;
+    }
+    
+    .option-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateX(4px);
+    }
+    
+    .option-btn.correct {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+    
+    .option-btn.incorrect {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: white;
+    }
+    
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    
+    .feedback.correct {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .feedback.incorrect {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .conversation-prompt {
+      background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .conversation-prompt h4 {
+      margin: 0 0 0.75rem 0;
+      color: #2d3436;
+      font-size: 1.1rem;
+    }
+    
+    .conversation-prompt p {
+      margin: 0.5rem 0;
+      color: #2d3436;
+      line-height: 1.6;
+    }
+    
+    .practice-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e0e7ff;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      box-sizing: border-box;
+    }
+    
+    .practice-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .submit-btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .submit-btn:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .submit-btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .stat-card h3 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    
+    .stat-card p {
+      margin: 0.5rem 0 0 0;
+      opacity: 0.9;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast.error {
+      background: #ef4444;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="header">
+    <h1 id="app-title">🎯 Verb Master</h1>
+    <p id="subtitle">Master Transitive &amp; Intransitive Verbs</p>
+   </header>
+   <div class="card">
+    <h2 id="learn-section-title"><span class="icon">📚</span> Learn the Basics</h2>
+    <div class="definition-box">
+     <h3>Transitive Verbs</h3>
+     <p>A transitive verb requires a direct object to complete its meaning. It transfers action from the subject to an object.</p>
+     <div class="example"><strong>Example:</strong> She <strong>bought</strong> a book.<br>
+       (What did she buy? → a book)
+     </div>
+     <div class="example"><strong>Example:</strong> The chef <strong>prepared</strong> dinner.<br>
+       (What did the chef prepare? → dinner)
+     </div>
+     <div class="example"><strong>Example:</strong> They <strong>wrote</strong> a letter.<br>
+       (What did they write? → a letter)
+     </div>
+     <div class="example"><strong>Example:</strong> Maria <strong>loves</strong> chocolate.<br>
+       (What does Maria love? → chocolate)
+     </div>
+     <p style="margin-top: 1rem;"><strong>Common Transitive Verbs:</strong> bring, carry, eat, find, give, hold, make, open, read, send, throw, watch, want, build, create, describe, enjoy, fix, grab, help, invite, kick, leave, meet, need, offer, play, question</p>
+    </div>
+    <div class="definition-box">
+     <h3>Intransitive Verbs</h3>
+     <p>An intransitive verb does not require a direct object. The action is complete by itself.</p>
+     <div class="example"><strong>Example:</strong> The baby <strong>cried</strong>.<br>
+       (No object needed)
+     </div>
+     <div class="example"><strong>Example:</strong> Birds <strong>fly</strong>.<br>
+       (No object needed)
+     </div>
+     <div class="example"><strong>Example:</strong> The sun <strong>rises</strong> every morning.<br>
+       (No object needed)
+     </div>
+     <div class="example"><strong>Example:</strong> We <strong>waited</strong> patiently.<br>
+       (No object needed)
+     </div>
+     <p style="margin-top: 1rem;"><strong>Common Intransitive Verbs:</strong> appear, arrive, dance, die, exist, fall, go, happen, laugh, listen, live, occur, sleep, smile, sneeze, swim, talk, travel, wait, walk, work, yawn, sit, stand, jump, run, respond</p>
+    </div>
+    <div class="definition-box" style="background: #fff0f0; border-left-color: #ef4444;">
+     <h3 style="color: #ef4444;">⚠️ Tricky Verbs - Can Be Both!</h3>
+     <p>Some verbs can be transitive OR intransitive depending on the context:</p>
+     <div class="example"><strong>RUN:</strong><br>
+       Intransitive: "She runs every day." (no object)<br>
+       Transitive: "She runs a business." (runs what? → a business)
+     </div>
+     <div class="example"><strong>SING:</strong><br>
+       Intransitive: "The birds sing beautifully." (no object)<br>
+       Transitive: "She sang a song." (sang what? → a song)
+     </div>
+     <div class="example"><strong>GROW:</strong><br>
+       Intransitive: "Children grow quickly." (no object)<br>
+       Transitive: "Farmers grow vegetables." (grow what? → vegetables)
+     </div>
+     <p style="margin-top: 1rem;"><strong>Other Dual-Purpose Verbs:</strong> move, change, begin, start, improve, increase, break, burn, drive, study, paint</p>
+    </div>
+   </div>
+   <div class="card">
+    <h2 id="practice-section-title"><span class="icon">✍️</span> Practice Activities</h2>
+    <div class="quiz-question">
+     <p><strong>Question 1:</strong> Identify the verb type in: "The dog chased the cat."</p>
+     <div class="options"><button class="option-btn" data-question="q1" data-answer="transitive">Transitive</button> <button class="option-btn" data-question="q1" data-answer="intransitive">Intransitive</button>
+     </div>
+     <div id="feedback-q1"></div>
+    </div>
+    <div class="quiz-question">
+     <p><strong>Question 2:</strong> Identify the verb type in: "The flowers bloomed."</p>
+     <div class="options"><button class="option-btn" data-question="q2" data-answer="transitive">Transitive</button> <button class="option-btn" data-question="q2" data-answer="intransitive">Intransitive</button>
+     </div>
+     <div id="feedback-q2"></div>
+    </div>
+    <div class="quiz-question">
+     <p><strong>Question 3:</strong> Identify the verb type in: "He wrote a letter."</p>
+     <div class="options"><button class="option-btn" data-question="q3" data-answer="transitive">Transitive</button> <button class="option-btn" data-question="q3" data-answer="intransitive">Intransitive</button>
+     </div>
+     <div id="feedback-q3"></div>
+    </div>
+    <div class="quiz-question">
+     <p><strong>Question 4:</strong> Identify the verb type in: "The children laughed."</p>
+     <div class="options"><button class="option-btn" data-question="q4" data-answer="transitive">Transitive</button> <button class="option-btn" data-question="q4" data-answer="intransitive">Intransitive</button>
+     </div>
+     <div id="feedback-q4"></div>
+    </div>
+    <div class="quiz-question">
+     <p><strong>Writing Exercise:</strong> Create a sentence using the transitive verb "read"</p><input type="text" class="practice-input" id="writing-input-1" placeholder="Type your sentence here..."> <button class="submit-btn" id="submit-writing-1">Submit Answer</button>
+     <div id="feedback-writing-1"></div>
+    </div>
+   </div>
+   <div class="card">
+    <h2 id="conversation-section-title"><span class="icon">💬</span> Conversation Prompts</h2>
+    <div class="conversation-prompt">
+     <h4>🗣️ Discussion Topic 1</h4>
+     <p><strong>Prompt:</strong> Describe your morning routine using at least 3 transitive verbs and 2 intransitive verbs. Can you identify which is which?</p>
+     <p><em>Example starter:</em> "I woke up (intransitive), made breakfast (transitive)..."</p>
+    </div>
+    <div class="conversation-prompt">
+     <h4>🗣️ Discussion Topic 2</h4>
+     <p><strong>Prompt:</strong> Tell a story about a memorable day. After telling the story, go back and identify all the transitive verbs. What objects do they act upon?</p>
+    </div>
+    <div class="conversation-prompt">
+     <h4>🗣️ Discussion Topic 3</h4>
+     <p><strong>Prompt:</strong> Some verbs can be both transitive and intransitive depending on context. Can you think of examples? Try using the verb "run" in two different ways.</p>
+     <p><em>Hint:</em> "She runs every morning" vs "She runs a business"</p>
+    </div>
+   </div>
+   <div class="card">
+    <h2><span class="icon">📊</span> Your Progress</h2>
+    <div class="stats" id="stats-container">
+     <div class="stat-card">
+      <h3 id="total-answers">0</h3>
+      <p>Total Answers</p>
+     </div>
+     <div class="stat-card">
+      <h3 id="correct-answers">0</h3>
+      <p>Correct Answers</p>
+     </div>
+     <div class="stat-card">
+      <h3 id="accuracy">0%</h3>
+      <p>Accuracy</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: "🎯 Verb Master",
+      subtitle: "Master Transitive & Intransitive Verbs",
+      learn_section_title: "Learn the Basics",
+      practice_section_title: "Practice Activities",
+      conversation_section_title: "Conversation Prompts",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      surface_color: "#f8f9ff",
+      text_color: "#333333",
+      accent_color: "#ffeaa7"
+    };
+
+    let allAnswers = [];
+    let recordCount = 0;
+    const correctAnswers = {
+      q1: 'transitive',
+      q2: 'intransitive',
+      q3: 'transitive',
+      q4: 'intransitive'
+    };
+
+    const dataHandler = {
+      onDataChanged(data) {
+        allAnswers = data;
+        recordCount = data.length;
+        updateStats();
+      }
+    };
+
+    async function initApp() {
+      const initResult = await window.dataSdk.init(dataHandler);
+      if (!initResult.isOk) {
+        showToast('Failed to initialize app', true);
+        return;
+      }
+
+      setupEventListeners();
+    }
+
+    function setupEventListeners() {
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', handleQuizAnswer);
+      });
+
+      document.getElementById('submit-writing-1').addEventListener('click', handleWritingSubmit);
+    }
+
+    async function handleQuizAnswer(e) {
+      const button = e.target;
+      const question = button.dataset.question;
+      const userAnswer = button.dataset.answer;
+      const correctAnswer = correctAnswers[question];
+      const isCorrect = userAnswer === correctAnswer;
+
+      const buttons = document.querySelectorAll(`[data-question="${question}"]`);
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.answer === correctAnswer) {
+          btn.classList.add('correct');
+        } else if (btn === button && !isCorrect) {
+          btn.classList.add('incorrect');
+        }
+      });
+
+      const feedbackDiv = document.getElementById(`feedback-${question}`);
+      feedbackDiv.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+      feedbackDiv.textContent = isCorrect 
+        ? '✓ Correct! Great job!' 
+        : `✗ Incorrect. The correct answer is ${correctAnswer}.`;
+
+      button.disabled = true;
+      button.innerHTML = '<span class="loading"></span>';
+
+      if (recordCount >= 999) {
+        showToast('Storage limit reached. Cannot save more answers.', true);
+        button.disabled = false;
+        button.innerHTML = button.dataset.answer;
+        return;
+      }
+
+      const result = await window.dataSdk.create({
+        id: `${question}-${Date.now()}`,
+        activity_type: question,
+        user_answer: userAnswer,
+        correct_answer: correctAnswer,
+        is_correct: isCorrect,
+        timestamp: new Date().toISOString()
+      });
+
+      button.disabled = false;
+      button.innerHTML = button.dataset.answer;
+
+      if (!result.isOk) {
+        showToast('Failed to save answer', true);
+      }
+    }
+
+    async function handleWritingSubmit() {
+      const input = document.getElementById('writing-input-1');
+      const submitBtn = document.getElementById('submit-writing-1');
+      const userAnswer = input.value.trim();
+
+      if (!userAnswer) {
+        showToast('Please write a sentence first', true);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading"></span> Saving...';
+
+      if (recordCount >= 999) {
+        showToast('Storage limit reached. Cannot save more answers.', true);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Answer';
+        return;
+      }
+
+      const containsRead = userAnswer.toLowerCase().includes('read');
+      const feedbackDiv = document.getElementById('feedback-writing-1');
+      
+      feedbackDiv.className = `feedback ${containsRead ? 'correct' : 'incorrect'}`;
+      feedbackDiv.textContent = containsRead
+        ? '✓ Great sentence! Make sure "read" has a direct object (what was read?).'
+        : '✗ Remember to use the verb "read" in your sentence.';
+
+      const result = await window.dataSdk.create({
+        id: `writing-1-${Date.now()}`,
+        activity_type: 'writing-exercise-1',
+        user_answer: userAnswer,
+        correct_answer: 'contains-read-verb',
+        is_correct: containsRead,
+        timestamp: new Date().toISOString()
+      });
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Submit Answer';
+
+      if (result.isOk) {
+        input.value = '';
+      } else {
+        showToast('Failed to save answer', true);
+      }
+    }
+
+    function updateStats() {
+      const total = allAnswers.length;
+      const correct = allAnswers.filter(a => a.is_correct).length;
+      const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+      document.getElementById('total-answers').textContent = total;
+      document.getElementById('correct-answers').textContent = correct;
+      document.getElementById('accuracy').textContent = `${accuracy}%`;
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.createElement('div');
+      toast.className = `toast ${isError ? 'error' : ''}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    async function onConfigChange(config) {
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      document.getElementById('learn-section-title').innerHTML = `<span class="icon">📚</span> ${config.learn_section_title || defaultConfig.learn_section_title}`;
+      document.getElementById('practice-section-title').innerHTML = `<span class="icon">✍️</span> ${config.practice_section_title || defaultConfig.practice_section_title}`;
+      document.getElementById('conversation-section-title').innerHTML = `<span class="icon">💬</span> ${config.conversation_section_title || defaultConfig.conversation_section_title}`;
+
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+
+      document.body.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      
+      document.querySelectorAll('.card h2').forEach(el => {
+        el.style.color = primaryColor;
+      });
+      
+      document.querySelectorAll('.definition-box').forEach(el => {
+        el.style.borderLeftColor = primaryColor;
+      });
+      
+      document.querySelectorAll('.definition-box h3').forEach(el => {
+        el.style.color = primaryColor;
+      });
+      
+      document.querySelectorAll('.option-btn').forEach(el => {
+        if (!el.classList.contains('correct') && !el.classList.contains('incorrect')) {
+          el.style.borderColor = primaryColor;
+        }
+      });
+      
+      document.querySelectorAll('.submit-btn:not(:disabled)').forEach(el => {
+        el.style.background = primaryColor;
+      });
+      
+      document.querySelectorAll('.practice-input:focus').forEach(el => {
+        el.style.borderColor = primaryColor;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["learn_section_title", config.learn_section_title || defaultConfig.learn_section_title],
+          ["practice_section_title", config.practice_section_title || defaultConfig.practice_section_title],
+          ["conversation_section_title", config.conversation_section_title || defaultConfig.conversation_section_title]
+        ])
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a118f0023cef3ec',t:'MTc2MzU3NDcxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
