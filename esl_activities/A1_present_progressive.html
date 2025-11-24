@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Present Progressive Town Explorer</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100%;
+            width: 100%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 48px;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 32px;
+            margin: 0 0 20px 0;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .explanation {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .explanation h3 {
+            color: #764ba2;
+            font-size: 24px;
+            margin: 0 0 15px 0;
+        }
+
+        .explanation p {
+            color: #333333;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .formula {
+            background: #667eea;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .examples {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .example-card {
+            background: #ffffff;
+            border: 2px solid #e0e0ff;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .example-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .place-icon {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        .example-sentence {
+            color: #333333;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .verb-highlight {
+            background: #fff4cc;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .practice-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .practice-card {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0ff;
+        }
+
+        .practice-question {
+            color: #333333;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .practice-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #d0d0d0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        .practice-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .check-btn {
+            background: #667eea;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+        .check-btn:hover {
+            background: #5568d3;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .conversation-section {
+            display: grid;
+            gap: 20px;
+        }
+
+        .conversation-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ebff 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid #667eea;
+        }
+
+        .conversation-card h4 {
+            color: #764ba2;
+            font-size: 22px;
+            margin: 0 0 15px 0;
+        }
+
+        .dialogue {
+            display: grid;
+            gap: 12px;
+        }
+
+        .dialogue-line {
+            background: #ffffff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333333;
+        }
+
+        .speaker {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 8px;
+        }
+
+        .prompt-box {
+            background: #fff9e6;
+            border: 2px dashed #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .prompt-box p {
+            color: #333333;
+            font-size: 16px;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .prompt-icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .section h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="app-title">🏙️ Present Progressive Town Explorer</h1>
+   </div>
+   <div class="section">
+    <h2 id="explanation-title">📚 What is Present Progressive?</h2>
+    <div class="explanation">
+     <h3>The Formula</h3>
+     <div class="formula">
+      Subject + am/is/are + verb + -ing
+     </div>
+     <p><strong>Use it for:</strong> Actions happening RIGHT NOW or around this time</p>
+     <p><strong>Time words:</strong> now, right now, at the moment, today, this week</p>
+    </div>
+    <div class="explanation">
+     <h3>Examples Around Town</h3>
+     <div class="examples">
+      <div class="example-card"><span class="place-icon">🏥</span> <span class="example-sentence">The doctor <span class="verb-highlight">is helping</span> a patient at the hospital.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">👮</span> <span class="example-sentence">Police officers <span class="verb-highlight">are working</span> at the police station.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">🏦</span> <span class="example-sentence">I <span class="verb-highlight">am waiting</span> in line at the bank.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">📚</span> <span class="example-sentence">Students <span class="verb-highlight">are studying</span> at the library right now.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">🏪</span> <span class="example-sentence">She <span class="verb-highlight">is shopping</span> at the supermarket.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">📮</span> <span class="example-sentence">He <span class="verb-highlight">is sending</span> a package at the post office.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">🍽️</span> <span class="example-sentence">They <span class="verb-highlight">are eating</span> lunch at the restaurant.</span>
+      </div>
+      <div class="example-card"><span class="place-icon">⛽</span> <span class="example-sentence">We <span class="verb-highlight">are getting</span> gas at the gas station.</span>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="section">
+    <h2 id="practice-title">✍️ Practice Exercises</h2>
+    <div class="practice-grid">
+     <div class="practice-card">
+      <div class="practice-question"><span class="place-icon">🏥</span> 1. The nurse _______ (check) the patient's temperature at the hospital.
+      </div><input type="text" class="practice-input" id="answer1" placeholder="Type your answer here..."> <button class="check-btn" onclick="checkAnswer(1, 'is checking')">Check Answer</button>
+      <div id="feedback1" class="feedback" style="display: none;"></div>
+     </div>
+     <div class="practice-card">
+      <div class="practice-question"><span class="place-icon">📚</span> 2. I _______ (read) a book at the library right now.
+      </div><input type="text" class="practice-input" id="answer2" placeholder="Type your answer here..."> <button class="check-btn" onclick="checkAnswer(2, 'am reading')">Check Answer</button>
+      <div id="feedback2" class="feedback" style="display: none;"></div>
+     </div>
+     <div class="practice-card">
+      <div class="practice-question"><span class="place-icon">🏦</span> 3. My parents _______ (open) a new account at the bank.
+      </div><input type="text" class="practice-input" id="answer3" placeholder="Type your answer here..."> <button class="check-btn" onclick="checkAnswer(3, 'are opening')">Check Answer</button>
+      <div id="feedback3" class="feedback" style="display: none;"></div>
+     </div>
+     <div class="practice-card">
+      <div class="practice-question"><span class="place-icon">🍽️</span> 4. The waiter _______ (bring) our food at the restaurant.
+      </div><input type="text" class="practice-input" id="answer4" placeholder="Type your answer here..."> <button class="check-btn" onclick="checkAnswer(4, 'is bringing')">Check Answer</button>
+      <div id="feedback4" class="feedback" style="display: none;"></div>
+     </div>
+     <div class="practice-card">
+      <div class="practice-question"><span class="place-icon">👮</span> 5. Police officers _______ (patrol) the streets this week.
+      </div><input type="text" class="practice-input" id="answer5" placeholder="Type your answer here..."> <button class="check-btn" onclick="checkAnswer(5, 'are patrolling')">Check Answer</button>
+      <div id="feedback5" class="feedback" style="display: none;"></div>
+     </div>
+     <div class="practice-card">
+      <div class="practice-question"><span class="place-icon">📮</span> 6. She _______ (mail) a letter at the post office.
+      </div><input type="text" class="practice-input" id="answer6" placeholder="Type your answer here..."> <button class="check-btn" onclick="checkAnswer(6, 'is mailing')">Check Answer</button>
+      <div id="feedback6" class="feedback" style="display: none;"></div>
+     </div>
+    </div>
+   </div>
+   <div class="section">
+    <h2 id="conversation-title">💬 Conversation Practice</h2>
+    <div class="conversation-section">
+     <div class="conversation-card">
+      <h4>🏥 At the Hospital</h4>
+      <div class="dialogue">
+       <div class="dialogue-line"><span class="speaker">Receptionist:</span> Good morning! How can I help you?
+       </div>
+       <div class="dialogue-line"><span class="speaker">Patient:</span> I'm waiting for Dr. Smith. Is she working today?
+       </div>
+       <div class="dialogue-line"><span class="speaker">Receptionist:</span> Yes, she's examining a patient right now. She'll be ready in 10 minutes.
+       </div>
+      </div>
+      <div class="prompt-box">
+       <p><span class="prompt-icon">💡</span><strong>Your turn!</strong> Practice these questions:</p>
+       <p>• What is the doctor doing?</p>
+       <p>• Who are you waiting for?</p>
+       <p>• Is the nurse helping someone now?</p>
+      </div>
+     </div>
+     <div class="conversation-card">
+      <h4>🏦 At the Bank</h4>
+      <div class="dialogue">
+       <div class="dialogue-line"><span class="speaker">Teller:</span> Next, please! Are you opening a new account?
+       </div>
+       <div class="dialogue-line"><span class="speaker">Customer:</span> No, I'm depositing money into my savings account.
+       </div>
+       <div class="dialogue-line"><span class="speaker">Teller:</span> Great! I'm processing your deposit now.
+       </div>
+      </div>
+      <div class="prompt-box">
+       <p><span class="prompt-icon">💡</span><strong>Your turn!</strong> Practice these questions:</p>
+       <p>• What are you doing at the bank?</p>
+       <p>• Is the teller helping you?</p>
+       <p>• Are they opening or closing now?</p>
+      </div>
+     </div>
+     <div class="conversation-card">
+      <h4>📚 At the Library</h4>
+      <div class="dialogue">
+       <div class="dialogue-line"><span class="speaker">Librarian:</span> Excuse me, the students over there are making noise. They're studying for exams.
+       </div>
+       <div class="dialogue-line"><span class="speaker">Visitor:</span> Sorry! I'm looking for books about history. Can you help me?
+       </div>
+       <div class="dialogue-line"><span class="speaker">Librarian:</span> Of course! I'm organizing the history section right now. Follow me.
+       </div>
+      </div>
+      <div class="prompt-box">
+       <p><span class="prompt-icon">💡</span><strong>Your turn!</strong> Practice these questions:</p>
+       <p>• What are the students doing?</p>
+       <p>• What is the librarian organizing?</p>
+       <p>• Are you reading or studying?</p>
+      </div>
+     </div>
+     <div class="conversation-card">
+      <h4>🍽️ At the Restaurant</h4>
+      <div class="dialogue">
+       <div class="dialogue-line"><span class="speaker">Server:</span> Good evening! Are you celebrating something special tonight?
+       </div>
+       <div class="dialogue-line"><span class="speaker">Customer:</span> Yes! We're celebrating my mom's birthday. She's turning 50!
+       </div>
+       <div class="dialogue-line"><span class="speaker">Server:</span> Wonderful! The chef is preparing a special dessert for her right now.
+       </div>
+      </div>
+      <div class="prompt-box">
+       <p><span class="prompt-icon">💡</span><strong>Your turn!</strong> Practice these questions:</p>
+       <p>• What are you celebrating?</p>
+       <p>• Is the chef cooking something special?</p>
+       <p>• What are the people at that table eating?</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+        const defaultConfig = {
+            app_title: "🏙️ Present Progressive Town Explorer",
+            explanation_title: "📚 What is Present Progressive?",
+            practice_title: "✍️ Practice Exercises",
+            conversation_title: "💬 Conversation Practice",
+            background_color: "#667eea",
+            surface_color: "#ffffff",
+            text_color: "#333333",
+            primary_color: "#667eea",
+            accent_color: "#764ba2"
+        };
+
+        async function onConfigChange(config) {
+            const appTitle = config.app_title || defaultConfig.app_title;
+            const explanationTitle = config.explanation_title || defaultConfig.explanation_title;
+            const practiceTitle = config.practice_title || defaultConfig.practice_title;
+            const conversationTitle = config.conversation_title || defaultConfig.conversation_title;
+            
+            document.getElementById('app-title').textContent = appTitle;
+            document.getElementById('explanation-title').textContent = explanationTitle;
+            document.getElementById('practice-title').textContent = practiceTitle;
+            document.getElementById('conversation-title').textContent = conversationTitle;
+
+            const bgColor = config.background_color || defaultConfig.background_color;
+            const surfaceColor = config.surface_color || defaultConfig.surface_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            const primaryColor = config.primary_color || defaultConfig.primary_color;
+            const accentColor = config.accent_color || defaultConfig.accent_color;
+
+            document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${accentColor} 100%)`;
+            
+            document.querySelectorAll('.section').forEach(el => {
+                el.style.background = surfaceColor;
+            });
+
+            document.querySelectorAll('.section h2').forEach(el => {
+                el.style.color = primaryColor;
+                el.style.borderBottomColor = primaryColor;
+            });
+
+            document.querySelectorAll('.explanation p, .practice-question, .dialogue-line, .prompt-box p').forEach(el => {
+                el.style.color = textColor;
+            });
+
+            document.querySelectorAll('.check-btn').forEach(el => {
+                el.style.background = primaryColor;
+            });
+
+            document.querySelectorAll('.formula').forEach(el => {
+                el.style.background = primaryColor;
+            });
+
+            document.querySelectorAll('.explanation h3, .conversation-card h4, .speaker').forEach(el => {
+                el.style.color = accentColor;
+            });
+
+            document.querySelectorAll('.verb-highlight').forEach(el => {
+                el.style.color = accentColor;
+            });
+        }
+
+        function checkAnswer(questionNumber, correctAnswer) {
+            const input = document.getElementById(`answer${questionNumber}`);
+            const feedback = document.getElementById(`feedback${questionNumber}`);
+            const userAnswer = input.value.trim().toLowerCase();
+            const correct = correctAnswer.toLowerCase();
+
+            feedback.style.display = 'block';
+
+            if (userAnswer === correct) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Correct! Great job!';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `✗ Not quite. The correct answer is: ${correctAnswer}`;
+            }
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig: defaultConfig,
+                onConfigChange: onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [
+                        {
+                            get: () => config.background_color || defaultConfig.background_color,
+                            set: (value) => {
+                                config.background_color = value;
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.surface_color || defaultConfig.surface_color,
+                            set: (value) => {
+                                config.surface_color = value;
+                                window.elementSdk.setConfig({ surface_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.text_color || defaultConfig.text_color,
+                            set: (value) => {
+                                config.text_color = value;
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.primary_color || defaultConfig.primary_color,
+                            set: (value) => {
+                                config.primary_color = value;
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        },
+                        {
+                            get: () => config.accent_color || defaultConfig.accent_color,
+                            set: (value) => {
+                                config.accent_color = value;
+                                window.elementSdk.setConfig({ accent_color: value });
+                            }
+                        }
+                    ],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["app_title", config.app_title || defaultConfig.app_title],
+                    ["explanation_title", config.explanation_title || defaultConfig.explanation_title],
+                    ["practice_title", config.practice_title || defaultConfig.practice_title],
+                    ["conversation_title", config.conversation_title || defaultConfig.conversation_title]
+                ])
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a39bf3c231deb9f',t:'MTc2Mzk5NjEyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
