@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spanish "Se" Mastery</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      width: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2.5rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      margin: 0;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .tab-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .tab-button.active {
+      background: white;
+      color: #667eea;
+      border-color: white;
+    }
+
+    main {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .usage-card {
+      background: #f8f9ff;
+      border-left: 4px solid #667eea;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .usage-title {
+      color: #667eea;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 0.75rem 0;
+    }
+
+    .usage-explanation {
+      color: #4a5568;
+      margin: 0 0 1rem 0;
+      line-height: 1.6;
+    }
+
+    .example {
+      background: white;
+      padding: 1rem;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+      border: 1px solid #e2e8f0;
+    }
+
+    .spanish {
+      color: #2d3748;
+      font-weight: 600;
+      font-style: italic;
+      margin-bottom: 0.25rem;
+    }
+
+    .english {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .practice-section {
+      margin-bottom: 2rem;
+    }
+
+    .practice-header {
+      color: #2d3748;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .exercise {
+      background: #f7fafc;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .question {
+      color: #2d3748;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .option-button {
+      background: white;
+      border: 2px solid #cbd5e0;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .option-button:hover {
+      border-color: #667eea;
+      background: #f8f9ff;
+    }
+
+    .option-button.correct {
+      background: #c6f6d5;
+      border-color: #48bb78;
+    }
+
+    .option-button.incorrect {
+      background: #fed7d7;
+      border-color: #f56565;
+    }
+
+    .option-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .feedback.correct {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .feedback.incorrect {
+      background: #fed7d7;
+      color: #742a2a;
+    }
+
+    .conversation-prompt {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .prompt-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+
+    .prompt-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .sample-responses {
+      background: #edf2f7;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+    }
+
+    .sample-label {
+      font-size: 0.9rem;
+      color: #4a5568;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .sample-response {
+      color: #2d3748;
+      font-style: italic;
+      margin: 0.5rem 0;
+      padding-left: 1rem;
+      border-left: 3px solid #667eea;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      main {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header>
+    <h1 id="mainTitle">Master "Se" in Spanish</h1>
+    <p class="subtitle" id="subtitle">Understand and practice all contextual uses of "se"</p>
+   </header>
+   <nav class="tabs" role="tablist"><button class="tab-button active" data-tab="explanations" role="tab" aria-selected="true">Explanations</button> <button class="tab-button" data-tab="practice" role="tab" aria-selected="false">Practice Exercises</button> <button class="tab-button" data-tab="conversation" role="tab" aria-selected="false">Conversation Prompts</button>
+   </nav>
+   <main>
+    <div id="explanations" class="tab-content active" role="tabpanel">
+     <div class="usage-card">
+      <h2 class="usage-title">1. Reflexive Se (Pronoun)</h2>
+      <p class="usage-explanation">Used when the subject performs an action on itself. The action reflects back to the subject.</p>
+      <div class="example">
+       <div class="spanish">
+        Me lavo las manos.
+       </div>
+       <div class="english">
+        I wash my hands. (I wash them for myself)
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Ella se mira en el espejo.
+       </div>
+       <div class="english">
+        She looks at herself in the mirror.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Nos preparamos para la fiesta.
+       </div>
+       <div class="english">
+        We prepare ourselves for the party.
+       </div>
+      </div>
+     </div>
+     <div class="usage-card">
+      <h2 class="usage-title">2. Reciprocal Se</h2>
+      <p class="usage-explanation">Used when two or more people perform an action on each other. Only used in plural forms (nos, os, se).</p>
+      <div class="example">
+       <div class="spanish">
+        María y Juan se aman.
+       </div>
+       <div class="english">
+        María and Juan love each other.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Nos escribimos mensajes todos los días.
+       </div>
+       <div class="english">
+        We write messages to each other every day.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se conocieron en la universidad.
+       </div>
+       <div class="english">
+        They met each other at university.
+       </div>
+      </div>
+     </div>
+     <div class="usage-card">
+      <h2 class="usage-title">3. Impersonal Se</h2>
+      <p class="usage-explanation">Used to express general statements without specifying who performs the action. Similar to "one" or "you" in English, or passive voice.</p>
+      <div class="example">
+       <div class="spanish">
+        Se habla español aquí.
+       </div>
+       <div class="english">
+        Spanish is spoken here. / One speaks Spanish here.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se vive bien en esta ciudad.
+       </div>
+       <div class="english">
+        One lives well in this city.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        ¿Cómo se dice "hello" en español?
+       </div>
+       <div class="english">
+        How do you say "hello" in Spanish?
+       </div>
+      </div>
+     </div>
+     <div class="usage-card">
+      <h2 class="usage-title">4. Passive Se</h2>
+      <p class="usage-explanation">Used to form passive constructions where the focus is on the action rather than who performs it. The verb agrees with the subject.</p>
+      <div class="example">
+       <div class="spanish">
+        Se venden coches aquí.
+       </div>
+       <div class="english">
+        Cars are sold here.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se construyó la casa en 1920.
+       </div>
+       <div class="english">
+        The house was built in 1920.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se prohibe fumar.
+       </div>
+       <div class="english">
+        Smoking is prohibited.
+       </div>
+      </div>
+     </div>
+     <div class="usage-card">
+      <h2 class="usage-title">5. Accidental Se</h2>
+      <p class="usage-explanation">Used to express unintentional or accidental actions. Often translates to "happened to" in English and removes blame from the subject.</p>
+      <div class="example">
+       <div class="spanish">
+        Se me cayó el vaso.
+       </div>
+       <div class="english">
+        The glass fell (on me) / I dropped the glass. (accidentally)
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se nos olvidó la tarea.
+       </div>
+       <div class="english">
+        We forgot the homework. (it slipped our minds)
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se le rompieron los lentes.
+       </div>
+       <div class="english">
+        His/her glasses broke. (accidentally)
+       </div>
+      </div>
+     </div>
+     <div class="usage-card">
+      <h2 class="usage-title">6. Se as Indirect Object Replacement</h2>
+      <p class="usage-explanation">When both direct and indirect object pronouns are used together, "le" or "les" changes to "se" to avoid awkward sounds.</p>
+      <div class="example">
+       <div class="spanish">
+        Se lo di. (instead of "le lo di")
+       </div>
+       <div class="english">
+        I gave it to him/her.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        Se las envié. (instead of "les las envié")
+       </div>
+       <div class="english">
+        I sent them to them.
+       </div>
+      </div>
+      <div class="example">
+       <div class="spanish">
+        ¿El libro? Se lo presté a María.
+       </div>
+       <div class="english">
+        The book? I lent it to María.
+       </div>
+      </div>
+     </div>
+    </div>
+    <div id="practice" class="tab-content" role="tabpanel">
+     <p class="practice-header" id="practiceInstructions">Choose the correct usage of "se" for each sentence:</p>
+     <div class="practice-section">
+      <div class="exercise" data-exercise="1">
+       <div class="question">
+        1. "Se venden casas" - What type of "se" is this?
+       </div>
+       <div class="options"><button class="option-button" data-answer="incorrect">Reflexive Se</button> <button class="option-button" data-answer="correct">Passive Se</button> <button class="option-button" data-answer="incorrect">Accidental Se</button> <button class="option-button" data-answer="incorrect">Reciprocal Se</button>
+       </div>
+       <div class="feedback-container"></div>
+      </div>
+      <div class="exercise" data-exercise="2">
+       <div class="question">
+        2. "Se me perdieron las llaves" - What type of "se" is this?
+       </div>
+       <div class="options"><button class="option-button" data-answer="incorrect">Reflexive Se</button> <button class="option-button" data-answer="incorrect">Impersonal Se</button> <button class="option-button" data-answer="correct">Accidental Se</button> <button class="option-button" data-answer="incorrect">Passive Se</button>
+       </div>
+       <div class="feedback-container"></div>
+      </div>
+      <div class="exercise" data-exercise="3">
+       <div class="question">
+        3. "Ellos se quieren mucho" - What type of "se" is this?
+       </div>
+       <div class="options"><button class="option-button" data-answer="incorrect">Reflexive Se</button> <button class="option-button" data-answer="correct">Reciprocal Se</button> <button class="option-button" data-answer="incorrect">Impersonal Se</button> <button class="option-button" data-answer="incorrect">Accidental Se</button>
+       </div>
+       <div class="feedback-container"></div>
+      </div>
+      <div class="exercise" data-exercise="4">
+       <div class="question">
+        4. "Me levanto temprano todos los días" - What type of "se" is this?
+       </div>
+       <div class="options"><button class="option-button" data-answer="correct">Reflexive Se</button> <button class="option-button" data-answer="incorrect">Reciprocal Se</button> <button class="option-button" data-answer="incorrect">Impersonal Se</button> <button class="option-button" data-answer="incorrect">Passive Se</button>
+       </div>
+       <div class="feedback-container"></div>
+      </div>
+      <div class="exercise" data-exercise="5">
+       <div class="question">
+        5. "¿Cómo se llega al centro?" - What type of "se" is this?
+       </div>
+       <div class="options"><button class="option-button" data-answer="incorrect">Reflexive Se</button> <button class="option-button" data-answer="correct">Impersonal Se</button> <button class="option-button" data-answer="incorrect">Accidental Se</button> <button class="option-button" data-answer="incorrect">Passive Se</button>
+       </div>
+       <div class="feedback-container"></div>
+      </div>
+      <div class="exercise" data-exercise="6">
+       <div class="question">
+        6. "Se lo compré ayer" - What type of "se" is this?
+       </div>
+       <div class="options"><button class="option-button" data-answer="incorrect">Reflexive Se</button> <button class="option-button" data-answer="incorrect">Reciprocal Se</button> <button class="option-button" data-answer="correct">Indirect Object Replacement</button> <button class="option-button" data-answer="incorrect">Accidental Se</button>
+       </div>
+       <div class="feedback-container"></div>
+      </div>
+     </div>
+    </div>
+    <div id="conversation" class="tab-content" role="tabpanel">
+     <div class="conversation-prompt">
+      <div class="prompt-label">
+       Reflexive Se Practice
+      </div>
+      <div class="prompt-text">
+       Describe your morning routine using reflexive verbs
+      </div>
+      <div class="sample-responses">
+       <div class="sample-label">
+        Sample responses:
+       </div>
+       <div class="sample-response">
+        Me despierto a las siete, me ducho, me visto y me preparo para el trabajo.
+       </div>
+       <div class="sample-response">
+        Primero me levanto, luego me lavo la cara y me cepillo los dientes.
+       </div>
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-label">
+       Reciprocal Se Practice
+      </div>
+      <div class="prompt-text">
+       Tell a story about how two people met and became friends
+      </div>
+      <div class="sample-responses">
+       <div class="sample-label">
+        Sample responses:
+       </div>
+       <div class="sample-response">
+        Se conocieron en la biblioteca. Se hablaron por primera vez sobre un libro. Ahora se ven todos los días y se ayudan mucho.
+       </div>
+       <div class="sample-response">
+        María y Pedro se encontraron en una fiesta. Se gustaron inmediatamente y se intercambiaron números de teléfono.
+       </div>
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-label">
+       Impersonal Se Practice
+      </div>
+      <div class="prompt-text">
+       Give directions or explain customs in a place you know
+      </div>
+      <div class="sample-responses">
+       <div class="sample-label">
+        Sample responses:
+       </div>
+       <div class="sample-response">
+        En mi ciudad, se come tarde. Se cena a las nueve o diez de la noche. También se camina mucho por el centro.
+       </div>
+       <div class="sample-response">
+        Se llega al museo en autobús. Se compran los boletos en la entrada y no se permite tomar fotos adentro.
+       </div>
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-label">
+       Accidental Se Practice
+      </div>
+      <div class="prompt-text">
+       Describe something that went wrong accidentally
+      </div>
+      <div class="sample-responses">
+       <div class="sample-label">
+        Sample responses:
+       </div>
+       <div class="sample-response">
+        Ayer fue un día terrible. Se me olvidaron las llaves en casa, se me cayó el café en la camisa, y se me rompió el teléfono.
+       </div>
+       <div class="sample-response">
+        Cuando era niño, se me perdió mi juguete favorito. Mis padres lo buscaron por toda la casa pero nunca se encontró.
+       </div>
+      </div>
+     </div>
+     <div class="conversation-prompt">
+      <div class="prompt-label">
+       Mixed Practice
+      </div>
+      <div class="prompt-text">
+       Describe a typical day in a city or workplace using various "se" constructions
+      </div>
+      <div class="sample-responses">
+       <div class="sample-label">
+        Sample responses:
+       </div>
+       <div class="sample-response">
+        En la oficina se trabaja mucho. Los colegas se saludan por la mañana. Yo me siento en mi escritorio y se habla inglés y español. A veces se me olvida una reunión, pero generalmente todo va bien.
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "Master \"Se\" in Spanish",
+      subtitle: "Understand and practice all contextual uses of \"se\"",
+      practice_instructions: "Choose the correct usage of \"se\" for each sentence:",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#2d3748",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#764ba2"
+    };
+
+    async function onConfigChange(config) {
+      const mainTitle = config.main_title || defaultConfig.main_title;
+      const subtitle = config.subtitle || defaultConfig.subtitle;
+      const practiceInstructions = config.practice_instructions || defaultConfig.practice_instructions;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      document.getElementById('mainTitle').textContent = mainTitle;
+      document.getElementById('subtitle').textContent = subtitle;
+      document.getElementById('practiceInstructions').textContent = practiceInstructions;
+
+      document.body.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${secondaryActionColor} 100%)`;
+      
+      const mainElement = document.querySelector('main');
+      mainElement.style.background = surfaceColor;
+
+      const allText = document.querySelectorAll('.usage-title, .practice-header, h2');
+      allText.forEach(el => el.style.color = primaryActionColor);
+
+      const bodyText = document.querySelectorAll('.usage-explanation, .question, .spanish');
+      bodyText.forEach(el => el.style.color = textColor);
+
+      const conversationPrompts = document.querySelectorAll('.conversation-prompt');
+      conversationPrompts.forEach(el => {
+        el.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${secondaryActionColor} 100%)`;
+      });
+
+      const usageCards = document.querySelectorAll('.usage-card');
+      usageCards.forEach(card => card.style.borderLeftColor = primaryActionColor);
+
+      const activeTabButton = document.querySelector('.tab-button.active');
+      if (activeTabButton) {
+        activeTabButton.style.color = primaryActionColor;
+      }
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["subtitle", config.subtitle || defaultConfig.subtitle],
+          ["practice_instructions", config.practice_instructions || defaultConfig.practice_instructions]
+        ])
+      });
+    }
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    const exercises = document.querySelectorAll('.exercise');
+    
+    exercises.forEach(exercise => {
+      const optionButtons = exercise.querySelectorAll('.option-button');
+      const feedbackContainer = exercise.querySelector('.feedback-container');
+      
+      optionButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          const isCorrect = button.getAttribute('data-answer') === 'correct';
+          
+          optionButtons.forEach(btn => {
+            btn.disabled = true;
+            if (btn.getAttribute('data-answer') === 'correct') {
+              btn.classList.add('correct');
+            } else if (btn === button && !isCorrect) {
+              btn.classList.add('incorrect');
+            }
+          });
+          
+          const feedback = document.createElement('div');
+          feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+          feedback.textContent = isCorrect ? '¡Correcto! Excellent work! 🎉' : '❌ Try reviewing the explanations tab.';
+          feedbackContainer.appendChild(feedback);
+        });
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a4547a114db9343',t:'MTc2NDExNzA1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
