@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detective Vocabulary Quiz</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    html {
+      height: 100%;
+      width: 100%;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      margin: 0 0 1rem 0;
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .start-btn, .answer-btn, .restart-btn {
+      font-size: 1.125rem;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Georgia', serif;
+    }
+
+    .start-btn:hover, .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .start-btn:active, .restart-btn:active {
+      transform: translateY(0);
+    }
+
+    .quiz-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .progress {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .question-card {
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .word {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+    }
+
+    .definition {
+      font-size: 1.125rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .answers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .answer-btn {
+      padding: 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid transparent;
+    }
+
+    .answer-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .answer-btn.correct {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      animation: correctPulse 0.5s ease;
+    }
+
+    .answer-btn.incorrect {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes correctPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .feedback {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      min-height: 1.5rem;
+    }
+
+    .results-container {
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .score {
+      font-size: 4rem;
+      font-weight: bold;
+      margin: 2rem 0;
+    }
+
+    .score-message {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .detective-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div id="app"></div>
+  <script>
+    const defaultConfig = {
+      background_color: "#2d1b4e",
+      card_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_button_color: "#7c3aed",
+      secondary_button_color: "#9333ea",
+      quiz_title: "Detective Vocabulary Quiz",
+      quiz_subtitle: "Test your knowledge of detective terminology and Tangle Tower",
+      start_button_text: "Begin Investigation",
+      results_title: "Case Closed!",
+      restart_button_text: "New Investigation",
+      font_family: "Georgia",
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+
+    const questions = [
+      {
+        word: "Alibi",
+        definition: "A claim or proof that someone was elsewhere when a crime was committed",
+        options: ["Defense statement", "Proof of absence", "Witness testimony", "Crime scene"],
+        correct: 1
+      },
+      {
+        word: "Motive",
+        definition: "The reason why someone would commit a crime",
+        options: ["Evidence", "Justification", "The why behind the crime", "Criminal record"],
+        correct: 2
+      },
+      {
+        word: "Suspect",
+        definition: "A person believed to have committed a crime",
+        options: ["Witness", "Potential perpetrator", "Victim", "Detective"],
+        correct: 1
+      },
+      {
+        word: "Clue",
+        definition: "A piece of evidence that helps solve a mystery",
+        options: ["Helpful hint or evidence", "Red herring", "Witness statement", "Crime weapon"],
+        correct: 0
+      },
+      {
+        word: "Grimoire",
+        definition: "In Tangle Tower, the family name of the detective protagonist",
+        options: ["A spell book", "The detective's surname", "The mansion name", "A puzzle type"],
+        correct: 1
+      },
+      {
+        word: "Tangle Tower",
+        definition: "The mysterious mansion where the murder takes place",
+        options: ["A puzzle game", "The crime scene mansion", "A character name", "A detective agency"],
+        correct: 1
+      },
+      {
+        word: "Deduction",
+        definition: "The process of reaching a conclusion through logical reasoning",
+        options: ["A guess", "Logical reasoning to a conclusion", "Evidence collection", "Interrogation"],
+        correct: 1
+      },
+      {
+        word: "Testimony",
+        definition: "A formal statement given by a witness about what they know",
+        options: ["Evidence", "Witness statement", "Confession", "Alibi"],
+        correct: 1
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let answered = false;
+    let currentScreen = 'start';
+
+    function onConfigChange(newConfig) {
+      const baseSize = newConfig.font_size || defaultConfig.font_size;
+      const customFont = newConfig.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Georgia, serif';
+
+      document.body.style.background = `linear-gradient(135deg, ${newConfig.background_color || defaultConfig.background_color} 0%, ${adjustColor(newConfig.background_color || defaultConfig.background_color, -20)} 100%)`;
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.body.style.fontSize = `${baseSize}px`;
+
+      const style = document.createElement('style');
+      style.textContent = `
+        h1 { 
+          color: ${newConfig.card_color || defaultConfig.card_color}; 
+          font-size: ${baseSize * 3}px;
+          font-family: ${customFont}, ${baseFontStack};
+        }
+        .subtitle { 
+          color: ${newConfig.card_color || defaultConfig.card_color}; 
+          font-size: ${baseSize * 1.25}px;
+        }
+        .question-card, .results-container { 
+          background: ${newConfig.card_color || defaultConfig.card_color}; 
+        }
+        .word, .score { 
+          color: ${newConfig.primary_button_color || defaultConfig.primary_button_color}; 
+        }
+        .definition, .progress, .score-message { 
+          color: ${newConfig.text_color || defaultConfig.text_color}; 
+        }
+        .definition { font-size: ${baseSize * 1.125}px; }
+        .progress { font-size: ${baseSize}px; }
+        .score { font-size: ${baseSize * 4}px; }
+        .score-message { font-size: ${baseSize * 1.5}px; }
+        .start-btn, .restart-btn { 
+          background: linear-gradient(135deg, ${newConfig.primary_button_color || defaultConfig.primary_button_color} 0%, ${newConfig.secondary_button_color || defaultConfig.secondary_button_color} 100%); 
+          color: ${newConfig.card_color || defaultConfig.card_color};
+          font-size: ${baseSize * 1.125}px;
+        }
+        .answer-btn { 
+          background: linear-gradient(135deg, ${adjustColor(newConfig.card_color || defaultConfig.card_color, -10)} 0%, ${adjustColor(newConfig.card_color || defaultConfig.card_color, -20)} 100%); 
+          color: ${newConfig.text_color || defaultConfig.text_color};
+          font-size: ${baseSize}px;
+        }
+        .feedback { 
+          color: ${newConfig.text_color || defaultConfig.text_color}; 
+          font-size: ${baseSize}px;
+        }
+      `;
+      document.head.appendChild(style);
+
+      render();
+    }
+
+    function adjustColor(color, percent) {
+      const num = parseInt(color.replace("#", ""), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = (num >> 8 & 0x00FF) + amt;
+      const B = (num & 0x0000FF) + amt;
+      return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255))
+        .toString(16).slice(1);
+    }
+
+    function startQuiz() {
+      currentScreen = 'quiz';
+      currentQuestionIndex = 0;
+      score = 0;
+      answered = false;
+      render();
+    }
+
+    function selectAnswer(selectedIndex) {
+      if (answered) return;
+      
+      answered = true;
+      const question = questions[currentQuestionIndex];
+      const isCorrect = selectedIndex === question.correct;
+      
+      if (isCorrect) {
+        score++;
+      }
+
+      const buttons = document.querySelectorAll('.answer-btn');
+      buttons.forEach((btn, idx) => {
+        if (idx === question.correct) {
+          btn.classList.add('correct');
+        } else if (idx === selectedIndex && !isCorrect) {
+          btn.classList.add('incorrect');
+        }
+        btn.disabled = true;
+      });
+
+      const feedback = document.getElementById('feedback');
+      feedback.textContent = isCorrect ? '🎯 Correct! Well deduced!' : '❌ Not quite. Keep investigating!';
+      feedback.style.background = isCorrect ? '#d1fae5' : '#fee2e2';
+
+      setTimeout(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+          currentQuestionIndex++;
+          answered = false;
+          render();
+        } else {
+          showResults();
+        }
+      }, 2000);
+    }
+
+    function showResults() {
+      currentScreen = 'results';
+      render();
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      
+      if (currentScreen === 'start') {
+        app.innerHTML = `
+          <div class="screen">
+            <div class="detective-icon">🔍</div>
+            <h1>${config.quiz_title || defaultConfig.quiz_title}</h1>
+            <p class="subtitle">${config.quiz_subtitle || defaultConfig.quiz_subtitle}</p>
+            <button class="start-btn" onclick="startQuiz()">${config.start_button_text || defaultConfig.start_button_text}</button>
+          </div>
+        `;
+      } else if (currentScreen === 'quiz') {
+        const question = questions[currentQuestionIndex];
+        app.innerHTML = `
+          <div class="screen quiz-container">
+            <div class="progress">Question ${currentQuestionIndex + 1} of ${questions.length}</div>
+            <div class="question-card">
+              <div class="word">${question.word}</div>
+              <div class="definition">${question.definition}</div>
+              <div class="answers-grid">
+                ${question.options.map((option, idx) => `
+                  <button class="answer-btn" onclick="selectAnswer(${idx})">${option}</button>
+                `).join('')}
+              </div>
+              <div id="feedback" class="feedback"></div>
+            </div>
+          </div>
+        `;
+      } else if (currentScreen === 'results') {
+        const percentage = Math.round((score / questions.length) * 100);
+        let message = '';
+        let icon = '';
+        
+        if (percentage === 100) {
+          message = 'Master Detective! Perfect score!';
+          icon = '🏆';
+        } else if (percentage >= 75) {
+          message = 'Excellent work, Detective!';
+          icon = '⭐';
+        } else if (percentage >= 50) {
+          message = 'Good investigating!';
+          icon = '👍';
+        } else {
+          message = 'Keep studying the case files!';
+          icon = '📚';
+        }
+
+        app.innerHTML = `
+          <div class="screen">
+            <div class="results-container">
+              <div class="detective-icon">${icon}</div>
+              <h1>${config.results_title || defaultConfig.results_title}</h1>
+              <div class="score">${score}/${questions.length}</div>
+              <div class="score-message">${message}</div>
+              <button class="restart-btn" onclick="startQuiz()">${config.restart_button_text || defaultConfig.restart_button_text}</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    const capabilities = {
+      recolorables: [
+        {
+          get: () => config.background_color || defaultConfig.background_color,
+          set: (value) => {
+            config.background_color = value;
+            window.elementSdk.setConfig({ background_color: value });
+          }
+        },
+        {
+          get: () => config.card_color || defaultConfig.card_color,
+          set: (value) => {
+            config.card_color = value;
+            window.elementSdk.setConfig({ card_color: value });
+          }
+        },
+        {
+          get: () => config.text_color || defaultConfig.text_color,
+          set: (value) => {
+            config.text_color = value;
+            window.elementSdk.setConfig({ text_color: value });
+          }
+        },
+        {
+          get: () => config.primary_button_color || defaultConfig.primary_button_color,
+          set: (value) => {
+            config.primary_button_color = value;
+            window.elementSdk.setConfig({ primary_button_color: value });
+          }
+        },
+        {
+          get: () => config.secondary_button_color || defaultConfig.secondary_button_color,
+          set: (value) => {
+            config.secondary_button_color = value;
+            window.elementSdk.setConfig({ secondary_button_color: value });
+          }
+        }
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => config.font_family || defaultConfig.font_family,
+        set: (value) => {
+          config.font_family = value;
+          window.elementSdk.setConfig({ font_family: value });
+        }
+      },
+      fontSizeable: {
+        get: () => config.font_size || defaultConfig.font_size,
+        set: (value) => {
+          config.font_size = value;
+          window.elementSdk.setConfig({ font_size: value });
+        }
+      }
+    };
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: () => capabilities,
+        mapToEditPanelValues: (cfg) => new Map([
+          ["quiz_title", cfg.quiz_title || defaultConfig.quiz_title],
+          ["quiz_subtitle", cfg.quiz_subtitle || defaultConfig.quiz_subtitle],
+          ["start_button_text", cfg.start_button_text || defaultConfig.start_button_text],
+          ["results_title", cfg.results_title || defaultConfig.results_title],
+          ["restart_button_text", cfg.restart_button_text || defaultConfig.restart_button_text]
+        ])
+      });
+
+      config = window.elementSdk.config;
+    }
+
+    onConfigChange(config);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a9ccc424007b999',t:'MTc2NTAzNDc0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
