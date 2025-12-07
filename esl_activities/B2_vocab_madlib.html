@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Mad Libs</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      width: 100%;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      min-height: 100%;
+      padding: 3% 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 3%;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin: 0 0 0.3em 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.2em;
+      margin: 0;
+      opacity: 0.95;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 4%;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .story-select {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5%;
+      margin-top: 3%;
+    }
+
+    .story-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 4% 3%;
+      border-radius: 12px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Georgia', serif;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .story-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .story-button:active {
+      transform: translateY(0);
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .story-title {
+      color: #667eea;
+      font-size: 1.8em;
+      margin: 0 0 1.5em 0;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 4%;
+    }
+
+    .input-group label {
+      display: block;
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 2%;
+      font-size: 1.1em;
+    }
+
+    .word-hint {
+      display: block;
+      color: #666;
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 1%;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 3%;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      font-family: 'Georgia', serif;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 3%;
+      margin-top: 5%;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 4%;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      cursor: pointer;
+      font-family: 'Georgia', serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .result-section {
+      display: none;
+    }
+
+    .result-section.active {
+      display: block;
+    }
+
+    .story-result {
+      background: #f9f9f9;
+      padding: 5%;
+      border-radius: 12px;
+      line-height: 1.8;
+      font-size: 1.15em;
+      color: #333;
+      margin-bottom: 5%;
+    }
+
+    .user-word {
+      color: #667eea;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .home-section {
+      display: none;
+    }
+
+    .home-section.active {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .header p {
+        font-size: 1em;
+      }
+
+      .story-select {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="header">
+    <h1 id="app-title">Vocabulary Mad Libs</h1>
+    <p id="subtitle">Practice vocabulary through creative storytelling</p>
+   </header>
+   <div class="card">
+    <div id="home-section" class="home-section active">
+     <h2 style="text-align: center; color: #333; margin-bottom: 1.5em;">Choose a Story</h2>
+     <div class="story-select" id="story-select"></div>
+    </div>
+    <div id="form-section" class="form-section">
+     <h2 class="story-title" id="current-story-title"></h2>
+     <form id="madlib-form"></form>
+     <div class="button-group"><button type="button" class="btn btn-secondary" id="back-btn">Back</button> <button type="button" class="btn btn-primary" id="submit-btn">Create Story</button>
+     </div>
+    </div>
+    <div id="result-section" class="result-section">
+     <h2 class="story-title">Your Story</h2>
+     <div class="story-result" id="story-output"></div>
+     <div class="button-group"><button type="button" class="btn btn-secondary" id="new-story-btn">Choose Another Story</button> <button type="button" class="btn btn-primary" id="retry-btn">Try Again</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const stories = [
+      {
+        title: "The Clever Diplomat",
+        fields: [
+          { label: "A verb meaning to avoid giving a direct answer", hint: "Example: dodge, avoid, sidestep" },
+          { label: "An adjective meaning quietly harmful", hint: "Example: harmful, damaging, dangerous" },
+          { label: "A noun meaning a person who challenges tradition", hint: "Example: rebel, nonconformist, challenger" },
+          { label: "A verb meaning to criticize harshly", hint: "Example: criticize, scold, blame" },
+          { label: "An adjective meaning overly eager to please", hint: "Example: submissive, flattering, fawning" },
+          { label: "A noun meaning a confusing contradiction", hint: "Example: contradiction, puzzle, mystery" },
+          { label: "A verb meaning to make worse", hint: "Example: worsen, intensify, aggravate" }
+        ],
+        template: "The ambassador steadfastly refused to [0] when pressed by journalists about the [1] rumors circulating through diplomatic channels. Known throughout the international community as a [2] who brazenly challenged conventional wisdom and protocol, she would frequently [3] those colleagues who displayed [4] behavior toward higher-ranking officials. This created a fascinating [5] within her own career, as her methods seemed to [6] the very tensions she claimed to be resolving. Despite the controversy surrounding her unconventional approach, she maintained an unwavering commitment to transparency, even when it meant alienating powerful allies who preferred more traditional forms of statecraft."
+      },
+      {
+        title: "The Productive Scholar",
+        fields: [
+          { label: "An adjective meaning highly productive", hint: "Example: productive, creative, fertile" },
+          { label: "A noun meaning an expert", hint: "Example: expert, specialist, master" },
+          { label: "A verb meaning to explain in detail", hint: "Example: explain, elaborate, discuss" },
+          { label: "An adjective meaning overly confident", hint: "Example: bold, presumptuous, overconfident" },
+          { label: "A noun meaning a large amount", hint: "Example: abundance, excess, wealth" },
+          { label: "An adjective meaning overly critical", hint: "Example: critical, faultfinding, picky" },
+          { label: "A verb meaning to reluctantly agree", hint: "Example: agree, accept, yield" }
+        ],
+        template: "The remarkably [0] professor, widely regarded as the preeminent [1] in medieval European literature, possessed an almost compulsive tendency to [2] about the most minute details of obscure thirteenth-century manuscripts. Her colleagues often remarked on her somewhat [3] assumptions regarding the universal applicability of her theoretical frameworks. When confronted with a [4] of criticism from younger scholars who questioned her methodologies, she initially responded with [5] rebuttals that dissected every minor flaw in their arguments. Eventually, however, she was forced to [6] to some of their more substantive points, though she did so with considerable reluctance and only after extensive peer pressure from the academic community."
+      },
+      {
+        title: "The Mysterious Artist",
+        fields: [
+          { label: "An adjective meaning mysterious", hint: "Example: mysterious, puzzling, unclear" },
+          { label: "A verb meaning to make confusing", hint: "Example: confuse, hide, obscure" },
+          { label: "A noun meaning a temporary stay", hint: "Example: visit, stay, trip" },
+          { label: "An adjective meaning short-lived", hint: "Example: temporary, brief, fleeting" },
+          { label: "A verb meaning to reject completely", hint: "Example: reject, abandon, renounce" },
+          { label: "An adjective meaning extremely skillful", hint: "Example: skillful, masterful, expert" },
+          { label: "A noun meaning praise and recognition", hint: "Example: praise, recognition, honor" }
+        ],
+        template: "The deliberately [0] painter cultivated an aura of mystery, often choosing to [1] the symbolic meanings embedded within her surrealist compositions. Following an extended [2] in the bohemian districts of Paris, where she immersed herself in the avant-garde art scene, she created what would become her most celebrated and [3] masterpiece—a haunting piece that seemed to capture the fleeting nature of human consciousness itself. In a shocking turn that left the art world reeling, she announced her decision to completely [4] her earlier expressionist style, declaring it derivative and lacking in genuine innovation. Her new approach, marked by [5] technical execution and profound philosophical depth, earned her unprecedented [6] from critics who had previously dismissed her work as mere pretension. The transformation was so complete that scholars now refer to her career as divided into distinct 'before' and 'after' periods."
+      },
+      {
+        title: "The Clever Strategist",
+        fields: [
+          { label: "An adjective meaning having keen judgment", hint: "Example: clever, sharp, insightful" },
+          { label: "A verb meaning to plot secretly", hint: "Example: plot, scheme, plan" },
+          { label: "A noun meaning someone who acts falsely", hint: "Example: fake, phony, pretender" },
+          { label: "An adjective meaning sharply effective", hint: "Example: sharp, keen, penetrating" },
+          { label: "A verb meaning to defeat completely", hint: "Example: defeat, conquer, crush" },
+          { label: "An adjective meaning stubbornly uncooperative", hint: "Example: stubborn, inflexible, rigid" },
+          { label: "A noun meaning the highest point", hint: "Example: peak, summit, top" }
+        ],
+        template: "The extraordinarily [0] general possessed an uncanny ability to anticipate enemy movements weeks in advance. She would secretly [1] with her most trusted advisors in secure underground bunkers, though many in the opposing camp publicly branded her a [2] for the stark contradictions between her diplomatic pronouncements and her military actions. Her [3] analysis of battlefield topography and enemy psychology, combined with meticulous attention to supply lines and troop morale, allowed her strategic brilliance to shine through. In the campaign's decisive engagement, she managed to completely [4] the numerically superior enemy forces through a combination of deception, superior positioning, and psychological warfare. Despite facing [5] resistance from traditionalist officers who questioned her unconventional tactics, she led her forces to the [6] of military achievement, securing a victory that historians would study for generations as a masterclass in the art of warfare and strategic thinking."
+      },
+      {
+        title: "The Determined Researcher",
+        fields: [
+          { label: "An adjective meaning persistently determined", hint: "Example: persistent, determined, relentless" },
+          { label: "A verb meaning to examine carefully", hint: "Example: examine, study, inspect" },
+          { label: "A noun meaning a difficult mystery", hint: "Example: mystery, puzzle, riddle" },
+          { label: "An adjective meaning stubbornly resistant", hint: "Example: stubborn, unyielding, difficult" },
+          { label: "A verb meaning to explain clearly", hint: "Example: explain, clarify, illuminate" },
+          { label: "An adjective meaning impossible to understand", hint: "Example: unclear, incomprehensible, confusing" },
+          { label: "A noun meaning a complete change of opinion", hint: "Example: reversal, turnaround, shift" }
+        ],
+        template: "The remarkably [0] scientist would meticulously [1] every minute detail preserved in the deteriorating ancient texts, remaining absolutely determined to solve the historical [2] that had confounded experts and scholars for nearly three decades. She faced particularly [3] resistance from the established academic elite, who viewed her unconventional theories with barely concealed contempt and dismissed her methodology as fundamentally flawed. Working tirelessly through countless sleepless nights in archives across multiple continents, she finally managed to [4] the cryptic references that had seemed so utterly [5] to previous generations of researchers. Her breakthrough discovery prompted a complete [6] among her harshest critics, many of whom subsequently praised her groundbreaking work and acknowledged that their previous skepticism had been unjustified. The revelation not only vindicated her years of solitary research but fundamentally altered the entire field's understanding of ancient civilizations."
+      },
+      {
+        title: "The Dramatic Speaker",
+        fields: [
+          { label: "An adjective meaning using fancy language", hint: "Example: fancy, elaborate, pompous" },
+          { label: "A verb meaning to protest strongly", hint: "Example: protest, complain, denounce" },
+          { label: "A noun meaning an overused saying", hint: "Example: cliché, saying, truism" },
+          { label: "An adjective meaning deeply touching", hint: "Example: moving, touching, emotional" },
+          { label: "A verb meaning to urge strongly", hint: "Example: urge, encourage, push" },
+          { label: "An adjective meaning brief in speech", hint: "Example: brief, short, concise" },
+          { label: "A noun meaning excessive talking", hint: "Example: wordiness, talkativeness, chattiness" }
+        ],
+        template: "The politician's notoriously [0] speaking style, characterized by elaborate rhetorical flourishes and classical allusions, became her most recognizable trademark on the campaign trail. She would passionately [1] against systemic corruption and institutional injustice with a fervor that electrified audiences across the nation. Carefully avoiding the empty [2] and vapid talking points that plagued her opponents' speeches, she instead crafted [3] narratives drawn from the lived experiences of ordinary citizens struggling against indifference and bureaucracy. Her ability to [4] massive crowds to concrete political action became legendary among grassroots organizers. Interestingly, despite her public persona, those who knew her privately noted her surprisingly [5] communication style in one-on-one conversations, a stark contrast that many found disorienting. Critics often accused her of [6] during formal addresses, though supporters argued that her elaborate style was precisely what gave her message its emotional resonance and made complex policy accessible to diverse audiences."
+      },
+      {
+        title: "The Simple-Living Philosopher",
+        fields: [
+          { label: "An adjective meaning severely self-disciplined", hint: "Example: simple, minimal, strict" },
+          { label: "A verb meaning to think deeply", hint: "Example: think, ponder, reflect" },
+          { label: "A noun meaning careful thought", hint: "Example: thought, reflection, consideration" },
+          { label: "An adjective meaning hard to understand", hint: "Example: complex, difficult, obscure" },
+          { label: "A verb meaning to prove wrong", hint: "Example: disprove, rebut, counter" },
+          { label: "An adjective meaning relevant", hint: "Example: relevant, related, connected" },
+          { label: "A noun meaning relief from difficulty", hint: "Example: relief, improvement, easing" }
+        ],
+        template: "Choosing to live an intensely [0] lifestyle in a remote mountain monastery, deliberately eschewing all material comforts and worldly possessions, the philosopher would [1] for countless hours in complete silence, seeking profound truths about the nature of existence and human consciousness. Following years of intense [2] and spiritual practice, she finally published her groundbreaking treatise on epistemology and metaphysics, presenting theories so [3] and intellectually challenging that even fellow philosophers struggled to fully grasp their implications. Leading scholars from prestigious institutions attempted repeatedly to [4] her central arguments through logical analysis and counterexamples, yet none succeeded in identifying any fundamental flaws in her reasoning. Her work addressed questions deeply [5] to understanding the relationship between mind and reality, consciousness and the external world. Perhaps most remarkably, she proposed practical methods for the [6] of human suffering through the cultivation of wisdom and the transcendence of ego-driven desires, combining rigorous philosophical analysis with contemplative practices drawn from multiple wisdom traditions spanning millennia."
+      },
+      {
+        title: "The Bitter Rival",
+        fields: [
+          { label: "An adjective meaning bitter and hostile", hint: "Example: bitter, hostile, resentful" },
+          { label: "A verb meaning to block or prevent", hint: "Example: block, prevent, stop" },
+          { label: "A noun meaning harsh criticism", hint: "Example: abuse, insults, criticism" },
+          { label: "An adjective meaning mean-spirited", hint: "Example: mean, cruel, nasty" },
+          { label: "A verb meaning to attack verbally", hint: "Example: attack, condemn, criticize" },
+          { label: "A noun meaning a false accusation", hint: "Example: lie, slander, falsehood" },
+          { label: "A verb meaning to make peace", hint: "Example: reconcile, reunite, settle" }
+        ],
+        template: "The deeply [0] competitor, still nursing decade-old professional grievances and personal resentments, actively sought every possible opportunity to [1] her rival's ambitious business plans and social advancement. During contentious board meetings and industry conferences, she would unleash torrents of caustic [2] disguised as professional critique, her barely controlled anger evident to everyone present. Her profoundly [3] attitude permeated every interaction, poisoning professional relationships and creating a toxic atmosphere that affected entire departments. She used her considerable media connections to systematically [4] her opponent's character and professional reputation through carefully orchestrated campaigns of negative publicity. The situation deteriorated further when she began spreading vicious [5] about her rival's personal life and business practices, crossing ethical lines that even her own allies found disturbing. Eventually, after years of bitter conflict that had damaged both their reputations and careers, a wise mediator convinced them to attempt to [6] their differences through facilitated dialogue, leading to an uneasy truce that, while fragile, at least ended the most destructive aspects of their feud."
+      },
+      {
+        title: "The Generous Benefactor",
+        fields: [
+          { label: "An adjective meaning noble and generous", hint: "Example: generous, noble, gracious" },
+          { label: "A verb meaning to show mercy", hint: "Example: forgive, pardon, spare" },
+          { label: "A noun meaning generous giving", hint: "Example: generosity, gifts, charity" },
+          { label: "An adjective meaning kind and helpful", hint: "Example: kind, charitable, caring" },
+          { label: "A verb meaning to teach and improve", hint: "Example: teach, enlighten, instruct" },
+          { label: "An adjective meaning narrow-minded", hint: "Example: narrow-minded, limited, petty" },
+          { label: "A noun meaning deep respect", hint: "Example: respect, admiration, honor" }
+        ],
+        template: "The exceptionally [0] queen, renowned throughout the kingdom for her noble character and generous spirit, made the surprising decision to [1] toward her former enemies who had plotted against her during the civil war, offering them reconciliation rather than retribution. She demonstrated her extraordinary [2] through the establishment of hospitals, universities, and cultural institutions that served all citizens regardless of their social standing or previous political allegiances. Her genuinely [3] nature inspired countless others to engage in charitable work and public service, creating a cultural renaissance that transformed the entire realm. Through her wise counsel and personal example, she sought to [4] her subjects, promoting literacy, critical thinking, and ethical behavior through both formal education and informal mentorship. She successfully overcame the [5] attitudes that had previously characterized court politics, encouraging a cosmopolitan worldview and intellectual openness. By the end of her remarkable reign, she had earned such profound [6] from her people that monuments celebrating her wisdom and compassion were erected in every major city, ensuring that her legacy of enlightened leadership would inspire future generations long after her passing."
+      },
+      {
+        title: "The Wordy Writer",
+        fields: [
+          { label: "An adjective meaning using too many words", hint: "Example: wordy, long-winded, rambling" },
+          { label: "A verb meaning to make unnecessarily complicated", hint: "Example: complicate, confuse, muddle" },
+          { label: "A noun meaning the use of too many words", hint: "Example: wordiness, rambling, long-windedness" },
+          { label: "An adjective meaning brief and clear", hint: "Example: brief, concise, clear" },
+          { label: "A verb meaning to shorten or condense", hint: "Example: shorten, cut, reduce" },
+          { label: "An adjective meaning overly fancy in language", hint: "Example: pompous, pretentious, showy" },
+          { label: "A noun meaning the main point or essence", hint: "Example: essence, core, heart" }
+        ],
+        template: "The infamously [0] historian demonstrated an unfortunate tendency to [1] even the simplest historical events with layers of unnecessary elaboration, tangential observations, and irrelevant biographical details about minor figures. His chronic [2] in academic writing became legendary among his increasingly exasperated peers, who would groan audibly when assigned to review his manuscripts. Editorial boards repeatedly urged him to adopt a more [3] writing style that would make his genuinely valuable research accessible to broader audiences beyond specialist scholars. They implored him to rigorously [4] his bloated manuscripts, which routinely exceeded word limits by factors of three or four, before submitting them for publication. His peculiarly [5] prose style, laden with obscure terminology and baroque sentence structures, often obscured rather than illuminated the significant historical insights buried within his work. Colleagues frequently joked that if he could simply extract the [6] of his arguments and present them clearly, he would revolutionize the field, as his research methodology was actually quite sound���it was merely his presentation that rendered his work nearly impenetrable to anyone without unlimited time and patience."
+      }
+    ];
+
+    let currentStory = null;
+    let userInputs = [];
+
+    const defaultConfig = {
+      app_title: "Vocabulary Mad Libs",
+      subtitle: "Practice vocabulary through creative storytelling",
+      start_button_text: "Start"
+    };
+
+    function renderStoryButtons() {
+      const container = document.getElementById('story-select');
+      container.innerHTML = '';
+      
+      stories.forEach((story, index) => {
+        const button = document.createElement('button');
+        button.className = 'story-button';
+        button.textContent = story.title;
+        button.onclick = () => selectStory(index);
+        container.appendChild(button);
+      });
+    }
+
+    function selectStory(index) {
+      currentStory = stories[index];
+      userInputs = [];
+      
+      document.getElementById('current-story-title').textContent = currentStory.title;
+      
+      const form = document.getElementById('madlib-form');
+      form.innerHTML = '';
+      
+      currentStory.fields.forEach((field, i) => {
+        const group = document.createElement('div');
+        group.className = 'input-group';
+        
+        const label = document.createElement('label');
+        label.textContent = field.label;
+        
+        const hint = document.createElement('span');
+        hint.className = 'word-hint';
+        hint.textContent = field.hint;
+        label.appendChild(hint);
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `input-${i}`;
+        input.required = true;
+        
+        group.appendChild(label);
+        group.appendChild(input);
+        form.appendChild(group);
+      });
+      
+      document.getElementById('home-section').classList.remove('active');
+      document.getElementById('form-section').classList.add('active');
+    }
+
+    function collectInputs() {
+      userInputs = [];
+      for (let i = 0; i < currentStory.fields.length; i++) {
+        const input = document.getElementById(`input-${i}`);
+        if (!input.value.trim()) {
+          input.focus();
+          return false;
+        }
+        userInputs.push(input.value.trim());
+      }
+      return true;
+    }
+
+    function generateStory() {
+      let result = currentStory.template;
+      userInputs.forEach((word, index) => {
+        result = result.replace(`[${index}]`, `<span class="user-word">${word}</span>`);
+      });
+      
+      document.getElementById('story-output').innerHTML = result;
+      document.getElementById('form-section').classList.remove('active');
+      document.getElementById('result-section').classList.add('active');
+    }
+
+    document.getElementById('submit-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (collectInputs()) {
+        generateStory();
+      }
+    });
+
+    document.getElementById('back-btn').addEventListener('click', function() {
+      document.getElementById('form-section').classList.remove('active');
+      document.getElementById('home-section').classList.add('active');
+      currentStory = null;
+    });
+
+    document.getElementById('new-story-btn').addEventListener('click', function() {
+      document.getElementById('result-section').classList.remove('active');
+      document.getElementById('home-section').classList.add('active');
+      currentStory = null;
+    });
+
+    document.getElementById('retry-btn').addEventListener('click', function() {
+      document.getElementById('result-section').classList.remove('active');
+      document.getElementById('form-section').classList.add('active');
+      
+      userInputs.forEach((word, i) => {
+        document.getElementById(`input-${i}`).value = word;
+      });
+    });
+
+    async function onConfigChange(config) {
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+    }
+
+    const element = {
+      defaultConfig: defaultConfig,
+      onConfigChange: onConfigChange,
+      mapToCapabilities: (config) => ({
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ["app_title", config.app_title || defaultConfig.app_title],
+        ["subtitle", config.subtitle || defaultConfig.subtitle],
+        ["start_button_text", config.start_button_text || defaultConfig.start_button_text]
+      ])
+    };
+
+    if (window.elementSdk) {
+      window.elementSdk.init(element);
+    }
+
+    renderStoryButtons();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9aa5574dd4939b68',t:'MTc2NTEyNDMyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
