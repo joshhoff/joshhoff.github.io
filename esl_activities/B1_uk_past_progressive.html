@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Past Progressive Practice</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .example-box {
+      transition: transform 0.2s;
+    }
+    
+    .example-box:hover {
+      transform: translateY(-2px);
+    }
+    
+    .practice-option {
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .practice-option:hover {
+      transform: scale(1.02);
+    }
+    
+    .practice-option.selected {
+      border-width: 3px;
+    }
+    
+    .practice-option.correct {
+      animation: correctPulse 0.5s;
+    }
+    
+    .practice-option.incorrect {
+      animation: shake 0.5s;
+    }
+    
+    @keyframes correctPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="w-full min-h-full"></div>
+  <script>
+    const defaultConfig = {
+      main_title: "Past Progressive",
+      lesson_title: "Understanding the Past Progressive Tense",
+      practice_title: "Practice Exercises",
+      background_color: "#f0f9ff",
+      surface_color: "#ffffff",
+      text_color: "#1e293b",
+      primary_action_color: "#3b82f6",
+      secondary_action_color: "#64748b",
+      font_family: "Inter",
+      font_size: 16
+    };
+
+    const questions = [
+      {
+        id: 1,
+        question: "I ___ (read) a book when you called.",
+        options: ["was reading", "were reading", "am reading", "read"],
+        correct: 0,
+        explanation: "Use 'was' with singular subjects (I, he, she, it)"
+      },
+      {
+        id: 2,
+        question: "They ___ (play) soccer at 3 PM yesterday.",
+        options: ["was playing", "were playing", "are playing", "played"],
+        correct: 1,
+        explanation: "Use 'were' with plural subjects (we, you, they)"
+      },
+      {
+        id: 3,
+        question: "She ___ (cook) dinner when the power went out.",
+        options: ["were cooking", "was cooking", "is cooking", "cooked"],
+        correct: 1,
+        explanation: "Use 'was' with singular subjects (I, he, she, it)"
+      },
+      {
+        id: 4,
+        question: "What ___ you ___ (do) at 8 PM last night?",
+        options: ["was...doing", "were...doing", "are...doing", "did...do"],
+        correct: 1,
+        explanation: "Use 'were' with 'you' in questions"
+      },
+      {
+        id: 5,
+        question: "The birds ___ (sing) while we ___ (walk) in the park.",
+        options: ["was singing...was walking", "were singing...were walking", "are singing...are walking", "sang...walked"],
+        correct: 1,
+        explanation: "Use 'were' with plural subjects for both clauses"
+      },
+      {
+        id: 6,
+        question: "While I ___ (study), my roommate ___ (listen) to music.",
+        options: ["studied...listened", "was studying...was listening", "am studying...is listening", "study...listens"],
+        correct: 1,
+        explanation: "Use past progressive for both parallel actions happening at the same time"
+      },
+      {
+        id: 7,
+        question: "He ___ (not pay) attention when the teacher asked him.",
+        options: ["wasn't paying", "weren't paying", "isn't paying", "didn't paid"],
+        correct: 0,
+        explanation: "For negatives, use 'wasn't' (was not) with singular subjects"
+      },
+      {
+        id: 8,
+        question: "At midnight, we ___ (still work) on the project.",
+        options: ["still worked", "are still working", "were still working", "was still working"],
+        correct: 2,
+        explanation: "Use 'were' with 'we' to describe an action in progress at a specific past time"
+      },
+      {
+        id: 9,
+        question: "The sun ___ (shine) and the birds ___ (chirp) beautifully.",
+        options: ["shone...chirped", "was shining...were chirping", "shines...chirp", "is shining...are chirping"],
+        correct: 1,
+        explanation: "Use past progressive for parallel background actions to set the scene"
+      },
+      {
+        id: 10,
+        question: "I hurt my leg while I ___ (run) in the marathon.",
+        options: ["ran", "run", "was running", "am running"],
+        correct: 2,
+        explanation: "Use past progressive for the longer action that was interrupted"
+      },
+      {
+        id: 11,
+        question: "___ it ___ (rain) when you left home?",
+        options: ["Did...rain", "Was...raining", "Is...raining", "Does...rain"],
+        correct: 1,
+        explanation: "Use 'was' with 'it' in yes/no questions about past progressive"
+      },
+      {
+        id: 12,
+        question: "My parents ___ (live) in Paris last year.",
+        options: ["were living", "was living", "lived", "are living"],
+        correct: 0,
+        explanation: "Use past progressive to emphasize a temporary situation in the past"
+      },
+      {
+        id: 13,
+        question: "She ___ always ___ (complain) about the weather.",
+        options: ["is...complaining", "was...complaining", "did...complain", "does...complain"],
+        correct: 1,
+        explanation: "Use past progressive with 'always' to express annoyance about repeated past actions"
+      },
+      {
+        id: 14,
+        question: "We ___ (not expect) any visitors when you arrived.",
+        options: ["didn't expect", "weren't expecting", "don't expect", "aren't expecting"],
+        correct: 1,
+        explanation: "Use past progressive negative to describe what wasn't happening at that moment"
+      },
+      {
+        id: 15,
+        question: "Everyone ___ (dance) when the music suddenly stopped.",
+        options: ["danced", "was dancing", "is dancing", "dances"],
+        correct: 1,
+        explanation: "Use past progressive for the ongoing action that was interrupted by a sudden event"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    function renderApp(config) {
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      
+      const app = document.getElementById('app');
+      app.style.backgroundColor = backgroundColor;
+      app.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      app.style.color = textColor;
+      
+      app.innerHTML = `
+        <div class="w-full max-w-4xl mx-auto px-6 py-8">
+          <!-- Header -->
+          <header class="text-center mb-12">
+            <h1 id="mainTitle" class="mb-2" style="font-size: ${baseSize * 2}px; font-weight: 700;">${config.main_title || defaultConfig.main_title}</h1>
+            <p id="lessonTitle" style="font-size: ${baseSize * 1.1}px; color: ${secondaryColor};">${config.lesson_title || defaultConfig.lesson_title}</p>
+          </header>
+
+          <!-- Lesson Section -->
+          <section class="mb-12 p-8 rounded-2xl shadow-lg" style="background-color: ${surfaceColor};">
+            <h2 style="font-size: ${baseSize * 1.5}px; font-weight: 600; margin-bottom: ${baseSize}px;">📚 What is Past Progressive?</h2>
+            <p style="font-size: ${baseSize}px; line-height: 1.6; margin-bottom: ${baseSize}px;">
+              The past progressive (also called past continuous) describes actions that were in progress at a specific time in the past.
+            </p>
+            
+            <div class="mb-6" style="background-color: ${backgroundColor}; padding: ${baseSize}px; border-radius: 12px; border-left: 4px solid ${primaryColor};">
+              <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">Structure:</p>
+              <p style="font-size: ${baseSize}px; font-family: monospace;">Subject + was/were + verb-ing</p>
+            </div>
+
+            <h3 style="font-size: ${baseSize * 1.2}px; font-weight: 600; margin-bottom: ${baseSize}px;">✨ Examples:</h3>
+            <div class="grid gap-4 mb-6">
+              <div class="example-box p-4 rounded-xl" style="background-color: ${backgroundColor}; border-left: 4px solid ${primaryColor};">
+                <p style="font-size: ${baseSize}px;"><strong>I was studying</strong> when you arrived.</p>
+                <p style="font-size: ${baseSize * 0.85}px; color: ${secondaryColor}; margin-top: ${baseSize * 0.5}px;">The studying was in progress when something else happened.</p>
+              </div>
+              <div class="example-box p-4 rounded-xl" style="background-color: ${backgroundColor}; border-left: 4px solid ${primaryColor};">
+                <p style="font-size: ${baseSize}px;"><strong>They were playing</strong> tennis at 5 PM.</p>
+                <p style="font-size: ${baseSize * 0.85}px; color: ${secondaryColor}; margin-top: ${baseSize * 0.5}px;">Describes what was happening at a specific past time.</p>
+              </div>
+              <div class="example-box p-4 rounded-xl" style="background-color: ${backgroundColor}; border-left: 4px solid ${primaryColor};">
+                <p style="font-size: ${baseSize}px;"><strong>She was sleeping</strong> while he <strong>was cooking</strong>.</p>
+                <p style="font-size: ${baseSize * 0.85}px; color: ${secondaryColor}; margin-top: ${baseSize * 0.5}px;">Two actions happening at the same time in the past.</p>
+              </div>
+            </div>
+
+            <h3 style="font-size: ${baseSize * 1.2}px; font-weight: 600; margin-bottom: ${baseSize}px;">📝 Key Rules:</h3>
+            <ul style="font-size: ${baseSize}px; line-height: 1.8; list-style-position: inside;">
+              <li style="margin-bottom: ${baseSize * 0.5}px;">✓ Use <strong>was</strong> with I, he, she, it</li>
+              <li style="margin-bottom: ${baseSize * 0.5}px;">✓ Use <strong>were</strong> with you, we, they</li>
+              <li style="margin-bottom: ${baseSize * 0.5}px;">✓ Add <strong>-ing</strong> to the main verb</li>
+              <li style="margin-bottom: ${baseSize * 0.5}px;">✓ Often used with time expressions: while, when, as, at [time]</li>
+            </ul>
+
+            <h3 style="font-size: ${baseSize * 1.2}px; font-weight: 600; margin-top: ${baseSize * 1.5}px; margin-bottom: ${baseSize}px;">🎯 Common Uses:</h3>
+            
+            <div class="grid gap-4">
+              <div class="p-4 rounded-xl" style="background-color: ${backgroundColor};">
+                <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">1. Interrupted Actions</p>
+                <p style="font-size: ${baseSize * 0.9}px; line-height: 1.6;">Use when a longer action was interrupted by a shorter action.</p>
+                <p style="font-size: ${baseSize * 0.9}px; margin-top: ${baseSize * 0.5}px; font-style: italic;">I <strong>was watching</strong> TV when someone knocked on the door.</p>
+              </div>
+
+              <div class="p-4 rounded-xl" style="background-color: ${backgroundColor};">
+                <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">2. Specific Time in the Past</p>
+                <p style="font-size: ${baseSize * 0.9}px; line-height: 1.6;">Describe what was happening at an exact moment in the past.</p>
+                <p style="font-size: ${baseSize * 0.9}px; margin-top: ${baseSize * 0.5}px; font-style: italic;">At 7 PM yesterday, we <strong>were having</strong> dinner.</p>
+              </div>
+
+              <div class="p-4 rounded-xl" style="background-color: ${backgroundColor};">
+                <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">3. Parallel Actions</p>
+                <p style="font-size: ${baseSize * 0.9}px; line-height: 1.6;">Show two or more actions happening at the same time.</p>
+                <p style="font-size: ${baseSize * 0.9}px; margin-top: ${baseSize * 0.5}px; font-style: italic;">While I <strong>was studying</strong>, my brother <strong>was playing</strong> video games.</p>
+              </div>
+
+              <div class="p-4 rounded-xl" style="background-color: ${backgroundColor};">
+                <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">4. Atmosphere or Background</p>
+                <p style="font-size: ${baseSize * 0.9}px; line-height: 1.6;">Set the scene in storytelling or descriptions.</p>
+                <p style="font-size: ${baseSize * 0.9}px; margin-top: ${baseSize * 0.5}px; font-style: italic;">The sun <strong>was shining</strong> and birds <strong>were singing</strong> that morning.</p>
+              </div>
+
+              <div class="p-4 rounded-xl" style="background-color: ${backgroundColor};">
+                <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">5. Temporary Situations in the Past</p>
+                <p style="font-size: ${baseSize * 0.9}px; line-height: 1.6;">Describe temporary situations that were true for a period in the past.</p>
+                <p style="font-size: ${baseSize * 0.9}px; margin-top: ${baseSize * 0.5}px; font-style: italic;">Last month, I <strong>was working</strong> on a big project.</p>
+              </div>
+
+              <div class="p-4 rounded-xl" style="background-color: ${backgroundColor};">
+                <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">6. Repeated Actions (with "always")</p>
+                <p style="font-size: ${baseSize * 0.9}px; line-height: 1.6;">Express annoyance about repeated past actions.</p>
+                <p style="font-size: ${baseSize * 0.9}px; margin-top: ${baseSize * 0.5}px; font-style: italic;">He <strong>was always complaining</strong> about the weather.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Practice Section -->
+          <section class="mb-8">
+            <div class="flex items-center justify-between mb-6">
+              <h2 id="practiceTitle" style="font-size: ${baseSize * 1.5}px; font-weight: 600;">${config.practice_title || defaultConfig.practice_title}</h2>
+              <div class="px-4 py-2 rounded-full" style="background-color: ${primaryColor}; color: white; font-size: ${baseSize * 0.9}px; font-weight: 600;">
+                Score: <span id="score">0</span>/${questions.length}
+              </div>
+            </div>
+
+            <div id="questionCard" class="p-8 rounded-2xl shadow-lg fade-in" style="background-color: ${surfaceColor};">
+              <!-- Question content will be inserted here -->
+            </div>
+
+            <div class="flex gap-4 mt-6">
+              <button id="prevBtn" class="px-6 py-3 rounded-xl transition-all" style="background-color: ${secondaryColor}; color: white; font-size: ${baseSize}px; font-weight: 500;">
+                ← Previous
+              </button>
+              <button id="nextBtn" class="px-6 py-3 rounded-xl transition-all flex-1" style="background-color: ${primaryColor}; color: white; font-size: ${baseSize}px; font-weight: 500;">
+                Next Question →
+              </button>
+            </div>
+          </section>
+        </div>
+      `;
+
+      renderQuestion(config);
+      setupEventListeners(config);
+    }
+
+    function renderQuestion(config) {
+      const question = questions[currentQuestion];
+      const questionCard = document.getElementById('questionCard');
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      
+      questionCard.innerHTML = `
+        <div class="mb-6">
+          <p style="font-size: ${baseSize * 0.9}px; color: ${secondaryColor}; margin-bottom: ${baseSize * 0.5}px;">Question ${currentQuestion + 1} of ${questions.length}</p>
+          <p style="font-size: ${baseSize * 1.2}px; font-weight: 600; line-height: 1.6;">${question.question}</p>
+        </div>
+
+        <div class="grid gap-3" id="optionsContainer">
+          ${question.options.map((option, index) => `
+            <button class="practice-option text-left p-4 rounded-xl border-2 transition-all" 
+                    data-index="${index}"
+                    style="background-color: ${backgroundColor}; border-color: ${secondaryColor}; font-size: ${baseSize}px;">
+              ${String.fromCharCode(65 + index)}. ${option}
+            </button>
+          `).join('')}
+        </div>
+
+        <div id="feedback" class="mt-6" style="display: none;">
+          <!-- Feedback will appear here -->
+        </div>
+      `;
+
+      document.querySelectorAll('.practice-option').forEach(btn => {
+        btn.addEventListener('click', () => handleAnswer(btn, config));
+      });
+
+      updateNavigationButtons(config);
+    }
+
+    function handleAnswer(button, config) {
+      if (answered) return;
+
+      const selectedIndex = parseInt(button.dataset.index);
+      const question = questions[currentQuestion];
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      
+      answered = true;
+      const isCorrect = selectedIndex === question.correct;
+
+      if (isCorrect) {
+        score++;
+        document.getElementById('score').textContent = score;
+        button.classList.add('correct');
+        button.style.borderColor = '#10b981';
+        button.style.backgroundColor = '#d1fae5';
+      } else {
+        button.classList.add('incorrect');
+        button.style.borderColor = '#ef4444';
+        button.style.backgroundColor = '#fee2e2';
+        
+        document.querySelectorAll('.practice-option')[question.correct].style.borderColor = '#10b981';
+        document.querySelectorAll('.practice-option')[question.correct].style.backgroundColor = '#d1fae5';
+      }
+
+      document.querySelectorAll('.practice-option').forEach(btn => {
+        btn.style.cursor = 'default';
+      });
+
+      const feedback = document.getElementById('feedback');
+      feedback.style.display = 'block';
+      feedback.innerHTML = `
+        <div class="p-4 rounded-xl" style="background-color: ${isCorrect ? '#d1fae5' : '#fee2e2'}; border-left: 4px solid ${isCorrect ? '#10b981' : '#ef4444'};">
+          <p style="font-size: ${baseSize}px; font-weight: 600; margin-bottom: ${baseSize * 0.5}px;">
+            ${isCorrect ? '✓ Correct!' : '✗ Incorrect'}
+          </p>
+          <p style="font-size: ${baseSize * 0.9}px;">${question.explanation}</p>
+        </div>
+      `;
+    }
+
+    function setupEventListeners(config) {
+      document.getElementById('nextBtn').addEventListener('click', () => {
+        if (currentQuestion < questions.length - 1) {
+          currentQuestion++;
+          answered = false;
+          renderQuestion(config);
+        } else if (answered) {
+          showFinalResults(config);
+        }
+      });
+
+      document.getElementById('prevBtn').addEventListener('click', () => {
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          answered = false;
+          renderQuestion(config);
+        }
+      });
+
+      updateNavigationButtons(config);
+    }
+
+    function updateNavigationButtons(config) {
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+
+      prevBtn.disabled = currentQuestion === 0;
+      prevBtn.style.opacity = currentQuestion === 0 ? '0.5' : '1';
+      prevBtn.style.cursor = currentQuestion === 0 ? 'not-allowed' : 'pointer';
+
+      if (currentQuestion === questions.length - 1 && answered) {
+        nextBtn.textContent = 'See Results →';
+      } else {
+        nextBtn.textContent = 'Next Question →';
+      }
+
+      nextBtn.disabled = !answered && currentQuestion === questions.length - 1;
+      nextBtn.style.opacity = (!answered && currentQuestion === questions.length - 1) ? '0.5' : '1';
+    }
+
+    function showFinalResults(config) {
+      const questionCard = document.getElementById('questionCard');
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      
+      const percentage = Math.round((score / questions.length) * 100);
+      let message = '';
+      let emoji = '';
+      
+      if (percentage === 100) {
+        message = 'Perfect! You have mastered the past progressive!';
+        emoji = '🎉';
+      } else if (percentage >= 80) {
+        message = 'Great job! You have a strong understanding!';
+        emoji = '🌟';
+      } else if (percentage >= 60) {
+        message = 'Good effort! Keep practicing to improve!';
+        emoji = '👍';
+      } else {
+        message = 'Keep learning! Review the lesson and try again!';
+        emoji = '📚';
+      }
+
+      questionCard.innerHTML = `
+        <div class="text-center">
+          <div style="font-size: ${baseSize * 4}px; margin-bottom: ${baseSize}px;">${emoji}</div>
+          <h2 style="font-size: ${baseSize * 1.8}px; font-weight: 700; margin-bottom: ${baseSize}px;">Quiz Complete!</h2>
+          <div class="mb-6 p-6 rounded-2xl" style="background-color: ${backgroundColor};">
+            <p style="font-size: ${baseSize * 3}px; font-weight: 700; color: ${primaryColor};">${score}/${questions.length}</p>
+            <p style="font-size: ${baseSize * 1.2}px; margin-top: ${baseSize * 0.5}px;">${percentage}%</p>
+          </div>
+          <p style="font-size: ${baseSize * 1.1}px; margin-bottom: ${baseSize * 2}px;">${message}</p>
+          <button id="restartBtn" class="px-8 py-4 rounded-xl transition-all" style="background-color: ${primaryColor}; color: white; font-size: ${baseSize}px; font-weight: 600;">
+            Try Again
+          </button>
+        </div>
+      `;
+
+      document.getElementById('restartBtn').addEventListener('click', () => {
+        currentQuestion = 0;
+        score = 0;
+        answered = false;
+        document.getElementById('score').textContent = '0';
+        renderQuestion(config);
+      });
+
+      document.getElementById('prevBtn').style.display = 'none';
+      document.getElementById('nextBtn').style.display = 'none';
+    }
+
+    async function onConfigChange(config) {
+      renderApp(config);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["lesson_title", config.lesson_title || defaultConfig.lesson_title],
+          ["practice_title", config.practice_title || defaultConfig.practice_title]
+        ])
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.elementSdk) {
+        renderApp(defaultConfig);
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9acf380d37283204',t:'MTc2NTU2MzQ1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
