@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spanish Moving Vocabulary Practice</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .flip-card {
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    
+    .draggable {
+      cursor: grab;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .draggable:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .draggable.dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+    }
+    
+    .drop-zone {
+      min-height: 60px;
+      transition: all 0.3s;
+    }
+    
+    .drop-zone.drag-over {
+      transform: scale(1.02);
+    }
+    
+    .drop-zone.correct {
+      animation: correctPulse 0.5s ease-in-out;
+    }
+    
+    .drop-zone.incorrect {
+      animation: incorrectShake 0.5s ease-in-out;
+    }
+    
+    @keyframes correctPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes incorrectShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-container" class="w-full h-full overflow-auto">
+   <div class="min-h-full px-6 py-8">
+    <header class="text-center mb-8">
+     <h1 id="app-title" class="text-4xl font-bold mb-2">Spanish Moving Vocabulary</h1>
+     <p id="subtitle" class="text-lg">Master essential terms for your move to a Spanish-speaking country!</p>
+    </header>
+    <div class="max-w-6xl mx-auto space-y-12"><!-- Flashcard Section -->
+     <section>
+      <h2 id="flashcard-title" class="text-3xl font-bold mb-6 text-center">Flip Card Practice</h2>
+      <p id="flashcard-instructions" class="text-center mb-6">Click the card to reveal the Spanish translation</p>
+      <div class="flex flex-col items-center">
+       <div class="flip-card w-full max-w-md h-64 mb-6" id="flip-card">
+        <div class="flip-card-inner">
+         <div class="flip-card-front" id="card-front"><span class="text-3xl font-semibold" id="english-term"></span>
+         </div>
+         <div class="flip-card-back" id="card-back">
+          <div><span class="text-3xl font-semibold block mb-2" id="spanish-term"></span> <span class="text-sm opacity-75" id="term-type"></span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="flex gap-4"><button id="prev-btn" class="px-6 py-3 rounded-lg font-semibold transition-colors"> ← Previous </button> <span class="px-6 py-3 rounded-lg font-semibold" id="card-counter">1 / 15</span> <button id="next-btn" class="px-6 py-3 rounded-lg font-semibold transition-colors"> Next → </button>
+       </div>
+      </div>
+     </section><!-- Drag and Drop Section -->
+     <section>
+      <h2 id="drag-drop-title" class="text-3xl font-bold mb-6 text-center">Drag &amp; Drop Challenge</h2>
+      <p id="drag-drop-instructions" class="text-center mb-6">Match the English terms with their Spanish translations</p>
+      <div class="grid md:grid-cols-2 gap-8">
+       <div>
+        <h3 class="text-xl font-semibold mb-4">English Terms</h3>
+        <div id="english-terms" class="space-y-3"></div>
+       </div>
+       <div>
+        <h3 class="text-xl font-semibold mb-4">Spanish Translations</h3>
+        <div id="drop-zones" class="space-y-3"></div>
+       </div>
+      </div>
+      <div class="flex gap-4 justify-center mt-6"><button id="check-btn" class="px-6 py-3 rounded-lg font-semibold transition-colors"> Check Answers </button> <button id="reset-btn" class="px-6 py-3 rounded-lg font-semibold transition-colors"> Reset </button>
+      </div>
+      <div id="result-message" class="text-center mt-4 text-lg font-semibold"></div>
+     </section>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#f0f9ff",
+      card_color: "#ffffff",
+      text_color: "#1e293b",
+      primary_button_color: "#3b82f6",
+      secondary_button_color: "#10b981",
+      app_title: "Spanish Moving Vocabulary",
+      flashcard_title: "Flip Card Practice",
+      drag_drop_title: "Drag & Drop Challenge",
+      instructions_label: "Click the card to reveal the Spanish translation",
+      next_button_text: "Next →",
+      previous_button_text: "← Previous",
+      check_answers_text: "Check Answers",
+      reset_button_text: "Reset",
+      font_family: "system-ui",
+      font_size: 16
+    };
+
+    const vocabularyData = [
+      { english: "To move (residence)", spanish: "Mudarse", type: "verb" },
+      { english: "Moving truck", spanish: "Camión de mudanza", type: "noun" },
+      { english: "Box", spanish: "Caja", type: "noun" },
+      { english: "To pack", spanish: "Empacar", type: "verb" },
+      { english: "To unpack", spanish: "Desempacar", type: "verb" },
+      { english: "Furniture", spanish: "Muebles", type: "noun" },
+      { english: "Apartment", spanish: "Apartamento", type: "noun" },
+      { english: "House", spanish: "Casa", type: "noun" },
+      { english: "Lease", spanish: "Contrato de arrendamiento", type: "noun" },
+      { english: "Landlord", spanish: "Arrendador", type: "noun" },
+      { english: "Deposit", spanish: "Depósito", type: "noun" },
+      { english: "To rent", spanish: "Alquilar", type: "verb" },
+      { english: "Address", spanish: "Dirección", type: "noun" },
+      { english: "Key", spanish: "Llave", type: "noun" },
+      { english: "Storage", spanish: "Almacenamiento", type: "noun" }
+    ];
+
+    let currentCardIndex = 0;
+    let dragDropTerms = [];
+    let draggedElement = null;
+
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function initializeFlashcards() {
+      updateFlashcard();
+      
+      const flipCard = document.getElementById('flip-card');
+      flipCard.addEventListener('click', () => {
+        flipCard.classList.toggle('flipped');
+      });
+      
+      document.getElementById('next-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentCardIndex = (currentCardIndex + 1) % vocabularyData.length;
+        const flipCard = document.getElementById('flip-card');
+        flipCard.classList.remove('flipped');
+        updateFlashcard();
+      });
+      
+      document.getElementById('prev-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentCardIndex = (currentCardIndex - 1 + vocabularyData.length) % vocabularyData.length;
+        const flipCard = document.getElementById('flip-card');
+        flipCard.classList.remove('flipped');
+        updateFlashcard();
+      });
+    }
+
+    function updateFlashcard() {
+      const term = vocabularyData[currentCardIndex];
+      document.getElementById('english-term').textContent = term.english;
+      document.getElementById('spanish-term').textContent = term.spanish;
+      document.getElementById('term-type').textContent = `(${term.type})`;
+      document.getElementById('card-counter').textContent = `${currentCardIndex + 1} / ${vocabularyData.length}`;
+    }
+
+    function initializeDragDrop() {
+      dragDropTerms = shuffleArray(vocabularyData).slice(0, 8);
+      const shuffledSpanish = shuffleArray([...dragDropTerms]);
+      
+      const englishContainer = document.getElementById('english-terms');
+      const dropZoneContainer = document.getElementById('drop-zones');
+      
+      englishContainer.innerHTML = '';
+      dropZoneContainer.innerHTML = '';
+      
+      dragDropTerms.forEach((term, index) => {
+        const draggableDiv = document.createElement('div');
+        draggableDiv.className = 'draggable px-4 py-3 rounded-lg font-medium';
+        draggableDiv.textContent = term.english;
+        draggableDiv.draggable = true;
+        draggableDiv.dataset.english = term.english;
+        draggableDiv.dataset.spanish = term.spanish;
+        
+        draggableDiv.addEventListener('dragstart', (e) => {
+          draggedElement = draggableDiv;
+          draggableDiv.classList.add('dragging');
+        });
+        
+        draggableDiv.addEventListener('dragend', () => {
+          draggableDiv.classList.remove('dragging');
+        });
+        
+        englishContainer.appendChild(draggableDiv);
+      });
+      
+      shuffledSpanish.forEach((term, index) => {
+        const dropZone = document.createElement('div');
+        dropZone.className = 'drop-zone px-4 py-3 rounded-lg border-2 border-dashed';
+        dropZone.dataset.spanish = term.spanish;
+        
+        const label = document.createElement('div');
+        label.className = 'font-medium mb-2';
+        label.textContent = term.spanish;
+        dropZone.appendChild(label);
+        
+        const placeholder = document.createElement('div');
+        placeholder.className = 'drop-placeholder text-sm opacity-50';
+        placeholder.textContent = 'Drop here';
+        dropZone.appendChild(placeholder);
+        
+        dropZone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropZone.classList.add('drag-over');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+          dropZone.classList.remove('drag-over');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('drag-over');
+          
+          if (draggedElement) {
+            const existingDraggable = dropZone.querySelector('.draggable');
+            if (existingDraggable) {
+              document.getElementById('english-terms').appendChild(existingDraggable);
+            }
+            
+            dropZone.appendChild(draggedElement);
+            placeholder.style.display = 'none';
+            dropZone.classList.remove('correct', 'incorrect');
+          }
+        });
+        
+        dropZoneContainer.appendChild(dropZone);
+      });
+      
+      document.getElementById('check-btn').addEventListener('click', checkAnswers);
+      document.getElementById('reset-btn').addEventListener('click', resetDragDrop);
+    }
+
+    function checkAnswers() {
+      const dropZones = document.querySelectorAll('.drop-zone');
+      let correct = 0;
+      let total = 0;
+      
+      dropZones.forEach(zone => {
+        const draggable = zone.querySelector('.draggable');
+        if (draggable) {
+          total++;
+          zone.classList.remove('correct', 'incorrect');
+          
+          if (draggable.dataset.spanish === zone.dataset.spanish) {
+            zone.classList.add('correct');
+            correct++;
+          } else {
+            zone.classList.add('incorrect');
+          }
+        }
+      });
+      
+      const resultMessage = document.getElementById('result-message');
+      if (total === 0) {
+        resultMessage.textContent = 'Please drag some terms to check your answers!';
+      } else if (correct === dragDropTerms.length) {
+        resultMessage.textContent = '🎉 Perfect! All answers are correct!';
+      } else {
+        resultMessage.textContent = `You got ${correct} out of ${dragDropTerms.length} correct. Keep trying!`;
+      }
+    }
+
+    function resetDragDrop() {
+      document.getElementById('result-message').textContent = '';
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('correct', 'incorrect');
+        const draggable = zone.querySelector('.draggable');
+        if (draggable) {
+          document.getElementById('english-terms').appendChild(draggable);
+        }
+        const placeholder = zone.querySelector('.drop-placeholder');
+        if (placeholder) {
+          placeholder.style.display = 'block';
+        }
+      });
+    }
+
+    async function onConfigChange(config) {
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      
+      document.getElementById('app-container').style.background = config.background_color || defaultConfig.background_color;
+      document.getElementById('app-container').style.color = config.text_color || defaultConfig.text_color;
+      document.getElementById('app-container').style.fontFamily = `${customFont}, ${baseFontStack}`;
+      
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('app-title').style.fontSize = `${baseSize * 2}px`;
+      document.getElementById('app-title').style.color = config.text_color || defaultConfig.text_color;
+      
+      document.getElementById('subtitle').style.fontSize = `${baseSize * 1.125}px`;
+      document.getElementById('subtitle').style.color = config.text_color || defaultConfig.text_color;
+      
+      document.getElementById('flashcard-title').textContent = config.flashcard_title || defaultConfig.flashcard_title;
+      document.getElementById('flashcard-title').style.fontSize = `${baseSize * 1.875}px`;
+      document.getElementById('flashcard-title').style.color = config.text_color || defaultConfig.text_color;
+      
+      document.getElementById('drag-drop-title').textContent = config.drag_drop_title || defaultConfig.drag_drop_title;
+      document.getElementById('drag-drop-title').style.fontSize = `${baseSize * 1.875}px`;
+      document.getElementById('drag-drop-title').style.color = config.text_color || defaultConfig.text_color;
+      
+      document.getElementById('flashcard-instructions').textContent = config.instructions_label || defaultConfig.instructions_label;
+      document.getElementById('flashcard-instructions').style.fontSize = `${baseSize}px`;
+      
+      document.getElementById('drag-drop-instructions').style.fontSize = `${baseSize}px`;
+      
+      const cardFront = document.getElementById('card-front');
+      const cardBack = document.getElementById('card-back');
+      cardFront.style.background = config.card_color || defaultConfig.card_color;
+      cardBack.style.background = config.card_color || defaultConfig.card_color;
+      cardFront.style.color = config.text_color || defaultConfig.text_color;
+      cardBack.style.color = config.text_color || defaultConfig.text_color;
+      cardFront.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+      cardBack.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+      
+      document.getElementById('english-term').style.fontSize = `${baseSize * 1.875}px`;
+      document.getElementById('spanish-term').style.fontSize = `${baseSize * 1.875}px`;
+      document.getElementById('term-type').style.fontSize = `${baseSize * 0.875}px`;
+      
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const checkBtn = document.getElementById('check-btn');
+      const resetBtn = document.getElementById('reset-btn');
+      const counter = document.getElementById('card-counter');
+      
+      prevBtn.textContent = config.previous_button_text || defaultConfig.previous_button_text;
+      nextBtn.textContent = config.next_button_text || defaultConfig.next_button_text;
+      checkBtn.textContent = config.check_answers_text || defaultConfig.check_answers_text;
+      resetBtn.textContent = config.reset_button_text || defaultConfig.reset_button_text;
+      
+      prevBtn.style.background = config.primary_button_color || defaultConfig.primary_button_color;
+      nextBtn.style.background = config.primary_button_color || defaultConfig.primary_button_color;
+      checkBtn.style.background = config.secondary_button_color || defaultConfig.secondary_button_color;
+      resetBtn.style.background = config.primary_button_color || defaultConfig.primary_button_color;
+      
+      prevBtn.style.color = '#ffffff';
+      nextBtn.style.color = '#ffffff';
+      checkBtn.style.color = '#ffffff';
+      resetBtn.style.color = '#ffffff';
+      counter.style.background = config.card_color || defaultConfig.card_color;
+      counter.style.color = config.text_color || defaultConfig.text_color;
+      
+      prevBtn.style.fontSize = `${baseSize}px`;
+      nextBtn.style.fontSize = `${baseSize}px`;
+      checkBtn.style.fontSize = `${baseSize}px`;
+      resetBtn.style.fontSize = `${baseSize}px`;
+      counter.style.fontSize = `${baseSize}px`;
+      
+      document.querySelectorAll('.draggable').forEach(el => {
+        el.style.background = config.card_color || defaultConfig.card_color;
+        el.style.color = config.text_color || defaultConfig.text_color;
+        el.style.fontSize = `${baseSize}px`;
+        el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+      });
+      
+      document.querySelectorAll('.drop-zone').forEach(el => {
+        el.style.borderColor = config.text_color || defaultConfig.text_color;
+        el.style.fontSize = `${baseSize}px`;
+        el.style.color = config.text_color || defaultConfig.text_color;
+        
+        if (el.classList.contains('correct')) {
+          el.style.background = config.secondary_button_color || defaultConfig.secondary_button_color;
+          el.style.borderColor = config.secondary_button_color || defaultConfig.secondary_button_color;
+          el.style.color = '#ffffff';
+        } else if (el.classList.contains('incorrect')) {
+          el.style.background = '#ef4444';
+          el.style.borderColor = '#ef4444';
+          el.style.color = '#ffffff';
+        }
+      });
+      
+      document.querySelectorAll('h3').forEach(el => {
+        el.style.fontSize = `${baseSize * 1.25}px`;
+        el.style.color = config.text_color || defaultConfig.text_color;
+      });
+      
+      const resultMessage = document.getElementById('result-message');
+      resultMessage.style.fontSize = `${baseSize * 1.125}px`;
+      resultMessage.style.color = config.text_color || defaultConfig.text_color;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => {
+                config.card_color = value;
+                window.elementSdk.setConfig({ card_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_button_color || defaultConfig.primary_button_color,
+              set: (value) => {
+                config.primary_button_color = value;
+                window.elementSdk.setConfig({ primary_button_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_button_color || defaultConfig.secondary_button_color,
+              set: (value) => {
+                config.secondary_button_color = value;
+                window.elementSdk.setConfig({ secondary_button_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["flashcard_title", config.flashcard_title || defaultConfig.flashcard_title],
+          ["drag_drop_title", config.drag_drop_title || defaultConfig.drag_drop_title],
+          ["instructions_label", config.instructions_label || defaultConfig.instructions_label],
+          ["next_button_text", config.next_button_text || defaultConfig.next_button_text],
+          ["previous_button_text", config.previous_button_text || defaultConfig.previous_button_text],
+          ["check_answers_text", config.check_answers_text || defaultConfig.check_answers_text],
+          ["reset_button_text", config.reset_button_text || defaultConfig.reset_button_text]
+        ])
+      });
+    }
+
+    initializeFlashcards();
+    initializeDragDrop();
+    onConfigChange(window.elementSdk?.config || defaultConfig);
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ace0fe902d53204',t:'MTc2NTU1MTMyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
