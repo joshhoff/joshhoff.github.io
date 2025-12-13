@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spanish Language Practice</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .card {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .flip-card {
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+    }
+    
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .progress-bar {
+      transition: width 0.3s ease;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="h-full overflow-auto w-full">
+   <div id="app-container" class="min-h-full w-full"><!-- Header -->
+    <header id="header" class="py-8 px-6">
+     <div class="max-w-6xl mx-auto text-center">
+      <h1 id="app-title" class="text-5xl font-bold mb-3">¡Aprende Español!</h1>
+      <p id="app-subtitle" class="text-xl">Master common words and phrases through interactive practice</p>
+     </div>
+    </header><!-- Navigation Tabs -->
+    <nav id="nav" class="border-b-2 mb-8">
+     <div class="max-w-6xl mx-auto px-6">
+      <div class="flex gap-2"><button id="tab-practice" class="tab-button px-6 py-3 font-semibold transition-colors border-b-4" onclick="switchTab('practice')"> 📝 <span id="practice-label">Practice Activities</span> </button> <button id="tab-prompts" class="tab-button px-6 py-3 font-semibold transition-colors border-b-4" onclick="switchTab('prompts')"> 💬 <span id="prompts-label">Conversation Prompts</span> </button> <button id="tab-definitions" class="tab-button px-6 py-3 font-semibold transition-colors border-b-4" onclick="switchTab('definitions')"> 📚 <span id="definitions-label">Definitions</span> </button>
+      </div>
+     </div>
+    </nav><!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 pb-12"><!-- Practice Activities Tab -->
+     <div id="content-practice" class="tab-content active">
+      <div class="mb-8">
+       <h2 class="text-3xl font-bold mb-4">Flashcard Practice</h2>
+       <p class="mb-4">Click the card to reveal the translation</p>
+       <div class="mb-4 flex items-center gap-4"><label for="category-select" class="font-semibold">Category:</label> <select id="category-select" class="px-4 py-2 rounded-lg border-2" onchange="updateFlashcard()"> <option value="nouns">Nouns</option> <option value="verbs">Verbs</option> <option value="adjectives">Adjectives</option> <option value="expressions">Expressions</option> </select>
+        <div class="flex-1"></div><span id="card-counter" class="font-semibold">1 / 10</span>
+       </div>
+       <div class="mb-4">
+        <div id="progress-bar-container" class="h-2 rounded-full overflow-hidden">
+         <div id="progress-bar" class="progress-bar h-full"></div>
+        </div>
+       </div>
+       <div id="flashcard" class="flip-card card rounded-lg shadow-lg h-64 mb-4">
+        <div class="flip-card-inner">
+         <div id="flashcard-front" class="flip-card-front font-bold text-3xl"></div>
+         <div id="flashcard-back" class="flip-card-back text-2xl"></div>
+        </div>
+       </div>
+       <div class="flex gap-4 justify-center"><button id="prev-button" class="px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-shadow" onclick="prevCard()">← Previous</button> <button id="next-button" class="px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-shadow" onclick="nextCard()">Next →</button>
+       </div>
+      </div><!-- Quiz Section -->
+      <div class="mt-12">
+       <h2 class="text-3xl font-bold mb-4">Quick Quiz</h2>
+       <p class="mb-4">Test your knowledge!</p>
+       <div id="quiz-container" class="rounded-lg shadow-lg p-6">
+        <div id="quiz-question" class="text-2xl font-bold mb-6"></div>
+        <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+        <div id="quiz-feedback" class="text-lg font-semibold mb-4 hidden"></div><button id="quiz-next" class="px-6 py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition-shadow hidden" onclick="nextQuiz()">Next Question</button>
+       </div>
+      </div>
+     </div><!-- Conversation Prompts Tab -->
+     <div id="content-prompts" class="tab-content">
+      <h2 class="text-3xl font-bold mb-6">Conversation Practice</h2>
+      <p class="mb-8">Practice these everyday scenarios to build your conversational skills</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+       <div class="card rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-3">🏪 At the Store</h3>
+        <div class="space-y-2 mb-4">
+         <p><strong>You:</strong> ¿Cuánto cuesta esto?</p>
+         <p class="text-sm">(How much does this cost?)</p>
+         <p><strong>You:</strong> ¿Tiene algo más barato?</p>
+         <p class="text-sm">(Do you have something cheaper?)</p>
+         <p><strong>You:</strong> Me lo llevo.</p>
+         <p class="text-sm">(I'll take it.)</p>
+        </div>
+       </div>
+       <div class="card rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-3">🍽️ At a Restaurant</h3>
+        <div class="space-y-2 mb-4">
+         <p><strong>You:</strong> Una mesa para dos, por favor.</p>
+         <p class="text-sm">(A table for two, please.)</p>
+         <p><strong>You:</strong> ¿Qué me recomienda?</p>
+         <p class="text-sm">(What do you recommend?)</p>
+         <p><strong>You:</strong> La cuenta, por favor.</p>
+         <p class="text-sm">(The check, please.)</p>
+        </div>
+       </div>
+       <div class="card rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-3">👋 Meeting Someone</h3>
+        <div class="space-y-2 mb-4">
+         <p><strong>You:</strong> Mucho gusto. ¿Cómo te llamas?</p>
+         <p class="text-sm">(Nice to meet you. What's your name?)</p>
+         <p><strong>You:</strong> ¿De dónde eres?</p>
+         <p class="text-sm">(Where are you from?)</p>
+         <p><strong>You:</strong> Encantado de conocerte.</p>
+         <p class="text-sm">(Delighted to meet you.)</p>
+        </div>
+       </div>
+       <div class="card rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-3">🗺️ Asking for Directions</h3>
+        <div class="space-y-2 mb-4">
+         <p><strong>You:</strong> ¿Dónde está el banco?</p>
+         <p class="text-sm">(Where is the bank?)</p>
+         <p><strong>You:</strong> ¿Está lejos de aquí?</p>
+         <p class="text-sm">(Is it far from here?)</p>
+         <p><strong>You:</strong> Muchas gracias por su ayuda.</p>
+         <p class="text-sm">(Thank you very much for your help.)</p>
+        </div>
+       </div>
+       <div class="card rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-3">☀️ Talking About Weather</h3>
+        <div class="space-y-2 mb-4">
+         <p><strong>You:</strong> ¿Qué tiempo hace hoy?</p>
+         <p class="text-sm">(What's the weather like today?)</p>
+         <p><strong>You:</strong> Hace mucho calor/frío.</p>
+         <p class="text-sm">(It's very hot/cold.)</p>
+         <p><strong>You:</strong> Creo que va a llover.</p>
+         <p class="text-sm">(I think it's going to rain.)</p>
+        </div>
+       </div>
+       <div class="card rounded-lg shadow-lg p-6">
+        <h3 class="text-xl font-bold mb-3">📞 On the Phone</h3>
+        <div class="space-y-2 mb-4">
+         <p><strong>You:</strong> ¿Aló? ¿Quién habla?</p>
+         <p class="text-sm">(Hello? Who's speaking?)</p>
+         <p><strong>You:</strong> ¿Puedo dejar un mensaje?</p>
+         <p class="text-sm">(Can I leave a message?)</p>
+         <p><strong>You:</strong> Te llamo más tarde.</p>
+         <p class="text-sm">(I'll call you later.)</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Definitions Tab -->
+     <div id="content-definitions" class="tab-content">
+      <h2 class="text-3xl font-bold mb-6">Vocabulary Reference</h2>
+      <div class="mb-6"><label for="search-box" class="sr-only">Search vocabulary</label> <input type="text" id="search-box" placeholder="Search vocabulary..." class="w-full px-4 py-3 rounded-lg border-2 text-lg" oninput="filterDefinitions()">
+      </div>
+      <div class="space-y-8"><!-- Nouns -->
+       <div class="definition-section">
+        <h3 class="text-2xl font-bold mb-4">Nouns (Sustantivos)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+         <div class="definition-card card rounded-lg shadow p-4" data-term="casa house">
+          <div class="font-bold text-lg">
+           la casa
+          </div>
+          <div class="text-sm">
+           the house
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="agua water">
+          <div class="font-bold text-lg">
+           el agua
+          </div>
+          <div class="text-sm">
+           the water
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="comida food">
+          <div class="font-bold text-lg">
+           la comida
+          </div>
+          <div class="text-sm">
+           the food
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="libro book">
+          <div class="font-bold text-lg">
+           el libro
+          </div>
+          <div class="text-sm">
+           the book
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="tiempo time weather">
+          <div class="font-bold text-lg">
+           el tiempo
+          </div>
+          <div class="text-sm">
+           the time / weather
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="familia family">
+          <div class="font-bold text-lg">
+           la familia
+          </div>
+          <div class="text-sm">
+           the family
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="amigo friend">
+          <div class="font-bold text-lg">
+           el amigo
+          </div>
+          <div class="text-sm">
+           the friend
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="trabajo work job">
+          <div class="font-bold text-lg">
+           el trabajo
+          </div>
+          <div class="text-sm">
+           the work / job
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="ciudad city">
+          <div class="font-bold text-lg">
+           la ciudad
+          </div>
+          <div class="text-sm">
+           the city
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="persona person">
+          <div class="font-bold text-lg">
+           la persona
+          </div>
+          <div class="text-sm">
+           the person
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="desarrollo development">
+          <div class="font-bold text-lg">
+           el desarrollo
+          </div>
+          <div class="text-sm">
+           the development
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="verguenza shame embarrassment">
+          <div class="font-bold text-lg">
+           la vergüenza
+          </div>
+          <div class="text-sm">
+           the shame / embarrassment
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="acontecimiento event happening">
+          <div class="font-bold text-lg">
+           el acontecimiento
+          </div>
+          <div class="text-sm">
+           the event / happening
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="involucracion involvement">
+          <div class="font-bold text-lg">
+           la involucración
+          </div>
+          <div class="text-sm">
+           the involvement
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="esfuerzo effort">
+          <div class="font-bold text-lg">
+           el esfuerzo
+          </div>
+          <div class="text-sm">
+           the effort
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="perseverancia perseverance">
+          <div class="font-bold text-lg">
+           la perseverancia
+          </div>
+          <div class="text-sm">
+           the perseverance
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="proposito purpose">
+          <div class="font-bold text-lg">
+           el propósito
+          </div>
+          <div class="text-sm">
+           the purpose
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="sabiduria wisdom">
+          <div class="font-bold text-lg">
+           la sabiduría
+          </div>
+          <div class="text-sm">
+           the wisdom
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="conocimiento knowledge">
+          <div class="font-bold text-lg">
+           el conocimiento
+          </div>
+          <div class="text-sm">
+           the knowledge
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="consecuencia consequence">
+          <div class="font-bold text-lg">
+           la consecuencia
+          </div>
+          <div class="text-sm">
+           the consequence
+          </div>
+         </div>
+        </div>
+       </div><!-- Verbs -->
+       <div class="definition-section">
+        <h3 class="text-2xl font-bold mb-4">Verbs (Verbos)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+         <div class="definition-card card rounded-lg shadow p-4" data-term="ser estar be">
+          <div class="font-bold text-lg">
+           ser / estar
+          </div>
+          <div class="text-sm">
+           to be
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="tener have">
+          <div class="font-bold text-lg">
+           tener
+          </div>
+          <div class="text-sm">
+           to have
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="hacer do make">
+          <div class="font-bold text-lg">
+           hacer
+          </div>
+          <div class="text-sm">
+           to do / make
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="ir go">
+          <div class="font-bold text-lg">
+           ir
+          </div>
+          <div class="text-sm">
+           to go
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="poder can able">
+          <div class="font-bold text-lg">
+           poder
+          </div>
+          <div class="text-sm">
+           to be able to / can
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="decir say tell">
+          <div class="font-bold text-lg">
+           decir
+          </div>
+          <div class="text-sm">
+           to say / tell
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="dar give">
+          <div class="font-bold text-lg">
+           dar
+          </div>
+          <div class="text-sm">
+           to give
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="ver see">
+          <div class="font-bold text-lg">
+           ver
+          </div>
+          <div class="text-sm">
+           to see
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="querer want love">
+          <div class="font-bold text-lg">
+           querer
+          </div>
+          <div class="text-sm">
+           to want / love
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="saber know">
+          <div class="font-bold text-lg">
+           saber
+          </div>
+          <div class="text-sm">
+           to know
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="desenvolver develop unwrap">
+          <div class="font-bold text-lg">
+           desenvolver
+          </div>
+          <div class="text-sm">
+           to develop / unwrap
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="emprender undertake start">
+          <div class="font-bold text-lg">
+           emprender
+          </div>
+          <div class="text-sm">
+           to undertake / start
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="conseguir achieve obtain">
+          <div class="font-bold text-lg">
+           conseguir
+          </div>
+          <div class="text-sm">
+           to achieve / obtain
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="convencer convince">
+          <div class="font-bold text-lg">
+           convencer
+          </div>
+          <div class="text-sm">
+           to convince
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="establecer establish">
+          <div class="font-bold text-lg">
+           establecer
+          </div>
+          <div class="text-sm">
+           to establish
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="pertenecer belong">
+          <div class="font-bold text-lg">
+           pertenecer
+          </div>
+          <div class="text-sm">
+           to belong
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="merecer deserve">
+          <div class="font-bold text-lg">
+           merecer
+          </div>
+          <div class="text-sm">
+           to deserve
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="reconocer recognize">
+          <div class="font-bold text-lg">
+           reconocer
+          </div>
+          <div class="text-sm">
+           to recognize
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="enfrentarse confront face">
+          <div class="font-bold text-lg">
+           enfrentarse
+          </div>
+          <div class="text-sm">
+           to confront / face
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="comprobar verify check">
+          <div class="font-bold text-lg">
+           comprobar
+          </div>
+          <div class="text-sm">
+           to verify / check
+          </div>
+         </div>
+        </div>
+       </div><!-- Adjectives -->
+       <div class="definition-section">
+        <h3 class="text-2xl font-bold mb-4">Adjectives (Adjetivos)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+         <div class="definition-card card rounded-lg shadow p-4" data-term="bueno good">
+          <div class="font-bold text-lg">
+           bueno/a
+          </div>
+          <div class="text-sm">
+           good
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="malo bad">
+          <div class="font-bold text-lg">
+           malo/a
+          </div>
+          <div class="text-sm">
+           bad
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="grande big large">
+          <div class="font-bold text-lg">
+           grande
+          </div>
+          <div class="text-sm">
+           big / large
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="pequeño small little">
+          <div class="font-bold text-lg">
+           pequeño/a
+          </div>
+          <div class="text-sm">
+           small / little
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="nuevo new">
+          <div class="font-bold text-lg">
+           nuevo/a
+          </div>
+          <div class="text-sm">
+           new
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="viejo old">
+          <div class="font-bold text-lg">
+           viejo/a
+          </div>
+          <div class="text-sm">
+           old
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="bonito pretty beautiful">
+          <div class="font-bold text-lg">
+           bonito/a
+          </div>
+          <div class="text-sm">
+           pretty / beautiful
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="feliz happy">
+          <div class="font-bold text-lg">
+           feliz
+          </div>
+          <div class="text-sm">
+           happy
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="triste sad">
+          <div class="font-bold text-lg">
+           triste
+          </div>
+          <div class="text-sm">
+           sad
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="facil easy">
+          <div class="font-bold text-lg">
+           fácil
+          </div>
+          <div class="text-sm">
+           easy
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="imprescindible essential indispensable">
+          <div class="font-bold text-lg">
+           imprescindible
+          </div>
+          <div class="text-sm">
+           essential / indispensable
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="exhausto exhausted">
+          <div class="font-bold text-lg">
+           exhausto/a
+          </div>
+          <div class="text-sm">
+           exhausted
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="desafiante challenging">
+          <div class="font-bold text-lg">
+           desafiante
+          </div>
+          <div class="text-sm">
+           challenging
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="abrumador overwhelming">
+          <div class="font-bold text-lg">
+           abrumador/a
+          </div>
+          <div class="text-sm">
+           overwhelming
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="sutil subtle">
+          <div class="font-bold text-lg">
+           sutil
+          </div>
+          <div class="text-sm">
+           subtle
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="ambiguo ambiguous">
+          <div class="font-bold text-lg">
+           ambiguo/a
+          </div>
+          <div class="text-sm">
+           ambiguous
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="inquietante disturbing unsettling">
+          <div class="font-bold text-lg">
+           inquietante
+          </div>
+          <div class="text-sm">
+           disturbing / unsettling
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="prometedor promising">
+          <div class="font-bold text-lg">
+           prometedor/a
+          </div>
+          <div class="text-sm">
+           promising
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="desconcertante disconcerting">
+          <div class="font-bold text-lg">
+           desconcertante
+          </div>
+          <div class="text-sm">
+           disconcerting
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="inesperado unexpected">
+          <div class="font-bold text-lg">
+           inesperado/a
+          </div>
+          <div class="text-sm">
+           unexpected
+          </div>
+         </div>
+        </div>
+       </div><!-- Expressions -->
+       <div class="definition-section">
+        <h3 class="text-2xl font-bold mb-4">Common Expressions (Expresiones Comunes)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+         <div class="definition-card card rounded-lg shadow p-4" data-term="hola hello hi">
+          <div class="font-bold text-lg">
+           ¡Hola!
+          </div>
+          <div class="text-sm">
+           Hello! / Hi!
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="gracias thank thanks">
+          <div class="font-bold text-lg">
+           Gracias
+          </div>
+          <div class="text-sm">
+           Thank you
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="por favor please">
+          <div class="font-bold text-lg">
+           Por favor
+          </div>
+          <div class="text-sm">
+           Please
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="disculpe excuse sorry">
+          <div class="font-bold text-lg">
+           Disculpe
+          </div>
+          <div class="text-sm">
+           Excuse me / Sorry
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="si yes">
+          <div class="font-bold text-lg">
+           Sí
+          </div>
+          <div class="text-sm">
+           Yes
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="no">
+          <div class="font-bold text-lg">
+           No
+          </div>
+          <div class="text-sm">
+           No
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="buenos dias good morning">
+          <div class="font-bold text-lg">
+           Buenos días
+          </div>
+          <div class="text-sm">
+           Good morning
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="buenas tardes good afternoon">
+          <div class="font-bold text-lg">
+           Buenas tardes
+          </div>
+          <div class="text-sm">
+           Good afternoon
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="buenas noches good evening night">
+          <div class="font-bold text-lg">
+           Buenas noches
+          </div>
+          <div class="text-sm">
+           Good evening / Good night
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="adios goodbye bye">
+          <div class="font-bold text-lg">
+           Adiós
+          </div>
+          <div class="text-sm">
+           Goodbye
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="como estas how are you">
+          <div class="font-bold text-lg">
+           ¿Cómo estás?
+          </div>
+          <div class="text-sm">
+           How are you?
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="muy bien very well good">
+          <div class="font-bold text-lg">
+           Muy bien
+          </div>
+          <div class="text-sm">
+           Very well
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="a fin de cuentas end of day">
+          <div class="font-bold text-lg">
+           A fin de cuentas
+          </div>
+          <div class="text-sm">
+           At the end of the day
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="dar en el clavo hit nail head">
+          <div class="font-bold text-lg">
+           Dar en el clavo
+          </div>
+          <div class="text-sm">
+           To hit the nail on the head
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="no tener pelos lengua mince words">
+          <div class="font-bold text-lg">
+           No tener pelos en la lengua
+          </div>
+          <div class="text-sm">
+           To not mince words
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="estar nubes head clouds">
+          <div class="font-bold text-lg">
+           Estar en las nubes
+          </div>
+          <div class="text-sm">
+           To have one's head in the clouds
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="costar ojo cara arm leg">
+          <div class="font-bold text-lg">
+           Costar un ojo de la cara
+          </div>
+          <div class="text-sm">
+           To cost an arm and a leg
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="ponerse pilas get act together">
+          <div class="font-bold text-lg">
+           Ponerse las pilas
+          </div>
+          <div class="text-sm">
+           To get one's act together
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="estar hecho polvo exhausted worn out">
+          <div class="font-bold text-lg">
+           Estar hecho polvo
+          </div>
+          <div class="text-sm">
+           To be exhausted / worn out
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="tomar pelo pull leg">
+          <div class="font-bold text-lg">
+           Tomar el pelo
+          </div>
+          <div class="text-sm">
+           To pull someone's leg
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="dar vuelta tortilla turn tables">
+          <div class="font-bold text-lg">
+           Dar la vuelta a la tortilla
+          </div>
+          <div class="text-sm">
+           To turn the tables
+          </div>
+         </div>
+         <div class="definition-card card rounded-lg shadow p-4" data-term="sin embargo nevertheless however">
+          <div class="font-bold text-lg">
+           Sin embargo
+          </div>
+          <div class="text-sm">
+           Nevertheless / However
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </main>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#f0f9ff",
+      card_color: "#ffffff",
+      text_color: "#1e293b",
+      primary_button_color: "#0ea5e9",
+      secondary_button_color: "#64748b",
+      app_title: "¡Aprende Español!",
+      app_subtitle: "Master common words and phrases through interactive practice",
+      practice_label: "Practice Activities",
+      prompts_label: "Conversation Prompts",
+      definitions_label: "Definitions"
+    };
+
+    const vocabulary = {
+      nouns: [
+        { spanish: "la casa", english: "the house" },
+        { spanish: "el agua", english: "the water" },
+        { spanish: "la comida", english: "the food" },
+        { spanish: "el libro", english: "the book" },
+        { spanish: "el tiempo", english: "the time / weather" },
+        { spanish: "la familia", english: "the family" },
+        { spanish: "el amigo", english: "the friend" },
+        { spanish: "el trabajo", english: "the work / job" },
+        { spanish: "la ciudad", english: "the city" },
+        { spanish: "la persona", english: "the person" },
+        { spanish: "el desarrollo", english: "the development" },
+        { spanish: "la vergüenza", english: "the shame / embarrassment" },
+        { spanish: "el acontecimiento", english: "the event / happening" },
+        { spanish: "la involucración", english: "the involvement" },
+        { spanish: "el esfuerzo", english: "the effort" },
+        { spanish: "la perseverancia", english: "the perseverance" },
+        { spanish: "el propósito", english: "the purpose" },
+        { spanish: "la sabiduría", english: "the wisdom" },
+        { spanish: "el conocimiento", english: "the knowledge" },
+        { spanish: "la consecuencia", english: "the consequence" }
+      ],
+      verbs: [
+        { spanish: "ser / estar", english: "to be" },
+        { spanish: "tener", english: "to have" },
+        { spanish: "hacer", english: "to do / make" },
+        { spanish: "ir", english: "to go" },
+        { spanish: "poder", english: "to be able to / can" },
+        { spanish: "decir", english: "to say / tell" },
+        { spanish: "dar", english: "to give" },
+        { spanish: "ver", english: "to see" },
+        { spanish: "querer", english: "to want / love" },
+        { spanish: "saber", english: "to know" },
+        { spanish: "desenvolver", english: "to develop / unwrap" },
+        { spanish: "emprender", english: "to undertake / start" },
+        { spanish: "conseguir", english: "to achieve / obtain" },
+        { spanish: "convencer", english: "to convince" },
+        { spanish: "establecer", english: "to establish" },
+        { spanish: "pertenecer", english: "to belong" },
+        { spanish: "merecer", english: "to deserve" },
+        { spanish: "reconocer", english: "to recognize" },
+        { spanish: "enfrentarse", english: "to confront / face" },
+        { spanish: "comprobar", english: "to verify / check" }
+      ],
+      adjectives: [
+        { spanish: "bueno/a", english: "good" },
+        { spanish: "malo/a", english: "bad" },
+        { spanish: "grande", english: "big / large" },
+        { spanish: "pequeño/a", english: "small / little" },
+        { spanish: "nuevo/a", english: "new" },
+        { spanish: "viejo/a", english: "old" },
+        { spanish: "bonito/a", english: "pretty / beautiful" },
+        { spanish: "feliz", english: "happy" },
+        { spanish: "triste", english: "sad" },
+        { spanish: "fácil", english: "easy" },
+        { spanish: "imprescindible", english: "essential / indispensable" },
+        { spanish: "exhausto/a", english: "exhausted" },
+        { spanish: "desafiante", english: "challenging" },
+        { spanish: "abrumador/a", english: "overwhelming" },
+        { spanish: "sutil", english: "subtle" },
+        { spanish: "ambiguo/a", english: "ambiguous" },
+        { spanish: "inquietante", english: "disturbing / unsettling" },
+        { spanish: "prometedor/a", english: "promising" },
+        { spanish: "desconcertante", english: "disconcerting" },
+        { spanish: "inesperado/a", english: "unexpected" }
+      ],
+      expressions: [
+        { spanish: "¡Hola!", english: "Hello! / Hi!" },
+        { spanish: "Gracias", english: "Thank you" },
+        { spanish: "Por favor", english: "Please" },
+        { spanish: "Disculpe", english: "Excuse me / Sorry" },
+        { spanish: "Sí", english: "Yes" },
+        { spanish: "No", english: "No" },
+        { spanish: "Buenos días", english: "Good morning" },
+        { spanish: "Buenas tardes", english: "Good afternoon" },
+        { spanish: "Buenas noches", english: "Good evening / Good night" },
+        { spanish: "Adiós", english: "Goodbye" },
+        { spanish: "A fin de cuentas", english: "At the end of the day" },
+        { spanish: "Dar en el clavo", english: "To hit the nail on the head" },
+        { spanish: "No tener pelos en la lengua", english: "To not mince words" },
+        { spanish: "Estar en las nubes", english: "To have one's head in the clouds" },
+        { spanish: "Costar un ojo de la cara", english: "To cost an arm and a leg" },
+        { spanish: "Ponerse las pilas", english: "To get one's act together" },
+        { spanish: "Estar hecho polvo", english: "To be exhausted / worn out" },
+        { spanish: "Tomar el pelo", english: "To pull someone's leg" },
+        { spanish: "Dar la vuelta a la tortilla", english: "To turn the tables" },
+        { spanish: "Sin embargo", english: "Nevertheless / However" }
+      ]
+    };
+
+    let currentCategory = 'nouns';
+    let currentCardIndex = 0;
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+
+    function switchTab(tabName) {
+      const tabs = ['practice', 'prompts', 'definitions'];
+      tabs.forEach(tab => {
+        const content = document.getElementById(`content-${tab}`);
+        const button = document.getElementById(`tab-${tab}`);
+        if (tab === tabName) {
+          content.classList.add('active');
+          button.style.borderBottomColor = window.elementSdk?.config?.primary_button_color || defaultConfig.primary_button_color;
+          button.style.color = window.elementSdk?.config?.primary_button_color || defaultConfig.primary_button_color;
+        } else {
+          content.classList.remove('active');
+          button.style.borderBottomColor = 'transparent';
+          button.style.color = window.elementSdk?.config?.text_color || defaultConfig.text_color;
+        }
+      });
+    }
+
+    function updateFlashcard() {
+      const category = document.getElementById('category-select').value;
+      currentCategory = category;
+      currentCardIndex = 0;
+      displayCard();
+    }
+
+    function displayCard() {
+      const cards = vocabulary[currentCategory];
+      const card = cards[currentCardIndex];
+      const flashcard = document.getElementById('flashcard');
+      
+      flashcard.classList.remove('flipped');
+      
+      const front = document.getElementById('flashcard-front');
+      const back = document.getElementById('flashcard-back');
+      
+      front.textContent = card.spanish;
+      back.textContent = card.english;
+      
+      front.style.backgroundColor = window.elementSdk?.config?.card_color || defaultConfig.card_color;
+      front.style.color = window.elementSdk?.config?.text_color || defaultConfig.text_color;
+      back.style.backgroundColor = window.elementSdk?.config?.card_color || defaultConfig.card_color;
+      back.style.color = window.elementSdk?.config?.text_color || defaultConfig.text_color;
+      
+      const counter = document.getElementById('card-counter');
+      counter.textContent = `${currentCardIndex + 1} / ${cards.length}`;
+      
+      const progressBar = document.getElementById('progress-bar');
+      const progress = ((currentCardIndex + 1) / cards.length) * 100;
+      progressBar.style.width = `${progress}%`;
+      progressBar.style.backgroundColor = window.elementSdk?.config?.primary_button_color || defaultConfig.primary_button_color;
+    }
+
+    function nextCard() {
+      const cards = vocabulary[currentCategory];
+      currentCardIndex = (currentCardIndex + 1) % cards.length;
+      displayCard();
+    }
+
+    function prevCard() {
+      const cards = vocabulary[currentCategory];
+      currentCardIndex = (currentCardIndex - 1 + cards.length) % cards.length;
+      displayCard();
+    }
+
+    document.getElementById('flashcard').addEventListener('click', function() {
+      this.classList.toggle('flipped');
+    });
+
+    function generateQuiz() {
+      const allWords = [...vocabulary.nouns, ...vocabulary.verbs, ...vocabulary.adjectives, ...vocabulary.expressions];
+      quizQuestions = [];
+      
+      for (let i = 0; i < 5; i++) {
+        const correctAnswer = allWords[Math.floor(Math.random() * allWords.length)];
+        const wrongAnswers = [];
+        
+        while (wrongAnswers.length < 3) {
+          const wrong = allWords[Math.floor(Math.random() * allWords.length)];
+          if (wrong.spanish !== correctAnswer.spanish && !wrongAnswers.includes(wrong)) {
+            wrongAnswers.push(wrong);
+          }
+        }
+        
+        const options = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+        
+        quizQuestions.push({
+          question: correctAnswer.spanish,
+          correctAnswer: correctAnswer.english,
+          options: options.map(o => o.english)
+        });
+      }
+      
+      currentQuizIndex = 0;
+      displayQuiz();
+    }
+
+    function displayQuiz() {
+      if (currentQuizIndex >= quizQuestions.length) {
+        document.getElementById('quiz-question').textContent = '🎉 Quiz Complete! Great job!';
+        document.getElementById('quiz-options').innerHTML = '';
+        document.getElementById('quiz-feedback').classList.add('hidden');
+        document.getElementById('quiz-next').classList.add('hidden');
+        return;
+      }
+      
+      const question = quizQuestions[currentQuizIndex];
+      document.getElementById('quiz-question').textContent = `What does "${question.question}" mean?`;
+      
+      const optionsContainer = document.getElementById('quiz-options');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.className = 'px-6 py-4 rounded-lg font-semibold shadow-md hover:shadow-lg transition-all text-left';
+        button.style.backgroundColor = window.elementSdk?.config?.card_color || defaultConfig.card_color;
+        button.style.color = window.elementSdk?.config?.text_color || defaultConfig.text_color;
+        button.style.border = `2px solid ${window.elementSdk?.config?.secondary_button_color || defaultConfig.secondary_button_color}`;
+        button.onclick = () => checkAnswer(option, question.correctAnswer, button);
+        optionsContainer.appendChild(button);
+      });
+      
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      document.getElementById('quiz-next').classList.add('hidden');
+    }
+
+    function checkAnswer(selected, correct, button) {
+      const feedback = document.getElementById('quiz-feedback');
+      const buttons = document.getElementById('quiz-options').getElementsByTagName('button');
+      
+      for (let btn of buttons) {
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+      }
+      
+      if (selected === correct) {
+        button.style.backgroundColor = '#10b981';
+        button.style.color = '#ffffff';
+        button.style.borderColor = '#10b981';
+        button.style.opacity = '1';
+        feedback.textContent = '✓ Correct!';
+        feedback.style.color = '#10b981';
+      } else {
+        button.style.backgroundColor = '#ef4444';
+        button.style.color = '#ffffff';
+        button.style.borderColor = '#ef4444';
+        button.style.opacity = '1';
+        feedback.textContent = `✗ Incorrect. The correct answer is: ${correct}`;
+        feedback.style.color = '#ef4444';
+      }
+      
+      feedback.classList.remove('hidden');
+      document.getElementById('quiz-next').classList.remove('hidden');
+    }
+
+    function nextQuiz() {
+      currentQuizIndex++;
+      displayQuiz();
+    }
+
+    function filterDefinitions() {
+      const searchTerm = document.getElementById('search-box').value.toLowerCase();
+      const cards = document.querySelectorAll('.definition-card');
+      
+      cards.forEach(card => {
+        const terms = card.getAttribute('data-term').toLowerCase();
+        if (terms.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    async function onConfigChange(config) {
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const cardColor = config.card_color || defaultConfig.card_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryButtonColor = config.primary_button_color || defaultConfig.primary_button_color;
+      const secondaryButtonColor = config.secondary_button_color || defaultConfig.secondary_button_color;
+      
+      document.getElementById('app-container').style.backgroundColor = backgroundColor;
+      document.getElementById('header').style.backgroundColor = primaryButtonColor;
+      document.getElementById('header').style.color = '#ffffff';
+      document.getElementById('nav').style.borderBottomColor = secondaryButtonColor;
+      
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('app-subtitle').textContent = config.app_subtitle || defaultConfig.app_subtitle;
+      document.getElementById('practice-label').textContent = config.practice_label || defaultConfig.practice_label;
+      document.getElementById('prompts-label').textContent = config.prompts_label || defaultConfig.prompts_label;
+      document.getElementById('definitions-label').textContent = config.definitions_label || defaultConfig.definitions_label;
+      
+      const allCards = document.querySelectorAll('.card');
+      allCards.forEach(card => {
+        card.style.backgroundColor = cardColor;
+        card.style.color = textColor;
+      });
+      
+      const buttons = document.querySelectorAll('button:not(.tab-button)');
+      buttons.forEach(button => {
+        if (button.id === 'quiz-next') {
+          button.style.backgroundColor = primaryButtonColor;
+          button.style.color = '#ffffff';
+        } else if (button.id === 'prev-button' || button.id === 'next-button') {
+          button.style.backgroundColor = primaryButtonColor;
+          button.style.color = '#ffffff';
+        }
+      });
+      
+      document.getElementById('progress-bar-container').style.backgroundColor = secondaryButtonColor + '40';
+      document.getElementById('quiz-container').style.backgroundColor = cardColor;
+      document.getElementById('quiz-container').style.color = textColor;
+      
+      document.getElementById('search-box').style.borderColor = secondaryButtonColor;
+      document.getElementById('search-box').style.color = textColor;
+      document.getElementById('category-select').style.borderColor = secondaryButtonColor;
+      document.getElementById('category-select').style.color = textColor;
+      
+      displayCard();
+      switchTab('practice');
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => {
+                config.card_color = value;
+                window.elementSdk.setConfig({ card_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_button_color || defaultConfig.primary_button_color,
+              set: (value) => {
+                config.primary_button_color = value;
+                window.elementSdk.setConfig({ primary_button_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_button_color || defaultConfig.secondary_button_color,
+              set: (value) => {
+                config.secondary_button_color = value;
+                window.elementSdk.setConfig({ secondary_button_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["app_subtitle", config.app_subtitle || defaultConfig.app_subtitle],
+          ["practice_label", config.practice_label || defaultConfig.practice_label],
+          ["prompts_label", config.prompts_label || defaultConfig.prompts_label],
+          ["definitions_label", config.definitions_label || defaultConfig.definitions_label]
+        ])
+      });
+    }
+
+    displayCard();
+    generateQuiz();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad6576f57423204',t:'MTc2NTYzODEzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
