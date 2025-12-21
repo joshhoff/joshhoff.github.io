@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerunds &amp; Infinitives Practice</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      font-family: 'Lexend', sans-serif;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.4s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .practice-card {
+      transition: all 0.3s ease;
+    }
+    
+    .practice-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .correct-answer {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+    
+    .incorrect-answer {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+    }
+    
+    .tab-button {
+      transition: all 0.2s ease;
+    }
+    
+    .tab-button.active {
+      border-bottom: 3px solid currentColor;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto"></div>
+  <script>
+    const defaultConfig = {
+      background_color: "#f0f9ff",
+      surface_color: "#ffffff",
+      text_color: "#1e293b",
+      primary_action: "#0ea5e9",
+      secondary_action: "#64748b",
+      font_family: "Lexend",
+      font_size: 16,
+      app_title: "Gerunds & Infinitives",
+      app_subtitle: "Master the Art of Verb Forms",
+      explanation_label: "Understanding the Rules",
+      examples_label: "Real-World Examples",
+      conversation_label: "Conversation Practice",
+      practice_label: "Written Activities"
+    };
+
+    let currentRecordCount = 0;
+    let currentTab = 'explanation';
+    let practiceAnswers = {};
+
+    const grammarRules = [
+      {
+        category: "GERUND RULES",
+        title: "Verbs Followed by Gerunds",
+        rule: "Some verbs are always followed by gerunds (-ing form)",
+        examples: ["enjoy", "avoid", "finish", "mind", "suggest", "consider", "practice", "keep", "miss", "deny", "admit", "risk"],
+        sentences: [
+          "I enjoy reading books in English.",
+          "She avoids making mistakes by practicing daily.",
+          "They finished studying at midnight.",
+          "Keep practicing and you'll improve!",
+          "I miss living in my hometown."
+        ]
+      },
+      {
+        category: "GERUND RULES",
+        title: "Prepositions + Gerunds",
+        rule: "After prepositions (in, on, at, by, for, about, of, etc.), always use gerunds",
+        examples: [
+          "interested in + gerund",
+          "good at + gerund",
+          "tired of + gerund",
+          "by + gerund (method)",
+          "before/after + gerund"
+        ],
+        sentences: [
+          "I'm interested in learning new languages.",
+          "She's good at solving problems.",
+          "I'm tired of waiting for the bus.",
+          "You can improve by practicing every day.",
+          "After finishing dinner, we went for a walk."
+        ]
+      },
+      {
+        category: "GERUND RULES",
+        title: "Gerunds as Subjects",
+        rule: "Gerunds can be used as the subject of a sentence",
+        examples: [
+          "Swimming is...",
+          "Learning is...",
+          "Traveling is...",
+          "Speaking is...",
+          "Reading is..."
+        ],
+        sentences: [
+          "Swimming is excellent exercise.",
+          "Learning English takes time and effort.",
+          "Traveling broadens your perspective.",
+          "Speaking in public makes me nervous.",
+          "Reading before bed helps me relax."
+        ]
+      },
+      {
+        category: "GERUND RULES",
+        title: "Go + Gerund (Activities)",
+        rule: "Use 'go + gerund' for activities and sports",
+        examples: [
+          "go swimming",
+          "go shopping",
+          "go hiking",
+          "go running",
+          "go skiing"
+        ],
+        sentences: [
+          "Let's go swimming this weekend!",
+          "I go shopping every Saturday.",
+          "They went hiking in the mountains.",
+          "Do you want to go running tomorrow?",
+          "We're going skiing in December."
+        ]
+      },
+      {
+        category: "INFINITIVE RULES",
+        title: "Verbs Followed by Infinitives",
+        rule: "Some verbs are always followed by infinitives (to + base verb)",
+        examples: ["want", "need", "decide", "plan", "hope", "agree", "refuse", "promise", "offer", "manage", "fail", "learn"],
+        sentences: [
+          "I want to improve my English skills.",
+          "She decided to take the exam next month.",
+          "They hope to travel abroad soon.",
+          "He promised to help me with homework.",
+          "We managed to finish the project on time."
+        ]
+      },
+      {
+        category: "INFINITIVE RULES",
+        title: "Adjectives + Infinitives",
+        rule: "Many adjectives are followed by infinitives to express feelings or opinions",
+        examples: [
+          "happy to...",
+          "difficult to...",
+          "easy to...",
+          "important to...",
+          "ready to..."
+        ],
+        sentences: [
+          "I'm happy to meet you!",
+          "English grammar is difficult to master.",
+          "This book is easy to understand.",
+          "It's important to practice regularly.",
+          "Are you ready to start the test?"
+        ]
+      },
+      {
+        category: "INFINITIVE RULES",
+        title: "Verbs + Object + Infinitive",
+        rule: "Some verbs need an object before the infinitive",
+        examples: [
+          "want someone to...",
+          "ask someone to...",
+          "tell someone to...",
+          "expect someone to...",
+          "would like someone to..."
+        ],
+        sentences: [
+          "I want you to help me.",
+          "She asked me to close the window.",
+          "The teacher told us to study harder.",
+          "They expect him to arrive soon.",
+          "I'd like you to meet my family."
+        ]
+      },
+      {
+        category: "SPECIAL CASES",
+        title: "Verbs with Different Meanings",
+        rule: "Some verbs can take both, but the meaning changes",
+        examples: [
+          "remember + gerund = recall a past action",
+          "remember + infinitive = not forget to do something",
+          "stop + gerund = quit an action",
+          "stop + infinitive = pause to do something else",
+          "try + gerund = experiment with something",
+          "try + infinitive = make an effort"
+        ],
+        sentences: [
+          "I remember meeting you last year. (past memory)",
+          "Remember to call me tomorrow. (don't forget)",
+          "He stopped smoking. (quit the habit)",
+          "He stopped to smoke. (paused for a cigarette)",
+          "Try adding more salt. (experiment)",
+          "Try to arrive on time. (make an effort)"
+        ]
+      }
+    ];
+
+    const conversationPrompts = [
+      {
+        situation: "Job Interview",
+        prompt: "What do you enjoy doing in your free time?",
+        hints: ["Use 'enjoy + gerund'", "Example: I enjoy playing tennis..."]
+      },
+      {
+        situation: "Making Plans",
+        prompt: "What do you plan to do this weekend?",
+        hints: ["Use 'plan + infinitive'", "Example: I plan to visit..."]
+      },
+      {
+        situation: "Past Experience",
+        prompt: "Tell me about a time you decided to try something new.",
+        hints: ["Use 'decide + infinitive'", "Use 'enjoy/avoid + gerund'"]
+      },
+      {
+        situation: "Daily Routine",
+        prompt: "What activities do you avoid doing?",
+        hints: ["Use 'avoid + gerund'", "Example: I avoid waking up early..."]
+      }
+    ];
+
+    const practiceExercises = [
+      {
+        id: "ex1",
+        question: "I want ___ (learn) Spanish next year.",
+        answer: "to learn",
+        type: "infinitive"
+      },
+      {
+        id: "ex2",
+        question: "She enjoys ___ (cook) Italian food.",
+        answer: "cooking",
+        type: "gerund"
+      },
+      {
+        id: "ex3",
+        question: "They decided ___ (move) to a new apartment.",
+        answer: "to move",
+        type: "infinitive"
+      },
+      {
+        id: "ex4",
+        question: "I don't mind ___ (help) you with your homework.",
+        answer: "helping",
+        type: "gerund"
+      },
+      {
+        id: "ex5",
+        question: "Remember ___ (lock) the door when you leave.",
+        answer: "to lock",
+        type: "infinitive"
+      },
+      {
+        id: "ex6",
+        question: "I remember ___ (visit) this museum as a child.",
+        answer: "visiting",
+        type: "gerund"
+      },
+      {
+        id: "ex7",
+        question: "He stopped ___ (drink) coffee because it made him nervous.",
+        answer: "drinking",
+        type: "gerund"
+      },
+      {
+        id: "ex8",
+        question: "We need ___ (practice) more before the presentation.",
+        answer: "to practice",
+        type: "infinitive"
+      }
+    ];
+
+    const dataHandler = {
+      onDataChanged(data) {
+        currentRecordCount = data.length;
+        updateProgressDisplay(data);
+      }
+    };
+
+    function updateProgressDisplay(data) {
+      const correctCount = data.filter(d => d.is_correct).length;
+      const totalCount = data.length;
+      const progressEl = document.getElementById('progress-display');
+      
+      if (progressEl && totalCount > 0) {
+        const percentage = Math.round((correctCount / totalCount) * 100);
+        progressEl.innerHTML = `
+          <div class="text-sm font-medium mb-2">Your Progress: ${correctCount}/${totalCount} correct (${percentage}%)</div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="h-2 rounded-full transition-all duration-500" style="width: ${percentage}%; background-color: ${window.elementSdk?.config?.primary_action || defaultConfig.primary_action}"></div>
+          </div>
+        `;
+      }
+    }
+
+    async function saveAnswer(exerciseId, userAnswer, correctAnswer) {
+      if (currentRecordCount >= 999) {
+        showToast("Maximum limit of 999 answers reached. Your progress is saved!", "warning");
+        return;
+      }
+
+      const isCorrect = userAnswer.trim().toLowerCase() === correctAnswer.toLowerCase();
+      
+      const result = await window.dataSdk.create({
+        id: `${exerciseId}_${Date.now()}`,
+        activity_type: "written_practice",
+        user_answer: userAnswer,
+        correct_answer: correctAnswer,
+        is_correct: isCorrect,
+        timestamp: new Date().toISOString()
+      });
+
+      if (result.isOk) {
+        return isCorrect;
+      } else {
+        showToast("Failed to save your answer. Please try again.", "error");
+        return null;
+      }
+    }
+
+    function showToast(message, type = "info") {
+      const toast = document.createElement('div');
+      const bgColor = type === "error" ? "#ef4444" : type === "warning" ? "#f59e0b" : "#10b981";
+      toast.className = "fixed top-4 right-4 px-6 py-3 rounded-lg text-white shadow-lg z-50 fade-in";
+      toast.style.backgroundColor = bgColor;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      render();
+    }
+
+    async function checkAnswer(exerciseId) {
+      const input = document.getElementById(`input-${exerciseId}`);
+      const feedback = document.getElementById(`feedback-${exerciseId}`);
+      const button = document.getElementById(`btn-${exerciseId}`);
+      
+      if (!input || !feedback || !button) return;
+      
+      const userAnswer = input.value.trim();
+      if (!userAnswer) {
+        showToast("Please enter an answer first.", "warning");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Checking...";
+      
+      const exercise = practiceExercises.find(ex => ex.id === exerciseId);
+      const isCorrect = await saveAnswer(exerciseId, userAnswer, exercise.answer);
+      
+      if (isCorrect !== null) {
+        input.className = `w-full px-4 py-2 border-2 rounded-lg ${isCorrect ? 'correct-answer' : 'incorrect-answer'}`;
+        feedback.className = `mt-2 text-sm font-medium ${isCorrect ? 'text-green-700' : 'text-red-700'}`;
+        feedback.textContent = isCorrect 
+          ? "✓ Correct! Well done!" 
+          : `✗ Not quite. The correct answer is: ${exercise.answer}`;
+        
+        button.textContent = "Checked";
+      } else {
+        button.disabled = false;
+        button.textContent = "Check Answer";
+      }
+    }
+
+    function render() {
+      const config = window.elementSdk?.config || defaultConfig;
+      const app = document.getElementById('app');
+      
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      
+      app.style.backgroundColor = config.background_color || defaultConfig.background_color;
+      app.style.color = config.text_color || defaultConfig.text_color;
+      app.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      app.style.fontSize = `${baseSize}px`;
+      
+      let content = `
+        <div class="min-h-full w-full" style="background-color: ${config.background_color || defaultConfig.background_color}">
+          <div class="max-w-5xl mx-auto px-6 py-8">
+            <!-- Header -->
+            <header class="text-center mb-8 fade-in">
+              <h1 class="font-bold mb-2" style="font-size: ${baseSize * 2.5}px; color: ${config.text_color || defaultConfig.text_color}">
+                ${config.app_title || defaultConfig.app_title}
+              </h1>
+              <p class="font-light" style="font-size: ${baseSize * 1.1}px; color: ${config.secondary_action || defaultConfig.secondary_action}">
+                ${config.app_subtitle || defaultConfig.app_subtitle}
+              </p>
+            </header>
+
+            <!-- Progress Display -->
+            <div id="progress-display" class="mb-6 p-4 rounded-lg fade-in" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)"></div>
+
+            <!-- Tab Navigation -->
+            <nav class="flex gap-2 mb-6 border-b-2 overflow-x-auto" style="border-color: ${config.secondary_action || defaultConfig.secondary_action}33">
+              <button onclick="switchTab('explanation')" class="tab-button px-6 py-3 font-medium whitespace-nowrap ${currentTab === 'explanation' ? 'active' : ''}" 
+                style="color: ${currentTab === 'explanation' ? config.primary_action : config.secondary_action}; font-size: ${baseSize * 0.95}px">
+                ${config.explanation_label || defaultConfig.explanation_label}
+              </button>
+              <button onclick="switchTab('examples')" class="tab-button px-6 py-3 font-medium whitespace-nowrap ${currentTab === 'examples' ? 'active' : ''}"
+                style="color: ${currentTab === 'examples' ? config.primary_action : config.secondary_action}; font-size: ${baseSize * 0.95}px">
+                ${config.examples_label || defaultConfig.examples_label}
+              </button>
+              <button onclick="switchTab('conversation')" class="tab-button px-6 py-3 font-medium whitespace-nowrap ${currentTab === 'conversation' ? 'active' : ''}"
+                style="color: ${currentTab === 'conversation' ? config.primary_action : config.secondary_action}; font-size: ${baseSize * 0.95}px">
+                ${config.conversation_label || defaultConfig.conversation_label}
+              </button>
+              <button onclick="switchTab('practice')" class="tab-button px-6 py-3 font-medium whitespace-nowrap ${currentTab === 'practice' ? 'active' : ''}"
+                style="color: ${currentTab === 'practice' ? config.primary_action : config.secondary_action}; font-size: ${baseSize * 0.95}px">
+                ${config.practice_label || defaultConfig.practice_label}
+              </button>
+            </nav>
+
+            <!-- Content Area -->
+            <main class="fade-in">
+      `;
+
+      if (currentTab === 'explanation') {
+        let currentCategory = '';
+        content += `<div class="space-y-6">`;
+        
+        grammarRules.forEach(rule => {
+          // Add category header if it's a new category
+          if (rule.category !== currentCategory) {
+            currentCategory = rule.category;
+            content += `
+              <div class="pt-4 pb-2">
+                <h2 class="font-bold text-center py-3 px-6 rounded-lg" style="font-size: ${baseSize * 1.6}px; color: white; background: linear-gradient(135deg, ${config.primary_action || defaultConfig.primary_action}, ${config.secondary_action || defaultConfig.secondary_action})">
+                  ${rule.category}
+                </h2>
+              </div>
+            `;
+          }
+          
+          content += `
+            <div class="p-6 rounded-xl practice-card" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+              <h3 class="font-semibold mb-3" style="font-size: ${baseSize * 1.4}px; color: ${config.primary_action || defaultConfig.primary_action}">
+                ${rule.title}
+              </h3>
+              <p class="mb-4" style="font-size: ${baseSize * 1.05}px; color: ${config.text_color || defaultConfig.text_color}">
+                ${rule.rule}
+              </p>
+              <div class="mb-4">
+                <p class="font-medium mb-2" style="font-size: ${baseSize * 0.95}px; color: ${config.secondary_action || defaultConfig.secondary_action}">
+                  Common verbs:
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  ${rule.examples.map(ex => `
+                    <span class="px-3 py-1 rounded-full text-sm" style="background-color: ${config.primary_action || defaultConfig.primary_action}22; color: ${config.primary_action || defaultConfig.primary_action}; font-size: ${baseSize * 0.85}px">
+                      ${ex}
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+              <div>
+                <p class="font-medium mb-2" style="font-size: ${baseSize * 0.95}px; color: ${config.secondary_action || defaultConfig.secondary_action}">
+                  Example sentences:
+                </p>
+                <ul class="space-y-2">
+                  ${rule.sentences.map(sentence => `
+                    <li class="flex items-start gap-2" style="font-size: ${baseSize * 0.95}px">
+                      <span style="color: ${config.primary_action || defaultConfig.primary_action}">•</span>
+                      <span>${sentence}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+          `;
+        });
+        
+        content += `</div>`;
+      } else if (currentTab === 'examples') {
+        content += `
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="p-6 rounded-xl" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+              <h3 class="font-semibold mb-4" style="font-size: ${baseSize * 1.3}px; color: ${config.primary_action || defaultConfig.primary_action}">
+                📚 Gerund Examples
+              </h3>
+              <ul class="space-y-3">
+                <li style="font-size: ${baseSize * 0.95}px"><strong>Reading</strong> books improves vocabulary.</li>
+                <li style="font-size: ${baseSize * 0.95}px">I'm good at <strong>speaking</strong> English.</li>
+                <li style="font-size: ${baseSize * 0.95}px">She's interested in <strong>learning</strong> French.</li>
+                <li style="font-size: ${baseSize * 0.95}px">Thank you for <strong>helping</strong> me.</li>
+                <li style="font-size: ${baseSize * 0.95}px">I can't stand <strong>waiting</strong> in long lines.</li>
+                <li style="font-size: ${baseSize * 0.95}px">He quit <strong>smoking</strong> last year.</li>
+              </ul>
+            </div>
+            <div class="p-6 rounded-xl" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+              <h3 class="font-semibold mb-4" style="font-size: ${baseSize * 1.3}px; color: ${config.primary_action || defaultConfig.primary_action}">
+                ✨ Infinitive Examples
+              </h3>
+              <ul class="space-y-3">
+                <li style="font-size: ${baseSize * 0.95}px">I want <strong>to travel</strong> around the world.</li>
+                <li style="font-size: ${baseSize * 0.95}px">She needs <strong>to study</strong> harder.</li>
+                <li style="font-size: ${baseSize * 0.95}px">They decided <strong>to buy</strong> a new car.</li>
+                <li style="font-size: ${baseSize * 0.95}px">We hope <strong>to see</strong> you soon.</li>
+                <li style="font-size: ${baseSize * 0.95}px">He promised <strong>to call</strong> me.</li>
+                <li style="font-size: ${baseSize * 0.95}px">I'm learning <strong>to play</strong> the guitar.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="mt-6 p-6 rounded-xl" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+            <h3 class="font-semibold mb-4" style="font-size: ${baseSize * 1.3}px; color: ${config.primary_action || defaultConfig.primary_action}">
+              🔄 Verbs That Change Meaning
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <p class="font-medium mb-2" style="font-size: ${baseSize}px; color: ${config.secondary_action || defaultConfig.secondary_action}">Remember + Gerund (past memory)</p>
+                <p style="font-size: ${baseSize * 0.95}px">I remember <strong>meeting</strong> her at the party.</p>
+              </div>
+              <div>
+                <p class="font-medium mb-2" style="font-size: ${baseSize}px; color: ${config.secondary_action || defaultConfig.secondary_action}">Remember + Infinitive (don't forget)</p>
+                <p style="font-size: ${baseSize * 0.95}px">Remember <strong>to bring</strong> your passport!</p>
+              </div>
+              <div>
+                <p class="font-medium mb-2" style="font-size: ${baseSize}px; color: ${config.secondary_action || defaultConfig.secondary_action}">Stop + Gerund (quit)</p>
+                <p style="font-size: ${baseSize * 0.95}px">I stopped <strong>eating</strong> fast food.</p>
+              </div>
+              <div>
+                <p class="font-medium mb-2" style="font-size: ${baseSize}px; color: ${config.secondary_action || defaultConfig.secondary_action}">Stop + Infinitive (pause to do)</p>
+                <p style="font-size: ${baseSize * 0.95}px">I stopped <strong>to eat</strong> lunch.</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === 'conversation') {
+        content += `
+          <div class="space-y-6">
+            ${conversationPrompts.map((prompt, idx) => `
+              <div class="p-6 rounded-xl practice-card" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+                <div class="flex items-start gap-4">
+                  <div class="text-3xl">💬</div>
+                  <div class="flex-1">
+                    <h4 class="font-semibold mb-2" style="font-size: ${baseSize * 1.2}px; color: ${config.primary_action || defaultConfig.primary_action}">
+                      ${prompt.situation}
+                    </h4>
+                    <p class="mb-4 font-medium" style="font-size: ${baseSize * 1.05}px; color: ${config.text_color || defaultConfig.text_color}">
+                      "${prompt.prompt}"
+                    </p>
+                    <div class="p-4 rounded-lg" style="background-color: ${config.primary_action || defaultConfig.primary_action}11">
+                      <p class="font-medium mb-2" style="font-size: ${baseSize * 0.9}px; color: ${config.secondary_action || defaultConfig.secondary_action}">
+                        💡 Hints:
+                      </p>
+                      <ul class="space-y-1">
+                        ${prompt.hints.map(hint => `
+                          <li style="font-size: ${baseSize * 0.85}px; color: ${config.text_color || defaultConfig.text_color}">• ${hint}</li>
+                        `).join('')}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+            
+            <div class="p-6 rounded-xl" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+              <h4 class="font-semibold mb-3" style="font-size: ${baseSize * 1.2}px; color: ${config.primary_action || defaultConfig.primary_action}">
+                🎯 Practice Tips
+              </h4>
+              <ul class="space-y-2">
+                <li style="font-size: ${baseSize * 0.95}px">• Practice these prompts with a study partner or teacher</li>
+                <li style="font-size: ${baseSize * 0.95}px">• Record yourself answering and listen back</li>
+                <li style="font-size: ${baseSize * 0.95}px">• Try to use at least 2-3 different gerunds or infinitives in each response</li>
+                <li style="font-size: ${baseSize * 0.95}px">• Focus on natural, conversational language</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === 'practice') {
+        content += `
+          <div class="space-y-6">
+            <div class="p-4 rounded-lg" style="background-color: ${config.primary_action || defaultConfig.primary_action}22">
+              <p style="font-size: ${baseSize * 0.95}px; color: ${config.text_color || defaultConfig.text_color}">
+                <strong>Instructions:</strong> Complete each sentence with the correct form of the verb in parentheses. 
+                Use either the gerund (-ing) or infinitive (to + verb) form.
+              </p>
+            </div>
+            
+            ${practiceExercises.map((exercise, idx) => `
+              <div class="p-6 rounded-xl practice-card" style="background-color: ${config.surface_color || defaultConfig.surface_color}; box-shadow: 0 2px 8px rgba(0,0,0,0.08)">
+                <div class="flex items-start gap-3 mb-4">
+                  <span class="font-bold px-3 py-1 rounded-full" style="background-color: ${config.primary_action || defaultConfig.primary_action}; color: white; font-size: ${baseSize * 0.9}px">
+                    ${idx + 1}
+                  </span>
+                  <p class="flex-1 pt-1" style="font-size: ${baseSize * 1.05}px; color: ${config.text_color || defaultConfig.text_color}">
+                    ${exercise.question}
+                  </p>
+                </div>
+                <div class="ml-12">
+                  <input 
+                    type="text" 
+                    id="input-${exercise.id}"
+                    placeholder="Type your answer here..."
+                    class="w-full px-4 py-2 border-2 rounded-lg focus:outline-none transition-all"
+                    style="border-color: ${config.secondary_action || defaultConfig.secondary_action}44; font-size: ${baseSize * 0.95}px"
+                  />
+                  <div id="feedback-${exercise.id}" class="mt-2 text-sm font-medium"></div>
+                  <button 
+                    id="btn-${exercise.id}"
+                    onclick="checkAnswer('${exercise.id}')"
+                    class="mt-3 px-6 py-2 rounded-lg font-medium transition-all hover:opacity-90"
+                    style="background-color: ${config.primary_action || defaultConfig.primary_action}; color: white; font-size: ${baseSize * 0.9}px"
+                  >
+                    Check Answer
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      content += `
+            </main>
+          </div>
+        </div>
+      `;
+
+      app.innerHTML = content;
+    }
+
+    async function onConfigChange(config) {
+      render();
+    }
+
+    const element = {
+      defaultConfig,
+      onConfigChange,
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_action || defaultConfig.primary_action,
+            set: (value) => {
+              config.primary_action = value;
+              window.elementSdk.setConfig({ primary_action: value });
+            }
+          },
+          {
+            get: () => config.secondary_action || defaultConfig.secondary_action,
+            set: (value) => {
+              config.secondary_action = value;
+              window.elementSdk.setConfig({ secondary_action: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ["app_title", config.app_title || defaultConfig.app_title],
+        ["app_subtitle", config.app_subtitle || defaultConfig.app_subtitle],
+        ["explanation_label", config.explanation_label || defaultConfig.explanation_label],
+        ["examples_label", config.examples_label || defaultConfig.examples_label],
+        ["conversation_label", config.conversation_label || defaultConfig.conversation_label],
+        ["practice_label", config.practice_label || defaultConfig.practice_label]
+      ])
+    };
+
+    async function init() {
+      if (window.elementSdk) {
+        window.elementSdk.init(element);
+      }
+      
+      if (window.dataSdk) {
+        const initResult = await window.dataSdk.init(dataHandler);
+        if (!initResult.isOk) {
+          console.error("Failed to initialize data SDK");
+        }
+      }
+      
+      render();
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b190a9e52709b68',t:'MTc2NjMzNzUzNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
