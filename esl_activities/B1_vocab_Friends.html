@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRIENDS English Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    
+    body {
+      box-sizing: border-box;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.4s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .pulse-once {
+      animation: pulseOnce 0.5s ease-out;
+    }
+    
+    @keyframes pulseOnce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto"></div>
+  <script>
+    const defaultConfig = {
+      app_title: "FRIENDS English Practice",
+      app_subtitle: "Learn English with your favorite TV show!",
+      check_button_text: "Check Answer",
+      next_button_text: "Next Question",
+      progress_label: "Progress",
+      background_color: "#fef3c7",
+      card_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_button_color: "#dc2626",
+      secondary_button_color: "#7c3aed",
+      font_family: "Poppins",
+      font_size: 16
+    };
+
+    const phrases = [
+      {
+        id: "phrase_1",
+        character: "Ross",
+        context: "When something goes wrong",
+        phrase: "We were on a ___!",
+        answer: "break",
+        explanation: "This is Ross's most famous line! He uses it to defend his actions during a relationship pause. In English, 'on a break' means temporarily stopping a relationship. This phrase became iconic because Ross and Rachel argued about it throughout the series.",
+        grammar: "Past continuous tense",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_2",
+        character: "Joey",
+        context: "When greeting someone",
+        phrase: "How you ___?",
+        answer: "doin",
+        explanation: "Joey's signature pickup line! This is a very casual, informal way of saying 'How are you doing?' In standard English, we say 'How are you doing?' but Joey drops the 'are' to sound cool and casual. This is common in informal American English.",
+        grammar: "Present continuous (informal)",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_3",
+        character: "Chandler",
+        context: "When being sarcastic",
+        phrase: "Could I ___ any more...?",
+        answer: "be",
+        explanation: "Chandler uses this sarcastic structure to emphasize something about himself. For example: 'Could I BE any more excited?' The emphasis on 'BE' makes it funny and sarcastic. This structure uses the modal verb 'could' with 'be' to create a rhetorical question.",
+        grammar: "Modal verb 'could' + be",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_4",
+        character: "Monica",
+        context: "When something is important",
+        phrase: "I ___!",
+        answer: "know",
+        explanation: "Monica often says 'I know!' to emphasize that she's already aware of something. It's used when someone tells you something you already understand. The exclamation mark shows strong emotion or emphasis.",
+        grammar: "Simple present tense",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_5",
+        character: "Phoebe",
+        context: "When something is obvious",
+        phrase: "___, duh!",
+        answer: "Obviously",
+        explanation: "'Obviously' means something is very clear or easy to understand. Adding 'duh' makes it more casual and sometimes a bit sarcastic. It's like saying 'Of course! Everyone knows that!' This is informal language used among friends.",
+        grammar: "Adverb",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_6",
+        character: "Rachel",
+        context: "When you don't care",
+        phrase: "It's not a big ___.",
+        answer: "deal",
+        explanation: "'It's not a big deal' is a common expression meaning something is not important or not worth worrying about. A 'deal' here means 'matter' or 'issue'. You can use this to comfort someone or to show something doesn't bother you.",
+        grammar: "Noun phrase",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_7",
+        character: "Ross",
+        context: "When correcting someone",
+        phrase: "We were on a ___!",
+        answer: "break",
+        explanation: "Yes, Ross says this SO many times in the show that we included it twice! This repetition shows how important this phrase is to Ross's character. In real life, repeating yourself too much can be annoying, but it can also show something is very important to you.",
+        grammar: "Past continuous tense",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_8",
+        character: "Joey",
+        context: "When sharing food",
+        phrase: "Joey doesn't ___ food!",
+        answer: "share",
+        explanation: "Joey is famous for loving food and not wanting to share it! This sentence uses the third person singular form. Notice we say 'doesn't share' (not 'don't share') because Joey is one person. This is a common mistake for ESL learners!",
+        grammar: "Simple present negative",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_9",
+        character: "Phoebe",
+        context: "When something smells bad",
+        phrase: "Oh no! What is that ___?",
+        answer: "smell",
+        explanation: "This is a common question when you notice a bad odor. 'Smell' is a noun here. You can also use it as a verb: 'It smells bad.' In questions, we often use 'what' to ask about unknown things.",
+        grammar: "Question with 'what'",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_10",
+        character: "Monica",
+        context: "When things must be perfect",
+        phrase: "I ___ it!",
+        answer: "need",
+        explanation: "Monica is a perfectionist, so she often says 'I need it!' when she wants something done her way. 'Need' expresses necessity or strong desire. It's stronger than 'want'. We use 'need' for things that are important or essential.",
+        grammar: "Simple present tense",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_11",
+        character: "Chandler",
+        context: "When making a joke",
+        phrase: "I'm not great at the ___.",
+        answer: "advice",
+        explanation: "Chandler often makes self-deprecating jokes. 'I'm not great at' means 'I'm not good at' or 'I'm bad at'. This is a polite way to admit you're not skilled at something. Notice 'advice' is an uncountable noun, so we don't say 'advices'.",
+        grammar: "Present tense with 'at'",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_12",
+        character: "Rachel",
+        context: "When surprised",
+        phrase: "Oh my ___!",
+        answer: "God",
+        explanation: "'Oh my God!' is one of the most common expressions of surprise in English. It can express shock, excitement, fear, or disbelief. Some people say 'Oh my gosh!' or 'Oh my goodness!' as alternatives. This is an exclamation, not a question.",
+        grammar: "Exclamation",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_13",
+        character: "Ross",
+        context: "When teaching",
+        phrase: "Let me ___ you something.",
+        answer: "tell",
+        explanation: "'Let me tell you something' is used when you want to share information or give your opinion. 'Let me' is a polite way to ask permission or to introduce what you're about to say. It's followed by the base form of the verb (tell, not telling or told).",
+        grammar: "Imperative with 'let'",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_14",
+        character: "Joey",
+        context: "When acting",
+        phrase: "It's a ___ thing.",
+        answer: "moo",
+        explanation: "Joey once said 'It's a moo point... like a cow's opinion. It doesn't matter.' He meant 'moot point' but said 'moo' instead! A 'moot point' means something that's not worth discussing. This shows how English learners (and native speakers!) can mix up similar-sounding words.",
+        grammar: "Noun phrase",
+        difficulty: "Hard"
+      },
+      {
+        id: "phrase_15",
+        character: "Phoebe",
+        context: "When singing",
+        phrase: "Smelly ___, smelly ___.",
+        answer: "cat",
+        explanation: "This is from Phoebe's famous song 'Smelly Cat'! She sings about a cat that smells bad. The repetition makes it catchy and memorable. In English, we often repeat words for emphasis or in songs. 'Smelly' is an adjective meaning 'having a bad smell'.",
+        grammar: "Adjective + noun",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_16",
+        character: "Monica",
+        context: "When organizing",
+        phrase: "Everything has to be ___.",
+        answer: "perfect",
+        explanation: "Monica is obsessed with perfection! 'Has to be' expresses strong necessity or obligation. It's similar to 'must be'. We use this structure when something is required or very important. 'Perfect' means without any mistakes or flaws.",
+        grammar: "Modal expression 'has to'",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_17",
+        character: "Chandler",
+        context: "When uncomfortable",
+        phrase: "Could this ___ any more awkward?",
+        answer: "be",
+        explanation: "Another example of Chandler's sarcastic structure! 'Awkward' means uncomfortable or embarrassing. This rhetorical question emphasizes how awkward the situation is. The structure 'Could this BE any more [adjective]?' is Chandler's signature way of speaking.",
+        grammar: "Modal verb structure",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_18",
+        character: "Rachel",
+        context: "When working",
+        phrase: "I'm ___ late!",
+        answer: "so",
+        explanation: "'I'm so late!' uses 'so' as an intensifier to emphasize HOW late you are. It's stronger than just saying 'I'm late.' We use 'so' before adjectives to show strong feelings or extreme situations. You can also say 'so happy', 'so tired', 'so excited', etc.",
+        grammar: "Intensifier 'so'",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_19",
+        character: "Ross",
+        context: "When explaining dinosaurs",
+        phrase: "It's not a dinosaur, it's a ___.",
+        answer: "fossil",
+        explanation: "Ross is a paleontologist who studies fossils! A 'fossil' is the preserved remains of an ancient organism. This sentence structure 'It's not X, it's Y' is used to correct someone's mistake. Notice we use 'a' before both 'dinosaur' and 'fossil' because they're singular countable nouns.",
+        grammar: "Correction structure",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_20",
+        character: "Joey",
+        context: "When confused",
+        phrase: "What's not to ___?",
+        answer: "like",
+        explanation: "Joey says this when he thinks something is obviously good. 'What's not to like?' is a rhetorical question meaning 'Everything about this is good!' The structure 'What's not to [verb]?' is used to say something is completely positive. For example: 'What's not to love?'",
+        grammar: "Rhetorical question",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_21",
+        character: "Phoebe",
+        context: "When being honest",
+        phrase: "I don't even ___ what that means.",
+        answer: "know",
+        explanation: "'I don't even know' is stronger than just 'I don't know'. The word 'even' emphasizes that you're completely confused or clueless. This is very common in casual conversation. You can use this when something is too complicated or strange to understand.",
+        grammar: "Negative present with 'even'",
+        difficulty: "Easy"
+      },
+      {
+        id: "phrase_22",
+        character: "Monica",
+        context: "When competing",
+        phrase: "I ___ to win!",
+        answer: "play",
+        explanation: "'I play to win!' means you're very competitive and always try your best to win. Monica is extremely competitive! The structure 'to [verb]' after 'play' shows your purpose or goal. This is called an infinitive of purpose.",
+        grammar: "Infinitive of purpose",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_23",
+        character: "Chandler",
+        context: "When joking about his job",
+        phrase: "Nobody ___ what I do.",
+        answer: "knows",
+        explanation: "Throughout the show, nobody understands Chandler's job! 'Nobody knows' means 'no person knows'. Notice we use 'knows' (with 's') because 'nobody' is treated as singular. This is a common mistake - negative words like 'nobody', 'nothing', 'nowhere' take singular verbs.",
+        grammar: "Negative subject + singular verb",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_24",
+        character: "Rachel",
+        context: "When making decisions",
+        phrase: "I have to ___ a choice.",
+        answer: "make",
+        explanation: "'Make a choice' is a common collocation in English. We 'make' decisions, choices, and plans. We don't 'do' a choice or 'take' a choice. Learning which verbs go with which nouns (collocations) is important for sounding natural in English.",
+        grammar: "Collocation with 'make'",
+        difficulty: "Medium"
+      },
+      {
+        id: "phrase_25",
+        character: "Ross",
+        context: "When being dramatic",
+        phrase: "This is the ___ day ever!",
+        answer: "worst",
+        explanation: "'The worst day ever' means the most terrible day in your entire life. 'Worst' is the superlative form of 'bad' (bad → worse → worst). We use 'the' before superlatives. Ross tends to be dramatic, so he uses extreme language like this often!",
+        grammar: "Superlative adjective",
+        difficulty: "Medium"
+      }
+    ];
+
+    let currentPhraseIndex = 0;
+    let userProgress = [];
+    let isAnswerChecked = false;
+    let isLoading = false;
+
+    const dataHandler = {
+      onDataChanged(data) {
+        userProgress = data;
+        updateProgressDisplay();
+      }
+    };
+
+    async function initializeApp() {
+      const initResult = await window.dataSdk.init(dataHandler);
+      if (!initResult.isOk) {
+        console.error("Failed to initialize data SDK");
+      }
+      
+      await window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          updateUIWithConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.card_color || defaultConfig.card_color,
+              set: (value) => {
+                config.card_color = value;
+                window.elementSdk.setConfig({ card_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.primary_button_color || defaultConfig.primary_button_color,
+              set: (value) => {
+                config.primary_button_color = value;
+                window.elementSdk.setConfig({ primary_button_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_button_color || defaultConfig.secondary_button_color,
+              set: (value) => {
+                config.secondary_button_color = value;
+                window.elementSdk.setConfig({ secondary_button_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["app_subtitle", config.app_subtitle || defaultConfig.app_subtitle],
+          ["check_button_text", config.check_button_text || defaultConfig.check_button_text],
+          ["next_button_text", config.next_button_text || defaultConfig.next_button_text],
+          ["progress_label", config.progress_label || defaultConfig.progress_label]
+        ])
+      });
+      
+      renderApp();
+    }
+
+    function updateUIWithConfig(config) {
+      const appEl = document.getElementById('app');
+      if (appEl) {
+        appEl.style.backgroundColor = config.background_color || defaultConfig.background_color;
+      }
+      
+      const cardEl = document.getElementById('practice-card');
+      if (cardEl) {
+        cardEl.style.backgroundColor = config.card_color || defaultConfig.card_color;
+      }
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      const titleEl = document.getElementById('app-title');
+      if (titleEl) {
+        titleEl.textContent = config.app_title || defaultConfig.app_title;
+        titleEl.style.fontSize = `${baseSize * 2}px`;
+        titleEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const subtitleEl = document.getElementById('app-subtitle');
+      if (subtitleEl) {
+        subtitleEl.textContent = config.app_subtitle || defaultConfig.app_subtitle;
+        subtitleEl.style.fontSize = `${baseSize * 1.125}px`;
+        subtitleEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const characterEl = document.getElementById('character-name');
+      if (characterEl) {
+        characterEl.style.fontSize = `${baseSize * 1.5}px`;
+        characterEl.style.color = config.primary_button_color || defaultConfig.primary_button_color;
+      }
+      
+      const contextEl = document.getElementById('context-text');
+      if (contextEl) {
+        contextEl.style.fontSize = `${baseSize * 0.875}px`;
+        contextEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const phraseEl = document.getElementById('phrase-text');
+      if (phraseEl) {
+        phraseEl.style.fontSize = `${baseSize * 1.25}px`;
+        phraseEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const grammarEl = document.getElementById('grammar-label');
+      if (grammarEl) {
+        grammarEl.style.fontSize = `${baseSize * 0.875}px`;
+        grammarEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const checkBtn = document.getElementById('check-button');
+      if (checkBtn) {
+        checkBtn.textContent = config.check_button_text || defaultConfig.check_button_text;
+        checkBtn.style.fontSize = `${baseSize}px`;
+        checkBtn.style.backgroundColor = config.primary_button_color || defaultConfig.primary_button_color;
+      }
+      
+      const nextBtn = document.getElementById('next-button');
+      if (nextBtn) {
+        nextBtn.textContent = config.next_button_text || defaultConfig.next_button_text;
+        nextBtn.style.fontSize = `${baseSize}px`;
+        nextBtn.style.backgroundColor = config.secondary_button_color || defaultConfig.secondary_button_color;
+      }
+      
+      const progressLabelEl = document.getElementById('progress-label');
+      if (progressLabelEl) {
+        progressLabelEl.textContent = config.progress_label || defaultConfig.progress_label;
+        progressLabelEl.style.fontSize = `${baseSize * 0.875}px`;
+        progressLabelEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const progressCountEl = document.getElementById('progress-count');
+      if (progressCountEl) {
+        progressCountEl.style.fontSize = `${baseSize * 0.875}px`;
+        progressCountEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      
+      const feedbackEl = document.getElementById('feedback');
+      if (feedbackEl) {
+        feedbackEl.style.fontSize = `${baseSize}px`;
+      }
+      
+      const explanationEl = document.getElementById('explanation');
+      if (explanationEl) {
+        explanationEl.style.fontSize = `${baseSize * 0.875}px`;
+        explanationEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+    }
+
+    function renderApp() {
+      const config = window.elementSdk?.config || defaultConfig;
+      const currentPhrase = phrases[currentPhraseIndex];
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="min-h-full w-full flex items-center justify-center p-6" style="background-color: ${config.background_color || defaultConfig.background_color};">
+          <div class="w-full max-w-2xl">
+            
+            <!-- Help Button -->
+            <button 
+              id="help-button"
+              class="fixed top-4 right-4 w-12 h-12 rounded-full text-white font-bold shadow-lg transition-all hover:opacity-90 active:scale-95 z-50"
+              style="background-color: ${config.secondary_button_color || defaultConfig.secondary_button_color}; font-size: ${baseSize * 1.25}px;"
+              title="Show Instructions"
+            >
+              ?
+            </button>
+            <div class="text-center mb-8 fade-in">
+              <h1 id="app-title" class="font-bold mb-2" style="font-size: ${baseSize * 2}px; color: ${config.text_color || defaultConfig.text_color};">
+                ${config.app_title || defaultConfig.app_title}
+              </h1>
+              <p id="app-subtitle" class="opacity-80" style="font-size: ${baseSize * 1.125}px; color: ${config.text_color || defaultConfig.text_color};">
+                ${config.app_subtitle || defaultConfig.app_subtitle}
+              </p>
+            </div>
+
+            <div id="practice-card" class="rounded-2xl shadow-2xl p-8 fade-in" style="background-color: ${config.card_color || defaultConfig.card_color};">
+              <div class="mb-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 id="character-name" class="font-bold" style="font-size: ${baseSize * 1.5}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                      ${currentPhrase.character}
+                    </h2>
+                    <p id="context-text" class="opacity-70" style="font-size: ${baseSize * 0.875}px; color: ${config.text_color || defaultConfig.text_color};">
+                      ${currentPhrase.context}
+                    </p>
+                  </div>
+                  <div class="text-4xl">☕</div>
+                </div>
+                
+                <div class="rounded-lg p-6 mb-4" style="background-color: ${config.background_color || defaultConfig.background_color};">
+                  <p id="phrase-text" class="font-semibold mb-4" style="font-size: ${baseSize * 1.25}px; color: ${config.text_color || defaultConfig.text_color};">
+                    "${currentPhrase.phrase}"
+                  </p>
+                  
+                  <input 
+                    type="text" 
+                    id="answer-input"
+                    placeholder="Type your answer here..."
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none transition-colors"
+                    style="font-size: ${baseSize}px;"
+                  />
+                </div>
+
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex gap-2">
+                    <span id="grammar-label" class="px-3 py-1 rounded-full" style="font-size: ${baseSize * 0.875}px; background-color: ${config.secondary_button_color || defaultConfig.secondary_button_color}; color: white;">
+                      ${currentPhrase.grammar}
+                    </span>
+                    <span class="px-3 py-1 rounded-full ${currentPhrase.difficulty === 'Easy' ? 'bg-green-500' : currentPhrase.difficulty === 'Medium' ? 'bg-yellow-500' : 'bg-red-500'} text-white" style="font-size: ${baseSize * 0.875}px;">
+                      ${currentPhrase.difficulty}
+                    </span>
+                  </div>
+                  <div class="text-right">
+                    <p id="progress-label" class="opacity-70" style="font-size: ${baseSize * 0.875}px; color: ${config.text_color || defaultConfig.text_color};">
+                      ${config.progress_label || defaultConfig.progress_label}
+                    </p>
+                    <p id="progress-count" class="font-semibold" style="font-size: ${baseSize * 0.875}px; color: ${config.text_color || defaultConfig.text_color};">
+                      ${currentPhraseIndex + 1} / ${phrases.length}
+                    </p>
+                  </div>
+                </div>
+
+                <div id="feedback" class="mb-4 p-4 rounded-lg hidden" style="font-size: ${baseSize}px;"></div>
+                
+                <div id="explanation" class="mb-4 p-4 rounded-lg hidden" style="font-size: ${baseSize * 0.875}px; background-color: ${config.background_color || defaultConfig.background_color}; color: ${config.text_color || defaultConfig.text_color};">
+                </div>
+
+                <div class="flex gap-3">
+                  <button 
+                    id="check-button"
+                    class="flex-1 py-3 px-6 rounded-lg text-white font-semibold transition-all hover:opacity-90 active:scale-95"
+                    style="font-size: ${baseSize}px; background-color: ${config.primary_button_color || defaultConfig.primary_button_color};"
+                  >
+                    ${config.check_button_text || defaultConfig.check_button_text}
+                  </button>
+                  
+                  <button 
+                    id="next-button"
+                    class="flex-1 py-3 px-6 rounded-lg text-white font-semibold transition-all hover:opacity-90 active:scale-95 hidden"
+                    style="font-size: ${baseSize}px; background-color: ${config.secondary_button_color || defaultConfig.secondary_button_color};"
+                  >
+                    ${config.next_button_text || defaultConfig.next_button_text}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('check-button').addEventListener('click', checkAnswer);
+      document.getElementById('next-button').addEventListener('click', nextQuestion);
+      document.getElementById('help-button').addEventListener('click', showInstructions);
+      document.getElementById('answer-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !isAnswerChecked) {
+          checkAnswer();
+        }
+      });
+    }
+
+    function showInstructions() {
+      const config = window.elementSdk?.config || defaultConfig;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      const modal = document.createElement('div');
+      modal.id = 'instructions-modal';
+      modal.className = 'fixed inset-0 flex items-center justify-center p-4 z-50';
+      modal.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+      modal.innerHTML = `
+        <div class="rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[90%] overflow-y-auto fade-in" style="background-color: ${config.card_color || defaultConfig.card_color};">
+          <div class="flex justify-between items-start mb-6">
+            <h2 class="font-bold" style="font-size: ${baseSize * 1.75}px; color: ${config.text_color || defaultConfig.text_color};">
+              📚 How to Use This App
+            </h2>
+            <button id="close-modal" class="text-3xl hover:opacity-70 transition-opacity" style="color: ${config.text_color || defaultConfig.text_color};">
+              ×
+            </button>
+          </div>
+          
+          <div class="space-y-6" style="color: ${config.text_color || defaultConfig.text_color};">
+            <section>
+              <h3 class="font-semibold mb-2" style="font-size: ${baseSize * 1.25}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                🎯 What You'll Learn
+              </h3>
+              <p style="font-size: ${baseSize}px; line-height: 1.6;">
+                Practice 25 authentic phrases from the TV show FRIENDS! Each exercise helps you learn:
+              </p>
+              <ul class="list-disc list-inside mt-2 space-y-1" style="font-size: ${baseSize * 0.9375}px; line-height: 1.6;">
+                <li><strong>Common expressions</strong> used by native English speakers</li>
+                <li><strong>Grammar structures</strong> in real conversational contexts</li>
+                <li><strong>Cultural references</strong> that make English more natural</li>
+                <li><strong>Informal language</strong> used among friends</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3 class="font-semibold mb-2" style="font-size: ${baseSize * 1.25}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                📝 How to Practice
+              </h3>
+              <ol class="list-decimal list-inside space-y-2" style="font-size: ${baseSize * 0.9375}px; line-height: 1.6;">
+                <li><strong>Read the phrase</strong> - Look at the character, context, and the sentence with a blank</li>
+                <li><strong>Type your answer</strong> - Fill in the missing word in the text box</li>
+                <li><strong>Check your answer</strong> - Click "Check Answer" or press Enter</li>
+                <li><strong>Read the explanation</strong> - Learn why the answer is correct and how to use it</li>
+                <li><strong>Move to next</strong> - Click "Next Question" to continue practicing</li>
+              </ol>
+            </section>
+
+            <section>
+              <h3 class="font-semibold mb-2" style="font-size: ${baseSize * 1.25}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                🎨 Difficulty Levels
+              </h3>
+              <div class="space-y-2" style="font-size: ${baseSize * 0.9375}px; line-height: 1.6;">
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 rounded-full bg-green-500 text-white text-sm">Easy</span>
+                  <span>Basic vocabulary and simple grammar structures</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 rounded-full bg-yellow-500 text-white text-sm">Medium</span>
+                  <span>More complex expressions and grammar patterns</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 rounded-full bg-red-500 text-white text-sm">Hard</span>
+                  <span>Advanced idioms and tricky language concepts</span>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h3 class="font-semibold mb-2" style="font-size: ${baseSize * 1.25}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                💡 Learning Tips
+              </h3>
+              <ul class="list-disc list-inside space-y-1" style="font-size: ${baseSize * 0.9375}px; line-height: 1.6;">
+                <li>Read the <strong>context</strong> carefully - it gives you hints!</li>
+                <li>Pay attention to the <strong>grammar label</strong> - it tells you what structure to use</li>
+                <li>Don't worry about mistakes - they help you learn!</li>
+                <li>Read the <strong>explanations</strong> even when you're correct - they teach you more</li>
+                <li>Try to use these phrases in your own conversations</li>
+                <li>Watch FRIENDS episodes to hear these phrases in action!</li>
+              </ul>
+            </section>
+
+            <section>
+              <h3 class="font-semibold mb-2" style="font-size: ${baseSize * 1.25}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                📊 Your Progress
+              </h3>
+              <p style="font-size: ${baseSize * 0.9375}px; line-height: 1.6;">
+                All your answers are automatically saved to your Canva Sheet! You can:
+              </p>
+              <ul class="list-disc list-inside mt-2 space-y-1" style="font-size: ${baseSize * 0.9375}px; line-height: 1.6;">
+                <li>Track which phrases you've practiced</li>
+                <li>See which answers you got correct</li>
+                <li>Review your learning history anytime</li>
+                <li>Practice the same phrases multiple times to improve</li>
+              </ul>
+            </section>
+
+            <div class="mt-8 p-4 rounded-lg" style="background-color: ${config.background_color || defaultConfig.background_color};">
+              <p class="text-center font-semibold" style="font-size: ${baseSize}px; color: ${config.primary_button_color || defaultConfig.primary_button_color};">
+                Ready to start? Close this guide and begin your practice! 🚀
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      document.getElementById('close-modal').addEventListener('click', () => {
+        modal.remove();
+      });
+      
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+    }
+
+    async function checkAnswer() {
+      if (isLoading || isAnswerChecked) return;
+      
+      const input = document.getElementById('answer-input');
+      const userAnswer = input.value.trim().toLowerCase();
+      const currentPhrase = phrases[currentPhraseIndex];
+      const correctAnswer = currentPhrase.answer.toLowerCase();
+      
+      if (!userAnswer) {
+        showToast("Please enter an answer first!", "#ef4444");
+        return;
+      }
+      
+      isLoading = true;
+      const checkBtn = document.getElementById('check-button');
+      checkBtn.disabled = true;
+      checkBtn.style.opacity = '0.5';
+      checkBtn.textContent = 'Checking...';
+      
+      const isCorrect = userAnswer === correctAnswer;
+      
+      const result = await window.dataSdk.create({
+        phrase_id: currentPhrase.id,
+        user_answer: userAnswer,
+        is_correct: isCorrect,
+        completed_at: new Date().toISOString()
+      });
+      
+      isLoading = false;
+      checkBtn.disabled = false;
+      checkBtn.style.opacity = '1';
+      const config = window.elementSdk?.config || defaultConfig;
+      checkBtn.textContent = config.check_button_text || defaultConfig.check_button_text;
+      
+      if (!result.isOk) {
+        showToast("Error saving your answer. Please try again.", "#ef4444");
+        return;
+      }
+      
+      isAnswerChecked = true;
+      input.disabled = true;
+      
+      const feedback = document.getElementById('feedback');
+      const explanation = document.getElementById('explanation');
+      const nextBtn = document.getElementById('next-button');
+      
+      feedback.classList.remove('hidden');
+      explanation.classList.remove('hidden');
+      checkBtn.classList.add('hidden');
+      nextBtn.classList.remove('hidden');
+      
+      if (isCorrect) {
+        feedback.style.backgroundColor = '#dcfce7';
+        feedback.style.color = '#166534';
+        feedback.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">✅</span>
+            <span class="font-semibold">Correct! Great job!</span>
+          </div>
+        `;
+        feedback.classList.add('pulse-once');
+      } else {
+        feedback.style.backgroundColor = '#fee2e2';
+        feedback.style.color = '#991b1b';
+        feedback.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">❌</span>
+            <span class="font-semibold">Not quite. The answer is: <strong>"${currentPhrase.answer}"</strong></span>
+          </div>
+        `;
+      }
+      
+      explanation.innerHTML = `
+        <p class="font-semibold mb-2">💡 Explanation:</p>
+        <p>${currentPhrase.explanation}</p>
+      `;
+    }
+
+    function nextQuestion() {
+      if (currentPhraseIndex < phrases.length - 1) {
+        currentPhraseIndex++;
+        isAnswerChecked = false;
+        renderApp();
+      } else {
+        showCompletionScreen();
+      }
+    }
+
+    function showCompletionScreen() {
+      const config = window.elementSdk?.config || defaultConfig;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const correctCount = userProgress.filter(p => p.is_correct).length;
+      const totalCount = userProgress.length;
+      const percentage = Math.round((correctCount / totalCount) * 100);
+      
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="min-h-full w-full flex items-center justify-center p-6" style="background-color: ${config.background_color || defaultConfig.background_color};">
+          <div class="w-full max-w-2xl text-center">
+            <div class="rounded-2xl shadow-2xl p-12 fade-in" style="background-color: ${config.card_color || defaultConfig.card_color};">
+              <div class="text-6xl mb-6">🎉</div>
+              <h2 class="font-bold mb-4" style="font-size: ${baseSize * 2}px; color: ${config.text_color || defaultConfig.text_color};">
+                Practice Complete!
+              </h2>
+              <p class="mb-8" style="font-size: ${baseSize * 1.25}px; color: ${config.text_color || defaultConfig.text_color};">
+                You got <strong>${correctCount}</strong> out of <strong>${totalCount}</strong> correct (${percentage}%)
+              </p>
+              <button 
+                id="restart-button"
+                class="py-3 px-8 rounded-lg text-white font-semibold transition-all hover:opacity-90 active:scale-95"
+                style="font-size: ${baseSize}px; background-color: ${config.primary_button_color || defaultConfig.primary_button_color};"
+              >
+                Practice Again
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('restart-button').addEventListener('click', () => {
+        currentPhraseIndex = 0;
+        isAnswerChecked = false;
+        renderApp();
+      });
+    }
+
+    function updateProgressDisplay() {
+      const progressCount = document.getElementById('progress-count');
+      if (progressCount) {
+        const config = window.elementSdk?.config || defaultConfig;
+        progressCount.style.color = config.text_color || defaultConfig.text_color;
+      }
+    }
+
+    function showToast(message, bgColor) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: ${bgColor};
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in;
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    initializeApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b42097496dfb999',t:'MTc2Njc2NzQwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
