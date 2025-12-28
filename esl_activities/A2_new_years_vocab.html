@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Year ESL Practice</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .vocab-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .vocab-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .activity-option {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .activity-option:hover {
+      transform: translateX(4px);
+    }
+    
+    .activity-option.correct {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+    
+    .activity-option.incorrect {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+    }
+    
+    .conversation-card {
+      transition: all 0.3s;
+    }
+    
+    .conversation-card:hover {
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .sparkle {
+      animation: sparkle 2s infinite;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full h-full overflow-auto"></div>
+  <script>
+    const defaultConfig = {
+      background_color: "#fef3c7",
+      surface_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_action_color: "#f59e0b",
+      secondary_action_color: "#8b5cf6",
+      font_family: "Poppins",
+      font_size: 16,
+      main_title: "New Year ESL Practice",
+      subtitle: "Learn vocabulary and practice conversations about celebrating the New Year",
+      vocab_title: "Essential Vocabulary",
+      activities_title: "Practice Activities",
+      conversation_title: "Conversation Prompts"
+    };
+
+    const vocabularyData = [
+      { term: "Resolution", definition: "A promise to yourself to do or not do something", example: "My resolution is to exercise more." },
+      { term: "Celebrate", definition: "To do something special for an important event", example: "We celebrate New Year with fireworks." },
+      { term: "Countdown", definition: "Counting backwards to zero, especially before midnight", example: "Everyone joined the countdown: 10, 9, 8..." },
+      { term: "Fireworks", definition: "Colorful explosions in the sky for celebrations", example: "The fireworks display was beautiful." },
+      { term: "Toast", definition: "To raise glasses and drink together to celebrate", example: "Let's toast to a happy new year!" },
+      { term: "Tradition", definition: "A custom passed down through generations", example: "Eating grapes at midnight is a Spanish tradition." },
+      { term: "Reflect", definition: "To think carefully about the past", example: "I like to reflect on the past year." },
+      { term: "Fresh start", definition: "A new beginning or opportunity", example: "The new year gives us a fresh start." }
+    ];
+
+    const activities = [
+      {
+        question: "Complete the sentence: At midnight, we do a _____ from 10 to 1.",
+        options: ["countdown", "celebration", "resolution", "tradition"],
+        correct: 0
+      },
+      {
+        question: "What do you call a promise you make to yourself for the new year?",
+        options: ["tradition", "toast", "resolution", "reflection"],
+        correct: 2
+      },
+      {
+        question: "When you raise your glass and drink with others, you make a _____.",
+        options: ["firework", "toast", "countdown", "fresh start"],
+        correct: 1
+      },
+      {
+        question: "Colorful explosions in the sky are called _____.",
+        options: ["celebrations", "fireworks", "traditions", "reflections"],
+        correct: 1
+      }
+    ];
+
+    const conversationPrompts = [
+      {
+        level: "Beginner",
+        prompts: [
+          "What is your favorite way to celebrate New Year?",
+          "Do you make New Year's resolutions? What is one resolution you have?",
+          "What time do you usually go to bed on New Year's Eve?",
+          "Do you watch fireworks on New Year's Eve?"
+        ]
+      },
+      {
+        level: "Intermediate",
+        prompts: [
+          "Describe a memorable New Year's celebration from your past.",
+          "What traditions does your family have for New Year's?",
+          "Do you think New Year's resolutions are helpful? Why or why not?",
+          "How do people in your country typically celebrate the New Year?"
+        ]
+      },
+      {
+        level: "Advanced",
+        prompts: [
+          "Compare and contrast New Year celebrations in different cultures you know about.",
+          "Discuss the psychological benefits of making New Year's resolutions.",
+          "What do you think makes a New Year's resolution successful?",
+          "Reflect on how New Year celebrations have changed over the years in your country."
+        ]
+      }
+    ];
+
+    let activityAnswers = new Array(activities.length).fill(null);
+
+    async function onConfigChange(config) {
+      const app = document.getElementById('app');
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Inter, sans-serif';
+      const headingFontStack = 'Poppins, sans-serif';
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      app.style.backgroundColor = backgroundColor;
+      app.style.color = textColor;
+      app.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      app.style.fontSize = `${baseSize}px`;
+
+      app.innerHTML = `
+        <div class="w-full min-h-full" style="background-color: ${backgroundColor};">
+          <div class="max-w-6xl mx-auto px-6 py-12">
+            <!-- Header -->
+            <header class="text-center mb-16">
+              <div class="inline-block mb-4 sparkle" style="font-size: ${baseSize * 3}px;">🎉</div>
+              <h1 class="mb-4" style="font-family: ${customFont}, ${headingFontStack}; font-size: ${baseSize * 2.5}px; color: ${textColor}; font-weight: 700;">
+                ${config.main_title || defaultConfig.main_title}
+              </h1>
+              <p class="max-w-2xl mx-auto" style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 1.1}px; color: ${textColor}; opacity: 0.8;">
+                ${config.subtitle || defaultConfig.subtitle}
+              </p>
+            </header>
+
+            <!-- Vocabulary Section -->
+            <section class="mb-16">
+              <h2 class="mb-8 flex items-center justify-center gap-3" style="font-family: ${customFont}, ${headingFontStack}; font-size: ${baseSize * 2}px; color: ${textColor}; font-weight: 600;">
+                <span style="font-size: ${baseSize * 1.8}px;">📚</span>
+                ${config.vocab_title || defaultConfig.vocab_title}
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                ${vocabularyData.map(vocab => `
+                  <div class="vocab-card p-6 rounded-xl" style="background-color: ${surfaceColor}; border: 2px solid ${primaryColor};">
+                    <h3 class="mb-2" style="font-family: ${customFont}, ${headingFontStack}; font-size: ${baseSize * 1.3}px; color: ${primaryColor}; font-weight: 600;">
+                      ${vocab.term}
+                    </h3>
+                    <p class="mb-3" style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 0.9}px; color: ${textColor}; opacity: 0.8;">
+                      ${vocab.definition}
+                    </p>
+                    <p class="italic" style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 0.85}px; color: ${secondaryColor};">
+                      "${vocab.example}"
+                    </p>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <!-- Activities Section -->
+            <section class="mb-16">
+              <h2 class="mb-8 flex items-center justify-center gap-3" style="font-family: ${customFont}, ${headingFontStack}; font-size: ${baseSize * 2}px; color: ${textColor}; font-weight: 600;">
+                <span style="font-size: ${baseSize * 1.8}px;">✏️</span>
+                ${config.activities_title || defaultConfig.activities_title}
+              </h2>
+              <div class="max-w-3xl mx-auto space-y-8">
+                ${activities.map((activity, index) => `
+                  <div class="p-8 rounded-xl" style="background-color: ${surfaceColor};">
+                    <p class="mb-6" style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 1.1}px; color: ${textColor}; font-weight: 500;">
+                      ${index + 1}. ${activity.question}
+                    </p>
+                    <div class="space-y-3">
+                      ${activity.options.map((option, optIndex) => `
+                        <div 
+                          class="activity-option p-4 rounded-lg border-2 ${activityAnswers[index] === optIndex ? (optIndex === activity.correct ? 'correct' : 'incorrect') : ''}"
+                          style="background-color: ${activityAnswers[index] === optIndex ? (optIndex === activity.correct ? '#d1fae5' : '#fee2e2') : surfaceColor}; border-color: ${activityAnswers[index] === optIndex ? (optIndex === activity.correct ? '#10b981' : '#ef4444') : '#e5e7eb'}; font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize}px; color: ${textColor};"
+                          data-activity="${index}"
+                          data-option="${optIndex}"
+                        >
+                          ${String.fromCharCode(65 + optIndex)}. ${option}
+                          ${activityAnswers[index] === optIndex ? (optIndex === activity.correct ? ' ✓' : ' ✗') : ''}
+                        </div>
+                      `).join('')}
+                    </div>
+                    ${activityAnswers[index] !== null && activityAnswers[index] === activity.correct ? `
+                      <p class="mt-4" style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 0.9}px; color: #10b981; font-weight: 500;">
+                        🎉 Correct! Great job!
+                      </p>
+                    ` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <!-- Conversation Prompts Section -->
+            <section class="mb-16">
+              <h2 class="mb-8 flex items-center justify-center gap-3" style="font-family: ${customFont}, ${headingFontStack}; font-size: ${baseSize * 2}px; color: ${textColor}; font-weight: 600;">
+                <span style="font-size: ${baseSize * 1.8}px;">💬</span>
+                ${config.conversation_title || defaultConfig.conversation_title}
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                ${conversationPrompts.map(section => `
+                  <div class="conversation-card p-8 rounded-xl" style="background-color: ${surfaceColor};">
+                    <div class="inline-block px-4 py-2 rounded-full mb-6" style="background-color: ${section.level === 'Beginner' ? primaryColor : section.level === 'Intermediate' ? secondaryColor : textColor}; color: white; font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 0.85}px; font-weight: 600;">
+                      ${section.level}
+                    </div>
+                    <ul class="space-y-4">
+                      ${section.prompts.map(prompt => `
+                        <li class="flex gap-3" style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 0.95}px; color: ${textColor};">
+                          <span style="color: ${primaryColor};">•</span>
+                          <span>${prompt}</span>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                `).join('')}
+              </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center pt-8" style="border-top: 2px solid ${primaryColor};">
+              <p style="font-family: ${customFont}, ${baseFontStack}; font-size: ${baseSize * 0.9}px; color: ${textColor}; opacity: 0.7;">
+                Practice these words and questions with a partner or teacher! 🌟
+              </p>
+            </footer>
+          </div>
+        </div>
+      `;
+
+      // Add event listeners for activity options
+      document.querySelectorAll('.activity-option').forEach(option => {
+        option.addEventListener('click', function() {
+          const activityIndex = parseInt(this.dataset.activity);
+          const optionIndex = parseInt(this.dataset.option);
+          
+          if (activityAnswers[activityIndex] === null) {
+            activityAnswers[activityIndex] = optionIndex;
+            onConfigChange(window.elementSdk.config);
+          }
+        });
+      });
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              window.elementSdk.setConfig({ secondary_action_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["subtitle", config.subtitle || defaultConfig.subtitle],
+        ["vocab_title", config.vocab_title || defaultConfig.vocab_title],
+        ["activities_title", config.activities_title || defaultConfig.activities_title],
+        ["conversation_title", config.conversation_title || defaultConfig.conversation_title]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b523e2622a13204',t:'MTc2NjkzNzMzNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
