@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geopolitical Terms Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&amp;family=DM+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .flip-card {
+      perspective: 1000px;
+    }
+    
+    .flip-card-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .flip-card-front, .flip-card-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    
+    .term-card {
+      transition: all 0.3s ease;
+    }
+    
+    .term-card:hover {
+      transform: translateY(-4px);
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-in {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+    
+    .tab-active {
+      border-bottom: 3px solid;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="w-full h-full overflow-auto" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+   <div class="max-w-5xl mx-auto px-4 py-8"><!-- Header -->
+    <header class="text-center mb-10 animate-in">
+     <div class="inline-flex items-center gap-3 mb-4">
+      <svg width="48" height="48" viewbox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="#e94560" stroke-width="2" fill="none" /> <ellipse cx="24" cy="24" rx="10" ry="22" stroke="#e94560" stroke-width="1.5" fill="none" /> <line x1="2" y1="24" x2="46" y2="24" stroke="#e94560" stroke-width="1.5" /> <line x1="24" y1="2" x2="24" y2="46" stroke="#e94560" stroke-width="1.5" /> <ellipse cx="24" cy="14" rx="18" ry="6" stroke="#e94560" stroke-width="1" fill="none" opacity="0.6" /> <ellipse cx="24" cy="34" rx="18" ry="6" stroke="#e94560" stroke-width="1" fill="none" opacity="0.6" />
+      </svg>
+      <h1 id="app-title" class="text-4xl md:text-5xl font-bold" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">Geopolitical Terms</h1>
+     </div>
+     <p id="app-subtitle" class="text-lg" style="font-family: 'DM Sans', sans-serif; color: #8d99ae;">Master essential vocabulary for international relations • English–Czech</p>
+    </header><!-- Navigation Tabs -->
+    <nav class="flex justify-center gap-2 mb-8"><button onclick="switchTab('glossary')" id="tab-glossary" class="px-6 py-3 rounded-t-lg font-medium transition-all tab-active" style="font-family: 'DM Sans', sans-serif; background: #2b2d42; color: #e94560; border-color: #e94560;"> 📖 Glossary </button> <button onclick="switchTab('flashcards')" id="tab-flashcards" class="px-6 py-3 rounded-t-lg font-medium transition-all" style="font-family: 'DM Sans', sans-serif; background: #2b2d42; color: #8d99ae;"> 🎴 Flip Cards </button> <button onclick="switchTab('quiz')" id="tab-quiz" class="px-6 py-3 rounded-t-lg font-medium transition-all" style="font-family: 'DM Sans', sans-serif; background: #2b2d42; color: #8d99ae;"> ✓ Quiz </button>
+    </nav><!-- Glossary Section -->
+    <section id="glossary-section" class="animate-in">
+     <div class="rounded-2xl p-6 mb-6" style="background: #2b2d42;">
+      <div class="flex flex-col md:flex-row gap-4 items-center justify-between mb-6">
+       <h2 class="text-2xl font-semibold" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">📚 Term Glossary</h2>
+       <div class="flex gap-2 flex-wrap justify-center"><button onclick="filterCategory('all')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all" style="background: #e94560; color: #edf2f4;">All</button> <button onclick="filterCategory('politics')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all" style="background: #3d405b; color: #8d99ae;">Politics</button> <button onclick="filterCategory('economics')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all" style="background: #3d405b; color: #8d99ae;">Economics</button> <button onclick="filterCategory('conflict')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all" style="background: #3d405b; color: #8d99ae;">Conflict</button>
+       </div>
+      </div>
+      <div id="glossary-grid" class="grid md:grid-cols-2 gap-4"><!-- Terms will be populated by JavaScript -->
+      </div>
+     </div>
+    </section><!-- Flashcards Section -->
+    <section id="flashcards-section" class="hidden animate-in">
+     <div class="rounded-2xl p-6" style="background: #2b2d42;">
+      <div class="text-center mb-6">
+       <h2 class="text-2xl font-semibold mb-2" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">🎴 Flip Card Practice</h2>
+       <p style="font-family: 'DM Sans', sans-serif; color: #8d99ae;">Click a card to reveal the Czech translation and definition</p>
+      </div>
+      <div class="flex justify-center gap-4 mb-6"><button onclick="shuffleCards()" class="px-5 py-2 rounded-lg font-medium transition-all hover:scale-105" style="background: #e94560; color: #edf2f4; font-family: 'DM Sans', sans-serif;"> 🔀 Shuffle </button> <button onclick="resetCards()" class="px-5 py-2 rounded-lg font-medium transition-all hover:scale-105" style="background: #3d405b; color: #edf2f4; font-family: 'DM Sans', sans-serif;"> ↺ Reset All </button>
+      </div>
+      <div id="flashcard-container" class="flex justify-center">
+       <div class="flip-card w-full max-w-md h-72 cursor-pointer" onclick="flipCurrentCard()">
+        <div class="flip-card-inner w-full h-full relative">
+         <div class="flip-card-front absolute w-full h-full rounded-2xl flex flex-col items-center justify-center p-8" style="background: linear-gradient(145deg, #3d405b, #2b2d42); border: 2px solid #e94560;"><span class="text-4xl mb-4" id="card-emoji">🌍</span>
+          <h3 id="card-term" class="text-3xl font-bold text-center" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">Diplomacy</h3>
+          <p class="mt-4 text-sm" style="color: #8d99ae;">Click to flip</p>
+         </div>
+         <div class="flip-card-back absolute w-full h-full rounded-2xl flex flex-col items-center justify-center p-8" style="background: linear-gradient(145deg, #e94560, #c73e54); border: 2px solid #edf2f4;"><span id="card-czech" class="text-2xl font-bold mb-3" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">Diplomacie</span>
+          <p id="card-definition" class="text-center text-sm leading-relaxed" style="font-family: 'DM Sans', sans-serif; color: #edf2f4;">The art of conducting negotiations between nations</p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-center items-center gap-4 mt-6"><button onclick="prevCard()" class="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110" style="background: #3d405b; color: #edf2f4;"> ← </button> <span id="card-counter" class="text-lg font-medium" style="font-family: 'DM Sans', sans-serif; color: #8d99ae;">1 / 12</span> <button onclick="nextCard()" class="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110" style="background: #3d405b; color: #edf2f4;"> → </button>
+      </div><!-- Progress dots -->
+      <div id="progress-dots" class="flex justify-center gap-2 mt-4 flex-wrap"><!-- Dots populated by JS -->
+      </div>
+     </div>
+    </section><!-- Quiz Section -->
+    <section id="quiz-section" class="hidden animate-in">
+     <div class="rounded-2xl p-6" style="background: #2b2d42;">
+      <div class="text-center mb-6">
+       <h2 class="text-2xl font-semibold mb-2" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">✓ Quick Quiz</h2>
+       <p style="font-family: 'DM Sans', sans-serif; color: #8d99ae;">Match the term with its correct definition</p>
+      </div>
+      <div id="quiz-container" class="max-w-2xl mx-auto">
+       <div class="text-center mb-6"><span id="quiz-score" class="text-lg font-medium px-4 py-2 rounded-full" style="background: #3d405b; color: #e94560; font-family: 'DM Sans', sans-serif;">Score: 0 / 0</span>
+       </div>
+       <div class="rounded-xl p-6 mb-6" style="background: #3d405b;">
+        <p class="text-sm mb-2" style="color: #8d99ae;">What does this term mean?</p>
+        <h3 id="quiz-term" class="text-2xl font-bold" style="font-family: 'Crimson Pro', serif; color: #edf2f4;">Sovereignty</h3>
+        <p id="quiz-czech" class="text-sm mt-2" style="color: #e94560;">Czech: Suverenita</p>
+       </div>
+       <div id="quiz-options" class="grid gap-3"><!-- Options populated by JS -->
+       </div>
+       <div id="quiz-feedback" class="hidden mt-6 p-4 rounded-xl text-center">
+        <p id="feedback-text" class="font-medium" style="font-family: 'DM Sans', sans-serif;"></p>
+       </div>
+       <div class="text-center mt-6"><button onclick="nextQuestion()" id="next-question-btn" class="hidden px-6 py-3 rounded-lg font-medium transition-all hover:scale-105" style="background: #e94560; color: #edf2f4; font-family: 'DM Sans', sans-serif;"> Next Question → </button> <button onclick="startQuiz()" id="start-quiz-btn" class="px-6 py-3 rounded-lg font-medium transition-all hover:scale-105" style="background: #e94560; color: #edf2f4; font-family: 'DM Sans', sans-serif;"> Start Quiz </button>
+       </div>
+      </div>
+     </div>
+    </section><!-- Footer -->
+    <footer class="text-center mt-10 pb-6">
+     <p style="font-family: 'DM Sans', sans-serif; color: #8d99ae; font-size: 0.875rem;">💡 Tip: Practice daily for best retention • Cvičte denně pro nejlepší zapamatování</p>
+    </footer>
+   </div>
+  </div>
+  <script>
+    // Geopolitical terms data
+    const terms = [
+      { term: "Sovereignty", czech: "Suverenita", definition: "Supreme authority of a state to govern itself without external interference", category: "politics", emoji: "👑" },
+      { term: "Diplomacy", czech: "Diplomacie", definition: "The art and practice of conducting negotiations between nations", category: "politics", emoji: "🤝" },
+      { term: "Sanctions", czech: "Sankce", definition: "Penalties imposed on a country to force compliance with international law", category: "economics", emoji: "🚫" },
+      { term: "Alliance", czech: "Aliance", definition: "A formal agreement between two or more nations for mutual support", category: "politics", emoji: "🔗" },
+      { term: "Hegemony", czech: "Hegemonie", definition: "Dominance or leadership of one state over others in a region", category: "politics", emoji: "🏛️" },
+      { term: "Détente", czech: "Détente / Uvolnění", definition: "The easing of strained relations, especially between nations", category: "politics", emoji: "🕊️" },
+      { term: "Embargo", czech: "Embargo", definition: "An official ban on trade or commercial activity with a country", category: "economics", emoji: "⛔" },
+      { term: "Annexation", czech: "Anexe", definition: "The forcible acquisition of territory by one state from another", category: "conflict", emoji: "📍" },
+      { term: "Multilateralism", czech: "Multilateralismus", definition: "Coordinated diplomatic relations among three or more states", category: "politics", emoji: "🌐" },
+      { term: "Tariff", czech: "Clo / Tarif", definition: "A tax imposed on imported goods and services", category: "economics", emoji: "💰" },
+      { term: "Ceasefire", czech: "Příměří", definition: "A temporary suspension of fighting by mutual agreement", category: "conflict", emoji: "✋" },
+      { term: "Proxy War", czech: "Zástupná válka", definition: "A conflict where major powers support opposing sides indirectly", category: "conflict", emoji: "🎭" },
+      { term: "Bilateral", czech: "Bilaterální", definition: "Involving two parties, typically two countries", category: "politics", emoji: "↔️" },
+      { term: "Geopolitics", czech: "Geopolitika", definition: "Politics influenced by geographical factors and power relations", category: "politics", emoji: "🗺️" },
+      { term: "Neutrality", czech: "Neutralita", definition: "A policy of not supporting either side in a conflict or dispute", category: "politics", emoji: "⚖️" },
+      { term: "Refugee", czech: "Uprchlík", definition: "A person forced to leave their country due to war or persecution", category: "conflict", emoji: "🏃" }
+    ];
+
+    let currentCardIndex = 0;
+    let flashcardOrder = [...Array(terms.length).keys()];
+    let quizScore = 0;
+    let quizTotal = 0;
+    let currentQuizTerm = null;
+    let answeredCurrentQuestion = false;
+
+    // Config and SDK setup
+    const defaultConfig = {
+      app_title: "Geopolitical Terms",
+      subtitle: "Master essential vocabulary for international relations • English–Czech",
+      background_color: "#1a1a2e",
+      surface_color: "#2b2d42",
+      text_color: "#edf2f4",
+      primary_action_color: "#e94560",
+      secondary_action_color: "#8d99ae",
+      font_family: "Crimson Pro"
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(cfg) {
+      config = { ...defaultConfig, ...cfg };
+      
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Georgia, serif';
+      const sansStack = 'DM Sans, sans-serif';
+      
+      // Update title and subtitle
+      const titleEl = document.getElementById('app-title');
+      const subtitleEl = document.getElementById('app-subtitle');
+      if (titleEl) {
+        titleEl.textContent = config.app_title || defaultConfig.app_title;
+        titleEl.style.fontFamily = `${customFont}, ${baseFontStack}`;
+        titleEl.style.color = config.text_color || defaultConfig.text_color;
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = config.subtitle || defaultConfig.subtitle;
+        subtitleEl.style.color = config.secondary_action_color || defaultConfig.secondary_action_color;
+      }
+      
+      // Update background
+      const wrapper = document.getElementById('app-wrapper');
+      if (wrapper) {
+        const bgColor = config.background_color || defaultConfig.background_color;
+        wrapper.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${adjustColor(bgColor, 20)} 50%, ${adjustColor(bgColor, 40)} 100%)`;
+      }
+      
+      // Update surfaces
+      document.querySelectorAll('[style*="background: #2b2d42"], [style*="background:#2b2d42"]').forEach(el => {
+        el.style.background = config.surface_color || defaultConfig.surface_color;
+      });
+      
+      // Update primary action colors
+      document.querySelectorAll('[style*="background: #e94560"], [style*="background:#e94560"]').forEach(el => {
+        el.style.background = config.primary_action_color || defaultConfig.primary_action_color;
+      });
+      
+      document.querySelectorAll('[style*="color: #e94560"], [style*="color:#e94560"]').forEach(el => {
+        el.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+      });
+      
+      // Update text colors
+      document.querySelectorAll('[style*="color: #edf2f4"], [style*="color:#edf2f4"]').forEach(el => {
+        el.style.color = config.text_color || defaultConfig.text_color;
+      });
+      
+      document.querySelectorAll('[style*="color: #8d99ae"], [style*="color:#8d99ae"]').forEach(el => {
+        el.style.color = config.secondary_action_color || defaultConfig.secondary_action_color;
+      });
+      
+      // Update headings font
+      document.querySelectorAll('h1, h2, h3').forEach(el => {
+        el.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+      
+      renderGlossary();
+    }
+
+    function adjustColor(hex, amount) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+      const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+      const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+      return '#' + (0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => cfg.surface_color || defaultConfig.surface_color,
+            set: (value) => { cfg.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (value) => { cfg.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => { cfg.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); }
+          },
+          {
+            get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => { cfg.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => cfg.font_family || defaultConfig.font_family,
+          set: (value) => { cfg.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+        },
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ["app_title", cfg.app_title || defaultConfig.app_title],
+        ["subtitle", cfg.subtitle || defaultConfig.subtitle]
+      ]);
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Tab switching
+    function switchTab(tab) {
+      const sections = ['glossary', 'flashcards', 'quiz'];
+      sections.forEach(s => {
+        const section = document.getElementById(`${s}-section`);
+        const tabBtn = document.getElementById(`tab-${s}`);
+        if (s === tab) {
+          section.classList.remove('hidden');
+          tabBtn.classList.add('tab-active');
+          tabBtn.style.color = config.primary_action_color || defaultConfig.primary_action_color;
+          tabBtn.style.borderColor = config.primary_action_color || defaultConfig.primary_action_color;
+        } else {
+          section.classList.add('hidden');
+          tabBtn.classList.remove('tab-active');
+          tabBtn.style.color = config.secondary_action_color || defaultConfig.secondary_action_color;
+        }
+      });
+    }
+
+    // Glossary rendering
+    let currentFilter = 'all';
+    
+    function renderGlossary() {
+      const grid = document.getElementById('glossary-grid');
+      const filtered = currentFilter === 'all' ? terms : terms.filter(t => t.category === currentFilter);
+      
+      grid.innerHTML = filtered.map((t, i) => `
+        <div class="term-card rounded-xl p-5" style="background: ${config.surface_color || '#3d405b'}; border-left: 4px solid ${config.primary_action_color || '#e94560'}; animation-delay: ${i * 0.05}s;">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl">${t.emoji}</span>
+            <div class="flex-1">
+              <div class="flex items-baseline gap-2 flex-wrap">
+                <h3 class="text-lg font-semibold" style="font-family: 'Crimson Pro', serif; color: ${config.text_color || '#edf2f4'};">${t.term}</h3>
+                <span class="text-sm font-medium" style="color: ${config.primary_action_color || '#e94560'};">${t.czech}</span>
+              </div>
+              <p class="text-sm mt-2 leading-relaxed" style="font-family: 'DM Sans', sans-serif; color: ${config.secondary_action_color || '#8d99ae'};">${t.definition}</p>
+              <span class="inline-block mt-3 text-xs px-2 py-1 rounded-full" style="background: ${config.background_color || '#1a1a2e'}; color: ${config.secondary_action_color || '#8d99ae'};">${t.category}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCategory(category) {
+      currentFilter = category;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const isActive = btn.textContent.toLowerCase().includes(category) || (category === 'all' && btn.textContent === 'All');
+        btn.style.background = isActive ? (config.primary_action_color || '#e94560') : (config.surface_color || '#3d405b');
+        btn.style.color = isActive ? (config.text_color || '#edf2f4') : (config.secondary_action_color || '#8d99ae');
+      });
+      renderGlossary();
+    }
+
+    // Flashcard functions
+    function updateCard() {
+      const term = terms[flashcardOrder[currentCardIndex]];
+      document.getElementById('card-term').textContent = term.term;
+      document.getElementById('card-emoji').textContent = term.emoji;
+      document.getElementById('card-czech').textContent = term.czech;
+      document.getElementById('card-definition').textContent = term.definition;
+      document.getElementById('card-counter').textContent = `${currentCardIndex + 1} / ${terms.length}`;
+      
+      // Reset flip
+      document.querySelector('.flip-card').classList.remove('flipped');
+      
+      // Update progress dots
+      updateProgressDots();
+    }
+
+    function updateProgressDots() {
+      const container = document.getElementById('progress-dots');
+      container.innerHTML = flashcardOrder.map((_, i) => `
+        <button onclick="goToCard(${i})" class="w-3 h-3 rounded-full transition-all" style="background: ${i === currentCardIndex ? (config.primary_action_color || '#e94560') : (config.surface_color || '#3d405b')};"></button>
+      `).join('');
+    }
+
+    function flipCurrentCard() {
+      document.querySelector('.flip-card').classList.toggle('flipped');
+    }
+
+    function nextCard() {
+      currentCardIndex = (currentCardIndex + 1) % terms.length;
+      updateCard();
+    }
+
+    function prevCard() {
+      currentCardIndex = (currentCardIndex - 1 + terms.length) % terms.length;
+      updateCard();
+    }
+
+    function goToCard(index) {
+      currentCardIndex = index;
+      updateCard();
+    }
+
+    function shuffleCards() {
+      flashcardOrder = flashcardOrder.sort(() => Math.random() - 0.5);
+      currentCardIndex = 0;
+      updateCard();
+    }
+
+    function resetCards() {
+      flashcardOrder = [...Array(terms.length).keys()];
+      currentCardIndex = 0;
+      updateCard();
+    }
+
+    // Quiz functions
+    function startQuiz() {
+      quizScore = 0;
+      quizTotal = 0;
+      document.getElementById('start-quiz-btn').classList.add('hidden');
+      generateQuestion();
+    }
+
+    function generateQuestion() {
+      answeredCurrentQuestion = false;
+      currentQuizTerm = terms[Math.floor(Math.random() * terms.length)];
+      
+      document.getElementById('quiz-term').textContent = currentQuizTerm.term;
+      document.getElementById('quiz-czech').textContent = `Czech: ${currentQuizTerm.czech}`;
+      
+      // Generate options
+      const wrongOptions = terms.filter(t => t.term !== currentQuizTerm.term)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3)
+        .map(t => t.definition);
+      
+      const options = [...wrongOptions, currentQuizTerm.definition].sort(() => Math.random() - 0.5);
+      
+      const optionsContainer = document.getElementById('quiz-options');
+      optionsContainer.innerHTML = options.map((opt, i) => `
+        <button onclick="checkAnswer(${i}, '${opt.replace(/'/g, "\\'")}')" class="quiz-option p-4 rounded-xl text-left transition-all hover:scale-[1.02]" style="background: ${config.surface_color || '#3d405b'}; color: ${config.text_color || '#edf2f4'}; font-family: 'DM Sans', sans-serif;">
+          ${opt}
+        </button>
+      `).join('');
+      
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      document.getElementById('next-question-btn').classList.add('hidden');
+      updateScore();
+    }
+
+    function checkAnswer(index, selected) {
+      if (answeredCurrentQuestion) return;
+      answeredCurrentQuestion = true;
+      quizTotal++;
+      
+      const isCorrect = selected === currentQuizTerm.definition;
+      if (isCorrect) quizScore++;
+      
+      const feedback = document.getElementById('quiz-feedback');
+      const feedbackText = document.getElementById('feedback-text');
+      
+      feedback.classList.remove('hidden');
+      if (isCorrect) {
+        feedback.style.background = '#2d6a4f';
+        feedbackText.textContent = '✓ Correct! Výborně!';
+        feedbackText.style.color = config.text_color || '#edf2f4';
+      } else {
+        feedback.style.background = '#9d0208';
+        feedbackText.innerHTML = `✗ Not quite. The correct answer is:<br><span style="color: ${config.text_color || '#edf2f4'}; font-weight: 500;">${currentQuizTerm.definition}</span>`;
+        feedbackText.style.color = config.text_color || '#edf2f4';
+      }
+      
+      // Highlight correct/incorrect
+      document.querySelectorAll('.quiz-option').forEach(btn => {
+        if (btn.textContent.trim() === currentQuizTerm.definition) {
+          btn.style.background = '#2d6a4f';
+          btn.style.borderColor = '#40916c';
+        } else if (btn.textContent.trim() === selected && !isCorrect) {
+          btn.style.background = '#9d0208';
+        }
+      });
+      
+      document.getElementById('next-question-btn').classList.remove('hidden');
+      updateScore();
+    }
+
+    function nextQuestion() {
+      generateQuestion();
+    }
+
+    function updateScore() {
+      document.getElementById('quiz-score').textContent = `Score: ${quizScore} / ${quizTotal}`;
+    }
+
+    // Initialize
+    renderGlossary();
+    updateCard();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bb62b1cc4bb3204',t:'MTc2Nzk4NTEzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
