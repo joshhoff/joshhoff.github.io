@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spanish Reflexive Verbs Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&amp;family=DM+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    .font-heading { font-family: 'Fraunces', serif; }
+    .font-body { font-family: 'DM Sans', sans-serif; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+    .animate-fade-in-delay-1 { animation: fadeInUp 0.6s ease-out 0.1s forwards; opacity: 0; }
+    .animate-fade-in-delay-2 { animation: fadeInUp 0.6s ease-out 0.2s forwards; opacity: 0; }
+    .animate-fade-in-delay-3 { animation: fadeInUp 0.6s ease-out 0.3s forwards; opacity: 0; }
+    
+    .correct-pulse { animation: pulse 0.3s ease-in-out; }
+    
+    .tab-active { 
+      background: linear-gradient(135deg, #E07B39 0%, #C4612A 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(224, 123, 57, 0.4);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+    
+    .input-field {
+      border: 2px solid #E8DDD4;
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      border-color: #E07B39;
+      box-shadow: 0 0 0 4px rgba(224, 123, 57, 0.15);
+      outline: none;
+    }
+    .input-correct {
+      border-color: #4CAF50 !important;
+      background-color: #E8F5E9 !important;
+    }
+    .input-incorrect {
+      border-color: #E53935 !important;
+      background-color: #FFEBEE !important;
+    }
+    
+    .verb-tag {
+      background: linear-gradient(135deg, #FFF3E6 0%, #FFE4CC 100%);
+      border: 1px solid #E07B39;
+    }
+    
+    .conversation-bubble {
+      position: relative;
+    }
+    .conversation-bubble::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+    }
+    .bubble-left::before {
+      left: -20px;
+      top: 15px;
+      border-right-color: #FFF9F5;
+    }
+    .bubble-right::before {
+      right: -20px;
+      top: 15px;
+      border-left-color: #E07B39;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50">
+  <div id="app-wrapper" class="h-full w-full overflow-auto">
+   <div class="min-h-full w-full"><!-- Header -->
+    <header class="w-full bg-gradient-to-r from-amber-900 via-orange-800 to-rose-900 text-white py-8 px-6">
+     <div class="max-w-5xl mx-auto text-center animate-fade-in">
+      <div class="flex items-center justify-center gap-3 mb-3">
+       <svg class="w-10 h-10" viewbox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" fill="#E07B39" /> <path d="M12 20C12 15.5817 15.5817 12 20 12C24.4183 12 28 15.5817 28 20" stroke="white" stroke-width="2.5" stroke-linecap="round" /> <circle cx="20" cy="20" r="3" fill="white" /> <path d="M20 23L20 28M17 25L23 25" stroke="white" stroke-width="2" stroke-linecap="round" />
+       </svg>
+       <h1 id="main-title" class="font-heading text-3xl md:text-4xl font-bold">Verbos Reflexivos</h1>
+      </div>
+      <p id="subtitle" class="text-amber-200 text-lg">Master Spanish reflexive verbs through interactive practice</p>
+     </div>
+    </header><!-- Navigation Tabs -->
+    <nav class="w-full bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-10">
+     <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap justify-center gap-2"><button onclick="switchTab('learn')" id="tab-learn" class="tab-btn tab-active px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300"> 📚 Learn </button> <button onclick="switchTab('fillblank')" id="tab-fillblank" class="tab-btn px-5 py-2.5 rounded-full font-medium text-sm bg-white text-gray-600 hover:bg-orange-50 transition-all duration-300"> ✏️ Fill in the Blank </button> <button onclick="switchTab('conjugate')" id="tab-conjugate" class="tab-btn px-5 py-2.5 rounded-full font-medium text-sm bg-white text-gray-600 hover:bg-orange-50 transition-all duration-300"> 🔄 Conjugation </button> <button onclick="switchTab('conversation')" id="tab-conversation" class="tab-btn px-5 py-2.5 rounded-full font-medium text-sm bg-white text-gray-600 hover:bg-orange-50 transition-all duration-300"> 💬 Conversations </button>
+     </div>
+    </nav><!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 py-8"><!-- Learn Section -->
+     <section id="section-learn" class="space-y-6 animate-fade-in">
+      <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 card-hover">
+       <h2 class="font-heading text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-3xl">🪞</span> What are Reflexive Verbs?</h2>
+       <p class="text-gray-600 leading-relaxed mb-4">Reflexive verbs (<em>verbos reflexivos</em>) indicate that the subject performs an action on itself. They use reflexive pronouns: <strong>me, te, se, nos, os, se</strong>.</p>
+       <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-4 border-l-4 border-orange-400">
+        <p class="text-gray-700"><strong>Example:</strong> "Me levanto" = I get (myself) up</p>
+        <p class="text-gray-500 text-sm mt-1">The action reflects back to the subject</p>
+       </div>
+      </div><!-- Verb Categories -->
+      <div class="grid md:grid-cols-2 gap-4">
+       <div class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-fade-in-delay-1">
+        <h3 class="font-heading text-xl font-bold text-orange-700 mb-4">🌅 Daily Routine</h3>
+        <div class="space-y-3">
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-amber-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">despertarse</span> <span class="text-gray-600">to wake up</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-amber-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">levantarse</span> <span class="text-gray-600">to get up</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-amber-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">ducharse</span> <span class="text-gray-600">to shower</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-amber-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">vestirse</span> <span class="text-gray-600">to get dressed</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-amber-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">acostarse</span> <span class="text-gray-600">to go to bed</span>
+         </div>
+        </div>
+       </div>
+       <div class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-fade-in-delay-2">
+        <h3 class="font-heading text-xl font-bold text-rose-700 mb-4">💭 Emotions &amp; States</h3>
+        <div class="space-y-3">
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-rose-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">sentirse</span> <span class="text-gray-600">to feel</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-rose-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">enamorarse</span> <span class="text-gray-600">to fall in love</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-rose-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">enojarse</span> <span class="text-gray-600">to get angry</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-rose-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">preocuparse</span> <span class="text-gray-600">to worry</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-rose-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">aburrirse</span> <span class="text-gray-600">to get bored</span>
+         </div>
+        </div>
+       </div>
+       <div class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-fade-in-delay-3">
+        <h3 class="font-heading text-xl font-bold text-emerald-700 mb-4">✨ Less Common Verbs</h3>
+        <div class="space-y-3">
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">arrepentirse</span> <span class="text-gray-600">to regret</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">atreverse</span> <span class="text-gray-600">to dare</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">quejarse</span> <span class="text-gray-600">to complain</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">burlarse</span> <span class="text-gray-600">to make fun of</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-emerald-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">desmayarse</span> <span class="text-gray-600">to faint</span>
+         </div>
+        </div>
+       </div>
+       <div class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-fade-in-delay-3">
+        <h3 class="font-heading text-xl font-bold text-purple-700 mb-4">🔄 Movement &amp; Position</h3>
+        <div class="space-y-3">
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-purple-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">sentarse</span> <span class="text-gray-600">to sit down</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-purple-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">moverse</span> <span class="text-gray-600">to move</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-purple-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">esconderse</span> <span class="text-gray-600">to hide</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-purple-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">alejarse</span> <span class="text-gray-600">to move away</span>
+         </div>
+         <div class="flex items-center gap-3 p-3 rounded-lg bg-purple-50"><span class="verb-tag px-3 py-1 rounded-full text-orange-800 font-medium text-sm">acercarse</span> <span class="text-gray-600">to approach</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Fill in the Blank Section -->
+     <section id="section-fillblank" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+       <div class="flex items-center justify-between mb-6">
+        <h2 class="font-heading text-2xl font-bold text-gray-800 flex items-center gap-2"><span class="text-3xl">✏️</span> Fill in the Blank</h2>
+        <div class="flex items-center gap-2"><span class="text-sm text-gray-500">Score:</span> <span id="fillblank-score" class="bg-orange-100 text-orange-800 font-bold px-3 py-1 rounded-full">0/0</span>
+        </div>
+       </div>
+       <p class="text-gray-600 mb-6">Complete each sentence with the correct reflexive verb form.</p>
+       <div id="fillblank-exercises" class="space-y-6"><!-- Exercises will be populated by JS -->
+       </div>
+       <div class="flex gap-3 mt-8"><button onclick="checkFillBlank()" class="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:-translate-y-1"> Check Answers </button> <button onclick="resetFillBlank()" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300"> New Exercises </button>
+       </div>
+      </div>
+     </section><!-- Conjugation Section -->
+     <section id="section-conjugate" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+       <div class="flex items-center justify-between mb-6">
+        <h2 class="font-heading text-2xl font-bold text-gray-800 flex items-center gap-2"><span class="text-3xl">🔄</span> Conjugation Practice</h2>
+        <div class="flex items-center gap-2"><span class="text-sm text-gray-500">Score:</span> <span id="conjugate-score" class="bg-orange-100 text-orange-800 font-bold px-3 py-1 rounded-full">0/0</span>
+        </div>
+       </div>
+       <div id="conjugate-verb" class="text-center mb-8">
+        <p class="text-gray-500 mb-2">Conjugate this verb in present tense:</p>
+        <h3 class="font-heading text-4xl font-bold text-orange-600" id="current-verb">lavarse</h3>
+        <p class="text-gray-500 mt-2" id="verb-meaning">(to wash oneself)</p>
+       </div>
+       <div class="grid md:grid-cols-2 gap-4">
+        <div class="space-y-3">
+         <div class="flex items-center gap-3"><label class="w-24 text-right font-medium text-gray-700">yo</label> <input type="text" id="conj-yo" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="me lavo">
+         </div>
+         <div class="flex items-center gap-3"><label class="w-24 text-right font-medium text-gray-700">tú</label> <input type="text" id="conj-tu" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="te lavas">
+         </div>
+         <div class="flex items-center gap-3"><label class="w-24 text-right font-medium text-gray-700">él/ella/Ud.</label> <input type="text" id="conj-el" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="se lava">
+         </div>
+        </div>
+        <div class="space-y-3">
+         <div class="flex items-center gap-3"><label class="w-24 text-right font-medium text-gray-700">nosotros</label> <input type="text" id="conj-nosotros" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="nos lavamos">
+         </div>
+         <div class="flex items-center gap-3"><label class="w-24 text-right font-medium text-gray-700">vosotros</label> <input type="text" id="conj-vosotros" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="os laváis">
+         </div>
+         <div class="flex items-center gap-3"><label class="w-24 text-right font-medium text-gray-700">ellos/Uds.</label> <input type="text" id="conj-ellos" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="se lavan">
+         </div>
+        </div>
+       </div>
+       <div class="flex gap-3 mt-8 justify-center"><button onclick="checkConjugation()" class="bg-gradient-to-r from-orange-500 to-rose-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:-translate-y-1"> Check Answers </button> <button onclick="newVerb()" class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300"> New Verb </button>
+       </div>
+       <div id="conjugation-feedback" class="mt-6 hidden">
+        <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+         <h4 class="font-semibold text-amber-800 mb-2">Correct Answers:</h4>
+         <div id="correct-conjugations" class="grid grid-cols-2 gap-2 text-sm text-gray-700"></div>
+        </div>
+       </div>
+      </div>
+     </section><!-- Conversation Section -->
+     <section id="section-conversation" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+       <h2 class="font-heading text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><span class="text-3xl">💬</span> Conversation Practice</h2>
+       <div id="conversation-container" class="space-y-8"><!-- Conversations will be populated by JS -->
+       </div><button onclick="newConversation()" class="mt-6 bg-gradient-to-r from-orange-500 to-rose-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:-translate-y-1"> New Conversation </button>
+      </div><!-- Speaking Prompts -->
+      <div class="bg-gradient-to-br from-orange-100 to-rose-100 rounded-2xl shadow-lg p-6 md:p-8">
+       <h3 class="font-heading text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-2xl">🎤</span> Speaking Prompts</h3>
+       <p class="text-gray-600 mb-4">Practice answering these questions out loud using reflexive verbs:</p>
+       <div id="speaking-prompts" class="space-y-4"><!-- Prompts will be populated by JS -->
+       </div><button onclick="newPrompts()" class="mt-4 bg-white text-orange-600 border-2 border-orange-300 px-5 py-2 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-300"> New Prompts </button>
+      </div>
+     </section>
+    </main><!-- Footer -->
+    <footer class="w-full bg-gray-800 text-gray-400 py-6 px-4 text-center text-sm mt-8">
+     <p>Practice makes perfect! 🇪🇸 ¡La práctica hace al maestro!</p>
+    </footer>
+   </div>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      main_title: 'Verbos Reflexivos',
+      subtitle: 'Master Spanish reflexive verbs through interactive practice',
+      background_color: '#FFF7ED',
+      surface_color: '#FFFFFF',
+      text_color: '#1F2937',
+      primary_action_color: '#E07B39',
+      secondary_action_color: '#9D174D'
+    };
+
+    let config = { ...defaultConfig };
+
+    // Verb data
+    const verbsData = {
+      lavarse: { meaning: 'to wash oneself', conjugations: ['me lavo', 'te lavas', 'se lava', 'nos lavamos', 'os laváis', 'se lavan'] },
+      levantarse: { meaning: 'to get up', conjugations: ['me levanto', 'te levantas', 'se levanta', 'nos levantamos', 'os levantáis', 'se levantan'] },
+      acostarse: { meaning: 'to go to bed', conjugations: ['me acuesto', 'te acuestas', 'se acuesta', 'nos acostamos', 'os acostáis', 'se acuestan'] },
+      vestirse: { meaning: 'to get dressed', conjugations: ['me visto', 'te vistes', 'se viste', 'nos vestimos', 'os vestís', 'se visten'] },
+      sentarse: { meaning: 'to sit down', conjugations: ['me siento', 'te sientas', 'se sienta', 'nos sentamos', 'os sentáis', 'se sientan'] },
+      dormirse: { meaning: 'to fall asleep', conjugations: ['me duermo', 'te duermes', 'se duerme', 'nos dormimos', 'os dormís', 'se duermen'] },
+      despertarse: { meaning: 'to wake up', conjugations: ['me despierto', 'te despiertas', 'se despierta', 'nos despertamos', 'os despertáis', 'se despiertan'] },
+      ducharse: { meaning: 'to shower', conjugations: ['me ducho', 'te duchas', 'se ducha', 'nos duchamos', 'os ducháis', 'se duchan'] },
+      peinarse: { meaning: 'to comb one\'s hair', conjugations: ['me peino', 'te peinas', 'se peina', 'nos peinamos', 'os peináis', 'se peinan'] },
+      maquillarse: { meaning: 'to put on makeup', conjugations: ['me maquillo', 'te maquillas', 'se maquilla', 'nos maquillamos', 'os maquilláis', 'se maquillan'] },
+      afeitarse: { meaning: 'to shave', conjugations: ['me afeito', 'te afeitas', 'se afeita', 'nos afeitamos', 'os afeitáis', 'se afeitan'] },
+      cepillarse: { meaning: 'to brush', conjugations: ['me cepillo', 'te cepillas', 'se cepilla', 'nos cepillamos', 'os cepilláis', 'se cepillan'] },
+      sentirse: { meaning: 'to feel', conjugations: ['me siento', 'te sientes', 'se siente', 'nos sentimos', 'os sentís', 'se sienten'] },
+      preocuparse: { meaning: 'to worry', conjugations: ['me preocupo', 'te preocupas', 'se preocupa', 'nos preocupamos', 'os preocupáis', 'se preocupan'] },
+      enojarse: { meaning: 'to get angry', conjugations: ['me enojo', 'te enojas', 'se enoja', 'nos enojamos', 'os enojáis', 'se enojan'] },
+      aburrirse: { meaning: 'to get bored', conjugations: ['me aburro', 'te aburres', 'se aburre', 'nos aburrimos', 'os aburrís', 'se aburren'] },
+      divertirse: { meaning: 'to have fun', conjugations: ['me divierto', 'te diviertes', 'se divierte', 'nos divertimos', 'os divertís', 'se divierten'] },
+      enamorarse: { meaning: 'to fall in love', conjugations: ['me enamoro', 'te enamoras', 'se enamora', 'nos enamoramos', 'os enamoráis', 'se enamoran'] },
+      quejarse: { meaning: 'to complain', conjugations: ['me quejo', 'te quejas', 'se queja', 'nos quejamos', 'os quejáis', 'se quejan'] },
+      acordarse: { meaning: 'to remember', conjugations: ['me acuerdo', 'te acuerdas', 'se acuerda', 'nos acordamos', 'os acordáis', 'se acuerdan'] },
+      olvidarse: { meaning: 'to forget', conjugations: ['me olvido', 'te olvidas', 'se olvida', 'nos olvidamos', 'os olvidáis', 'se olvidan'] },
+      arrepentirse: { meaning: 'to regret', conjugations: ['me arrepiento', 'te arrepientes', 'se arrepiente', 'nos arrepentimos', 'os arrepentís', 'se arrepienten'] },
+      atreverse: { meaning: 'to dare', conjugations: ['me atrevo', 'te atreves', 'se atreve', 'nos atrevemos', 'os atrevéis', 'se atreven'] }
+    };
+
+    // Fill in the blank exercises
+    const fillBlankExercises = [
+      { sentence: 'Yo ___ a las 7 de la mañana todos los días.', answer: 'me despierto', hint: 'despertarse - yo' },
+      { sentence: 'María ___ muy elegante para la fiesta.', answer: 'se viste', hint: 'vestirse - ella' },
+      { sentence: 'Nosotros ___ en el sofá para ver la película.', answer: 'nos sentamos', hint: 'sentarse - nosotros' },
+      { sentence: '¿Tú ___ los dientes después de comer?', answer: 'te cepillas', hint: 'cepillarse - tú' },
+      { sentence: 'Los niños ___ muy tarde los fines de semana.', answer: 'se acuestan', hint: 'acostarse - ellos' },
+      { sentence: 'Ella ___ muy feliz hoy.', answer: 'se siente', hint: 'sentirse - ella' },
+      { sentence: 'Yo nunca ___ de mis errores.', answer: 'me arrepiento', hint: 'arrepentirse - yo' },
+      { sentence: '¿Ustedes ___ por el examen?', answer: 'se preocupan', hint: 'preocuparse - ustedes' },
+      { sentence: 'Mi hermano ___ muy temprano todos los días.', answer: 'se ducha', hint: 'ducharse - él' },
+      { sentence: 'Nosotros ___ mucho en las fiestas.', answer: 'nos divertimos', hint: 'divertirse - nosotros' },
+      { sentence: 'Ella ___ de su cumpleaños.', answer: 'se olvida', hint: 'olvidarse - ella' },
+      { sentence: 'Los estudiantes ___ cuando la clase es larga.', answer: 'se aburren', hint: 'aburrirse - ellos' },
+      { sentence: 'Yo ___ el pelo todas las mañanas.', answer: 'me peino', hint: 'peinarse - yo' },
+      { sentence: '¿Tú ___ a hacer cosas nuevas?', answer: 'te atreves', hint: 'atreverse - tú' },
+      { sentence: 'Mi madre ___ antes de salir.', answer: 'se maquilla', hint: 'maquillarse - ella' },
+      { sentence: 'Ellos ___ del servicio del restaurante.', answer: 'se quejan', hint: 'quejarse - ellos' },
+      { sentence: 'Juan ___ de su novia en la universidad.', answer: 'se enamoró', hint: 'enamorarse - él (past)' },
+      { sentence: 'Nosotros ___ de vacaciones todos los veranos.', answer: 'nos acordamos', hint: 'acordarse - nosotros' }
+    ];
+
+    // Conversations
+    const conversations = [
+      {
+        title: 'Morning Routine',
+        speakers: ['Ana', 'Carlos'],
+        lines: [
+          { speaker: 0, text: '¡Buenos días, Carlos! ¿A qué hora te levantas normalmente?' },
+          { speaker: 1, text: 'Me levanto a las 6:30. Primero me ducho y luego me visto.' },
+          { speaker: 0, text: '¡Qué temprano! Yo me despierto a las 7, pero no me levanto hasta las 7:30.' },
+          { speaker: 1, text: '¿Y te maquillas por la mañana?' },
+          { speaker: 0, text: 'Sí, me maquillo y me peino antes de desayunar. ¿Tú te afeitas todos los días?' },
+          { speaker: 1, text: 'No, solo me afeito los lunes, miércoles y viernes.' }
+        ],
+        verbs: ['levantarse', 'ducharse', 'vestirse', 'despertarse', 'maquillarse', 'peinarse', 'afeitarse']
+      },
+      {
+        title: 'At the Party',
+        speakers: ['Sofía', 'Miguel'],
+        lines: [
+          { speaker: 0, text: '¿Cómo te sientes en esta fiesta, Miguel?' },
+          { speaker: 1, text: 'Me divierto mucho. ¿Y tú? ¿No te aburres?' },
+          { speaker: 0, text: '¡Para nada! Me encanta. Mira, Laura y Pedro se acercan a nosotros.' },
+          { speaker: 1, text: '¿Sabes que ellos se enamoraron aquí el año pasado?' },
+          { speaker: 0, text: '¡Sí! Me acuerdo perfectamente. Se miraron y ya no se separaron.' },
+          { speaker: 1, text: 'Es increíble cómo algunas personas se entienden tan bien desde el principio.' }
+        ],
+        verbs: ['sentirse', 'divertirse', 'aburrirse', 'acercarse', 'enamorarse', 'acordarse', 'separarse', 'entenderse']
+      },
+      {
+        title: 'Feeling Stressed',
+        speakers: ['Doctor', 'Paciente'],
+        lines: [
+          { speaker: 0, text: '¿Por qué cree que se siente tan estresado últimamente?' },
+          { speaker: 1, text: 'Me preocupo mucho por el trabajo. No puedo dormirme por las noches.' },
+          { speaker: 0, text: '¿Se despierta durante la noche?' },
+          { speaker: 1, text: 'Sí, me despierto varias veces y me enojo conmigo mismo por no poder descansar.' },
+          { speaker: 0, text: 'Necesita relajarse. ¿Ha intentado acostarse más temprano?' },
+          { speaker: 1, text: 'Me acuesto a las 10, pero mi mente no se calma.' }
+        ],
+        verbs: ['sentirse', 'preocuparse', 'dormirse', 'despertarse', 'enojarse', 'relajarse', 'acostarse', 'calmarse']
+      },
+      {
+        title: 'Complaining About Service',
+        speakers: ['Cliente', 'Gerente'],
+        lines: [
+          { speaker: 0, text: 'Disculpe, me quejo del servicio. El mesero se olvidó de mi pedido.' },
+          { speaker: 1, text: 'Me disculpo sinceramente. ¿Puede repetirse su orden?' },
+          { speaker: 0, text: 'Pedí pasta, pero me equivoqué de plato. Ahora me arrepiento.' },
+          { speaker: 1, text: 'No se preocupe. Nos encargamos de todo. Por favor, siéntese cómodo.' },
+          { speaker: 0, text: 'Gracias. Me alegro de que se tome esto en serio.' },
+          { speaker: 1, text: 'Claro, no nos burlamos de las preocupaciones de nuestros clientes.' }
+        ],
+        verbs: ['quejarse', 'olvidarse', 'disculparse', 'equivocarse', 'arrepentirse', 'preocuparse', 'sentarse', 'alegrarse', 'burlarse']
+      }
+    ];
+
+    // Speaking prompts
+    const speakingPrompts = [
+      '¿A qué hora te levantas los días de semana?',
+      '¿Cómo te preparas para una cita importante?',
+      '¿De qué te arrepientes en tu vida?',
+      '¿Cuándo fue la última vez que te enojaste?',
+      '¿Cómo te relajas después de un día difícil?',
+      '¿Te acuerdas de tus sueños cuando te despiertas?',
+      '¿De qué te preocupas más en la vida?',
+      '¿Cómo te diviertes los fines de semana?',
+      '¿Te aburres fácilmente?',
+      '¿Alguna vez te enamoraste a primera vista?',
+      '¿Te atreves a probar comidas nuevas?',
+      '¿Cuánto tiempo tardas en vestirte por la mañana?',
+      '¿Te quejas cuando el servicio es malo?',
+      '¿A qué hora te acuestas normalmente?',
+      '¿Cómo te sientes cuando estás solo/a?'
+    ];
+
+    // State
+    let currentVerb = 'lavarse';
+    let conjugateScore = { correct: 0, total: 0 };
+    let fillBlankScore = { correct: 0, total: 0 };
+    let currentExercises = [];
+    let currentConversation = 0;
+
+    // Tab switching
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('bg-white', 'text-gray-600');
+      });
+      document.getElementById(`tab-${tab}`).classList.add('tab-active');
+      document.getElementById(`tab-${tab}`).classList.remove('bg-white', 'text-gray-600');
+
+      document.querySelectorAll('section[id^="section-"]').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(`section-${tab}`).classList.remove('hidden');
+
+      if (tab === 'fillblank' && currentExercises.length === 0) {
+        resetFillBlank();
+      }
+      if (tab === 'conversation') {
+        renderConversation();
+        renderPrompts();
+      }
+    }
+
+    // Fill in the blank functions
+    function resetFillBlank() {
+      const shuffled = [...fillBlankExercises].sort(() => Math.random() - 0.5);
+      currentExercises = shuffled.slice(0, 5);
+      fillBlankScore = { correct: 0, total: 0 };
+      updateFillBlankScore();
+      renderFillBlank();
+    }
+
+    function renderFillBlank() {
+      const container = document.getElementById('fillblank-exercises');
+      container.innerHTML = currentExercises.map((ex, i) => `
+        <div class="bg-gray-50 rounded-xl p-4 space-y-3">
+          <p class="text-gray-800 font-medium">${i + 1}. ${ex.sentence.replace('___', '<span class="text-orange-500 font-bold">_____</span>')}</p>
+          <div class="flex items-center gap-3">
+            <input type="text" id="fillblank-${i}" class="input-field flex-1 px-4 py-2 rounded-lg" placeholder="Your answer...">
+            <span class="text-xs text-gray-400 bg-gray-200 px-2 py-1 rounded">${ex.hint}</span>
+          </div>
+          <p id="feedback-${i}" class="text-sm hidden"></p>
+        </div>
+      `).join('');
+    }
+
+    function checkFillBlank() {
+      let correct = 0;
+      currentExercises.forEach((ex, i) => {
+        const input = document.getElementById(`fillblank-${i}`);
+        const feedback = document.getElementById(`feedback-${i}`);
+        const userAnswer = input.value.trim().toLowerCase();
+        const correctAnswer = ex.answer.toLowerCase();
+
+        feedback.classList.remove('hidden');
+        if (userAnswer === correctAnswer) {
+          input.classList.remove('input-incorrect');
+          input.classList.add('input-correct');
+          feedback.textContent = '✓ Correct!';
+          feedback.className = 'text-sm text-green-600';
+          correct++;
+        } else {
+          input.classList.remove('input-correct');
+          input.classList.add('input-incorrect');
+          feedback.textContent = `✗ Correct answer: ${ex.answer}`;
+          feedback.className = 'text-sm text-red-600';
+        }
+      });
+
+      fillBlankScore.correct += correct;
+      fillBlankScore.total += currentExercises.length;
+      updateFillBlankScore();
+    }
+
+    function updateFillBlankScore() {
+      document.getElementById('fillblank-score').textContent = `${fillBlankScore.correct}/${fillBlankScore.total}`;
+    }
+
+    // Conjugation functions
+    function newVerb() {
+      const verbs = Object.keys(verbsData);
+      currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+      document.getElementById('current-verb').textContent = currentVerb;
+      document.getElementById('verb-meaning').textContent = `(${verbsData[currentVerb].meaning})`;
+      document.getElementById('conjugation-feedback').classList.add('hidden');
+
+      ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'].forEach(pronoun => {
+        const input = document.getElementById(`conj-${pronoun}`);
+        input.value = '';
+        input.classList.remove('input-correct', 'input-incorrect');
+      });
+    }
+
+    function checkConjugation() {
+      const conjugations = verbsData[currentVerb].conjugations;
+      const pronouns = ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'];
+      const pronounLabels = ['yo', 'tú', 'él/ella', 'nosotros', 'vosotros', 'ellos/Uds.'];
+      let correct = 0;
+
+      pronouns.forEach((pronoun, i) => {
+        const input = document.getElementById(`conj-${pronoun}`);
+        const userAnswer = input.value.trim().toLowerCase();
+        const correctAnswer = conjugations[i].toLowerCase();
+
+        if (userAnswer === correctAnswer) {
+          input.classList.remove('input-incorrect');
+          input.classList.add('input-correct');
+          correct++;
+        } else {
+          input.classList.remove('input-correct');
+          input.classList.add('input-incorrect');
+        }
+      });
+
+      conjugateScore.correct += correct;
+      conjugateScore.total += 6;
+      document.getElementById('conjugate-score').textContent = `${conjugateScore.correct}/${conjugateScore.total}`;
+
+      // Show correct answers
+      const feedbackContainer = document.getElementById('conjugation-feedback');
+      const correctDiv = document.getElementById('correct-conjugations');
+      correctDiv.innerHTML = pronounLabels.map((label, i) => `
+        <span><strong>${label}:</strong> ${conjugations[i]}</span>
+      `).join('');
+      feedbackContainer.classList.remove('hidden');
+    }
+
+    // Conversation functions
+    function renderConversation() {
+      const conv = conversations[currentConversation];
+      const container = document.getElementById('conversation-container');
+
+      container.innerHTML = `
+        <div class="mb-4">
+          <h3 class="font-heading text-xl font-bold text-gray-800">${conv.title}</h3>
+          <div class="flex flex-wrap gap-2 mt-2">
+            ${conv.verbs.map(v => `<span class="verb-tag px-2 py-1 rounded-full text-orange-800 text-xs font-medium">${v}</span>`).join('')}
+          </div>
+        </div>
+        <div class="space-y-4">
+          ${conv.lines.map(line => `
+            <div class="flex ${line.speaker === 0 ? 'justify-start' : 'justify-end'}">
+              <div class="max-w-xs md:max-w-md">
+                <p class="text-xs text-gray-500 mb-1 ${line.speaker === 0 ? 'text-left' : 'text-right'}">${conv.speakers[line.speaker]}</p>
+                <div class="conversation-bubble ${line.speaker === 0 ? 'bubble-left bg-orange-50 border border-orange-100' : 'bubble-right bg-orange-500 text-white'} rounded-xl px-4 py-3">
+                  <p class="${line.speaker === 0 ? 'text-gray-800' : 'text-white'}">${line.text}</p>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function newConversation() {
+      currentConversation = (currentConversation + 1) % conversations.length;
+      renderConversation();
+    }
+
+    function renderPrompts() {
+      const shuffled = [...speakingPrompts].sort(() => Math.random() - 0.5);
+      const selected = shuffled.slice(0, 4);
+      const container = document.getElementById('speaking-prompts');
+
+      container.innerHTML = selected.map((prompt, i) => `
+        <div class="bg-white rounded-xl p-4 shadow-sm border-l-4 border-orange-400">
+          <p class="text-gray-700">${i + 1}. ${prompt}</p>
+        </div>
+      `).join('');
+    }
+
+    function newPrompts() {
+      renderPrompts();
+    }
+
+    // Element SDK integration
+    async function onConfigChange(cfg) {
+      const title = cfg.main_title || defaultConfig.main_title;
+      const subtitle = cfg.subtitle || defaultConfig.subtitle;
+      
+      document.getElementById('main-title').textContent = title;
+      document.getElementById('subtitle').textContent = subtitle;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => cfg.surface_color || defaultConfig.surface_color,
+            set: (value) => { cfg.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (value) => { cfg.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => { cfg.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); }
+          },
+          {
+            get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => { cfg.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['main_title', cfg.main_title || defaultConfig.main_title],
+        ['subtitle', cfg.subtitle || defaultConfig.subtitle]
+      ]);
+    }
+
+    // Initialize
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Initialize first verb
+    newVerb();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bb5d29296a93204',t:'MTc2Nzk4MTUwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
