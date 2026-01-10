@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Small Talk Practice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    * {
+      font-family: 'Nunito', sans-serif;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    }
+    .card-shadow {
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+    .prompt-card {
+      transition: all 0.3s ease;
+    }
+    .prompt-card:hover {
+      transform: translateY(-2px);
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pulse-dot {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full gradient-bg overflow-auto">
+   <div class="w-full min-h-full p-4 md:p-8"><!-- Header -->
+    <header class="text-center mb-8 fade-in">
+     <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4"><span class="text-2xl">💬</span> <span id="lang-toggle" class="text-white font-semibold cursor-pointer hover:text-yellow-200 transition-colors">EN / ES</span>
+     </div>
+     <h1 id="main-title" class="text-3xl md:text-5xl font-extrabold text-white mb-3 drop-shadow-lg">Small Talk Practice</h1>
+     <p id="welcome-text" class="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">Master everyday conversations with interactive prompts and writing exercises!</p>
+    </header><!-- Navigation Tabs -->
+    <nav class="flex justify-center gap-2 mb-8 flex-wrap"><button data-tab="prompts" class="tab-btn active bg-white text-purple-700 font-bold px-6 py-3 rounded-full shadow-lg transition-all hover:scale-105"> <span class="en">💭 Prompts</span> <span class="es hidden">💭 Temas</span> </button> <button data-tab="vocabulary" class="tab-btn bg-white/30 text-white font-bold px-6 py-3 rounded-full transition-all hover:bg-white/50"> <span class="en">📚 Vocabulary</span> <span class="es hidden">📚 Vocabulario</span> </button> <button data-tab="writing" class="tab-btn bg-white/30 text-white font-bold px-6 py-3 rounded-full transition-all hover:bg-white/50"> <span class="en">✍️ Writing</span> <span class="es hidden">✍️ Escritura</span> </button> <button data-tab="progress" class="tab-btn bg-white/30 text-white font-bold px-6 py-3 rounded-full transition-all hover:bg-white/50"> <span class="en">📊 Progress</span> <span class="es hidden">📊 Progreso</span> </button>
+    </nav><!-- Main Content -->
+    <main id="content" class="max-w-4xl mx-auto"><!-- Prompts Section -->
+     <section id="prompts-section" class="fade-in">
+      <div class="grid gap-4 md:grid-cols-2"><!-- Greeting Card -->
+       <div class="prompt-card bg-white rounded-2xl p-6 card-shadow cursor-pointer" data-category="greetings">
+        <div class="flex items-center gap-3 mb-4"><span class="text-4xl">👋</span>
+         <div>
+          <h3 class="font-bold text-purple-800 text-xl en">Greetings</h3>
+          <h3 class="font-bold text-purple-800 text-xl es hidden">Saludos</h3>
+          <p class="text-gray-500 text-sm en">Hello, goodbye, and more</p>
+          <p class="text-gray-500 text-sm es hidden">Hola, adiós, y más</p>
+         </div>
+        </div>
+        <div class="flex gap-2 flex-wrap"><span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">Hi!</span> <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">How are you?</span> <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">See you!</span>
+        </div>
+       </div><!-- Weather Card -->
+       <div class="prompt-card bg-white rounded-2xl p-6 card-shadow cursor-pointer" data-category="weather">
+        <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🌤️</span>
+         <div>
+          <h3 class="font-bold text-purple-800 text-xl en">Weather Talk</h3>
+          <h3 class="font-bold text-purple-800 text-xl es hidden">Hablar del Clima</h3>
+          <p class="text-gray-500 text-sm en">Discuss the weather</p>
+          <p class="text-gray-500 text-sm es hidden">Discutir el clima</p>
+         </div>
+        </div>
+        <div class="flex gap-2 flex-wrap"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">Nice day!</span> <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">It's cold</span> <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">Sunny</span>
+        </div>
+       </div><!-- Weekend Card -->
+       <div class="prompt-card bg-white rounded-2xl p-6 card-shadow cursor-pointer" data-category="weekend">
+        <div class="flex items-center gap-3 mb-4"><span class="text-4xl">🎉</span>
+         <div>
+          <h3 class="font-bold text-purple-800 text-xl en">Weekend Plans</h3>
+          <h3 class="font-bold text-purple-800 text-xl es hidden">Planes del Fin de Semana</h3>
+          <p class="text-gray-500 text-sm en">Talk about your plans</p>
+          <p class="text-gray-500 text-sm es hidden">Habla de tus planes</p>
+         </div>
+        </div>
+        <div class="flex gap-2 flex-wrap"><span class="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm">Any plans?</span> <span class="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm">I'm going to...</span> <span class="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm">Sounds fun!</span>
+        </div>
+       </div><!-- Work Card -->
+       <div class="prompt-card bg-white rounded-2xl p-6 card-shadow cursor-pointer" data-category="work">
+        <div class="flex items-center gap-3 mb-4"><span class="text-4xl">💼</span>
+         <div>
+          <h3 class="font-bold text-purple-800 text-xl en">Work &amp; School</h3>
+          <h3 class="font-bold text-purple-800 text-xl es hidden">Trabajo y Escuela</h3>
+          <p class="text-gray-500 text-sm en">Professional conversations</p>
+          <p class="text-gray-500 text-sm es hidden">Conversaciones profesionales</p>
+         </div>
+        </div>
+        <div class="flex gap-2 flex-wrap"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">How's work?</span> <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Busy day</span> <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">Meeting</span>
+        </div>
+       </div>
+      </div>
+     </section><!-- Vocabulary Section (Hidden by default) -->
+     <section id="vocabulary-section" class="hidden fade-in">
+      <div class="bg-white rounded-2xl p-6 card-shadow">
+       <h2 class="text-2xl font-bold text-purple-800 mb-6 en">📚 Essential Small Talk Vocabulary</h2>
+       <h2 class="text-2xl font-bold text-purple-800 mb-6 es hidden">📚 Vocabulario Esencial para Charlas</h2>
+       <div class="space-y-4" id="vocab-list"><!-- Vocab items will be generated -->
+       </div>
+      </div>
+     </section><!-- Writing Section (Hidden by default) -->
+     <section id="writing-section" class="hidden fade-in">
+      <div class="bg-white rounded-2xl p-6 card-shadow">
+       <h2 class="text-2xl font-bold text-purple-800 mb-2 en">✍️ Writing Practice</h2>
+       <h2 class="text-2xl font-bold text-purple-800 mb-2 es hidden">✍️ Práctica de Escritura</h2>
+       <p class="text-gray-600 mb-6 en">Respond to the prompt in English. Your answers will be saved!</p>
+       <p class="text-gray-600 mb-6 es hidden">Responde al tema en inglés. ¡Tus respuestas se guardarán!</p>
+       <div id="writing-prompt" class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-5 mb-6">
+        <p class="text-purple-800 font-semibold text-lg" id="current-prompt-en">Loading prompt...</p>
+        <p class="text-purple-600 mt-2" id="current-prompt-es">Cargando tema...</p>
+        <p class="text-gray-500 text-sm mt-3" id="prompt-hint-en">💡 Hint: Write 3-4 sentences using advanced vocabulary and varied sentence structures</p>
+        <p class="text-gray-500 text-sm es hidden" id="prompt-hint-es">💡 Pista: Escribe 3-4 oraciones usando vocabulario avanzado y estructuras variadas</p>
+       </div>
+       <div class="mb-4"><label for="user-response" class="block text-gray-700 font-semibold mb-2 en">Your Response:</label> <label for="user-response" class="block text-gray-700 font-semibold mb-2 es hidden">Tu Respuesta:</label> <textarea id="user-response" rows="4" class="w-full border-2 border-purple-200 rounded-xl p-4 focus:border-purple-500 focus:outline-none transition-colors resize-none" placeholder="Write your answer here... / Escribe tu respuesta aquí..."></textarea>
+       </div>
+       <div class="flex gap-3 flex-wrap"><button id="save-response" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"> <span class="en">💾 Save Response</span> <span class="es hidden">💾 Guardar Respuesta</span> </button> <button id="next-prompt" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-6 py-3 rounded-full transition-all hover:scale-105"> <span class="en">➡️ Next Prompt</span> <span class="es hidden">➡️ Siguiente Tema</span> </button>
+       </div>
+       <div id="save-feedback" class="mt-4 hidden">
+        <p class="text-green-600 font-semibold en">✅ Response saved successfully!</p>
+        <p class="text-green-600 font-semibold es hidden">✅ ¡Respuesta guardada con éxito!</p>
+       </div>
+      </div>
+     </section><!-- Progress Section (Hidden by default) -->
+     <section id="progress-section" class="hidden fade-in">
+      <div class="bg-white rounded-2xl p-6 card-shadow">
+       <h2 class="text-2xl font-bold text-purple-800 mb-6 en">📊 Your Progress</h2>
+       <h2 class="text-2xl font-bold text-purple-800 mb-6 es hidden">📊 Tu Progreso</h2>
+       <div class="grid md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-5 text-white text-center">
+         <p class="text-4xl font-bold" id="total-responses">0</p>
+         <p class="text-purple-200 en">Responses Written</p>
+         <p class="text-purple-200 es hidden">Respuestas Escritas</p>
+        </div>
+        <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-5 text-white text-center">
+         <p class="text-4xl font-bold" id="prompts-completed">0</p>
+         <p class="text-pink-200 en">Prompts Completed</p>
+         <p class="text-pink-200 es hidden">Temas Completados</p>
+        </div>
+        <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-5 text-white text-center">
+         <p class="text-4xl font-bold" id="streak-count">🔥</p>
+         <p class="text-indigo-200 en">Keep Going!</p>
+         <p class="text-indigo-200 es hidden">¡Sigue Así!</p>
+        </div>
+       </div>
+       <h3 class="font-bold text-gray-700 mb-4 en">📝 Your Recent Responses:</h3>
+       <h3 class="font-bold text-gray-700 mb-4 es hidden">📝 Tus Respuestas Recientes:</h3>
+       <div id="responses-list" class="space-y-3">
+        <p class="text-gray-500 italic en">No responses yet. Start writing!</p>
+        <p class="text-gray-500 italic es hidden">Aún no hay respuestas. ¡Empieza a escribir!</p>
+       </div>
+      </div>
+     </section>
+    </main><!-- Practice Modal -->
+    <div id="practice-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+     <div class="bg-white rounded-2xl p-6 max-w-lg w-full card-shadow max-h-[90%] overflow-auto">
+      <div class="flex justify-between items-center mb-4">
+       <h3 id="modal-title" class="text-xl font-bold text-purple-800">Greetings</h3><button id="close-modal" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+      </div>
+      <div id="modal-content" class="space-y-4"><!-- Dynamic content -->
+      </div>
+     </div>
+    </div><!-- Footer -->
+    <footer class="text-center mt-12 pb-8">
+     <p class="text-white/70 text-sm en">Practice makes perfect! 💪</p>
+     <p class="text-white/70 text-sm es hidden">¡La práctica hace al maestro! 💪</p>
+    </footer>
+   </div>
+  </div>
+  <script>
+    // Configuration
+    const defaultConfig = {
+      app_title: "Small Talk Practice",
+      welcome_message: "Master everyday conversations with interactive prompts and writing exercises!",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_action_color: "#7c3aed",
+      secondary_action_color: "#ec4899"
+    };
+
+    let config = { ...defaultConfig };
+    let currentLang = 'en';
+    let userResponses = [];
+    let currentPromptIndex = 0;
+
+    // Writing prompts data
+    const writingPrompts = [
+      { id: "greet_1", en: "A colleague you haven't seen in weeks approaches you. How would you greet them and inquire about what they've been up to?", es: "Un colega que no has visto en semanas se acerca a ti. ¿Cómo lo saludarías y preguntarías sobre lo que ha estado haciendo?" },
+      { id: "weather_1", en: "The forecast predicts unexpected weather changes this week. How would you bring this up in conversation and express your thoughts about it?", es: "El pronóstico predice cambios climáticos inesperados esta semana. ¿Cómo mencionarías esto en una conversación y expresarías tus pensamientos al respecto?" },
+      { id: "weekend_1", en: "Someone asks about your weekend plans. Describe your plans using phrases that convey enthusiasm or the desire to relax, depending on your mood.", es: "Alguien pregunta sobre tus planes de fin de semana. Describe tus planes usando frases que transmitan entusiasmo o el deseo de relajarte, dependiendo de tu estado de ánimo." },
+      { id: "work_1", en: "A new colleague joins your team. Introduce yourself professionally and ask thoughtful questions about their background and role.", es: "Un nuevo colega se une a tu equipo. Preséntate profesionalmente y haz preguntas reflexivas sobre su experiencia y rol." },
+      { id: "greet_2", en: "You're leaving the office after a productive day. Write an appropriate farewell that acknowledges your team and expresses positivity.", es: "Te vas de la oficina después de un día productivo. Escribe una despedida apropiada que reconozca a tu equipo y exprese positividad." },
+      { id: "weather_2", en: "The weather is ideal for outdoor activities. Initiate a conversation about how you or others might take advantage of it.", es: "El clima es ideal para actividades al aire libre. Inicia una conversación sobre cómo tú u otros podrían aprovecharlo." },
+      { id: "hobby_1", en: "Someone asks about your hobbies. Describe one in detail and explain why it's meaningful to you.", es: "Alguien pregunta sobre tus pasatiempos. Describe uno en detalle y explica por qué es significativo para ti." },
+      { id: "work_2", en: "A colleague mentions they're feeling overwhelmed with their workload. Respond empathetically and offer a suggestion or words of encouragement.", es: "Un colega menciona que se siente abrumado con su carga de trabajo. Responde con empatía y ofrece una sugerencia o palabras de aliento." },
+      { id: "opinion_1", en: "During a coffee break, someone asks your perspective on a recent news topic or trend. Share your viewpoint diplomatically.", es: "Durante un descanso para café, alguien pregunta tu perspectiva sobre un tema de noticias reciente o tendencia. Comparte tu punto de vista diplomáticamente." },
+      { id: "reflection_1", en: "A colleague asks how you've been managing work-life balance. Reflect honestly on your approach and any challenges.", es: "Un colega pregunta cómo has estado manejando el equilibrio trabajo-vida. Reflexiona honestamente sobre tu enfoque y cualquier desafío." }
+    ];
+
+    // Vocabulary data
+    const vocabulary = [
+      { en: "How have you been lately?", es: "¿Cómo has estado últimamente?", category: "greetings" },
+      { en: "It's a pleasure to meet you", es: "Es un placer conocerte", category: "greetings" },
+      { en: "I look forward to seeing you again", es: "Espero verte de nuevo", category: "greetings" },
+      { en: "It was great catching up with you", es: "Fue genial ponernos al día", category: "greetings" },
+      { en: "Long time no see!", es: "¡Cuánto tiempo sin verte!", category: "greetings" },
+      { en: "What have you been up to?", es: "¿Qué has estado haciendo?", category: "greetings" },
+      { en: "The weather's been unpredictable", es: "El clima ha estado impredecible", category: "weather" },
+      { en: "It's quite humid/muggy today", es: "Está bastante húmedo/bochornoso hoy", category: "weather" },
+      { en: "We're experiencing a heatwave", es: "Estamos experimentando una ola de calor", category: "weather" },
+      { en: "The forecast calls for...", es: "El pronóstico dice que...", category: "weather" },
+      { en: "It's perfect weather for outdoor activities", es: "Es el clima perfecto para actividades al aire libre", category: "weather" },
+      { en: "Do you have any exciting plans?", es: "¿Tienes planes emocionantes?", category: "weekend" },
+      { en: "I'm considering...", es: "Estoy considerando...", category: "weekend" },
+      { en: "I'm looking forward to unwinding", es: "Tengo ganas de relajarme", category: "weekend" },
+      { en: "That sounds absolutely delightful", es: "Eso suena absolutamente encantador", category: "weekend" },
+      { en: "I might take it easy this weekend", es: "Quizás me lo tome con calma este fin de semana", category: "weekend" },
+      { en: "How's your current project going?", es: "¿Cómo va tu proyecto actual?", category: "work" },
+      { en: "I've been swamped with deadlines", es: "He estado abrumado/a con fechas límite", category: "work" },
+      { en: "We're collaborating on a new initiative", es: "Estamos colaborando en una nueva iniciativa", category: "work" },
+      { en: "I'm juggling multiple responsibilities", es: "Estoy haciendo malabarismos con múltiples responsabilidades", category: "work" },
+      { en: "The workload has been manageable", es: "La carga de trabajo ha sido manejable", category: "work" },
+      { en: "That's quite fascinating", es: "Eso es bastante fascinante", category: "general" },
+      { en: "I couldn't agree more", es: "No podría estar más de acuerdo", category: "general" },
+      { en: "From my perspective...", es: "Desde mi perspectiva...", category: "general" },
+      { en: "That's a valid point", es: "Es un punto válido", category: "general" },
+      { en: "I appreciate your insight", es: "Aprecio tu perspicacia", category: "general" },
+      { en: "To be honest...", es: "Para ser honesto/a...", category: "general" },
+      { en: "What's your take on...?", es: "¿Cuál es tu opinión sobre...?", category: "general" },
+      { en: "I'm inclined to think that...", es: "Estoy inclinado/a a pensar que...", category: "general" }
+    ];
+
+    // Conversation examples for modals
+    const conversationExamples = {
+      greetings: {
+        title: { en: "Greetings", es: "Saludos" },
+        examples: [
+          { 
+            a: { en: "Hi! How have you been lately?", es: "¡Hola! ¿Cómo has estado últimamente?" },
+            b: { en: "I've been doing quite well, thanks for asking! And yourself?", es: "He estado bastante bien, ¡gracias por preguntar! ¿Y tú?" },
+            a2: { en: "I can't complain. Work has been keeping me occupied, but it's rewarding.", es: "No me puedo quejar. El trabajo me ha mantenido ocupado/a, pero es gratificante." }
+          },
+          {
+            a: { en: "Long time no see! What have you been up to?", es: "¡Cuánto tiempo sin verte! ¿Qué has estado haciendo?" },
+            b: { en: "I've been exploring some new hobbies. How about you?", es: "He estado explorando algunos pasatiempos nuevos. ¿Y tú?" },
+            a2: { en: "That's wonderful! I'd love to hear more about that.", es: "¡Eso es maravilloso! Me encantaría saber más sobre eso." }
+          }
+        ]
+      },
+      weather: {
+        title: { en: "Weather Talk", es: "Hablar del Clima" },
+        examples: [
+          {
+            a: { en: "The weather's been quite unpredictable lately, hasn't it?", es: "El clima ha estado bastante impredecible últimamente, ¿no?" },
+            b: { en: "Absolutely! The forecast mentioned we might experience a cold front this week.", es: "¡Absolutamente! El pronóstico mencionó que podríamos experimentar un frente frío esta semana." },
+            a2: { en: "I heard that too. Better dress in layers to be prepared.", es: "Yo también escuché eso. Mejor vestirse en capas para estar preparado/a." }
+          },
+          {
+            a: { en: "It's perfect weather for outdoor activities today!", es: "¡Es el clima perfecto para actividades al aire libre hoy!" },
+            b: { en: "I couldn't agree more. I'm considering going for a hike.", es: "No podría estar más de acuerdo. Estoy considerando ir de excursión." },
+            a2: { en: "That sounds absolutely delightful! Enjoy yourself.", es: "¡Eso suena absolutamente encantador! Disfrútalo." }
+          }
+        ]
+      },
+      weekend: {
+        title: { en: "Weekend Plans", es: "Planes del Fin de Semana" },
+        examples: [
+          {
+            a: { en: "Do you have any exciting plans for the weekend?", es: "¿Tienes planes emocionantes para el fin de semana?" },
+            b: { en: "I'm looking forward to unwinding with a good book. You?", es: "Tengo ganas de relajarme con un buen libro. ¿Y tú?" },
+            a2: { en: "I might take it easy as well. It's been a hectic week.", es: "Yo también podría tomármelo con calma. Ha sido una semana agitada." }
+          },
+          {
+            a: { en: "How was your weekend? Did you do anything interesting?", es: "¿Cómo estuvo tu fin de semana? ¿Hiciste algo interesante?" },
+            b: { en: "It was quite productive. I attended a workshop on photography.", es: "Fue bastante productivo. Asistí a un taller de fotografía." },
+            a2: { en: "That's fascinating! I've always wanted to improve my photography skills.", es: "¡Eso es fascinante! Siempre he querido mejorar mis habilidades fotográficas." }
+          }
+        ]
+      },
+      work: {
+        title: { en: "Work & School", es: "Trabajo y Escuela" },
+        examples: [
+          {
+            a: { en: "How's your current project progressing?", es: "¿Cómo va tu proyecto actual?" },
+            b: { en: "We're making significant progress. The team is collaborating effectively.", es: "Estamos haciendo un progreso significativo. El equipo está colaborando efectivamente." },
+            a2: { en: "That's excellent to hear. Teamwork makes all the difference.", es: "Es excelente escuchar eso. El trabajo en equipo marca toda la diferencia." }
+          },
+          {
+            a: { en: "I've been swamped with deadlines lately. How do you manage?", es: "He estado abrumado/a con fechas límite últimamente. ¿Cómo lo manejas?" },
+            b: { en: "I try to prioritize tasks and take regular breaks to maintain productivity.", es: "Intento priorizar tareas y tomar descansos regulares para mantener la productividad." },
+            a2: { en: "That's valuable advice. I appreciate your insight.", es: "Es un consejo valioso. Aprecio tu perspicacia." }
+          }
+        ]
+      }
+    };
+
+    // Initialize vocabulary list
+    function initVocabulary() {
+      const vocabList = document.getElementById('vocab-list');
+      vocabList.innerHTML = vocabulary.map(item => `
+        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-purple-50 transition-colors">
+          <div>
+            <p class="font-semibold text-purple-800">${item.en}</p>
+            <p class="text-gray-600">${item.es}</p>
+          </div>
+          <span class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-xs">${item.category}</span>
+        </div>
+      `).join('');
+    }
+
+    // Language toggle
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hidden', currentLang !== 'en'));
+      document.querySelectorAll('.es').forEach(el => el.classList.toggle('hidden', currentLang !== 'es'));
+      updateWritingPrompt();
+    }
+
+    // Tab switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === tabName;
+        btn.classList.toggle('bg-white', isActive);
+        btn.classList.toggle('text-purple-700', isActive);
+        btn.classList.toggle('shadow-lg', isActive);
+        btn.classList.toggle('bg-white/30', !isActive);
+        btn.classList.toggle('text-white', !isActive);
+      });
+
+      document.querySelectorAll('section[id$="-section"]').forEach(section => {
+        section.classList.add('hidden');
+      });
+
+      const targetSection = document.getElementById(`${tabName}-section`);
+      if (targetSection) {
+        targetSection.classList.remove('hidden');
+      }
+    }
+
+    // Update writing prompt
+    function updateWritingPrompt() {
+      const prompt = writingPrompts[currentPromptIndex];
+      document.getElementById('current-prompt-en').textContent = prompt.en;
+      document.getElementById('current-prompt-es').textContent = prompt.es;
+      document.getElementById('user-response').value = '';
+      document.getElementById('save-feedback').classList.add('hidden');
+    }
+
+    // Next prompt
+    function nextPrompt() {
+      currentPromptIndex = (currentPromptIndex + 1) % writingPrompts.length;
+      updateWritingPrompt();
+    }
+
+    // Show modal with conversation examples
+    function showModal(category) {
+      const modal = document.getElementById('practice-modal');
+      const content = conversationExamples[category];
+      
+      document.getElementById('modal-title').textContent = content.title[currentLang];
+      
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = content.examples.map((ex, i) => `
+        <div class="bg-gray-50 rounded-xl p-4">
+          <p class="text-xs text-gray-500 mb-2 en">Example ${i + 1}</p>
+          <p class="text-xs text-gray-500 mb-2 es hidden">Ejemplo ${i + 1}</p>
+          <div class="space-y-2">
+            <div class="flex gap-2">
+              <span class="bg-purple-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">A</span>
+              <p class="text-gray-800">${ex.a[currentLang]}</p>
+            </div>
+            <div class="flex gap-2">
+              <span class="bg-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">B</span>
+              <p class="text-gray-800">${ex.b[currentLang]}</p>
+            </div>
+            <div class="flex gap-2">
+              <span class="bg-purple-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">A</span>
+              <p class="text-gray-800">${ex.a2[currentLang]}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    // Close modal
+    function closeModal() {
+      const modal = document.getElementById('practice-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Update progress display
+    function updateProgress() {
+      const totalResponses = userResponses.length;
+      const uniquePrompts = new Set(userResponses.map(r => r.prompt_id)).size;
+      
+      document.getElementById('total-responses').textContent = totalResponses;
+      document.getElementById('prompts-completed').textContent = uniquePrompts;
+      
+      const responsesList = document.getElementById('responses-list');
+      if (userResponses.length > 0) {
+        responsesList.innerHTML = userResponses.slice(-5).reverse().map(r => {
+          const prompt = writingPrompts.find(p => p.id === r.prompt_id);
+          return `
+            <div class="bg-gray-50 rounded-xl p-4">
+              <p class="text-purple-700 font-semibold text-sm mb-2">${prompt ? prompt[currentLang] : 'Unknown prompt'}</p>
+              <p class="text-gray-700">${r.user_response}</p>
+              <p class="text-gray-400 text-xs mt-2">${new Date(r.completed_at).toLocaleDateString()}</p>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Data handler for SDK
+    const dataHandler = {
+      onDataChanged(data) {
+        userResponses = data;
+        updateProgress();
+      }
+    };
+
+    // Save response
+    async function saveResponse() {
+      const responseText = document.getElementById('user-response').value.trim();
+      if (!responseText) return;
+
+      if (userResponses.length >= 999) {
+        document.getElementById('save-feedback').innerHTML = `
+          <p class="text-red-600 font-semibold en">⚠️ Maximum responses reached (999). Delete some to add more.</p>
+          <p class="text-red-600 font-semibold es hidden">⚠️ Máximo de respuestas alcanzado (999). Elimina algunas para agregar más.</p>
+        `;
+        document.getElementById('save-feedback').classList.remove('hidden');
+        return;
+      }
+
+      const saveBtn = document.getElementById('save-response');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="pulse-dot">⏳</span>';
+
+      const prompt = writingPrompts[currentPromptIndex];
+      const result = await window.dataSdk.create({
+        prompt_id: prompt.id,
+        user_response: responseText,
+        completed_at: new Date().toISOString()
+      });
+
+      if (result.isOk) {
+        document.getElementById('save-feedback').innerHTML = `
+          <p class="text-green-600 font-semibold en">✅ Response saved successfully!</p>
+          <p class="text-green-600 font-semibold es hidden">✅ ¡Respuesta guardada con éxito!</p>
+        `;
+        document.getElementById('save-feedback').classList.remove('hidden');
+        document.getElementById('user-response').value = '';
+      } else {
+        document.getElementById('save-feedback').innerHTML = `
+          <p class="text-red-600 font-semibold en">❌ Error saving. Please try again.</p>
+          <p class="text-red-600 font-semibold es hidden">❌ Error al guardar. Intenta de nuevo.</p>
+        `;
+        document.getElementById('save-feedback').classList.remove('hidden');
+      }
+
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = `
+        <span class="en">💾 Save Response</span>
+        <span class="es hidden">💾 Guardar Respuesta</span>
+      `;
+      document.querySelectorAll('.en').forEach(el => el.classList.toggle('hidden', currentLang !== 'en'));
+      document.querySelectorAll('.es').forEach(el => el.classList.toggle('hidden', currentLang !== 'es'));
+    }
+
+    // Render function for config changes
+    async function onConfigChange(cfg) {
+      const title = document.getElementById('main-title');
+      const welcome = document.getElementById('welcome-text');
+      
+      if (title) title.textContent = cfg.app_title || defaultConfig.app_title;
+      if (welcome) welcome.textContent = cfg.welcome_message || defaultConfig.welcome_message;
+    }
+
+    // Element SDK capabilities
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (value) => { cfg.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => cfg.surface_color || defaultConfig.surface_color,
+            set: (value) => { cfg.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (value) => { cfg.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => cfg.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => { cfg.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); }
+          },
+          {
+            get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => { cfg.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ["app_title", cfg.app_title || defaultConfig.app_title],
+        ["welcome_message", cfg.welcome_message || defaultConfig.welcome_message]
+      ]);
+    }
+
+    // Initialize app
+    async function init() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities,
+          mapToEditPanelValues
+        });
+        config = window.elementSdk.config || defaultConfig;
+      }
+
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        await window.dataSdk.init(dataHandler);
+      }
+
+      // Initialize UI
+      initVocabulary();
+      updateWritingPrompt();
+
+      // Event listeners
+      document.getElementById('lang-toggle').addEventListener('click', toggleLanguage);
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      document.querySelectorAll('.prompt-card').forEach(card => {
+        card.addEventListener('click', () => showModal(card.dataset.category));
+      });
+
+      document.getElementById('close-modal').addEventListener('click', closeModal);
+      document.getElementById('practice-modal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeModal();
+      });
+
+      document.getElementById('save-response').addEventListener('click', saveResponse);
+      document.getElementById('next-prompt').addEventListener('click', nextPrompt);
+
+      // Initial render
+      await onConfigChange(config);
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bbcbbba778db999',t:'MTc2ODA1Mzk2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
