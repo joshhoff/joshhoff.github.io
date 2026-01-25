@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Flip Cards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&amp;family=DM+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .card-container {
+      perspective: 1000px;
+    }
+    
+    .card-inner {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    
+    .card-front, .card-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    
+    .progress-fill {
+      transition: width 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-slide-in {
+      animation: slideIn 0.5s ease-out forwards;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 20px 5px rgba(139, 92, 246, 0.2);
+      }
+    }
+    
+    .pulse-hint {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="w-full h-full overflow-auto" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+   <div class="w-full min-h-full flex flex-col items-center px-4 py-8"><!-- Header -->
+    <header class="text-center mb-8 animate-slide-in">
+     <h1 id="main-title" class="text-3xl md:text-4xl font-semibold mb-3" style="font-family: 'Crimson Pro', serif; color: #e2e8f0;">Vocabulary Flip Cards</h1>
+     <p id="instruction-text" class="text-base md:text-lg max-w-xl mx-auto" style="font-family: 'DM Sans', sans-serif; color: #94a3b8;">Read the clue, then click the card to reveal the vocabulary word. Try to guess before flipping!</p>
+    </header><!-- Progress Bar -->
+    <div class="w-full max-w-md mb-6 animate-slide-in" style="animation-delay: 0.1s;">
+     <div class="flex justify-between items-center mb-2"><span id="progress-text" class="text-sm font-medium" style="font-family: 'DM Sans', sans-serif; color: #94a3b8;">Card 1 of 12</span> <span id="score-text" class="text-sm font-medium" style="font-family: 'DM Sans', sans-serif; color: #a78bfa;">Score: 0</span>
+     </div>
+     <div class="w-full h-2 rounded-full" style="background: rgba(255,255,255,0.1);">
+      <div id="progress-bar" class="progress-fill h-full rounded-full" style="width: 8.33%; background: linear-gradient(90deg, #8b5cf6, #a78bfa);"></div>
+     </div>
+    </div><!-- Flip Card -->
+    <div class="card-container w-full max-w-lg mb-6 animate-slide-in" style="animation-delay: 0.2s; height: 320px;">
+     <div id="card-inner" class="card-inner w-full h-full relative cursor-pointer pulse-hint"><!-- Front of Card (Clue) -->
+      <div class="card-front absolute inset-0 rounded-2xl p-6 flex flex-col justify-center items-center" style="background: linear-gradient(145deg, #1e293b, #334155); border: 1px solid rgba(139, 92, 246, 0.3);">
+       <div class="text-center"><span class="inline-block px-3 py-1 rounded-full text-xs font-medium mb-4" style="background: rgba(139, 92, 246, 0.2); color: #a78bfa; font-family: 'DM Sans', sans-serif;"> CLUE </span>
+        <p id="clue-text" class="text-xl md:text-2xl leading-relaxed" style="font-family: 'Crimson Pro', serif; color: #e2e8f0;">A sticky strip used to attach things together or fix broken items.</p>
+        <p class="mt-6 text-sm" style="color: #64748b; font-family: 'DM Sans', sans-serif;">👆 Click to reveal the answer</p>
+       </div>
+      </div><!-- Back of Card (Answer) -->
+      <div class="card-back absolute inset-0 rounded-2xl p-6 flex flex-col justify-center items-center" style="background: linear-gradient(145deg, #4c1d95, #6d28d9); border: 1px solid rgba(167, 139, 250, 0.5);">
+       <div class="text-center"><span class="inline-block px-3 py-1 rounded-full text-xs font-medium mb-4" style="background: rgba(255,255,255,0.2); color: #e2e8f0; font-family: 'DM Sans', sans-serif;"> ANSWER </span>
+        <p id="answer-text" class="text-4xl md:text-5xl font-semibold mb-4" style="font-family: 'Crimson Pro', serif; color: #ffffff;">TAPE</p>
+        <p id="example-sentence" class="text-base italic" style="color: #c4b5fd; font-family: 'DM Sans', sans-serif;">"I need some tape to wrap this present."</p>
+       </div>
+      </div>
+     </div>
+    </div><!-- Self-Assessment Buttons -->
+    <div id="assessment-buttons" class="flex gap-4 mb-6 opacity-0 transition-opacity duration-300" style="pointer-events: none;"><button id="btn-knew" class="px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); font-family: 'DM Sans', sans-serif;"> ✓ I knew it! </button> <button id="btn-learning" class="px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); font-family: 'DM Sans', sans-serif;"> 📚 Still learning </button>
+    </div><!-- Navigation -->
+    <div class="flex gap-4 animate-slide-in" style="animation-delay: 0.3s;"><button id="btn-prev" class="px-5 py-2.5 rounded-xl font-medium transition-all duration-200 hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100" style="background: rgba(255,255,255,0.1); color: #94a3b8; font-family: 'DM Sans', sans-serif;" disabled> ← Previous </button> <button id="btn-shuffle" class="px-5 py-2.5 rounded-xl font-medium transition-all duration-200 hover:scale-105" style="background: rgba(139, 92, 246, 0.2); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.4); font-family: 'DM Sans', sans-serif;"> 🔀 Shuffle </button> <button id="btn-next" class="px-5 py-2.5 rounded-xl font-medium transition-all duration-200 hover:scale-105" style="background: rgba(139, 92, 246, 0.3); color: #e2e8f0; border: 1px solid rgba(139, 92, 246, 0.5); font-family: 'DM Sans', sans-serif;"> Next → </button>
+    </div><!-- Completion Screen -->
+    <div id="completion-screen" class="hidden fixed inset-0 flex items-center justify-center p-4" style="background: rgba(0,0,0,0.8); z-index: 50;">
+     <div class="text-center p-8 rounded-2xl max-w-md" style="background: linear-gradient(145deg, #1e293b, #334155); border: 1px solid rgba(139, 92, 246, 0.3);">
+      <div class="text-6xl mb-4">
+       🎉
+      </div>
+      <h2 class="text-2xl font-semibold mb-2" style="font-family: 'Crimson Pro', serif; color: #e2e8f0;">Great Work!</h2>
+      <p class="mb-4" style="font-family: 'DM Sans', sans-serif; color: #94a3b8;">You've completed all 12 vocabulary cards!</p>
+      <p id="final-score" class="text-xl font-medium mb-6" style="font-family: 'DM Sans', sans-serif; color: #a78bfa;">Words you knew: 0 / 12</p><button id="btn-restart" class="px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105" style="background: linear-gradient(90deg, #8b5cf6, #6d28d9); color: #ffffff; font-family: 'DM Sans', sans-serif;"> Practice Again </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      activity_title: "Vocabulary Flip Cards",
+      instruction_text: "Read the clue, then click the card to reveal the vocabulary word. Try to guess before flipping!",
+      font_family: "Crimson Pro",
+      font_size: 16,
+      background_color: "#1a1a2e",
+      surface_color: "#1e293b",
+      text_color: "#e2e8f0",
+      primary_action_color: "#8b5cf6",
+      secondary_action_color: "#94a3b8"
+    };
+
+    const vocabularyData = [
+      {
+        word: "TAPE",
+        clue: "A sticky strip used to attach things together or fix broken items.",
+        example: '"I need some tape to wrap this present."'
+      },
+      {
+        word: "PORTRAIT",
+        clue: "A painting, drawing, or photograph of a person, especially their face.",
+        example: '"The museum has a famous portrait of the queen."'
+      },
+      {
+        word: "BRUSH",
+        clue: "A tool with bristles used for painting, cleaning, or styling hair.",
+        example: '"The artist dipped her brush into the blue paint."'
+      },
+      {
+        word: "PAINT",
+        clue: "A colored liquid used to cover surfaces or create artwork.",
+        example: '"We bought white paint for the bedroom walls."'
+      },
+      {
+        word: "ASTRONOMY",
+        clue: "The scientific study of stars, planets, and the universe.",
+        example: '"She studies astronomy because she loves learning about galaxies."'
+      },
+      {
+        word: "TELESCOPE",
+        clue: "An instrument that makes distant objects appear closer and larger.",
+        example: '"We used a telescope to see the moon\'s craters."'
+      },
+      {
+        word: "COSMOS",
+        clue: "The universe seen as a well-ordered whole; all of space and everything in it.",
+        example: '"Scientists are still discovering new secrets of the cosmos."'
+      },
+      {
+        word: "ATTIC",
+        clue: "A room or space directly under the roof of a house, often used for storage.",
+        example: '"We found old photographs in boxes in the attic."'
+      },
+      {
+        word: "CLOAK",
+        clue: "A loose outer garment, like a cape, that hangs from the shoulders.",
+        example: '"The wizard wore a long dark cloak."'
+      },
+      {
+        word: "DUSTY",
+        clue: "Covered with or full of tiny particles of dirt or powder.",
+        example: '"The old books on the shelf were dusty."'
+      },
+      {
+        word: "SPIDER WEBS",
+        clue: "Thin, sticky nets made by spiders to catch insects.",
+        example: '"The abandoned house was full of spider webs."'
+      },
+      {
+        word: "GEMS",
+        clue: "Precious stones that are cut and polished, like diamonds or rubies.",
+        example: '"The crown was decorated with beautiful gems."'
+      }
+    ];
+
+    let cards = [...vocabularyData];
+    let currentIndex = 0;
+    let score = 0;
+    let isFlipped = false;
+    let hasAnswered = false;
+
+    const cardInner = document.getElementById('card-inner');
+    const clueText = document.getElementById('clue-text');
+    const answerText = document.getElementById('answer-text');
+    const exampleSentence = document.getElementById('example-sentence');
+    const progressText = document.getElementById('progress-text');
+    const progressBar = document.getElementById('progress-bar');
+    const scoreText = document.getElementById('score-text');
+    const assessmentButtons = document.getElementById('assessment-buttons');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnShuffle = document.getElementById('btn-shuffle');
+    const btnKnew = document.getElementById('btn-knew');
+    const btnLearning = document.getElementById('btn-learning');
+    const completionScreen = document.getElementById('completion-screen');
+    const finalScore = document.getElementById('final-score');
+    const btnRestart = document.getElementById('btn-restart');
+    const mainTitle = document.getElementById('main-title');
+    const instructionText = document.getElementById('instruction-text');
+
+    function updateCard() {
+      const card = cards[currentIndex];
+      clueText.textContent = card.clue;
+      answerText.textContent = card.word;
+      exampleSentence.textContent = card.example;
+      progressText.textContent = `Card ${currentIndex + 1} of ${cards.length}`;
+      progressBar.style.width = `${((currentIndex + 1) / cards.length) * 100}%`;
+      
+      btnPrev.disabled = currentIndex === 0;
+      
+      if (isFlipped) {
+        cardInner.classList.remove('flipped');
+        isFlipped = false;
+      }
+      
+      cardInner.classList.add('pulse-hint');
+      
+      assessmentButtons.style.opacity = '0';
+      assessmentButtons.style.pointerEvents = 'none';
+      hasAnswered = false;
+    }
+
+    function flipCard() {
+      if (!isFlipped) {
+        cardInner.classList.add('flipped');
+        cardInner.classList.remove('pulse-hint');
+        isFlipped = true;
+        
+        if (!hasAnswered) {
+          assessmentButtons.style.opacity = '1';
+          assessmentButtons.style.pointerEvents = 'auto';
+        }
+      }
+    }
+
+    function handleKnew() {
+      if (!hasAnswered) {
+        score++;
+        scoreText.textContent = `Score: ${score}`;
+        hasAnswered = true;
+        assessmentButtons.style.opacity = '0';
+        assessmentButtons.style.pointerEvents = 'none';
+      }
+    }
+
+    function handleLearning() {
+      if (!hasAnswered) {
+        hasAnswered = true;
+        assessmentButtons.style.opacity = '0';
+        assessmentButtons.style.pointerEvents = 'none';
+      }
+    }
+
+    function nextCard() {
+      if (currentIndex < cards.length - 1) {
+        currentIndex++;
+        updateCard();
+      } else {
+        showCompletion();
+      }
+    }
+
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCard();
+      }
+    }
+
+    function shuffleCards() {
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+      currentIndex = 0;
+      score = 0;
+      scoreText.textContent = `Score: ${score}`;
+      updateCard();
+    }
+
+    function showCompletion() {
+      finalScore.textContent = `Words you knew: ${score} / ${cards.length}`;
+      completionScreen.classList.remove('hidden');
+    }
+
+    function restart() {
+      completionScreen.classList.add('hidden');
+      cards = [...vocabularyData];
+      currentIndex = 0;
+      score = 0;
+      scoreText.textContent = `Score: ${score}`;
+      updateCard();
+    }
+
+    cardInner.addEventListener('click', flipCard);
+    btnKnew.addEventListener('click', handleKnew);
+    btnLearning.addEventListener('click', handleLearning);
+    btnNext.addEventListener('click', nextCard);
+    btnPrev.addEventListener('click', prevCard);
+    btnShuffle.addEventListener('click', shuffleCards);
+    btnRestart.addEventListener('click', restart);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        if (!isFlipped) {
+          flipCard();
+        }
+      } else if (e.key === 'ArrowRight') {
+        nextCard();
+      } else if (e.key === 'ArrowLeft') {
+        prevCard();
+      }
+    });
+
+    function onConfigChange(config) {
+      const title = config.activity_title || defaultConfig.activity_title;
+      const instructions = config.instruction_text || defaultConfig.instruction_text;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      mainTitle.textContent = title;
+      instructionText.textContent = instructions;
+
+      mainTitle.style.fontFamily = `${fontFamily}, serif`;
+      mainTitle.style.color = textColor;
+      mainTitle.style.fontSize = `${fontSize * 2}px`;
+
+      instructionText.style.color = secondaryColor;
+      instructionText.style.fontSize = `${fontSize}px`;
+
+      clueText.style.fontFamily = `${fontFamily}, serif`;
+      clueText.style.color = textColor;
+      clueText.style.fontSize = `${fontSize * 1.5}px`;
+
+      answerText.style.fontFamily = `${fontFamily}, serif`;
+      answerText.style.fontSize = `${fontSize * 3}px`;
+
+      document.getElementById('app-wrapper').style.background = `linear-gradient(135deg, ${bgColor} 0%, ${surfaceColor} 100%)`;
+
+      progressBar.style.background = `linear-gradient(90deg, ${primaryColor}, ${primaryColor}aa)`;
+      scoreText.style.color = primaryColor;
+      progressText.style.color = secondaryColor;
+
+      btnShuffle.style.background = `${primaryColor}33`;
+      btnShuffle.style.color = primaryColor;
+      btnShuffle.style.borderColor = `${primaryColor}66`;
+
+      btnNext.style.background = `${primaryColor}4d`;
+      btnNext.style.color = textColor;
+      btnNext.style.borderColor = `${primaryColor}80`;
+
+      btnPrev.style.color = secondaryColor;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => window.elementSdk.setConfig({ background_color: value })
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => window.elementSdk.setConfig({ surface_color: value })
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => window.elementSdk.setConfig({ text_color: value })
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => window.elementSdk.setConfig({ primary_action_color: value })
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => window.elementSdk.setConfig({ secondary_action_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => window.elementSdk.setConfig({ font_family: value })
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => window.elementSdk.setConfig({ font_size: value })
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["activity_title", config.activity_title || defaultConfig.activity_title],
+          ["instruction_text", config.instruction_text || defaultConfig.instruction_text]
+        ])
+      });
+    }
+
+    updateCard();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c397d3f50bfdf5b',t:'MTc2OTM2MjEyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
