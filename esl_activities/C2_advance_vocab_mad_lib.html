@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Explorer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    * {
+      font-family: 'Outfit', sans-serif;
+    }
+    .map-grid {
+      background-image: 
+        linear-gradient(rgba(100, 140, 180, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100, 140, 180, 0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .location-marker {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .word-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .word-card:hover {
+      transform: translateY(-4px);
+    }
+    .progress-ring {
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+    .correct-flash {
+      animation: correctFlash 0.6s ease-out;
+    }
+    @keyframes correctFlash {
+      0% { background-color: rgb(34, 197, 94); }
+      100% { background-color: transparent; }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-slate-900 text-white overflow-auto">
+  <div id="app" class="h-full w-full map-grid relative"><!-- Decorative Map Elements -->
+   <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <svg class="absolute top-10 left-10 w-16 h-16 text-cyan-500/20" viewbox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+    </svg>
+    <svg class="absolute top-1/4 right-20 w-12 h-12 text-amber-500/20" viewbox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+    </svg>
+    <svg class="absolute bottom-20 left-1/4 w-14 h-14 text-rose-500/20" viewbox="0 0 24 24" fill="currentColor"><path d="M15 8v8H5V8h10m1-2H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4V7c0-.55-.45-1-1-1z" />
+    </svg>
+    <div class="absolute top-1/2 left-1/3 w-32 h-32 rounded-full bg-gradient-to-br from-cyan-500/5 to-transparent"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-gradient-to-tl from-amber-500/5 to-transparent"></div>
+   </div><!-- Header -->
+   <header class="relative z-10 p-6 flex items-center justify-between border-b border-slate-700/50 bg-slate-900/80 backdrop-blur-sm">
+    <div class="flex items-center gap-4">
+     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
+      <svg class="w-7 h-7 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+      </svg>
+     </div>
+     <div>
+      <h1 id="app-title" class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Vocabulary Explorer</h1>
+      <p id="welcome-text" class="text-slate-400 text-sm">Master advanced words through interactive practice</p>
+     </div>
+    </div>
+    <div id="stats-display" class="flex items-center gap-6">
+     <div class="text-center">
+      <div id="words-mastered" class="text-2xl font-bold text-emerald-400">
+       0
+      </div>
+      <div class="text-xs text-slate-500 uppercase tracking-wider">
+       Mastered
+      </div>
+     </div>
+     <div class="text-center">
+      <div id="accuracy-display" class="text-2xl font-bold text-amber-400">
+       0%
+      </div>
+      <div class="text-xs text-slate-500 uppercase tracking-wider">
+       Accuracy
+      </div>
+     </div>
+    </div>
+   </header><!-- Main Content -->
+   <main class="relative z-10 p-6"><!-- Category Selection View -->
+    <div id="category-view" class="max-w-6xl mx-auto">
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><!-- Adjectives Region -->
+      <div class="word-card group relative bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-2xl p-6 border border-slate-700/50 hover:border-rose-500/50 cursor-pointer" data-category="adjectives">
+       <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-sm font-bold shadow-lg shadow-rose-500/25 location-marker"><span id="adj-count">0</span>
+       </div>
+       <div class="w-14 h-14 rounded-xl bg-rose-500/20 flex items-center justify-center mb-4 group-hover:bg-rose-500/30 transition-colors">
+        <svg class="w-8 h-8 text-rose-400" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-white mb-2">Adjectives</h3>
+       <p class="text-slate-400 text-sm mb-4">Descriptive words for travel &amp; content</p>
+       <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-rose-500/10 text-rose-300 text-xs rounded-full">breathtaking</span> <span class="px-2 py-1 bg-rose-500/10 text-rose-300 text-xs rounded-full">captivating</span>
+       </div>
+      </div><!-- Adverbs Region -->
+      <div class="word-card group relative bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-2xl p-6 border border-slate-700/50 hover:border-amber-500/50 cursor-pointer" data-category="adverbs">
+       <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-sm font-bold shadow-lg shadow-amber-500/25 location-marker"><span id="adv-count">0</span>
+       </div>
+       <div class="w-14 h-14 rounded-xl bg-amber-500/20 flex items-center justify-center mb-4 group-hover:bg-amber-500/30 transition-colors">
+        <svg class="w-8 h-8 text-amber-400" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-white mb-2">Adverbs</h3>
+       <p class="text-slate-400 text-sm mb-4">Words that modify actions &amp; descriptions</p>
+       <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-amber-500/10 text-amber-300 text-xs rounded-full">seamlessly</span> <span class="px-2 py-1 bg-amber-500/10 text-amber-300 text-xs rounded-full">thoroughly</span>
+       </div>
+      </div><!-- Verbs Region -->
+      <div class="word-card group relative bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-2xl p-6 border border-slate-700/50 hover:border-cyan-500/50 cursor-pointer" data-category="verbs">
+       <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center text-sm font-bold shadow-lg shadow-cyan-500/25 location-marker"><span id="verb-count">0</span>
+       </div>
+       <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4 group-hover:bg-cyan-500/30 transition-colors">
+        <svg class="w-8 h-8 text-cyan-400" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /> <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-white mb-2">Verbs</h3>
+       <p class="text-slate-400 text-sm mb-4">Action words for travel &amp; video content</p>
+       <div class="flex flex-wrap gap-2"><span class="px-2 py-1 bg-cyan-500/10 text-cyan-300 text-xs rounded-full">curate</span> <span class="px-2 py-1 bg-cyan-500/10 text-cyan-300 text-xs rounded-full">navigate</span>
+       </div>
+      </div>
+     </div><!-- Start Practice Button -->
+     <div class="text-center flex flex-col sm:flex-row gap-4 justify-center items-center"><button id="start-practice-btn" class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-lg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all hover:scale-105"> 🗺️ Start Practice Journey </button> <button id="start-madlib-btn" class="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-semibold text-lg shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all hover:scale-105"> 📝 Create Story Mad Lib </button>
+     </div><!-- Word List Section -->
+     <div class="mt-12">
+      <h2 class="text-xl font-semibold text-white mb-6 flex items-center gap-3">
+       <svg class="w-6 h-6 text-cyan-400" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+       </svg> Vocabulary Map</h2>
+      <div id="word-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"><!-- Words will be rendered here -->
+      </div>
+     </div>
+    </div><!-- Practice View -->
+    <div id="practice-view" class="hidden max-w-2xl mx-auto">
+     <div class="bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-3xl p-8 border border-slate-700/50 shadow-2xl"><!-- Progress Bar -->
+      <div class="flex items-center justify-between mb-6"><button id="back-btn" class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+        <svg class="w-5 h-5" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7" />
+        </svg> Back to Map </button>
+       <div class="flex items-center gap-3"><span id="question-counter" class="text-slate-400 text-sm">1 / 10</span>
+        <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
+         <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300" style="width: 10%"></div>
+        </div>
+       </div>
+      </div><!-- Question Card -->
+      <div id="question-card" class="text-center mb-8 fade-in">
+       <div id="word-type-badge" class="inline-block px-4 py-1 rounded-full text-sm font-medium mb-4 bg-rose-500/20 text-rose-300">
+        Adjective
+       </div>
+       <h2 id="current-word" class="text-4xl font-bold text-white mb-3">breathtaking</h2>
+       <p id="word-definition" class="text-slate-400 text-lg mb-2">Extremely impressive or beautiful</p>
+       <p id="word-example" class="text-slate-500 text-sm italic">"The breathtaking views from the mountaintop were worth the hike."</p>
+      </div><!-- Answer Options -->
+      <div id="answer-section">
+       <p class="text-slate-400 text-center mb-4">Choose the correct usage:</p>
+       <div id="answer-options" class="space-y-3"><!-- Options will be rendered here -->
+       </div>
+      </div><!-- Feedback Section -->
+      <div id="feedback-section" class="hidden mt-6 p-4 rounded-xl text-center fade-in">
+       <p id="feedback-text" class="text-lg font-medium"></p><button id="next-btn" class="mt-4 px-6 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"> Next Word → </button>
+      </div>
+     </div>
+    </div><!-- Results View -->
+    <div id="results-view" class="hidden max-w-xl mx-auto">
+     <div class="bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-3xl p-8 border border-slate-700/50 shadow-2xl text-center fade-in">
+      <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+       <svg class="w-10 h-10 text-white" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+       </svg>
+      </div>
+      <h2 class="text-3xl font-bold text-white mb-2">Journey Complete! 🎉</h2>
+      <p class="text-slate-400 mb-6">You've finished this practice session</p>
+      <div class="grid grid-cols-2 gap-4 mb-8">
+       <div class="bg-slate-700/50 rounded-xl p-4">
+        <div id="result-correct" class="text-3xl font-bold text-emerald-400">
+         0
+        </div>
+        <div class="text-slate-400 text-sm">
+         Correct
+        </div>
+       </div>
+       <div class="bg-slate-700/50 rounded-xl p-4">
+        <div id="result-accuracy" class="text-3xl font-bold text-amber-400">
+         0%
+        </div>
+        <div class="text-slate-400 text-sm">
+         Accuracy
+        </div>
+       </div>
+      </div><button id="restart-btn" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all hover:scale-105"> 🗺️ Explore More Words </button>
+     </div>
+    </div><!-- Mad Lib View -->
+    <div id="madlib-view" class="hidden max-w-3xl mx-auto">
+     <div class="bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-3xl p-8 border border-slate-700/50 shadow-2xl"><!-- Mad Lib Header -->
+      <div class="flex items-center justify-between mb-6"><button id="madlib-back-btn" class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+        <svg class="w-5 h-5" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7" />
+        </svg> Back to Map </button>
+       <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center"><span class="text-xl">📝</span>
+        </div>
+        <h2 class="text-2xl font-bold text-white">Travel Story Mad Lib</h2>
+       </div>
+      </div><!-- Instructions -->
+      <div class="bg-slate-700/30 rounded-xl p-4 mb-6 border border-slate-600/50">
+       <p class="text-slate-300 text-center">Fill in the blanks with the vocabulary words to create your unique travel story!</p>
+      </div><!-- Mad Lib Form -->
+      <div id="madlib-form" class="space-y-6">
+       <div class="bg-slate-700/20 rounded-xl p-6 leading-relaxed text-slate-200 text-lg">
+        <p class="mb-4">Last summer, I decided to <span class="inline-block"> <select id="blank-1" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose verb...</option> </select> </span> on an unforgettable adventure. I wanted to <span class="inline-block"> <select id="blank-2" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose verb...</option> </select> </span> myself in a new culture, so I booked a ticket to Japan.</p>
+        <p class="mb-4">When I arrived, the city was <span class="inline-block"> <select id="blank-3" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adjective...</option> </select> </span> with energy! The streets were filled with <span class="inline-block"> <select id="blank-4" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adjective...</option> </select> </span> scenery everywhere I looked. I <span class="inline-block"> <select id="blank-5" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adverb...</option> </select> </span> explored every neighborhood, trying to <span class="inline-block"> <select id="blank-6" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose verb...</option> </select> </span> my way through the complex subway system.</p>
+        <p class="mb-4">I decided to start a YouTube channel to <span class="inline-block"> <select id="blank-7" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose verb...</option> </select> </span> my experiences. I <span class="inline-block"> <select id="blank-8" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adverb...</option> </select> </span> planned each video to create <span class="inline-block"> <select id="blank-9" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adjective...</option> </select> </span> content for my viewers. I even found a <span class="inline-block"> <select id="blank-10" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adjective...</option> </select> </span> temple hidden in the mountains that took my breath away.</p>
+        <p>The experience was so <span class="inline-block"> <select id="blank-11" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adjective...</option> </select> </span> that I <span class="inline-block"> <select id="blank-12" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose adverb...</option> </select> </span> decided to extend my trip. I wanted to <span class="inline-block"> <select id="blank-13" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-1 text-white focus:border-cyan-500 focus:outline-none"> <option value="">Choose verb...</option> </select> </span> the entire country and share every moment with my growing audience!</p>
+       </div><!-- Submit Button -->
+       <div class="text-center"><button id="complete-madlib-btn" class="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl font-semibold shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"> ✨ Complete Story </button>
+       </div>
+      </div><!-- Completed Story View -->
+      <div id="madlib-completed" class="hidden">
+       <div class="bg-gradient-to-br from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-500/30 mb-6">
+        <h3 class="text-2xl font-bold text-purple-300 mb-4 text-center">✨ Your Travel Story ✨</h3>
+        <div id="completed-story" class="text-slate-200 text-lg leading-relaxed"></div>
+       </div><!-- Word Review -->
+       <div class="bg-slate-700/30 rounded-xl p-6 border border-slate-600/50 mb-6">
+        <h4 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+         <svg class="w-5 h-5 text-amber-400" viewbox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+         </svg> Words You Used</h4>
+        <div id="words-used-list" class="flex flex-wrap gap-2"></div>
+       </div>
+       <div class="flex gap-3 justify-center"><button id="new-madlib-btn" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl font-semibold transition-colors"> 📝 Create Another Story </button> <button id="madlib-home-btn" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all"> 🗺️ Back to Map </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    // Vocabulary Data
+    const vocabularyData = {
+      adjectives: [
+        { id: 'adj1', word: 'breathtaking', definition: 'Extremely impressive or beautiful', example: 'The breathtaking views from the mountaintop were worth the hike.', correctUsage: 'The vlogger captured breathtaking footage of the Northern Lights.', wrongOptions: ['The hotel was very breathtaking expensive.', 'We breathtaking arrived at the airport.', 'She breathtaking her suitcase carefully.'] },
+        { id: 'adj2', word: 'captivating', definition: 'Attracting and holding attention', example: 'Her captivating travel stories kept us entertained for hours.', correctUsage: 'The YouTuber creates captivating content about hidden destinations.', wrongOptions: ['The train captivating through the mountains.', 'We captivating booked our flights online.', 'The tour guide spoke captivating fast.'] },
+        { id: 'adj3', word: 'immersive', definition: 'Providing a complete involvement in an activity', example: 'The museum offered an immersive experience of ancient civilizations.', correctUsage: 'Travel vlogs provide an immersive glimpse into different cultures.', wrongOptions: ['She immersive packed her bags yesterday.', 'The plane immersive landed on time.', 'We immersive enjoyed the local food.'] },
+        { id: 'adj4', word: 'picturesque', definition: 'Visually attractive, especially in a charming way', example: 'The picturesque village looked like a postcard.', correctUsage: 'Her channel features picturesque locations around Europe.', wrongOptions: ['We picturesque traveled to Japan last year.', 'The blogger picturesque edited her video.', 'They picturesque enjoyed the street food.'] },
+        { id: 'adj5', word: 'authentic', definition: 'Genuine, true to its origins', example: 'We found an authentic local restaurant away from tourist areas.', correctUsage: 'Viewers appreciate authentic travel experiences over staged content.', wrongOptions: ['She authentic flew to Paris yesterday.', 'The video authentic uploaded quickly.', 'We authentic at the famous landmark.'] },
+        { id: 'adj6', word: 'exhilarating', definition: 'Making one feel very happy and excited', example: 'Skydiving was the most exhilarating experience of my trip.', correctUsage: 'The content creator shared exhilarating adventure sports footage.', wrongOptions: ['We exhilarating our hotel reservation.', 'The journey exhilarating took eight hours.', 'She exhilarating recorded the sunset.'] },
+        { id: 'adj7', word: 'secluded', definition: 'Hidden away from others, private', example: 'We discovered a secluded beach with no other tourists.', correctUsage: 'The travel vlogger revealed secluded spots unknown to most visitors.', wrongOptions: ['They secluded booked the tour online.', 'The flight secluded departed on schedule.', 'We secluded enjoyed the museum.'] },
+        { id: 'adj8', word: 'bustling', definition: 'Full of energetic and noisy activity', example: 'The bustling markets were overwhelming but exciting.', correctUsage: 'Her videos showcase bustling street scenes from Asian cities.', wrongOptions: ['We bustling reserved a table for dinner.', 'The vlogger bustling edited all night.', 'They bustling flew across the ocean.'] }
+      ],
+      adverbs: [
+        { id: 'adv1', word: 'seamlessly', definition: 'Smoothly and without interruption', example: 'The tour guide seamlessly transitioned between languages.', correctUsage: 'Good travel vlogs seamlessly blend information with entertainment.', wrongOptions: ['The seamlessly hotel was fully booked.', 'We visited the seamlessly cathedral.', 'Her seamlessly luggage was very heavy.'] },
+        { id: 'adv2', word: 'thoroughly', definition: 'In a complete and careful way', example: 'We thoroughly researched the destination before booking.', correctUsage: 'The reviewer thoroughly examined every aspect of the resort.', wrongOptions: ['The thoroughly beach was beautiful.', 'We saw a thoroughly mountain view.', 'Her thoroughly camera captured everything.'] },
+        { id: 'adv3', word: 'spontaneously', definition: 'Without planning, on impulse', example: 'We spontaneously decided to extend our trip by a week.', correctUsage: 'The best travel moments often happen spontaneously on camera.', wrongOptions: ['The spontaneously flight was delayed.', 'We visited a spontaneously temple.', 'Her spontaneously video went viral.'] },
+        { id: 'adv4', word: 'meticulously', definition: 'With great attention to detail', example: 'She meticulously planned every day of the itinerary.', correctUsage: 'Successful YouTubers meticulously edit their travel content.', wrongOptions: ['The meticulously sunset was gorgeous.', 'We stayed at a meticulously hotel.', 'Her meticulously passport was renewed.'] },
+        { id: 'adv5', word: 'effortlessly', definition: 'Without difficulty or effort', example: 'He effortlessly navigated through the crowded streets.', correctUsage: 'Top vloggers effortlessly engage their audience throughout videos.', wrongOptions: ['The effortlessly destination was remote.', 'We took an effortlessly photograph.', 'Her effortlessly content is popular.'] },
+        { id: 'adv6', word: 'vividly', definition: 'In a way that produces clear mental images', example: 'She vividly described the local traditions and customs.', correctUsage: 'Great travel storytellers vividly portray their experiences.', wrongOptions: ['The vividly airport was crowded.', 'We booked a vividly tour guide.', 'Her vividly subscribers keep growing.'] },
+        { id: 'adv7', word: 'remarkably', definition: 'In a way that is worthy of attention', example: 'The ancient ruins were remarkably well-preserved.', correctUsage: 'Her travel channel has grown remarkably over the past year.', wrongOptions: ['We visited the remarkably museum.', 'The remarkably food was delicious.', 'Her remarkably camera is expensive.'] },
+        { id: 'adv8', word: 'predominantly', definition: 'Mainly, for the most part', example: 'The region is predominantly known for its vineyards.', correctUsage: 'His content is predominantly focused on budget travel tips.', wrongOptions: ['The predominantly hotel was luxurious.', 'We saw predominantly beautiful scenery.', 'Her predominantly trip lasted two weeks.'] }
+      ],
+      verbs: [
+        { id: 'verb1', word: 'curate', definition: 'To select and organize content carefully', example: 'Travel influencers curate their best photos for social media.', correctUsage: 'She curates destination guides for her YouTube subscribers.', wrongOptions: ['The hotel curate was excellent.', 'We curate beautiful at the beach.', 'Her curate flight landed early.'] },
+        { id: 'verb2', word: 'navigate', definition: 'To find one\'s way through a place or situation', example: 'It took time to navigate the complex subway system.', correctUsage: 'The vlogger shows viewers how to navigate foreign cities.', wrongOptions: ['The navigate scenery was stunning.', 'We stayed at a navigate resort.', 'Her navigate content is inspiring.'] },
+        { id: 'verb3', word: 'immerse', definition: 'To involve oneself deeply in an activity', example: 'I wanted to immerse myself in the local culture.', correctUsage: 'Travel content helps viewers immerse themselves in new places.', wrongOptions: ['The immerse hotel was overpriced.', 'We took immerse photographs daily.', 'Her immerse camera is professional.'] },
+        { id: 'verb4', word: 'venture', definition: 'To go somewhere that may be dangerous or unknown', example: 'We decided to venture off the beaten path.', correctUsage: 'Adventure vloggers venture into remote wilderness areas.', wrongOptions: ['The venture landscape was breathtaking.', 'We had a venture time exploring.', 'Her venture subscribers love her work.'] },
+        { id: 'verb5', word: 'embark', definition: 'To begin a journey or new experience', example: 'Tomorrow we embark on our cross-country road trip.', correctUsage: 'The YouTuber embarks on a new travel series each season.', wrongOptions: ['The embark accommodation was comfortable.', 'We saw embark wildlife on safari.', 'Her embark editing is impressive.'] },
+        { id: 'verb6', word: 'capture', definition: 'To record or preserve an image or moment', example: 'He managed to capture the perfect sunset photo.', correctUsage: 'Travel creators capture moments that inspire wanderlust.', wrongOptions: ['The capture destination was exotic.', 'We had capture weather throughout.', 'Her capture equipment is top-quality.'] },
+        { id: 'verb7', word: 'traverse', definition: 'To travel across or through', example: 'We plan to traverse the entire country by train.', correctUsage: 'Documentary makers traverse challenging terrain for content.', wrongOptions: ['The traverse food was incredible.', 'We booked traverse flights in advance.', 'Her traverse viewers are loyal.'] },
+        { id: 'verb8', word: 'document', definition: 'To record in detail', example: 'She documents every aspect of her travels in a journal.', correctUsage: 'Vloggers document their journeys for millions of viewers.', wrongOptions: ['The document hotel had great service.', 'We experienced document adventures.', 'Her document channel is growing.'] }
+      ]
+    };
+
+    // App State
+    let userProgress = [];
+    let currentQuestion = 0;
+    let sessionQuestions = [];
+    let sessionCorrect = 0;
+    let isLoading = false;
+
+    // Default Config
+    const defaultConfig = {
+      app_title: 'Vocabulary Explorer',
+      welcome_message: 'Master advanced words through interactive practice',
+      practice_button_text: '🗺️ Start Practice Journey',
+      background_color: '#0f172a',
+      surface_color: '#1e293b',
+      text_color: '#f8fafc',
+      primary_action_color: '#06b6d4',
+      secondary_action_color: '#f59e0b',
+      font_family: 'Outfit',
+      font_size: 16
+    };
+
+    // Initialize SDKs
+    async function initializeApp() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (config) => {
+            const appTitle = config.app_title || defaultConfig.app_title;
+            const welcomeMessage = config.welcome_message || defaultConfig.welcome_message;
+            const practiceButtonText = config.practice_button_text || defaultConfig.practice_button_text;
+            const bgColor = config.background_color || defaultConfig.background_color;
+            const surfaceColor = config.surface_color || defaultConfig.surface_color;
+            const textColor = config.text_color || defaultConfig.text_color;
+            const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+            const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+            const fontFamily = config.font_family || defaultConfig.font_family;
+            const fontSize = config.font_size || defaultConfig.font_size;
+
+            document.getElementById('app-title').textContent = appTitle;
+            document.getElementById('welcome-text').textContent = welcomeMessage;
+            document.getElementById('start-practice-btn').textContent = practiceButtonText;
+
+            document.body.style.backgroundColor = bgColor;
+            document.body.style.fontFamily = `${fontFamily}, sans-serif`;
+            document.body.style.fontSize = `${fontSize}px`;
+
+            document.querySelectorAll('.word-card').forEach(card => {
+              card.style.backgroundColor = surfaceColor;
+            });
+          },
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              { get: () => config.background_color || defaultConfig.background_color, set: (v) => window.elementSdk.setConfig({ background_color: v }) },
+              { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => window.elementSdk.setConfig({ surface_color: v }) },
+              { get: () => config.text_color || defaultConfig.text_color, set: (v) => window.elementSdk.setConfig({ text_color: v }) },
+              { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => window.elementSdk.setConfig({ primary_action_color: v }) },
+              { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => window.elementSdk.setConfig({ secondary_action_color: v }) }
+            ],
+            borderables: [],
+            fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => window.elementSdk.setConfig({ font_family: v }) },
+            fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => window.elementSdk.setConfig({ font_size: v }) }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ['app_title', config.app_title || defaultConfig.app_title],
+            ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+            ['practice_button_text', config.practice_button_text || defaultConfig.practice_button_text]
+          ])
+        });
+      }
+
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const initResult = await window.dataSdk.init({
+          onDataChanged: (data) => {
+            userProgress = data;
+            updateUI();
+          }
+        });
+        if (!initResult.isOk) {
+          console.error('Failed to initialize data SDK');
+        }
+      }
+
+      setupEventListeners();
+      renderWordList();
+    }
+
+    function updateUI() {
+      // Update mastery counts
+      const masteredAdj = userProgress.filter(p => p.mastered && p.word_id.startsWith('adj')).length;
+      const masteredAdv = userProgress.filter(p => p.mastered && p.word_id.startsWith('adv')).length;
+      const masteredVerb = userProgress.filter(p => p.mastered && p.word_id.startsWith('verb')).length;
+
+      document.getElementById('adj-count').textContent = masteredAdj;
+      document.getElementById('adv-count').textContent = masteredAdv;
+      document.getElementById('verb-count').textContent = masteredVerb;
+
+      const totalMastered = masteredAdj + masteredAdv + masteredVerb;
+      document.getElementById('words-mastered').textContent = totalMastered;
+
+      // Calculate accuracy
+      const totalAttempts = userProgress.reduce((sum, p) => sum + (p.attempts || 0), 0);
+      const totalCorrect = userProgress.reduce((sum, p) => sum + (p.correct || 0), 0);
+      const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
+      document.getElementById('accuracy-display').textContent = accuracy + '%';
+
+      renderWordList();
+    }
+
+    function getWordProgress(wordId) {
+      return userProgress.find(p => p.word_id === wordId);
+    }
+
+    function renderWordList() {
+      const container = document.getElementById('word-list');
+      const allWords = [...vocabularyData.adjectives, ...vocabularyData.adverbs, ...vocabularyData.verbs];
+      
+      container.innerHTML = allWords.map(word => {
+        const progress = getWordProgress(word.id);
+        const mastered = progress?.mastered || false;
+        const attempts = progress?.attempts || 0;
+        const correct = progress?.correct || 0;
+        const accuracy = attempts > 0 ? Math.round((correct / attempts) * 100) : 0;
+        
+        let typeColor = 'rose';
+        let typeName = 'Adjective';
+        if (word.id.startsWith('adv')) { typeColor = 'amber'; typeName = 'Adverb'; }
+        if (word.id.startsWith('verb')) { typeColor = 'cyan'; typeName = 'Verb'; }
+
+        return `
+          <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 hover:border-${typeColor}-500/30 transition-colors">
+            <div class="flex items-start justify-between mb-2">
+              <div>
+                <span class="px-2 py-0.5 text-xs rounded-full bg-${typeColor}-500/20 text-${typeColor}-300">${typeName}</span>
+                <h4 class="text-lg font-semibold text-white mt-1">${word.word}</h4>
+              </div>
+              ${mastered ? '<span class="text-emerald-400 text-xl">✓</span>' : ''}
+            </div>
+            <p class="text-slate-400 text-sm mb-2">${word.definition}</p>
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+              <span>Attempts: ${attempts}</span>
+              <span>•</span>
+              <span>Accuracy: ${accuracy}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setupEventListeners() {
+      document.getElementById('start-practice-btn').addEventListener('click', startPractice);
+      document.getElementById('start-madlib-btn').addEventListener('click', startMadLib);
+      document.getElementById('back-btn').addEventListener('click', showCategoryView);
+      document.getElementById('next-btn').addEventListener('click', nextQuestion);
+      document.getElementById('restart-btn').addEventListener('click', () => {
+        showCategoryView();
+      });
+      document.getElementById('madlib-back-btn').addEventListener('click', showCategoryView);
+      document.getElementById('complete-madlib-btn').addEventListener('click', completeMadLib);
+      document.getElementById('new-madlib-btn').addEventListener('click', resetMadLib);
+      document.getElementById('madlib-home-btn').addEventListener('click', showCategoryView);
+
+      document.querySelectorAll('[data-category]').forEach(card => {
+        card.addEventListener('click', () => {
+          const category = card.dataset.category;
+          startPractice(category);
+        });
+      });
+    }
+
+    function startPractice(category = null) {
+      let words = [];
+      if (category === 'adjectives') {
+        words = [...vocabularyData.adjectives];
+      } else if (category === 'adverbs') {
+        words = [...vocabularyData.adverbs];
+      } else if (category === 'verbs') {
+        words = [...vocabularyData.verbs];
+      } else {
+        words = [...vocabularyData.adjectives, ...vocabularyData.adverbs, ...vocabularyData.verbs];
+      }
+
+      // Shuffle and limit to 10 questions
+      sessionQuestions = shuffleArray(words).slice(0, 10);
+      currentQuestion = 0;
+      sessionCorrect = 0;
+
+      document.getElementById('category-view').classList.add('hidden');
+      document.getElementById('practice-view').classList.remove('hidden');
+      document.getElementById('results-view').classList.add('hidden');
+
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const question = sessionQuestions[currentQuestion];
+      if (!question) return;
+
+      const questionCard = document.getElementById('question-card');
+      questionCard.classList.remove('fade-in');
+      void questionCard.offsetWidth;
+      questionCard.classList.add('fade-in');
+
+      let typeColor = 'bg-rose-500/20 text-rose-300';
+      let typeName = 'Adjective';
+      if (question.id.startsWith('adv')) { typeColor = 'bg-amber-500/20 text-amber-300'; typeName = 'Adverb'; }
+      if (question.id.startsWith('verb')) { typeColor = 'bg-cyan-500/20 text-cyan-300'; typeName = 'Verb'; }
+
+      document.getElementById('word-type-badge').className = `inline-block px-4 py-1 rounded-full text-sm font-medium mb-4 ${typeColor}`;
+      document.getElementById('word-type-badge').textContent = typeName;
+      document.getElementById('current-word').textContent = question.word;
+      document.getElementById('word-definition').textContent = question.definition;
+      document.getElementById('word-example').textContent = `"${question.example}"`;
+
+      // Create answer options
+      const options = shuffleArray([question.correctUsage, ...question.wrongOptions]);
+      const optionsContainer = document.getElementById('answer-options');
+      optionsContainer.innerHTML = options.map((option, index) => `
+        <button class="answer-btn w-full text-left p-4 bg-slate-700/50 hover:bg-slate-700 border border-slate-600/50 hover:border-slate-500 rounded-xl transition-all" data-correct="${option === question.correctUsage}">
+          <span class="text-slate-300">${option}</span>
+        </button>
+      `).join('');
+
+      document.querySelectorAll('.answer-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleAnswer(btn, question));
+      });
+
+      // Update progress
+      document.getElementById('question-counter').textContent = `${currentQuestion + 1} / ${sessionQuestions.length}`;
+      document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / sessionQuestions.length) * 100}%`;
+
+      document.getElementById('answer-section').classList.remove('hidden');
+      document.getElementById('feedback-section').classList.add('hidden');
+    }
+
+    async function handleAnswer(button, question) {
+      if (isLoading) return;
+      
+      const isCorrect = button.dataset.correct === 'true';
+      
+      // Disable all buttons
+      document.querySelectorAll('.answer-btn').forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.correct === 'true') {
+          btn.classList.add('border-emerald-500', 'bg-emerald-500/20');
+        }
+      });
+
+      if (isCorrect) {
+        sessionCorrect++;
+        button.classList.add('correct-flash');
+      } else {
+        button.classList.add('shake', 'border-red-500', 'bg-red-500/20');
+      }
+
+      // Update progress in database
+      isLoading = true;
+      const existingProgress = getWordProgress(question.id);
+      
+      if (existingProgress) {
+        const updatedProgress = {
+          ...existingProgress,
+          attempts: (existingProgress.attempts || 0) + 1,
+          correct: (existingProgress.correct || 0) + (isCorrect ? 1 : 0),
+          mastered: ((existingProgress.correct || 0) + (isCorrect ? 1 : 0)) >= 3,
+          last_practiced: new Date().toISOString()
+        };
+        if (window.dataSdk) {
+          await window.dataSdk.update(updatedProgress);
+        }
+      } else {
+        if (userProgress.length >= 999) {
+          showInlineMessage('Maximum data limit reached. Progress will not be saved.');
+        } else if (window.dataSdk) {
+          await window.dataSdk.create({
+            word_id: question.id,
+            attempts: 1,
+            correct: isCorrect ? 1 : 0,
+            mastered: isCorrect ? false : false,
+            last_practiced: new Date().toISOString()
+          });
+        }
+      }
+      isLoading = false;
+
+      // Show feedback
+      const feedbackSection = document.getElementById('feedback-section');
+      const feedbackText = document.getElementById('feedback-text');
+      
+      feedbackSection.classList.remove('hidden', 'bg-emerald-500/20', 'bg-red-500/20');
+      feedbackSection.classList.add(isCorrect ? 'bg-emerald-500/20' : 'bg-red-500/20');
+      feedbackText.textContent = isCorrect ? '✨ Excellent! That\'s correct!' : '❌ Not quite. Keep practicing!';
+      feedbackText.className = `text-lg font-medium ${isCorrect ? 'text-emerald-300' : 'text-red-300'}`;
+    }
+
+    function showInlineMessage(message) {
+      const existingMsg = document.querySelector('.inline-message');
+      if (existingMsg) existingMsg.remove();
+      
+      const msgEl = document.createElement('div');
+      msgEl.className = 'inline-message fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-amber-500 text-black px-4 py-2 rounded-lg z-50';
+      msgEl.textContent = message;
+      document.body.appendChild(msgEl);
+      
+      setTimeout(() => msgEl.remove(), 3000);
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion >= sessionQuestions.length) {
+        showResults();
+      } else {
+        showQuestion();
+      }
+    }
+
+    function showResults() {
+      document.getElementById('practice-view').classList.add('hidden');
+      document.getElementById('results-view').classList.remove('hidden');
+
+      document.getElementById('result-correct').textContent = sessionCorrect;
+      document.getElementById('result-accuracy').textContent = Math.round((sessionCorrect / sessionQuestions.length) * 100) + '%';
+    }
+
+    function showCategoryView() {
+      document.getElementById('category-view').classList.remove('hidden');
+      document.getElementById('practice-view').classList.add('hidden');
+      document.getElementById('results-view').classList.add('hidden');
+      document.getElementById('madlib-view').classList.add('hidden');
+    }
+
+    function startMadLib() {
+      document.getElementById('category-view').classList.add('hidden');
+      document.getElementById('madlib-view').classList.remove('hidden');
+      
+      // Populate dropdowns
+      populateMadLibDropdowns();
+      
+      // Show form, hide completed
+      document.getElementById('madlib-form').classList.remove('hidden');
+      document.getElementById('madlib-completed').classList.add('hidden');
+      
+      // Enable complete button checking
+      checkMadLibCompletion();
+    }
+
+    function populateMadLibDropdowns() {
+      // Define which blanks need which type
+      const blankTypes = {
+        'blank-1': 'verb',    // embark
+        'blank-2': 'verb',    // immerse
+        'blank-3': 'adj',     // bustling
+        'blank-4': 'adj',     // breathtaking
+        'blank-5': 'adv',     // thoroughly
+        'blank-6': 'verb',    // navigate
+        'blank-7': 'verb',    // document
+        'blank-8': 'adv',     // meticulously
+        'blank-9': 'adj',     // captivating
+        'blank-10': 'adj',    // secluded
+        'blank-11': 'adj',    // exhilarating
+        'blank-12': 'adv',    // spontaneously
+        'blank-13': 'verb'    // traverse
+      };
+
+      Object.keys(blankTypes).forEach(blankId => {
+        const select = document.getElementById(blankId);
+        const type = blankTypes[blankId];
+        
+        let words = [];
+        if (type === 'adj') {
+          words = vocabularyData.adjectives.map(w => w.word);
+        } else if (type === 'adv') {
+          words = vocabularyData.adverbs.map(w => w.word);
+        } else if (type === 'verb') {
+          words = vocabularyData.verbs.map(w => w.word);
+        }
+
+        // Clear and populate
+        select.innerHTML = `<option value="">Choose ${type === 'adj' ? 'adjective' : type === 'adv' ? 'adverb' : 'verb'}...</option>`;
+        words.forEach(word => {
+          const option = document.createElement('option');
+          option.value = word;
+          option.textContent = word;
+          select.appendChild(option);
+        });
+
+        // Add change listener
+        select.addEventListener('change', checkMadLibCompletion);
+      });
+    }
+
+    function checkMadLibCompletion() {
+      const allFilled = Array.from({ length: 13 }, (_, i) => i + 1).every(i => {
+        const select = document.getElementById(`blank-${i}`);
+        return select && select.value !== '';
+      });
+
+      const completeBtn = document.getElementById('complete-madlib-btn');
+      completeBtn.disabled = !allFilled;
+    }
+
+    function completeMadLib() {
+      // Collect all selected words
+      const selectedWords = [];
+      const blanks = [];
+      
+      for (let i = 1; i <= 13; i++) {
+        const select = document.getElementById(`blank-${i}`);
+        const word = select.value;
+        blanks.push(word);
+        if (word && !selectedWords.includes(word)) {
+          selectedWords.push(word);
+        }
+      }
+
+      // Build the completed story
+      const story = `
+        <p class="mb-4">
+          Last summer, I decided to <span class="font-semibold text-cyan-300">${blanks[0]}</span> on an unforgettable adventure. 
+          I wanted to <span class="font-semibold text-cyan-300">${blanks[1]}</span> myself in a new culture, so I booked a ticket to Japan.
+        </p>
+        
+        <p class="mb-4">
+          When I arrived, the city was <span class="font-semibold text-rose-300">${blanks[2]}</span> with energy! 
+          The streets were filled with <span class="font-semibold text-rose-300">${blanks[3]}</span> scenery everywhere I looked. 
+          I <span class="font-semibold text-amber-300">${blanks[4]}</span> explored every neighborhood, trying to 
+          <span class="font-semibold text-cyan-300">${blanks[5]}</span> my way through the complex subway system.
+        </p>
+        
+        <p class="mb-4">
+          I decided to start a YouTube channel to <span class="font-semibold text-cyan-300">${blanks[6]}</span> my experiences. 
+          I <span class="font-semibold text-amber-300">${blanks[7]}</span> planned each video to create 
+          <span class="font-semibold text-rose-300">${blanks[8]}</span> content for my viewers. 
+          I even found a <span class="font-semibold text-rose-300">${blanks[9]}</span> temple hidden in the mountains that took my breath away.
+        </p>
+        
+        <p>
+          The experience was so <span class="font-semibold text-rose-300">${blanks[10]}</span> that I 
+          <span class="font-semibold text-amber-300">${blanks[11]}</span> decided to extend my trip. 
+          I wanted to <span class="font-semibold text-cyan-300">${blanks[12]}</span> the entire country and share every moment with my growing audience!
+        </p>
+      `;
+
+      document.getElementById('completed-story').innerHTML = story;
+
+      // Show used words with definitions
+      const wordsListHtml = selectedWords.map(word => {
+        const allWords = [...vocabularyData.adjectives, ...vocabularyData.adverbs, ...vocabularyData.verbs];
+        const wordData = allWords.find(w => w.word === word);
+        
+        let typeColor = 'rose';
+        if (wordData.id.startsWith('adv')) typeColor = 'amber';
+        if (wordData.id.startsWith('verb')) typeColor = 'cyan';
+
+        return `
+          <div class="bg-slate-800/50 rounded-lg px-3 py-2 border border-${typeColor}-500/30">
+            <div class="font-semibold text-${typeColor}-300">${word}</div>
+            <div class="text-xs text-slate-400">${wordData.definition}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('words-used-list').innerHTML = wordsListHtml;
+
+      // Hide form, show completed
+      document.getElementById('madlib-form').classList.add('hidden');
+      document.getElementById('madlib-completed').classList.remove('hidden');
+    }
+
+    function resetMadLib() {
+      // Reset all dropdowns
+      for (let i = 1; i <= 13; i++) {
+        const select = document.getElementById(`blank-${i}`);
+        if (select) select.selectedIndex = 0;
+      }
+
+      // Show form, hide completed
+      document.getElementById('madlib-form').classList.remove('hidden');
+      document.getElementById('madlib-completed').classList.add('hidden');
+      
+      checkMadLibCompletion();
+    }
+
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    // Initialize
+    initializeApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c7323412695308a',t:'MTc2OTk2NjYxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
