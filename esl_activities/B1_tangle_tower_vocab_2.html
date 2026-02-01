@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Quest</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&amp;family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Quicksand', sans-serif;
+    }
+    
+    .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+    
+    .card-flip {
+      perspective: 1000px;
+    }
+    
+    .card-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    
+    .card-front, .card-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
+    }
+    
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .glow-pulse {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100px) rotate(720deg); opacity: 0; }
+    }
+    
+    .confetti-piece {
+      animation: confetti 1s ease-out forwards;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .shake {
+      animation: shake 0.3s ease-in-out;
+    }
+    
+    @keyframes bounce-in {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .bounce-in {
+      animation: bounce-in 0.4s ease-out;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-100 overflow-auto">
+  <div id="app" class="w-full h-full min-h-full p-4 md:p-8"><!-- Header -->
+   <header class="text-center mb-8">
+    <h1 id="main-title" class="font-display text-4xl md:text-5xl font-bold text-amber-800 mb-2 drop-shadow-lg">🎯 Vocabulary Quest</h1>
+    <p class="text-amber-700 text-lg">Master 13 amazing words through fun activities!</p>
+   </header><!-- Navigation Tabs -->
+   <nav class="flex justify-center gap-2 md:gap-4 mb-8 flex-wrap"><button onclick="switchMode('flashcards')" id="tab-flashcards" class="tab-btn px-4 md:px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-amber-500 text-white shadow-lg"> 📚 Flashcards </button> <button onclick="switchMode('matching')" id="tab-matching" class="tab-btn px-4 md:px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-white text-amber-700 hover:bg-amber-100"> 🔗 Matching </button> <button onclick="switchMode('writing')" id="tab-writing" class="tab-btn px-4 md:px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-white text-amber-700 hover:bg-amber-100"> ✍️ Writing </button> <button onclick="switchMode('quiz')" id="tab-quiz" class="tab-btn px-4 md:px-6 py-3 rounded-full font-semibold transition-all duration-300 bg-white text-amber-700 hover:bg-amber-100"> 🏆 Quiz </button>
+   </nav><!-- Score Display -->
+   <div class="flex justify-center mb-6">
+    <div class="bg-white rounded-2xl px-6 py-3 shadow-lg flex items-center gap-4"><span class="text-amber-600 font-semibold">⭐ Score:</span> <span id="score" class="text-2xl font-bold text-amber-800">0</span> <span class="text-amber-400">|</span> <span class="text-amber-600 font-semibold">🔥 Streak:</span> <span id="streak" class="text-2xl font-bold text-orange-500">0</span>
+    </div>
+   </div><!-- Main Content Area -->
+   <main id="content-area" class="max-w-4xl mx-auto"><!-- Content loaded dynamically -->
+   </main><!-- Confetti Container -->
+   <div id="confetti-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
+  </div>
+  <script>
+    const vocabulary = [
+      { word: "harp", definition: "A large musical instrument with strings stretched on a triangular frame, played by plucking", emoji: "🎵", example: "She played a beautiful melody on the harp." },
+      { word: "aviary", definition: "A large enclosure or building for keeping birds", emoji: "🦜", example: "The zoo's aviary houses over 50 species of tropical birds." },
+      { word: "wings", definition: "The parts of a bird, insect, or airplane that allow it to fly", emoji: "🪽", example: "The eagle spread its wings and soared through the sky." },
+      { word: "square", definition: "An open public area in a town, often used for gatherings and markets", emoji: "🏛️", example: "People gathered in the town square for the festival." },
+      { word: "greenhouse", definition: "A glass building where plants are grown in controlled conditions", emoji: "🌿", example: "The tomatoes grow faster in the greenhouse." },
+      { word: "attic", definition: "A space or room at the top of a house, under the roof", emoji: "🏠", example: "We found old photographs stored in the attic." },
+      { word: "family tree", definition: "A diagram showing the relationships between family members across generations", emoji: "🌳", example: "I discovered my great-grandmother on our family tree." },
+      { word: "butterfly", definition: "An insect with large, often colorful wings that develops from a caterpillar", emoji: "🦋", example: "A beautiful butterfly landed on the flower." },
+      { word: "mirror", definition: "A reflective surface, typically glass coated with metal, that shows images", emoji: "🪞", example: "She looked at her reflection in the mirror." },
+      { word: "cage", definition: "An enclosure made of bars or wire for keeping animals or birds", emoji: "🗑️", example: "The hamster ran on its wheel inside the cage." },
+      { word: "beak", definition: "The hard, pointed mouth part of a bird", emoji: "🐦", example: "The pelican caught a fish in its large beak." },
+      { word: "traveler", definition: "A person who is traveling or who travels frequently", emoji: "🧳", example: "The traveler visited ten countries last year." },
+      { word: "vegetation", definition: "Plants in general, or the plants that grow in a particular area", emoji: "🌱", example: "The rainforest has lush vegetation." }
+    ];
+
+    let currentMode = 'flashcards';
+    let currentCardIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let matchedPairs = [];
+    let selectedCard = null;
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let config = {};
+
+    const defaultConfig = {
+      app_title: "🎯 Vocabulary Quest",
+      flashcard_prompt: "Click the card to reveal the definition!",
+      quiz_prompt: "Choose the correct definition:"
+    };
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function updateScore(points) {
+      score += points;
+      streak++;
+      document.getElementById('score').textContent = score;
+      document.getElementById('streak').textContent = streak;
+      if (points > 0) {
+        createConfetti();
+      }
+    }
+
+    function resetStreak() {
+      streak = 0;
+      document.getElementById('streak').textContent = streak;
+    }
+
+    function createConfetti() {
+      const container = document.getElementById('confetti-container');
+      const colors = ['#f59e0b', '#ef4444', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+      
+      for (let i = 0; i < 20; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece absolute w-3 h-3 rounded-full';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '40%';
+        confetti.style.animationDelay = Math.random() * 0.3 + 's';
+        container.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 1500);
+      }
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500', 'text-white', 'shadow-lg');
+        btn.classList.add('bg-white', 'text-amber-700');
+      });
+      document.getElementById(`tab-${mode}`).classList.remove('bg-white', 'text-amber-700');
+      document.getElementById(`tab-${mode}`).classList.add('bg-amber-500', 'text-white', 'shadow-lg');
+      
+      renderContent();
+    }
+
+    function renderContent() {
+      const container = document.getElementById('content-area');
+      
+      switch(currentMode) {
+        case 'flashcards':
+          renderFlashcards(container);
+          break;
+        case 'matching':
+          renderMatching(container);
+          break;
+        case 'writing':
+          renderWriting(container);
+          break;
+        case 'quiz':
+          renderQuiz(container);
+          break;
+      }
+    }
+
+    function renderFlashcards(container) {
+      const item = vocabulary[currentCardIndex];
+      const promptText = config.flashcard_prompt || defaultConfig.flashcard_prompt;
+      
+      container.innerHTML = `
+        <div class="text-center">
+          <p id="flashcard-prompt" class="text-amber-600 mb-4">${promptText}</p>
+          
+          <div class="card-flip w-full max-w-md mx-auto h-72 cursor-pointer mb-6" onclick="flipCard()">
+            <div id="card-inner" class="card-inner relative w-full h-full">
+              <div class="card-front absolute w-full h-full bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-6 glow-pulse">
+                <span class="text-6xl mb-4">${item.emoji}</span>
+                <h2 class="font-display text-4xl font-bold text-white drop-shadow-lg">${item.word}</h2>
+                <p class="text-amber-100 mt-2 text-sm">tap to flip</p>
+              </div>
+              <div class="card-back absolute w-full h-full bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-6 text-center">
+                <p class="text-white text-lg font-medium mb-4">${item.definition}</p>
+                <p class="text-emerald-100 text-sm italic">"${item.example}"</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex justify-center gap-4 items-center">
+            <button onclick="prevCard()" class="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-amber-600 hover:bg-amber-50 transition-colors text-xl font-bold">
+              ←
+            </button>
+            <span class="text-amber-700 font-semibold">${currentCardIndex + 1} / ${vocabulary.length}</span>
+            <button onclick="nextCard()" class="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-amber-600 hover:bg-amber-50 transition-colors text-xl font-bold">
+              →
+            </button>
+          </div>
+          
+          <button onclick="markLearned()" class="mt-6 px-6 py-3 bg-emerald-500 text-white rounded-full font-semibold hover:bg-emerald-600 transition-colors shadow-lg">
+            ✓ I know this word! (+10 pts)
+          </button>
+        </div>
+      `;
+    }
+
+    function flipCard() {
+      document.getElementById('card-inner').classList.toggle('flipped');
+    }
+
+    function prevCard() {
+      currentCardIndex = (currentCardIndex - 1 + vocabulary.length) % vocabulary.length;
+      renderFlashcards(document.getElementById('content-area'));
+    }
+
+    function nextCard() {
+      currentCardIndex = (currentCardIndex + 1) % vocabulary.length;
+      renderFlashcards(document.getElementById('content-area'));
+    }
+
+    function markLearned() {
+      updateScore(10);
+      nextCard();
+    }
+
+    function renderMatching(container) {
+      if (matchedPairs.length === 0) {
+        const shuffledWords = shuffleArray(vocabulary.slice(0, 6));
+        const shuffledDefs = shuffleArray(shuffledWords);
+        
+        container.innerHTML = `
+          <div class="text-center mb-6">
+            <h2 class="font-display text-2xl font-bold text-amber-800 mb-2">Match the Words!</h2>
+            <p class="text-amber-600">Click a word, then click its matching definition</p>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="space-y-3" id="words-column">
+              ${shuffledWords.map((item, i) => `
+                <div onclick="selectWord(${i}, '${item.word}')" id="word-${i}" data-word="${item.word}" 
+                     class="match-word p-4 bg-white rounded-xl shadow-md cursor-pointer hover:shadow-lg transition-all border-2 border-transparent hover:border-amber-300">
+                  <span class="text-xl mr-2">${item.emoji}</span>
+                  <span class="font-semibold text-amber-800">${item.word}</span>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="space-y-3" id="defs-column">
+              ${shuffledDefs.map((item, i) => `
+                <div onclick="selectDef(${i}, '${item.word}')" id="def-${i}" data-word="${item.word}"
+                     class="match-def p-4 bg-amber-50 rounded-xl shadow-md cursor-pointer hover:shadow-lg transition-all border-2 border-transparent hover:border-amber-300">
+                  <span class="text-amber-700 text-sm">${item.definition.substring(0, 60)}...</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <div class="text-center mt-6">
+            <button onclick="resetMatching()" class="px-6 py-2 bg-amber-200 text-amber-800 rounded-full font-semibold hover:bg-amber-300 transition-colors">
+              🔄 New Round
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function selectWord(index, word) {
+      if (document.getElementById(`word-${index}`).classList.contains('opacity-50')) return;
+      
+      document.querySelectorAll('.match-word').forEach(el => {
+        el.classList.remove('border-amber-500', 'bg-amber-100');
+      });
+      
+      document.getElementById(`word-${index}`).classList.add('border-amber-500', 'bg-amber-100');
+      selectedCard = { type: 'word', index, word };
+    }
+
+    function selectDef(index, word) {
+      if (document.getElementById(`def-${index}`).classList.contains('opacity-50')) return;
+      
+      if (selectedCard && selectedCard.type === 'word') {
+        const wordEl = document.getElementById(`word-${selectedCard.index}`);
+        const defEl = document.getElementById(`def-${index}`);
+        
+        if (selectedCard.word === word) {
+          wordEl.classList.add('bg-emerald-100', 'border-emerald-500', 'opacity-50');
+          wordEl.classList.remove('cursor-pointer', 'hover:shadow-lg');
+          defEl.classList.add('bg-emerald-100', 'border-emerald-500', 'opacity-50');
+          defEl.classList.remove('cursor-pointer', 'hover:shadow-lg');
+          
+          matchedPairs.push(word);
+          updateScore(15);
+          
+          if (matchedPairs.length === 6) {
+            setTimeout(() => {
+              showMessage('🎉 Perfect Match! All pairs found!', 'success');
+            }, 500);
+          }
+        } else {
+          wordEl.classList.add('shake', 'border-red-400', 'bg-red-50');
+          defEl.classList.add('shake', 'border-red-400', 'bg-red-50');
+          resetStreak();
+          
+          setTimeout(() => {
+            wordEl.classList.remove('shake', 'border-red-400', 'bg-red-50', 'border-amber-500', 'bg-amber-100');
+            defEl.classList.remove('shake', 'border-red-400', 'bg-red-50');
+          }, 500);
+        }
+        
+        selectedCard = null;
+      }
+    }
+
+    function resetMatching() {
+      matchedPairs = [];
+      selectedCard = null;
+      renderMatching(document.getElementById('content-area'));
+    }
+
+    function renderWriting(container) {
+      const shuffled = shuffleArray(vocabulary);
+      
+      container.innerHTML = `
+        <div class="text-center mb-6">
+          <h2 class="font-display text-2xl font-bold text-amber-800 mb-2">Fill in the Blanks!</h2>
+          <p class="text-amber-600">Type the correct word for each definition</p>
+        </div>
+        
+        <div class="space-y-4" id="writing-questions">
+          ${shuffled.slice(0, 5).map((item, i) => `
+            <div class="bg-white rounded-xl p-5 shadow-lg" id="writing-q-${i}">
+              <div class="flex items-start gap-3">
+                <span class="text-2xl">${item.emoji}</span>
+                <div class="flex-1">
+                  <p class="text-amber-700 mb-3">${item.definition}</p>
+                  <div class="flex gap-3 items-center flex-wrap">
+                    <input type="text" id="answer-${i}" data-answer="${item.word}" 
+                           class="flex-1 min-w-0 px-4 py-2 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none"
+                           placeholder="Type your answer..."
+                           onkeypress="if(event.key==='Enter')checkWritingAnswer(${i})">
+                    <button onclick="checkWritingAnswer(${i})" 
+                            class="px-4 py-2 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 transition-colors whitespace-nowrap">
+                      Check
+                    </button>
+                  </div>
+                  <p id="feedback-${i}" class="mt-2 text-sm font-medium"></p>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="text-center mt-6">
+          <button onclick="renderWriting(document.getElementById('content-area'))" 
+                  class="px-6 py-2 bg-amber-200 text-amber-800 rounded-full font-semibold hover:bg-amber-300 transition-colors">
+            🔄 New Questions
+          </button>
+        </div>
+      `;
+    }
+
+    function checkWritingAnswer(index) {
+      const input = document.getElementById(`answer-${index}`);
+      const feedback = document.getElementById(`feedback-${index}`);
+      const container = document.getElementById(`writing-q-${index}`);
+      const correctAnswer = input.dataset.answer.toLowerCase();
+      const userAnswer = input.value.trim().toLowerCase();
+      
+      if (userAnswer === correctAnswer) {
+        feedback.textContent = '✅ Correct! Great job!';
+        feedback.className = 'mt-2 text-sm font-medium text-emerald-600 bounce-in';
+        container.classList.add('border-2', 'border-emerald-400');
+        input.disabled = true;
+        input.classList.add('bg-emerald-50');
+        updateScore(20);
+      } else if (userAnswer === '') {
+        feedback.textContent = '💡 Type your answer first!';
+        feedback.className = 'mt-2 text-sm font-medium text-amber-600';
+      } else {
+        feedback.textContent = `❌ Not quite. The answer is: "${input.dataset.answer}"`;
+        feedback.className = 'mt-2 text-sm font-medium text-red-500';
+        container.classList.add('shake');
+        resetStreak();
+        setTimeout(() => container.classList.remove('shake'), 300);
+      }
+    }
+
+    function renderQuiz(container) {
+      quizQuestions = shuffleArray(vocabulary).slice(0, 5);
+      currentQuizIndex = 0;
+      renderQuizQuestion(container);
+    }
+
+    function renderQuizQuestion(container) {
+      if (currentQuizIndex >= quizQuestions.length) {
+        container.innerHTML = `
+          <div class="text-center bg-gradient-to-br from-amber-100 to-orange-100 rounded-3xl p-10 shadow-xl">
+            <span class="text-7xl mb-4 block floating">🏆</span>
+            <h2 class="font-display text-3xl font-bold text-amber-800 mb-4">Quiz Complete!</h2>
+            <p class="text-amber-700 text-xl mb-6">Your final score: <strong>${score}</strong> points</p>
+            <button onclick="renderQuiz(document.getElementById('content-area'))" 
+                    class="px-8 py-4 bg-amber-500 text-white rounded-full font-bold text-lg hover:bg-amber-600 transition-colors shadow-lg">
+              🔄 Try Again
+            </button>
+          </div>
+        `;
+        return;
+      }
+      
+      const question = quizQuestions[currentQuizIndex];
+      const wrongAnswers = shuffleArray(vocabulary.filter(v => v.word !== question.word)).slice(0, 3);
+      const options = shuffleArray([question, ...wrongAnswers]);
+      const promptText = config.quiz_prompt || defaultConfig.quiz_prompt;
+      
+      container.innerHTML = `
+        <div class="text-center mb-6">
+          <span class="text-amber-500 font-semibold">Question ${currentQuizIndex + 1} of ${quizQuestions.length}</span>
+          <div class="w-full bg-amber-100 rounded-full h-2 mt-2">
+            <div class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: ${((currentQuizIndex) / quizQuestions.length) * 100}%"></div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-3xl p-8 shadow-xl text-center mb-6">
+          <span class="text-5xl mb-4 block">${question.emoji}</span>
+          <h2 class="font-display text-3xl font-bold text-amber-800 mb-2">${question.word}</h2>
+          <p id="quiz-prompt" class="text-amber-600">${promptText}</p>
+        </div>
+        
+        <div class="grid gap-3" id="quiz-options">
+          ${options.map((opt, i) => `
+            <button onclick="checkQuizAnswer('${opt.word}', '${question.word}', this)" 
+                    class="quiz-option w-full p-4 bg-amber-50 rounded-xl text-left hover:bg-amber-100 transition-all border-2 border-transparent hover:border-amber-300 shadow-md">
+              <span class="font-semibold text-amber-800">${String.fromCharCode(65 + i)}.</span>
+              <span class="text-amber-700 ml-2">${opt.definition}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function checkQuizAnswer(selected, correct, button) {
+      const options = document.querySelectorAll('.quiz-option');
+      options.forEach(opt => {
+        opt.disabled = true;
+        opt.classList.add('pointer-events-none');
+      });
+      
+      if (selected === correct) {
+        button.classList.add('bg-emerald-100', 'border-emerald-500');
+        updateScore(25);
+        
+        setTimeout(() => {
+          currentQuizIndex++;
+          renderQuizQuestion(document.getElementById('content-area'));
+        }, 1000);
+      } else {
+        button.classList.add('bg-red-100', 'border-red-400', 'shake');
+        resetStreak();
+        
+        options.forEach(opt => {
+          if (opt.textContent.includes(vocabulary.find(v => v.word === correct).definition.substring(0, 30))) {
+            opt.classList.add('bg-emerald-100', 'border-emerald-500');
+          }
+        });
+        
+        setTimeout(() => {
+          currentQuizIndex++;
+          renderQuizQuestion(document.getElementById('content-area'));
+        }, 2000);
+      }
+    }
+
+    function showMessage(text, type) {
+      const container = document.getElementById('content-area');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-6 rounded-2xl shadow-2xl text-center z-50 bounce-in ${type === 'success' ? 'bg-emerald-500' : 'bg-red-500'} text-white`;
+      msgDiv.innerHTML = `<p class="text-2xl font-bold">${text}</p>`;
+      document.body.appendChild(msgDiv);
+      
+      setTimeout(() => {
+        msgDiv.remove();
+      }, 2000);
+    }
+
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      const titleEl = document.getElementById('main-title');
+      if (titleEl) {
+        titleEl.textContent = config.app_title || defaultConfig.app_title;
+      }
+      
+      const flashcardPrompt = document.getElementById('flashcard-prompt');
+      if (flashcardPrompt) {
+        flashcardPrompt.textContent = config.flashcard_prompt || defaultConfig.flashcard_prompt;
+      }
+      
+      const quizPrompt = document.getElementById('quiz-prompt');
+      if (quizPrompt) {
+        quizPrompt.textContent = config.quiz_prompt || defaultConfig.quiz_prompt;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["app_title", config.app_title || defaultConfig.app_title],
+        ["flashcard_prompt", config.flashcard_prompt || defaultConfig.flashcard_prompt],
+        ["quiz_prompt", config.quiz_prompt || defaultConfig.quiz_prompt]
+      ]);
+    }
+
+    // Initialize
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+    
+    renderContent();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c73266534bb308a',t:'MTc2OTk2Njc0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
