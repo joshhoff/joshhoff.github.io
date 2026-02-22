@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Winter Olympics Trivia</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    body, html { height: 100%; }
+    .snowflake { animation: snowfall 3s linear infinite; }
+    @keyframes snowfall {
+      to { transform: translateY(100px) rotate(360deg); opacity: 0; }
+    }
+    .medal-gold { color: #fbbf24; }
+    .medal-silver { color: #d1d5db; }
+    .medal-bronze { color: #d97706; }
+    .pulse-answer { animation: pulseAnswer 0.6s ease-out; }
+    @keyframes pulseAnswer {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .slide-in { animation: slideIn 0.5s ease-out; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .btn-answer { transition: all 0.3s ease; }
+    .btn-answer:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+    .btn-answer:disabled { cursor: not-allowed; opacity: 0.7; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full w-full" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0c4a6e 100%);">
+  <div id="app" class="h-full w-full overflow-auto">
+   <!-- Floating snowflakes background -->
+   <div class="fixed inset-0 pointer-events-none">
+    <div class="snowflake absolute text-2xl" style="left: 10%; animation-delay: 0s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 20%; animation-delay: 0.5s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 30%; animation-delay: 1s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 40%; animation-delay: 1.5s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 50%; animation-delay: 2s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 60%; animation-delay: 0.7s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 70%; animation-delay: 1.2s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 80%; animation-delay: 1.8s;">
+     ❄️
+    </div>
+    <div class="snowflake absolute text-2xl" style="left: 90%; animation-delay: 2.3s;">
+     ❄️
+    </div>
+   </div><!-- Header -->
+   <header class="relative z-10 backdrop-blur-md" style="background: rgba(15, 23, 42, 0.95); border-bottom: 3px solid #0ea5e9;">
+    <div class="max-w-5xl mx-auto px-4 py-6">
+     <h1 id="app-title" class="text-3xl md:text-4xl font-extrabold text-center" style="color: #06b6d4;">🏔️ Winter Olympics Trivia</h1>
+     <p id="welcome-msg" class="text-center mt-2 text-sm" style="color: #cbd5e1;">Test your knowledge of winter sports terms and actions</p>
+    </div>
+   </header><!-- Main Content -->
+   <main class="relative z-0 max-w-3xl mx-auto px-4 py-8">
+    <!-- Start Screen -->
+    <section id="start-screen" class="slide-in text-center py-12">
+     <div class="text-6xl mb-6">
+      🎿
+     </div>
+     <h2 class="text-3xl font-bold mb-4" style="color: #f1f5f9;">Ready to test your Winter Olympics knowledge?</h2>
+     <p class="mb-8 text-lg" style="color: #cbd5e1;">Answer questions about winter sports terms and actions. How many can you get right?</p><button onclick="startQuiz()" class="px-8 py-4 rounded-2xl font-bold text-lg transition-all" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;"> Start Quiz 🚀 </button>
+    </section><!-- Quiz Screen -->
+    <section id="quiz-screen" class="hidden">
+     <!-- Progress Bar -->
+     <div class="mb-6">
+      <div class="flex justify-between items-center mb-2">
+       <span id="question-counter" style="color: #cbd5e1;">Question 1 of 10</span> <span id="score-display" style="color: #06b6d4; font-weight: bold;">Score: 0</span>
+      </div>
+      <div class="w-full rounded-full" style="background: rgba(30, 58, 138, 0.5); height: 8px;">
+       <div id="progress-bar" class="rounded-full transition-all" style="background: linear-gradient(90deg, #06b6d4, #0891b2); height: 8px; width: 0%;"></div>
+      </div>
+     </div><!-- Question Card -->
+     <div class="slide-in rounded-3xl p-8 mb-6 shadow-2xl" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(6, 182, 212, 0.1)); border: 2px solid #0ea5e9;">
+      <div id="question-category" class="text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4" style="background: rgba(6, 182, 212, 0.3); color: #06b6d4;"></div>
+      <h3 id="question-text" class="text-2xl font-bold mb-8" style="color: #f1f5f9;"></h3><!-- Answer Options -->
+      <div id="answers-container" class="space-y-3">
+       <!-- Generated by JavaScript -->
+      </div><!-- Feedback -->
+      <div id="feedback-box" class="hidden mt-6 p-4 rounded-xl" style="background: rgba(6, 182, 212, 0.2); border-left: 4px solid #06b6d4;">
+       <p id="feedback-text" class="font-semibold" style="color: #f1f5f9;"></p>
+       <p id="feedback-detail" class="text-sm mt-2" style="color: #cbd5e1;"></p>
+      </div>
+     </div><!-- Next Button --> <button id="next-btn" onclick="nextQuestion()" class="hidden w-full py-4 rounded-2xl font-bold text-white transition-all" style="background: linear-gradient(135deg, #06b6d4, #0891b2);"> Next Question → </button>
+    </section><!-- Results Screen -->
+    <section id="results-screen" class="hidden slide-in">
+     <div class="text-center py-12 rounded-3xl" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(6, 182, 212, 0.15)); border: 2px solid #0ea5e9;">
+      <div id="medal-emoji" class="text-8xl mb-4"></div>
+      <h2 id="result-title" class="text-3xl font-bold mb-2" style="color: #f1f5f9;"></h2>
+      <p id="result-subtitle" class="text-lg mb-6" style="color: #cbd5e1;"></p><!-- Score Breakdown -->
+      <div class="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
+       <div class="p-4 rounded-xl" style="background: rgba(34, 197, 94, 0.2); border: 2px solid #22c55e;">
+        <div id="final-score" class="text-3xl font-bold medal-gold" style="color: #22c55e;"></div>
+        <div class="text-sm" style="color: #cbd5e1;">
+         Correct
+        </div>
+       </div>
+       <div class="p-4 rounded-xl" style="background: rgba(168, 85, 247, 0.2); border: 2px solid #a855f7;">
+        <div id="wrong-count" class="text-3xl font-bold" style="color: #a855f7;"></div>
+        <div class="text-sm" style="color: #cbd5e1;">
+         Incorrect
+        </div>
+       </div>
+       <div class="p-4 rounded-xl" style="background: rgba(6, 182, 212, 0.2); border: 2px solid #06b6d4;">
+        <div id="percentage-score" class="text-3xl font-bold" style="color: #06b6d4;"></div>
+        <div class="text-sm" style="color: #cbd5e1;">
+         Percent
+        </div>
+       </div>
+      </div><!-- Action Buttons -->
+      <div class="flex gap-4 justify-center mb-6">
+       <button onclick="startQuiz()" class="px-6 py-3 rounded-xl font-bold" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;"> Try Again 🔄 </button> <button onclick="showStats()" class="px-6 py-3 rounded-xl font-bold" style="background: rgba(6, 182, 212, 0.3); color: #06b6d4; border: 2px solid #06b6d4;"> View Stats 📊 </button>
+      </div>
+     </div>
+    </section><!-- Stats Screen -->
+    <section id="stats-screen" class="hidden slide-in">
+     <div class="rounded-3xl p-8 shadow-2xl" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.1), rgba(6, 182, 212, 0.1)); border: 2px solid #0ea5e9;">
+      <div class="flex justify-between items-center mb-6">
+       <h2 class="text-2xl font-bold" style="color: #f1f5f9;">Your Statistics</h2><button onclick="backToResults()" style="color: #06b6d4; font-size: 24px;">✕</button>
+      </div><!-- Stats Grid -->
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+       <div class="p-5 rounded-xl" style="background: rgba(6, 182, 212, 0.2); border-left: 4px solid #06b6d4;">
+        <div class="text-sm" style="color: #cbd5e1;">
+         Total Quizzes Completed
+        </div>
+        <div id="stat-quizzes" class="text-4xl font-bold" style="color: #06b6d4;">
+         0
+        </div>
+       </div>
+       <div class="p-5 rounded-xl" style="background: rgba(34, 197, 94, 0.2); border-left: 4px solid #22c55e;">
+        <div class="text-sm" style="color: #cbd5e1;">
+         Average Score
+        </div>
+        <div id="stat-average" class="text-4xl font-bold" style="color: #22c55e;">
+         0%
+        </div>
+       </div>
+       <div class="p-5 rounded-xl" style="background: rgba(168, 85, 247, 0.2); border-left: 4px solid #a855f7;">
+        <div class="text-sm" style="color: #cbd5e1;">
+         Best Score
+        </div>
+        <div id="stat-best" class="text-4xl font-bold" style="color: #a855f7;">
+         0%
+        </div>
+       </div>
+       <div class="p-5 rounded-xl" style="background: rgba(249, 115, 22, 0.2); border-left: 4px solid #f97316;">
+        <div class="text-sm" style="color: #cbd5e1;">
+         Total Questions Answered
+        </div>
+        <div id="stat-total-q" class="text-4xl font-bold" style="color: #f97316;">
+         0
+        </div>
+       </div>
+      </div><!-- Recent Results -->
+      <div>
+       <h3 class="text-lg font-bold mb-4" style="color: #f1f5f9;">Recent Results</h3>
+       <div id="recent-results" class="space-y-2">
+        <!-- Generated by JavaScript -->
+       </div>
+      </div><button onclick="backToResults()" class="w-full mt-6 py-3 rounded-xl font-bold transition-all" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;"> Back to Results </button>
+     </div>
+    </section>
+   </main>
+  </div>
+  <script>
+    // Winter Olympics trivia questions
+    const quizQuestions = [
+      {
+        id: 'q1',
+        category: 'Alpine Skiing',
+        question: 'What is the term for a skier moving sideways down a slope?',
+        answers: ['Traversing', 'Schussing', 'Mogul', 'Slalom'],
+        correct: 0,
+        explanation: 'Traversing is when a skier moves sideways across the slope to control speed and direction.'
+      },
+      {
+        id: 'q2',
+        category: 'Figure Skating',
+        question: 'What is a "triple axel"?',
+        answers: ['A figure with 3 loops', 'A jump with 3.5 rotations', 'A skating maneuver with 3 turns', 'A spin lasting 3 seconds'],
+        correct: 1,
+        explanation: 'A triple axel is a figure skating jump that involves 3.5 rotations in the air—one of the most difficult jumps.'
+      },
+      {
+        id: 'q3',
+        category: 'Speed Skating',
+        question: 'In speed skating, what does "crossover" refer to?',
+        answers: ['Skating backwards', 'Crossing one foot over the other while turning', 'Switching lanes', 'Falling and getting back up'],
+        correct: 1,
+        explanation: 'Crossovers are a technique where skaters cross one foot over the other to maintain speed while turning in the corners.'
+      },
+      {
+        id: 'q4',
+        category: 'Ice Hockey',
+        question: 'What is a "hat trick" in ice hockey?',
+        answers: ['3 assists in one game', 'Scoring 3 goals in one game', 'Winning 3 games in a row', '3 penalty minutes'],
+        correct: 1,
+        explanation: 'A hat trick occurs when a single player scores 3 goals in one game—traditionally fans throw hats on the ice!'
+      },
+      {
+        id: 'q5',
+        category: 'Curling',
+        question: 'What is the "house" in curling?',
+        answers: ['The clubroom', 'The delivery area', 'The target rings at the end of the sheet', 'The scoring zone'],
+        correct: 2,
+        explanation: 'The house is the circular target at the end of the curling sheet. The goal is to place stones as close to the center as possible.'
+      },
+      {
+        id: 'q6',
+        category: 'Freestyle Skiing',
+        question: 'What are "moguls" in freestyle skiing?',
+        answers: ['Skiers in slow motion', 'Officials on the slope', 'Bumps and hills on the slope', 'Aerial tricks'],
+        correct: 2,
+        explanation: 'Moguls are a series of bumps and small hills on a ski slope. Mogul skiing is a freestyle discipline combining speed and tricks.'
+      },
+      {
+        id: 'q7',
+        category: 'Snowboarding',
+        question: 'What does "catching an edge" mean in snowboarding?',
+        answers: ['Finding the best slope', 'Accidentally turning the board edge down', 'Performing a trick', 'Reaching the edge of the mountain'],
+        correct: 1,
+        explanation: 'Catching an edge is when the snowboard\'s edge accidentally digs into the snow, usually causing a fall or unexpected turn.'
+      },
+      {
+        id: 'q8',
+        category: 'Biathlon',
+        question: 'What sport combines cross-country skiing with what activity?',
+        answers: ['Snowshoeing', 'Rifle shooting', 'Ice skating', 'Sledding'],
+        correct: 1,
+        explanation: 'Biathlon combines cross-country skiing with rifle shooting. Athletes must ski fast and shoot accurately—a perfect Olympic challenge!'
+      },
+      {
+        id: 'q9',
+        category: 'Luge',
+        question: 'How many people typically race in a doubles luge event?',
+        answers: ['1 person', '2 people', '3 people', '4 people'],
+        correct: 1,
+        explanation: 'Doubles luge features 2 athletes (a driver and pusher) racing down an icy track on a single sled. The pusher helps launch the sled at the start.'
+      },
+      {
+        id: 'q10',
+        category: 'Ski Jumping',
+        question: 'In ski jumping, what is the "hill size" (HS)?',
+        answers: ['The height of the jump', 'The construction size of the hill', 'The distance where a 90-degree slope is reached', 'The length of the in-run'],
+        correct: 2,
+        explanation: 'Hill size (HS) is the distance from the takeoff to the point where the landing slope reaches 90 degrees. It\'s a key measurement for ski jumping hills.'
+      },
+      {
+        id: 'q11',
+        category: 'Alpine Skiing',
+        question: 'What is "carving" in skiing?',
+        answers: ['Engraving patterns in snow', 'Cutting through snow with tilted edges', 'Making sharp turns only', 'Skiing backwards'],
+        correct: 1,
+        explanation: 'Carving is a skiing technique where the edges of the skis cut through the snow, creating clean turns with minimal skidding.'
+      },
+      {
+        id: 'q12',
+        category: 'Snowboarding',
+        question: 'What does "regular" stance mean in snowboarding?',
+        answers: ['Moving at normal speed', 'Left foot forward', 'Right foot forward', 'Facing uphill'],
+        correct: 1,
+        explanation: 'Regular stance means riding with the left foot forward. The opposite is "goofy" stance, where the right foot is forward.'
+      },
+      {
+        id: 'q13',
+        category: 'Figure Skating',
+        question: 'What is a "lutz" in figure skating?',
+        answers: ['A spin in place', 'A jump from the back outside edge', 'A jump from the front inside edge', 'A skating move backwards'],
+        correct: 1,
+        explanation: 'A lutz is a figure skating jump performed from the back outside edge of one skate. It\'s one of the six basic jumps.'
+      },
+      {
+        id: 'q14',
+        category: 'Cross-Country Skiing',
+        question: 'What is "classic technique" in cross-country skiing?',
+        answers: ['The oldest style', 'Skiing in prepared tracks', 'Diagonal stride movement', 'All of the above'],
+        correct: 3,
+        explanation: 'Classic technique uses prepared tracks and diagonal striding movements. It\'s the traditional style, contrasted with "skate skiing" which is more modern.'
+      },
+      {
+        id: 'q15',
+        category: 'Ice Hockey',
+        question: 'What is a "slapshot"?',
+        answers: ['A slow push pass', 'A hard shot with a wind-up', 'Falling on ice', 'A defensive block'],
+        correct: 1,
+        explanation: 'A slapshot is a powerful hockey shot where the player swings the stick back and hits the puck with force—often the hardest shot in hockey.'
+      },
+      {
+        id: 'q16',
+        category: 'Curling',
+        question: 'What does "sweeping" do in curling?',
+        answers: ['Cleans the ice', 'Reduces friction and helps the stone travel farther or straighter', 'Speeds up the delivery', 'Changes the stone\'s color'],
+        correct: 1,
+        explanation: 'Sweeping reduces friction on the ice, allowing the curling stone to travel farther and straighter. Strategic sweeping is crucial to the game.'
+      },
+      {
+        id: 'q17',
+        category: 'Bobsleigh',
+        question: 'What is the primary role of the "brakeman" in bobsleigh?',
+        answers: ['Steer the sled', 'Push at the start', 'Apply brakes at the finish', 'Maintain balance'],
+        correct: 2,
+        explanation: 'The brakeman applies the brakes at the finish to slow down the sled at the end of the run. This role is critical for safety and final positioning.'
+      },
+      {
+        id: 'q18',
+        category: 'Skeleton',
+        question: 'What is the main difference between skeleton and luge?',
+        answers: ['Direction athletes face', 'Number of athletes', 'Type of sled', 'All of the above'],
+        correct: 0,
+        explanation: 'In skeleton, athletes race head-first down the track, while in luge they race feet-first. This fundamental difference affects technique and speed.'
+      },
+      {
+        id: 'q19',
+        category: 'Freestyle Skiing',
+        question: 'What is an "air" or "aerial" in freestyle skiing?',
+        answers: ['Flying without jumping', 'A jump that launches the skier into the air', 'Spinning on flat ground', 'Launching from a ramp'],
+        correct: 1,
+        explanation: 'An aerial is a ski jump where the athlete launches into the air and performs tricks or rotations before landing—a core freestyle skiing event.'
+      },
+      {
+        id: 'q20',
+        category: 'Speed Skating',
+        question: 'What is "stroking" in speed skating?',
+        answers: ['Falling repeatedly', 'The pushing motion to move forward', 'Hitting the ice with poles', 'Changing lanes'],
+        correct: 1,
+        explanation: 'Stroking refers to the pushing motion speed skaters use to propel themselves forward on ice. It requires powerful leg extension and precision.'
+      }
+    ];
+
+    // App state
+    let currentQuestion = 0;
+    let currentScore = 0;
+    let allAttempts = [];
+    let quizActive = false;
+
+    // Config
+    const defaultConfig = {
+      app_title: '🏔️ Winter Olympics Trivia',
+      welcome_message: 'Test your knowledge of winter sports terms and actions',
+      background_color: '#0f172a',
+      surface_color: '#0ea5e9',
+      text_color: '#f1f5f9',
+      primary_action_color: '#06b6d4',
+      secondary_action_color: '#0891b2',
+      font_family: 'Poppins',
+      font_size: 16
+    };
+
+    // Initialize SDKs
+    async function initApp() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (config) => {
+            applyConfig(config);
+          },
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+              },
+              {
+                get: () => config.surface_color || defaultConfig.surface_color,
+                set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+              },
+              {
+                get: () => config.primary_action_color || defaultConfig.primary_action_color,
+                set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); }
+              },
+              {
+                get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+                set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ['app_title', config.app_title || defaultConfig.app_title],
+            ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+          ])
+        });
+      }
+
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init({
+          onDataChanged: (data) => {
+            allAttempts = data;
+          }
+        });
+      }
+
+      applyConfig(window.elementSdk?.config || defaultConfig);
+    }
+
+    function applyConfig(config) {
+      const c = { ...defaultConfig, ...config };
+      const fontStack = `${c.font_family}, sans-serif`;
+      const baseSize = c.font_size;
+
+      document.body.style.fontFamily = fontStack;
+      document.body.style.fontSize = `${baseSize}px`;
+
+      const titleEl = document.getElementById('app-title');
+      const welcomeEl = document.getElementById('welcome-msg');
+      titleEl.textContent = c.app_title;
+      titleEl.style.color = c.primary_action_color;
+      titleEl.style.fontFamily = fontStack;
+      titleEl.style.fontSize = `${baseSize * 1.5}px`;
+      welcomeEl.textContent = c.welcome_message;
+      welcomeEl.style.fontFamily = fontStack;
+    }
+
+    function startQuiz() {
+      currentQuestion = 0;
+      currentScore = 0;
+      quizActive = true;
+
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('results-screen').classList.add('hidden');
+      document.getElementById('stats-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      if (currentQuestion >= quizQuestions.length) {
+        showResults();
+        return;
+      }
+
+      const q = quizQuestions[currentQuestion];
+
+      document.getElementById('question-counter').textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+      document.getElementById('score-display').textContent = `Score: ${currentScore}`;
+      document.getElementById('progress-bar').style.width = `${((currentQuestion + 1) / quizQuestions.length) * 100}%`;
+
+      document.getElementById('question-category').textContent = q.category;
+      document.getElementById('question-text').textContent = q.question;
+
+      const container = document.getElementById('answers-container');
+      container.innerHTML = '';
+
+      q.answers.forEach((answer, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-answer w-full p-4 rounded-xl text-left font-semibold transition-all';
+        btn.style.background = 'rgba(6, 182, 212, 0.2)';
+        btn.style.color = '#f1f5f9';
+        btn.style.border = '2px solid rgba(6, 182, 212, 0.4)';
+        btn.textContent = answer;
+        btn.onclick = () => checkAnswer(idx, q.correct);
+
+        container.appendChild(btn);
+      });
+
+      document.getElementById('feedback-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+    }
+
+    async function checkAnswer(selected, correct) {
+      const isCorrect = selected === correct;
+      if (isCorrect) {
+        currentScore++;
+      }
+
+      const buttons = document.querySelectorAll('.btn-answer');
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === correct) {
+          btn.style.background = 'rgba(34, 197, 94, 0.4)';
+          btn.style.borderColor = '#22c55e';
+          if (idx === selected && isCorrect) {
+            btn.classList.add('pulse-answer');
+          }
+        } else if (idx === selected && !isCorrect) {
+          btn.style.background = 'rgba(239, 68, 68, 0.4)';
+          btn.style.borderColor = '#ef4444';
+          btn.classList.add('shake');
+        }
+      });
+
+      const feedback = document.getElementById('feedback-box');
+      const feedbackText = document.getElementById('feedback-text');
+      const feedbackDetail = document.getElementById('feedback-detail');
+
+      feedback.classList.remove('hidden');
+      if (isCorrect) {
+        feedbackText.textContent = '✅ Correct!';
+        feedbackText.style.color = '#22c55e';
+        feedback.style.borderColor = '#22c55e';
+      } else {
+        feedbackText.textContent = '❌ Incorrect';
+        feedbackText.style.color = '#ef4444';
+        feedback.style.borderColor = '#ef4444';
+      }
+      feedbackDetail.textContent = quizQuestions[currentQuestion].explanation;
+
+      // Save attempt
+      if (window.dataSdk && quizActive) {
+        await window.dataSdk.create({
+          question_id: quizQuestions[currentQuestion].id,
+          score: isCorrect ? 1 : 0,
+          completed: false,
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      document.getElementById('next-btn').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < quizQuestions.length) {
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    async function showResults() {
+      quizActive = false;
+      const percentage = Math.round((currentScore / quizQuestions.length) * 100);
+      let emoji, title, subtitle;
+
+      if (percentage === 100) {
+        emoji = '🥇';
+        title = 'Perfect! Gold Medal! 🏅';
+        subtitle = 'You\'re a Winter Olympics expert!';
+      } else if (percentage >= 80) {
+        emoji = '🥈';
+        title = 'Excellent! Silver Medal! 🏅';
+        subtitle = 'Outstanding performance!';
+      } else if (percentage >= 60) {
+        emoji = '🥉';
+        title = 'Great job! Bronze Medal! 🏅';
+        subtitle = 'You know your winter sports!';
+      } else if (percentage >= 40) {
+        emoji = '⛷️';
+        title = 'Good effort!';
+        subtitle = 'Keep learning about winter sports!';
+      } else {
+        emoji = '❄️';
+        title = 'Keep practicing!';
+        subtitle = 'Try again and learn more about winter sports!';
+      }
+
+      // Save result
+      if (window.dataSdk) {
+        await window.dataSdk.create({
+          question_id: `quiz_${Date.now()}`,
+          score: percentage,
+          completed: true,
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      document.getElementById('medal-emoji').textContent = emoji;
+      document.getElementById('result-title').textContent = title;
+      document.getElementById('result-subtitle').textContent = subtitle;
+      document.getElementById('final-score').textContent = currentScore;
+      document.getElementById('wrong-count').textContent = quizQuestions.length - currentScore;
+      document.getElementById('percentage-score').textContent = `${percentage}%`;
+
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('results-screen').classList.remove('hidden');
+    }
+
+    function showStats() {
+      const completedQuizzes = allAttempts.filter(a => a.completed).length;
+      const quizScores = allAttempts.filter(a => a.completed).map(a => a.score);
+      const avgScore = quizScores.length > 0 ? Math.round(quizScores.reduce((a, b) => a + b, 0) / quizScores.length) : 0;
+      const bestScore = quizScores.length > 0 ? Math.max(...quizScores) : 0;
+      const totalAnswered = allAttempts.filter(a => !a.completed).length;
+
+      document.getElementById('stat-quizzes').textContent = completedQuizzes;
+      document.getElementById('stat-average').textContent = `${avgScore}%`;
+      document.getElementById('stat-best').textContent = `${bestScore}%`;
+      document.getElementById('stat-total-q').textContent = totalAnswered;
+
+      const recentContainer = document.getElementById('recent-results');
+      recentContainer.innerHTML = '';
+
+      const recentQuizzes = allAttempts.filter(a => a.completed).slice(-5).reverse();
+      if (recentQuizzes.length === 0) {
+        recentContainer.innerHTML = '<p style="color: #cbd5e1;">No quizzes completed yet!</p>';
+      } else {
+        recentQuizzes.forEach(attempt => {
+          const date = new Date(attempt.timestamp).toLocaleDateString();
+          const div = document.createElement('div');
+          div.className = 'p-3 rounded-lg flex justify-between items-center';
+          div.style.background = 'rgba(6, 182, 212, 0.2)';
+          div.innerHTML = `<span style="color: #f1f5f9;">${date}</span><span style="color: #06b6d4; font-weight: bold;">${attempt.score}%</span>`;
+          recentContainer.appendChild(div);
+        });
+      }
+
+      document.getElementById('results-screen').classList.add('hidden');
+      document.getElementById('stats-screen').classList.remove('hidden');
+    }
+
+    function backToResults() {
+      document.getElementById('stats-screen').classList.add('hidden');
+      document.getElementById('results-screen').classList.remove('hidden');
+    }
+
+    // Initialize
+    initApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d1f3842270a6827',t:'MTc3MTc3MTAyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
