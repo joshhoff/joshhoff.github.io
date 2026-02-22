@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Science Vocabulary Flip Cards</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    
+    .card-container {
+      perspective: 1000px;
+    }
+    
+    .card-inner {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    
+    .card-front, .card-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.5); }
+    }
+    
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .glow-animation {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+    }
+    
+    .confetti {
+      animation: confetti 1s ease-out forwards;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease-out forwards;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full m-0 overflow-auto">
+  <div id="app-wrapper" class="w-full h-full min-h-full flex flex-col" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);"><!-- Header -->
+   <header class="text-center py-6 px-4">
+    <h1 id="app-title" class="text-3xl md:text-4xl font-extrabold text-white mb-2 drop-shadow-lg" style="font-family: 'Nunito', sans-serif;">🔬 Science Vocabulary</h1>
+    <p id="instructions" class="text-indigo-200 text-lg" style="font-family: 'Nunito', sans-serif;">Click a card to reveal the definition!</p>
+   </header><!-- Progress Bar -->
+   <div class="px-6 mb-4">
+    <div class="max-w-2xl mx-auto">
+     <div class="flex justify-between items-center mb-2"><span id="progress-text" class="text-indigo-200 text-sm font-semibold" style="font-family: 'Nunito', sans-serif;">Progress: 0 / 9</span> <button id="reset-btn" class="px-4 py-1 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold rounded-full transition-all duration-300 hover:scale-105" style="font-family: 'Nunito', sans-serif;"> 🔄 Reset </button>
+     </div>
+     <div class="h-3 bg-indigo-900/50 rounded-full overflow-hidden">
+      <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+     </div>
+    </div>
+   </div><!-- Cards Grid -->
+   <main class="flex-1 px-4 pb-8">
+    <div id="cards-grid" class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"><!-- Cards will be generated here -->
+    </div>
+   </main><!-- Completion Message -->
+   <div id="completion-message" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-3xl p-8 text-center max-w-md mx-auto shadow-2xl slide-in">
+     <div class="text-6xl mb-4">
+      🎉
+     </div>
+     <h2 class="text-2xl font-extrabold text-indigo-900 mb-2" style="font-family: 'Nunito', sans-serif;">Amazing Job!</h2>
+     <p class="text-indigo-600 mb-6" style="font-family: 'Nunito', sans-serif;">You've reviewed all the vocabulary cards!</p><button id="play-again-btn" class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold rounded-full transition-all duration-300 hover:scale-105 shadow-lg" style="font-family: 'Nunito', sans-serif;"> Play Again 🔄 </button>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      app_title: '🔬 Science Vocabulary',
+      instructions_text: 'Click a card to reveal the definition!',
+      background_color: '#1e1b4b',
+      card_front_color: '#ffffff',
+      text_color: '#312e81',
+      primary_action_color: '#6366f1',
+      secondary_action_color: '#10b981',
+      font_family: 'Nunito',
+      font_size: 16
+    };
+
+    const vocabularyData = [
+      { term: 'Microbiologist', definition: 'A scientist who studies tiny living things like bacteria and viruses that can only be seen with a microscope', emoji: '🧬' },
+      { term: 'Eye Lens', definition: 'The clear part of your eye that focuses light so you can see things clearly', emoji: '👁️' },
+      { term: 'Experiment', definition: 'A test or investigation to discover something new or prove an idea', emoji: '🧪' },
+      { term: 'Lock', definition: 'A device that keeps something closed or secured, opened with a key or code', emoji: '🔒' },
+      { term: 'Bacteria', definition: 'Tiny single-celled organisms that live everywhere - some helpful, some harmful', emoji: '🦠' },
+      { term: 'Curious', definition: 'Having a strong desire to learn or know about something', emoji: '🤔' },
+      { term: 'Innovator', definition: 'A person who introduces new ideas, methods, or inventions', emoji: '💡' },
+      { term: 'Category', definition: 'A group of things that share similar features or characteristics', emoji: '📁' },
+      { term: 'Microscope', definition: 'A scientific tool that makes tiny things look bigger so we can study them', emoji: '🔬' }
+    ];
+
+    let flippedCards = new Set();
+
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function createCard(item, index) {
+      const cardContainer = document.createElement('div');
+      cardContainer.className = 'card-container h-48 cursor-pointer';
+      cardContainer.dataset.index = index;
+      
+      cardContainer.innerHTML = `
+        <div class="card-inner w-full h-full relative">
+          <div class="card-front absolute inset-0 rounded-2xl shadow-xl flex flex-col items-center justify-center p-4 border-4 border-indigo-200 hover:border-indigo-400 transition-colors duration-300" style="background: linear-gradient(145deg, #ffffff 0%, #f0f0ff 100%);">
+            <span class="text-5xl mb-3">${item.emoji}</span>
+            <h3 class="text-xl font-bold text-center" style="font-family: 'Nunito', sans-serif; color: #312e81;">${item.term}</h3>
+            <span class="mt-2 text-xs text-indigo-400 font-semibold">TAP TO FLIP</span>
+          </div>
+          <div class="card-back absolute inset-0 rounded-2xl shadow-xl flex flex-col items-center justify-center p-5" style="background: linear-gradient(145deg, #6366f1 0%, #4f46e5 100%);">
+            <span class="text-3xl mb-2">${item.emoji}</span>
+            <p class="text-white text-center text-sm leading-relaxed" style="font-family: 'Nunito', sans-serif;">${item.definition}</p>
+          </div>
+        </div>
+      `;
+      
+      cardContainer.addEventListener('click', () => flipCard(cardContainer, index));
+      
+      return cardContainer;
+    }
+
+    function flipCard(cardElement, index) {
+      const cardInner = cardElement.querySelector('.card-inner');
+      cardInner.classList.toggle('flipped');
+      
+      if (cardInner.classList.contains('flipped') && !flippedCards.has(index)) {
+        flippedCards.add(index);
+        updateProgress();
+        
+        if (flippedCards.size === vocabularyData.length) {
+          setTimeout(showCompletion, 800);
+        }
+      }
+    }
+
+    function updateProgress() {
+      const progress = flippedCards.size;
+      const total = vocabularyData.length;
+      const percentage = (progress / total) * 100;
+      
+      document.getElementById('progress-text').textContent = `Progress: ${progress} / ${total}`;
+      document.getElementById('progress-bar').style.width = `${percentage}%`;
+    }
+
+    function showCompletion() {
+      document.getElementById('completion-message').classList.remove('hidden');
+    }
+
+    function hideCompletion() {
+      document.getElementById('completion-message').classList.add('hidden');
+    }
+
+    function resetGame() {
+      flippedCards.clear();
+      updateProgress();
+      hideCompletion();
+      renderCards();
+    }
+
+    function renderCards() {
+      const grid = document.getElementById('cards-grid');
+      grid.innerHTML = '';
+      
+      const shuffled = shuffleArray(vocabularyData);
+      shuffled.forEach((item, index) => {
+        const card = createCard(item, index);
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('slide-in');
+        grid.appendChild(card);
+      });
+    }
+
+    async function onConfigChange(config) {
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const baseFontSize = config.font_size || defaultConfig.font_size;
+      
+      const title = document.getElementById('app-title');
+      title.textContent = config.app_title || defaultConfig.app_title;
+      title.style.fontFamily = `'${fontFamily}', sans-serif`;
+      title.style.fontSize = `${baseFontSize * 2}px`;
+      
+      const instructions = document.getElementById('instructions');
+      instructions.textContent = config.instructions_text || defaultConfig.instructions_text;
+      instructions.style.fontFamily = `'${fontFamily}', sans-serif`;
+      instructions.style.fontSize = `${baseFontSize}px`;
+    }
+
+    // Initialize
+    document.getElementById('reset-btn').addEventListener('click', resetGame);
+    document.getElementById('play-again-btn').addEventListener('click', resetGame);
+    
+    renderCards();
+
+    // Initialize Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => window.elementSdk.setConfig({ background_color: value })
+            },
+            {
+              get: () => config.card_front_color || defaultConfig.card_front_color,
+              set: (value) => window.elementSdk.setConfig({ card_front_color: value })
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => window.elementSdk.setConfig({ text_color: value })
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => window.elementSdk.setConfig({ primary_action_color: value })
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => window.elementSdk.setConfig({ secondary_action_color: value })
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => window.elementSdk.setConfig({ font_family: value })
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => window.elementSdk.setConfig({ font_size: value })
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['app_title', config.app_title || defaultConfig.app_title],
+          ['instructions_text', config.instructions_text || defaultConfig.instructions_text]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d203bd2c58d20bc',t:'MTc3MTc4MTY2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
