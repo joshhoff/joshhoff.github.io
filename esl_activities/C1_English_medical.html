@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Vocabulary Mastery</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Source Sans 3', sans-serif; }
+    .heading-font { font-family: 'Crimson Pro', serif; }
+    .phonetic { font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', sans-serif; }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-hover:hover { transform: translateY(-4px); }
+    .pulse-correct { animation: pulseGreen 0.5s ease-out; }
+    .pulse-incorrect { animation: pulseRed 0.5s ease-out; }
+    @keyframes pulseGreen { 0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } 50% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0.3); } }
+    @keyframes pulseRed { 0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } 50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0.3); } }
+    .progress-bar { transition: width 0.5s ease-out; }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);"><!-- Navigation -->
+   <nav class="sticky top-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-700/50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+     <h1 id="main-title" class="heading-font text-2xl font-bold text-emerald-400">Medical Vocabulary Mastery</h1>
+     <div class="flex items-center gap-4">
+      <div class="text-sm text-slate-400"><span id="score-display">Score: 0</span> | <span id="streak-display">Streak: 0</span>
+      </div><button id="nav-home" class="px-3 py-1.5 text-sm rounded-lg bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 transition-colors">Home</button>
+     </div>
+    </div>
+   </nav><!-- Main Content -->
+   <main class="max-w-6xl mx-auto px-4 py-8"><!-- Home Screen -->
+    <section id="home-screen" class="fade-in">
+     <div class="text-center mb-12">
+      <h2 id="welcome-heading" class="heading-font text-4xl font-bold text-white mb-4">C1 Medical English</h2>
+      <p id="welcome-text" class="text-slate-300 text-lg max-w-2xl mx-auto">Master advanced medical vocabulary with a focus on pronunciation patterns. Practice the different sounds of "a" and "e" in medical terminology.</p>
+     </div><!-- Activity Cards -->
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"><button onclick="startActivity('pronunciation')" class="card-hover p-6 rounded-2xl bg-gradient-to-br from-emerald-600/20 to-emerald-800/20 border border-emerald-500/30 text-left group">
+       <div class="text-4xl mb-4">
+        🔊
+       </div><h3 class="heading-font text-xl font-semibold text-emerald-400 mb-2">Pronunciation Practice</h3><p class="text-slate-400 text-sm">Learn the different sounds of "a" and "e" in medical terms</p><span class="inline-block mt-4 text-emerald-400 text-sm group-hover:translate-x-2 transition-transform">Start →</span> </button> <button onclick="startActivity('vocab-quiz')" class="card-hover p-6 rounded-2xl bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 text-left group">
+       <div class="text-4xl mb-4">
+        📝
+       </div><h3 class="heading-font text-xl font-semibold text-blue-400 mb-2">Vocabulary Quiz</h3><p class="text-slate-400 text-sm">Test your knowledge of C1 medical terminology</p><span class="inline-block mt-4 text-blue-400 text-sm group-hover:translate-x-2 transition-transform">Start →</span> </button> <button onclick="startActivity('conversation')" class="card-hover p-6 rounded-2xl bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 text-left group">
+       <div class="text-4xl mb-4">
+        💬
+       </div><h3 class="heading-font text-xl font-semibold text-purple-400 mb-2">Conversation Prompts</h3><p class="text-slate-400 text-sm">Practice speaking with medical scenario prompts</p><span class="inline-block mt-4 text-purple-400 text-sm group-hover:translate-x-2 transition-transform">Start →</span> </button> <button onclick="startActivity('writing')" class="card-hover p-6 rounded-2xl bg-gradient-to-br from-amber-600/20 to-amber-800/20 border border-amber-500/30 text-left group">
+       <div class="text-4xl mb-4">
+        ✍️
+       </div><h3 class="heading-font text-xl font-semibold text-amber-400 mb-2">Written Activities</h3><p class="text-slate-400 text-sm">Complete medical documentation exercises</p><span class="inline-block mt-4 text-amber-400 text-sm group-hover:translate-x-2 transition-transform">Start →</span> </button> <button onclick="startActivity('matching')" class="card-hover p-6 rounded-2xl bg-gradient-to-br from-rose-600/20 to-rose-800/20 border border-rose-500/30 text-left group">
+       <div class="text-4xl mb-4">
+        🔗
+       </div><h3 class="heading-font text-xl font-semibold text-rose-400 mb-2">Definition Matching</h3><p class="text-slate-400 text-sm">Match medical terms with their definitions</p><span class="inline-block mt-4 text-rose-400 text-sm group-hover:translate-x-2 transition-transform">Start →</span> </button> <button onclick="startActivity('progress')" class="card-hover p-6 rounded-2xl bg-gradient-to-br from-slate-600/20 to-slate-800/20 border border-slate-500/30 text-left group">
+       <div class="text-4xl mb-4">
+        📊
+       </div><h3 class="heading-font text-xl font-semibold text-slate-300 mb-2">My Progress</h3><p class="text-slate-400 text-sm">View your learning statistics and history</p><span class="inline-block mt-4 text-slate-300 text-sm group-hover:translate-x-2 transition-transform">View →</span> </button>
+     </div><!-- Pronunciation Guide Preview -->
+     <div class="p-6 rounded-2xl bg-slate-800/50 border border-slate-700/50">
+      <h3 class="heading-font text-xl font-semibold text-white mb-4">📖 Quick Pronunciation Guide</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+       <div>
+        <h4 class="text-emerald-400 font-medium mb-3">The Letter "A" Sounds</h4>
+        <ul class="space-y-2 text-sm">
+         <li class="flex items-center gap-3 text-slate-300"><span class="phonetic text-emerald-300">/eɪ/</span> <span>as in <strong>anemia</strong>, <strong>fatal</strong></span></li>
+         <li class="flex items-center gap-3 text-slate-300"><span class="phonetic text-emerald-300">/æ/</span> <span>as in <strong>cardiac</strong>, <strong>gastric</strong></span></li>
+         <li class="flex items-center gap-3 text-slate-300"><span class="phonetic text-emerald-300">/ə/</span> <span>as in <strong>hepatic</strong>, <strong>renal</strong></span></li>
+        </ul>
+       </div>
+       <div>
+        <h4 class="text-blue-400 font-medium mb-3">The Letter "E" Sounds</h4>
+        <ul class="space-y-2 text-sm">
+         <li class="flex items-center gap-3 text-slate-300"><span class="phonetic text-blue-300">/iː/</span> <span>as in <strong>fever</strong>, <strong>seizure</strong></span></li>
+         <li class="flex items-center gap-3 text-slate-300"><span class="phonetic text-blue-300">/ɛ/</span> <span>as in <strong>cerebral</strong>, <strong>septic</strong></span></li>
+         <li class="flex items-center gap-3 text-slate-300"><span class="phonetic text-blue-300">/ɪ/</span> <span>as in <strong>benign</strong>, <strong>remission</strong></span></li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </section><!-- Pronunciation Activity -->
+    <section id="pronunciation-screen" class="hidden fade-in">
+     <div class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+       <h2 class="heading-font text-2xl font-bold text-white">🔊 Pronunciation Practice</h2><span id="pron-progress" class="text-slate-400 text-sm">Question 1 of 10</span>
+      </div>
+      <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+       <div id="pron-progress-bar" class="h-full bg-emerald-500 progress-bar" style="width: 10%"></div>
+      </div>
+     </div>
+     <div id="pron-card" class="p-8 rounded-2xl bg-slate-800/70 border border-slate-700/50 mb-6">
+      <div class="text-center mb-8"><span id="pron-word" class="heading-font text-4xl font-bold text-white">anemia</span>
+       <p id="pron-phonetic" class="phonetic text-xl text-emerald-400 mt-2">/əˈniːmiə/</p>
+      </div>
+      <p class="text-slate-300 text-center mb-6">Which sound does the highlighted letter make?</p>
+      <div id="pron-options" class="grid grid-cols-2 gap-4 max-w-md mx-auto"><!-- Options populated by JS -->
+      </div>
+     </div>
+     <div id="pron-feedback" class="hidden p-4 rounded-xl mb-6 text-center">
+      <p id="pron-feedback-text" class="font-medium"></p>
+      <p id="pron-explanation" class="text-sm mt-2 opacity-80"></p>
+     </div>
+     <div class="flex justify-center"><button id="pron-next" onclick="nextPronunciation()" class="hidden px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition-colors"> Next Question → </button>
+     </div>
+    </section><!-- Vocabulary Quiz -->
+    <section id="vocab-quiz-screen" class="hidden fade-in">
+     <div class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+       <h2 class="heading-font text-2xl font-bold text-white">📝 Vocabulary Quiz</h2><span id="vocab-progress" class="text-slate-400 text-sm">Question 1 of 10</span>
+      </div>
+      <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
+       <div id="vocab-progress-bar" class="h-full bg-blue-500 progress-bar" style="width: 10%"></div>
+      </div>
+     </div>
+     <div id="vocab-card" class="p-8 rounded-2xl bg-slate-800/70 border border-slate-700/50 mb-6">
+      <p class="text-slate-400 text-sm mb-2">Define this medical term:</p>
+      <h3 id="vocab-term" class="heading-font text-3xl font-bold text-white mb-2">Hemorrhage</h3>
+      <p id="vocab-phonetic" class="phonetic text-blue-400 mb-8">/ˈhemərɪdʒ/</p>
+      <div id="vocab-options" class="space-y-3"><!-- Options populated by JS -->
+      </div>
+     </div>
+     <div id="vocab-feedback" class="hidden p-4 rounded-xl mb-6">
+      <p id="vocab-feedback-text" class="font-medium"></p>
+      <p id="vocab-context" class="text-sm mt-2 opacity-80"></p>
+     </div>
+     <div class="flex justify-center"><button id="vocab-next" onclick="nextVocabQuestion()" class="hidden px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors"> Next Question → </button>
+     </div>
+    </section><!-- Conversation Prompts -->
+    <section id="conversation-screen" class="hidden fade-in">
+     <div class="mb-8">
+      <h2 class="heading-font text-2xl font-bold text-white mb-2">💬 Conversation Practice</h2>
+      <p class="text-slate-400">Practice speaking using these medical scenario prompts</p>
+     </div>
+     <div id="conversation-card" class="p-8 rounded-2xl bg-slate-800/70 border border-slate-700/50 mb-6">
+      <div class="flex items-center gap-3 mb-6"><span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium" id="conv-scenario-type">Patient Consultation</span> <span class="px-3 py-1 rounded-full bg-slate-600/50 text-slate-300 text-sm" id="conv-difficulty">Advanced</span>
+      </div>
+      <h3 id="conv-title" class="heading-font text-xl font-semibold text-white mb-4">Discussing Treatment Options</h3>
+      <div class="bg-slate-900/50 rounded-xl p-6 mb-6">
+       <p class="text-slate-400 text-sm mb-2">Scenario:</p>
+       <p id="conv-scenario" class="text-slate-200 leading-relaxed">A patient has been diagnosed with chronic hypertension and is reluctant to start medication. Explain the condition, potential complications, and treatment options while addressing their concerns.</p>
+      </div>
+      <div class="mb-6">
+       <p class="text-slate-400 text-sm mb-3">Key vocabulary to use:</p>
+       <div id="conv-vocab" class="flex flex-wrap gap-2"><span class="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 text-sm">hypertension /ˌhaɪpərˈtenʃən/</span> <span class="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 text-sm">cardiovascular /ˌkɑːdioʊˈvæskjələr/</span> <span class="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 text-sm">asymptomatic /ˌeɪsɪmptəˈmætɪk/</span>
+       </div>
+      </div>
+      <div>
+       <p class="text-slate-400 text-sm mb-3">Discussion points:</p>
+       <ul id="conv-points" class="space-y-2 text-slate-300">
+        <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Explain what hypertension means and why it's called "the silent killer"</span></li>
+        <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Discuss lifestyle modifications vs. pharmacological intervention</span></li>
+        <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Address common misconceptions about blood pressure medication</span></li>
+       </ul>
+      </div>
+     </div>
+     <div class="flex justify-between"><button onclick="prevConversation()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors">← Previous</button> <button onclick="markConversationComplete()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white transition-colors">Mark Complete ✓</button> <button onclick="nextConversation()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors">Next →</button>
+     </div>
+    </section><!-- Written Activities -->
+    <section id="writing-screen" class="hidden fade-in">
+     <div class="mb-8">
+      <h2 class="heading-font text-2xl font-bold text-white mb-2">✍️ Written Activities</h2>
+      <p class="text-slate-400">Practice medical documentation and written communication</p>
+     </div>
+     <div id="writing-card" class="p-8 rounded-2xl bg-slate-800/70 border border-slate-700/50 mb-6">
+      <div class="flex items-center gap-3 mb-6"><span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium" id="writing-type">Clinical Notes</span>
+      </div>
+      <h3 id="writing-title" class="heading-font text-xl font-semibold text-white mb-4">Write a SOAP Note</h3>
+      <div class="bg-slate-900/50 rounded-xl p-6 mb-6">
+       <p class="text-slate-400 text-sm mb-2">Instructions:</p>
+       <p id="writing-prompt" class="text-slate-200 leading-relaxed">A 54-year-old male patient presents with chest pain radiating to the left arm, shortness of breath, and diaphoresis. Write a SOAP note documenting this encounter. Include relevant medical terminology.</p>
+      </div>
+      <div class="mb-6">
+       <p class="text-slate-400 text-sm mb-3">Required vocabulary (include pronunciation practice):</p>
+       <div id="writing-vocab" class="grid grid-cols-2 gap-2"><span class="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm"> <strong>diaphoresis</strong> <span class="phonetic text-amber-400/70">/ˌdaɪəfəˈriːsɪs/</span> </span> <span class="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm"> <strong>angina</strong> <span class="phonetic text-amber-400/70">/ænˈdʒaɪnə/</span> </span> <span class="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm"> <strong>myocardial</strong> <span class="phonetic text-amber-400/70">/ˌmaɪoʊˈkɑːrdiəl/</span> </span> <span class="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm"> <strong>electrocardiogram</strong> <span class="phonetic text-amber-400/70">/ɪˌlektroʊˈkɑːrdioʊˌɡræm/</span> </span>
+       </div>
+      </div>
+      <div class="mb-4"><label class="text-slate-400 text-sm mb-2 block">Your response:</label> <textarea id="writing-response" class="w-full h-64 p-4 rounded-xl bg-slate-900 border border-slate-600 text-slate-200 placeholder-slate-500 focus:border-amber-500 focus:outline-none resize-none" placeholder="S (Subjective):
+
+O (Objective):
+
+A (Assessment):
+
+P (Plan):"></textarea>
+      </div>
+      <div id="writing-tips" class="bg-amber-500/10 rounded-xl p-4 border border-amber-500/20">
+       <p class="text-amber-400 text-sm font-medium mb-2">💡 Writing Tips:</p>
+       <ul class="text-amber-200/80 text-sm space-y-1">
+        <li>• Use precise medical terminology throughout</li>
+        <li>• Include patient history in the Subjective section</li>
+        <li>• Document vital signs and examination findings in Objective</li>
+        <li>• Provide differential diagnoses in Assessment</li>
+       </ul>
+      </div>
+     </div>
+     <div class="flex justify-between"><button onclick="prevWriting()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors">← Previous</button> <button onclick="saveWritingResponse()" id="save-writing-btn" class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white transition-colors">Save Response</button> <button onclick="nextWriting()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors">Next →</button>
+     </div>
+    </section><!-- Definition Matching -->
+    <section id="matching-screen" class="hidden fade-in">
+     <div class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+       <h2 class="heading-font text-2xl font-bold text-white">🔗 Definition Matching</h2><span id="match-score" class="text-slate-400 text-sm">Matched: 0 of 6</span>
+      </div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div>
+       <h3 class="text-rose-400 font-medium mb-4">Terms</h3>
+       <div id="match-terms" class="space-y-3"><!-- Terms populated by JS -->
+       </div>
+      </div>
+      <div>
+       <h3 class="text-emerald-400 font-medium mb-4">Definitions</h3>
+       <div id="match-definitions" class="space-y-3"><!-- Definitions populated by JS -->
+       </div>
+      </div>
+     </div>
+     <div class="flex justify-center gap-4"><button onclick="resetMatching()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors">Reset</button> <button onclick="newMatchingSet()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white transition-colors">New Set</button>
+     </div>
+    </section><!-- Progress Screen -->
+    <section id="progress-screen" class="hidden fade-in">
+     <div class="mb-8">
+      <h2 class="heading-font text-2xl font-bold text-white mb-2">📊 My Progress</h2>
+      <p class="text-slate-400">Track your learning journey</p>
+     </div>
+     <div class="grid md:grid-cols-3 gap-6 mb-8">
+      <div class="p-6 rounded-2xl bg-slate-800/70 border border-slate-700/50 text-center">
+       <div class="text-4xl font-bold text-emerald-400 mb-2" id="total-correct">
+        0
+       </div>
+       <p class="text-slate-400">Correct Answers</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-slate-800/70 border border-slate-700/50 text-center">
+       <div class="text-4xl font-bold text-blue-400 mb-2" id="total-activities">
+        0
+       </div>
+       <p class="text-slate-400">Activities Completed</p>
+      </div>
+      <div class="p-6 rounded-2xl bg-slate-800/70 border border-slate-700/50 text-center">
+       <div class="text-4xl font-bold text-purple-400 mb-2" id="best-streak">
+        0
+       </div>
+       <p class="text-slate-400">Best Streak</p>
+      </div>
+     </div>
+     <div class="p-6 rounded-2xl bg-slate-800/70 border border-slate-700/50">
+      <h3 class="heading-font text-xl font-semibold text-white mb-4">Recent Activity</h3>
+      <div id="activity-history" class="space-y-3 max-h-96 overflow-y-auto">
+       <p class="text-slate-500 text-center py-8">No activity recorded yet. Start practicing!</p>
+      </div>
+     </div>
+    </section><!-- Results Screen -->
+    <section id="results-screen" class="hidden fade-in">
+     <div class="max-w-lg mx-auto text-center py-12">
+      <div class="text-6xl mb-6">
+       🎉
+      </div>
+      <h2 class="heading-font text-3xl font-bold text-white mb-4">Activity Complete!</h2>
+      <div class="p-6 rounded-2xl bg-slate-800/70 border border-slate-700/50 mb-8">
+       <div class="text-5xl font-bold text-emerald-400 mb-2" id="final-score">
+        8/10
+       </div>
+       <p class="text-slate-400">Correct Answers</p>
+       <div class="mt-4 pt-4 border-t border-slate-700">
+        <p class="text-slate-300" id="final-message">Great work! Keep practicing to improve.</p>
+       </div>
+      </div>
+      <div class="flex justify-center gap-4"><button onclick="showScreen('home-screen')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors">Back to Home</button> <button onclick="restartActivity()" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white transition-colors">Try Again</button>
+      </div>
+     </div>
+    </section>
+   </main>
+  </div>
+  <script>
+    // Configuration
+    const defaultConfig = {
+      app_title: 'Medical Vocabulary Mastery',
+      welcome_message: 'Master advanced medical vocabulary with a focus on pronunciation patterns.',
+      background_color: '#1a1a2e',
+      surface_color: '#1e293b',
+      text_color: '#e2e8f0',
+      primary_action_color: '#10b981',
+      secondary_action_color: '#6366f1',
+      font_family: 'Source Sans 3',
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+    let userProgress = [];
+    let score = 0;
+    let streak = 0;
+    let bestStreak = 0;
+    let currentActivity = '';
+    let currentIndex = 0;
+
+    // Medical Vocabulary Data with Pronunciation Focus
+    const pronunciationQuestions = [
+      { word: 'an<span class="text-emerald-400 underline">e</span>mia', phonetic: '/əˈniːmiə/', letter: 'e', sound: '/iː/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The "e" in anemia makes a long /iː/ sound, as in "see".' },
+      { word: 'c<span class="text-emerald-400 underline">a</span>rdiac', phonetic: '/ˈkɑːrdiæk/', letter: 'a', sound: '/ɑː/', options: ['/æ/', '/eɪ/', '/ɑː/', '/ə/'], explanation: 'The first "a" in cardiac makes the /ɑː/ sound, as in "father".' },
+      { word: 'h<span class="text-emerald-400 underline">e</span>patic', phonetic: '/hɪˈpætɪk/', letter: 'e', sound: '/ɪ/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The "e" in hepatic reduces to /ɪ/, a short sound like in "bit".' },
+      { word: 'f<span class="text-emerald-400 underline">a</span>tal', phonetic: '/ˈfeɪtəl/', letter: 'a', sound: '/eɪ/', options: ['/æ/', '/eɪ/', '/ɑː/', '/ə/'], explanation: 'The "a" in fatal makes the long /eɪ/ sound, as in "day".' },
+      { word: 'c<span class="text-emerald-400 underline">e</span>rebral', phonetic: '/ˈserəbrəl/', letter: 'e', sound: '/ɛ/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The first "e" in cerebral makes the /ɛ/ sound, as in "bed".' },
+      { word: 'g<span class="text-emerald-400 underline">a</span>stric', phonetic: '/ˈɡæstrɪk/', letter: 'a', sound: '/æ/', options: ['/æ/', '/eɪ/', '/ɑː/', '/ə/'], explanation: 'The "a" in gastric makes the short /æ/ sound, as in "cat".' },
+      { word: 's<span class="text-emerald-400 underline">e</span>ptic', phonetic: '/ˈseptɪk/', letter: 'e', sound: '/ɛ/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The "e" in septic makes the /ɛ/ sound, as in "bet".' },
+      { word: 'f<span class="text-emerald-400 underline">e</span>ver', phonetic: '/ˈfiːvər/', letter: 'e', sound: '/iː/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The "e" in fever makes the long /iː/ sound.' },
+      { word: 'r<span class="text-emerald-400 underline">e</span>nal', phonetic: '/ˈriːnəl/', letter: 'e', sound: '/iː/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The "e" in renal makes the long /iː/ sound, as in "me".' },
+      { word: 'b<span class="text-emerald-400 underline">e</span>nign', phonetic: '/bɪˈnaɪn/', letter: 'e', sound: '/ɪ/', options: ['/iː/', '/ɛ/', '/ɪ/', '/eɪ/'], explanation: 'The "e" in benign reduces to the short /ɪ/ sound.' },
+      { word: 'l<span class="text-emerald-400 underline">a</span>tent', phonetic: '/ˈleɪtənt/', letter: 'a', sound: '/eɪ/', options: ['/æ/', '/eɪ/', '/ɑː/', '/ə/'], explanation: 'The "a" in latent makes the long /eɪ/ sound.' },
+      { word: 'ac<span class="text-emerald-400 underline">u</span>te', phonetic: '/əˈkjuːt/', letter: 'a', sound: '/ə/', options: ['/æ/', '/eɪ/', '/ɑː/', '/ə/'], explanation: 'The initial "a" in acute reduces to the schwa /ə/ sound.' }
+    ];
+
+    const vocabQuestions = [
+      { term: 'Hemorrhage', phonetic: '/ˈhemərɪdʒ/', correct: 'Severe or uncontrolled bleeding', options: ['Severe or uncontrolled bleeding', 'Blood clot formation', 'Low blood pressure', 'Rapid heart rate'], context: 'Note the "e" makes an /ɛ/ sound and the "a" makes a schwa /ə/ sound.' },
+      { term: 'Tachycardia', phonetic: '/ˌtækɪˈkɑːrdiə/', correct: 'Abnormally rapid heart rate', options: ['Abnormally slow heart rate', 'Abnormally rapid heart rate', 'Irregular heart rhythm', 'Heart muscle weakness'], context: 'The "a" sounds: first is /æ/ as in "cat", second is /ɑː/ as in "father".' },
+      { term: 'Edema', phonetic: '/ɪˈdiːmə/', correct: 'Swelling caused by fluid retention', options: ['Skin discoloration', 'Swelling caused by fluid retention', 'Tissue death', 'Inflammation of joints'], context: 'The "e" makes two different sounds: /ɪ/ then /iː/.' },
+      { term: 'Prognosis', phonetic: '/prɒɡˈnoʊsɪs/', correct: 'Predicted outcome of a disease', options: ['Initial examination', 'Predicted outcome of a disease', 'Treatment plan', 'Medical history'], context: 'Note how "o" can vary: /ɒ/ vs /oʊ/.' },
+      { term: 'Metastasis', phonetic: '/məˈtæstəsɪs/', correct: 'Spread of cancer to other body parts', options: ['Cancer remission', 'Spread of cancer to other body parts', 'Tumor shrinkage', 'Benign growth'], context: 'The "a" makes the /æ/ sound, "e" reduces to schwa /ə/.' },
+      { term: 'Atrophy', phonetic: '/ˈætrəfi/', correct: 'Wasting away of body tissue', options: ['Tissue growth', 'Wasting away of body tissue', 'Muscle strengthening', 'Cell division'], context: 'The "a" makes the /æ/ sound as in "cat".' },
+      { term: 'Anaphylaxis', phonetic: '/ˌænəfɪˈlæksɪs/', correct: 'Severe allergic reaction', options: ['Mild allergic reaction', 'Severe allergic reaction', 'Skin rash', 'Breathing difficulty'], context: 'Multiple "a" sounds: /æ/, /ə/, and /æ/ again.' },
+      { term: 'Palliative', phonetic: '/ˈpæliətɪv/', correct: 'Relieving symptoms without curing', options: ['Curing disease', 'Relieving symptoms without curing', 'Preventing illness', 'Diagnosing conditions'], context: 'The "a" makes the /æ/ sound, second "a" reduces to schwa.' },
+      { term: 'Etiology', phonetic: '/ˌiːtiˈɒlədʒi/', correct: 'The cause or origin of a disease', options: ['Treatment of disease', 'The cause or origin of a disease', 'Study of aging', 'Prevention methods'], context: 'The "e" makes the long /iː/ sound.' },
+      { term: 'Remission', phonetic: '/rɪˈmɪʃən/', correct: 'Temporary recovery from disease', options: ['Disease worsening', 'Temporary recovery from disease', 'Complete cure', 'New diagnosis'], context: 'Both "e" and "i" make similar /ɪ/ sounds here.' }
+    ];
+
+    const conversationPrompts = [
+      {
+        type: 'Patient Consultation',
+        difficulty: 'Advanced',
+        title: 'Discussing Treatment Options',
+        scenario: 'A patient has been diagnosed with chronic hypertension and is reluctant to start medication. Explain the condition, potential complications, and treatment options while addressing their concerns.',
+        vocab: ['hypertension /ˌhaɪpərˈtenʃən/', 'cardiovascular /ˌkɑːdioʊˈvæskjələr/', 'asymptomatic /ˌeɪsɪmptəˈmætɪk/'],
+        points: ['Explain what hypertension means and why it\'s called "the silent killer"', 'Discuss lifestyle modifications vs. pharmacological intervention', 'Address common misconceptions about blood pressure medication']
+      },
+      {
+        type: 'Medical History',
+        difficulty: 'Advanced',
+        title: 'Taking a Comprehensive History',
+        scenario: 'A new patient presents with recurrent episodes of severe abdominal pain. Take a detailed medical history focusing on gastrointestinal symptoms.',
+        vocab: ['gastrointestinal /ˌɡæstroʊɪnˈtestɪnəl/', 'epigastric /ˌepɪˈɡæstrɪk/', 'dyspepsia /dɪsˈpepsiə/'],
+        points: ['Ask about onset, location, character, and radiation of pain', 'Inquire about associated symptoms: nausea, vomiting, changes in bowel habits', 'Explore dietary triggers and medication history']
+      },
+      {
+        type: 'Case Presentation',
+        difficulty: 'Expert',
+        title: 'Presenting a Complex Case',
+        scenario: 'Present a case of a 67-year-old with suspected bacterial pneumonia to your senior colleague. Include relevant history, examination findings, and initial management.',
+        vocab: ['pneumonia /njuːˈmoʊniə/', 'auscultation /ˌɔːskəlˈteɪʃən/', 'consolidation /kənˌsɒlɪˈdeɪʃən/'],
+        points: ['Structure your presentation using the standard case format', 'Describe respiratory examination findings using correct terminology', 'Propose differential diagnoses and justify your primary working diagnosis']
+      },
+      {
+        type: 'Breaking Bad News',
+        difficulty: 'Expert',
+        title: 'Communicating a Serious Diagnosis',
+        scenario: 'You need to inform a patient that their biopsy results show malignant cells consistent with adenocarcinoma. Practice delivering this news sensitively.',
+        vocab: ['malignant /məˈlɪɡnənt/', 'adenocarcinoma /ˌædənoʊˌkɑːrsɪˈnoʊmə/', 'prognosis /prɒɡˈnoʊsɪs/'],
+        points: ['Set up the conversation: privacy, time, support person present', 'Deliver information in clear, understandable language', 'Allow time for questions and emotional response']
+      }
+    ];
+
+    const writingActivities = [
+      {
+        type: 'Clinical Notes',
+        title: 'Write a SOAP Note',
+        prompt: 'A 54-year-old male patient presents with chest pain radiating to the left arm, shortness of breath, and diaphoresis. Write a SOAP note documenting this encounter.',
+        vocab: [
+          { term: 'diaphoresis', phonetic: '/ˌdaɪəfəˈriːsɪs/' },
+          { term: 'angina', phonetic: '/ænˈdʒaɪnə/' },
+          { term: 'myocardial', phonetic: '/ˌmaɪoʊˈkɑːrdiəl/' },
+          { term: 'electrocardiogram', phonetic: '/ɪˌlektroʊˈkɑːrdioʊˌɡræm/' }
+        ],
+        tips: ['Use precise medical terminology throughout', 'Include patient history in the Subjective section', 'Document vital signs and examination findings in Objective', 'Provide differential diagnoses in Assessment']
+      },
+      {
+        type: 'Referral Letter',
+        title: 'Write a Specialist Referral',
+        prompt: 'Write a referral letter to a gastroenterologist for a patient with persistent dysphagia and unintentional weight loss. Include relevant history and investigation results.',
+        vocab: [
+          { term: 'dysphagia', phonetic: '/dɪsˈfeɪdʒə/' },
+          { term: 'esophageal', phonetic: '/ɪˌsɒfəˈdʒiːəl/' },
+          { term: 'endoscopy', phonetic: '/enˈdɒskəpi/' },
+          { term: 'malignancy', phonetic: '/məˈlɪɡnənsi/' }
+        ],
+        tips: ['Follow formal letter structure', 'Clearly state the reason for referral', 'Include relevant positive and negative findings', 'Specify urgency of referral']
+      },
+      {
+        type: 'Discharge Summary',
+        title: 'Write a Discharge Summary',
+        prompt: 'A patient with community-acquired pneumonia is ready for discharge after 5 days of IV antibiotics. Write a discharge summary including diagnosis, treatment, and follow-up plan.',
+        vocab: [
+          { term: 'pneumonia', phonetic: '/njuːˈmoʊniə/' },
+          { term: 'antibiotic', phonetic: '/ˌæntɪbaɪˈɒtɪk/' },
+          { term: 'afebrile', phonetic: '/eɪˈfiːbraɪl/' },
+          { term: 'rehabilitation', phonetic: '/ˌriːəˌbɪlɪˈteɪʃən/' }
+        ],
+        tips: ['Summarize admission reason and key findings', 'Document all treatments provided', 'List current medications with dosages', 'Clearly outline follow-up appointments and warning signs']
+      }
+    ];
+
+    const matchingTerms = [
+      { term: 'Bradycardia', phonetic: '/ˌbrædɪˈkɑːrdiə/', definition: 'Abnormally slow heart rate' },
+      { term: 'Dyspnea', phonetic: '/dɪspˈniːə/', definition: 'Difficulty breathing or shortness of breath' },
+      { term: 'Hematoma', phonetic: '/ˌhiːməˈtoʊmə/', definition: 'Collection of blood outside blood vessels' },
+      { term: 'Cyanosis', phonetic: '/ˌsaɪəˈnoʊsɪs/', definition: 'Bluish discoloration of skin due to poor oxygen' },
+      { term: 'Necrosis', phonetic: '/nəˈkroʊsɪs/', definition: 'Death of body tissue' },
+      { term: 'Stenosis', phonetic: '/stəˈnoʊsɪs/', definition: 'Abnormal narrowing of a passage' },
+      { term: 'Embolism', phonetic: '/ˈembəlɪzəm/', definition: 'Blockage of a blood vessel' },
+      { term: 'Pyrexia', phonetic: '/paɪˈreksiə/', definition: 'Elevated body temperature; fever' },
+      { term: 'Lethargy', phonetic: '/ˈleθərdʒi/', definition: 'Abnormal drowsiness or lack of energy' },
+      { term: 'Arrhythmia', phonetic: '/əˈrɪðmiə/', definition: 'Irregular heartbeat rhythm' },
+      { term: 'Ischemia', phonetic: '/ɪˈskiːmiə/', definition: 'Inadequate blood supply to tissue' },
+      { term: 'Thrombosis', phonetic: '/θrɒmˈboʊsɪs/', definition: 'Formation of a blood clot' }
+    ];
+
+    let selectedTerm = null;
+    let matchedPairs = 0;
+    let currentMatchingSet = [];
+
+    // SDK Initialization
+    async function initializeApp() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...config, ...newConfig };
+            applyConfig();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [
+              { get: () => cfg.background_color || defaultConfig.background_color, set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+              { get: () => cfg.surface_color || defaultConfig.surface_color, set: (v) => { cfg.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+              { get: () => cfg.text_color || defaultConfig.text_color, set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+              { get: () => cfg.primary_action_color || defaultConfig.primary_action_color, set: (v) => { cfg.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+              { get: () => cfg.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { cfg.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+            ],
+            borderables: [],
+            fontEditable: { get: () => cfg.font_family || defaultConfig.font_family, set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+            fontSizeable: { get: () => cfg.font_size || defaultConfig.font_size, set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+          }),
+          mapToEditPanelValues: (cfg) => new Map([
+            ['app_title', cfg.app_title || defaultConfig.app_title],
+            ['welcome_message', cfg.welcome_message || defaultConfig.welcome_message]
+          ])
+        });
+      }
+
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init({
+          onDataChanged: (data) => {
+            userProgress = data;
+            updateProgressDisplay();
+          }
+        });
+        if (!result.isOk) {
+          console.error('Data SDK initialization failed');
+        }
+      }
+
+      applyConfig();
+      document.getElementById('nav-home').addEventListener('click', () => showScreen('home-screen'));
+    }
+
+    function applyConfig() {
+      const app = document.getElementById('app');
+      const title = document.getElementById('main-title');
+      const welcomeText = document.getElementById('welcome-text');
+      
+      title.textContent = config.app_title || defaultConfig.app_title;
+      welcomeText.textContent = config.welcome_message || defaultConfig.welcome_message;
+      
+      const fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      document.body.style.fontFamily = fontFamily;
+      document.body.style.fontSize = `${baseSize}px`;
+    }
+
+    function showScreen(screenId) {
+      const screens = ['home-screen', 'pronunciation-screen', 'vocab-quiz-screen', 'conversation-screen', 'writing-screen', 'matching-screen', 'progress-screen', 'results-screen'];
+      screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('fade-in');
+        }
+      });
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.remove('hidden');
+        void target.offsetWidth;
+        target.classList.add('fade-in');
+      }
+    }
+
+    function startActivity(activity) {
+      currentActivity = activity;
+      currentIndex = 0;
+      
+      if (activity === 'pronunciation') {
+        loadPronunciationQuestion();
+        showScreen('pronunciation-screen');
+      } else if (activity === 'vocab-quiz') {
+        loadVocabQuestion();
+        showScreen('vocab-quiz-screen');
+      } else if (activity === 'conversation') {
+        loadConversation();
+        showScreen('conversation-screen');
+      } else if (activity === 'writing') {
+        loadWritingActivity();
+        showScreen('writing-screen');
+      } else if (activity === 'matching') {
+        initMatching();
+        showScreen('matching-screen');
+      } else if (activity === 'progress') {
+        showScreen('progress-screen');
+      }
+    }
+
+    // Pronunciation Functions
+    function loadPronunciationQuestion() {
+      const q = pronunciationQuestions[currentIndex];
+      document.getElementById('pron-word').innerHTML = q.word;
+      document.getElementById('pron-phonetic').textContent = q.phonetic;
+      document.getElementById('pron-progress').textContent = `Question ${currentIndex + 1} of ${pronunciationQuestions.length}`;
+      document.getElementById('pron-progress-bar').style.width = `${((currentIndex + 1) / pronunciationQuestions.length) * 100}%`;
+      
+      const optionsContainer = document.getElementById('pron-options');
+      const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+      optionsContainer.innerHTML = shuffled.map(opt => `
+        <button onclick="checkPronunciation('${opt}')" class="p-4 rounded-xl border-2 border-slate-600 bg-slate-700/50 text-white phonetic text-xl hover:border-emerald-500 hover:bg-slate-700 transition-all">
+          ${opt}
+        </button>
+      `).join('');
+      
+      document.getElementById('pron-feedback').classList.add('hidden');
+      document.getElementById('pron-next').classList.add('hidden');
+      document.getElementById('pron-card').classList.remove('pulse-correct', 'pulse-incorrect');
+    }
+
+    async function checkPronunciation(answer) {
+      const q = pronunciationQuestions[currentIndex];
+      const isCorrect = answer === q.sound;
+      const feedback = document.getElementById('pron-feedback');
+      const card = document.getElementById('pron-card');
+      
+      card.classList.add(isCorrect ? 'pulse-correct' : 'pulse-incorrect');
+      
+      feedback.classList.remove('hidden', 'bg-emerald-500/20', 'bg-red-500/20', 'text-emerald-400', 'text-red-400');
+      feedback.classList.add(isCorrect ? 'bg-emerald-500/20' : 'bg-red-500/20');
+      
+      document.getElementById('pron-feedback-text').textContent = isCorrect ? '✓ Correct!' : `✗ Incorrect. The answer is ${q.sound}`;
+      document.getElementById('pron-feedback-text').classList.add(isCorrect ? 'text-emerald-400' : 'text-red-400');
+      document.getElementById('pron-explanation').textContent = q.explanation;
+      document.getElementById('pron-explanation').classList.add(isCorrect ? 'text-emerald-300' : 'text-red-300');
+      
+      if (isCorrect) {
+        score++;
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+      } else {
+        streak = 0;
+      }
+      updateScoreDisplay();
+      
+      await saveProgress('pronunciation', `pron-${currentIndex}`, answer, isCorrect);
+      
+      document.querySelectorAll('#pron-options button').forEach(btn => btn.disabled = true);
+      document.getElementById('pron-next').classList.remove('hidden');
+    }
+
+    function nextPronunciation() {
+      currentIndex++;
+      if (currentIndex >= pronunciationQuestions.length) {
+        showResults();
+      } else {
+        loadPronunciationQuestion();
+      }
+    }
+
+    // Vocabulary Quiz Functions
+    function loadVocabQuestion() {
+      const q = vocabQuestions[currentIndex];
+      document.getElementById('vocab-term').textContent = q.term;
+      document.getElementById('vocab-phonetic').textContent = q.phonetic;
+      document.getElementById('vocab-progress').textContent = `Question ${currentIndex + 1} of ${vocabQuestions.length}`;
+      document.getElementById('vocab-progress-bar').style.width = `${((currentIndex + 1) / vocabQuestions.length) * 100}%`;
+      
+      const optionsContainer = document.getElementById('vocab-options');
+      const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+      optionsContainer.innerHTML = shuffled.map((opt, i) => `
+        <button onclick="checkVocab('${opt.replace(/'/g, "\\'")}')" class="w-full p-4 rounded-xl border-2 border-slate-600 bg-slate-700/50 text-left text-slate-200 hover:border-blue-500 hover:bg-slate-700 transition-all">
+          <span class="text-blue-400 mr-2">${String.fromCharCode(65 + i)}.</span> ${opt}
+        </button>
+      `).join('');
+      
+      document.getElementById('vocab-feedback').classList.add('hidden');
+      document.getElementById('vocab-next').classList.add('hidden');
+      document.getElementById('vocab-card').classList.remove('pulse-correct', 'pulse-incorrect');
+    }
+
+    async function checkVocab(answer) {
+      const q = vocabQuestions[currentIndex];
+      const isCorrect = answer === q.correct;
+      const feedback = document.getElementById('vocab-feedback');
+      const card = document.getElementById('vocab-card');
+      
+      card.classList.add(isCorrect ? 'pulse-correct' : 'pulse-incorrect');
+      
+      feedback.classList.remove('hidden', 'bg-emerald-500/20', 'bg-red-500/20');
+      feedback.classList.add(isCorrect ? 'bg-emerald-500/20' : 'bg-red-500/20');
+      
+      document.getElementById('vocab-feedback-text').textContent = isCorrect ? '✓ Correct!' : `✗ Incorrect. The answer is: ${q.correct}`;
+      document.getElementById('vocab-feedback-text').className = `font-medium ${isCorrect ? 'text-emerald-400' : 'text-red-400'}`;
+      document.getElementById('vocab-context').textContent = q.context;
+      document.getElementById('vocab-context').className = `text-sm mt-2 ${isCorrect ? 'text-emerald-300' : 'text-red-300'}`;
+      
+      if (isCorrect) {
+        score++;
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+      } else {
+        streak = 0;
+      }
+      updateScoreDisplay();
+      
+      await saveProgress('vocab-quiz', `vocab-${currentIndex}`, answer, isCorrect);
+      
+      document.querySelectorAll('#vocab-options button').forEach(btn => btn.disabled = true);
+      document.getElementById('vocab-next').classList.remove('hidden');
+    }
+
+    function nextVocabQuestion() {
+      currentIndex++;
+      if (currentIndex >= vocabQuestions.length) {
+        showResults();
+      } else {
+        loadVocabQuestion();
+      }
+    }
+
+    // Conversation Functions
+    function loadConversation() {
+      const c = conversationPrompts[currentIndex];
+      document.getElementById('conv-scenario-type').textContent = c.type;
+      document.getElementById('conv-difficulty').textContent = c.difficulty;
+      document.getElementById('conv-title').textContent = c.title;
+      document.getElementById('conv-scenario').textContent = c.scenario;
+      
+      document.getElementById('conv-vocab').innerHTML = c.vocab.map(v => 
+        `<span class="px-3 py-1.5 rounded-lg bg-purple-500/20 text-purple-300 text-sm">${v}</span>`
+      ).join('');
+      
+      document.getElementById('conv-points').innerHTML = c.points.map(p => `
+        <li class="flex items-start gap-2">
+          <span class="text-purple-400 mt-1">•</span>
+          <span>${p}</span>
+        </li>
+      `).join('');
+    }
+
+    function prevConversation() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        loadConversation();
+      }
+    }
+
+    function nextConversation() {
+      if (currentIndex < conversationPrompts.length - 1) {
+        currentIndex++;
+        loadConversation();
+      }
+    }
+
+    async function markConversationComplete() {
+      await saveProgress('conversation', `conv-${currentIndex}`, 'completed', true);
+      showToast('Activity marked as complete!', 'success');
+    }
+
+    // Writing Functions
+    function loadWritingActivity() {
+      const w = writingActivities[currentIndex];
+      document.getElementById('writing-type').textContent = w.type;
+      document.getElementById('writing-title').textContent = w.title;
+      document.getElementById('writing-prompt').textContent = w.prompt;
+      
+      document.getElementById('writing-vocab').innerHTML = w.vocab.map(v => `
+        <span class="px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-sm">
+          <strong>${v.term}</strong> <span class="phonetic text-amber-400/70">${v.phonetic}</span>
+        </span>
+      `).join('');
+      
+      document.getElementById('writing-tips').querySelector('ul').innerHTML = w.tips.map(t => 
+        `<li>• ${t}</li>`
+      ).join('');
+      
+      document.getElementById('writing-response').value = '';
+    }
+
+    function prevWriting() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        loadWritingActivity();
+      }
+    }
+
+    function nextWriting() {
+      if (currentIndex < writingActivities.length - 1) {
+        currentIndex++;
+        loadWritingActivity();
+      }
+    }
+
+    async function saveWritingResponse() {
+      const response = document.getElementById('writing-response').value.trim();
+      if (!response) {
+        showToast('Please write a response before saving.', 'error');
+        return;
+      }
+      
+      const btn = document.getElementById('save-writing-btn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      
+      await saveProgress('writing', `writing-${currentIndex}`, response, true);
+      
+      btn.disabled = false;
+      btn.textContent = 'Save Response';
+      showToast('Response saved successfully!', 'success');
+    }
+
+    // Matching Functions
+    function initMatching() {
+      matchedPairs = 0;
+      selectedTerm = null;
+      
+      const shuffledTerms = [...matchingTerms].sort(() => Math.random() - 0.5).slice(0, 6);
+      currentMatchingSet = shuffledTerms;
+      
+      const termsContainer = document.getElementById('match-terms');
+      termsContainer.innerHTML = shuffledTerms.map((t, i) => `
+        <button id="term-${i}" onclick="selectTerm(${i})" class="w-full p-4 rounded-xl border-2 border-slate-600 bg-slate-700/50 text-left transition-all hover:border-rose-500">
+          <span class="font-semibold text-white">${t.term}</span>
+          <span class="phonetic text-rose-400 text-sm block">${t.phonetic}</span>
+        </button>
+      `).join('');
+      
+      const shuffledDefs = [...shuffledTerms].sort(() => Math.random() - 0.5);
+      const defsContainer = document.getElementById('match-definitions');
+      defsContainer.innerHTML = shuffledDefs.map((d, i) => `
+        <button id="def-${i}" data-def="${d.definition}" onclick="selectDefinition(${i}, '${d.definition.replace(/'/g, "\\'")}')" class="w-full p-4 rounded-xl border-2 border-slate-600 bg-slate-700/50 text-left text-slate-200 transition-all hover:border-emerald-500">
+          ${d.definition}
+        </button>
+      `).join('');
+      
+      updateMatchScore();
+    }
+
+    function selectTerm(index) {
+      document.querySelectorAll('#match-terms button').forEach(btn => btn.classList.remove('border-rose-500', 'bg-rose-500/20'));
+      const termBtn = document.getElementById(`term-${index}`);
+      if (termBtn && !termBtn.disabled) {
+        termBtn.classList.add('border-rose-500', 'bg-rose-500/20');
+        selectedTerm = index;
+      }
+    }
+
+    async function selectDefinition(index, definition) {
+      if (selectedTerm === null) {
+        showToast('Select a term first', 'error');
+        return;
+      }
+      
+      const term = currentMatchingSet[selectedTerm];
+      const defBtn = document.getElementById(`def-${index}`);
+      const termBtn = document.getElementById(`term-${selectedTerm}`);
+      
+      if (term.definition === definition) {
+        termBtn.classList.remove('border-rose-500', 'bg-rose-500/20');
+        termBtn.classList.add('border-emerald-500', 'bg-emerald-500/20', 'opacity-50');
+        termBtn.disabled = true;
+        
+        defBtn.classList.add('border-emerald-500', 'bg-emerald-500/20', 'opacity-50');
+        defBtn.disabled = true;
+        
+        matchedPairs++;
+        score++;
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+        updateScoreDisplay();
+        updateMatchScore();
+        
+        await saveProgress('matching', `match-${term.term}`, definition, true);
+        
+        if (matchedPairs === currentMatchingSet.length) {
+          showToast('All matched! Great job!', 'success');
+        }
+      } else {
+        streak = 0;
+        updateScoreDisplay();
+        showToast('Not a match. Try again!', 'error');
+      }
+      
+      selectedTerm = null;
+      document.querySelectorAll('#match-terms button').forEach(btn => {
+        if (!btn.disabled) btn.classList.remove('border-rose-500', 'bg-rose-500/20');
+      });
+    }
+
+    function updateMatchScore() {
+      document.getElementById('match-score').textContent = `Matched: ${matchedPairs} of ${currentMatchingSet.length}`;
+    }
+
+    function resetMatching() {
+      initMatching();
+    }
+
+    function newMatchingSet() {
+      initMatching();
+    }
+
+    // Progress & Results Functions
+    function updateScoreDisplay() {
+      document.getElementById('score-display').textContent = `Score: ${score}`;
+      document.getElementById('streak-display').textContent = `Streak: ${streak}`;
+    }
+
+    function updateProgressDisplay() {
+      const correctCount = userProgress.filter(p => p.is_correct).length;
+      const totalActivities = userProgress.length;
+      
+      document.getElementById('total-correct').textContent = correctCount;
+      document.getElementById('total-activities').textContent = totalActivities;
+      document.getElementById('best-streak').textContent = bestStreak;
+      
+      const historyContainer = document.getElementById('activity-history');
+      if (userProgress.length === 0) {
+        historyContainer.innerHTML = '<p class="text-slate-500 text-center py-8">No activity recorded yet. Start practicing!</p>';
+      } else {
+        const recent = [...userProgress].reverse().slice(0, 20);
+        historyContainer.innerHTML = recent.map(p => `
+          <div class="flex items-center justify-between p-3 rounded-lg bg-slate-900/50">
+            <div>
+              <span class="text-sm font-medium text-slate-300">${p.activity_type}</span>
+              <span class="text-xs text-slate-500 ml-2">${p.question_id}</span>
+            </div>
+            <span class="${p.is_correct ? 'text-emerald-400' : 'text-red-400'}">${p.is_correct ? '✓' : '✗'}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function showResults() {
+      const total = currentActivity === 'pronunciation' ? pronunciationQuestions.length : vocabQuestions.length;
+      const correct = userProgress.filter(p => p.activity_type === currentActivity && p.is_correct).length;
+      
+      document.getElementById('final-score').textContent = `${correct}/${total}`;
+      
+      const percentage = (correct / total) * 100;
+      let message = '';
+      if (percentage >= 90) message = 'Excellent! You have mastered this material!';
+      else if (percentage >= 70) message = 'Great work! Keep practicing to improve further.';
+      else if (percentage >= 50) message = 'Good effort! Review the terms you missed.';
+      else message = 'Keep studying! Practice makes perfect.';
+      
+      document.getElementById('final-message').textContent = message;
+      showScreen('results-screen');
+    }
+
+    function restartActivity() {
+      currentIndex = 0;
+      if (currentActivity === 'pronunciation') {
+        loadPronunciationQuestion();
+        showScreen('pronunciation-screen');
+      } else if (currentActivity === 'vocab-quiz') {
+        loadVocabQuestion();
+        showScreen('vocab-quiz-screen');
+      }
+    }
+
+    async function saveProgress(activityType, questionId, answer, isCorrect) {
+      if (window.dataSdk && userProgress.length < 999) {
+        const result = await window.dataSdk.create({
+          activity_type: activityType,
+          question_id: questionId,
+          user_answer: answer.substring(0, 500),
+          is_correct: isCorrect,
+          completed_at: new Date().toISOString()
+        });
+        if (!result.isOk) {
+          console.error('Failed to save progress');
+        }
+      }
+    }
+
+    function showToast(message, type) {
+      const existing = document.querySelector('.toast-notification');
+      if (existing) existing.remove();
+      
+      const toast = document.createElement('div');
+      toast.className = `toast-notification fixed bottom-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white font-medium z-50 transition-all transform ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // Initialize
+    initializeApp();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d48b55d81cd6d14',t:'MTc3MjIwNjA2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
