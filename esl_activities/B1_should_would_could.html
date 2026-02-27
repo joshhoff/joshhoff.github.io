@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modal Verbs Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .slide-in { animation: slideIn 0.5s ease-out forwards; }
+    .pulse-animation { animation: pulse 0.3s ease-in-out; }
+    .shake-animation { animation: shake 0.4s ease-in-out; }
+    
+    .option-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .progress-fill {
+      transition: width 0.5s ease;
+    }
+    
+    .card-shadow {
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+   <!-- Main Container -->
+   <div class="min-h-full w-full p-4 md:p-8">
+    <!-- Header -->
+    <header class="text-center mb-6 slide-in">
+     <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold text-white drop-shadow-lg mb-2">Should, Could &amp; Would</h1>
+     <p id="subtitle" class="text-white/90 text-lg">Master English modal verbs through real-life scenarios</p>
+    </header><!-- Stats Bar -->
+    <div class="max-w-2xl mx-auto mb-6 slide-in" style="animation-delay: 0.1s;">
+     <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 flex justify-around text-white">
+      <div class="text-center">
+       <div id="total-correct" class="text-2xl font-bold">
+        0
+       </div>
+       <div class="text-sm opacity-80">
+        Correct
+       </div>
+      </div>
+      <div class="text-center">
+       <div id="total-attempts" class="text-2xl font-bold">
+        0
+       </div>
+       <div class="text-sm opacity-80">
+        Attempts
+       </div>
+      </div>
+      <div class="text-center">
+       <div id="accuracy" class="text-2xl font-bold">
+        0%
+       </div>
+       <div class="text-sm opacity-80">
+        Accuracy
+       </div>
+      </div>
+     </div>
+    </div><!-- Tabs -->
+    <div class="max-w-2xl mx-auto mb-6 flex gap-3 justify-center slide-in" style="animation-delay: 0.15s;"><button id="practice-tab" onclick="switchTab('practice')" class="px-6 py-3 rounded-xl font-bold transition-all" style="background: rgba(255,255,255,0.3); color: white;">📝 Practice Quiz</button> <button id="conversation-tab" onclick="switchTab('conversation')" class="px-6 py-3 rounded-xl font-bold transition-all" style="background: rgba(255,255,255,0); color: rgba(255,255,255,0.6);">💬 Conversations</button>
+    </div><!-- Practice Section -->
+    <div id="practice-section" class="max-w-2xl mx-auto slide-in" style="animation-delay: 0.2s;">
+     <!-- Progress Bar -->
+     <div class="mb-6">
+      <div class="bg-white/20 rounded-full h-3 overflow-hidden">
+       <div id="progress-bar" class="progress-fill h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" style="width: 0%"></div>
+      </div>
+      <p id="progress-text" class="text-white/80 text-sm mt-2 text-center">Question 1 of 10</p>
+     </div><!-- Main Card -->
+     <div class="bg-white rounded-3xl card-shadow overflow-hidden">
+      <!-- Scenario Section -->
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-500 p-6 text-white">
+       <div class="flex items-center gap-3 mb-3">
+        <span id="scenario-icon" class="text-3xl">💭</span> <span id="scenario-category" class="text-sm font-semibold bg-white/20 px-3 py-1 rounded-full">Advice</span>
+       </div>
+       <p id="scenario-text" class="text-lg leading-relaxed">Loading scenario...</p>
+      </div><!-- Question Section -->
+      <div class="p-6">
+       <h3 class="text-gray-600 font-semibold mb-4 text-center">Choose the correct modal verb:</h3>
+       <p id="sentence" class="text-xl text-center text-gray-800 mb-6 font-medium leading-relaxed">You <span id="blank" class="inline-block min-w-[100px] border-b-3 border-dashed border-indigo-400 text-indigo-600 font-bold">______</span> see a doctor.</p><!-- Options -->
+       <div id="options-container" class="grid grid-cols-3 gap-3 mb-6">
+        <button class="option-btn bg-gradient-to-br from-rose-400 to-pink-500 text-white font-bold py-4 px-6 rounded-xl text-lg" data-answer="should" onclick="checkAnswer('should')"> should </button> <button class="option-btn bg-gradient-to-br from-amber-400 to-orange-500 text-white font-bold py-4 px-6 rounded-xl text-lg" data-answer="could" onclick="checkAnswer('could')"> could </button> <button class="option-btn bg-gradient-to-br from-cyan-400 to-blue-500 text-white font-bold py-4 px-6 rounded-xl text-lg" data-answer="would" onclick="checkAnswer('would')"> would </button>
+       </div><!-- Feedback Area -->
+       <div id="feedback" class="hidden text-center p-4 rounded-xl mb-4">
+        <p id="feedback-text" class="font-bold text-lg mb-2"></p>
+        <p id="feedback-explanation" class="text-gray-600"></p>
+       </div><!-- Next Button --> <button id="next-btn" class="hidden w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 rounded-xl text-lg hover:from-emerald-600 hover:to-teal-600 transition-all" onclick="nextQuestion()"> Next Question → </button>
+      </div>
+     </div>
+    </div><!-- Conversation Section -->
+    <div id="conversation-section" class="hidden max-w-2xl mx-auto slide-in" style="animation-delay: 0.2s;">
+     <div class="bg-white rounded-3xl card-shadow overflow-hidden">
+      <div class="bg-gradient-to-r from-indigo-500 to-purple-500 p-6 text-white">
+       <h2 class="text-2xl font-bold mb-2">🗣️ Real-Life Conversation Practice</h2>
+       <p class="text-white/90">Practice using modal verbs in realistic situations. Click ✏️ to write your response!</p>
+      </div>
+      <div id="conversation-list" class="p-6 space-y-4"></div>
+     </div>
+    </div><!-- Grammar Tips -->
+    <div class="max-w-2xl mx-auto mt-6 bg-white/10 backdrop-blur-sm rounded-2xl p-5 text-white slide-in" style="animation-delay: 0.3s;">
+     <h3 class="font-bold text-lg mb-3 flex items-center gap-2"><span>📚</span> Quick Grammar Guide</h3>
+     <div class="grid md:grid-cols-3 gap-4 text-sm">
+      <div class="bg-white/10 rounded-xl p-3">
+       <div class="font-bold text-rose-300 mb-1">
+        SHOULD
+       </div>
+       <p class="opacity-90">Advice, recommendations, or what is right to do</p>
+       <p class="opacity-70 mt-1 italic">"You should rest more."</p>
+      </div>
+      <div class="bg-white/10 rounded-xl p-3">
+       <div class="font-bold text-amber-300 mb-1">
+        COULD
+       </div>
+       <p class="opacity-90">Possibility, ability, or polite suggestions</p>
+       <p class="opacity-70 mt-1 italic">"We could go tomorrow."</p>
+      </div>
+      <div class="bg-white/10 rounded-xl p-3">
+       <div class="font-bold text-cyan-300 mb-1">
+        WOULD
+       </div>
+       <p class="opacity-90">Hypotheticals, preferences, or polite requests</p>
+       <p class="opacity-70 mt-1 italic">"I would love to help."</p>
+      </div>
+     </div>
+    </div><!-- Encouragement -->
+    <p id="encouragement" class="text-center text-white/80 mt-6 text-lg font-medium slide-in" style="animation-delay: 0.4s;">Keep practicing to improve your English! 🌟</p>
+   </div>
+  </div>
+  <script>
+    // Scenarios with questions - Reference content (Paradigm A)
+    const scenarios = [
+      {
+        id: "advice-1",
+        icon: "🏥",
+        category: "Advice",
+        context: "Your friend has had a headache for three days and hasn't seen anyone about it.",
+        sentence: "You ______ see a doctor about that headache.",
+        answer: "should",
+        explanation: "We use 'should' to give advice about what is the right thing to do."
+      },
+      {
+        id: "possibility-1",
+        icon: "🎬",
+        category: "Possibility",
+        context: "You're planning weekend activities with a friend and discussing options.",
+        sentence: "We ______ watch a movie or go to the park.",
+        answer: "could",
+        explanation: "We use 'could' to suggest possibilities or options."
+      },
+      {
+        id: "hypothetical-1",
+        icon: "🏝️",
+        category: "Hypothetical",
+        context: "Someone asks about your dream vacation destination.",
+        sentence: "If I had more money, I ______ travel to Japan.",
+        answer: "would",
+        explanation: "We use 'would' for hypothetical situations (imaginary conditions)."
+      },
+      {
+        id: "advice-2",
+        icon: "📚",
+        category: "Advice",
+        context: "Your classmate is worried about failing an important exam next week.",
+        sentence: "You ______ study a little every day instead of all at once.",
+        answer: "should",
+        explanation: "'Should' expresses a recommendation about the best course of action."
+      },
+      {
+        id: "polite-1",
+        icon: "☕",
+        category: "Polite Request",
+        context: "You're at a café and want to order something.",
+        sentence: "I ______ like a cup of coffee, please.",
+        answer: "would",
+        explanation: "'Would like' is a polite way to express what you want."
+      },
+      {
+        id: "ability-1",
+        icon: "🎸",
+        category: "Past Ability",
+        context: "Talking about what you were able to do when you were younger.",
+        sentence: "When I was a child, I ______ play the piano very well.",
+        answer: "could",
+        explanation: "'Could' describes a general ability in the past."
+      },
+      {
+        id: "advice-3",
+        icon: "😴",
+        category: "Advice",
+        context: "Your colleague looks very tired at work today.",
+        sentence: "You ______ go to bed earlier tonight.",
+        answer: "should",
+        explanation: "'Should' is used to give friendly advice or suggestions."
+      },
+      {
+        id: "preference-1",
+        icon: "🍕",
+        category: "Preference",
+        context: "A friend asks what you prefer between two restaurants.",
+        sentence: "I ______ rather eat Italian food than Chinese.",
+        answer: "would",
+        explanation: "'Would rather' expresses preference between choices."
+      },
+      {
+        id: "suggestion-1",
+        icon: "🚗",
+        category: "Suggestion",
+        context: "Discussing how to get to the airport tomorrow morning.",
+        sentence: "We ______ take a taxi, or we ______ use the bus.",
+        answer: "could",
+        explanation: "'Could' offers possible options or suggestions politely."
+      },
+      {
+        id: "hypothetical-2",
+        icon: "💼",
+        category: "Hypothetical",
+        context: "Imagining what you'd do in a different job situation.",
+        sentence: "If I were the manager, I ______ give everyone Fridays off.",
+        answer: "would",
+        explanation: "'Would' is used with 'if' clauses for unreal/hypothetical situations."
+      },
+      {
+        id: "obligation-1",
+        icon: "🗣️",
+        category: "Moral Obligation",
+        context: "Discussing what's the right thing to do when you make a mistake.",
+        sentence: "You ______ apologize when you hurt someone's feelings.",
+        answer: "should",
+        explanation: "'Should' expresses moral obligation or what is right."
+      },
+      {
+        id: "possibility-2",
+        icon: "🌧️",
+        category: "Possibility",
+        context: "Looking at the sky and thinking about the weather.",
+        sentence: "It ______ rain later, so bring an umbrella.",
+        answer: "could",
+        explanation: "'Could' indicates something is possible but not certain."
+      },
+      {
+        id: "polite-2",
+        icon: "📞",
+        category: "Polite Request",
+        context: "You need to ask someone to help you with something.",
+        sentence: "______ you mind helping me carry these boxes?",
+        answer: "would",
+        explanation: "'Would you mind' is a very polite way to make requests."
+      },
+      {
+        id: "advice-4",
+        icon: "💪",
+        category: "Advice",
+        context: "A friend wants to get healthier but doesn't know how to start.",
+        sentence: "You ______ start with small changes like walking more.",
+        answer: "should",
+        explanation: "'Should' gives advice about what is recommended."
+      },
+      {
+        id: "hypothetical-3",
+        icon: "🎁",
+        category: "Hypothetical",
+        context: "Imagining winning the lottery and what you'd do.",
+        sentence: "If I won the lottery, I ______ buy a house for my parents.",
+        answer: "would",
+        explanation: "'Would' describes imaginary results of unreal situations."
+      },
+      {
+        id: "advice-5",
+        icon: "⏰",
+        category: "Advice",
+        context: "Your sibling is always late for work and it's affecting their job.",
+        sentence: "You ______ leave home 15 minutes earlier.",
+        answer: "should",
+        explanation: "'Should' provides practical advice for improving a situation."
+      },
+      {
+        id: "possibility-3",
+        icon: "🎓",
+        category: "Possibility",
+        context: "Discussing career options after graduation.",
+        sentence: "After university, I ______ work in marketing or finance.",
+        answer: "could",
+        explanation: "'Could' presents possible career paths or options."
+      },
+      {
+        id: "hypothetical-4",
+        icon: "🏠",
+        category: "Hypothetical",
+        context: "Imagining living in another country.",
+        sentence: "If I lived abroad, I ______ learn the local language.",
+        answer: "would",
+        explanation: "'Would' describes what would happen in an imaginary scenario."
+      },
+      {
+        id: "ability-2",
+        icon: "🏊",
+        category: "Past Ability",
+        context: "Talking about skills you had before but don't use much now.",
+        sentence: "I ______ swim very fast when I was on the school team.",
+        answer: "could",
+        explanation: "'Could' describes ability in the past (that you may have lost)."
+      },
+      {
+        id: "advice-6",
+        icon: "💰",
+        category: "Advice",
+        context: "Your friend spends too much money on coffee every day.",
+        sentence: "You ______ make coffee at home to save money.",
+        answer: "should",
+        explanation: "'Should' suggests a practical solution to a problem."
+      },
+      {
+        id: "polite-3",
+        icon: "🎤",
+        category: "Polite Request",
+        context: "You want to borrow a pen from a colleague during a meeting.",
+        sentence: "______ I borrow your pen for a moment?",
+        answer: "could",
+        explanation: "'Could I' is a polite way to ask permission or make a request."
+      },
+      {
+        id: "hypothetical-5",
+        icon: "🌟",
+        category: "Hypothetical",
+        context: "Imagining being famous or successful.",
+        sentence: "If I became a famous actor, I ______ help many charities.",
+        answer: "would",
+        explanation: "'Would' describes intentions in imaginary future scenarios."
+      },
+      {
+        id: "suggestion-2",
+        icon: "🍔",
+        category: "Suggestion",
+        context: "Planning a dinner with friends and offering alternatives.",
+        sentence: "We ______ order pizza, or we ______ cook something ourselves.",
+        answer: "could",
+        explanation: "'Could' presents multiple possibilities or suggestions."
+      },
+      {
+        id: "advice-7",
+        icon: "📖",
+        category: "Advice",
+        context: "Your friend wants to improve their English but doesn't know where to start.",
+        sentence: "You ______ watch English movies with subtitles.",
+        answer: "should",
+        explanation: "'Should' recommends an action to help achieve a goal."
+      },
+      {
+        id: "preference-2",
+        icon: "🎭",
+        category: "Preference",
+        context: "Someone asks if you prefer going out or staying home.",
+        sentence: "I ______ prefer to stay home and relax this weekend.",
+        answer: "would",
+        explanation: "'Would prefer' expresses what you like better between options."
+      },
+      {
+        id: "possibility-4",
+        icon: "✈️",
+        category: "Possibility",
+        context: "Planning a trip and discussing what might happen.",
+        sentence: "The flight ______ be delayed because of bad weather.",
+        answer: "could",
+        explanation: "'Could' suggests something that might possibly happen."
+      },
+      {
+        id: "obligation-2",
+        icon: "🚴",
+        category: "Moral Obligation",
+        context: "Discussing environmental responsibility.",
+        sentence: "We ______ reduce our plastic use to protect the planet.",
+        answer: "should",
+        explanation: "'Should' expresses what we ought to do for the greater good."
+      },
+      {
+        id: "polite-4",
+        icon: "🚪",
+        category: "Polite Request",
+        context: "You're leaving a meeting early and want to excuse yourself.",
+        sentence: "I ______ like to leave now, if that's okay.",
+        answer: "would",
+        explanation: "'Would like' is a polite way to express a request."
+      },
+      {
+        id: "hypothetical-6",
+        icon: "👨‍💼",
+        category: "Hypothetical",
+        context: "Talking about what you'd do if you didn't have to work.",
+        sentence: "If I didn't need to work, I ______ travel the world.",
+        answer: "would",
+        explanation: "'Would' describes what you'd do in an impossible situation."
+      },
+      {
+        id: "advice-8",
+        icon: "😰",
+        category: "Advice",
+        context: "Your friend is very nervous before an important presentation.",
+        sentence: "You ______ practice your presentation several times.",
+        answer: "should",
+        explanation: "'Should' recommends preparation to reduce nervousness."
+      },
+      {
+        id: "ability-3",
+        icon: "🎨",
+        category: "Past Ability",
+        context: "Talking about artistic skills from your childhood.",
+        sentence: "When I was younger, I ______ draw really well.",
+        answer: "could",
+        explanation: "'Could' describes skills or abilities you had in the past."
+      }
+    ];
+
+    // Conversation prompts - Written activities
+    const conversationPrompts = [
+      {
+        id: "conv-1",
+        icon: "💬",
+        title: "Restaurant Situation",
+        prompt: "You're at a restaurant and want to order. Practice using 'would like' to politely request food.",
+        example: "Waiter: What would you like? You: I would like the chicken pasta and a glass of water, please.",
+        vocab: "Would like, Could I, Could you recommend"
+      },
+      {
+        id: "conv-2",
+        icon: "💬",
+        title: "Giving Advice",
+        prompt: "A friend is stressed about exams. Use 'should' to give helpful advice.",
+        example: "Friend: I'm so stressed! You: You should take breaks between study sessions. You could also try exercising.",
+        vocab: "Should, Could, Maybe you should"
+      },
+      {
+        id: "conv-3",
+        icon: "💬",
+        title: "Making Plans",
+        prompt: "Suggest three different activities using 'could' and 'would'.",
+        example: "We could go hiking, or we could visit the museum. Which would you prefer?",
+        vocab: "Could, Would prefer, What would you like"
+      },
+      {
+        id: "conv-4",
+        icon: "💬",
+        title: "Polite Requests",
+        prompt: "Practice asking for help or favors politely using 'could' and 'would'.",
+        example: "Could you help me move this box? Would you mind checking this email for me?",
+        vocab: "Could you, Would you mind, Could I ask"
+      },
+      {
+        id: "conv-5",
+        icon: "💬",
+        title: "Expressing Preferences",
+        prompt: "Tell a friend what you would prefer to do this evening.",
+        example: "I would prefer to watch a movie rather than go out. I would rather have a quiet night.",
+        vocab: "Would prefer, Would rather, I'd like"
+      },
+      {
+        id: "conv-6",
+        icon: "💬",
+        title: "Giving Job Interview Advice",
+        prompt: "Someone asks for advice before a job interview. Use 'should' and 'could'.",
+        example: "You should research the company. You could prepare answers to common questions.",
+        vocab: "Should, Could, It's important to"
+      },
+      {
+        id: "conv-7",
+        icon: "💬",
+        title: "Hypothetical Travel Discussion",
+        prompt: "Discuss what you would do on an imaginary trip to another country.",
+        example: "If I went to Brazil, I would visit Rio de Janeiro. I would learn some Portuguese first.",
+        vocab: "Would, If I went, I would like"
+      },
+      {
+        id: "conv-8",
+        icon: "💬",
+        title: "Asking About Possibilities",
+        prompt: "Ask what could happen or what's possible in a given situation.",
+        example: "What could go wrong? It could rain today. Could we reschedule the meeting?",
+        vocab: "Could, What could, It could"
+      },
+      {
+        id: "conv-9",
+        icon: "💬",
+        title: "Offering Suggestions",
+        prompt: "Someone is bored. Suggest things they could do.",
+        example: "You could read a book, or you could call a friend. I could come over if you'd like.",
+        vocab: "Could, You could, We could"
+      },
+      {
+        id: "conv-10",
+        icon: "💬",
+        title: "Expressing Regret",
+        prompt: "Talk about what you would have done differently in a past situation.",
+        example: "I would have studied more. I could have asked for help earlier.",
+        vocab: "Would have, Could have, Should have"
+      },
+      {
+        id: "conv-11",
+        icon: "💬",
+        title: "Phone Conversation",
+        prompt: "Practice a phone conversation requesting information or making an appointment.",
+        example: "Could I speak to someone about the job opening? I would like to schedule a meeting.",
+        vocab: "Could I, Would like, Could you tell me"
+      },
+      {
+        id: "conv-12",
+        icon: "💬",
+        title: "Health Advice",
+        prompt: "Someone tells you they're not feeling well. Give advice using 'should'.",
+        example: "You should drink plenty of water. You could try taking some medicine. You should see a doctor if it gets worse.",
+        vocab: "Should, Could, You should try"
+      },
+      {
+        id: "conv-13",
+        icon: "💬",
+        title: "Disagreeing Politely",
+        prompt: "Practice disagreeing with someone while being polite using these verbs.",
+        example: "I see your point, but I would suggest trying a different approach. We could also consider other options.",
+        vocab: "Would suggest, Could also, I would"
+      },
+      {
+        id: "conv-14",
+        icon: "💬",
+        title: "Dream Job Discussion",
+        prompt: "Describe what you would do in your dream job.",
+        example: "If I could have any job, I would be a teacher. I would love working with children.",
+        vocab: "Would, Could have, I would love"
+      },
+      {
+        id: "conv-15",
+        icon: "💬",
+        title: "Apologizing",
+        prompt: "Use these verbs when apologizing and explaining what you should have done.",
+        example: "I'm sorry for being late. I should have left earlier. Could I make it up to you?",
+        vocab: "Should have, Could, I apologize"
+      },
+      {
+        id: "conv-16",
+        icon: "💬",
+        title: "New Roommate Conversation",
+        prompt: "Discuss house rules and suggestions with a new roommate.",
+        example: "We should decide on cleaning schedules. Could we take turns cooking? I would prefer quiet time after 10pm.",
+        vocab: "Should, Could we, Would prefer"
+      },
+      {
+        id: "conv-17",
+        icon: "💬",
+        title: "Discussing Past Experiences",
+        prompt: "Talk about what you could do in the past and what you would do differently now.",
+        example: "When I was young, I could speak more languages. I would study abroad if I could do it again.",
+        vocab: "Could, Would, Past ability"
+      },
+      {
+        id: "conv-18",
+        icon: "💬",
+        title: "Environmental Discussion",
+        prompt: "Discuss what people should and could do to protect the environment.",
+        example: "We should reduce plastic use. We could use public transportation instead of driving.",
+        vocab: "Should, Could, We should"
+      },
+      {
+        id: "conv-19",
+        icon: "💬",
+        title: "Party Planning",
+        prompt: "Plan a party with a friend using suggestions and preferences.",
+        example: "We could invite 20 people. I would prefer an outdoor party. Should we hire a caterer?",
+        vocab: "Could, Would prefer, Should we"
+      },
+      {
+        id: "conv-20",
+        icon: "💬",
+        title: "Learning New Skills",
+        prompt: "Give advice to someone wanting to learn a new skill.",
+        example: "You should start with the basics. You could take online courses. I would suggest finding a teacher.",
+        vocab: "Should, Could, Would suggest"
+      }
+    ];
+
+    // State
+    let currentQuestionIndex = 0;
+    let shuffledScenarios = [];
+    let userProgress = {};
+    let answered = false;
+    let sessionCorrect = 0;
+    let sessionAttempts = 0;
+
+    // Default config
+    const defaultConfig = {
+      app_title: "Should, Could & Would",
+      encouragement_text: "Keep practicing to improve your English! 🌟",
+      primary_color: "#667eea",
+      secondary_color: "#ffffff",
+      text_color: "#1f2937",
+      accent_color: "#10b981",
+      button_color: "#764ba2",
+      font_family: "Nunito",
+      font_size: 16
+    };
+
+    // Shuffle array
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    // Switch tabs
+    function switchTab(tab) {
+      const practiceSection = document.getElementById('practice-section');
+      const conversationSection = document.getElementById('conversation-section');
+      const practiceTab = document.getElementById('practice-tab');
+      const conversationTab = document.getElementById('conversation-tab');
+      
+      if (tab === 'practice') {
+        practiceSection.style.display = 'block';
+        conversationSection.classList.add('hidden');
+        practiceTab.style.background = 'rgba(255,255,255,0.3)';
+        practiceTab.style.color = 'white';
+        conversationTab.style.background = 'rgba(255,255,255,0)';
+        conversationTab.style.color = 'rgba(255,255,255,0.6)';
+      } else {
+        practiceSection.style.display = 'none';
+        conversationSection.classList.remove('hidden');
+        conversationTab.style.background = 'rgba(255,255,255,0.3)';
+        conversationTab.style.color = 'white';
+        practiceTab.style.background = 'rgba(255,255,255,0)';
+        practiceTab.style.color = 'rgba(255,255,255,0.6)';
+        renderConversationPrompts();
+      }
+    }
+
+    // Render conversation prompts
+    function renderConversationPrompts() {
+      const container = document.getElementById('conversation-list');
+      container.innerHTML = '';
+      
+      conversationPrompts.forEach((prompt) => {
+        const card = document.createElement('div');
+        card.className = 'bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border-l-4 border-indigo-500';
+        
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-2xl">${prompt.icon}</span>
+                <h3 class="font-bold text-gray-800">${prompt.title}</h3>
+              </div>
+              <p class="text-gray-700 mb-3">${prompt.prompt}</p>
+              <div class="bg-white p-3 rounded mb-3 border border-indigo-200">
+                <p class="text-sm text-gray-600"><span class="font-semibold">Example:</span> ${prompt.example}</p>
+              </div>
+              <p class="text-xs text-indigo-600 font-semibold">Key phrases: ${prompt.vocab}</p>
+            </div>
+            <button onclick="toggleConversationDetail('${prompt.id}')" class="flex-shrink-0 px-3 py-2 bg-indigo-500 text-white rounded font-bold hover:bg-indigo-600 transition-all">✏️</button>
+          </div>
+          <div id="detail-${prompt.id}" class="hidden mt-4 pt-4 border-t border-indigo-200">
+            <textarea id="text-${prompt.id}" class="w-full p-3 border border-indigo-300 rounded text-sm font-medium" rows="4" placeholder="Write your practice response here..."></textarea>
+            <button onclick="saveConversationResponse('${prompt.id}')" class="mt-2 w-full bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600 transition-all">Save Practice ✓</button>
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+
+    // Toggle conversation detail
+    function toggleConversationDetail(id) {
+      const detail = document.getElementById(`detail-${id}`);
+      detail.classList.toggle('hidden');
+    }
+
+    // Save conversation response
+    function saveConversationResponse(id) {
+      const textarea = document.getElementById(`text-${id}`);
+      const response = textarea.value.trim();
+      
+      if (!response) {
+        return;
+      }
+      
+      // Show success message
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '✅ Saved!';
+      btn.disabled = true;
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 2000);
+    }
+
+    // Initialize game
+    function initGame() {
+      shuffledScenarios = shuffleArray(scenarios).slice(0, 10);
+      currentQuestionIndex = 0;
+      sessionCorrect = 0;
+      sessionAttempts = 0;
+      answered = false;
+      loadQuestion();
+      updateStats();
+    }
+
+    // Load current question
+    function loadQuestion() {
+      const scenario = shuffledScenarios[currentQuestionIndex];
+      
+      document.getElementById('scenario-icon').textContent = scenario.icon;
+      document.getElementById('scenario-category').textContent = scenario.category;
+      document.getElementById('scenario-text').textContent = scenario.context;
+      document.getElementById('sentence').innerHTML = scenario.sentence.replace('______', 
+        '<span id="blank" class="inline-block min-w-[100px] border-b-3 border-dashed border-indigo-400 text-indigo-600 font-bold">______</span>'
+      );
+      
+      // Reset UI
+      document.getElementById('feedback').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+      
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'ring-4', 'ring-green-400', 'ring-red-400');
+      });
+      
+      answered = false;
+      
+      // Update progress
+      const progress = ((currentQuestionIndex) / shuffledScenarios.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+      document.getElementById('progress-text').textContent = `Question ${currentQuestionIndex + 1} of ${shuffledScenarios.length}`;
+    }
+
+    // Check answer
+    async function checkAnswer(selected) {
+      if (answered) return;
+      answered = true;
+      
+      const scenario = shuffledScenarios[currentQuestionIndex];
+      const isCorrect = selected === scenario.answer;
+      
+      sessionAttempts++;
+      if (isCorrect) sessionCorrect++;
+      
+      // Update blank with answer
+      document.getElementById('blank').textContent = scenario.answer;
+      
+      // Show feedback
+      const feedback = document.getElementById('feedback');
+      const feedbackText = document.getElementById('feedback-text');
+      const feedbackExplanation = document.getElementById('feedback-explanation');
+      
+      if (isCorrect) {
+        feedback.className = 'text-center p-4 rounded-xl mb-4 bg-green-100';
+        feedbackText.textContent = '✅ Correct! Well done!';
+        feedbackText.className = 'font-bold text-lg mb-2 text-green-700';
+      } else {
+        feedback.className = 'text-center p-4 rounded-xl mb-4 bg-red-100';
+        feedbackText.textContent = `❌ Not quite. The answer is "${scenario.answer}"`;
+        feedbackText.className = 'font-bold text-lg mb-2 text-red-700';
+      }
+      feedbackExplanation.textContent = scenario.explanation;
+      feedback.classList.remove('hidden');
+      
+      // Style buttons
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.answer === scenario.answer) {
+          btn.classList.add('ring-4', 'ring-green-400');
+        } else if (btn.dataset.answer === selected && !isCorrect) {
+          btn.classList.add('ring-4', 'ring-red-400', 'shake-animation');
+        } else {
+          btn.classList.add('opacity-50');
+        }
+      });
+      
+      // Show next button or complete
+      const nextBtn = document.getElementById('next-btn');
+      if (currentQuestionIndex < shuffledScenarios.length - 1) {
+        nextBtn.textContent = 'Next Question →';
+      } else {
+        nextBtn.textContent = '🎉 See Results';
+      }
+      nextBtn.classList.remove('hidden');
+      
+      // Save progress
+      await saveProgress(scenario.id, isCorrect);
+      updateStats();
+    }
+
+    // Next question
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= shuffledScenarios.length) {
+        showResults();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    // Show results
+    function showResults() {
+      const percentage = Math.round((sessionCorrect / sessionAttempts) * 100);
+      let message = '';
+      let emoji = '';
+      
+      if (percentage >= 90) {
+        message = 'Excellent! You really understand modal verbs!';
+        emoji = '🏆';
+      } else if (percentage >= 70) {
+        message = 'Great job! Keep practicing to master them!';
+        emoji = '⭐';
+      } else if (percentage >= 50) {
+        message = 'Good effort! Review the grammar tips and try again!';
+        emoji = '💪';
+      } else {
+        message = 'Keep learning! Practice makes perfect!';
+        emoji = '📚';
+      }
+      
+      const practiceSection = document.getElementById('practice-section');
+      practiceSection.innerHTML = `
+        <div class="bg-white rounded-3xl card-shadow p-8 text-center">
+          <div class="text-6xl mb-4">${emoji}</div>
+          <h2 class="text-2xl font-bold text-gray-800 mb-4">Practice Complete!</h2>
+          <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl p-6 mb-6">
+            <div class="text-5xl font-bold mb-2">${percentage}%</div>
+            <div class="text-lg opacity-90">${sessionCorrect} out of ${sessionAttempts} correct</div>
+          </div>
+          <p class="text-gray-600 text-lg mb-6">${message}</p>
+          <button onclick="initGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 rounded-xl text-lg hover:from-emerald-600 hover:to-teal-600 transition-all">
+            Practice Again 🔄
+          </button>
+        </div>
+      `;
+      
+      document.getElementById('progress-bar').style.width = '100%';
+      document.getElementById('progress-text').textContent = 'Complete!';
+    }
+
+    // Update stats display
+    function updateStats() {
+      let totalCorrect = sessionCorrect;
+      let totalAttempts = sessionAttempts;
+      
+      // Add historical data
+      Object.values(userProgress).forEach(p => {
+        totalCorrect += p.correct_answers || 0;
+        totalAttempts += p.total_attempts || 0;
+      });
+      
+      document.getElementById('total-correct').textContent = totalCorrect;
+      document.getElementById('total-attempts').textContent = totalAttempts;
+      document.getElementById('accuracy').textContent = totalAttempts > 0 
+        ? Math.round((totalCorrect / totalAttempts) * 100) + '%' 
+        : '0%';
+    }
+
+    // Save progress to Data SDK
+    async function saveProgress(scenarioId, isCorrect) {
+      if (!window.dataSdk) return;
+      
+      const existing = Object.values(userProgress).find(p => p.scenario_id === scenarioId);
+      
+      if (existing) {
+        existing.correct_answers = (existing.correct_answers || 0) + (isCorrect ? 1 : 0);
+        existing.total_attempts = (existing.total_attempts || 0) + 1;
+        existing.last_practiced = new Date().toISOString();
+        
+        const result = await window.dataSdk.update(existing);
+        if (!result.isOk) {
+          console.error('Failed to update progress');
+        }
+      } else {
+        // Check limit
+        if (Object.keys(userProgress).length >= 999) {
+          console.warn('Data limit reached');
+          return;
+        }
+        
+        const result = await window.dataSdk.create({
+          scenario_id: scenarioId,
+          correct_answers: isCorrect ? 1 : 0,
+          total_attempts: 1,
+          last_practiced: new Date().toISOString()
+        });
+        
+        if (!result.isOk) {
+          console.error('Failed to save progress');
+        }
+      }
+    }
+
+    // Data handler
+    const dataHandler = {
+      onDataChanged(data) {
+        userProgress = {};
+        data.forEach(record => {
+          userProgress[record.scenario_id] = record;
+        });
+        updateStats();
+      }
+    };
+
+    // Element SDK config change handler
+    async function onConfigChange(config) {
+      const title = config.app_title || defaultConfig.app_title;
+      const encouragement = config.encouragement_text || defaultConfig.encouragement_text;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const secondaryColor = config.secondary_color || defaultConfig.secondary_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      const buttonColor = config.button_color || defaultConfig.button_color;
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      
+      // Update title
+      const titleEl = document.getElementById('main-title');
+      if (titleEl) titleEl.textContent = title;
+      
+      // Update encouragement
+      const encourageEl = document.getElementById('encouragement');
+      if (encourageEl) encourageEl.textContent = encouragement;
+      
+      // Update colors
+      const app = document.getElementById('app');
+      if (app) {
+        app.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${buttonColor} 100%)`;
+      }
+      
+      // Update font
+      document.body.style.fontFamily = `${fontFamily}, Nunito, sans-serif`;
+      
+      // Update font sizes proportionally
+      if (titleEl) titleEl.style.fontSize = `${fontSize * 2}px`;
+      const subtitle = document.getElementById('subtitle');
+      if (subtitle) subtitle.style.fontSize = `${fontSize * 1.125}px`;
+    }
+
+    // Map to capabilities
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => { config.accent_color = value; window.elementSdk.setConfig({ accent_color: value }); }
+          },
+          {
+            get: () => config.button_color || defaultConfig.button_color,
+            set: (value) => { config.button_color = value; window.elementSdk.setConfig({ button_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); }
+        }
+      };
+    }
+
+    // Map to edit panel values
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["app_title", config.app_title || defaultConfig.app_title],
+        ["encouragement_text", config.encouragement_text || defaultConfig.encouragement_text]
+      ]);
+    }
+
+    // Initialize
+    async function init() {
+      // Initialize Element SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities,
+          mapToEditPanelValues
+        });
+      }
+      
+      // Initialize Data SDK
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+      
+      // Start the game
+      initGame();
+    }
+
+    init();
+  </script> // Scenarios with questions - Reference content (Paradigm A) const scenarios = [ { id: "advice-1", icon: "🏥", category: "Advice", context: "Your friend has had a headache for three days and hasn't seen anyone about it.", sentence: "You ______ see a doctor about that headache.", answer: "should", explanation: "We use 'should' to give advice about what is the right thing to do." }, { id: "possibility-1", icon: "🎬", category: "Possibility", context: "You're planning weekend activities with a friend and discussing options.", sentence: "We ______ watch a movie or go to the park.", answer: "could", explanation: "We use 'could' to suggest possibilities or options." }, { id: "hypothetical-1", icon: "🏝️", category: "Hypothetical", context: "Someone asks about your dream vacation destination.", sentence: "If I had more money, I ______ travel to Japan.", answer: "would", explanation: "We use 'would' for hypothetical situations (imaginary conditions)." }, { id: "advice-2", icon: "📚", category: "Advice", context: "Your classmate is worried about failing an important exam next week.", sentence: "You ______ study a little every day instead of all at once.", answer: "should", explanation: "'Should' expresses a recommendation about the best course of action." }, { id: "polite-1", icon: "☕", category: "Polite Request", context: "You're at a café and want to order something.", sentence: "I ______ like a cup of coffee, please.", answer: "would", explanation: "'Would like' is a polite way to express what you want." }, { id: "ability-1", icon: "🎸", category: "Past Ability", context: "Talking about what you were able to do when you were younger.", sentence: "When I was a child, I ______ play the piano very well.", answer: "could", explanation: "'Could' describes a general ability in the past." }, { id: "advice-3", icon: "😴", category: "Advice", context: "Your colleague looks very tired at work today.", sentence: "You ______ go to bed earlier tonight.", answer: "should", explanation: "'Should' is used to give friendly advice or suggestions." }, { id: "preference-1", icon: "🍕", category: "Preference", context: "A friend asks what you prefer between two restaurants.", sentence: "I ______ rather eat Italian food than Chinese.", answer: "would", explanation: "'Would rather' expresses preference between choices." }, { id: "suggestion-1", icon: "🚗", category: "Suggestion", context: "Discussing how to get to the airport tomorrow morning.", sentence: "We ______ take a taxi, or we ______ use the bus.", answer: "could", explanation: "'Could' offers possible options or suggestions politely." }, { id: "hypothetical-2", icon: "💼", category: "Hypothetical", context: "Imagining what you'd do in a different job situation.", sentence: "If I were the manager, I ______ give everyone Fridays off.", answer: "would", explanation: "'Would' is used with 'if' clauses for unreal/hypothetical situations." }, { id: "obligation-1", icon: "🗣️", category: "Moral Obligation", context: "Discussing what's the right thing to do when you make a mistake.", sentence: "You ______ apologize when you hurt someone's feelings.", answer: "should", explanation: "'Should' expresses moral obligation or what is right." }, { id: "possibility-2", icon: "🌧️", category: "Possibility", context: "Looking at the sky and thinking about the weather.", sentence: "It ______ rain later, so bring an umbrella.", answer: "could", explanation: "'Could' indicates something is possible but not certain." }, { id: "polite-2", icon: "📞", category: "Polite Request", context: "You need to ask someone to help you with something.", sentence: "______ you mind helping me carry these boxes?", answer: "would", explanation: "'Would you mind' is a very polite way to make requests." }, { id: "advice-4", icon: "💪", category: "Advice", context: "A friend wants to get healthier but doesn't know how to start.", sentence: "You ______ start with small changes like walking more.", answer: "should", explanation: "'Should' gives advice about what is recommended." }, { id: "hypothetical-3", icon: "🎁", category: "Hypothetical", context: "Imagining winning the lottery and what you'd do.", sentence: "If I won the lottery, I ______ buy a house for my parents.", answer: "would", explanation: "'Would' describes imaginary results of unreal situations." }, { id: "advice-5", icon: "⏰", category: "Advice", context: "Your sibling is always late for work and it's affecting their job.", sentence: "You ______ leave home 15 minutes earlier.", answer: "should", explanation: "'Should' provides practical advice for improving a situation." }, { id: "possibility-3", icon: "🎓", category: "Possibility", context: "Discussing career options after graduation.", sentence: "After university, I ______ work in marketing or finance.", answer: "could", explanation: "'Could' presents possible career paths or options." }, { id: "hypothetical-4", icon: "🏠", category: "Hypothetical", context: "Imagining living in another country.", sentence: "If I lived abroad, I ______ learn the local language.", answer: "would", explanation: "'Would' describes what would happen in an imaginary scenario." }, { id: "ability-2", icon: "🏊", category: "Past Ability", context: "Talking about skills you had before but don't use much now.", sentence: "I ______ swim very fast when I was on the school team.", answer: "could", explanation: "'Could' describes ability in the past (that you may have lost)." }, { id: "advice-6", icon: "💰", category: "Advice", context: "Your friend spends too much money on coffee every day.", sentence: "You ______ make coffee at home to save money.", answer: "should", explanation: "'Should' suggests a practical solution to a problem." }, { id: "polite-3", icon: "🎤", category: "Polite Request", context: "You want to borrow a pen from a colleague during a meeting.", sentence: "______ I borrow your pen for a moment?", answer: "could", explanation: "'Could I' is a polite way to ask permission or make a request." }, { id: "hypothetical-5", icon: "🌟", category: "Hypothetical", context: "Imagining being famous or successful.", sentence: "If I became a famous actor, I ______ help many charities.", answer: "would", explanation: "'Would' describes intentions in imaginary future scenarios." }, { id: "suggestion-2", icon: "🍔", category: "Suggestion", context: "Planning a dinner with friends and offering alternatives.", sentence: "We ______ order pizza, or we ______ cook something ourselves.", answer: "could", explanation: "'Could' presents multiple possibilities or suggestions." }, { id: "advice-7", icon: "📖", category: "Advice", context: "Your friend wants to improve their English but doesn't know where to start.", sentence: "You ______ watch English movies with subtitles.", answer: "should", explanation: "'Should' recommends an action to help achieve a goal." }, { id: "preference-2", icon: "🎭", category: "Preference", context: "Someone asks if you prefer going out or staying home.", sentence: "I ______ prefer to stay home and relax this weekend.", answer: "would", explanation: "'Would prefer' expresses what you like better between options." }, { id: "possibility-4", icon: "✈️", category: "Possibility", context: "Planning a trip and discussing what might happen.", sentence: "The flight ______ be delayed because of bad weather.", answer: "could", explanation: "'Could' suggests something that might possibly happen." }, { id: "obligation-2", icon: "🚴", category: "Moral Obligation", context: "Discussing environmental responsibility.", sentence: "We ______ reduce our plastic use to protect the planet.", answer: "should", explanation: "'Should' expresses what we ought to do for the greater good." }, { id: "polite-4", icon: "🚪", category: "Polite Request", context: "You're leaving a meeting early and want to excuse yourself.", sentence: "I ______ like to leave now, if that's okay.", answer: "would", explanation: "'Would like' is a polite way to express a request." }, { id: "hypothetical-6", icon: "👨‍💼", category: "Hypothetical", context: "Talking about what you'd do if you didn't have to work.", sentence: "If I didn't need to work, I ______ travel the world.", answer: "would", explanation: "'Would' describes what you'd do in an impossible situation." }, { id: "advice-8", icon: "😰", category: "Advice", context: "Your friend is very nervous before an important presentation.", sentence: "You ______ practice your presentation several times.", answer: "should", explanation: "'Should' recommends preparation to reduce nervousness." }, { id: "ability-3", icon: "🎨", category: "Past Ability", context: "Talking about artistic skills from your childhood.", sentence: "When I was younger, I ______ draw really well.", answer: "could", explanation: "'Could' describes skills or abilities you had in the past." } ]; // Conversation prompts - Written activities const conversationPrompts = [ { id: "conv-1", icon: "💬", title: "Restaurant Situation", prompt: "You're at a restaurant and want to order. Practice using 'would like' to politely request food.", example: "Waiter: What would you like? You: I would like the chicken pasta and a glass of water, please.", vocab: "Would like, Could I, Could you recommend" }, { id: "conv-2", icon: "💬", title: "Giving Advice", prompt: "A friend is stressed about exams. Use 'should' to give helpful advice.", example: "Friend: I'm so stressed! You: You should take breaks between study sessions. You could also try exercising.", vocab: "Should, Could, Maybe you should" }, { id: "conv-3", icon: "💬", title: "Making Plans", prompt: "Suggest three different activities using 'could' and 'would'.", example: "We could go hiking, or we could visit the museum. Which would you prefer?", vocab: "Could, Would prefer, What would you like" }, { id: "conv-4", icon: "💬", title: "Polite Requests", prompt: "Practice asking for help or favors politely using 'could' and 'would'.", example: "Could you help me move this box? Would you mind checking this email for me?", vocab: "Could you, Would you mind, Could I ask" }, { id: "conv-5", icon: "💬", title: "Expressing Preferences", prompt: "Tell a friend what you would prefer to do this evening.", example: "I would prefer to watch a movie rather than go out. I would rather have a quiet night.", vocab: "Would prefer, Would rather, I'd like" }, { id: "conv-6", icon: "💬", title: "Giving Job Interview Advice", prompt: "Someone asks for advice before a job interview. Use 'should' and 'could'.", example: "You should research the company. You could prepare answers to common questions.", vocab: "Should, Could, It's important to" }, { id: "conv-7", icon: "💬", title: "Hypothetical Travel Discussion", prompt: "Discuss what you would do on an imaginary trip to another country.", example: "If I went to Brazil, I would visit Rio de Janeiro. I would learn some Portuguese first.", vocab: "Would, If I went, I would like" }, { id: "conv-8", icon: "💬", title: "Asking About Possibilities", prompt: "Ask what could happen or what's possible in a given situation.", example: "What could go wrong? It could rain today. Could we reschedule the meeting?", vocab: "Could, What could, It could" }, { id: "conv-9", icon: "💬", title: "Offering Suggestions", prompt: "Someone is bored. Suggest things they could do.", example: "You could read a book, or you could call a friend. I could come over if you'd like.", vocab: "Could, You could, We could" }, { id: "conv-10", icon: "💬", title: "Expressing Regret", prompt: "Talk about what you would have done differently in a past situation.", example: "I would have studied more. I could have asked for help earlier.", vocab: "Would have, Could have, Should have" }, { id: "conv-11", icon: "💬", title: "Phone Conversation", prompt: "Practice a phone conversation requesting information or making an appointment.", example: "Could I speak to someone about the job opening? I would like to schedule a meeting.", vocab: "Could I, Would like, Could you tell me" }, { id: "conv-12", icon: "💬", title: "Health Advice", prompt: "Someone tells you they're not feeling well. Give advice using 'should'.", example: "You should drink plenty of water. You could try taking some medicine. You should see a doctor if it gets worse.", vocab: "Should, Could, You should try" }, { id: "conv-13", icon: "💬", title: "Disagreeing Politely", prompt: "Practice disagreeing with someone while being polite using these verbs.", example: "I see your point, but I would suggest trying a different approach. We could also consider other options.", vocab: "Would suggest, Could also, I would" }, { id: "conv-14", icon: "💬", title: "Dream Job Discussion", prompt: "Describe what you would do in your dream job.", example: "If I could have any job, I would be a teacher. I would love working with children.", vocab: "Would, Could have, I would love" }, { id: "conv-15", icon: "💬", title: "Apologizing", prompt: "Use these verbs when apologizing and explaining what you should have done.", example: "I'm sorry for being late. I should have left earlier. Could I make it up to you?", vocab: "Should have, Could, I apologize" }, { id: "conv-16", icon: "💬", title: "New Roommate Conversation", prompt: "Discuss house rules and suggestions with a new roommate.", example: "We should decide on cleaning schedules. Could we take turns cooking? I would prefer quiet time after 10pm.", vocab: "Should, Could we, Would prefer" }, { id: "conv-17", icon: "💬", title: "Discussing Past Experiences", prompt: "Talk about what you could do in the past and what you would do differently now.", example: "When I was young, I could speak more languages. I would study abroad if I could do it again.", vocab: "Could, Would, Past ability" }, { id: "conv-18", icon: "💬", title: "Environmental Discussion", prompt: "Discuss what people should and could do to protect the environment.", example: "We should reduce plastic use. We could use public transportation instead of driving.", vocab: "Should, Could, We should" }, { id: "conv-19", icon: "💬", title: "Party Planning", prompt: "Plan a party with a friend using suggestions and preferences.", example: "We could invite 20 people. I would prefer a outdoor party. Should we hire a caterer?", vocab: "Could, Would prefer, Should we" }, { id: "conv-20", icon: "💬", title: "Learning New Skills", prompt: "Give advice to someone wanting to learn a new skill.", example: "You should start with the basics. You could take online courses. I would suggest finding a teacher.", vocab: "Should, Could, Would suggest" } ]; // State let currentQuestionIndex = 0; let shuffledScenarios = []; let userProgress = {}; let answered = false; let sessionCorrect = 0; let sessionAttempts = 0; // Default config const defaultConfig = { app_title: "Should, Could &amp; Would", encouragement_text: "Keep practicing to improve your English! 🌟", primary_color: "#667eea", secondary_color: "#ffffff", text_color: "#1f2937", accent_color: "#10b981", button_color: "#764ba2", font_family: "Nunito", font_size: 16 }; // Shuffle array function shuffleArray(array) { const shuffled = [...array]; for (let i = shuffled.length - 1; i &gt; 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; } return shuffled; } // Initialize game function initGame() { shuffledScenarios = shuffleArray(scenarios).slice(0, 10); currentQuestionIndex = 0; sessionCorrect = 0; sessionAttempts = 0; answered = false; loadQuestion(); updateStats(); } // Load current question function loadQuestion() { const scenario = shuffledScenarios[currentQuestionIndex]; document.getElementById('scenario-icon').textContent = scenario.icon; document.getElementById('scenario-category').textContent = scenario.category; document.getElementById('scenario-text').textContent = scenario.context; document.getElementById('sentence').innerHTML = scenario.sentence.replace('______', '<span id="blank" class="inline-block min-w-[100px] border-b-3 border-dashed border-indigo-400 text-indigo-600 font-bold">______</span>' ); // Reset UI document.getElementById('feedback').classList.add('hidden'); document.getElementById('next-btn').classList.add('hidden'); const buttons = document.querySelectorAll('.option-btn'); buttons.forEach(btn =&gt; { btn.disabled = false; btn.classList.remove('opacity-50', 'ring-4', 'ring-green-400', 'ring-red-400'); }); answered = false; // Update progress const progress = ((currentQuestionIndex) / shuffledScenarios.length) * 100; document.getElementById('progress-bar').style.width = `${progress}%`; document.getElementById('progress-text').textContent = `Question ${currentQuestionIndex + 1} of ${shuffledScenarios.length}`; } // Check answer async function checkAnswer(selected) { if (answered) return; answered = true; const scenario = shuffledScenarios[currentQuestionIndex]; const isCorrect = selected === scenario.answer; sessionAttempts++; if (isCorrect) sessionCorrect++; // Update blank with answer document.getElementById('blank').textContent = scenario.answer; // Show feedback const feedback = document.getElementById('feedback'); const feedbackText = document.getElementById('feedback-text'); const feedbackExplanation = document.getElementById('feedback-explanation'); if (isCorrect) { feedback.className = 'text-center p-4 rounded-xl mb-4 bg-green-100'; feedbackText.textContent = '✅ Correct! Well done!'; feedbackText.className = 'font-bold text-lg mb-2 text-green-700'; } else { feedback.className = 'text-center p-4 rounded-xl mb-4 bg-red-100'; feedbackText.textContent = `❌ Not quite. The answer is "${scenario.answer}"`; feedbackText.className = 'font-bold text-lg mb-2 text-red-700'; } feedbackExplanation.textContent = scenario.explanation; feedback.classList.remove('hidden'); // Style buttons const buttons = document.querySelectorAll('.option-btn'); buttons.forEach(btn =&gt; { btn.disabled = true; if (btn.dataset.answer === scenario.answer) { btn.classList.add('ring-4', 'ring-green-400'); } else if (btn.dataset.answer === selected &amp;&amp; !isCorrect) { btn.classList.add('ring-4', 'ring-red-400', 'shake-animation'); } else { btn.classList.add('opacity-50'); } }); // Show next button or complete const nextBtn = document.getElementById('next-btn'); if (currentQuestionIndex &lt; shuffledScenarios.length - 1) { nextBtn.textContent = 'Next Question →'; } else { nextBtn.textContent = '🎉 See Results'; } nextBtn.classList.remove('hidden'); // Save progress await saveProgress(scenario.id, isCorrect); updateStats(); } // Next question function nextQuestion() { currentQuestionIndex++; if (currentQuestionIndex &gt;= shuffledScenarios.length) { showResults(); } else { loadQuestion(); } } // Switch tabs function switchTab(tab) { const practiceSection = document.querySelector('.max-w-2xl.mx-auto.slide-in[style*="0.2s"]').parentElement; const conversationSection = document.getElementById('conversation-section'); const practiceTab = document.getElementById('practice-tab'); const conversationTab = document.getElementById('conversation-tab'); if (tab === 'practice') { practiceSection.style.display = 'block'; conversationSection.classList.add('hidden'); practiceTab.style.background = 'rgba(255,255,255,0.3)'; practiceTab.style.color = 'white'; conversationTab.style.background = 'rgba(255,255,255,0)'; conversationTab.style.color = 'rgba(255,255,255,0.6)'; } else { practiceSection.style.display = 'none'; conversationSection.classList.remove('hidden'); conversationTab.style.background = 'rgba(255,255,255,0.3)'; conversationTab.style.color = 'white'; practiceTab.style.background = 'rgba(255,255,255,0)'; practiceTab.style.color = 'rgba(255,255,255,0.6)'; renderConversationPrompts(); } } // Render conversation prompts function renderConversationPrompts() { const container = document.getElementById('conversation-list'); container.innerHTML = ''; conversationPrompts.forEach((prompt, index) =&gt; { const card = document.createElement('div'); card.className = 'bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border-l-4 border-indigo-500'; card.innerHTML = ` 
+  <div class="flex items-start justify-between gap-4">
+   <div class="flex-1">
+    <div class="flex items-center gap-2 mb-2"><span class="text-2xl">${prompt.icon}</span>
+     <h3 class="font-bold text-gray-800">${prompt.title}</h3>
+    </div>
+    <p class="text-gray-700 mb-3">${prompt.prompt}</p>
+    <div class="bg-white p-3 rounded mb-3 border border-indigo-200">
+     <p class="text-sm text-gray-600"><span class="font-semibold">Example:</span> ${prompt.example}</p>
+    </div>
+    <p class="text-xs text-indigo-600 font-semibold">Key phrases: ${prompt.vocab}</p>
+   </div><button onclick="toggleConversationDetail('${prompt.id}')" class="flex-shrink-0 px-3 py-2 bg-indigo-500 text-white rounded font-bold hover:bg-indigo-600 transition-all">✏️</button>
+  </div>
+  <div id="detail-${prompt.id}" class="hidden mt-4 pt-4 border-t border-indigo-200"><textarea id="text-${prompt.id}" class="w-full p-3 border border-indigo-300 rounded text-sm" rows="4" placeholder="Write your practice response here..."></textarea> <button onclick="saveConversationResponse('${prompt.id}')" class="mt-2 w-full bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600 transition-all">Save Practice</button>
+  </div> `; container.appendChild(card); }); } // Toggle conversation detail function toggleConversationDetail(id) { const detail = document.getElementById(`detail-${id}`); detail.classList.toggle('hidden'); } // Save conversation response async function saveConversationResponse(id) { const textarea = document.getElementById(`text-${id}`); const response = textarea.value.trim(); if (!response) { alert('Please write something first!'); return; } // Show success message const btn = event.target; const originalText = btn.textContent; btn.textContent = '✅ Saved!'; btn.disabled = true; setTimeout(() =&gt; { btn.textContent = originalText; btn.disabled = false; }, 2000); // Show results function showResults() { let message = ''; let emoji = ''; if (percentage &gt;= 90) { message = 'Excellent! You really understand modal verbs!'; emoji = '🏆'; } else if (percentage &gt;= 70) { message = 'Great job! Keep practicing to master them!'; emoji = '⭐'; } else if (percentage &gt;= 50) { message = 'Good effort! Review the grammar tips and try again!'; emoji = '💪'; } else { message = 'Keep learning! Practice makes perfect!'; emoji = '📚'; } const card = document.querySelector('.bg-white.rounded-3xl'); card.innerHTML = ` 
+  <div class="p-8 text-center">
+   <div class="text-6xl mb-4">
+    ${emoji}
+   </div>
+   <h2 class="text-2xl font-bold text-gray-800 mb-4">Practice Complete!</h2>
+   <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl p-6 mb-6">
+    <div class="text-5xl font-bold mb-2">
+     ${percentage}%
+    </div>
+    <div class="text-lg opacity-90">
+     ${sessionCorrect} out of ${sessionAttempts} correct
+    </div>
+   </div>
+   <p class="text-gray-600 text-lg mb-6">${message}</p><button onclick="initGame()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold py-4 rounded-xl text-lg hover:from-emerald-600 hover:to-teal-600 transition-all"> Practice Again 🔄 </button>
+  </div> `; document.getElementById('progress-bar').style.width = '100%'; document.getElementById('progress-text').textContent = 'Complete!'; } // Update stats display function updateStats() { let totalCorrect = sessionCorrect; let totalAttempts = sessionAttempts; // Add historical data Object.values(userProgress).forEach(p =&gt; { totalCorrect += p.correct_answers || 0; totalAttempts += p.total_attempts || 0; }); document.getElementById('total-correct').textContent = totalCorrect; document.getElementById('total-attempts').textContent = totalAttempts; document.getElementById('accuracy').textContent = totalAttempts &gt; 0 ? Math.round((totalCorrect / totalAttempts) * 100) + '%' : '0%'; } // Save progress to Data SDK async function saveProgress(scenarioId, isCorrect) { if (!window.dataSdk) return; const existing = Object.values(userProgress).find(p =&gt; p.scenario_id === scenarioId); if (existing) { existing.correct_answers = (existing.correct_answers || 0) + (isCorrect ? 1 : 0); existing.total_attempts = (existing.total_attempts || 0) + 1; existing.last_practiced = new Date().toISOString(); const result = await window.dataSdk.update(existing); if (!result.isOk) { console.error('Failed to update progress'); } } else { // Check limit if (Object.keys(userProgress).length &gt;= 999) { console.warn('Data limit reached'); return; } const result = await window.dataSdk.create({ scenario_id: scenarioId, correct_answers: isCorrect ? 1 : 0, total_attempts: 1, last_practiced: new Date().toISOString() }); if (!result.isOk) { console.error('Failed to save progress'); } } } // Data handler const dataHandler = { onDataChanged(data) { userProgress = {}; data.forEach(record =&gt; { userProgress[record.scenario_id] = record; }); updateStats(); } }; // Element SDK config change handler async function onConfigChange(config) { const title = config.app_title || defaultConfig.app_title; const encouragement = config.encouragement_text || defaultConfig.encouragement_text; const primaryColor = config.primary_color || defaultConfig.primary_color; const secondaryColor = config.secondary_color || defaultConfig.secondary_color; const textColor = config.text_color || defaultConfig.text_color; const accentColor = config.accent_color || defaultConfig.accent_color; const buttonColor = config.button_color || defaultConfig.button_color; const fontFamily = config.font_family || defaultConfig.font_family; const fontSize = config.font_size || defaultConfig.font_size; // Update title const titleEl = document.getElementById('main-title'); if (titleEl) titleEl.textContent = title; // Update encouragement const encourageEl = document.getElementById('encouragement'); if (encourageEl) encourageEl.textContent = encouragement; // Update colors const app = document.getElementById('app'); if (app) { app.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${buttonColor} 100%)`; } // Update font document.body.style.fontFamily = `${fontFamily}, Nunito, sans-serif`; // Update font sizes proportionally if (titleEl) titleEl.style.fontSize = `${fontSize * 2}px`; const subtitle = document.getElementById('subtitle'); if (subtitle) subtitle.style.fontSize = `${fontSize * 1.125}px`; } // Map to capabilities function mapToCapabilities(config) { return { recolorables: [ { get: () =&gt; config.primary_color || defaultConfig.primary_color, set: (value) =&gt; { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); } }, { get: () =&gt; config.secondary_color || defaultConfig.secondary_color, set: (value) =&gt; { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); } }, { get: () =&gt; config.text_color || defaultConfig.text_color, set: (value) =&gt; { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); } }, { get: () =&gt; config.accent_color || defaultConfig.accent_color, set: (value) =&gt; { config.accent_color = value; window.elementSdk.setConfig({ accent_color: value }); } }, { get: () =&gt; config.button_color || defaultConfig.button_color, set: (value) =&gt; { config.button_color = value; window.elementSdk.setConfig({ button_color: value }); } } ], borderables: [], fontEditable: { get: () =&gt; config.font_family || defaultConfig.font_family, set: (value) =&gt; { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); } }, fontSizeable: { get: () =&gt; config.font_size || defaultConfig.font_size, set: (value) =&gt; { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); } } }; } // Map to edit panel values function mapToEditPanelValues(config) { return new Map([ ["app_title", config.app_title || defaultConfig.app_title], ["encouragement_text", config.encouragement_text || defaultConfig.encouragement_text] ]); } // Initialize async function init() { // Initialize Element SDK if (window.elementSdk) { window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues }); } // Initialize Data SDK if (window.dataSdk) { const result = await window.dataSdk.init(dataHandler); if (!result.isOk) { console.error('Failed to initialize Data SDK'); } } // Start the game initGame(); } init(); 
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d499c39f08eba33',t:'MTc3MjIxNTUyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
