@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get &amp; Be Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; margin: 0; }
+    .font-heading { font-family: 'Fraunces', serif; }
+    .tab-btn { transition: all 0.25s ease; }
+    .tab-btn.active { border-bottom: 3px solid; }
+    .card-enter { animation: cardIn 0.35s ease both; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-section { animation: fadeUp 0.4s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pattern-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .pattern-card { transition: all 0.25s ease; }
+    .check-animation { animation: popIn 0.3s ease; }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .toast-msg { animation: toastIn 0.3s ease, toastOut 0.3s ease 2s forwards; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; } }
+    input[type="text"]:focus, textarea:focus { outline: none; }
+    .conversation-card { border-left: 4px solid; }
+    .difficulty-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="h-full w-full overflow-auto" style="background-color: #0f1729;"><!-- Header -->
+   <header class="w-full px-4 sm:px-8 pt-6 pb-4">
+    <div class="max-w-4xl mx-auto">
+     <div class="flex items-center gap-3 mb-1">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #e8563f;"><i data-lucide="languages" style="width:20px;height:20px;color:#0f1729;"></i>
+      </div>
+      <h1 id="app-title" class="font-heading text-2xl sm:text-3xl font-bold" style="color: #f0e6d3;">Get &amp; Be Mastery</h1>
+     </div>
+     <p id="subtitle-text" class="text-sm mt-1 ml-13" style="color: #7a8599;">Advanced patterns for C1 learners — context, practice &amp; conversation</p>
+    </div>
+   </header><!-- Tabs -->
+   <nav class="w-full px-4 sm:px-8 sticky top-0 z-20" style="background-color: #0f1729;" aria-label="Main navigation">
+    <div class="max-w-4xl mx-auto flex gap-1 border-b" style="border-color: #1e2a42;"><button class="tab-btn active px-4 py-3 text-sm font-semibold" style="color: #e8563f; border-color: #e8563f;" data-tab="learn" aria-selected="true"> <i data-lucide="book-open" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;"></i> Patterns </button> <button class="tab-btn px-4 py-3 text-sm font-medium" style="color: #7a8599; border-color: transparent;" data-tab="activities" aria-selected="false"> <i data-lucide="pen-tool" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;"></i> Activities </button> <button class="tab-btn px-4 py-3 text-sm font-medium" style="color: #7a8599; border-color: transparent;" data-tab="conversation" aria-selected="false"> <i data-lucide="message-circle" style="width:15px;height:15px;display:inline;vertical-align:-2px;margin-right:4px;"></i> Conversation </button>
+    </div>
+   </nav>
+   <main class="w-full px-4 sm:px-8 py-6">
+    <div class="max-w-4xl mx-auto"><!-- LEARN TAB -->
+     <section id="tab-learn" class="fade-section" role="tabpanel"><!-- GET Patterns -->
+      <div class="mb-8">
+       <div class="flex items-center gap-2 mb-4"><span class="text-xs font-bold tracking-widest uppercase" style="color: #e8563f;">GET</span>
+        <div class="flex-1 h-px" style="background-color: #1e2a42;"></div>
+       </div>
+       <div class="grid gap-3" id="get-patterns"></div>
+      </div><!-- BE Patterns -->
+      <div>
+       <div class="flex items-center gap-2 mb-4"><span class="text-xs font-bold tracking-widest uppercase" style="color: #56b891;">BE</span>
+        <div class="flex-1 h-px" style="background-color: #1e2a42;"></div>
+       </div>
+       <div class="grid gap-3" id="be-patterns"></div>
+      </div>
+     </section><!-- ACTIVITIES TAB -->
+     <section id="tab-activities" class="fade-section" style="display:none;" role="tabpanel">
+      <div id="activities-container"></div>
+     </section><!-- CONVERSATION TAB -->
+     <section id="tab-conversation" class="fade-section" style="display:none;" role="tabpanel">
+      <div id="conversation-container"></div>
+     </section>
+    </div>
+   </main><!-- Toast -->
+   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-xl text-sm font-semibold z-50 hidden" style="background-color: #56b891; color: #0f1729;"></div>
+  </div>
+  <script>
+    // ===== DATA =====
+    const getPatterns = [
+      {
+        title: "Get + adjective (change of state)",
+        explanation: "Describes a gradual or sudden change. More natural and conversational than \"become\" in everyday English.",
+        examples: [
+          { sentence: "It's <strong>getting dark</strong> — we should head home.", note: "Gradual change in weather/light" },
+          { sentence: "She <strong>got nervous</strong> before the presentation.", note: "Emotional change" },
+          { sentence: "Don't <strong>get upset</strong> — I was only joking.", note: "Imperative + emotional state" }
+        ],
+        tip: "C1 nuance: \"Get\" implies process; \"be\" states the result. Compare: \"I got tired\" (I became tired) vs. \"I was tired\" (I already was)."
+      },
+      {
+        title: "Get + past participle (passive / reflexive)",
+        explanation: "Used for dynamic passives — things that happen to you, often unexpectedly. More informal than \"be + past participle.\"",
+        examples: [
+          { sentence: "He <strong>got fired</strong> after the merger.", note: "Unexpected event, more dramatic" },
+          { sentence: "We <strong>got lost</strong> in the old town.", note: "Reflexive meaning — it happened to us" },
+          { sentence: "They <strong>got married</strong> last June.", note: "Life events often use \"get\"" }
+        ],
+        tip: "Formality shift: \"He was fired\" (neutral report) vs. \"He got fired\" (emphasises impact or surprise)."
+      },
+      {
+        title: "Get + object + to-infinitive (cause / persuade)",
+        explanation: "Means to convince or arrange for someone to do something. Implies effort or persuasion.",
+        examples: [
+          { sentence: "I finally <strong>got him to agree</strong> to the terms.", note: "Persuasion after effort" },
+          { sentence: "Can you <strong>get the IT team to look</strong> into it?", note: "Arranging someone's action" },
+          { sentence: "We couldn't <strong>get anyone to volunteer</strong>.", note: "Failed persuasion" }
+        ],
+        tip: "Compare with \"make\": \"I made him agree\" (forced) vs. \"I got him to agree\" (persuaded). \"Get\" is softer."
+      },
+      {
+        title: "Get + idiomatic expressions",
+        explanation: "\"Get\" appears in many fixed expressions where it doesn't translate literally. These are essential for C1-level fluency.",
+        examples: [
+          { sentence: "Let's <strong>get down to business</strong>.", note: "Start working seriously" },
+          { sentence: "I can't <strong>get my head around</strong> this policy.", note: "Struggle to understand" },
+          { sentence: "She really <strong>gets on my nerves</strong>.", note: "Annoys / irritates" }
+        ],
+        tip: "These idioms signal natural, high-level English. Use them in writing and speech to sound more fluent."
+      }
+    ];
+
+    const bePatterns = [
+      {
+        title: "Be + to-infinitive (formal arrangements / destiny)",
+        explanation: "Expresses scheduled plans, formal instructions, or fate. Common in news, official writing, and narrative.",
+        examples: [
+          { sentence: "The Prime Minister <strong>is to visit</strong> Berlin next week.", note: "Formal scheduled plan (news style)" },
+          { sentence: "You <strong>are not to leave</strong> this room.", note: "Strict instruction / prohibition" },
+          { sentence: "They <strong>were never to meet</strong> again.", note: "Literary / narrative destiny" }
+        ],
+        tip: "This structure sounds very formal. In conversation, prefer \"going to\" or \"supposed to\" instead."
+      },
+      {
+        title: "Be + adjective + preposition (fixed collocations)",
+        explanation: "Many be + adjective combinations require a specific preposition. Getting these right is a hallmark of C1 accuracy.",
+        examples: [
+          { sentence: "She's <strong>keen on</strong> learning Japanese.", note: "keen ON (not \"for\" or \"about\")" },
+          { sentence: "I'm <strong>liable to</strong> forget if you don't remind me.", note: "liable TO (likely to, with risk)" },
+          { sentence: "He's <strong>prone to</strong> exaggeration.", note: "prone TO (tendency toward something negative)" }
+        ],
+        tip: "Keep a collocations notebook. Wrong prepositions are one of the most common C1 errors."
+      },
+      {
+        title: "Be + being + adjective (temporary behaviour)",
+        explanation: "Describes deliberate or temporary behaviour, often with a critical or surprised tone. Implies choice, not character.",
+        examples: [
+          { sentence: "You'<strong>re being ridiculous</strong> — just apologise.", note: "Temporary behaviour, criticism" },
+          { sentence: "He'<strong>s being unusually generous</strong> today.", note: "Surprise at atypical behaviour" },
+          { sentence: "Stop <strong>being so stubborn</strong>!", note: "Implies they can choose differently" }
+        ],
+        tip: "\"You are rude\" = character trait. \"You're being rude\" = current behaviour (fixable). Big pragmatic difference!"
+      },
+      {
+        title: "Be + past participle (stative passive / result)",
+        explanation: "Describes a state or result, not the action itself. Contrasts with \"get + past participle\" which emphasises the event.",
+        examples: [
+          { sentence: "The window <strong>was broken</strong> when I arrived.", note: "State — already broken" },
+          { sentence: "All the tickets <strong>are sold out</strong>.", note: "Current result" },
+          { sentence: "I <strong>was impressed</strong> by the quality.", note: "State of mind (result of being impressed)" }
+        ],
+        tip: "\"The window was broken\" (state) vs. \"The window got broken\" (event — someone broke it). Both are passive but the emphasis shifts."
+      }
+    ];
+
+    const activities = [
+      {
+        title: "Fill in the Blank: Get or Be?",
+        instruction: "Choose the correct form. Think about whether the sentence describes a state, a change, an event, or a result.",
+        questions: [
+          { prompt: "She ___ promoted after just six months.", answer: "got", hint: "This is an event that happened — use the dynamic passive.", distractor: "was" },
+          { prompt: "The report ___ finished by the time you arrive.", answer: "will be", hint: "This describes a future result/state.", distractor: "will get" },
+          { prompt: "He ___ increasingly frustrated with the delays.", answer: "got", hint: "A gradual change of emotional state.", distractor: "was" },
+          { prompt: "You're ___ unreasonable — can we talk about this calmly?", answer: "being", hint: "Temporary, deliberate behaviour — not a permanent trait.", distractor: "getting" },
+          { prompt: "The building ___ designed by a famous architect.", answer: "was", hint: "Neutral factual passive — no emphasis on drama or surprise.", distractor: "got" },
+          { prompt: "I can't ___ used to waking up this early.", answer: "get", hint: "\"Get used to\" = process of adapting. \"Be used to\" = already adapted.", distractor: "be" }
+        ]
+      },
+      {
+        title: "Rewrite: Formal ↔ Informal",
+        instruction: "Rewrite each sentence using the verb in brackets. Then reveal the suggested answer.",
+        questions: [
+          { prompt: "He became very angry. (get)", answer: "He got very angry.", context: "Informal register — \"get + adjective\" for change of state." },
+          { prompt: "The meeting is arranged for 3pm. (be + to-inf)", answer: "The meeting is to take place at 3pm.", context: "Formal register — \"be + to-infinitive\" for scheduled events." },
+          { prompt: "Someone stole my wallet. (get)", answer: "I got my wallet stolen.", context: "\"Get + object + past participle\" — something happened to me." },
+          { prompt: "You are acting childish right now. (be + being)", answer: "You're being childish.", context: "\"Be + being\" — temporary, deliberate behaviour." }
+        ]
+      },
+      {
+        title: "Error Correction",
+        instruction: "Each sentence has a mistake with \"get\" or \"be\". Find and fix it, then check your answer.",
+        questions: [
+          { prompt: "She is being tall.", answer: "She is tall.", context: "\"Be + being\" is only for temporary behaviour, not permanent physical traits." },
+          { prompt: "I got used to the noise already — it doesn't bother me.", answer: "I'm used to the noise already — it doesn't bother me.", context: "\"Already adapted\" = state (be used to). \"Get used to\" = the process." },
+          { prompt: "The children got very well-behaved at school yesterday.", answer: "The children were very well-behaved at school yesterday.", context: "Describes their state/behaviour, not a change. Use \"be\"." },
+          { prompt: "He was his boss to approve the budget.", answer: "He got his boss to approve the budget.", context: "\"Get + object + to-infinitive\" = persuade someone to do something." }
+        ]
+      }
+    ];
+
+    const conversationPrompts = [
+      {
+        title: "Life Changes",
+        level: "C1",
+        category: "Personal",
+        prompts: [
+          "Describe a time you <strong>got into trouble</strong> — what happened and how did you <strong>get out of</strong> it?",
+          "Talk about something you've <strong>got used to</strong> that was difficult at first (a new country, job, habit).",
+          "How have your priorities <strong>gotten</strong> different as you've grown older?"
+        ],
+        targetStructures: ["get into / out of", "get used to", "get + adjective (change)"]
+      },
+      {
+        title: "Work & Ambition",
+        level: "C1",
+        category: "Professional",
+        prompts: [
+          "Have you ever <strong>got someone to change</strong> their mind at work? How?",
+          "What <strong>gets on your nerves</strong> about meetings or office culture?",
+          "Describe a project that <strong>was supposed to be</strong> finished quickly but took much longer."
+        ],
+        targetStructures: ["get + obj + to-inf", "get on one's nerves", "be + to-infinitive"]
+      },
+      {
+        title: "Society & Opinion",
+        level: "C1",
+        category: "Discussion",
+        prompts: [
+          "Do you think people <strong>are being too sensitive</strong> about language these days, or not sensitive enough?",
+          "What's an issue you can't <strong>get your head around</strong> — something that truly baffles you?",
+          "Should public figures <strong>be held accountable</strong> for things they said years ago? Why?"
+        ],
+        targetStructures: ["be + being + adj", "get one's head around", "be + past participle (passive)"]
+      },
+      {
+        title: "Role Play: Negotiation",
+        level: "C1",
+        category: "Role Play",
+        prompts: [
+          "<strong>Scenario:</strong> You need to <strong>get your landlord to fix</strong> a problem they've been ignoring. Partner plays the landlord.",
+          "<strong>Scenario:</strong> You <strong>got overcharged</strong> at a restaurant. Politely resolve it with your partner (the manager).",
+          "<strong>Scenario:</strong> A colleague <strong>is being difficult</strong> about a shared deadline. Negotiate a solution."
+        ],
+        targetStructures: ["get + obj + to-inf", "get + past participle", "be + being + adj"]
+      },
+      {
+        title: "Debate Starters",
+        level: "C1+",
+        category: "Debate",
+        prompts: [
+          "\"People who <strong>get ahead</strong> in life are just lucky.\" Agree or disagree?",
+          "\"Children <strong>are to be seen</strong> and not heard\" — outdated or still relevant in some contexts?",
+          "Is it ever acceptable to <strong>be dishonest</strong> to <strong>get a point across</strong>?"
+        ],
+        targetStructures: ["get ahead", "be + to-infinitive", "be + adj / get + noun + across"]
+      }
+    ];
+
+    // ===== RENDER FUNCTIONS =====
+    const accent = "#e8563f";
+    const green = "#56b891";
+    const surface = "#182038";
+    const textColor = "#f0e6d3";
+    const mutedText = "#7a8599";
+
+    function renderPatterns() {
+      const getContainer = document.getElementById('get-patterns');
+      const beContainer = document.getElementById('be-patterns');
+      getContainer.innerHTML = '';
+      beContainer.innerHTML = '';
+
+      getPatterns.forEach((p, i) => {
+        getContainer.appendChild(createPatternCard(p, accent, i));
+      });
+      bePatterns.forEach((p, i) => {
+        beContainer.appendChild(createPatternCard(p, green, i));
+      });
+    }
+
+    function createPatternCard(pattern, color, index) {
+      const card = document.createElement('div');
+      card.className = 'pattern-card rounded-xl p-5 cursor-pointer card-enter';
+      card.style.backgroundColor = surface;
+      card.style.animationDelay = `${index * 0.08}s`;
+
+      const expanded = document.createElement('div');
+      expanded.style.display = 'none';
+      expanded.className = 'mt-4';
+
+      let examplesHtml = pattern.examples.map(ex => `
+        <div class="mb-3 pl-4" style="border-left: 2px solid ${color}30;">
+          <p class="text-sm mb-1" style="color:${textColor};">${ex.sentence}</p>
+          <p class="text-xs" style="color:${mutedText};">${ex.note}</p>
+        </div>
+      `).join('');
+
+      expanded.innerHTML = `
+        <p class="text-sm mb-4" style="color:${mutedText};">${pattern.explanation}</p>
+        ${examplesHtml}
+        <div class="mt-4 p-3 rounded-lg" style="background-color: ${color}15; border: 1px solid ${color}30;">
+          <p class="text-xs font-semibold mb-1" style="color:${color};">💡 C1 Tip</p>
+          <p class="text-xs" style="color:${textColor}cc;">${pattern.tip}</p>
+        </div>
+      `;
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between">
+          <h3 class="font-heading font-semibold text-sm sm:text-base" style="color:${textColor};">${pattern.title}</h3>
+          <i data-lucide="chevron-down" style="width:18px;height:18px;color:${mutedText};transition:transform 0.25s;"></i>
+        </div>
+      `;
+
+      card.appendChild(expanded);
+
+      card.addEventListener('click', () => {
+        const isOpen = expanded.style.display !== 'none';
+        expanded.style.display = isOpen ? 'none' : 'block';
+        const chevron = card.querySelector('[data-lucide="chevron-down"]');
+        if (chevron) {
+          chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+        }
+      });
+
+      return card;
+    }
+
+    function renderActivities() {
+      const container = document.getElementById('activities-container');
+      container.innerHTML = '';
+
+      activities.forEach((activity, ai) => {
+        const section = document.createElement('div');
+        section.className = 'mb-8 card-enter';
+        section.style.animationDelay = `${ai * 0.1}s`;
+
+        let questionsHtml = '';
+
+        if (ai === 0) {
+          // Fill in the blank
+          activity.questions.forEach((q, qi) => {
+            const qId = `fill-${qi}`;
+            questionsHtml += `
+              <div class="p-4 rounded-lg mb-3" style="background-color: ${surface};" id="q-wrapper-${qId}">
+                <p class="text-sm mb-3" style="color:${textColor};">${qi + 1}. ${q.prompt.replace('___', '<span class="inline-block border-b-2 px-2 mx-1" style="border-color:' + accent + '; min-width:80px;">&nbsp;</span>')}</p>
+                <div class="flex flex-wrap gap-2 mb-2">
+                  <button onclick="checkFillAnswer('${qId}', '${q.answer}', this)" class="px-4 py-1.5 rounded-full text-xs font-semibold transition-colors" style="background-color:#1e2a42;color:${textColor};">${q.answer}</button>
+                  <button onclick="checkFillAnswer('${qId}', '${q.distractor}', this)" class="px-4 py-1.5 rounded-full text-xs font-semibold transition-colors" style="background-color:#1e2a42;color:${textColor};">${q.distractor}</button>
+                </div>
+                <div id="feedback-${qId}" class="text-xs mt-2" style="color:${mutedText};"></div>
+              </div>
+            `;
+          });
+        } else if (ai === 1) {
+          // Rewrite
+          activity.questions.forEach((q, qi) => {
+            const rId = `rewrite-${qi}`;
+            questionsHtml += `
+              <div class="p-4 rounded-lg mb-3" style="background-color: ${surface};">
+                <p class="text-sm mb-2" style="color:${textColor};">${qi + 1}. ${q.prompt}</p>
+                <label for="input-${rId}" class="sr-only">Your rewrite for question ${qi + 1}</label>
+                <textarea id="input-${rId}" rows="2" class="w-full p-3 rounded-lg text-sm resize-none" style="background-color:#1e2a42;color:${textColor};border:1px solid #2a3654;" placeholder="Write your version here..."></textarea>
+                <div class="flex items-center gap-2 mt-2">
+                  <button onclick="toggleReveal('${rId}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold" style="background-color:${accent};color:#0f1729;">Reveal Answer</button>
+                </div>
+                <div id="reveal-${rId}" class="mt-2 p-3 rounded-lg hidden" style="background-color:${green}15;border:1px solid ${green}30;">
+                  <p class="text-sm font-semibold" style="color:${green};">${q.answer}</p>
+                  <p class="text-xs mt-1" style="color:${mutedText};">${q.context}</p>
+                </div>
+              </div>
+            `;
+          });
+        } else {
+          // Error correction
+          activity.questions.forEach((q, qi) => {
+            const eId = `error-${qi}`;
+            questionsHtml += `
+              <div class="p-4 rounded-lg mb-3" style="background-color: ${surface};">
+                <p class="text-sm mb-2" style="color:${textColor};">${qi + 1}. <span style="color:${accent};">✗</span> "${q.prompt}"</p>
+                <label for="input-${eId}" class="sr-only">Your correction for question ${qi + 1}</label>
+                <input type="text" id="input-${eId}" class="w-full p-3 rounded-lg text-sm" style="background-color:#1e2a42;color:${textColor};border:1px solid #2a3654;" placeholder="Write the corrected sentence...">
+                <div class="flex items-center gap-2 mt-2">
+                  <button onclick="toggleReveal('${eId}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold" style="background-color:${accent};color:#0f1729;">Check Answer</button>
+                </div>
+                <div id="reveal-${eId}" class="mt-2 p-3 rounded-lg hidden" style="background-color:${green}15;border:1px solid ${green}30;">
+                  <p class="text-sm font-semibold" style="color:${green};">✓ ${q.answer}</p>
+                  <p class="text-xs mt-1" style="color:${mutedText};">${q.context}</p>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        section.innerHTML = `
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full" style="background-color:${accent}20;color:${accent};">Activity ${ai + 1}</span>
+          </div>
+          <h2 class="font-heading text-lg font-bold mb-1" style="color:${textColor};">${activity.title}</h2>
+          <p class="text-sm mb-4" style="color:${mutedText};">${activity.instruction}</p>
+          ${questionsHtml}
+        `;
+
+        container.appendChild(section);
+      });
+    }
+
+    function renderConversation() {
+      const container = document.getElementById('conversation-container');
+      container.innerHTML = '';
+
+      const categoryColors = { Personal: accent, Professional: "#d4a843", Discussion: green, "Role Play": "#6e8fd4", Debate: "#c76ebd" };
+
+      conversationPrompts.forEach((section, si) => {
+        const catColor = categoryColors[section.category] || accent;
+        const card = document.createElement('div');
+        card.className = 'conversation-card rounded-xl p-5 mb-4 card-enter';
+        card.style.backgroundColor = surface;
+        card.style.borderLeftColor = catColor;
+        card.style.animationDelay = `${si * 0.08}s`;
+
+        let promptsHtml = section.prompts.map((p, pi) => `
+          <div class="mb-3 pl-3 py-2 rounded-r-lg" style="background-color:#0f172980;">
+            <p class="text-sm" style="color:${textColor};">${pi + 1}. ${p}</p>
+          </div>
+        `).join('');
+
+        let structuresHtml = section.targetStructures.map(s => `
+          <span class="text-xs px-2 py-1 rounded-full" style="background-color:${catColor}20;color:${catColor};">${s}</span>
+        `).join('');
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full" style="background-color:${catColor}25;color:${catColor};">${section.category}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full" style="background-color:#1e2a42;color:${mutedText};">${section.level}</span>
+          </div>
+          <h2 class="font-heading text-lg font-bold mb-3" style="color:${textColor};">${section.title}</h2>
+          ${promptsHtml}
+          <div class="mt-4 pt-3" style="border-top:1px solid #1e2a4280;">
+            <p class="text-xs font-semibold mb-2" style="color:${mutedText};">Target Structures</p>
+            <div class="flex flex-wrap gap-2">${structuresHtml}</div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // ===== INTERACTION HANDLERS =====
+    window.checkFillAnswer = function(qId, selectedAnswer, btn) {
+      const wrapper = document.getElementById(`q-wrapper-${qId}`);
+      const feedback = document.getElementById(`feedback-${qId}`);
+      const questionIndex = parseInt(qId.split('-')[1]);
+      const correctAnswer = activities[0].questions[questionIndex].answer;
+      const hint = activities[0].questions[questionIndex].hint;
+      const buttons = wrapper.querySelectorAll('button');
+
+      buttons.forEach(b => b.disabled = true);
+
+      if (selectedAnswer === correctAnswer) {
+        btn.style.backgroundColor = green;
+        btn.style.color = '#0f1729';
+        feedback.innerHTML = `<span class="check-animation inline-block" style="color:${green};">✓ Correct!</span> <span style="color:${mutedText};">${hint}</span>`;
+      } else {
+        btn.style.backgroundColor = '#e8563f50';
+        btn.style.color = accent;
+        buttons.forEach(b => {
+          if (b.textContent.trim() === correctAnswer) {
+            b.style.backgroundColor = green;
+            b.style.color = '#0f1729';
+          }
+        });
+        feedback.innerHTML = `<span style="color:${accent};">✗ Not quite.</span> <span style="color:${mutedText};">${hint}</span>`;
+      }
+    };
+
+    window.toggleReveal = function(id) {
+      const el = document.getElementById(`reveal-${id}`);
+      el.classList.toggle('hidden');
+    };
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('toast-msg');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('toast-msg');
+      }, 2300);
+    }
+
+    // ===== TABS =====
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.tab;
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.color = mutedText;
+          b.style.borderColor = 'transparent';
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.style.color = accent;
+        btn.style.borderColor = accent;
+        btn.setAttribute('aria-selected', 'true');
+
+        document.querySelectorAll('[id^="tab-"]').forEach(s => s.style.display = 'none');
+        const target = document.getElementById(`tab-${tabName}`);
+        target.style.display = 'block';
+        target.classList.remove('fade-section');
+        void target.offsetWidth;
+        target.classList.add('fade-section');
+      });
+    });
+
+    // ===== INIT RENDERS =====
+    renderPatterns();
+    renderActivities();
+    renderConversation();
+
+    // ===== ELEMENT SDK =====
+    const defaultConfig = {
+      app_title: "Get & Be Mastery",
+      subtitle_text: "Advanced patterns for C1 learners — context, practice & conversation",
+      background_color: "#0f1729",
+      surface_color: "#182038",
+      text_color: "#f0e6d3",
+      primary_action_color: "#e8563f",
+      secondary_action_color: "#56b891",
+      font_family: "DM Sans",
+      font_size: 16
+    };
+
+    function applyConfig(config) {
+      const bg = config.background_color || defaultConfig.background_color;
+      const sf = config.surface_color || defaultConfig.surface_color;
+      const tx = config.text_color || defaultConfig.text_color;
+      const pa = config.primary_action_color || defaultConfig.primary_action_color;
+      const sa = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const ff = config.font_family || defaultConfig.font_family;
+      const fs = config.font_size || defaultConfig.font_size;
+
+      const wrapper = document.getElementById('app-wrapper');
+      wrapper.style.backgroundColor = bg;
+
+      const title = document.getElementById('app-title');
+      title.textContent = config.app_title || defaultConfig.app_title;
+      title.style.color = tx;
+      title.style.fontFamily = `'Fraunces', ${ff}, serif`;
+      title.style.fontSize = `${fs * 1.75}px`;
+
+      const sub = document.getElementById('subtitle-text');
+      sub.textContent = config.subtitle_text || defaultConfig.subtitle_text;
+      sub.style.color = `${tx}88`;
+      sub.style.fontFamily = `${ff}, sans-serif`;
+      sub.style.fontSize = `${fs * 0.875}px`;
+
+      // Apply font to body
+      document.body.style.fontFamily = `${ff}, sans-serif`;
+
+      // Recolor pattern cards
+      document.querySelectorAll('.pattern-card').forEach(card => {
+        card.style.backgroundColor = sf;
+      });
+
+      // Recolor tab bar bg
+      document.querySelectorAll('nav').forEach(n => n.style.backgroundColor = bg);
+
+      // Active tab color
+      document.querySelectorAll('.tab-btn.active').forEach(t => {
+        t.style.color = pa;
+        t.style.borderColor = pa;
+      });
+
+      // Activity cards
+      document.querySelectorAll('#activities-container > div .rounded-lg').forEach(card => {
+        if (!card.classList.contains('hidden') && card.id && card.id.startsWith('reveal-')) return;
+        if (card.style.backgroundColor && !card.style.backgroundColor.includes('rgb')) return;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          applyConfig(config);
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+            },
+            {
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); }
+            },
+            {
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["app_title", config.app_title || defaultConfig.app_title],
+          ["subtitle_text", config.subtitle_text || defaultConfig.subtitle_text]
+        ])
+      });
+    }
+
+    lucide.createIcons();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dbe1ee44197def1',t:'MTc3MzQzNzIyNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
