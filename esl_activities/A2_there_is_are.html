@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>There Is &amp; There Are Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; margin: 0; }
+    .font-heading { font-family: 'Fraunces', serif; }
+    .tab-btn { transition: all 0.3s ease; padding: 0.5rem 1rem; border-radius: 8px 8px 0 0; position: relative; }
+    .tab-btn.active { transform: translateY(-2px); box-shadow: 0 -4px 12px rgba(0,0,0,0.2); }
+    .card-enter { animation: cardIn 0.4s ease both; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .pattern-card { transition: all 0.3s ease; cursor: pointer; }
+    .pattern-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
+    .check-anim { animation: check 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    @keyframes check { 0% { transform: scale(0) rotate(-45deg); } 70% { transform: scale(1.2); } 100% { transform: scale(1) rotate(0); } }
+    input, textarea { transition: all 0.2s ease; }
+    input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.2); }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%); background-size: 400% 400%; animation: gradient 15s ease infinite;">
+   <style>@keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }</style><!-- Header -->
+   <header class="w-full px-4 sm:px-6 pt-4 pb-3 sticky top-0 z-40 backdrop-blur-xl" style="background: rgba(30, 20, 60, 0.85); border-bottom: 3px solid rgba(255,255,255,0.2);">
+    <div class="max-w-5xl mx-auto">
+     <div class="flex items-center gap-2">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #f39c12, #e74c3c);"><i data-lucide="languages" style="width:20px;height:20px;color:white;"></i>
+      </div>
+      <div>
+       <h1 id="app-title" class="font-heading text-lg sm:text-xl font-bold" style="color: white; margin: 0;">There Is &amp; There Are</h1>
+       <p id="subtitle-text" class="text-xs" style="color: #ecf0f1; margin: 2px 0 0 0;">Master it in 20 minutes!</p>
+      </div>
+     </div>
+    </div>
+   </header><!-- Tabs -->
+   <nav class="w-full px-4 sm:px-6 sticky top-14 z-30 backdrop-blur-lg" style="background: rgba(0,0,0,0.3); border-bottom: 2px solid rgba(255,255,255,0.15);">
+    <div class="max-w-5xl mx-auto flex gap-1"><button class="tab-btn active text-sm font-bold" style="color: #fff; background: rgba(255,255,255,0.15);" data-tab="learn">📚 Learn</button> <button class="tab-btn text-sm font-bold" style="color: rgba(255,255,255,0.7); hover:color:white;" data-tab="activities">✏️ Practice</button> <button class="tab-btn text-sm font-bold" style="color: rgba(255,255,255,0.7); hover:color:white;" data-tab="conversation">💬 Speak</button>
+    </div>
+   </nav>
+   <main class="w-full px-4 sm:px-6 py-5">
+    <div class="max-w-5xl mx-auto"><!-- LEARN TAB -->
+     <section id="tab-learn" role="tabpanel">
+      <div class="grid-2" id="patterns-grid"></div>
+     </section><!-- PRACTICE TAB -->
+     <section id="tab-activities" class="hidden" role="tabpanel">
+      <div id="activities-grid" class="grid-2"></div>
+     </section><!-- SPEAK TAB -->
+     <section id="tab-conversation" class="hidden" role="tabpanel">
+      <div id="conversation-grid" class="grid-2"></div>
+     </section>
+    </div>
+   </main>
+   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full text-sm font-bold z-50 hidden backdrop-blur-xl" style="background: rgba(0,0,0,0.7); color: #2ecc71;"></div>
+  </div>
+  <script>
+    const colors = {
+      is: { bg: 'linear-gradient(135deg, #667eea, #764ba2)', accent: '#667eea', light: 'rgba(102, 126, 234, 0.1)' },
+      are: { bg: 'linear-gradient(135deg, #f093fb, #f5576c)', accent: '#f5576c', light: 'rgba(245, 87, 108, 0.1)' },
+      have: { bg: 'linear-gradient(135deg, #4facfe, #00f2fe)', accent: '#00f2fe', light: 'rgba(0, 242, 254, 0.1)' }
+    };
+
+    const patterns = [
+      {
+        type: 'is',
+        title: '"There is" + Singular',
+        points: [
+          '✓ One thing exists',
+          '✓ Use with countable & uncountable',
+          '💡 Spanish: Hay un gato',
+          '📌 English: There IS a cat'
+        ],
+        example: '"There is a cat on the porch"'
+      },
+      {
+        type: 'are',
+        title: '"There are" + Plural',
+        points: [
+          '✓ Multiple things exist',
+          '✓ Must use PLURAL verb',
+          '💡 Spanish: Hay gatos (same)',
+          '📌 English: There ARE cats'
+        ],
+        example: '"There are five students"'
+      },
+      {
+        type: 'is',
+        title: 'Uncountable Nouns',
+        points: [
+          '✓ Information, furniture, advice',
+          '✓ Always use "is" (even if plural)',
+          '⚠️ Common mistake: *there are informations',
+          '📌 Correct: "There is information"'
+        ],
+        example: '"There is not much furniture"'
+      },
+      {
+        type: 'are',
+        title: 'Questions & Inversion',
+        points: [
+          '✓ Verb moves to FRONT',
+          '✓ IS there...? / ARE there...?',
+          '❌ NOT: "There is a problem?" ',
+          '✅ YES: "Is there a problem?"'
+        ],
+        example: '"Are there any tickets left?"'
+      },
+      {
+        type: 'is',
+        title: 'Perfect Tenses',
+        points: [
+          '✓ "There HAVE been" (present perfect)',
+          '✓ "There HAS been" (singular)',
+          '✓ "There WILL BE" (future)',
+          '📌 Pattern: [auxiliary] + there + be'
+        ],
+        example: '"There have been many changes"'
+      },
+      {
+        type: 'have',
+        title: 'Have vs. There Is',
+        points: [
+          'I HAVE a cat (ownership)',
+          'There IS a cat (existence)',
+          '💡 Different focus, same thing',
+          '📌 Context determines which one'
+        ],
+        example: 'I have a cat / There is a cat in my house'
+      }
+    ];
+
+    function renderPatterns() {
+      const grid = document.getElementById('patterns-grid');
+      grid.innerHTML = patterns.map((p, i) => `
+        <div class="card-enter rounded-2xl p-5 backdrop-blur-xl cursor-pointer" style="background: ${colors[p.type].bg}; border: 2px solid rgba(255,255,255,0.2); animation-delay: ${i*0.1}s;">
+          <h3 class="font-heading text-base sm:text-lg font-bold mb-3" style="color: white;">${p.title}</h3>
+          <div class="space-y-2 mb-3">
+            ${p.points.map(pt => `<p class="text-xs sm:text-sm" style="color: rgba(255,255,255,0.95);">${pt}</p>`).join('')}
+          </div>
+          <div class="mt-3 p-2 rounded-lg" style="background: ${colors[p.type].light}; border-left: 3px solid ${colors[p.type].accent};">
+            <p class="text-xs font-semibold italic" style="color: white;">"${p.example}"</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const activities = [
+      {
+        title: 'Choose: Is or Are?',
+        type: 'multiple',
+        questions: [
+          { q: 'There ___ many opportunities here.', a: 'are', b: 'is' },
+          { q: 'There ___ not enough time.', a: 'is', b: 'are' },
+          { q: '___ there any milk?', a: 'Is', b: 'Are' },
+          { q: 'There ___ a lot of people.', a: 'are', b: 'is' },
+          { q: 'How many students ___ there?', a: 'are', b: 'is' }
+        ]
+      },
+      {
+        title: 'Fix the Error',
+        type: 'error',
+        questions: [
+          { wrong: 'There is a lot of people', right: 'There are a lot of people' },
+          { wrong: 'Are there any informations?', right: 'Is there any information?' },
+          { wrong: 'There are a cat in the house', right: 'There is a cat in the house' },
+          { wrong: 'In the room is many chairs', right: 'There are many chairs in the room' }
+        ]
+      }
+    ];
+
+    function renderActivities() {
+      const grid = document.getElementById('activities-grid');
+      grid.innerHTML = activities.map((act, ai) => `
+        <div class="card-enter rounded-2xl p-5 backdrop-blur-xl" style="background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.2); animation-delay: ${ai*0.1}s;">
+          <h3 class="font-heading text-base font-bold mb-4" style="color: white;">${act.title}</h3>
+          <div class="space-y-3">
+            ${(act.type === 'multiple' ? act.questions : act.questions.slice(0, 3)).map((q, i) => `
+              <div class="p-3 rounded-lg" style="background: rgba(255,255,255,0.08);">
+                ${act.type === 'multiple' 
+                  ? `<p class="text-sm mb-2" style="color: #ecf0f1;">${i+1}. ${q.q.replace('___', '<span style="border-bottom: 2px dotted rgba(255,255,255,0.5);">___</span>')}</p>
+                     <button onclick="checkAns(this, '${q.a}')" class="mr-2 px-3 py-1 text-xs rounded-full" style="background: rgba(255,255,255,0.1); color: #ecf0f1;">${q.a}</button>
+                     <button onclick="checkAns(this, '${q.b}')" class="px-3 py-1 text-xs rounded-full" style="background: rgba(255,255,255,0.1); color: #ecf0f1;">${q.b}</button>`
+                  : `<p class="text-sm mb-2" style="color: #e74c3c; text-decoration: line-through;">${i+1}. ${q.wrong}</p>
+                     <p class="text-sm" style="color: #2ecc71;">✓ ${q.right}</p>`
+                }
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const conversations = [
+      { theme: 'Hometown', qs: ['What unique things ARE THERE in your hometown?', 'ARE THERE any problems in your community?', 'THERE ARE probably traditions where you\'re from.'] },
+      { theme: 'Workplace', qs: ['IS THERE a canteen? ARE THERE meeting rooms?', 'What challenges ARE THERE in your job?', 'In a dream office, what would THERE BE?'] },
+      { theme: 'Future', qs: ['THERE WILL BE what jobs in 20 years?', 'What THERE WOULDN\'T BE anymore?', 'DO YOU THINK THERE WILL BE solutions to climate change?'] }
+    ];
+
+    function renderConversation() {
+      const grid = document.getElementById('conversation-grid');
+      grid.innerHTML = conversations.map((c, i) => `
+        <div class="card-enter rounded-2xl p-5 backdrop-blur-xl" style="background: linear-gradient(135deg, rgba(255,107,107,0.3), rgba(255,193,7,0.3)); border: 2px solid rgba(255,255,255,0.2); animation-delay: ${i*0.1}s;">
+          <h3 class="font-heading text-base font-bold mb-3" style="color: white;">🗣️ ${c.theme}</h3>
+          <div class="space-y-2">
+            ${c.qs.map((q, j) => `<p class="text-xs sm:text-sm" style="color: rgba(255,255,255,0.95);">• ${q}</p>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.checkAns = function(btn, correct) {
+      const btns = btn.parentElement.querySelectorAll('button');
+      btns.forEach(b => b.disabled = true);
+      if (btn.textContent === correct) {
+        btn.style.background = 'rgba(46, 204, 113, 0.4)';
+        btn.innerHTML = '✓ ' + btn.textContent;
+      } else {
+        btn.style.background = 'rgba(231, 76, 60, 0.4)';
+        btns.forEach(b => {
+          if (b.textContent === correct) {
+            b.style.background = 'rgba(46, 204, 113, 0.4)';
+            b.innerHTML = '✓ ' + b.textContent;
+          }
+        });
+      }
+    };
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 2000);
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.style.background = 'rgba(255,255,255,0)';
+          b.style.color = 'rgba(255,255,255,0.7)';
+        });
+        btn.style.background = 'rgba(255,255,255,0.15)';
+        btn.style.color = 'white';
+
+        document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+      });
+    });
+
+    renderPatterns();
+    renderActivities();
+    renderConversation();
+    lucide.createIcons();
+
+    // Element SDK
+    const defaultConfig = {
+      app_title: 'There Is & There Are',
+      subtitle_text: 'Master it in 20 minutes!',
+      background_color: '#667eea',
+      text_color: '#ffffff',
+      primary_action_color: '#f39c12',
+      font_family: 'DM Sans',
+      font_size: 16
+    };
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+          document.getElementById('subtitle-text').textContent = config.subtitle_text || defaultConfig.subtitle_text;
+          document.body.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
+        },
+        mapToCapabilities: () => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: { get: () => defaultConfig.font_family, set: (v) => {} },
+          fontSizeable: { get: () => defaultConfig.font_size, set: (v) => {} }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['app_title', config.app_title || defaultConfig.app_title],
+          ['subtitle_text', config.subtitle_text || defaultConfig.subtitle_text]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc47b81562cdef1',t:'MTc3MzUwMzkzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
