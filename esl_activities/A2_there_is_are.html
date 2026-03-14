@@ -34,7 +34,8 @@
    <header class="w-full px-4 sm:px-6 pt-4 pb-3 sticky top-0 z-40 backdrop-blur-xl" style="background: rgba(30, 20, 60, 0.85); border-bottom: 3px solid rgba(255,255,255,0.2);">
     <div class="max-w-5xl mx-auto">
      <div class="flex items-center gap-2">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #f39c12, #e74c3c);"><i data-lucide="languages" style="width:20px;height:20px;color:white;"></i>
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #f39c12, #e74c3c);">
+       <i data-lucide="languages" style="width:20px;height:20px;color:white;"></i>
       </div>
       <div>
        <h1 id="app-title" class="font-heading text-lg sm:text-xl font-bold" style="color: white; margin: 0;">There Is &amp; There Are</h1>
@@ -44,11 +45,13 @@
     </div>
    </header><!-- Tabs -->
    <nav class="w-full px-4 sm:px-6 sticky top-14 z-30 backdrop-blur-lg" style="background: rgba(0,0,0,0.3); border-bottom: 2px solid rgba(255,255,255,0.15);">
-    <div class="max-w-5xl mx-auto flex gap-1"><button class="tab-btn active text-sm font-bold" style="color: #fff; background: rgba(255,255,255,0.15);" data-tab="learn">📚 Learn</button> <button class="tab-btn text-sm font-bold" style="color: rgba(255,255,255,0.7); hover:color:white;" data-tab="activities">✏️ Practice</button> <button class="tab-btn text-sm font-bold" style="color: rgba(255,255,255,0.7); hover:color:white;" data-tab="conversation">💬 Speak</button>
+    <div class="max-w-5xl mx-auto flex gap-1">
+     <button class="tab-btn active text-sm font-bold" style="color: #fff; background: rgba(255,255,255,0.15);" data-tab="learn">📚 Learn</button> <button class="tab-btn text-sm font-bold" style="color: rgba(255,255,255,0.7);" data-tab="activities">✏️ Practice</button> <button class="tab-btn text-sm font-bold" style="color: rgba(255,255,255,0.7);" data-tab="conversation">💬 Speak</button>
     </div>
    </nav>
    <main class="w-full px-4 sm:px-6 py-5">
-    <div class="max-w-5xl mx-auto"><!-- LEARN TAB -->
+    <div class="max-w-5xl mx-auto">
+     <!-- LEARN TAB -->
      <section id="tab-learn" role="tabpanel">
       <div class="grid-2" id="patterns-grid"></div>
      </section><!-- PRACTICE TAB -->
@@ -264,33 +267,39 @@
     const defaultConfig = {
       app_title: 'There Is & There Are',
       subtitle_text: 'Master it in 20 minutes!',
-      background_color: '#667eea',
-      text_color: '#ffffff',
-      primary_action_color: '#f39c12',
       font_family: 'DM Sans',
       font_size: 16
     };
 
+    let config = { ...defaultConfig };
+
     if (window.elementSdk) {
       window.elementSdk.init({
         defaultConfig,
-        onConfigChange: async (config) => {
-          document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
-          document.getElementById('subtitle-text').textContent = config.subtitle_text || defaultConfig.subtitle_text;
-          document.body.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
+        onConfigChange: async (newConfig) => {
+          config = { ...config, ...newConfig };
+          document.getElementById('app-title').textContent = config.app_title;
+          document.getElementById('subtitle-text').textContent = config.subtitle_text;
+          document.body.style.fontFamily = `${config.font_family}, sans-serif`;
         },
-        mapToCapabilities: () => ({
+        mapToCapabilities: (cfg) => ({
           recolorables: [],
           borderables: [],
-          fontEditable: { get: () => defaultConfig.font_family, set: (v) => {} },
-          fontSizeable: { get: () => defaultConfig.font_size, set: (v) => {} }
+          fontEditable: {
+            get: () => cfg.font_family || defaultConfig.font_family,
+            set: (v) => { cfg.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+          },
+          fontSizeable: {
+            get: () => cfg.font_size || defaultConfig.font_size,
+            set: (v) => { cfg.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+          }
         }),
-        mapToEditPanelValues: (config) => new Map([
-          ['app_title', config.app_title || defaultConfig.app_title],
-          ['subtitle_text', config.subtitle_text || defaultConfig.subtitle_text]
+        mapToEditPanelValues: (cfg) => new Map([
+          ['app_title', cfg.app_title || defaultConfig.app_title],
+          ['subtitle_text', cfg.subtitle_text || defaultConfig.subtitle_text]
         ])
       });
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc47b81562cdef1',t:'MTc3MzUwMzkzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc47dde60c2def1',t:'MTc3MzUwNDAzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
