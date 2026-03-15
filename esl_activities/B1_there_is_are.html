@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noun Explorer</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&amp;family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; margin: 0; }
+    .font-heading { font-family: 'Fraunces', serif; }
+    .tab-active { border-bottom: 3px solid; }
+    .fade-in { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .card-pop { animation: cardPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes cardPop { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+    .shake { animation: shake 0.4s ease; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    .pulse-correct { animation: pulseCorrect 0.5s ease; }
+    @keyframes pulseCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    .tooltip-noun { position: relative; cursor: help; border-bottom: 2px dashed; }
+    .tooltip-noun:hover .tooltip-box { opacity: 1; visibility: visible; transform: translateY(0); }
+    .tooltip-box { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(4px); opacity: 0; visibility: hidden; transition: all 0.2s; z-index: 50; white-space: nowrap; padding: 6px 12px; border-radius: 8px; font-size: 13px; pointer-events: none; }
+    .progress-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    input[type="text"]:focus { outline: none; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background-color: #FDF6EC;">
+   <!-- Header -->
+   <header class="sticky top-0 z-30" style="background-color: #FDF6EC; border-bottom: 2px solid #E8D5B7;">
+    <div class="max-w-3xl mx-auto px-4 py-4">
+     <h1 id="app-title" class="font-heading text-2xl md:text-3xl font-bold" style="color: #2D3436;">Noun Explorer</h1>
+     <p id="welcome-msg" class="text-sm mt-1" style="color: #636E72;">Master countable &amp; uncountable nouns at your own pace</p>
+    </div><!-- Tabs -->
+    <nav class="max-w-3xl mx-auto px-4 flex gap-1" role="tablist" aria-label="Main sections">
+     <button role="tab" data-tab="learn" class="tab-btn tab-active flex items-center gap-2 px-5 py-3 font-medium text-sm rounded-t-lg transition-all" style="color: #E17055; border-color: #E17055;" aria-selected="true"> <i data-lucide="book-open" style="width:18px;height:18px;"></i> <span class="tab-label">Learn</span> </button> <button role="tab" data-tab="practice" class="tab-btn flex items-center gap-2 px-5 py-3 font-medium text-sm rounded-t-lg transition-all" style="color: #636E72;" aria-selected="false"> <i data-lucide="pencil" style="width:18px;height:18px;"></i> <span class="tab-label">Practice</span> </button> <button role="tab" data-tab="talk" class="tab-btn flex items-center gap-2 px-5 py-3 font-medium text-sm rounded-t-lg transition-all" style="color: #636E72;" aria-selected="false"> <i data-lucide="message-circle" style="width:18px;height:18px;"></i> <span class="tab-label">Talk</span> </button>
+    </nav>
+   </header>
+   <main class="max-w-3xl mx-auto px-4 py-6 pb-16">
+    <!-- LEARN TAB -->
+    <section id="tab-learn" class="tab-content fade-in" role="tabpanel">
+     <!-- What are they? -->
+     <div class="rounded-2xl p-6 mb-6 card-pop" style="background-color: #FFFFFF; border: 1px solid #E8D5B7;">
+      <h2 class="font-heading text-xl font-semibold mb-3 flex items-center gap-2" style="color: #2D3436;"><span style="background: #FDCB6E; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;">💡</span> What's the Difference?</h2>
+      <p class="leading-relaxed mb-4" style="color: #2D3436;">In English, nouns are divided into two groups based on whether you can <strong>count</strong> them or not. Understanding this helps you choose the right words like <em>a, an, some, much, many</em>.</p>
+      <div class="grid md:grid-cols-2 gap-4">
+       <!-- Countable -->
+       <div class="rounded-xl p-5" style="background: linear-gradient(135deg, #DFE6FD 0%, #E8F0FE 100%); border: 1px solid #B2C4F0;">
+        <h3 class="font-heading font-semibold text-lg mb-2" style="color: #2D3436;">✅ Countable Nouns</h3>
+        <p class="text-sm mb-3" style="color: #2D3436;">Things you can count: <strong>one, two, three…</strong></p>
+        <ul class="space-y-2 text-sm" style="color: #2D3436;">
+         <li class="flex items-start gap-2"><span style="color: #0984E3;">•</span> Have singular <em>and</em> plural forms<br><span class="tooltip-noun" style="border-color: #0984E3;"> one <strong>apple</strong> → two <strong>apples</strong> <span class="tooltip-box" style="background:#2D3436;color:#fff;">You can say "1 apple, 2 apples"</span> </span></li>
+         <li class="flex items-start gap-2"><span style="color: #0984E3;">•</span> Use <strong>a / an</strong>: <em>a book, an idea</em></li>
+         <li class="flex items-start gap-2"><span style="color: #0984E3;">•</span> Use <strong>many, few, a few</strong></li>
+         <li class="flex items-start gap-2"><span style="color: #0984E3;">•</span> Use <strong>How many…?</strong></li>
+        </ul>
+        <div class="mt-3 p-3 rounded-lg text-sm" style="background: rgba(255,255,255,0.7);">
+         <strong>More examples:</strong> cat, student, bottle, chair, question, friend, person
+        </div>
+       </div><!-- Uncountable -->
+       <div class="rounded-xl p-5" style="background: linear-gradient(135deg, #FDEBD0 0%, #FEF3E2 100%); border: 1px solid #F0D5A8;">
+        <h3 class="font-heading font-semibold text-lg mb-2" style="color: #2D3436;">🚫 Uncountable Nouns</h3>
+        <p class="text-sm mb-3" style="color: #2D3436;">Things you <strong>cannot count</strong> individually</p>
+        <ul class="space-y-2 text-sm" style="color: #2D3436;">
+         <li class="flex items-start gap-2"><span style="color: #E17055;">•</span> No plural form<br><span class="tooltip-noun" style="border-color: #E17055;"> <strong>water</strong> (NOT <s>waters</s>) <span class="tooltip-box" style="background:#2D3436;color:#fff;">You can't say "1 water, 2 waters"</span> </span></li>
+         <li class="flex items-start gap-2"><span style="color: #E17055;">•</span> <strong>No</strong> a / an: <em>some rice</em> (NOT <s>a rice</s>)</li>
+         <li class="flex items-start gap-2"><span style="color: #E17055;">•</span> Use <strong>much, little, a little</strong></li>
+         <li class="flex items-start gap-2"><span style="color: #E17055;">•</span> Use <strong>How much…?</strong></li>
+        </ul>
+        <div class="mt-3 p-3 rounded-lg text-sm" style="background: rgba(255,255,255,0.7);">
+         <strong>More examples:</strong> money, information, advice, music, traffic, homework
+        </div>
+       </div>
+      </div>
+     </div><!-- Key grammar rules -->
+     <div class="rounded-2xl p-6 mb-6 card-pop" style="background-color: #FFFFFF; border: 1px solid #E8D5B7; animation-delay: 0.15s;">
+      <h2 class="font-heading text-xl font-semibold mb-4 flex items-center gap-2" style="color: #2D3436;"><span style="background: #55EFC4; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;">📏</span> Key Grammar Rules</h2>
+      <div class="overflow-x-auto">
+       <table class="w-full text-sm border-collapse">
+        <thead>
+         <tr style="background: #F8F0E3;">
+          <th class="text-left p-3 rounded-tl-lg font-semibold" style="color: #2D3436;">Rule</th>
+          <th class="text-left p-3 font-semibold" style="color: #0984E3;">Countable ✅</th>
+          <th class="text-left p-3 rounded-tr-lg font-semibold" style="color: #E17055;">Uncountable 🚫</th>
+         </tr>
+        </thead>
+        <tbody style="color: #2D3436;">
+         <tr style="border-bottom: 1px solid #E8D5B7;">
+          <td class="p-3 font-medium">Article</td>
+          <td class="p-3">a / an / the</td>
+          <td class="p-3">the / some / ∅</td>
+         </tr>
+         <tr style="border-bottom: 1px solid #E8D5B7;">
+          <td class="p-3 font-medium">Quantity (a lot)</td>
+          <td class="p-3"><strong>many</strong> books</td>
+          <td class="p-3"><strong>much</strong> time</td>
+         </tr>
+         <tr style="border-bottom: 1px solid #E8D5B7;">
+          <td class="p-3 font-medium">Quantity (a little)</td>
+          <td class="p-3"><strong>a few</strong> friends</td>
+          <td class="p-3"><strong>a little</strong> sugar</td>
+         </tr>
+         <tr style="border-bottom: 1px solid #E8D5B7;">
+          <td class="p-3 font-medium">Question</td>
+          <td class="p-3">How <strong>many</strong>…?</td>
+          <td class="p-3">How <strong>much</strong>…?</td>
+         </tr>
+         <tr>
+          <td class="p-3 font-medium">some / any</td>
+          <td class="p-3">some eggs / any eggs</td>
+          <td class="p-3">some milk / any milk</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div><!-- Tricky nouns -->
+     <div class="rounded-2xl p-6 mb-6 card-pop" style="background-color: #FFFFFF; border: 1px solid #E8D5B7; animation-delay: 0.3s;">
+      <h2 class="font-heading text-xl font-semibold mb-3 flex items-center gap-2" style="color: #2D3436;"><span style="background: #FD79A8; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;">⚠️</span> Tricky Nouns to Remember</h2>
+      <p class="text-sm mb-4" style="color: #636E72;">These words confuse many learners! They look countable but are actually uncountable:</p>
+      <div class="flex flex-wrap gap-2">
+       <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">information</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">advice</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">furniture</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">luggage</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">news</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">homework</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">bread</span> <span class="px-3 py-2 rounded-full text-sm font-medium" style="background: #FFEAA7; color: #2D3436;">weather</span>
+      </div>
+      <div class="mt-4 p-4 rounded-xl text-sm" style="background: #F8F0E3; color: #2D3436;">
+       <strong>💡 Tip:</strong> To make uncountable nouns specific, use a <em>container</em> or <em>unit</em>:<br>
+        a <strong>piece</strong> of advice · a <strong>glass</strong> of water · a <strong>slice</strong> of bread · a <strong>piece</strong> of furniture
+      </div>
+     </div>
+    </section><!-- PRACTICE TAB -->
+    <section id="tab-practice" class="tab-content hidden" role="tabpanel">
+     <!-- Progress -->
+     <div class="mb-6 rounded-2xl p-5" style="background-color: #FFFFFF; border: 1px solid #E8D5B7;">
+      <div class="flex justify-between items-center mb-2">
+       <span class="text-sm font-medium" style="color: #2D3436;">Your Progress</span> <span id="score-display" class="text-sm font-bold" style="color: #E17055;">0 / 0</span>
+      </div>
+      <div class="w-full h-3 rounded-full" style="background: #E8D5B7;">
+       <div id="progress-bar" class="h-3 rounded-full progress-fill" style="width: 0%; background: linear-gradient(90deg, #E17055, #FDCB6E);"></div>
+      </div>
+     </div><!-- Activity 1: Sort -->
+     <div class="rounded-2xl p-6 mb-6 fade-in" style="background-color: #FFFFFF; border: 1px solid #E8D5B7;">
+      <h2 class="font-heading text-lg font-semibold mb-1 flex items-center gap-2" style="color: #2D3436;"><span style="background: #74B9FF; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">1</span> Sort the Nouns</h2>
+      <p class="text-sm mb-4" style="color: #636E72;">Tap each word to sort it into the correct category.</p>
+      <div id="sort-words" class="flex flex-wrap gap-2 mb-4 min-h-[44px]"></div>
+      <div class="grid grid-cols-2 gap-4">
+       <div class="rounded-xl p-4 min-h-[120px]" style="background: #DFE6FD; border: 2px dashed #B2C4F0;">
+        <h3 class="text-sm font-bold mb-2 text-center" style="color: #0984E3;">✅ Countable</h3>
+        <div id="sort-countable" class="flex flex-wrap gap-2 justify-center"></div>
+       </div>
+       <div class="rounded-xl p-4 min-h-[120px]" style="background: #FDEBD0; border: 2px dashed #F0D5A8;">
+        <h3 class="text-sm font-bold mb-2 text-center" style="color: #E17055;">🚫 Uncountable</h3>
+        <div id="sort-uncountable" class="flex flex-wrap gap-2 justify-center"></div>
+       </div>
+      </div>
+      <div id="sort-feedback" class="mt-3 text-sm font-medium text-center hidden"></div><button id="sort-reset" class="mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-80" style="background: #E8D5B7; color: #2D3436;"> <i data-lucide="refresh-cw" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i> Try New Words </button>
+     </div><!-- Activity 2: Fill in the blank -->
+     <div class="rounded-2xl p-6 mb-6 fade-in" style="background-color: #FFFFFF; border: 1px solid #E8D5B7;">
+      <h2 class="font-heading text-lg font-semibold mb-1 flex items-center gap-2" style="color: #2D3436;"><span style="background: #55EFC4; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">2</span> Fill in the Blank</h2>
+      <p class="text-sm mb-4" style="color: #636E72;">Choose the correct word to complete each sentence.</p>
+      <div id="fill-questions" class="space-y-4"></div><button id="fill-check" class="mt-5 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background: #E17055;"> <i data-lucide="check-circle" style="width:16px;height:16px;display:inline;vertical-align:middle;"></i> Check Answers </button> <button id="fill-reset" class="mt-5 ml-2 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:opacity-80" style="background: #E8D5B7; color: #2D3436;"> New Questions </button>
+      <div id="fill-feedback" class="mt-3 text-sm font-medium hidden"></div>
+     </div><!-- Activity 3: Error correction -->
+     <div class="rounded-2xl p-6 mb-6 fade-in" style="background-color: #FFFFFF; border: 1px solid #E8D5B7;">
+      <h2 class="font-heading text-lg font-semibold mb-1 flex items-center gap-2" style="color: #2D3436;"><span style="background: #FD79A8; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">3</span> Fix the Mistake</h2>
+      <p class="text-sm mb-4" style="color: #636E72;">Each sentence has one error. Type the corrected sentence.</p>
+      <div id="error-questions" class="space-y-5"></div><button id="error-check" class="mt-5 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90" style="background: #E17055;"> <i data-lucide="check-circle" style="width:16px;height:16px;display:inline;vertical-align:middle;"></i> Check Corrections </button> <button id="error-reset" class="mt-5 ml-2 px-4 py-3 rounded-xl text-sm font-medium transition-all hover:opacity-80" style="background: #E8D5B7; color: #2D3436;"> New Sentences </button>
+     </div>
+    </section><!-- TALK TAB -->
+    <section id="tab-talk" class="tab-content hidden" role="tabpanel">
+     <div class="rounded-2xl p-6 mb-6 fade-in" style="background-color: #FFFFFF; border: 1px solid #E8D5B7;">
+      <h2 class="font-heading text-xl font-semibold mb-2" style="color: #2D3436;">💬 Conversation Practice</h2>
+      <p class="text-sm mb-4" style="color: #636E72;">Use these prompts with a partner, teacher, or practice speaking aloud. Try to use countable and uncountable nouns correctly!</p>
+     </div>
+     <div id="convo-cards" class="space-y-4"></div><button id="new-prompts" class="mt-6 w-full px-6 py-4 rounded-xl text-sm font-bold text-white transition-all hover:opacity-90 flex items-center justify-center gap-2" style="background: #E17055;"> <i data-lucide="shuffle" style="width:18px;height:18px;"></i> Get New Prompts </button>
+    </section>
+   </main>
+  </div>
+  <script>
+    // ── Data ──
+    const sortPool = [
+      { word: 'apple', type: 'c' }, { word: 'music', type: 'u' }, { word: 'chair', type: 'c' },
+      { word: 'water', type: 'u' }, { word: 'student', type: 'c' }, { word: 'advice', type: 'u' },
+      { word: 'money', type: 'u' }, { word: 'bottle', type: 'c' }, { word: 'rice', type: 'u' },
+      { word: 'idea', type: 'c' }, { word: 'traffic', type: 'u' }, { word: 'friend', type: 'c' },
+      { word: 'sugar', type: 'u' }, { word: 'ticket', type: 'c' }, { word: 'bread', type: 'u' },
+      { word: 'homework', type: 'u' }, { word: 'question', type: 'c' }, { word: 'luggage', type: 'u' },
+      { word: 'newspaper', type: 'c' }, { word: 'information', type: 'u' }, { word: 'egg', type: 'c' },
+      { word: 'furniture', type: 'u' }, { word: 'coin', type: 'c' }, { word: 'weather', type: 'u' },
+      { word: 'people', type: 'u' }, { word: 'person', type: 'c' }, { word: 'crowd', type: 'u' },
+    ];
+
+    const fillPool = [
+      { sentence: 'I don\'t have ___ time today.', options: ['many', 'much'], answer: 'much' },
+      { sentence: 'There are ___ students in the class.', options: ['much', 'many'], answer: 'many' },
+      { sentence: 'Can I have ___ water, please?', options: ['a', 'some'], answer: 'some' },
+      { sentence: 'She gave me ___ good advice.', options: ['an', 'some'], answer: 'some' },
+      { sentence: 'How ___ money do you need?', options: ['many', 'much'], answer: 'much' },
+      { sentence: 'How ___ eggs do we need?', options: ['much', 'many'], answer: 'many' },
+      { sentence: 'I have ___ few friends in this city.', options: ['a', 'a little'], answer: 'a' },
+      { sentence: 'There is ___ sugar left in the jar.', options: ['a few', 'a little'], answer: 'a little' },
+      { sentence: 'We bought ___ new furniture.', options: ['a', 'some'], answer: 'some' },
+      { sentence: 'He ate ___ apple for lunch.', options: ['an', 'some'], answer: 'an' },
+      { sentence: 'I need ___ information about the course.', options: ['an', 'some'], answer: 'some' },
+      { sentence: 'She has ___ brothers and sisters.', options: ['much', 'many'], answer: 'many' },
+      { sentence: 'There are ___ people at the party.', options: ['much', 'many'], answer: 'many' },
+      { sentence: 'We don\'t have ___ people in the office today.', options: ['much', 'many'], answer: 'many' },
+    ];
+
+    const errorPool = [
+      { wrong: 'I need an advice about my job.', correct: 'I need some advice about my job.' },
+      { wrong: 'She has many money in the bank.', correct: 'She has much money in the bank.' },
+      { wrong: 'Can you give me an information?', correct: 'Can you give me some information?' },
+      { wrong: 'There are much people in the park.', correct: 'There are many people in the park.' },
+      { wrong: 'I bought a new furniture yesterday.', correct: 'I bought some new furniture yesterday.' },
+      { wrong: 'How many rice do you want?', correct: 'How much rice do you want?' },
+      { wrong: 'We don\'t have many time left.', correct: 'We don\'t have much time left.' },
+      { wrong: 'She gave me a good news.', correct: 'She gave me some good news.' },
+      { wrong: 'I have much friends at school.', correct: 'I have many friends at school.' },
+      { wrong: 'Can I have a water, please?', correct: 'Can I have some water, please?' },
+      { wrong: 'How many peoples are in your family?', correct: 'How many people are in your family?' },
+      { wrong: 'There is much people waiting outside.', correct: 'There are many people waiting outside.' },
+    ];
+
+    const convoPool = [
+      { topic: '🛒 Shopping', prompt: 'You\'re at a supermarket. Tell your partner what you need to buy. Use "some", "a few", and "a little" correctly.', hint: 'e.g., "I need some bread, a few tomatoes, and a little cheese."' },
+      { topic: '🍳 Cooking', prompt: 'Describe your favourite recipe. What ingredients do you need? How much or how many of each?', hint: 'e.g., "You need two eggs, some flour, and a little milk."' },
+      { topic: '🏠 Your Room', prompt: 'Describe the furniture and things in your room. Which items can you count?', hint: 'e.g., "I have a desk, two chairs, and some books. There isn\'t much space."' },
+      { topic: '✈️ Travel', prompt: 'You\'re packing for a trip. What are you taking? Talk about your luggage and belongings.', hint: 'e.g., "I\'m taking some clothes, a few books, and a little money."' },
+      { topic: '🎓 School Life', prompt: 'Tell your partner about your homework and study habits. What subjects do you study?', hint: 'e.g., "I have a lot of homework tonight. I don\'t have much free time."' },
+      { topic: '☀️ Weather', prompt: 'Describe the weather in your city during different seasons. What activities do you do?', hint: 'e.g., "We get a lot of rain in spring. There isn\'t much snow in winter."' },
+      { topic: '🍽️ At a Restaurant', prompt: 'Role-play ordering food at a restaurant. Ask about the menu and order your meal.', hint: 'e.g., "Can I have some soup and a sandwich? How much is the coffee?"' },
+      { topic: '🏙️ Your City', prompt: 'Describe your city or town. Talk about the traffic, the people, and the places.', hint: 'e.g., "There is a lot of traffic. There are many parks but not much green space downtown."' },
+    ];
+
+    // ── State ──
+    let score = 0;
+    let totalAttempted = 0;
+    let currentSortWords = [];
+    let currentFillQs = [];
+    let currentErrorQs = [];
+    let currentConvos = [];
+
+    // ── Utilities ──
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    function pick(arr, n) { return shuffle(arr).slice(0, n); }
+
+    // ── Tabs ──
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        tabBtns.forEach(b => {
+          b.classList.remove('tab-active');
+          b.style.color = '#636E72';
+          b.style.borderColor = 'transparent';
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('tab-active');
+        btn.style.color = '#E17055';
+        btn.style.borderColor = '#E17055';
+        btn.setAttribute('aria-selected', 'true');
+        tabContents.forEach(tc => tc.classList.add('hidden'));
+        const panel = document.getElementById('tab-' + target);
+        panel.classList.remove('hidden');
+        panel.classList.add('fade-in');
+      });
+    });
+
+    // ── Progress ──
+    function updateProgress() {
+      document.getElementById('score-display').textContent = `${score} / ${totalAttempted}`;
+      const pct = totalAttempted > 0 ? (score / totalAttempted) * 100 : 0;
+      document.getElementById('progress-bar').style.width = pct + '%';
+    }
+
+    // ── Activity 1: Sort ──
+    function initSort() {
+      currentSortWords = pick(sortPool, 8);
+      const container = document.getElementById('sort-words');
+      const countable = document.getElementById('sort-countable');
+      const uncountable = document.getElementById('sort-uncountable');
+      const feedback = document.getElementById('sort-feedback');
+      container.innerHTML = '';
+      countable.innerHTML = '';
+      uncountable.innerHTML = '';
+      feedback.classList.add('hidden');
+
+      currentSortWords.forEach(item => {
+        const btn = document.createElement('button');
+        btn.textContent = item.word;
+        btn.className = 'px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer hover:scale-105';
+        btn.style.background = '#F8F0E3';
+        btn.style.color = '#2D3436';
+        btn.style.border = '1px solid #E8D5B7';
+        btn.dataset.type = item.type;
+        btn.dataset.word = item.word;
+        btn.addEventListener('click', () => sortWord(btn));
+        container.appendChild(btn);
+      });
+    }
+
+    function sortWord(btn) {
+      const type = btn.dataset.type;
+      const word = btn.dataset.word;
+      btn.remove();
+
+      const tag = document.createElement('span');
+      tag.textContent = word;
+      tag.className = 'px-3 py-1.5 rounded-full text-xs font-medium card-pop';
+
+      // Always place in the category user intended (we check on click which side)
+      // We'll use a simple approach: first click goes to countable, hold shift for uncountable
+      // Actually better UX: show two drop targets. Let's make the word go where the user clicks.
+      // Updated: ask user which category via two-button approach
+      showSortChoice(word, type, btn);
+    }
+
+    function showSortChoice(word, correctType) {
+      const container = document.getElementById('sort-words');
+
+      // Create inline choice
+      const choiceDiv = document.createElement('div');
+      choiceDiv.className = 'flex gap-2 items-center px-3 py-2 rounded-xl card-pop';
+      choiceDiv.style.background = '#FFF8E7';
+      choiceDiv.style.border = '1px solid #FDCB6E';
+      choiceDiv.innerHTML = `
+        <span class="text-sm font-medium" style="color:#2D3436;">"${word}" is:</span>
+        <button class="sort-choice px-3 py-1.5 rounded-full text-xs font-bold hover:scale-105 transition-all" data-choice="c" style="background:#DFE6FD;color:#0984E3;border:1px solid #B2C4F0;">Countable</button>
+        <button class="sort-choice px-3 py-1.5 rounded-full text-xs font-bold hover:scale-105 transition-all" data-choice="u" style="background:#FDEBD0;color:#E17055;border:1px solid #F0D5A8;">Uncountable</button>
+      `;
+      container.prepend(choiceDiv);
+
+      choiceDiv.querySelectorAll('.sort-choice').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const chosen = btn.dataset.choice;
+          const isCorrect = chosen === correctType;
+          const targetId = chosen === 'c' ? 'sort-countable' : 'sort-uncountable';
+          const target = document.getElementById(targetId);
+
+          const tag = document.createElement('span');
+          tag.textContent = word;
+          tag.className = 'px-3 py-1.5 rounded-full text-xs font-medium card-pop';
+
+          if (isCorrect) {
+            tag.style.background = chosen === 'c' ? '#74B9FF' : '#FDCB6E';
+            tag.style.color = '#2D3436';
+            score++;
+          } else {
+            tag.style.background = '#FF7675';
+            tag.style.color = '#FFF';
+            // Move to correct side after delay
+            setTimeout(() => {
+              tag.remove();
+              const correctTarget = document.getElementById(correctType === 'c' ? 'sort-countable' : 'sort-uncountable');
+              const fixedTag = document.createElement('span');
+              fixedTag.textContent = word;
+              fixedTag.className = 'px-3 py-1.5 rounded-full text-xs font-medium card-pop';
+              fixedTag.style.background = correctType === 'c' ? '#74B9FF' : '#FDCB6E';
+              fixedTag.style.color = '#2D3436';
+              correctTarget.appendChild(fixedTag);
+            }, 800);
+          }
+          totalAttempted++;
+          updateProgress();
+
+          target.appendChild(tag);
+          choiceDiv.remove();
+
+          // Check if all done
+          if (container.querySelectorAll('button[data-word]').length === 0 && container.querySelectorAll('.sort-choice').length === 0) {
+            const fb = document.getElementById('sort-feedback');
+            fb.classList.remove('hidden');
+            fb.textContent = '🎉 All sorted! Try new words to keep practising.';
+            fb.style.color = '#00B894';
+          }
+        });
+      });
+    }
+
+    document.getElementById('sort-reset').addEventListener('click', initSort);
+
+    // ── Activity 2: Fill in the blank ──
+    function initFill() {
+      currentFillQs = pick(fillPool, 5);
+      const container = document.getElementById('fill-questions');
+      const feedback = document.getElementById('fill-feedback');
+      container.innerHTML = '';
+      feedback.classList.add('hidden');
+
+      currentFillQs.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'p-4 rounded-xl';
+        div.style.background = '#F8F0E3';
+        div.dataset.answer = q.answer;
+        div.dataset.index = i;
+
+        const shuffledOpts = shuffle(q.options);
+        div.innerHTML = `
+          <p class="text-sm mb-3 font-medium" style="color:#2D3436;">${i + 1}. ${q.sentence.replace('___', '<span style="border-bottom:2px dashed #E17055;padding:0 4px;">______</span>')}</p>
+          <div class="flex gap-2">
+            ${shuffledOpts.map(opt => `
+              <button class="fill-opt px-4 py-2 rounded-lg text-sm font-medium transition-all hover:scale-105" data-q="${i}" data-val="${opt}" style="background:#FFFFFF;color:#2D3436;border:1px solid #E8D5B7;">${opt}</button>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      container.querySelectorAll('.fill-opt').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const qIndex = btn.dataset.q;
+          container.querySelectorAll(`.fill-opt[data-q="${qIndex}"]`).forEach(b => {
+            b.style.background = '#FFFFFF';
+            b.style.border = '1px solid #E8D5B7';
+            b.style.color = '#2D3436';
+          });
+          btn.style.background = '#E17055';
+          btn.style.color = '#FFFFFF';
+          btn.style.border = '1px solid #E17055';
+        });
+      });
+    }
+
+    document.getElementById('fill-check').addEventListener('click', () => {
+      const container = document.getElementById('fill-questions');
+      const feedback = document.getElementById('fill-feedback');
+      let correct = 0;
+      let answered = 0;
+
+      currentFillQs.forEach((q, i) => {
+        const selected = container.querySelector(`.fill-opt[data-q="${i}"][style*="background: rgb(225, 112, 85)"]`) ||
+                         container.querySelector(`.fill-opt[data-q="${i}"][style*="background:#E17055"]`);
+
+        const allOpts = container.querySelectorAll(`.fill-opt[data-q="${i}"]`);
+
+        if (selected) {
+          answered++;
+          const val = selected.dataset.val;
+          if (val === q.answer) {
+            correct++;
+            selected.style.background = '#00B894';
+            selected.style.border = '1px solid #00B894';
+            selected.classList.add('pulse-correct');
+          } else {
+            selected.style.background = '#FF7675';
+            selected.style.border = '1px solid #FF7675';
+            selected.classList.add('shake');
+            // Highlight correct
+            allOpts.forEach(o => {
+              if (o.dataset.val === q.answer) {
+                o.style.background = '#00B894';
+                o.style.border = '1px solid #00B894';
+                o.style.color = '#FFFFFF';
+              }
+            });
+          }
+        }
+        allOpts.forEach(o => o.style.pointerEvents = 'none');
+      });
+
+      score += correct;
+      totalAttempted += answered;
+      updateProgress();
+
+      feedback.classList.remove('hidden');
+      feedback.textContent = answered === 0 ? '👆 Select an answer for each sentence first!' : `You got ${correct} out of ${answered} correct!`;
+      feedback.style.color = correct === answered ? '#00B894' : '#E17055';
+    });
+
+    document.getElementById('fill-reset').addEventListener('click', initFill);
+
+    // ── Activity 3: Error correction ──
+    function initError() {
+      currentErrorQs = pick(errorPool, 4);
+      const container = document.getElementById('error-questions');
+      container.innerHTML = '';
+
+      currentErrorQs.forEach((q, i) => {
+        const div = document.createElement('div');
+        div.className = 'rounded-xl p-4';
+        div.style.background = '#F8F0E3';
+        div.dataset.correct = q.correct.toLowerCase().trim();
+        div.innerHTML = `
+          <p class="text-sm mb-2" style="color:#636E72;">Wrong sentence:</p>
+          <p class="text-sm font-medium mb-3 p-3 rounded-lg" style="background:#FF7675;color:#FFF;display:inline-block;">"${q.wrong}"</p>
+          <div>
+            <label for="error-input-${i}" class="text-sm font-medium block mb-1" style="color:#2D3436;">Your correction:</label>
+            <input type="text" id="error-input-${i}" class="w-full px-4 py-3 rounded-lg text-sm" style="border:2px solid #E8D5B7;background:#FFFFFF;color:#2D3436;" placeholder="Type the corrected sentence..." data-index="${i}">
+          </div>
+          <div class="error-result mt-2 text-sm hidden"></div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById('error-check').addEventListener('click', () => {
+      const container = document.getElementById('error-questions');
+      let correct = 0;
+      let answered = 0;
+
+      currentErrorQs.forEach((q, i) => {
+        const input = document.getElementById('error-input-' + i);
+        const resultDiv = input.closest('.rounded-xl').querySelector('.error-result');
+        const userAnswer = input.value.trim().toLowerCase().replace(/[.!?]+$/, '');
+        const correctAnswer = q.correct.toLowerCase().replace(/[.!?]+$/, '');
+
+        if (userAnswer.length > 0) {
+          answered++;
+          resultDiv.classList.remove('hidden');
+          if (userAnswer === correctAnswer) {
+            correct++;
+            input.style.borderColor = '#00B894';
+            resultDiv.innerHTML = `<span style="color:#00B894;">✅ Correct!</span>`;
+            input.classList.add('pulse-correct');
+          } else {
+            input.style.borderColor = '#FF7675';
+            resultDiv.innerHTML = `<span style="color:#FF7675;">❌ The correct answer is: </span><strong style="color:#00B894;">"${q.correct}"</strong>`;
+            input.classList.add('shake');
+          }
+          input.readOnly = true;
+        }
+      });
+
+      score += correct;
+      totalAttempted += answered;
+      updateProgress();
+    });
+
+    document.getElementById('error-reset').addEventListener('click', initError);
+
+    // ── Conversation Prompts ──
+    function initConvo() {
+      currentConvos = pick(convoPool, 4);
+      const container = document.getElementById('convo-cards');
+      container.innerHTML = '';
+
+      currentConvos.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = 'rounded-2xl p-6 card-pop';
+        div.style.background = '#FFFFFF';
+        div.style.border = '1px solid #E8D5B7';
+        div.style.animationDelay = (i * 0.1) + 's';
+        div.innerHTML = `
+          <h3 class="font-heading text-lg font-semibold mb-2" style="color:#2D3436;">${c.topic}</h3>
+          <p class="text-sm leading-relaxed mb-3" style="color:#2D3436;">${c.prompt}</p>
+          <div class="p-3 rounded-lg text-sm" style="background:#F8F0E3;color:#636E72;">
+            <strong>💡 Example:</strong> ${c.hint}
+          </div>
+          <button class="convo-toggle mt-3 px-4 py-2 rounded-lg text-xs font-medium transition-all hover:opacity-80" style="background:#DFE6FD;color:#0984E3;border:1px solid #B2C4F0;">
+            <i data-lucide="lightbulb" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i> Show grammar tips
+          </button>
+          <div class="convo-tips hidden mt-3 p-3 rounded-lg text-sm" style="background:#E8F8F5;color:#2D3436;">
+            <strong>Remember:</strong> Use "How much…?" for uncountable nouns and "How many…?" for countable nouns. Use "some" in positive sentences and "any" in questions and negatives.
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      container.querySelectorAll('.convo-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tips = btn.nextElementSibling;
+          tips.classList.toggle('hidden');
+          btn.innerHTML = tips.classList.contains('hidden')
+            ? '<i data-lucide="lightbulb" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i> Show grammar tips'
+            : '<i data-lucide="eye-off" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i> Hide grammar tips';
+          lucide.createIcons();
+        });
+      });
+      lucide.createIcons();
+    }
+
+    document.getElementById('new-prompts').addEventListener('click', initConvo);
+
+    // ── Init ──
+    initSort();
+    initFill();
+    initError();
+    initConvo();
+    updateProgress();
+    lucide.createIcons();
+
+    // ── Element SDK ──
+    const defaultConfig = {
+      app_title: 'Noun Explorer',
+      welcome_message: 'Master countable & uncountable nouns at your own pace',
+      learn_tab_title: 'Learn',
+      practice_tab_title: 'Practice',
+      talk_tab_title: 'Talk',
+      background_color: '#FDF6EC',
+      surface_color: '#FFFFFF',
+      text_color: '#2D3436',
+      primary_action_color: '#E17055',
+      secondary_action_color: '#0984E3',
+      font_family: 'DM Sans',
+      font_size: 16
+    };
+
+    function applyConfig(config) {
+      const bg = config.background_color || defaultConfig.background_color;
+      const surface = config.surface_color || defaultConfig.surface_color;
+      const text = config.text_color || defaultConfig.text_color;
+      const primary = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondary = config.secondary_action_color || defaultConfig.secondary_action_color;
+      const font = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+
+      const app = document.getElementById('app');
+      app.style.backgroundColor = bg;
+
+      document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+      document.getElementById('welcome-msg').textContent = config.welcome_message || defaultConfig.welcome_message;
+
+      // Tab labels
+      const tabLabels = document.querySelectorAll('.tab-label');
+      if (tabLabels[0]) tabLabels[0].textContent = config.learn_tab_title || defaultConfig.learn_tab_title;
+      if (tabLabels[1]) tabLabels[1].textContent = config.practice_tab_title || defaultConfig.practice_tab_title;
+      if (tabLabels[2]) tabLabels[2].textContent = config.talk_tab_title || defaultConfig.talk_tab_title;
+
+      // Colors on surfaces
+      document.querySelectorAll('#tab-learn .rounded-2xl, #tab-practice .rounded-2xl, #tab-talk .rounded-2xl').forEach(el => {
+        if (el.style.backgroundColor === 'rgb(255, 255, 255)' || el.style.backgroundColor === '' || !el.style.backgroundColor) {
+          el.style.backgroundColor = surface;
+        }
+      });
+
+      // Text color
+      document.querySelectorAll('.font-heading').forEach(el => el.style.color = text);
+      document.getElementById('welcome-msg').style.color = text;
+
+      // Primary action buttons
+      document.querySelectorAll('#fill-check, #error-check, #new-prompts').forEach(el => el.style.background = primary);
+
+      // Active tab
+      document.querySelectorAll('.tab-btn.tab-active').forEach(el => {
+        el.style.color = primary;
+        el.style.borderColor = primary;
+      });
+
+      // Score
+      document.getElementById('score-display').style.color = primary;
+
+      // Progress bar gradient
+      document.getElementById('progress-bar').style.background = `linear-gradient(90deg, ${primary}, #FDCB6E)`;
+
+      // Header border
+      const header = document.querySelector('header');
+      header.style.backgroundColor = bg;
+
+      // Font
+      const baseFontStack = 'Arial, sans-serif';
+      document.body.style.fontFamily = `${font}, ${baseFontStack}`;
+
+      // Font size
+      document.body.style.fontSize = fontSize + 'px';
+      document.getElementById('app-title').style.fontSize = (fontSize * 1.75) + 'px';
+      document.getElementById('welcome-msg').style.fontSize = (fontSize * 0.875) + 'px';
+    }
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => { applyConfig(config); },
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+          { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } },
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+        }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ['app_title', config.app_title || defaultConfig.app_title],
+        ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+        ['learn_tab_title', config.learn_tab_title || defaultConfig.learn_tab_title],
+        ['practice_tab_title', config.practice_tab_title || defaultConfig.practice_tab_title],
+        ['talk_tab_title', config.talk_tab_title || defaultConfig.talk_tab_title],
+      ])
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dcd934bb3c0ebfe',t:'MTc3MzU5OTI4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
