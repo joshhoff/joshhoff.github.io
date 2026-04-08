@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To vs For Workshop</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['Fraunces', 'Georgia', 'serif'],
+        body: ['Source Sans 3', 'sans-serif']
+      }
+    }
+  }
+}
+</script>
+  <style>
+  html, body { height: 100%; margin: 0; }
+  .tab-active { border-bottom: 3px solid #1a2f23; color: #1a2f23; }
+  .tab-inactive { border-bottom: 3px solid transparent; color: #6b7f74; }
+  .fade-in { animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .rule-card { transition: all 0.2s ease; }
+  .rule-card:hover { transform: translateY(-2px); }
+  .correct-flash { animation: correctPulse 0.5s ease; }
+  @keyframes correctPulse { 0% { background-color: #d1fae5; } 100% { background-color: transparent; } }
+  .incorrect-flash { animation: incorrectPulse 0.5s ease; }
+  @keyframes incorrectPulse { 0% { background-color: #fee2e2; } 100% { background-color: transparent; } }
+  .prompt-bubble { position: relative; }
+  .prompt-bubble::before { content: ''; position: absolute; left: -8px; top: 12px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 8px solid #e8efe6; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background-color: #f4f1eb; font-family: 'Source Sans 3', sans-serif;">
+   <!-- Header -->
+   <header style="background-color: #1a2f23;" class="px-6 py-8 text-center relative"><button onclick="toggleLanguage()" class="absolute right-6 top-8 px-3 py-1.5 rounded-lg font-body font-600 text-xs transition-all hover:opacity-80" style="background: #3b6b4f; color: #e8d5b0;"> <span id="lang-btn">ES</span> </button>
+    <h1 id="main-title" class="font-display text-3xl md:text-4xl font-bold" style="color: #e8d5b0;">To vs For</h1>
+    <p id="subtitle" class="font-body mt-2 text-lg" style="color: #a8b8a0;">Master the difference at C1 level</p>
+    <div class="flex justify-center gap-1 mt-4">
+     <span class="inline-block w-2 h-2 rounded-full" style="background:#e8d5b0;"></span> <span class="inline-block w-2 h-2 rounded-full" style="background:#a8b8a0;"></span> <span class="inline-block w-2 h-2 rounded-full" style="background:#e8d5b0;"></span>
+    </div>
+   </header><!-- Tabs -->
+   <nav class="flex border-b sticky top-0 z-10 px-4" style="background-color: #f4f1eb; border-color: #d4cfc5;" role="tablist">
+    <button onclick="switchTab('learn')" id="tab-learn" role="tab" class="tab-active px-5 py-3 font-body font-600 text-sm tracking-wide uppercase transition-colors"></button> <button onclick="switchTab('convo')" id="tab-convo" role="tab" class="tab-inactive px-5 py-3 font-body font-600 text-sm tracking-wide uppercase transition-colors"></button> <button onclick="switchTab('practice')" id="tab-practice" role="tab" class="tab-inactive px-5 py-3 font-body font-600 text-sm tracking-wide uppercase transition-colors"></button>
+   </nav><!-- LEARN TAB -->
+   <section id="panel-learn" class="fade-in p-5 md:p-8 max-w-3xl mx-auto">
+    <h2 id="learn-heading" class="font-display text-2xl font-bold mb-6" style="color: #1a2f23;"></h2>
+    <div class="space-y-4">
+     <!-- TO rules -->
+     <div class="rule-card rounded-xl p-5 shadow-sm" style="background: #fff; border-left: 4px solid #3b6b4f;">
+      <h3 id="use-to-heading" class="font-display text-lg font-bold mb-3" style="color: #3b6b4f;"></h3>
+      <ul class="space-y-3 text-sm" style="color: #2d2d2d;">
+       <li id="to-rule-1"></li>
+       <li id="to-rule-2"></li>
+       <li id="to-rule-3"></li>
+       <li id="to-rule-4"></li>
+       <li id="to-rule-5"></li>
+      </ul>
+     </div><!-- FOR rules -->
+     <div class="rule-card rounded-xl p-5 shadow-sm" style="background: #fff; border-left: 4px solid #8b6d3f;">
+      <h3 id="use-for-heading" class="font-display text-lg font-bold mb-3" style="color: #8b6d3f;"></h3>
+      <ul class="space-y-3 text-sm" style="color: #2d2d2d;">
+       <li id="for-rule-1"></li>
+       <li id="for-rule-2"></li>
+       <li id="for-rule-3"></li>
+       <li id="for-rule-4"></li>
+       <li id="for-rule-5"></li>
+      </ul>
+     </div><!-- Tricky pairs -->
+     <div class="rule-card rounded-xl p-5 shadow-sm" style="background: #fff; border-left: 4px solid #6b5b8a;">
+      <h3 id="tricky-heading" class="font-display text-lg font-bold mb-3" style="color: #6b5b8a;"></h3>
+      <div class="space-y-3 text-sm" style="color:#2d2d2d;">
+       <div class="p-3 rounded-lg" style="background:#f8f5ff;">
+        <p id="tricky-1-title"></p>
+        <p id="tricky-1-content" style="color:#555;"></p>
+       </div>
+       <div class="p-3 rounded-lg" style="background:#f8f5ff;">
+        <p id="tricky-2-title"></p>
+        <p id="tricky-2-content" style="color:#555;"></p>
+       </div>
+       <div class="p-3 rounded-lg" style="background:#f8f5ff;">
+        <p id="tricky-3-title"></p>
+        <p id="tricky-3-content" style="color:#555;"></p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- CONVERSATION TAB -->
+   <section id="panel-convo" class="fade-in p-5 md:p-8 max-w-3xl mx-auto hidden">
+    <h2 id="convo-heading" class="font-display text-2xl font-bold mb-2" style="color: #1a2f23;"></h2>
+    <p id="convo-subtext" class="text-sm mb-6" style="color: #6b7f74;"></p>
+    <div id="convo-list" class="space-y-4"></div>
+   </section><!-- PRACTICE TAB -->
+   <section id="panel-practice" class="fade-in p-5 md:p-8 max-w-3xl mx-auto hidden">
+    <h2 id="practice-heading" class="font-display text-2xl font-bold mb-2" style="color: #1a2f23;"></h2><!-- Score -->
+    <div class="flex items-center justify-between mb-6">
+     <p id="practice-subtext" class="text-sm" style="color: #6b7f74;"></p>
+     <div id="score-display" class="font-display font-bold text-lg" style="color: #3b6b4f;">
+      0 / 0
+     </div>
+    </div>
+    <div id="quiz-list" class="space-y-3"></div><button onclick="resetQuiz()" class="mt-6 px-5 py-2.5 rounded-lg font-body font-600 text-sm transition-all hover:opacity-90" style="background: #1a2f23; color: #e8d5b0;"> <i data-lucide="refresh-cw" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> <span id="reset-btn"></span> </button>
+   </section>
+  </div>
+  <script>
+const defaultConfig = {
+  main_title: "To vs For",
+  subtitle: "Master the difference at C1 level",
+  bg_color: "#f4f1eb",
+  header_color: "#1a2f23",
+  accent_color: "#3b6b4f",
+  text_color: "#2d2d2d",
+  gold_color: "#e8d5b0",
+  font_family: "Fraunces",
+  font_size: 16
+};
+
+let currentLanguage = 'en';
+
+const translations = {
+  en: {
+    learn: "Learn",
+    conversation: "Conversation",
+    practice: "Practice",
+    learnHeading: "When do we use <em>to</em> vs <em>for</em>?",
+    useTo: "✦ Use TO",
+    toRule1: "<strong>Purpose / Reason (with a verb):</strong><br><span style=\"color:#555;\">I went to the shop <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to buy</mark> some milk.</span>",
+    toRule2: "<strong>Direction / Destination:</strong><br><span style=\"color:#555;\">She drove <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> the airport in record time.</span>",
+    toRule3: "<strong>Recipient of an action:</strong><br><span style=\"color:#555;\">He explained the policy <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> the new employees.</span>",
+    toRule4: "<strong>Time limit:</strong><br><span style=\"color:#555;\">The meeting is scheduled from 9 <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> 11.</span>",
+    toRule5: "<strong>Comparison:</strong><br><span style=\"color:#555;\">I prefer coffee <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> tea when I'm working late.</span>",
+    useFor: "✦ Use FOR",
+    forRule1: "<strong>Purpose / Reason (with a noun):</strong><br><span style=\"color:#555;\">I went to the shop <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> some milk.</span>",
+    forRule2: "<strong>Benefit / On behalf of:</strong><br><span style=\"color:#555;\">She volunteered <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> the charity every weekend.</span>",
+    forRule3: "<strong>Duration of time:</strong><br><span style=\"color:#555;\">They've been negotiating <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> three hours straight.</span>",
+    forRule4: "<strong>In favour of / Supporting:</strong><br><span style=\"color:#555;\">Are you <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> or against the proposal?</span>",
+    forRule5: "<strong>Exchange:</strong><br><span style=\"color:#555;\">I traded my old laptop <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> a newer model.</span>",
+    trickyHeading: "⚡ C1 Tricky Pairs",
+    tricky1Title: "\"Wait for\" vs \"Wait to\"",
+    tricky1Content: "I'm waiting <strong>for</strong> the results. (noun follows)<br>I'm waiting <strong>to</strong> hear back. (verb follows)",
+    tricky2Title: "\"Reason for\" vs \"Reason to\"",
+    tricky2Content: "What's the reason <strong>for</strong> the delay? (noun follows)<br>Is there any reason <strong>to</strong> worry? (verb follows)",
+    tricky3Title: "\"Responsible for\" — always FOR",
+    tricky3Content: "She's responsible <strong>for</strong> managing the entire project.",
+    convoHeading: "Conversation Prompts",
+    convoSubtext: "Speak aloud or write your answers. Click a prompt to reveal a model response.",
+    convoPrompt1: "Describe something you've been waiting a long time for. Why is it taking so long?",
+    convoModel1: "I've been waiting <strong>for</strong> a promotion <strong>for</strong> over a year now. The main reason <strong>for</strong> the delay is that the company restructured. I'm trying <strong>to</strong> remain patient, but it's hard <strong>to</strong> stay motivated when there's no clear timeline.",
+    convoPrompt2: "Talk about a gift you gave to someone. Who was it for and why?",
+    convoModel2: "Last month I bought a rare book <strong>for</strong> my father. I went <strong>to</strong> three different shops <strong>to</strong> find it. It was <strong>for</strong> his retirement — I wanted <strong>to</strong> give him something meaningful <strong>to</strong> mark the occasion.",
+    convoPrompt3: "Explain the reasons for choosing your current career path.",
+    convoModel3: "The main reason <strong>for</strong> my choice was my passion <strong>for</strong> problem-solving. I moved <strong>to</strong> Berlin <strong>to</strong> study engineering. I've worked <strong>for</strong> the same company <strong>for</strong> five years, and it's been incredibly rewarding <strong>to</strong> see my projects come <strong>to</strong> life.",
+    convoPrompt4: "Describe a time you had to make a trade-off or exchange.",
+    convoModel4: "I traded my apartment in the city <strong>for</strong> a house in the countryside. It was a difficult decision <strong>to</strong> make. The commute <strong>to</strong> work takes longer, but <strong>for</strong> me, the peace and quiet made it worth it. I did it <strong>for</strong> my family's wellbeing.",
+    convoPrompt5: "Who is someone you are responsible for, and what does that involve?",
+    convoModel5: "I'm responsible <strong>for</strong> mentoring three junior colleagues. I try <strong>to</strong> meet with each of them <strong>for</strong> at least an hour a week. It can be challenging <strong>to</strong> balance that with my own workload, but it's rewarding <strong>to</strong> see them grow.",
+    modelResponse: "Model Response",
+    practiceHeading: "Written Activities",
+    practiceSubtext: "Fill in each gap with <strong>to</strong> or <strong>for</strong>.",
+    resetBtn: "Reset All",
+    check: "Check",
+    quizItem1: "She applied",
+    quizItem1Gap: "for",
+    quizItem1After: "the position despite having little experience.",
+    quizItem2: "We need",
+    quizItem2Gap: "to",
+    quizItem2After: "address this issue before the deadline.",
+    quizItem3: "He's been studying",
+    quizItem3Gap: "for",
+    quizItem3After: "six hours without a break.",
+    quizItem4: "I sent the documents",
+    quizItem4Gap: "to",
+    quizItem4After: "the legal department yesterday.",
+    quizItem5: "This report is",
+    quizItem5Gap: "for",
+    quizItem5After: "the board of directors.",
+    quizItem6: "They travelled",
+    quizItem6Gap: "to",
+    quizItem6After: "Japan to attend the conference.",
+    quizItem7: "What's the best way",
+    quizItem7Gap: "to",
+    quizItem7After: "prepare for the exam?",
+    quizItem8: "She's been responsible",
+    quizItem8Gap: "for",
+    quizItem8After: "the entire marketing strategy.",
+    quizItem9: "I prefer working remotely",
+    quizItem9Gap: "to",
+    quizItem9After: "commuting every day.",
+    quizItem10: "He exchanged his euros",
+    quizItem10Gap: "for",
+    quizItem10After: "dollars at the airport.",
+    quizItem11: "Is there any reason",
+    quizItem11Gap: "to",
+    quizItem11After: "believe the data is inaccurate?",
+    quizItem12: "We're still waiting",
+    quizItem12Gap: "for",
+    quizItem12After: "confirmation from the supplier."
+  },
+  es: {
+    learn: "Aprende",
+    conversation: "Conversación",
+    practice: "Práctica",
+    learnHeading: "¿Cuándo usamos <em>to</em> vs <em>for</em>?",
+    useTo: "✦ Usa TO",
+    toRule1: "<strong>Propósito / Razón (con verbo):</strong><br><span style=\"color:#555;\">I went to the shop <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to buy</mark> some milk. (Fui a la tienda <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">para comprar</mark> leche.)</span>",
+    toRule2: "<strong>Dirección / Destino:</strong><br><span style=\"color:#555;\">She drove <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> the airport in record time. (Condujo <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">al</mark> aeropuerto en tiempo récord.)</span>",
+    toRule3: "<strong>Destinatario de una acción:</strong><br><span style=\"color:#555;\">He explained the policy <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> the new employees. (Explicó la política <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">a</mark> los nuevos empleados.)</span>",
+    toRule4: "<strong>Límite de tiempo:</strong><br><span style=\"color:#555;\">The meeting is scheduled from 9 <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> 11. (La reunión está programada de 9 <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">a</mark> 11.)</span>",
+    toRule5: "<strong>Comparación:</strong><br><span style=\"color:#555;\">I prefer coffee <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">to</mark> tea when I'm working late. (Prefiero café <mark style=\"background:#d1fae5;border-radius:3px;padding:0 3px;\">a</mark> té cuando trabajo hasta tarde.)</span>",
+    useFor: "✦ Usa FOR",
+    forRule1: "<strong>Propósito / Razón (con sustantivo):</strong><br><span style=\"color:#555;\">I went to the shop <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> some milk. (Fui a la tienda <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">por</mark> leche.)</span>",
+    forRule2: "<strong>Beneficio / En nombre de:</strong><br><span style=\"color:#555;\">She volunteered <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> the charity every weekend. (Se ofreció como voluntaria <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">para</mark> la caridad cada fin de semana.)</span>",
+    forRule3: "<strong>Duración de tiempo:</strong><br><span style=\"color:#555;\">They've been negotiating <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> three hours straight. (Han estado negociando <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">durante</mark> tres horas seguidas.)</span>",
+    forRule4: "<strong>A favor de / Apoyando:</strong><br><span style=\"color:#555;\">Are you <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> or against the proposal? (¿Estás <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">a favor</mark> o en contra de la propuesta?)</span>",
+    forRule5: "<strong>Intercambio:</strong><br><span style=\"color:#555;\">I traded my old laptop <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">for</mark> a newer model. (Cambié mi portátil viejo <mark style=\"background:#fef3c7;border-radius:3px;padding:0 3px;\">por</mark> uno más nuevo.)</span>",
+    trickyHeading: "⚡ Pares Complicados (Nivel C1)",
+    tricky1Title: "\"Wait for\" vs \"Wait to\"",
+    tricky1Content: "I'm waiting <strong>for</strong> the results. (Estoy esperando <strong>por</strong> los resultados.) (sustantivo)<br>I'm waiting <strong>to</strong> hear back. (Estoy esperando <strong>para</strong> saber.) (verbo)",
+    tricky2Title: "\"Reason for\" vs \"Reason to\"",
+    tricky2Content: "What's the reason <strong>for</strong> the delay? (¿Cuál es la razón <strong>por</strong> el retraso?) (sustantivo)<br>Is there any reason <strong>to</strong> worry? (¿Hay razón <strong>para</strong> preocuparse?) (verbo)",
+    tricky3Title: "\"Responsible for\" — siempre FOR",
+    tricky3Content: "She's responsible <strong>for</strong> managing the entire project. (Ella es responsable <strong>de</strong> gestionar todo el proyecto.)",
+    convoHeading: "Preguntas de Conversación",
+    convoSubtext: "Responde en voz alta o por escrito. Haz clic en una pregunta para ver una respuesta modelo.",
+    convoPrompt1: "Describe algo por lo que has estado esperando mucho tiempo. ¿Por qué está tardando tanto?",
+    convoModel1: "He estado esperando <strong>por</strong> un ascenso <strong>durante</strong> más de un año. La razón <strong>por</strong> la cual se retrasa es que la empresa se reestructuró. Estoy intentando <strong>permanecer</strong> paciente, pero es difícil <strong>mantener</strong> la motivación cuando no hay un cronograma claro.",
+    convoPrompt2: "Habla sobre un regalo que le diste a alguien. ¿Para quién era y por qué?",
+    convoModel2: "El mes pasado compré un libro raro <strong>para</strong> mi padre. Fui <strong>a</strong> tres tiendas diferentes <strong>para</strong> encontrarlo. Era <strong>para</strong> su jubilación — quería <strong>darle</strong> algo significativo <strong>para</strong> marcar la ocasión.",
+    convoPrompt3: "Explica las razones por las que elegiste tu carrera actual.",
+    convoModel3: "La razón principal <strong>por</strong> mi elección fue mi pasión <strong>por</strong> resolver problemas. Me mudé <strong>a</strong> Berlín <strong>para</strong> estudiar ingeniería. He trabajado <strong>para</strong> la misma empresa <strong>durante</strong> cinco años, y ha sido increíblemente gratificante <strong>ver</strong> mis proyectos cobrar vida.",
+    convoPrompt4: "Describe un momento en el que tuviste que hacer una compensación o cambio.",
+    convoModel4: "Cambié mi apartamento en la ciudad <strong>por</strong> una casa en el campo. Fue una decisión difícil <strong>de</strong> tomar. El viaje <strong>a</strong> trabajar tarda más, pero <strong>para</strong> mí, la paz y la tranquilidad lo hicieron valer la pena. Lo hice <strong>por</strong> el bienestar de mi familia.",
+    convoPrompt5: "¿Quién es alguien de quien eres responsable y qué implica eso?",
+    convoModel5: "Soy responsable <strong>de</strong> tutoría <strong>para</strong> tres colegas junior. Intento reunirme con cada uno de ellos <strong>durante</strong> al menos una hora a la semana. Puede ser un desafío <strong>equilibrar</strong> eso con mi propia carga de trabajo, pero es gratificante <strong>ver</strong> crecer.",
+    modelResponse: "Respuesta Modelo",
+    practiceHeading: "Actividades Escritas",
+    practiceSubtext: "Rellena cada espacio con <strong>to</strong> o <strong>for</strong>.",
+    resetBtn: "Reiniciar Todo",
+    check: "Verificar",
+    quizItem1: "Ella solicitó",
+    quizItem1Gap: "for",
+    quizItem1After: "el puesto a pesar de tener poca experiencia.",
+    quizItem2: "Necesitamos",
+    quizItem2Gap: "to",
+    quizItem2After: "abordar este problema antes de la fecha límite.",
+    quizItem3: "Él ha estado estudiando",
+    quizItem3Gap: "for",
+    quizItem3After: "seis horas seguidas.",
+    quizItem4: "Envié los documentos",
+    quizItem4Gap: "to",
+    quizItem4After: "el departamento legal ayer.",
+    quizItem5: "Este informe es",
+    quizItem5Gap: "for",
+    quizItem5After: "la junta directiva.",
+    quizItem6: "Viajaron",
+    quizItem6Gap: "to",
+    quizItem6After: "Japón para asistir a la conferencia.",
+    quizItem7: "¿Cuál es la mejor manera",
+    quizItem7Gap: "to",
+    quizItem7After: "prepararse para el examen?",
+    quizItem8: "Ha sido responsable",
+    quizItem8Gap: "for",
+    quizItem8After: "toda la estrategia de marketing.",
+    quizItem9: "Prefiero trabajar de forma remota",
+    quizItem9Gap: "to",
+    quizItem9After: "viajar diariamente.",
+    quizItem10: "Cambió sus euros",
+    quizItem10Gap: "for",
+    quizItem10After: "dólares en el aeropuerto.",
+    quizItem11: "¿Hay alguna razón",
+    quizItem11Gap: "to",
+    quizItem11After: "creer que los datos son inexactos?",
+    quizItem12: "Todavía estamos esperando",
+    quizItem12Gap: "for",
+    quizItem12After: "confirmación del proveedor."
+  }
+};
+
+function toggleLanguage() {
+  currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+  document.getElementById('lang-btn').textContent = currentLanguage === 'en' ? 'ES' : 'EN';
+  updateUI();
+}
+
+function updateUI() {
+  const t = translations[currentLanguage];
+  
+  // Update tabs
+  document.getElementById('tab-learn').textContent = t.learn;
+  document.getElementById('tab-convo').textContent = t.conversation;
+  document.getElementById('tab-practice').textContent = t.practice;
+  
+  // Update learn tab
+  document.getElementById('learn-heading').innerHTML = t.learnHeading;
+  document.getElementById('use-to-heading').textContent = t.useTo;
+  document.getElementById('use-for-heading').textContent = t.useFor;
+  document.getElementById('tricky-heading').textContent = t.trickyHeading;
+  
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById(`to-rule-${i}`).innerHTML = t[`toRule${i}`];
+    document.getElementById(`for-rule-${i}`).innerHTML = t[`forRule${i}`];
+  }
+  
+  document.getElementById('tricky-1-title').textContent = t.tricky1Title;
+  document.getElementById('tricky-1-content').innerHTML = t.tricky1Content;
+  document.getElementById('tricky-2-title').textContent = t.tricky2Title;
+  document.getElementById('tricky-2-content').innerHTML = t.tricky2Content;
+  document.getElementById('tricky-3-title').textContent = t.tricky3Title;
+  document.getElementById('tricky-3-content').innerHTML = t.tricky3Content;
+  
+  // Update convo tab
+  document.getElementById('convo-heading').textContent = t.convoHeading;
+  document.getElementById('convo-subtext').textContent = t.convoSubtext;
+  buildConversations();
+  
+  // Update practice tab
+  document.getElementById('practice-heading').textContent = t.practiceHeading;
+  document.getElementById('practice-subtext').innerHTML = t.practiceSubtext;
+  document.getElementById('reset-btn').textContent = t.resetBtn;
+  buildQuiz();
+}
+
+const conversationPrompts = [
+  { keyPrompt: 'convoPrompt1', keyModel: 'convoModel1' },
+  { keyPrompt: 'convoPrompt2', keyModel: 'convoModel2' },
+  { keyPrompt: 'convoPrompt3', keyModel: 'convoModel3' },
+  { keyPrompt: 'convoPrompt4', keyModel: 'convoModel4' },
+  { keyPrompt: 'convoPrompt5', keyModel: 'convoModel5' }
+];
+
+const quizQuestions = [
+  { before: 'quizItem1', gap: 'quizItem1Gap', after: 'quizItem1After' },
+  { before: 'quizItem2', gap: 'quizItem2Gap', after: 'quizItem2After' },
+  { before: 'quizItem3', gap: 'quizItem3Gap', after: 'quizItem3After' },
+  { before: 'quizItem4', gap: 'quizItem4Gap', after: 'quizItem4After' },
+  { before: 'quizItem5', gap: 'quizItem5Gap', after: 'quizItem5After' },
+  { before: 'quizItem6', gap: 'quizItem6Gap', after: 'quizItem6After' },
+  { before: 'quizItem7', gap: 'quizItem7Gap', after: 'quizItem7After' },
+  { before: 'quizItem8', gap: 'quizItem8Gap', after: 'quizItem8After' },
+  { before: 'quizItem9', gap: 'quizItem9Gap', after: 'quizItem9After' },
+  { before: 'quizItem10', gap: 'quizItem10Gap', after: 'quizItem10After' },
+  { before: 'quizItem11', gap: 'quizItem11Gap', after: 'quizItem11After' },
+  { before: 'quizItem12', gap: 'quizItem12Gap', after: 'quizItem12After' }
+];
+
+let quizState = {};
+
+function switchTab(tab) {
+  ['learn','convo','practice'].forEach(t => {
+    document.getElementById('panel-' + t).classList.toggle('hidden', t !== tab);
+    const btn = document.getElementById('tab-' + t);
+    btn.className = t === tab ? 'tab-active px-5 py-3 font-body font-600 text-sm tracking-wide uppercase transition-colors' : 'tab-inactive px-5 py-3 font-body font-600 text-sm tracking-wide uppercase transition-colors';
+  });
+}
+
+function buildConversations() {
+  const t = translations[currentLanguage];
+  const container = document.getElementById('convo-list');
+  container.innerHTML = conversationPrompts.map((c, i) => `
+    <div class="rounded-xl overflow-hidden shadow-sm" style="background:#fff;">
+      <button onclick="toggleConvo(${i})" class="w-full text-left p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors">
+        <span class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style="background:#e8efe6;color:#3b6b4f;">${i+1}</span>
+        <span class="font-body text-sm" style="color:#2d2d2d;">${t[c.keyPrompt]}</span>
+        <i data-lucide="chevron-down" id="chev-${i}" style="width:18px;height:18px;flex-shrink:0;margin-top:2px;color:#aaa;transition:transform 0.2s;"></i>
+      </button>
+      <div id="convo-answer-${i}" class="hidden px-4 pb-4">
+        <div class="ml-11 prompt-bubble p-4 rounded-lg text-sm leading-relaxed" style="background:#e8efe6;color:#2d2d2d;">
+          <p class="font-bold text-xs uppercase tracking-wide mb-2" style="color:#3b6b4f;">${t.modelResponse}</p>
+          ${t[c.keyModel]}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons();
+}
+
+function toggleConvo(i) {
+  const el = document.getElementById('convo-answer-' + i);
+  const chev = document.getElementById('chev-' + i);
+  const isHidden = el.classList.contains('hidden');
+  el.classList.toggle('hidden');
+  chev.style.transform = isHidden ? 'rotate(180deg)' : '';
+}
+
+function buildQuiz() {
+  const t = translations[currentLanguage];
+  quizState = {};
+  const container = document.getElementById('quiz-list');
+  container.innerHTML = quizQuestions.map((q, i) => `
+    <div id="quiz-row-${i}" class="rounded-xl p-4 shadow-sm flex flex-wrap items-center gap-2 text-sm transition-colors" style="background:#fff;color:#2d2d2d;">
+      <span class="font-bold mr-1" style="color:#6b7f74;">${i+1}.</span>
+      <span>${t[q.before]}</span>
+      <input id="quiz-input-${i}" type="text" maxlength="4" placeholder="___" class="w-16 text-center border-b-2 outline-none font-bold py-1 bg-transparent" style="border-color:#d4cfc5;color:#1a2f23;" onkeydown="if(event.key==='Enter')checkAnswer(${i})" aria-label="Fill in to or for for question ${i+1}">
+      <span>${t[q.after]}</span>
+      <button onclick="checkAnswer(${i})" class="ml-auto px-3 py-1 rounded-md text-xs font-600 transition-all hover:opacity-80" style="background:#1a2f23;color:#e8d5b0;">${t.check}</button>
+      <span id="quiz-fb-${i}" class="text-xs font-bold ml-1"></span>
+    </div>
+  `).join('');
+  updateScore();
+}
+
+function checkAnswer(i) {
+  const t = translations[currentLanguage];
+  const input = document.getElementById('quiz-input-' + i);
+  const fb = document.getElementById('quiz-fb-' + i);
+  const row = document.getElementById('quiz-row-' + i);
+  const val = input.value.trim().toLowerCase();
+  if (!val) return;
+  const correctAnswer = t[quizQuestions[i].gap];
+  const correct = val === correctAnswer;
+  quizState[i] = correct;
+  fb.textContent = correct ? '✓ ' + (currentLanguage === 'en' ? 'Correct' : 'Correcto') : `✗ "${correctAnswer}"`;
+  fb.style.color = correct ? '#16a34a' : '#dc2626';
+  input.disabled = true;
+  input.value = correctAnswer;
+  input.style.borderColor = correct ? '#16a34a' : '#dc2626';
+  row.classList.add(correct ? 'correct-flash' : 'incorrect-flash');
+  updateScore();
+}
+
+function updateScore() {
+  const answered = Object.keys(quizState).length;
+  const correct = Object.values(quizState).filter(Boolean).length;
+  document.getElementById('score-display').textContent = `${correct} / ${quizQuestions.length}`;
+}
+
+function resetQuiz() {
+  buildQuiz();
+}
+
+// Init
+updateUI();
+
+// Element SDK
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const c = { ...defaultConfig, ...config };
+    const font = c.font_family || defaultConfig.font_family;
+    const baseSize = c.font_size || defaultConfig.font_size;
+    
+    document.getElementById('main-title').style.fontFamily = `${font}, Georgia, serif`;
+    document.getElementById('main-title').style.fontSize = `${baseSize * 2}px`;
+    document.getElementById('subtitle').style.fontSize = `${baseSize * 1.1}px`;
+    document.getElementById('app').style.backgroundColor = c.bg_color;
+  },
+  mapToCapabilities: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return {
+      recolorables: [
+        { get: () => c.bg_color || defaultConfig.bg_color, set: (v) => { c.bg_color = v; window.elementSdk.setConfig({ bg_color: v }); } },
+        { get: () => c.header_color || defaultConfig.header_color, set: (v) => { c.header_color = v; window.elementSdk.setConfig({ header_color: v }); } },
+        { get: () => c.text_color || defaultConfig.text_color, set: (v) => { c.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => c.accent_color || defaultConfig.accent_color, set: (v) => { c.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+        { get: () => c.gold_color || defaultConfig.gold_color, set: (v) => { c.gold_color = v; window.elementSdk.setConfig({ gold_color: v }); } }
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => c.font_family || defaultConfig.font_family,
+        set: (v) => { c.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+      },
+      fontSizeable: {
+        get: () => c.font_size || defaultConfig.font_size,
+        set: (v) => { c.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+      }
+    };
+  },
+  mapToEditPanelValues: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return new Map([
+      ["main_title", c.main_title],
+      ["subtitle", c.subtitle]
+    ]);
+  }
+});
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e8e07ad11d775a0',t:'MTc3NTYxNzMxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
