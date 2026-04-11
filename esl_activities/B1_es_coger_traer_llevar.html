@@ -251,9 +251,7 @@
    <div id="panel-practice" class="tab-panel hidden max-w-4xl mx-auto px-6 py-10">
     <div class="text-center mb-8">
      <h2 class="font-display text-3xl mb-2" style="color: #f5e6c4;">Practice Quiz</h2>
-     <p class="opacity-60">Choose the correct verb for each sentence</p>
-     <div class="mt-4 flex justify-center gap-4 items-center"><span id="score-display" class="text-sm font-semibold" style="color: #c9a227;">Score: 0 / 0</span> <button onclick="resetQuiz()" class="text-xs px-3 py-1 rounded-full font-semibold" style="background: #2a2a2a; color: #c9a227;">Reset</button>
-     </div>
+     <p class="opacity-60">Study the correct answers below</p>
     </div>
     <div id="quiz-container"></div>
    </div><!-- CONVERSATION TAB -->
@@ -360,8 +358,6 @@
       { sentence: '"___ my hand and hold it tight."', answer: 'Grab', options: ['Grab', 'Take', 'Bring'], englishHint: 'The action of holding', spanishEquivalent: 'Coge mi mano.' }
     ];
 
-    let score = 0, answered = 0;
-
     function buildQuiz() {
       const container = document.getElementById('quiz-container');
       container.innerHTML = '';
@@ -372,69 +368,27 @@
         div.style.border = '1px solid #2a2a2a';
         div.style.animationDelay = (i * 0.08) + 's';
         
-        const questionHtml = `
-          <p class="text-sm opacity-50 mb-2">Question ${i + 1} of ${quizData.length}</p>
-          <p class="text-lg font-semibold mb-2" style="color:#f5e6c4;">${q.sentence}</p>
-          <p class="text-xs mb-1 opacity-40 italic">📍 ${q.englishHint}</p>
-          <p class="text-xs mb-4 opacity-30 italic">Equivalent: ${q.spanishEquivalent}</p>
-          <div class="flex flex-wrap gap-3 mb-4" id="q-${i}">
-        `;
-        
         let optionsHtml = '';
         q.options.forEach(o => {
-          optionsHtml += `<button class="quiz-option" data-answer="${o}" style="background:#0f1419;color:#c9a227;border:2px solid #2a2a2a;padding:10px 20px;border-radius:9999px;font-weight:600;font-size:14px;cursor:pointer;">${o}</button>`;
+          optionsHtml += `<span style="background:#0f1419;color:#c9a227;border:2px solid #2a2a2a;padding:8px 16px;border-radius:9999px;font-weight:600;font-size:14px;display:inline-block;margin-right:8px;margin-bottom:8px;">${o}</span>`;
         });
         
-        div.innerHTML = questionHtml + optionsHtml + `
+        div.innerHTML = `
+          <p class="text-sm opacity-50 mb-2">Question ${i + 1} of ${quizData.length}</p>
+          <p class="text-lg font-semibold mb-4" style="color:#f5e6c4;">${q.sentence}</p>
+          <p class="text-sm mb-4 opacity-60">Which verb fits best?</p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            ${optionsHtml}
           </div>
-          <p id="fb-${i}" class="text-sm mt-3 hidden"></p>
+          <div class="rounded-xl p-4 border-l-4" style="background:#1a2010;border-color:#a3c45a;">
+            <p class="text-sm mb-2" style="color:#a3c45a;">✓ Correct answer: <strong>${q.answer}</strong></p>
+            <p class="text-xs mb-2 opacity-70">📍 ${q.englishHint}</p>
+            <p class="text-xs opacity-60 italic">🇪🇸 ${q.spanishEquivalent}</p>
+          </div>
         `;
         
         container.appendChild(div);
-        
-        // Attach click handlers after creating buttons
-        div.querySelectorAll('.quiz-option').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const chosen = this.getAttribute('data-answer');
-            checkAnswer(i, chosen, this);
-          });
-        });
       });
-    }
-
-    function checkAnswer(i, chosen, btn) {
-      const wrap = document.getElementById('q-' + i);
-      if (wrap.dataset.answered === 'true') return;
-      wrap.dataset.answered = 'true';
-      answered++;
-      const correct = quizData[i].answer;
-      const fb = document.getElementById('fb-' + i);
-      fb.classList.remove('hidden');
-
-      wrap.querySelectorAll('.quiz-option').forEach(b => {
-        b.style.pointerEvents = 'none';
-        if (b.getAttribute('data-answer') === correct) {
-          b.classList.add('correct-answer');
-        }
-      });
-
-      if (chosen === correct) {
-        score++;
-        fb.textContent = '✅ Correct!';
-        fb.style.color = '#a3c45a';
-      } else {
-        btn.classList.add('wrong-answer');
-        fb.textContent = `❌ The correct answer is "${correct}"`;
-        fb.style.color = '#f87171';
-      }
-      document.getElementById('score-display').textContent = `Score: ${score} / ${answered}`;
-    }
-
-    function resetQuiz() {
-      score = 0;
-      answered = 0;
-      document.getElementById('score-display').textContent = 'Score: 0 / 0';
-      buildQuiz();
     }
 
     // ---- CONVERSATIONS ----
@@ -529,5 +483,5 @@
     buildConversations();
     lucide.createIcons();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eabf141e3a2ebbb',t:'MTc3NTkzMDk2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eabf922d6d6df2b',t:'MTc3NTkzMTI5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
