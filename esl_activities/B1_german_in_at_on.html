@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preposition Power</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+html, body { height: 100%; margin: 0; }
+* { box-sizing: border-box; }
+.font-display { font-family: 'Fredoka', sans-serif; }
+.font-body { font-family: 'Nunito', sans-serif; }
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes slideUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.anim-pop { animation: popIn 0.4s ease-out forwards; }
+.anim-slide { animation: slideUp 0.4s ease-out forwards; }
+.anim-float { animation: float 3s ease-in-out infinite; }
+.anim-delay-1 { animation-delay: 0.1s; }
+.anim-delay-2 { animation-delay: 0.2s; }
+.anim-delay-3 { animation-delay: 0.3s; }
+.anim-delay-4 { animation-delay: 0.4s; }
+
+.tab-btn { transition: all 0.2s; }
+.tab-btn.active { transform: translateY(-2px); }
+
+.quiz-option { transition: all 0.15s; cursor: pointer; }
+.quiz-option:hover { transform: scale(1.03); }
+.quiz-option.correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+.quiz-option.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; }
+
+.rule-card { transition: transform 0.2s; }
+.rule-card:hover { transform: translateY(-3px); }
+
+.convo-bubble { position: relative; border-radius: 18px; }
+.convo-bubble::after {
+  content: ''; position: absolute; bottom: -8px; left: 24px;
+  width: 16px; height: 16px; background: inherit;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.fill-blank-input {
+  border-bottom: 2px dashed currentColor;
+  background: transparent;
+  text-align: center;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  min-width: 60px;
+  max-width: 80px;
+  transition: border-color 0.2s;
+}
+.fill-blank-input:focus { border-bottom-style: solid; }
+.fill-blank-input.correct-answer { border-color: #10b981; color: #059669; }
+.fill-blank-input.wrong-answer { border-color: #ef4444; color: #dc2626; }
+
+.progress-dot { width: 10px; height: 10px; border-radius: 50%; transition: all 0.3s; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body">
+  <div id="app" class="h-full w-full overflow-auto" style="background: #FFF8F0;"><!-- Header -->
+   <header class="sticky top-0 z-30" style="background: #FF6B35;">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+     <div class="flex items-center gap-2"><span class="text-3xl anim-float">📍</span>
+      <h1 id="appTitle" class="font-display text-xl md:text-2xl font-bold text-white">Preposition Power</h1>
+     </div>
+     <div class="flex items-center gap-1"><span id="scoreDisplay" class="font-display text-white font-bold text-lg">⭐ 0</span>
+     </div>
+    </div><!-- Tabs -->
+    <nav class="max-w-3xl mx-auto px-4 flex gap-2 pb-2" role="tablist"><button class="tab-btn active font-display text-sm font-600 px-3 py-1.5 rounded-full text-white" style="background:#D94F1A;" data-tab="learn" role="tab" aria-selected="true" onclick="switchTab('learn')">📖 Learn</button> <button class="tab-btn font-display text-sm font-600 px-3 py-1.5 rounded-full text-white/70" style="background:transparent;" data-tab="practice" role="tab" aria-selected="false" onclick="switchTab('practice')">✏️ Practice</button> <button class="tab-btn font-display text-sm font-600 px-3 py-1.5 rounded-full text-white/70" style="background:transparent;" data-tab="quiz" role="tab" aria-selected="false" onclick="switchTab('quiz')">🎯 Quiz</button> <button class="tab-btn font-display text-sm font-600 px-3 py-1.5 rounded-full text-white/70" style="background:transparent;" data-tab="talk" role="tab" aria-selected="false" onclick="switchTab('talk')">💬 Talk</button>
+    </nav>
+   </header>
+   <main class="max-w-3xl mx-auto px-4 py-6 pb-20"><!-- LEARN TAB -->
+    <section id="tab-learn" class="tab-content">
+     <p id="encourageText" class="text-center font-display text-lg mb-6" style="color: #FF6B35;">Du schaffst das! You got this! 💪</p><!-- German Context Banner -->
+     <div class="rounded-2xl p-4 mb-6 anim-slide" style="background: #2D3047; color: #FFF8F0;">
+      <p class="font-display font-bold text-base mb-1">🇩🇪 Warum ist das schwer?</p>
+      <p class="text-sm opacity-90">Im Deutschen benutzt du oft <strong>"in"</strong>, <strong>"an"</strong> und <strong>"auf"</strong> — aber sie passen nicht immer 1:1 zu <strong>in</strong>, <strong>at</strong> und <strong>on</strong> auf Englisch! Lass uns die Unterschiede lernen.</p>
+     </div><!-- IN -->
+     <div class="rule-card rounded-2xl p-5 mb-4 anim-slide anim-delay-1" style="background: #4ECDC4; color: #1a3a37;">
+      <h2 class="font-display text-2xl font-bold mb-1">📦 IN</h2>
+      <p class="font-bold text-sm mb-3">= inside something / drinnen</p>
+      <div class="space-y-2 text-sm">
+       <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.4);">
+        <p class="font-bold">🕐 Time — Months, Years, Seasons, Parts of Day</p>
+        <p><strong>in</strong> January · <strong>in</strong> 2024 · <strong>in</strong> summer · <strong>in</strong> the morning</p>
+        <p class="text-xs mt-1 opacity-80">🇩🇪 <em>im Januar, im Jahr 2024, im Sommer, am Morgen</em> ← Achtung! "am Morgen" ist <strong>in</strong> the morning, nicht "at"!</p>
+       </div>
+       <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.4);">
+        <p class="font-bold">📍 Place — Countries, Cities, Rooms</p>
+        <p><strong>in</strong> Germany · <strong>in</strong> Berlin · <strong>in</strong> the kitchen · <strong>in</strong> the car</p>
+        <p class="text-xs mt-1 opacity-80">🇩🇪 <em>in Deutschland, in Berlin, in der Küche</em> — das passt! ✅</p>
+       </div>
+      </div>
+     </div><!-- AT -->
+     <div class="rule-card rounded-2xl p-5 mb-4 anim-slide anim-delay-2" style="background: #FFE66D; color: #3d3500;">
+      <h2 class="font-display text-2xl font-bold mb-1">📌 AT</h2>
+      <p class="font-bold text-sm mb-3">= exact point or spot / genau an einem Punkt</p>
+      <div class="space-y-2 text-sm">
+       <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.5);">
+        <p class="font-bold">🕐 Time — Exact Times, Mealtimes, Night</p>
+        <p><strong>at</strong> 3 o'clock · <strong>at</strong> noon · <strong>at</strong> night · <strong>at</strong> lunchtime</p>
+        <p class="text-xs mt-1 opacity-80">🇩🇪 <em>um 3 Uhr, am Mittag, in der Nacht</em> ← "in der Nacht" wird zu <strong>at</strong> night!</p>
+       </div>
+       <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.5);">
+        <p class="font-bold">📍 Place — Specific Spots, Buildings</p>
+        <p><strong>at</strong> school · <strong>at</strong> the bus stop · <strong>at</strong> home · <strong>at</strong> the door</p>
+        <p class="text-xs mt-1 opacity-80">🇩🇪 <em>in der Schule</em> ← "in der Schule" wird zu <strong>at</strong> school! Tricky!</p>
+       </div>
+      </div>
+     </div><!-- ON -->
+     <div class="rule-card rounded-2xl p-5 mb-4 anim-slide anim-delay-3" style="background: #FF6B6B; color: #3d0e0e;">
+      <h2 class="font-display text-2xl font-bold mb-1">📄 ON</h2>
+      <p class="font-bold text-sm mb-3">= on a surface or specific day / auf einer Oberfläche</p>
+      <div class="space-y-2 text-sm">
+       <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.4);">
+        <p class="font-bold">🕐 Time — Days &amp; Dates</p>
+        <p><strong>on</strong> Monday · <strong>on</strong> my birthday · <strong>on</strong> December 25th</p>
+        <p class="text-xs mt-1 opacity-80">🇩🇪 <em>am Montag, an meinem Geburtstag</em> ← "am" → <strong>on</strong> für Tage!</p>
+       </div>
+       <div class="rounded-xl p-3" style="background: rgba(255,255,255,0.4);">
+        <p class="font-bold">📍 Place — Surfaces, Streets, Floors</p>
+        <p><strong>on</strong> the table · <strong>on</strong> the wall · <strong>on</strong> Main Street · <strong>on</strong> the 2nd floor</p>
+        <p class="text-xs mt-1 opacity-80">🇩🇪 <em>auf dem Tisch, an der Wand, in der Hauptstraße</em> ← Alle anders!</p>
+       </div>
+      </div>
+     </div><!-- Quick Reference -->
+     <div class="rounded-2xl p-5 anim-slide anim-delay-4" style="background: #2D3047; color: #FFF8F0;">
+      <h3 class="font-display font-bold text-lg mb-3">⚡ Quick Cheat Sheet</h3>
+      <div class="grid grid-cols-3 gap-2 text-center text-sm">
+       <div class="rounded-xl p-2" style="background: #4ECDC4; color: #1a3a37;">
+        <p class="font-bold">IN</p>
+        <p>months</p>
+        <p>years</p>
+        <p>seasons</p>
+        <p>morning/afternoon</p>
+        <p>countries</p>
+        <p>cities</p>
+       </div>
+       <div class="rounded-xl p-2" style="background: #FFE66D; color: #3d3500;">
+        <p class="font-bold">AT</p>
+        <p>clock times</p>
+        <p>night</p>
+        <p>noon</p>
+        <p>weekend*</p>
+        <p>school</p>
+        <p>home</p>
+       </div>
+       <div class="rounded-xl p-2" style="background: #FF6B6B; color: #3d0e0e;">
+        <p class="font-bold">ON</p>
+        <p>days</p>
+        <p>dates</p>
+        <p>birthday</p>
+        <p>the table</p>
+        <p>the wall</p>
+        <p>streets</p>
+       </div>
+      </div>
+      <p class="text-xs mt-2 opacity-60">*British English: "at the weekend" / American English: "on the weekend"</p>
+     </div>
+    </section><!-- PRACTICE TAB (Fill in the blank) -->
+    <section id="tab-practice" class="tab-content hidden">
+     <h2 class="font-display text-xl font-bold mb-1" style="color: #2D3047;">✏️ Fill in the Blank</h2>
+     <p class="text-sm mb-4" style="color: #666;">Type <strong>in</strong>, <strong>at</strong>, or <strong>on</strong>. Then click "Check" to see how you did!</p>
+     <div id="practiceContainer" class="space-y-3"></div>
+     <div class="flex gap-3 mt-6"><button onclick="checkPractice()" class="font-display font-bold px-6 py-2.5 rounded-full text-white" style="background:#FF6B35;">Check Answers ✓</button> <button onclick="resetPractice()" class="font-display font-bold px-6 py-2.5 rounded-full" style="background:#e5e5e5; color:#333;">Try Again 🔄</button>
+     </div>
+     <div id="practiceResult" class="mt-4 font-display font-bold text-lg hidden"></div>
+    </section><!-- QUIZ TAB -->
+    <section id="tab-quiz" class="tab-content hidden">
+     <h2 class="font-display text-xl font-bold mb-1" style="color: #2D3047;">🎯 Multiple Choice Quiz</h2>
+     <p class="text-sm mb-4" style="color: #666;">Pick the correct preposition. Earn ⭐ for each right answer!</p>
+     <div class="flex gap-1 justify-center mb-4" id="quizProgress"></div>
+     <div id="quizCard" class="rounded-2xl p-5" style="background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.08);"></div>
+     <div id="quizDone" class="hidden text-center py-10">
+      <p class="text-5xl mb-3">🎉</p>
+      <p class="font-display text-2xl font-bold" style="color:#2D3047;">Quiz Complete!</p>
+      <p id="quizScore" class="font-display text-lg mt-1" style="color:#FF6B35;"></p><button onclick="startQuiz()" class="mt-4 font-display font-bold px-6 py-2.5 rounded-full text-white" style="background:#FF6B35;">Play Again 🔄</button>
+     </div>
+    </section><!-- TALK TAB -->
+    <section id="tab-talk" class="tab-content hidden">
+     <h2 class="font-display text-xl font-bold mb-1" style="color: #2D3047;">💬 Conversation Practice</h2>
+     <p class="text-sm mb-5" style="color: #666;">Practice these with a friend, a parent, or say them out loud! Try to answer the questions using <strong>in</strong>, <strong>at</strong>, or <strong>on</strong>.</p>
+     <div id="convoContainer" class="space-y-6"></div><button onclick="loadNewConvos()" class="mt-6 font-display font-bold px-6 py-2.5 rounded-full text-white" style="background:#FF6B35;">More Prompts 🔀</button>
+    </section>
+   </main>
+  </div>
+  <script>
+// ========== CONFIG & SDK ==========
+const defaultConfig = {
+  app_title: 'Preposition Power',
+  encouragement_text: 'Du schaffst das! You got this! 💪',
+  background_color: '#FFF8F0',
+  header_color: '#FF6B35',
+  text_color: '#2D3047',
+  accent_color: '#4ECDC4',
+  surface_color: '#FFFFFF'
+};
+
+let score = 0;
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const c = { ...defaultConfig, ...config };
+    document.getElementById('appTitle').textContent = c.app_title;
+    document.getElementById('encourageText').textContent = c.encouragement_text;
+    document.getElementById('app').style.background = c.background_color;
+    document.querySelector('header').style.background = c.header_color;
+
+    document.querySelectorAll('.font-display[style*="color: #2D3047"], h2[style*="color: #2D3047"]').forEach(el => {
+      el.style.color = c.text_color;
+    });
+  },
+  mapToCapabilities: (config) => {
+    const c = { ...defaultConfig, ...config };
+    const makeColor = (key) => ({
+      get: () => c[key] || defaultConfig[key],
+      set: (v) => { c[key] = v; window.elementSdk.setConfig({ [key]: v }); }
+    });
+    return {
+      recolorables: [
+        makeColor('background_color'),
+        makeColor('surface_color'),
+        makeColor('text_color'),
+        makeColor('header_color'),
+        makeColor('accent_color')
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => c.font_family || 'Fredoka',
+        set: (v) => { c.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+      },
+      fontSizeable: {
+        get: () => c.font_size || 16,
+        set: (v) => { c.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+      }
+    };
+  },
+  mapToEditPanelValues: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return new Map([
+      ['app_title', c.app_title],
+      ['encouragement_text', c.encouragement_text]
+    ]);
+  }
+});
+
+// ========== TAB SWITCHING ==========
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(s => s.classList.add('hidden'));
+  document.getElementById('tab-' + tab).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const isActive = b.dataset.tab === tab;
+    b.classList.toggle('active', isActive);
+    b.style.background = isActive ? '#D94F1A' : 'transparent';
+    b.style.color = isActive ? 'white' : 'rgba(255,255,255,0.7)';
+    b.setAttribute('aria-selected', isActive);
+  });
+  if (tab === 'quiz' && !quizStarted) startQuiz();
+  if (tab === 'talk') loadNewConvos();
+}
+
+// ========== PRACTICE (Fill in Blank) ==========
+const practiceItems = [
+  { before: "I wake up", after: "the morning.", answer: "in", hint: "🇩🇪 am Morgen → but English uses..." },
+  { before: "My birthday is", after: "July 14th.", answer: "on", hint: "🇩🇪 am 14. Juli → dates use..." },
+  { before: "We have lunch", after: "noon.", answer: "at", hint: "🇩🇪 am Mittag → exact time..." },
+  { before: "The book is", after: "the table.", answer: "on", hint: "🇩🇪 auf dem Tisch → surface..." },
+  { before: "She lives", after: "Berlin.", answer: "in", hint: "🇩🇪 in Berlin → city..." },
+  { before: "I am", after: "school right now.", answer: "at", hint: "🇩🇪 in der Schule → but English uses..." },
+  { before: "We go swimming", after: "summer.", answer: "in", hint: "🇩🇪 im Sommer → season..." },
+  { before: "The picture is", after: "the wall.", answer: "on", hint: "🇩🇪 an der Wand → surface..." },
+  { before: "Let's meet", after: "Saturday.", answer: "on", hint: "🇩🇪 am Samstag → day of the week..." },
+  { before: "The movie starts", after: "8 o'clock.", answer: "at", hint: "🇩🇪 um 8 Uhr → exact time..." },
+];
+
+function buildPractice() {
+  const container = document.getElementById('practiceContainer');
+  container.innerHTML = '';
+  practiceItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'rounded-xl p-4 anim-slide';
+    div.style.cssText = 'background:white; box-shadow:0 2px 8px rgba(0,0,0,0.06);';
+    div.style.animationDelay = (i * 0.05) + 's';
+    div.innerHTML = `
+      <label class="flex flex-wrap items-center gap-1 text-base font-body" for="p${i}">
+        <span class="font-bold text-sm" style="color:#FF6B35;">${i + 1}.</span>
+        <span>${item.before}</span>
+        <input id="p${i}" type="text" class="fill-blank-input" style="color:#2D3047;" maxlength="4" autocomplete="off" aria-label="Fill in preposition: ${item.before} ___ ${item.after}">
+        <span>${item.after}</span>
+      </label>
+      <p class="text-xs mt-1 opacity-50">${item.hint}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function checkPractice() {
+  let correct = 0;
+  practiceItems.forEach((item, i) => {
+    const input = document.getElementById('p' + i);
+    const val = input.value.trim().toLowerCase();
+    input.classList.remove('correct-answer', 'wrong-answer');
+    if (val === item.answer) {
+      input.classList.add('correct-answer');
+      correct++;
+    } else {
+      input.classList.add('wrong-answer');
+      input.value = item.answer;
+    }
+  });
+  const result = document.getElementById('practiceResult');
+  result.classList.remove('hidden');
+  if (correct === practiceItems.length) {
+    result.textContent = `🎉 Perfekt! All ${correct} correct!`;
+    result.style.color = '#059669';
+    score += 3;
+  } else {
+    result.textContent = `${correct}/${practiceItems.length} correct — keep going! 💪`;
+    result.style.color = '#FF6B35';
+    score += correct > 0 ? 1 : 0;
+  }
+  updateScore();
+}
+
+function resetPractice() {
+  practiceItems.forEach((_, i) => {
+    const input = document.getElementById('p' + i);
+    input.value = '';
+    input.classList.remove('correct-answer', 'wrong-answer');
+  });
+  document.getElementById('practiceResult').classList.add('hidden');
+}
+
+// ========== QUIZ ==========
+const quizQuestions = [
+  { q: "I was born ___ 2013.", options: ["in", "at", "on"], answer: 0 },
+  { q: "We have PE ___ Wednesday.", options: ["in", "on", "at"], answer: 1 },
+  { q: "She's waiting ___ the bus stop.", options: ["on", "in", "at"], answer: 2 },
+  { q: "The cat is sleeping ___ the sofa.", options: ["at", "on", "in"], answer: 1 },
+  { q: "I do my homework ___ the afternoon.", options: ["in", "on", "at"], answer: 0 },
+  { q: "We eat dinner ___ 6 o'clock.", options: ["in", "on", "at"], answer: 2 },
+  { q: "My family lives ___ a small town.", options: ["at", "on", "in"], answer: 2 },
+  { q: "There's a spider ___ the ceiling!", options: ["on", "at", "in"], answer: 0 },
+  { q: "I love playing outside ___ summer.", options: ["at", "on", "in"], answer: 2 },
+  { q: "The party is ___ Saturday ___ 3 o'clock.", options: ["on / at", "in / on", "at / in"], answer: 0 },
+];
+let quizIdx = 0, quizCorrect = 0, quizStarted = false, quizAnswered = false;
+
+function startQuiz() {
+  quizIdx = 0; quizCorrect = 0; quizStarted = true; quizAnswered = false;
+  document.getElementById('quizDone').classList.add('hidden');
+  document.getElementById('quizCard').classList.remove('hidden');
+  renderQuizProgress();
+  renderQuizQuestion();
+}
+
+function renderQuizProgress() {
+  const container = document.getElementById('quizProgress');
+  container.innerHTML = '';
+  quizQuestions.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot';
+    dot.style.background = i < quizIdx ? '#4ECDC4' : i === quizIdx ? '#FF6B35' : '#ddd';
+    container.appendChild(dot);
+  });
+}
+
+function renderQuizQuestion() {
+  if (quizIdx >= quizQuestions.length) {
+    document.getElementById('quizCard').classList.add('hidden');
+    document.getElementById('quizDone').classList.remove('hidden');
+    document.getElementById('quizScore').textContent = `You got ${quizCorrect} out of ${quizQuestions.length}! ${quizCorrect >= 7 ? 'Super! 🌟' : 'Keep practicing! 💪'}`;
+    score += quizCorrect;
+    updateScore();
+    return;
+  }
+  const q = quizQuestions[quizIdx];
+  quizAnswered = false;
+  const card = document.getElementById('quizCard');
+  card.innerHTML = `
+    <p class="font-display text-sm mb-1" style="color:#999;">Question ${quizIdx + 1} of ${quizQuestions.length}</p>
+    <p class="font-display text-lg font-bold mb-4" style="color:#2D3047;">${q.q.replace('___', '<span style="color:#FF6B35;">___</span>')}</p>
+    <div class="space-y-2">
+      ${q.options.map((opt, i) => `
+        <button class="quiz-option w-full text-left font-body font-bold text-base px-4 py-3 rounded-xl border-2" style="background:#FFF8F0; border-color:#e5e5e5; color:#2D3047;" onclick="answerQuiz(${i})" aria-label="${opt}">${opt}</button>
+      `).join('')}
+    </div>
+    <div id="quizFeedback" class="mt-3 font-display text-sm hidden"></div>
+  `;
+}
+
+function answerQuiz(chosen) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = quizQuestions[quizIdx];
+  const buttons = document.querySelectorAll('.quiz-option');
+  buttons[q.answer].classList.add('correct');
+  if (chosen !== q.answer) {
+    buttons[chosen].classList.add('wrong');
+  } else {
+    quizCorrect++;
+  }
+  const fb = document.getElementById('quizFeedback');
+  fb.classList.remove('hidden');
+  fb.textContent = chosen === q.answer ? '✅ Richtig! Great job!' : `❌ The answer is "${q.options[q.answer]}"`;
+  fb.style.color = chosen === q.answer ? '#059669' : '#dc2626';
+
+  setTimeout(() => {
+    quizIdx++;
+    renderQuizProgress();
+    renderQuizQuestion();
+  }, 1200);
+}
+
+// ========== CONVERSATION ==========
+const convos = [
+  { emoji: "🏫", prompt: "Where do you go every day?", example: "I go to school. I am <strong>at</strong> school from 8 <strong>to</strong> 1.", follow: "What do you do <strong>at</strong> school <strong>in</strong> the morning?" },
+  { emoji: "🎂", prompt: "When is your birthday?", example: "My birthday is <strong>on</strong> March 5th. I was born <strong>in</strong> 2013.", follow: "What do you do <strong>on</strong> your birthday?" },
+  { emoji: "🏠", prompt: "Where is your room?", example: "My room is <strong>on</strong> the second floor. There's a poster <strong>on</strong> the wall.", follow: "What's <strong>in</strong> your room?" },
+  { emoji: "⏰", prompt: "What time do you wake up?", example: "I wake up <strong>at</strong> 7 o'clock <strong>in</strong> the morning.", follow: "What do you eat <strong>at</strong> breakfast?" },
+  { emoji: "🌞", prompt: "What's your favorite season?", example: "I love swimming <strong>in</strong> summer! We go to the lake <strong>on</strong> weekends.", follow: "What do you do <strong>in</strong> winter?" },
+  { emoji: "🚌", prompt: "How do you get to school?", example: "I wait <strong>at</strong> the bus stop. I sit <strong>on</strong> the bus <strong>for</strong> 10 minutes.", follow: "Who do you sit with <strong>on</strong> the bus?" },
+  { emoji: "📺", prompt: "What do you do in the evening?", example: "I watch TV <strong>in</strong> the evening. My favorite show is <strong>on</strong> <strong>at</strong> 7 o'clock.", follow: "What time do you go to bed <strong>at</strong> night?" },
+  { emoji: "🎮", prompt: "Where do you play with friends?", example: "We play <strong>at</strong> the park <strong>on</strong> Saturdays. <strong>In</strong> winter we stay <strong>at</strong> home.", follow: "What games do you play <strong>on</strong> the weekend?" },
+];
+let convoShown = [];
+
+function loadNewConvos() {
+  const available = convos.filter((_, i) => !convoShown.includes(i));
+  if (available.length < 3) convoShown = [];
+  const pool = convos.filter((_, i) => !convoShown.includes(i));
+  const picked = [];
+  while (picked.length < 3 && pool.length > 0) {
+    const ri = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(ri, 1)[0]);
+    convoShown.push(convos.indexOf(picked[picked.length - 1]));
+  }
+  const container = document.getElementById('convoContainer');
+  container.innerHTML = '';
+  picked.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'rounded-2xl p-5 anim-slide';
+    div.style.cssText = `background:white; box-shadow:0 2px 12px rgba(0,0,0,0.06); animation-delay:${i * 0.1}s;`;
+    div.innerHTML = `
+      <p class="text-3xl mb-2">${c.emoji}</p>
+      <p class="font-display font-bold text-base mb-2" style="color:#2D3047;">${c.prompt}</p>
+      <div class="convo-bubble p-3 mb-3 text-sm" style="background:#4ECDC4; color:#1a3a37;">
+        <p class="font-bold text-xs mb-1">Example answer:</p>
+        <p>${c.example}</p>
+      </div>
+      <p class="text-sm" style="color:#666;"><strong>Now ask your partner:</strong> ${c.follow}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function updateScore() {
+  document.getElementById('scoreDisplay').textContent = '⭐ ' + score;
+}
+
+// Init
+buildPractice();
+loadNewConvos();
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9eb389c0936576eb',t:'MTc3NjAxMDYxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
