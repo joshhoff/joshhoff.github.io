@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transitive &amp; Intransitive Verbs</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+html, body { height: 100%; margin: 0; }
+* { box-sizing: border-box; }
+.font-heading { font-family: 'Fraunces', serif; }
+.font-body { font-family: 'DM Sans', sans-serif; }
+.tab-active { border-bottom: 3px solid var(--c-primary); color: var(--c-primary); }
+.tab-inactive { border-bottom: 3px solid transparent; color: var(--c-text); opacity: 0.6; }
+.card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+.card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.fade-in { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100; padding: 12px 24px; border-radius: 12px; font-weight: 600; animation: toastIn 0.3s ease, toastOut 0.3s ease 2s forwards; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(16px); } }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body" style="background: var(--c-bg); color: var(--c-text);">
+  <div id="app" class="h-full w-full overflow-auto"><!-- Header -->
+   <header class="sticky top-0 z-50 backdrop-blur-md border-b" style="background: var(--c-surface); border-color: rgba(0,0,0,0.08);">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+     <h1 id="appTitle" class="font-heading text-xl font-bold" style="color: var(--c-primary);"></h1><button id="langToggle" onclick="toggleLang()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition" style="background: var(--c-primary); color: var(--c-surface);"> <i data-lucide="globe" style="width:16px;height:16px;"></i> <span id="langLabel">ES</span> </button>
+    </div>
+   </header><!-- Navigation Tabs -->
+   <nav class="sticky top-[57px] z-40" style="background: var(--c-surface);">
+    <div class="max-w-3xl mx-auto px-4 flex gap-1 overflow-x-auto" id="tabNav"></div>
+   </nav><!-- Content -->
+   <main class="max-w-3xl mx-auto px-4 py-6" id="mainContent"></main>
+  </div>
+  <script>
+// ---- State ----
+let lang = 'en';
+let currentTab = 0;
+
+const content = {
+  en: {
+    tabs: ['Learn', 'Examples', 'Practice', 'Conversation'],
+    welcome: '',
+    learn: {
+      title: 'Understanding Verb Types',
+      transitive: {
+        title: '✅ Transitive Verbs',
+        subtitle: 'Need an object to complete the meaning',
+        explanation: 'A <strong>transitive verb</strong> needs a <strong>direct object</strong> — someone or something that receives the action. Without it, the sentence feels incomplete.',
+        examples: [
+          { sentence: 'She <u>reads</u> <strong>a book</strong>.', note: '"a book" is the object — what she reads' },
+          { sentence: 'They <u>bought</u> <strong>a new car</strong>.', note: '"a new car" receives the action' },
+          { sentence: 'He <u>sent</u> <strong>the email</strong>.', note: '"the email" is what he sent' }
+        ],
+        test: '🤔 Try removing the object: "She reads ___." — It feels incomplete, right?'
+      },
+      intransitive: {
+        title: '🔄 Intransitive Verbs',
+        subtitle: 'Complete on their own — no object needed',
+        explanation: 'An <strong>intransitive verb</strong> expresses a complete action by itself. You do NOT need an object after it.',
+        examples: [
+          { sentence: 'The baby <u>laughed</u>.', note: 'Complete! No object needed.' },
+          { sentence: 'She <u>arrived</u> early.', note: '"early" is an adverb, not an object.' },
+          { sentence: 'The sun <u>rises</u> every morning.', note: 'The action is complete on its own.' }
+        ],
+        test: '💡 Tip: If you can ask "WHAT?" or "WHOM?" after the verb and get an answer, it\'s transitive!'
+      },
+      both: {
+        title: '⚡ Verbs That Can Be Both!',
+        explanation: 'Some verbs work as transitive AND intransitive depending on context:',
+        examples: [
+          { t: 'She <u>eats</u> <strong>breakfast</strong>.', i: 'She <u>eats</u> at 7 AM.' },
+          { t: 'He <u>runs</u> <strong>a company</strong>.', i: 'He <u>runs</u> every day.' },
+          { t: 'I <u>write</u> <strong>letters</strong>.', i: 'I <u>write</u> in my journal.' }
+        ]
+      }
+    },
+    examples: {
+      title: 'More Examples in Context',
+      subtitle: 'Tap each card to see the explanation',
+      items: [
+        { verb: 'break', t: 'He <u>broke</u> <strong>the window</strong>.', i: 'The glass <u>broke</u>.', explain: '"Break" can be both! With an object = transitive. Alone = intransitive.' },
+        { verb: 'sing', t: 'She <u>sang</u> <strong>a beautiful song</strong>.', i: 'She <u>sang</u> beautifully.', explain: '"Sing" works both ways. The adverb "beautifully" is NOT an object.' },
+        { verb: 'grow', t: 'They <u>grow</u> <strong>tomatoes</strong>.', i: 'The children <u>grew</u> quickly.', explain: 'Transitive: they grow something. Intransitive: something grows on its own.' },
+        { verb: 'open', t: 'Please <u>open</u> <strong>the door</strong>.', i: 'The store <u>opens</u> at 9.', explain: 'With object = transitive command. Without = intransitive description.' },
+        { verb: 'study', t: 'I <u>study</u> <strong>English</strong> every day.', i: 'I <u>study</u> at the library.', explain: 'With "English" = transitive. With "at the library" (place, not object) = intransitive.' },
+        { verb: 'fly', t: 'The pilot <u>flies</u> <strong>the plane</strong>.', i: 'Birds <u>fly</u> south in winter.', explain: 'The pilot flies something (transitive). Birds just fly (intransitive).' }
+      ]
+    },
+    practice: {
+      title: 'Practice Activities',
+      activity1: {
+        title: '📝 Activity 1: Identify the Verb Type',
+        instruction: 'Is the underlined verb transitive (T) or intransitive (I)?',
+        questions: [
+          { q: 'The dog <u>barked</u> loudly.', a: 'I', why: '"Barked" has no object. "Loudly" is an adverb.' },
+          { q: 'Maria <u>cooked</u> <strong>dinner</strong> for everyone.', a: 'T', why: '"Dinner" is the direct object of "cooked."' },
+          { q: 'The children <u>slept</u> peacefully.', a: 'I', why: '"Slept" needs no object. "Peacefully" is an adverb.' },
+          { q: 'We <u>watched</u> <strong>a movie</strong> last night.', a: 'T', why: '"A movie" is the object — what we watched.' },
+          { q: 'The flowers <u>bloomed</u> in spring.', a: 'I', why: '"Bloomed" is complete on its own. "In spring" is a time phrase.' },
+          { q: 'She <u>teaches</u> <strong>mathematics</strong> at the university.', a: 'T', why: '"Mathematics" is what she teaches — the direct object.' }
+        ]
+      },
+      activity2: {
+        title: '✍️ Activity 2: Complete the Sentences',
+        instruction: 'Add an appropriate object to make the verb transitive, or mark ✓ if it\'s already complete.',
+        sentences: [
+          { s: 'The teacher explained _____.', hint: 'What did the teacher explain?', sample: 'the lesson / the rules / the problem' },
+          { s: 'The baby cried _____.', hint: 'Does "cried" need an object?', sample: '✓ Already complete! (Add "all night" for extra detail)' },
+          { s: 'My brother fixed _____.', hint: 'What did he fix?', sample: 'the car / my phone / the sink' },
+          { s: 'The rain stopped _____.', hint: 'Does "stopped" need an object here?', sample: '✓ Already complete! (Add "suddenly" for extra detail)' }
+        ]
+      },
+      activity3: {
+        title: '🔀 Activity 3: Use the Same Verb Both Ways',
+        instruction: 'Write TWO sentences for each verb — one transitive, one intransitive.',
+        verbs: [
+          { v: 'play', tHint: 'play + object (what?)', iHint: 'play + no object', tEx: 'She plays the guitar.', iEx: 'The children play outside.' },
+          { v: 'move', tHint: 'move + object (what?)', iHint: 'move + no object', tEx: 'We moved the furniture.', iEx: 'The clouds moved slowly.' },
+          { v: 'change', tHint: 'change + object (what?)', iHint: 'change + no object', tEx: 'He changed his clothes.', iEx: 'The weather changed suddenly.' }
+        ]
+      }
+    },
+    conversation: {
+      title: 'Conversation Prompts',
+      subtitle: 'Practice with a partner or write your answers. Try to identify transitive and intransitive verbs in your responses!',
+      prompts: [
+        { topic: '🍳 Daily Routine', questions: ['What do you eat for breakfast?', 'What time do you usually wake up?', 'Do you exercise? What do you do?'], tip: 'Notice: "eat breakfast" (T) vs. "wake up" (I)' },
+        { topic: '🎬 Entertainment', questions: ['What kind of movies do you watch?', 'Do you sing or play an instrument?', 'How often do you go out with friends?'], tip: '"Watch movies" (T) vs. "go out" (I)' },
+        { topic: '🏠 Home & Family', questions: ['Who cooks in your family? What do they cook?', 'Do you have pets? What do they do all day?', 'What did you buy last weekend?'], tip: '"Cook dinner" (T) vs. "The dog sleeps" (I)' },
+        { topic: '✈️ Travel', questions: ['Where did you travel last year?', 'What did you bring in your suitcase?', 'Did anything unexpected happen during your trip?'], tip: '"Bring luggage" (T) vs. "travel" (I)' },
+        { topic: '💼 Work & Study', questions: ['What subjects do you study?', 'Do you work? What do you do at your job?', 'How do you relax after a long day?'], tip: '"Study English" (T) vs. "relax" (I)' }
+      ]
+    }
+  },
+  es: {
+    tabs: ['Aprende', 'Ejemplos', 'Practica', 'Conversación'],
+    welcome: '',
+    learn: {
+      title: 'Entendiendo los Tipos de Verbos',
+      transitive: {
+        title: '✅ Verbos Transitivos',
+        subtitle: 'Necesitan un objeto para completar el significado',
+        explanation: 'Un <strong>verbo transitivo</strong> necesita un <strong>objeto directo</strong> — alguien o algo que recibe la acción. Sin él, la oración se siente incompleta.',
+        examples: [
+          { sentence: 'She <u>reads</u> <strong>a book</strong>.', note: '"a book" es el objeto — lo que ella lee' },
+          { sentence: 'They <u>bought</u> <strong>a new car</strong>.', note: '"a new car" recibe la acción' },
+          { sentence: 'He <u>sent</u> <strong>the email</strong>.', note: '"the email" es lo que él envió' }
+        ],
+        test: '🤔 Intenta quitar el objeto: "She reads ___." — Se siente incompleta, ¿verdad?'
+      },
+      intransitive: {
+        title: '🔄 Verbos Intransitivos',
+        subtitle: 'Se completan solos — no necesitan objeto',
+        explanation: 'Un <strong>verbo intransitivo</strong> expresa una acción completa por sí solo. NO necesitas un objeto después.',
+        examples: [
+          { sentence: 'The baby <u>laughed</u>.', note: '¡Completa! No necesita objeto.' },
+          { sentence: 'She <u>arrived</u> early.', note: '"early" es un adverbio, no un objeto.' },
+          { sentence: 'The sun <u>rises</u> every morning.', note: 'La acción está completa por sí sola.' }
+        ],
+        test: '💡 Consejo: Si puedes preguntar "¿QUÉ?" o "¿A QUIÉN?" después del verbo y obtener respuesta, ¡es transitivo!'
+      },
+      both: {
+        title: '⚡ ¡Verbos Que Pueden Ser Ambos!',
+        explanation: 'Algunos verbos funcionan como transitivos E intransitivos según el contexto:',
+        examples: [
+          { t: 'She <u>eats</u> <strong>breakfast</strong>.', i: 'She <u>eats</u> at 7 AM.' },
+          { t: 'He <u>runs</u> <strong>a company</strong>.', i: 'He <u>runs</u> every day.' },
+          { t: 'I <u>write</u> <strong>letters</strong>.', i: 'I <u>write</u> in my journal.' }
+        ]
+      }
+    },
+    examples: {
+      title: 'Más Ejemplos en Contexto',
+      subtitle: 'Toca cada tarjeta para ver la explicación',
+      items: [
+        { verb: 'break', t: 'He <u>broke</u> <strong>the window</strong>.', i: 'The glass <u>broke</u>.', explain: '"Break" puede ser ambos. Con objeto = transitivo. Solo = intransitivo.' },
+        { verb: 'sing', t: 'She <u>sang</u> <strong>a beautiful song</strong>.', i: 'She <u>sang</u> beautifully.', explain: '"Sing" funciona de ambas formas. El adverbio "beautifully" NO es un objeto.' },
+        { verb: 'grow', t: 'They <u>grow</u> <strong>tomatoes</strong>.', i: 'The children <u>grew</u> quickly.', explain: 'Transitivo: cultivan algo. Intransitivo: algo crece por sí solo.' },
+        { verb: 'open', t: 'Please <u>open</u> <strong>the door</strong>.', i: 'The store <u>opens</u> at 9.', explain: 'Con objeto = comando transitivo. Sin objeto = descripción intransitiva.' },
+        { verb: 'study', t: 'I <u>study</u> <strong>English</strong> every day.', i: 'I <u>study</u> at the library.', explain: 'Con "English" = transitivo. Con "at the library" (lugar, no objeto) = intransitivo.' },
+        { verb: 'fly', t: 'The pilot <u>flies</u> <strong>the plane</strong>.', i: 'Birds <u>fly</u> south in winter.', explain: 'El piloto vuela algo (transitivo). Los pájaros solo vuelan (intransitivo).' }
+      ]
+    },
+    practice: {
+      title: 'Actividades de Práctica',
+      activity1: {
+        title: '📝 Actividad 1: Identifica el Tipo de Verbo',
+        instruction: '¿El verbo subrayado es transitivo (T) o intransitivo (I)?',
+        questions: [
+          { q: 'The dog <u>barked</u> loudly.', a: 'I', why: '"Barked" no tiene objeto. "Loudly" es un adverbio.' },
+          { q: 'Maria <u>cooked</u> <strong>dinner</strong> for everyone.', a: 'T', why: '"Dinner" es el objeto directo de "cooked."' },
+          { q: 'The children <u>slept</u> peacefully.', a: 'I', why: '"Slept" no necesita objeto. "Peacefully" es un adverbio.' },
+          { q: 'We <u>watched</u> <strong>a movie</strong> last night.', a: 'T', why: '"A movie" es el objeto — lo que vimos.' },
+          { q: 'The flowers <u>bloomed</u> in spring.', a: 'I', why: '"Bloomed" se completa solo. "In spring" es una frase de tiempo.' },
+          { q: 'She <u>teaches</u> <strong>mathematics</strong> at the university.', a: 'T', why: '"Mathematics" es lo que ella enseña — el objeto directo.' }
+        ]
+      },
+      activity2: {
+        title: '✍️ Actividad 2: Completa las Oraciones',
+        instruction: 'Agrega un objeto apropiado para hacer el verbo transitivo, o marca ✓ si ya está completa.',
+        sentences: [
+          { s: 'The teacher explained _____.', hint: '¿Qué explicó el profesor?', sample: 'the lesson / the rules / the problem' },
+          { s: 'The baby cried _____.', hint: '¿"Cried" necesita objeto?', sample: '✓ ¡Ya está completa! (Agrega "all night" para más detalle)' },
+          { s: 'My brother fixed _____.', hint: '¿Qué arregló?', sample: 'the car / my phone / the sink' },
+          { s: 'The rain stopped _____.', hint: '¿"Stopped" necesita objeto aquí?', sample: '✓ ¡Ya está completa! (Agrega "suddenly" para más detalle)' }
+        ]
+      },
+      activity3: {
+        title: '🔀 Actividad 3: Usa el Mismo Verbo de Ambas Formas',
+        instruction: 'Escribe DOS oraciones para cada verbo — una transitiva, una intransitiva.',
+        verbs: [
+          { v: 'play', tHint: 'play + objeto (¿qué?)', iHint: 'play + sin objeto', tEx: 'She plays the guitar.', iEx: 'The children play outside.' },
+          { v: 'move', tHint: 'move + objeto (¿qué?)', iHint: 'move + sin objeto', tEx: 'We moved the furniture.', iEx: 'The clouds moved slowly.' },
+          { v: 'change', tHint: 'change + objeto (¿qué?)', iHint: 'change + sin objeto', tEx: 'He changed his clothes.', iEx: 'The weather changed suddenly.' }
+        ]
+      }
+    },
+    conversation: {
+      title: 'Temas de Conversación',
+      subtitle: 'Practica con un compañero o escribe tus respuestas. ¡Intenta identificar verbos transitivos e intransitivos en tus respuestas!',
+      prompts: [
+        { topic: '🍳 Rutina Diaria', questions: ['What do you eat for breakfast?', 'What time do you usually wake up?', 'Do you exercise? What do you do?'], tip: 'Nota: "eat breakfast" (T) vs. "wake up" (I)' },
+        { topic: '🎬 Entretenimiento', questions: ['What kind of movies do you watch?', 'Do you sing or play an instrument?', 'How often do you go out with friends?'], tip: '"Watch movies" (T) vs. "go out" (I)' },
+        { topic: '🏠 Hogar y Familia', questions: ['Who cooks in your family? What do they cook?', 'Do you have pets? What do they do all day?', 'What did you buy last weekend?'], tip: '"Cook dinner" (T) vs. "The dog sleeps" (I)' },
+        { topic: '✈️ Viajes', questions: ['Where did you travel last year?', 'What did you bring in your suitcase?', 'Did anything unexpected happen during your trip?'], tip: '"Bring luggage" (T) vs. "travel" (I)' },
+        { topic: '💼 Trabajo y Estudio', questions: ['What subjects do you study?', 'Do you work? What do you do at your job?', 'How do you relax after a long day?'], tip: '"Study English" (T) vs. "relax" (I)' }
+      ]
+    }
+  }
+};
+
+// ---- Activity State ----
+const quizAnswers = {};
+const revealedHints = {};
+const revealedExamples = {};
+const writingInputs = {};
+const writingInputs3 = {};
+const expandedCards = {};
+
+function toggleLang() {
+  lang = lang === 'en' ? 'es' : 'en';
+  document.getElementById('langLabel').textContent = lang === 'en' ? 'ES' : 'EN';
+  renderTabs();
+  renderContent();
+}
+
+function renderTabs() {
+  const c = content[lang];
+  const nav = document.getElementById('tabNav');
+  nav.innerHTML = '';
+  c.tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = `px-4 py-3 font-semibold text-sm whitespace-nowrap transition ${i === currentTab ? 'tab-active' : 'tab-inactive'}`;
+    btn.textContent = t;
+    btn.onclick = () => { currentTab = i; renderTabs(); renderContent(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderContent() {
+  const c = content[lang];
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+  main.className = 'max-w-3xl mx-auto px-4 py-6 fade-in';
+  if (currentTab === 0) renderLearn(main, c);
+  else if (currentTab === 1) renderExamples(main, c);
+  else if (currentTab === 2) renderPractice(main, c);
+  else renderConversation(main, c);
+}
+
+function renderLearn(main, c) {
+  const d = c.learn;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-6" style="color:var(--c-primary);">${d.title}</h2>
+    ${renderVerbSection(d.transitive, 'var(--c-primary)')}
+    ${renderVerbSection(d.intransitive, 'var(--c-secondary)')}
+    <div class="rounded-2xl p-5 mb-6 border" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-2">${d.both.title}</h3>
+      <p class="mb-4 text-sm leading-relaxed">${d.both.explanation}</p>
+      <div class="space-y-3">
+        ${d.both.examples.map(e => `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div class="rounded-xl p-3 text-sm" style="background:color-mix(in srgb, var(--c-primary) 8%, transparent);"><span class="font-semibold" style="color:var(--c-primary);">T:</span> ${e.t}</div>
+            <div class="rounded-xl p-3 text-sm" style="background:color-mix(in srgb, var(--c-secondary) 8%, transparent);"><span class="font-semibold" style="color:var(--c-secondary);">I:</span> ${e.i}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderVerbSection(data, color) {
+  return `
+    <div class="rounded-2xl p-5 mb-6 border" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${data.title}</h3>
+      <p class="text-xs font-semibold mb-3 opacity-60">${data.subtitle}</p>
+      <p class="text-sm leading-relaxed mb-4">${data.explanation}</p>
+      <div class="space-y-2 mb-4">
+        ${data.examples.map(e => `
+          <div class="rounded-xl p-3" style="background:color-mix(in srgb, ${color} 6%, transparent);">
+            <p class="text-sm font-medium mb-1">${e.sentence}</p>
+            <p class="text-xs opacity-70">${e.note}</p>
+          </div>
+        `).join('')}
+      </div>
+      <div class="rounded-xl p-3 text-sm font-medium" style="background:color-mix(in srgb, ${color} 12%, transparent);color:${color};">${data.test}</div>
+    </div>
+  `;
+}
+
+function renderExamples(main, c) {
+  const d = c.examples;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      ${d.items.map((item, i) => `
+        <div class="rounded-2xl border card-hover cursor-pointer overflow-hidden" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);" onclick="toggleCard(${i})">
+          <div class="p-4">
+            <div class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:var(--c-primary);color:var(--c-surface);">${item.verb}</div>
+            <div class="space-y-2 mb-2">
+              <p class="text-sm"><span class="font-bold" style="color:var(--c-primary);">T:</span> ${item.t}</p>
+              <p class="text-sm"><span class="font-bold" style="color:var(--c-secondary);">I:</span> ${item.i}</p>
+            </div>
+          </div>
+          <div id="card-${i}" class="px-4 pb-4 ${expandedCards[i] ? '' : 'hidden'}">
+            <div class="rounded-xl p-3 text-xs leading-relaxed" style="background:color-mix(in srgb, var(--c-primary) 8%, transparent);">${item.explain}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function toggleCard(i) {
+  expandedCards[i] = !expandedCards[i];
+  const el = document.getElementById('card-' + i);
+  if (el) el.classList.toggle('hidden');
+}
+
+function renderPractice(main, c) {
+  const d = c.practice;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-6" style="color:var(--c-primary);">${d.title}</h2>
+    ${renderActivity1(d.activity1)}
+    ${renderActivity2(d.activity2)}
+    ${renderActivity3(d.activity3)}
+  `;
+}
+
+function renderActivity1(a) {
+  return `
+    <div class="rounded-2xl border p-5 mb-6" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${a.title}</h3>
+      <p class="text-sm opacity-70 mb-4">${a.instruction}</p>
+      <div class="space-y-4">
+        ${a.questions.map((q, i) => {
+          const answered = quizAnswers[i];
+          const isCorrect = answered === q.a;
+          return `
+            <div class="rounded-xl p-4" style="background:color-mix(in srgb, var(--c-bg) 60%, transparent);">
+              <p class="text-sm mb-3">${q.q}</p>
+              <div class="flex gap-2">
+                <button onclick="answerQuiz(${i},'T','${q.a}')" class="px-4 py-1.5 rounded-full text-sm font-bold transition" style="background:${answered === 'T' ? (isCorrect ? 'var(--c-primary)' : '#ef4444') : 'rgba(0,0,0,0.06)'};color:${answered === 'T' ? 'var(--c-surface)' : 'inherit'};">T</button>
+                <button onclick="answerQuiz(${i},'I','${q.a}')" class="px-4 py-1.5 rounded-full text-sm font-bold transition" style="background:${answered === 'I' ? (isCorrect ? 'var(--c-primary)' : '#ef4444') : 'rgba(0,0,0,0.06)'};color:${answered === 'I' ? 'var(--c-surface)' : 'inherit'};">I</button>
+              </div>
+              ${answered ? `<p class="text-xs mt-2 ${isCorrect ? '' : 'text-red-500'}">${isCorrect ? '✅' : '❌'} ${q.why}</p>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function answerQuiz(i, answer, correct) {
+  quizAnswers[i] = answer;
+  renderContent();
+}
+
+function renderActivity2(a) {
+  return `
+    <div class="rounded-2xl border p-5 mb-6" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${a.title}</h3>
+      <p class="text-sm opacity-70 mb-4">${a.instruction}</p>
+      <div class="space-y-4">
+        ${a.sentences.map((s, i) => `
+          <div class="rounded-xl p-4" style="background:color-mix(in srgb, var(--c-bg) 60%, transparent);">
+            <p class="text-sm font-medium mb-2">${s.s}</p>
+            <input type="text" placeholder="${s.hint}" value="${writingInputs[i] || ''}" oninput="writingInputs[${i}]=this.value" class="w-full px-3 py-2 rounded-lg text-sm border" style="border-color:rgba(0,0,0,0.1);background:var(--c-surface);">
+            <button onclick="revealHint(${i})" class="mt-2 text-xs font-semibold" style="color:var(--c-secondary);">${revealedHints[i] ? '' : (lang === 'en' ? '👀 Show suggestion' : '👀 Mostrar sugerencia')}</button>
+            ${revealedHints[i] ? `<p class="text-xs mt-1 opacity-70">${s.sample}</p>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function revealHint(i) {
+  revealedHints[i] = true;
+  renderContent();
+}
+
+function renderActivity3(a) {
+  return `
+    <div class="rounded-2xl border p-5 mb-6" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${a.title}</h3>
+      <p class="text-sm opacity-70 mb-4">${a.instruction}</p>
+      <div class="space-y-5">
+        ${a.verbs.map((v, i) => `
+          <div class="rounded-xl p-4" style="background:color-mix(in srgb, var(--c-bg) 60%, transparent);">
+            <div class="inline-block px-3 py-1 rounded-full text-sm font-bold mb-3" style="background:var(--c-primary);color:var(--c-surface);">${v.v}</div>
+            <div class="space-y-2">
+              <div>
+                <label class="text-xs font-bold" style="color:var(--c-primary);">T: ${v.tHint}</label>
+                <input type="text" value="${writingInputs3['t'+i] || ''}" oninput="writingInputs3['t${i}']=this.value" class="w-full px-3 py-2 rounded-lg text-sm border mt-1" style="border-color:rgba(0,0,0,0.1);background:var(--c-surface);">
+              </div>
+              <div>
+                <label class="text-xs font-bold" style="color:var(--c-secondary);">I: ${v.iHint}</label>
+                <input type="text" value="${writingInputs3['i'+i] || ''}" oninput="writingInputs3['i${i}']=this.value" class="w-full px-3 py-2 rounded-lg text-sm border mt-1" style="border-color:rgba(0,0,0,0.1);background:var(--c-surface);">
+              </div>
+            </div>
+            <button onclick="revealExample(${i})" class="mt-2 text-xs font-semibold" style="color:var(--c-secondary);">${revealedExamples[i] ? '' : (lang === 'en' ? '👀 Show examples' : '👀 Mostrar ejemplos')}</button>
+            ${revealedExamples[i] ? `<div class="text-xs mt-1 opacity-70"><p><strong>T:</strong> ${v.tEx}</p><p><strong>I:</strong> ${v.iEx}</p></div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function revealExample(i) {
+  revealedExamples[i] = true;
+  renderContent();
+}
+
+function renderConversation(main, c) {
+  const d = c.conversation;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>
+    <div class="space-y-4">
+      ${d.prompts.map(p => `
+        <div class="rounded-2xl border p-5 card-hover" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+          <h3 class="font-heading text-lg font-bold mb-3">${p.topic}</h3>
+          <ol class="space-y-2 mb-3">
+            ${p.questions.map(q => `<li class="text-sm pl-1">• ${q}</li>`).join('')}
+          </ol>
+          <div class="rounded-xl p-3 text-xs font-medium" style="background:color-mix(in srgb, var(--c-secondary) 10%, transparent);color:var(--c-secondary);">💡 ${p.tip}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ---- Element SDK ----
+const defaultConfig = {
+  app_title: 'Transitive & Intransitive Verbs',
+  welcome_message: 'Master English verb types step by step!',
+  background_color: '#FFF8F0',
+  surface_color: '#FFFFFF',
+  text_color: '#2D2A26',
+  primary_color: '#C05621',
+  secondary_color: '#2B6CB0',
+  font_family: 'DM Sans',
+  font_size: 16
+};
+
+function applyConfig(config) {
+  const root = document.documentElement;
+  root.style.setProperty('--c-bg', config.background_color || defaultConfig.background_color);
+  root.style.setProperty('--c-surface', config.surface_color || defaultConfig.surface_color);
+  root.style.setProperty('--c-text', config.text_color || defaultConfig.text_color);
+  root.style.setProperty('--c-primary', config.primary_color || defaultConfig.primary_color);
+  root.style.setProperty('--c-secondary', config.secondary_color || defaultConfig.secondary_color);
+
+  document.body.style.background = config.background_color || defaultConfig.background_color;
+  document.body.style.color = config.text_color || defaultConfig.text_color;
+  document.body.style.fontFamily = `${config.font_family || defaultConfig.font_family}, DM Sans, sans-serif`;
+
+  const title = document.getElementById('appTitle');
+  if (title) title.textContent = config.app_title || defaultConfig.app_title;
+
+  const base = config.font_size || defaultConfig.font_size;
+  document.body.style.fontSize = base + 'px';
+
+  const btn = document.getElementById('langToggle');
+  if (btn) { btn.style.background = config.primary_color || defaultConfig.primary_color; btn.style.color = config.surface_color || defaultConfig.surface_color; }
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    applyConfig(config);
+    renderContent();
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.primary_color || defaultConfig.primary_color, set: v => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+      { get: () => config.secondary_color || defaultConfig.secondary_color, set: v => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ['app_title', config.app_title || defaultConfig.app_title],
+    ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+  ])
+});
+
+applyConfig(defaultConfig);
+renderTabs();
+renderContent();
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f15f69f369e762a',t:'MTc3NzA0MjY3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
