@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fine Dining C1 Vocabulary</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital@0;1&amp;family=Raleway:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+html, body { height: 100%; margin: 0; }
+* { box-sizing: border-box; }
+.font-heading { font-family: 'Crimson Text', serif; }
+.font-body { font-family: 'Raleway', sans-serif; }
+.tab-active { border-bottom: 3px solid var(--c-primary); color: var(--c-primary); }
+.tab-inactive { border-bottom: 3px solid transparent; color: var(--c-text); opacity: 0.6; }
+.card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+.card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.fade-in { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.match-pair { cursor: pointer; transition: all 0.2s; }
+.match-pair.selected { transform: scale(1.02); }
+.match-pair.matched { opacity: 0.5; pointer-events: none; }
+.line-connecting { position: absolute; stroke: var(--c-secondary); stroke-width: 2; pointer-events: none; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body" style="background: var(--c-bg); color: var(--c-text);">
+  <div id="app" class="h-full w-full overflow-auto">
+   <header class="sticky top-0 z-50 backdrop-blur-md border-b" style="background: var(--c-surface); border-color: rgba(0,0,0,0.08);">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+     <h1 id="appTitle" class="font-heading text-2xl font-bold" style="color: var(--c-primary);"></h1><button id="langToggle" onclick="toggleLang()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition" style="background: var(--c-primary); color: var(--c-surface);"> <i data-lucide="globe" style="width:16px;height:16px;"></i> <span id="langLabel">ES</span> </button>
+    </div>
+   </header>
+   <nav class="sticky top-[57px] z-40" style="background: var(--c-surface);">
+    <div class="max-w-4xl mx-auto px-4 flex gap-1 overflow-x-auto" id="tabNav"></div>
+   </nav>
+   <main class="max-w-4xl mx-auto px-4 py-6" id="mainContent"></main>
+  </div>
+  <script>
+let lang = 'en';
+let currentTab = 0;
+let selectedMatches = {};
+const writingInputs = {};
+const revealedDefinitions = {};
+
+const content = {
+  en: {
+    tabs: ['Vocabulary', 'Phrases', 'Match', 'Write', 'Speak'],
+    vocabulary: {
+      title: 'Fine Dining Vocabulary',
+      subtitle: 'Master sophisticated dining terminology at C1 level',
+      categories: [
+        {
+          name: '🍷 Wine & Beverages',
+          items: [
+            { term: 'Aeration', def: 'Allowing wine to breathe or come into contact with air to enhance flavour' },
+            { term: 'Bouquet', def: 'The fragrant aroma of aged wine, more complex than initial aroma' },
+            { term: 'Palate', def: 'One\'s sense of taste; ability to distinguish flavours' },
+            { term: 'Tannins', def: 'Compounds in wine that create dryness and astringency on the palate' },
+            { term: 'Decant', def: 'To pour wine slowly from bottle into another vessel, often to separate sediment' }
+          ]
+        },
+        {
+          name: '🥘 Cooking & Preparation',
+          items: [
+            { term: 'Sous-vide', def: 'Cooking method where food is vacuum-sealed and cooked in precise water temperature' },
+            { term: 'Mise en place', def: 'French term meaning "everything in its place"; ingredients prepared before cooking begins' },
+            { term: 'Reduction', def: 'Sauce made by simmering liquid to concentrate flavours and thicken consistency' },
+            { term: 'Deglaze', def: 'To add liquid to a hot pan to dissolve caramelized food particles for sauce-making' },
+            { term: 'Brunoise', def: 'Finely diced vegetable cut into tiny, uniform cubes (1mm × 1mm)' }
+          ]
+        },
+        {
+          name: '🍽️ Table & Service',
+          items: [
+            { term: 'Amuse-bouche', def: 'Small complimentary appetizer served before the meal begins' },
+            { term: 'Palate cleanser', def: 'Light dish or beverage served between courses to refresh the palate' },
+            { term: 'Service à la française', def: 'Service style where dishes are presented and served from the left' },
+            { term: 'Charger plate', def: 'Decorative plate placed under the plate for formal table settings' },
+            { term: 'Crumb sweeper', def: 'Specialized utensil used to remove crumbs from the table between courses' }
+          ]
+        },
+        {
+          name: '👨‍🍳 Culinary Professionals',
+          items: [
+            { term: 'Sommelier', def: 'Wine expert who assists guests in selecting wines and food pairings' },
+            { term: 'Maître d\'', def: 'Manager of dining room; coordinates service and seating' },
+            { term: 'Garde manger', def: 'Larder chef responsible for cold dishes, salads, and appetizers' },
+            { term: 'Pastry chef', def: 'Chef specializing in desserts, baked goods, and pastries (pâtissier)' },
+            { term: 'Expeditor', def: 'Chef who coordinates kitchen operations and ensures quality control' }
+          ]
+        }
+      ]
+    },
+    phrases: {
+      title: 'Essential Fine Dining Phrases',
+      subtitle: 'Sophisticated expressions for restaurant situations',
+      sections: [
+        {
+          context: '🎤 Making Reservations',
+          phrases: [
+            { phrase: 'I\'d like to make a reservation for two under the name...', usage: 'Booking a table in advance' },
+            { phrase: 'Do you have availability for a party of four on Saturday evening?', usage: 'Inquiring about table availability' },
+            { phrase: 'Would you accommodate a special request? We\'re celebrating an anniversary.', usage: 'Requesting special arrangements' }
+          ]
+        },
+        {
+          context: '📋 Dining Experiences',
+          phrases: [
+            { phrase: 'May I have the wine list? I\'d appreciate your recommendation.', usage: 'Requesting wine suggestions from sommelier' },
+            { phrase: 'This dish is exquisitely prepared. My compliments to the chef.', usage: 'Praising exceptional cuisine' },
+            { phrase: 'Could you clarify the provenance of these ingredients?', usage: 'Asking about where ingredients come from' },
+            { phrase: 'I have a severe shellfish allergy. What can you recommend?', usage: 'Communicating dietary restrictions professionally' }
+          ]
+        },
+        {
+          context: '🍽️ Course Progression',
+          phrases: [
+            { phrase: 'Shall we proceed to the next course?', usage: 'Indicating readiness to move forward' },
+            { phrase: 'This would pair beautifully with a medium-bodied wine.', usage: 'Discussing food and wine pairings' },
+            { phrase: 'The palate cleanser was a refreshing interlude.', usage: 'Commenting on course transitions' }
+          ]
+        },
+        {
+          context: '💳 Concluding the Meal',
+          phrases: [
+            { phrase: 'The bill, please. It was an outstanding dining experience.', usage: 'Requesting the check courteously' },
+            { phrase: 'Could we arrange to have the leftover wine bottled for later?', usage: 'Making requests about remaining items' },
+            { phrase: 'I\'d like to commend your service staff—they were impeccable.', usage: 'Complimenting service quality' }
+          ]
+        }
+      ]
+    },
+    match: {
+      title: 'Match Terms to Definitions',
+      subtitle: 'Connect 10 advanced culinary terms with their precise meanings',
+      pairs: [
+        { term: 'Julienne', def: 'Thin, uniform vegetable strips (2mm × 2mm)' },
+        { term: 'Concasse', def: 'Roughly chopped vegetables, typically tomatoes' },
+        { term: 'Baste', def: 'To spoon cooking juices over food during cooking' },
+        { term: 'Chiffonade', def: 'Thin ribbon cuts of leafy herbs or vegetables' },
+        { term: 'Fond', def: 'Caramelized food particles left in pan after cooking' },
+        { term: 'Temper', def: 'Gradually adjusting temperature of chocolate for desired texture' },
+        { term: 'Emulsify', def: 'Combining oil and water-based liquids into stable mixture' },
+        { term: 'Sachet', def: 'Cheesecloth pouch containing herbs and spices for flavouring stock' },
+        { term: 'Macerate', def: 'Soaking fruit in liquid to soften and infuse flavours' },
+        { term: 'Gratinée', def: 'Dish with browned crust, typically formed under broiler' }
+      ]
+    },
+    write: {
+      title: 'Reflective Writing Activities',
+      subtitle: 'Develop your C1 writing skills with sophisticated prompts',
+      prompts: [
+        {
+          topic: 'Culinary Critique',
+          prompt: 'Describe a memorable fine dining experience in 150-200 words. Discuss the cuisine, service, ambiance, and whether it justified the price point. Use sophisticated vocabulary and varied sentence structures.',
+          hint: 'Consider: technique, presentation, flavour profiles, staff professionalism, atmosphere'
+        },
+        {
+          topic: 'Menu Analysis',
+          prompt: 'Analyze a restaurant\'s tasting menu philosophy. How do courses progress? What culinary techniques are evident? How are dietary restrictions accommodated?',
+          hint: 'Refer to: course structure, ingredient sourcing, preparation methods, service style'
+        },
+        {
+          topic: 'Food Pairing Rationale',
+          prompt: 'Explain why specific wines complement particular dishes. Discuss tannins, acidity, body, and how they interact with food elements.',
+          hint: 'Consider: flavour compounds, mouthfeel, tradition, innovation'
+        },
+        {
+          topic: 'Cultural Culinary Perspective',
+          prompt: 'Compare fine dining traditions across two different cultures. How do techniques, ingredients, and service differ? What explains these distinctions?',
+          hint: 'Explore: history, geography, available resources, philosophical approach to food'
+        }
+      ]
+    },
+    speak: {
+      title: 'Conversation Scenarios',
+      subtitle: 'Practice sophisticated dining dialogues with contextual depth',
+      scenarios: [
+        {
+          title: '🎯 Scenario 1: Wine Selection Consultation',
+          situation: 'You\'re dining with a colleague. The sommelier approaches. You need to order wine but aren\'t certain what pairs best with the courses.',
+          prompts: [
+            'Ask the sommelier about their philosophy on wine pairing',
+            'Inquire whether they have lesser-known options from specific regions',
+            'Discuss your preference for full-bodied vs. light wines',
+            'Ask about the aging process of a particular vintage'
+          ],
+          vocabulary: 'Palette, terroir, vintage, bouquet, tannins, acidity, body'
+        },
+        {
+          title: '🎯 Scenario 2: Dietary Accommodations',
+          situation: 'Your dining companion has multiple allergies. You need to communicate this to the maître d\' and server without awkwardness.',
+          prompts: [
+            'Politely explain the allergies to the maître d\' at arrival',
+            'Ask how the kitchen can adapt courses',
+            'Inquire about ingredient sourcing transparency',
+            'Thank the team for their attentiveness'
+          ],
+          vocabulary: 'Allergy, provenance, accommodate, modification, protocol'
+        },
+        {
+          title: '🎯 Scenario 3: Critiquing Service & Cuisine',
+          situation: 'You\'re a restaurant consultant dining incognito. Discuss your observations with a colleague.',
+          prompts: [
+            'Evaluate the progression of courses and their balance',
+            'Assess the technical skill evident in plating and preparation',
+            'Comment on service timing and staff knowledge',
+            'Suggest areas for refinement'
+          ],
+          vocabulary: 'Exquisite, meticulous, technique, refinement, execution, elegance'
+        },
+        {
+          title: '🎯 Scenario 4: Menu Understanding & Inquiry',
+          situation: 'Several dishes on the menu feature unfamiliar techniques or ingredients. You\'re asking the server for clarification.',
+          prompts: [
+            'Ask about the sous-vide preparation and its advantages',
+            'Inquire about the origin of an unusual ingredient',
+            'Request details on the reduction or sauce preparation',
+            'Ask whether courses can be adjusted for preferences'
+          ],
+          vocabulary: 'Sous-vide, technique, origin, reduction, adaptation, sourcing'
+        }
+      ]
+    }
+  },
+  es: {
+    tabs: ['Vocabulario', 'Frases', 'Emparejar', 'Escribir', 'Hablar'],
+    vocabulary: {
+      title: 'Vocabulario de Alta Cocina',
+      subtitle: 'Domina la terminología sofisticada de la gastronomía fina',
+      categories: [
+        {
+          name: '🍷 Vinos y Bebidas',
+          items: [
+            { term: 'Aereación', def: 'Permitir que el vino respire o entre en contacto con el aire para mejorar el sabor' },
+            { term: 'Buqué', def: 'El aroma fragante de un vino envejecido, más complejo que el aroma inicial' },
+            { term: 'Paladar', def: 'El sentido del gusto de una persona; capacidad de distinguir sabores' },
+            { term: 'Taninos', def: 'Compuestos en el vino que crean sequedad y astringencia en el paladar' },
+            { term: 'Decantar', def: 'Verter lentamente el vino de la botella a otro recipiente, a menudo para separar sedimento' }
+          ]
+        },
+        {
+          name: '🥘 Cocina y Preparación',
+          items: [
+            { term: 'Cocción al vacío', def: 'Método de cocción donde la comida se sella al vacío y se cocina a temperatura precisa' },
+            { term: 'Mise en place', def: 'Término francés que significa "todo en su lugar"; ingredientes preparados antes de cocinar' },
+            { term: 'Reducción', def: 'Salsa hecha hirviendo líquido para concentrar sabores y espesar la consistencia' },
+            { term: 'Desglasar', def: 'Agregar líquido a una sartén caliente para disolver partículas caramelizadas' },
+            { term: 'Brunoise', def: 'Corte fino de verduras en pequeños cubos uniformes (1mm × 1mm)' }
+          ]
+        },
+        {
+          name: '🍽️ Mesa y Servicio',
+          items: [
+            { term: 'Amuse-bouche', def: 'Pequeño aperitivo de cortesía servido antes de que comience la comida' },
+            { term: 'Limpiador de paladar', def: 'Plato ligero o bebida servida entre platos para refrescar el paladar' },
+            { term: 'Servicio a la francesa', def: 'Estilo de servicio donde los platos se presentan y sirven desde la izquierda' },
+            { term: 'Plato base', def: 'Plato decorativo colocado debajo del plato para configuraciones formales' },
+            { term: 'Recogedor de migas', def: 'Utensilio especializado para remover migas de la mesa entre platos' }
+          ]
+        },
+        {
+          name: '👨‍🍳 Profesionales Culinarios',
+          items: [
+            { term: 'Sommelier', def: 'Experto en vinos que ayuda a los huéspedes a seleccionar vinos y combinaciones' },
+            { term: 'Maître d\'', def: 'Gerente del comedor; coordina el servicio y la ubicación de mesas' },
+            { term: 'Chef de frío', def: 'Chef responsable de platos fríos, ensaladas y aperitivos' },
+            { term: 'Pastelero', def: 'Chef especializado en postres, productos horneados y pasteles' },
+            { term: 'Expedidor', def: 'Chef que coordina las operaciones de cocina y garantiza el control de calidad' }
+          ]
+        }
+      ]
+    },
+    phrases: {
+      title: 'Frases Esenciales para Alta Cocina',
+      subtitle: 'Expresiones sofisticadas para situaciones en restaurantes',
+      sections: [
+        {
+          context: '🎤 Hacer Reservas',
+          phrases: [
+            { phrase: 'Me gustaría hacer una reserva para dos bajo el nombre...', usage: 'Reservar una mesa con anticipación' },
+            { phrase: '¿Tienen disponibilidad para un grupo de cuatro el sábado por la noche?', usage: 'Preguntar sobre disponibilidad de mesa' },
+            { phrase: '¿Podrían acomodar una solicitud especial? Estamos celebrando un aniversario.', usage: 'Solicitar arreglos especiales' }
+          ]
+        },
+        {
+          context: '📋 Experiencias Gastronómicas',
+          phrases: [
+            { phrase: '¿Podría tener la lista de vinos? Agradecería su recomendación.', usage: 'Solicitar sugerencias de vino del sommelier' },
+            { phrase: 'Este plato está exquisitamente preparado. Mis felicitaciones al chef.', usage: 'Elogiar la cocina excepcional' },
+            { phrase: '¿Podría aclarar la procedencia de estos ingredientes?', usage: 'Preguntar de dónde provienen los ingredientes' },
+            { phrase: 'Tengo una alergia grave a los mariscos. ¿Qué puede recomendar?', usage: 'Comunicar restricciones dietéticas profesionalmente' }
+          ]
+        },
+        {
+          context: '🍽️ Progresión de Platos',
+          phrases: [
+            { phrase: '¿Pasamos al siguiente plato?', usage: 'Indicar preparación para avanzar' },
+            { phrase: 'Esto combinaría hermosamente con un vino de cuerpo medio.', usage: 'Discutir emparejamientos de comida y vino' },
+            { phrase: 'El limpiador de paladar fue un interludio refrescante.', usage: 'Comentar sobre transiciones entre platos' }
+          ]
+        },
+        {
+          context: '💳 Concluyendo la Comida',
+          phrases: [
+            { phrase: 'La cuenta, por favor. Fue una experiencia gastronómica excepcional.', usage: 'Solicitar la factura cortésmente' },
+            { phrase: '¿Podrían embotellar el vino sobrante para después?', usage: 'Hacer solicitudes sobre artículos restantes' },
+            { phrase: 'Me gustaría elogiar a su personal de servicio—fueron impecables.', usage: 'Elogiar la calidad del servicio' }
+          ]
+        }
+      ]
+    },
+    match: {
+      title: 'Emparejar Términos con Definiciones',
+      subtitle: 'Conecta 10 términos culinarios avanzados con sus significados precisos',
+      pairs: [
+        { term: 'Juliena', def: 'Tiras uniformes y delgadas de verdura (2mm × 2mm)' },
+        { term: 'Concassé', def: 'Verduras cortadas toscamente, típicamente tomates' },
+        { term: 'Riego', def: 'Verter jugos de cocción sobre la comida durante la cocción' },
+        { term: 'Chiffonade', def: 'Cortes en cinta delgada de hierbas o verduras de hoja' },
+        { term: 'Fondo', def: 'Partículas de comida caramelizadas dejadas en la sartén después de cocinar' },
+        { term: 'Templado', def: 'Ajustar gradualmente la temperatura del chocolate para la textura deseada' },
+        { term: 'Emulsionar', def: 'Combinar líquidos a base de aceite y agua en mezcla estable' },
+        { term: 'Bolsita aromática', def: 'Bolsa de muselina que contiene hierbas y especias para aromatizar caldo' },
+        { term: 'Maceración', def: 'Empapar fruta en líquido para ablandar e infundir sabores' },
+        { term: 'Gratinada', def: 'Plato con corteza dorada, típicamente formada bajo la parrilla' }
+      ]
+    },
+    write: {
+      title: 'Actividades de Escritura Reflexiva',
+      subtitle: 'Desarrolla tus habilidades de escritura C1 con indicaciones sofisticadas',
+      prompts: [
+        {
+          topic: 'Crítica Culinaria',
+          prompt: 'Describe una experiencia memorable de alta cocina en 150-200 palabras. Discute la cocina, el servicio, el ambiente y si justificaba el precio. Usa vocabulario sofisticado y estructura de oraciones variada.',
+          hint: 'Considera: técnica, presentación, perfiles de sabor, profesionalismo del personal, atmósfera'
+        },
+        {
+          topic: 'Análisis del Menú',
+          prompt: 'Analiza la filosofía del menú de degustación de un restaurante. ¿Cómo progresan los platos? ¿Qué técnicas culinarias son evidentes? ¿Cómo se acomodan las restricciones dietéticas?',
+          hint: 'Refiere a: estructura de platos, procedencia de ingredientes, métodos de preparación, estilo de servicio'
+        },
+        {
+          topic: 'Lógica del Emparejamiento de Alimentos',
+          prompt: 'Explica por qué vinos específicos complementan ciertos platos. Discute taninos, acidez, cuerpo y cómo interactúan con elementos de comida.',
+          hint: 'Considera: compuestos de sabor, sensación en la boca, tradición, innovación'
+        },
+        {
+          topic: 'Perspectiva Culinaria Cultural',
+          prompt: 'Compara tradiciones de alta cocina en dos culturas diferentes. ¿Cómo difieren las técnicas, ingredientes y servicio? ¿Qué explica estas distinciones?',
+          hint: 'Explora: historia, geografía, recursos disponibles, enfoque filosófico de la comida'
+        }
+      ]
+    },
+    speak: {
+      title: 'Escenarios de Conversación',
+      subtitle: 'Practica diálogos gastronómicos sofisticados con profundidad contextual',
+      scenarios: [
+        {
+          title: '🎯 Escenario 1: Consulta de Selección de Vinos',
+          situation: 'Cenas con un colega. El sommelier se acerca. Necesitas ordenar vino pero no estás seguro qué combina mejor con los platos.',
+          prompts: [
+            'Pregunta al sommelier sobre su filosofía en emparejamiento de vinos',
+            'Investiga si tienen opciones menos conocidas de regiones específicas',
+            'Discute tu preferencia por vinos de cuerpo completo vs. ligeros',
+            'Pregunta sobre el proceso de envejecimiento de una cosecha particular'
+          ],
+          vocabulary: 'Paladar, terroir, cosecha, buqué, taninos, acidez, cuerpo'
+        },
+        {
+          title: '🎯 Escenario 2: Acomodaciones Dietéticas',
+          situation: 'Tu compañero de comida tiene múltiples alergias. Necesitas comunicar esto al maître d\' y camarero sin incomodidad.',
+          prompts: [
+            'Explica cortésmente las alergias al maître d\' al llegar',
+            'Pregunta cómo la cocina puede adaptar los platos',
+            'Investiga sobre la transparencia en la procedencia de ingredientes',
+            'Agradece al equipo por su atención'
+          ],
+          vocabulary: 'Alergia, procedencia, acomodar, modificación, protocolo'
+        },
+        {
+          title: '🎯 Escenario 3: Criticando Servicio y Cocina',
+          situation: 'Eres un consultor de restaurantes cenando de incógnito. Discute observaciones con un colega.',
+          prompts: [
+            'Evalúa la progresión de platos y su equilibrio',
+            'Evalúa la habilidad técnica evidente en la presentación y preparación',
+            'Comenta sobre el tiempo del servicio y el conocimiento del personal',
+            'Sugiere áreas para refinamiento'
+          ],
+          vocabulary: 'Exquisito, meticuloso, técnica, refinamiento, ejecución, elegancia'
+        },
+        {
+          title: '🎯 Escenario 4: Comprensión e Investigación del Menú',
+          situation: 'Varios platos en el menú presentan técnicas o ingredientes desconocidos. Pides al camarero clarificación.',
+          prompts: [
+            'Pregunta sobre la preparación al vacío y sus ventajas',
+            'Investiga sobre el origen de un ingrediente inusual',
+            'Solicita detalles sobre la preparación de la reducción o salsa',
+            'Pregunta si los platos pueden adaptarse según preferencias'
+          ],
+          vocabulary: 'Cocción al vacío, técnica, origen, reducción, adaptación, procedencia'
+        }
+      ]
+    }
+  }
+};
+
+function toggleLang() {
+  lang = lang === 'en' ? 'es' : 'en';
+  document.getElementById('langLabel').textContent = lang === 'en' ? 'ES' : 'EN';
+  renderTabs();
+  renderContent();
+}
+
+function renderTabs() {
+  const c = content[lang];
+  const nav = document.getElementById('tabNav');
+  nav.innerHTML = '';
+  c.tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = `px-4 py-3 font-semibold text-sm whitespace-nowrap transition ${i === currentTab ? 'tab-active' : 'tab-inactive'}`;
+    btn.textContent = t;
+    btn.onclick = () => { currentTab = i; renderTabs(); renderContent(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderContent() {
+  const c = content[lang];
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+  main.className = 'fade-in';
+  if (currentTab === 0) renderVocabulary(main, c);
+  else if (currentTab === 1) renderPhrases(main, c);
+  else if (currentTab === 2) renderMatch(main, c);
+  else if (currentTab === 3) renderWrite(main, c);
+  else renderSpeak(main, c);
+}
+
+function renderVocabulary(main, c) {
+  const d = c.vocabulary;
+  let html = `<h2 class="font-heading text-3xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>`;
+  d.categories.forEach((cat, ci) => {
+    html += `<div class="rounded-2xl border p-5 mb-5" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-xl font-bold mb-4">${cat.name}</h3>
+      <div class="space-y-3">`;
+    cat.items.forEach((item, ii) => {
+      const revKey = `v_${ci}_${ii}`;
+      html += `<div class="rounded-lg p-4" style="background:color-mix(in srgb, var(--c-primary) 6%, transparent);">
+        <div class="flex justify-between items-start cursor-pointer" onclick="revealedDefinitions['${revKey}'] = !revealedDefinitions['${revKey}']; renderContent();">
+          <p class="font-bold text-sm" style="color:var(--c-primary);">${item.term}</p>
+          <i data-lucide="${revealedDefinitions[revKey] ? 'chevron-up' : 'chevron-down'}" style="width:18px;height:18px;opacity:0.6;"></i>
+        </div>
+        ${revealedDefinitions[revKey] ? `<p class="text-sm mt-2 opacity-80">${item.def}</p>` : ''}
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  main.innerHTML = html;
+  lucide.createIcons();
+}
+
+function renderPhrases(main, c) {
+  const d = c.phrases;
+  let html = `<h2 class="font-heading text-3xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>`;
+  d.sections.forEach(sect => {
+    html += `<div class="rounded-2xl border p-5 mb-5" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-4" style="color:var(--c-secondary);">${sect.context}</h3>
+      <div class="space-y-3">`;
+    sect.phrases.forEach(ph => {
+      html += `<div class="rounded-lg p-4" style="background:color-mix(in srgb, var(--c-secondary) 6%, transparent);">
+        <p class="font-semibold text-sm mb-1">"${ph.phrase}"</p>
+        <p class="text-xs opacity-70">→ ${ph.usage}</p>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+  main.innerHTML = html;
+  lucide.createIcons();
+}
+
+function renderMatch(main, c) {
+  const d = c.match;
+  let html = `<h2 class="font-heading text-3xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">`;
+  d.pairs.forEach((pair, i) => {
+    html += `<div class="rounded-lg p-4 card-hover" style="background:color-mix(in srgb, var(--c-primary) 8%, transparent);border:2px solid transparent;">
+      <p class="font-bold text-sm mb-2">${pair.term}</p>
+      <p class="text-xs opacity-80">${pair.def}</p>
+    </div>`;
+  });
+  html += `</div>`;
+  main.innerHTML = html;
+  lucide.createIcons();
+}
+
+function renderWrite(main, c) {
+  const d = c.write;
+  let html = `<h2 class="font-heading text-3xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>`;
+  d.prompts.forEach((prompt, i) => {
+    const key = `write_${i}`;
+    html += `<div class="rounded-2xl border p-5 mb-5" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-2" style="color:var(--c-secondary);">${prompt.topic}</h3>
+      <p class="text-sm mb-3">${prompt.prompt}</p>
+      <textarea id="write_${i}" placeholder="Write your response here..." class="w-full rounded-lg p-3 text-sm border" style="border-color:rgba(0,0,0,0.1);background:var(--c-bg);min-height:150px;" oninput="writingInputs['${key}']=this.value;"></textarea>
+      <button onclick="revealedDefinitions['${key}'] = !revealedDefinitions['${key}']; renderContent();" class="mt-2 text-xs font-semibold" style="color:var(--c-secondary);">
+        ${revealedDefinitions[key] ? '✓ Hint shown' : '💡 Show hint'}
+      </button>
+      ${revealedDefinitions[key] ? `<p class="text-xs mt-1 opacity-70"><strong>Hint:</strong> ${prompt.hint}</p>` : ''}
+    </div>`;
+  });
+  main.innerHTML = html;
+  document.querySelectorAll('textarea').forEach((ta, i) => {
+    if (writingInputs[`write_${i}`]) ta.value = writingInputs[`write_${i}`];
+  });
+}
+
+function renderSpeak(main, c) {
+  const d = c.speak;
+  let html = `<h2 class="font-heading text-3xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>`;
+  d.scenarios.forEach((scen, si) => {
+    html += `<div class="rounded-2xl border p-5 mb-5" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-2" style="color:var(--c-secondary);">${scen.title}</h3>
+      <p class="text-sm mb-4 italic opacity-80">"${scen.situation}"</p>
+      <div class="space-y-2 mb-4">`;
+    scen.prompts.forEach(pr => {
+      html += `<div class="text-sm flex items-start gap-2"><span style="color:var(--c-primary);font-weight:bold;">•</span><span>${pr}</span></div>`;
+    });
+    html += `</div><div class="rounded-lg p-3" style="background:color-mix(in srgb, var(--c-secondary) 8%, transparent);"><p class="text-xs font-semibold mb-1">Key Vocabulary:</p><p class="text-xs opacity-80">${scen.vocabulary}</p></div></div>`;
+  });
+  main.innerHTML = html;
+  lucide.createIcons();
+}
+
+// ---- Activity State ----
+const quizAnswers = {};
+const revealedHints = {};
+const revealedExamples = {};
+const writingInputs = {};
+const writingInputs3 = {};
+const expandedCards = {};
+
+function toggleLang() {
+  lang = lang === 'en' ? 'es' : 'en';
+  document.getElementById('langLabel').textContent = lang === 'en' ? 'ES' : 'EN';
+  renderTabs();
+  renderContent();
+}
+
+function renderTabs() {
+  const c = content[lang];
+  const nav = document.getElementById('tabNav');
+  nav.innerHTML = '';
+  c.tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = `px-4 py-3 font-semibold text-sm whitespace-nowrap transition ${i === currentTab ? 'tab-active' : 'tab-inactive'}`;
+    btn.textContent = t;
+    btn.onclick = () => { currentTab = i; renderTabs(); renderContent(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderContent() {
+  const c = content[lang];
+  const main = document.getElementById('mainContent');
+  main.innerHTML = '';
+  main.className = 'max-w-3xl mx-auto px-4 py-6 fade-in';
+  if (currentTab === 0) renderLearn(main, c);
+  else if (currentTab === 1) renderExamples(main, c);
+  else if (currentTab === 2) renderPractice(main, c);
+  else renderConversation(main, c);
+}
+
+function renderLearn(main, c) {
+  const d = c.learn;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-6" style="color:var(--c-primary);">${d.title}</h2>
+    ${renderVerbSection(d.transitive, 'var(--c-primary)')}
+    ${renderVerbSection(d.intransitive, 'var(--c-secondary)')}
+    <div class="rounded-2xl p-5 mb-6 border" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-2">${d.both.title}</h3>
+      <p class="mb-4 text-sm leading-relaxed">${d.both.explanation}</p>
+      <div class="space-y-3">
+        ${d.both.examples.map(e => `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div class="rounded-xl p-3 text-sm" style="background:color-mix(in srgb, var(--c-primary) 8%, transparent);"><span class="font-semibold" style="color:var(--c-primary);">T:</span> ${e.t}</div>
+            <div class="rounded-xl p-3 text-sm" style="background:color-mix(in srgb, var(--c-secondary) 8%, transparent);"><span class="font-semibold" style="color:var(--c-secondary);">I:</span> ${e.i}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderVerbSection(data, color) {
+  return `
+    <div class="rounded-2xl p-5 mb-6 border" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${data.title}</h3>
+      <p class="text-xs font-semibold mb-3 opacity-60">${data.subtitle}</p>
+      <p class="text-sm leading-relaxed mb-4">${data.explanation}</p>
+      <div class="space-y-2 mb-4">
+        ${data.examples.map(e => `
+          <div class="rounded-xl p-3" style="background:color-mix(in srgb, ${color} 6%, transparent);">
+            <p class="text-sm font-medium mb-1">${e.sentence}</p>
+            <p class="text-xs opacity-70">${e.note}</p>
+          </div>
+        `).join('')}
+      </div>
+      <div class="rounded-xl p-3 text-sm font-medium" style="background:color-mix(in srgb, ${color} 12%, transparent);color:${color};">${data.test}</div>
+    </div>
+  `;
+}
+
+function renderExamples(main, c) {
+  const d = c.examples;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      ${d.items.map((item, i) => `
+        <div class="rounded-2xl border card-hover cursor-pointer overflow-hidden" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);" onclick="toggleCard(${i})">
+          <div class="p-4">
+            <div class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" style="background:var(--c-primary);color:var(--c-surface);">${item.verb}</div>
+            <div class="space-y-2 mb-2">
+              <p class="text-sm"><span class="font-bold" style="color:var(--c-primary);">T:</span> ${item.t}</p>
+              <p class="text-sm"><span class="font-bold" style="color:var(--c-secondary);">I:</span> ${item.i}</p>
+            </div>
+          </div>
+          <div id="card-${i}" class="px-4 pb-4 ${expandedCards[i] ? '' : 'hidden'}">
+            <div class="rounded-xl p-3 text-xs leading-relaxed" style="background:color-mix(in srgb, var(--c-primary) 8%, transparent);">${item.explain}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function toggleCard(i) {
+  expandedCards[i] = !expandedCards[i];
+  const el = document.getElementById('card-' + i);
+  if (el) el.classList.toggle('hidden');
+}
+
+function renderPractice(main, c) {
+  const d = c.practice;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-6" style="color:var(--c-primary);">${d.title}</h2>
+    ${renderActivity1(d.activity1)}
+    ${renderActivity2(d.activity2)}
+    ${renderActivity3(d.activity3)}
+  `;
+}
+
+function renderActivity1(a) {
+  return `
+    <div class="rounded-2xl border p-5 mb-6" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${a.title}</h3>
+      <p class="text-sm opacity-70 mb-4">${a.instruction}</p>
+      <div class="space-y-4">
+        ${a.questions.map((q, i) => {
+          const answered = quizAnswers[i];
+          const isCorrect = answered === q.a;
+          return `
+            <div class="rounded-xl p-4" style="background:color-mix(in srgb, var(--c-bg) 60%, transparent);">
+              <p class="text-sm mb-3">${q.q}</p>
+              <div class="flex gap-2">
+                <button onclick="answerQuiz(${i},'T','${q.a}')" class="px-4 py-1.5 rounded-full text-sm font-bold transition" style="background:${answered === 'T' ? (isCorrect ? 'var(--c-primary)' : '#ef4444') : 'rgba(0,0,0,0.06)'};color:${answered === 'T' ? 'var(--c-surface)' : 'inherit'};">T</button>
+                <button onclick="answerQuiz(${i},'I','${q.a}')" class="px-4 py-1.5 rounded-full text-sm font-bold transition" style="background:${answered === 'I' ? (isCorrect ? 'var(--c-primary)' : '#ef4444') : 'rgba(0,0,0,0.06)'};color:${answered === 'I' ? 'var(--c-surface)' : 'inherit'};">I</button>
+              </div>
+              ${answered ? `<p class="text-xs mt-2 ${isCorrect ? '' : 'text-red-500'}">${isCorrect ? '✅' : '❌'} ${q.why}</p>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function answerQuiz(i, answer, correct) {
+  quizAnswers[i] = answer;
+  renderContent();
+}
+
+function renderActivity2(a) {
+  return `
+    <div class="rounded-2xl border p-5 mb-6" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${a.title}</h3>
+      <p class="text-sm opacity-70 mb-4">${a.instruction}</p>
+      <div class="space-y-4">
+        ${a.sentences.map((s, i) => `
+          <div class="rounded-xl p-4" style="background:color-mix(in srgb, var(--c-bg) 60%, transparent);">
+            <p class="text-sm font-medium mb-2">${s.s}</p>
+            <input type="text" placeholder="${s.hint}" value="${writingInputs[i] || ''}" oninput="writingInputs[${i}]=this.value" class="w-full px-3 py-2 rounded-lg text-sm border" style="border-color:rgba(0,0,0,0.1);background:var(--c-surface);">
+            <button onclick="revealHint(${i})" class="mt-2 text-xs font-semibold" style="color:var(--c-secondary);">${revealedHints[i] ? '' : (lang === 'en' ? '👀 Show suggestion' : '👀 Mostrar sugerencia')}</button>
+            ${revealedHints[i] ? `<p class="text-xs mt-1 opacity-70">${s.sample}</p>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function revealHint(i) {
+  revealedHints[i] = true;
+  renderContent();
+}
+
+function renderActivity3(a) {
+  return `
+    <div class="rounded-2xl border p-5 mb-6" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+      <h3 class="font-heading text-lg font-bold mb-1">${a.title}</h3>
+      <p class="text-sm opacity-70 mb-4">${a.instruction}</p>
+      <div class="space-y-5">
+        ${a.verbs.map((v, i) => `
+          <div class="rounded-xl p-4" style="background:color-mix(in srgb, var(--c-bg) 60%, transparent);">
+            <div class="inline-block px-3 py-1 rounded-full text-sm font-bold mb-3" style="background:var(--c-primary);color:var(--c-surface);">${v.v}</div>
+            <div class="space-y-2">
+              <div>
+                <label class="text-xs font-bold" style="color:var(--c-primary);">T: ${v.tHint}</label>
+                <input type="text" value="${writingInputs3['t'+i] || ''}" oninput="writingInputs3['t${i}']=this.value" class="w-full px-3 py-2 rounded-lg text-sm border mt-1" style="border-color:rgba(0,0,0,0.1);background:var(--c-surface);">
+              </div>
+              <div>
+                <label class="text-xs font-bold" style="color:var(--c-secondary);">I: ${v.iHint}</label>
+                <input type="text" value="${writingInputs3['i'+i] || ''}" oninput="writingInputs3['i${i}']=this.value" class="w-full px-3 py-2 rounded-lg text-sm border mt-1" style="border-color:rgba(0,0,0,0.1);background:var(--c-surface);">
+              </div>
+            </div>
+            <button onclick="revealExample(${i})" class="mt-2 text-xs font-semibold" style="color:var(--c-secondary);">${revealedExamples[i] ? '' : (lang === 'en' ? '👀 Show examples' : '👀 Mostrar ejemplos')}</button>
+            ${revealedExamples[i] ? `<div class="text-xs mt-1 opacity-70"><p><strong>T:</strong> ${v.tEx}</p><p><strong>I:</strong> ${v.iEx}</p></div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function revealExample(i) {
+  revealedExamples[i] = true;
+  renderContent();
+}
+
+function renderConversation(main, c) {
+  const d = c.conversation;
+  main.innerHTML = `
+    <h2 class="font-heading text-2xl font-bold mb-2" style="color:var(--c-primary);">${d.title}</h2>
+    <p class="text-sm opacity-70 mb-6">${d.subtitle}</p>
+    <div class="space-y-4">
+      ${d.prompts.map(p => `
+        <div class="rounded-2xl border p-5 card-hover" style="background:var(--c-surface);border-color:rgba(0,0,0,0.06);">
+          <h3 class="font-heading text-lg font-bold mb-3">${p.topic}</h3>
+          <ol class="space-y-2 mb-3">
+            ${p.questions.map(q => `<li class="text-sm pl-1">• ${q}</li>`).join('')}
+          </ol>
+          <div class="rounded-xl p-3 text-xs font-medium" style="background:color-mix(in srgb, var(--c-secondary) 10%, transparent);color:var(--c-secondary);">💡 ${p.tip}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}// ---- Element SDK ----
+const defaultConfig = {
+  app_title: 'Fine Dining C1 Vocabulary',
+  welcome_message: 'Master sophisticated culinary vocabulary!',
+  background_color: '#F5EFE7',
+  surface_color: '#FFFBF7',
+  text_color: '#3D3530',
+  primary_color: '#9B4E3C',
+  secondary_color: '#5A7F8B',
+  font_family: 'Raleway',
+  font_size: 16
+};
+
+function applyConfig(config) {
+  const root = document.documentElement;
+  root.style.setProperty('--c-bg', config.background_color || defaultConfig.background_color);
+  root.style.setProperty('--c-surface', config.surface_color || defaultConfig.surface_color);
+  root.style.setProperty('--c-text', config.text_color || defaultConfig.text_color);
+  root.style.setProperty('--c-primary', config.primary_color || defaultConfig.primary_color);
+  root.style.setProperty('--c-secondary', config.secondary_color || defaultConfig.secondary_color);
+
+  document.body.style.background = config.background_color || defaultConfig.background_color;
+  document.body.style.color = config.text_color || defaultConfig.text_color;
+  document.body.style.fontFamily = `${config.font_family || defaultConfig.font_family}, Raleway, sans-serif`;
+
+  const title = document.getElementById('appTitle');
+  if (title) title.textContent = config.app_title || defaultConfig.app_title;
+
+  const base = config.font_size || defaultConfig.font_size;
+  document.body.style.fontSize = base + 'px';
+
+  const btn = document.getElementById('langToggle');
+  if (btn) { btn.style.background = config.primary_color || defaultConfig.primary_color; btn.style.color = config.surface_color || defaultConfig.surface_color; }
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    applyConfig(config);
+    renderContent();
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.primary_color || defaultConfig.primary_color, set: v => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+      { get: () => config.secondary_color || defaultConfig.secondary_color, set: v => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ['app_title', config.app_title || defaultConfig.app_title],
+    ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+  ])
+});
+
+applyConfig(defaultConfig);
+renderTabs();
+renderContent();
+lucide.createIcons();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f164c07b26c08e7',t:'MTc3NzA0NjE3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
