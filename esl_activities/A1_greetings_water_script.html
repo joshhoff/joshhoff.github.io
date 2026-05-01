@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESL Greetings Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .phrase-btn { transition: all 0.15s; }
+    .phrase-btn:active { transform: scale(0.97); }
+    .correct { animation: pulse-green 0.5s; }
+    .incorrect { animation: shake 0.4s; }
+    @keyframes pulse-green { 0%,100%{ background-color: inherit; } 50%{ background-color: #d1fae5; } }
+    @keyframes shake { 0%,100%{ transform: translateX(0); } 25%{ transform: translateX(-4px); } 75%{ transform: translateX(4px); } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-amber-50 text-gray-800 overflow-auto">
+  <div class="w-full h-full min-h-full p-4 md:p-8 max-w-4xl mx-auto space-y-8 pb-16"><!-- Header -->
+   <header class="text-center space-y-2">
+    <h1 id="page-title" class="text-3xl md:text-4xl font-800 text-emerald-700">🗣️ English Greetings &amp; Goodbyes</h1>
+    <p class="text-gray-600 text-lg">Práctica para nivel A2 · <span class="italic">Practice for A2 level</span></p>
+   </header><!-- Tabs -->
+   <nav class="flex gap-2 justify-center flex-wrap"><button onclick="showTab('greetings')" id="tab-greetings" class="px-5 py-2 rounded-full font-600 bg-emerald-600 text-white phrase-btn">Greetings</button> <button onclick="showTab('goodbyes')" id="tab-goodbyes" class="px-5 py-2 rounded-full font-600 bg-white text-emerald-700 border-2 border-emerald-200 phrase-btn">Goodbyes</button> <button onclick="showTab('quiz')" id="tab-quiz" class="px-5 py-2 rounded-full font-600 bg-white text-emerald-700 border-2 border-emerald-200 phrase-btn">Quiz</button> <button onclick="showTab('practice')" id="tab-practice" class="px-5 py-2 rounded-full font-600 bg-white text-emerald-700 border-2 border-emerald-200 phrase-btn">Speech Practice</button>
+   </nav><!-- GREETINGS TAB -->
+   <section id="section-greetings" class="space-y-4">
+    <h2 class="text-2xl font-700 text-emerald-700"><i data-lucide="hand-metal" class="inline w-6 h-6"></i> Common Greetings</h2>
+    <div class="grid sm:grid-cols-2 gap-3" id="greetings-list"></div>
+   </section><!-- GOODBYES TAB -->
+   <section id="section-goodbyes" class="hidden space-y-4">
+    <h2 class="text-2xl font-700 text-emerald-700"><i data-lucide="hand" class="inline w-6 h-6"></i> Common Goodbyes</h2>
+    <div class="grid sm:grid-cols-2 gap-3" id="goodbyes-list"></div>
+   </section><!-- QUIZ TAB -->
+   <section id="section-quiz" class="hidden space-y-4">
+    <h2 class="text-2xl font-700 text-emerald-700"><i data-lucide="brain" class="inline w-6 h-6"></i> Match the Phrase</h2>
+    <p class="text-gray-600">Selecciona la traducción correcta · <em>Select the correct translation</em></p>
+    <div id="quiz-container" class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 space-y-4">
+     <p id="quiz-prompt" class="text-xl font-700 text-center"></p>
+     <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+     <p id="quiz-feedback" class="text-center font-600 min-h-[1.5rem]"></p>
+     <div class="text-center">
+      <button onclick="nextQuiz()" class="px-5 py-2 bg-emerald-600 text-white rounded-full phrase-btn font-600">Next →</button>
+     </div>
+    </div>
+    <p id="quiz-score" class="text-center font-600 text-emerald-700"></p>
+   </section><!-- PRACTICE TAB -->
+   <section id="section-practice" class="hidden space-y-4">
+    <h2 id="practice-heading" class="text-2xl font-700 text-emerald-700"><i data-lucide="mic" class="inline w-6 h-6"></i> Speech Practice</h2>
+    <p class="text-gray-600">Lee el texto y practica la pronunciación · <em>Read the text and practice pronunciation</em></p>
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-emerald-100 space-y-4">
+     <div id="practice-text" class="text-lg leading-relaxed space-y-3 text-gray-800">
+      <p><strong>Hello,</strong> my name is Jonathan.</p>
+      <p>I want to <strong>offer</strong> you a free <strong>sample</strong> of my water.</p>
+      <p>Here is a free bottle. Please <strong>enjoy</strong>.</p>
+      <p>In one week, I will <strong>return</strong> and if you are interested in receiving more fresh water, we can <strong>schedule</strong> water delivery.</p>
+      <p><strong>Thank you</strong> for the consideration.</p>
+     </div>
+     <div class="border-t pt-4 space-y-3">
+      <h3 class="font-700 text-emerald-700">📖 Vocabulary · Vocabulario</h3>
+      <div class="grid sm:grid-cols-2 gap-2 text-sm">
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>offer</strong> – ofrecer
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>sample</strong> – muestra
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>enjoy</strong> – disfrutar
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>return</strong> – regresar / volver
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>interested</strong> – interesado/a
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>schedule</strong> – programar
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>delivery</strong> – entrega
+       </div>
+       <div class="bg-emerald-50 p-2 rounded-lg">
+        <strong>consideration</strong> – consideración
+       </div>
+      </div>
+     </div>
+     <div class="border-t pt-4 space-y-3">
+      <h3 class="font-700 text-emerald-700">✍️ Fill in the Blanks · Completa los espacios</h3>
+      <p class="text-sm text-gray-600">Escribe la palabra que falta · <em>Type the missing word</em></p>
+      <div id="fill-blanks" class="space-y-3"></div><button onclick="checkBlanks()" class="px-5 py-2 bg-emerald-600 text-white rounded-full phrase-btn font-600">Check Answers ✓</button>
+      <p id="blanks-feedback" class="font-600 min-h-[1.5rem]"></p>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+  const defaultConfig = {
+    page_title: '🗣️ English Greetings & Goodbyes',
+    practice_heading: 'Speech Practice',
+    primary_color: '#047857',
+    surface_color: '#ffffff',
+    text_color: '#1f2937',
+    accent_color: '#fffbeb',
+    secondary_action_color: '#d1fae5',
+    font_family: 'Nunito',
+    font_size: 16
+  };
+
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => {
+      document.getElementById('page-title').textContent = config.page_title || defaultConfig.page_title;
+      document.getElementById('practice-heading').innerHTML = `<i data-lucide="mic" class="inline w-6 h-6"></i> ${config.practice_heading || defaultConfig.practice_heading}`;
+      lucide.createIcons();
+    },
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+        { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
+        { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => config.font_family || defaultConfig.font_family,
+        set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+      },
+      fontSizeable: {
+        get: () => config.font_size || defaultConfig.font_size,
+        set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+      }
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['page_title', config.page_title || defaultConfig.page_title],
+      ['practice_heading', config.practice_heading || defaultConfig.practice_heading]
+    ])
+  });
+
+  // Data
+  const greetings = [
+    { en: 'Hello', es: 'Hola', tip: 'Formal and informal' },
+    { en: 'Hi', es: 'Hola (informal)', tip: 'Casual, with friends' },
+    { en: 'Good morning', es: 'Buenos días', tip: 'Before noon' },
+    { en: 'Good afternoon', es: 'Buenas tardes', tip: 'After noon' },
+    { en: 'Good evening', es: 'Buenas noches', tip: 'Evening arrival' },
+    { en: 'How are you?', es: '¿Cómo estás?', tip: 'Common question' },
+    { en: 'Nice to meet you', es: 'Mucho gusto', tip: 'First meeting' },
+    { en: 'How\'s it going?', es: '¿Qué tal?', tip: 'Informal' }
+  ];
+
+  const goodbyes = [
+    { en: 'Goodbye', es: 'Adiós', tip: 'Standard farewell' },
+    { en: 'See you later', es: 'Hasta luego', tip: 'Will meet again' },
+    { en: 'See you tomorrow', es: 'Hasta mañana', tip: 'Next day' },
+    { en: 'Take care', es: 'Cuídate', tip: 'Warm farewell' },
+    { en: 'Have a good day', es: 'Que tengas un buen día', tip: 'Polite' },
+    { en: 'Good night', es: 'Buenas noches', tip: 'Before sleep' },
+    { en: 'Bye!', es: '¡Chao!', tip: 'Very casual' },
+    { en: 'See you soon', es: 'Hasta pronto', tip: 'Expecting to meet soon' }
+  ];
+
+  function renderPhrases(list, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = list.map(p => `
+      <div class="bg-white rounded-xl p-4 border border-emerald-100 card-hover cursor-pointer" onclick="speakPhrase('${p.en.replace(/'/g, "\\'")}')">
+        <p class="font-700 text-emerald-700 text-lg">${p.en}</p>
+        <p class="text-gray-600">${p.es}</p>
+        <p class="text-xs text-gray-400 mt-1 italic">💡 ${p.tip}</p>
+      </div>
+    `).join('');
+  }
+
+  function speakPhrase(text) {
+    if ('speechSynthesis' in window) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = 0.85;
+      speechSynthesis.speak(u);
+    }
+  }
+
+  // Tabs
+  function showTab(tab) {
+    ['greetings','goodbyes','quiz','practice'].forEach(t => {
+      document.getElementById('section-' + t).classList.toggle('hidden', t !== tab);
+      const btn = document.getElementById('tab-' + t);
+      if (t === tab) { btn.className = 'px-5 py-2 rounded-full font-600 bg-emerald-600 text-white phrase-btn'; }
+      else { btn.className = 'px-5 py-2 rounded-full font-600 bg-white text-emerald-700 border-2 border-emerald-200 phrase-btn'; }
+    });
+    if (tab === 'quiz') nextQuiz();
+  }
+
+  // Quiz
+  const allPhrases = [...greetings, ...goodbyes];
+  let quizScore = 0, quizTotal = 0, currentQuiz = null;
+
+  function nextQuiz() {
+    document.getElementById('quiz-feedback').textContent = '';
+    currentQuiz = allPhrases[Math.floor(Math.random() * allPhrases.length)];
+    const isEnToEs = Math.random() > 0.5;
+    const prompt = isEnToEs ? currentQuiz.en : currentQuiz.es;
+    const correctAns = isEnToEs ? currentQuiz.es : currentQuiz.en;
+
+    let options = [correctAns];
+    while (options.length < 4) {
+      const r = allPhrases[Math.floor(Math.random() * allPhrases.length)];
+      const opt = isEnToEs ? r.es : r.en;
+      if (!options.includes(opt)) options.push(opt);
+    }
+    options.sort(() => Math.random() - 0.5);
+
+    document.getElementById('quiz-prompt').textContent = `"${prompt}"`;
+    document.getElementById('quiz-options').innerHTML = options.map(o => `
+      <button onclick="answerQuiz(this, '${o.replace(/'/g, "\\'")}', '${correctAns.replace(/'/g, "\\'")}')" class="p-3 rounded-xl border-2 border-emerald-200 bg-emerald-50 font-600 phrase-btn text-left">${o}</button>
+    `).join('');
+  }
+
+  function answerQuiz(btn, selected, correct) {
+    quizTotal++;
+    const fb = document.getElementById('quiz-feedback');
+    if (selected === correct) {
+      quizScore++;
+      fb.textContent = '✅ ¡Correcto! · Correct!';
+      fb.className = 'text-center font-600 min-h-[1.5rem] text-emerald-600';
+      btn.classList.add('correct');
+    } else {
+      fb.textContent = `❌ La respuesta era: "${correct}"`;
+      fb.className = 'text-center font-600 min-h-[1.5rem] text-red-500';
+      btn.classList.add('incorrect');
+    }
+    document.querySelectorAll('#quiz-options button').forEach(b => b.disabled = true);
+    document.getElementById('quiz-score').textContent = `Score: ${quizScore}/${quizTotal}`;
+  }
+
+  // Fill in the blanks
+  const blanks = [
+    { sentence: 'Hello, my name ___ Jonathan.', answer: 'is' },
+    { sentence: 'I want to ___ you a free sample.', answer: 'offer' },
+    { sentence: 'Here is a free ___.', answer: 'bottle' },
+    { sentence: 'In one week, I will ___.', answer: 'return' },
+    { sentence: '___ you for the consideration.', answer: 'thank' }
+  ];
+
+  function renderBlanks() {
+    document.getElementById('fill-blanks').innerHTML = blanks.map((b, i) => `
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-gray-700">${b.sentence.replace('___', `<input id="blank-${i}" type="text" class="border-b-2 border-emerald-300 outline-none w-24 text-center font-600 bg-transparent" placeholder="___">`)}</span>
+      </div>
+    `).join('');
+  }
+
+  function checkBlanks() {
+    let correct = 0;
+    blanks.forEach((b, i) => {
+      const input = document.getElementById('blank-' + i);
+      if (input.value.trim().toLowerCase() === b.answer.toLowerCase()) {
+        input.style.borderColor = '#10b981'; correct++;
+      } else {
+        input.style.borderColor = '#ef4444';
+        input.value = b.answer;
+      }
+    });
+    const fb = document.getElementById('blanks-feedback');
+    fb.textContent = correct === blanks.length ? '🎉 ¡Perfecto! All correct!' : `${correct}/${blanks.length} correct. Las respuestas correctas se muestran arriba.`;
+    fb.className = correct === blanks.length ? 'font-600 text-emerald-600' : 'font-600 text-amber-600';
+  }
+
+  // Init
+  renderPhrases(greetings, 'greetings-list');
+  renderPhrases(goodbyes, 'goodbyes-list');
+  renderBlanks();
+  lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f4bc42027bce2db',t:'MTc3NzYwNjg0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
