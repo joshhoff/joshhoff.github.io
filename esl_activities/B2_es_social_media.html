@@ -19,15 +19,13 @@
   <style>body { box-sizing: border-box; }</style>
  </head>
  <body class="h-full font-body">
-  <div id="app" class="h-full w-full overflow-auto bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50">
-   <!-- Header -->
+  <div id="app" class="h-full w-full overflow-auto bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50"><!-- Header -->
    <header class="bg-gradient-to-r from-slate-800 to-indigo-900 text-white p-6 text-center">
     <h1 id="main-title" class="font-heading text-3xl md:text-4xl mb-1">Social Media English</h1>
     <p id="main-subtitle" class="text-sky-200 text-sm">Present Perfect + Marketing Vocabulary</p>
     <p class="text-sky-300 text-xs mt-2">Nivel B1 · Para hispanohablantes</p>
    </header><!-- Tabs -->
-   <nav class="flex justify-center gap-2 p-4 flex-wrap" role="navigation" aria-label="Main sections">
-    <button onclick="showTab('learn')" id="tab-learn" class="tab-active px-4 py-2 rounded-full text-sm font-medium transition-all">📚 Learn</button> <button onclick="showTab('practice')" id="tab-practice" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">✍️ Practice</button> <button onclick="showTab('captions')" id="tab-captions" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">📸 Captions</button> <button onclick="showTab('conversation')" id="tab-conversation" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">💬 Conversation</button> <button onclick="showTab('progress')" id="tab-progress" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">📊 Progress</button>
+   <nav class="flex justify-center gap-2 p-4 flex-wrap" role="navigation" aria-label="Main sections"><button onclick="showTab('learn')" id="tab-learn" class="tab-active px-4 py-2 rounded-full text-sm font-medium transition-all">📚 Learn</button> <button onclick="showTab('practice')" id="tab-practice" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">✍️ Practice</button> <button onclick="showTab('conversation')" id="tab-conversation" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">💬 Conversation</button> <button onclick="showTab('progress')" id="tab-progress" class="px-4 py-2 rounded-full text-sm font-medium bg-white text-slate-600 transition-all">📊 Progress</button>
    </nav><!-- LEARN TAB -->
    <main id="section-learn" class="max-w-3xl mx-auto p-4 fade-in">
     <div class="bg-white rounded-2xl shadow-sm p-6 mb-4 border border-sky-100">
@@ -52,13 +50,6 @@
      <h2 class="font-heading text-2xl text-slate-800 mb-2">Conversation Prompts</h2>
      <p class="text-slate-500 text-sm mb-4">Practica estas conversaciones en voz alta o con un compañero.</p>
      <div id="convo-area" class="space-y-4"></div>
-    </div>
-   </section><!-- CAPTIONS TAB -->
-   <section id="section-captions" class="max-w-3xl mx-auto p-4 fade-in hidden">
-    <div class="bg-white rounded-2xl shadow-sm p-6 border border-sky-100">
-     <h2 class="font-heading text-2xl text-slate-800 mb-2">Create Social Media Captions</h2>
-     <p class="text-slate-500 text-sm mb-4">Write a caption for these social media posts using present perfect and vocabulary from the Learn tab.</p>
-     <div id="captions-area"></div>
     </div>
    </section><!-- PROGRESS TAB -->
    <section id="section-progress" class="max-w-3xl mx-auto p-4 fade-in hidden">
@@ -121,16 +112,6 @@ const conversations = [
 
 let userAnswers = [];
 let currentExercise = 0;
-
-const captionScenarios = [
-  { id: "cap1", scenario: "Fashion influencer post", context: "You launched a new clothing line and gained 5,000 followers", emoji: "👗", suggestion: "Use: 'have launched', 'have gained'" },
-  { id: "cap2", scenario: "Coffee shop promotion", context: "Your café has created amazing reels and reached new customers", emoji: "☕", suggestion: "Use: 'have created', 'have reached'" },
-  { id: "cap3", scenario: "Tech startup announcement", context: "Your company developed a new app and built strong brand awareness", emoji: "📱", suggestion: "Use: 'have developed', 'have built'" },
-  { id: "cap4", scenario: "Fitness brand update", context: "You boosted posts and increased engagement significantly", emoji: "💪", suggestion: "Use: 'have boosted', 'have increased'" },
-  { id: "cap5", scenario: "Travel blogger moment", context: "You've gone viral with beach content and attracted sponsorships", emoji: "✈️", suggestion: "Use: 'have gone', 'have attracted'" }
-];
-
-let currentCaption = 0;
 
 // Render vocab
 function renderVocab() {
@@ -210,102 +191,6 @@ async function saveAnswer(activityId, answer, isCorrect) {
 function nextExercise() { if (currentExercise < exercises.length - 1) { currentExercise++; renderPractice(); } }
 function prevExercise() { if (currentExercise > 0) { currentExercise--; renderPractice(); } }
 
-// Render captions
-function renderCaptions() {
-  const area = document.getElementById('captions-area');
-  const scenario = captionScenarios[currentCaption];
-  area.innerHTML = `
-    <div class="mb-3 flex items-center justify-between">
-      <span class="text-xs text-slate-400">Caption ${currentCaption + 1} of ${captionScenarios.length}</span>
-      <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">${Math.round(((currentCaption) / captionScenarios.length) * 100)}% complete</span>
-    </div>
-    <div class="bg-gradient-to-r from-indigo-50 to-sky-50 rounded-xl p-5 mb-4">
-      <div class="flex items-start gap-3">
-        <span class="text-4xl">${scenario.emoji}</span>
-        <div>
-          <h3 class="font-heading text-lg text-slate-800">${scenario.scenario}</h3>
-          <p class="text-sm text-slate-600 mt-1">${scenario.context}</p>
-          <p class="text-xs text-sky-600 mt-2 bg-sky-100 rounded px-2 py-1 inline-block">💡 ${scenario.suggestion}</p>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="caption-input" class="block text-sm font-medium text-slate-700 mb-2">Write your caption:</label>
-      <textarea id="caption-input" placeholder="Write a caption using present perfect and marketing vocabulary..." class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 h-24 resize-none font-body"></textarea>
-    </div>
-    <div class="flex gap-2 mb-3">
-      <button onclick="submitCaption()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl text-sm font-medium transition-colors flex-1">Submit Caption</button>
-      <button onclick="saveDraft()" class="border border-slate-300 text-slate-600 hover:bg-slate-50 px-4 py-3 rounded-xl text-sm font-medium transition-colors">Save Draft</button>
-    </div>
-    <div id="caption-feedback" class="text-sm mb-4"></div>
-    <div class="flex justify-between">
-      <button onclick="prevCaption()" class="text-sm text-slate-500 hover:text-slate-700 ${currentCaption === 0 ? 'invisible' : ''}">← Previous</button>
-      <button onclick="nextCaption()" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium ${currentCaption === captionScenarios.length - 1 ? 'invisible' : ''}">Next →</button>
-    </div>
-  `;
-}
-
-function submitCaption() {
-  const input = document.getElementById('caption-input');
-  const caption = input.value.trim();
-  const scenario = captionScenarios[currentCaption];
-  const feedback = document.getElementById('caption-feedback');
-
-  if (!caption) {
-    feedback.innerHTML = `<div class="bg-amber-50 text-amber-700 rounded-xl p-3 border border-amber-200">⚠️ Please write a caption first.</div>`;
-    return;
-  }
-
-  const hasPerfect = /have\s+\w+ed|has\s+\w+ed|haven't|hasn't/i.test(caption);
-  const hasMarketing = /engagement|viral|reach|followers|content|brand|awareness|boost|analytics/i.test(caption);
-
-  let message = '';
-  if (hasPerfect && hasMarketing) {
-    message = `<div class="bg-emerald-50 text-emerald-700 rounded-xl p-3 border border-emerald-200">✅ Excellent! You used present perfect and marketing vocabulary. Great work!</div>`;
-  } else if (hasPerfect) {
-    message = `<div class="bg-blue-50 text-blue-700 rounded-xl p-3 border border-blue-200">👍 Good! You used present perfect. Try adding more marketing vocabulary from the Learn tab.</div>`;
-  } else if (hasMarketing) {
-    message = `<div class="bg-blue-50 text-blue-700 rounded-xl p-3 border border-blue-200">👍 Good! You used marketing vocabulary. Try to include the present perfect tense (have/has + past participle).</div>`;
-  } else {
-    message = `<div class="bg-amber-50 text-amber-700 rounded-xl p-3 border border-amber-200">💭 Remember to use present perfect (have/has + past participle) and marketing vocabulary like 'engagement', 'reach', or 'followers'.</div>`;
-  }
-
-  feedback.innerHTML = message;
-  saveCaption(scenario.id, caption, hasPerfect && hasMarketing);
-}
-
-function saveDraft() {
-  const input = document.getElementById('caption-input');
-  const feedback = document.getElementById('caption-feedback');
-  const scenario = captionScenarios[currentCaption];
-  
-  if (!input.value.trim()) {
-    feedback.innerHTML = `<div class="bg-amber-50 text-amber-700 rounded-xl p-3 border border-amber-200">⚠️ Nothing to save yet!</div>`;
-    return;
-  }
-  
-  feedback.innerHTML = `<div class="bg-sky-50 text-sky-700 rounded-xl p-3 border border-sky-200">💾 Draft saved! You can continue later.</div>`;
-  saveCaption(scenario.id, input.value.trim(), false);
-}
-
-async function saveCaption(scenarioId, captionText, isComplete) {
-  if (userAnswers.length >= 999) return;
-  const result = await window.dataSdk.create({
-    activity_id: scenarioId,
-    caption_scenario: scenarioId,
-    caption_text: captionText,
-    user_answer: captionText,
-    is_correct: isComplete,
-    completed_at: new Date().toISOString()
-  });
-  if (!result.isOk) {
-    console.error('Failed to save caption');
-  }
-}
-
-function nextCaption() { if (currentCaption < captionScenarios.length - 1) { currentCaption++; renderCaptions(); } }
-function prevCaption() { if (currentCaption > 0) { currentCaption--; renderCaptions(); } }
-
 // Render conversations
 function renderConversations() {
   const area = document.getElementById('convo-area');
@@ -364,7 +249,7 @@ function renderProgress() {
 
 // Tabs
 function showTab(tab) {
-  ['learn','practice','captions','conversation','progress'].forEach(t => {
+  ['learn','practice','conversation','progress'].forEach(t => {
     document.getElementById('section-' + t).classList.toggle('hidden', t !== tab);
     const btn = document.getElementById('tab-' + t);
     btn.classList.toggle('tab-active', t === tab);
@@ -372,7 +257,6 @@ function showTab(tab) {
     btn.classList.toggle('text-slate-600', t !== tab);
   });
   if (tab === 'practice') renderPractice();
-  if (tab === 'captions') renderCaptions();
   if (tab === 'progress') renderProgress();
 }
 
@@ -435,5 +319,5 @@ const dataHandler = {
 
 lucide.createIcons();
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f4ffcfb2171a3c8',t:'MTc3NzY1MTExMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f4ff8b454daa3c8',t:'MTc3NzY1MDkzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
