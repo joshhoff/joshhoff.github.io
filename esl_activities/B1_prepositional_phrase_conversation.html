@@ -33,17 +33,16 @@
      <h1 id="main-title" class="text-3xl md:text-4xl font-800 text-orange-900 mb-1">Put the Conversation in Order!</h1>
      <p id="instructions" class="text-orange-700 font-600 text-sm md:text-base">Drag the sentences into the correct order</p>
     </header>
-    <div class="flex gap-2 mb-5 justify-center flex-wrap">
-     <button onclick="loadScenario('restaurant')" class="scenario-btn px-4 py-2 rounded-full font-700 text-sm transition-all" data-scenario="restaurant">🍽️ Restaurant</button> <button onclick="loadScenario('cafe')" class="scenario-btn px-4 py-2 rounded-full font-700 text-sm transition-all" data-scenario="cafe">☕ Café</button> <button onclick="loadScenario('clinic')" class="scenario-btn px-4 py-2 rounded-full font-700 text-sm transition-all" data-scenario="clinic">🏥 Clinic</button>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mb-5"><button onclick="loadScenario('restaurant')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="restaurant">🍽️ Restaurant</button> <button onclick="loadScenario('cafe')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="cafe">☕ Café</button> <button onclick="loadScenario('clinic')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="clinic">🏥 Clinic</button> <button onclick="loadScenario('hotel')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="hotel">🏨 Hotel</button> <button onclick="loadScenario('supermarket')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="supermarket">🛒 Supermarket</button> <button onclick="loadScenario('bank')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="bank">🏦 Bank</button> <button onclick="loadScenario('library')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="library">📚 Library</button> <button onclick="loadScenario('hairsalon')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="hairsalon">💇 Hair Salon</button> <button onclick="loadScenario('airport')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="airport">✈️ Airport</button> <button onclick="loadScenario('school')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="school">🎓 School</button> <button onclick="loadScenario('gym')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="gym">💪 Gym</button> <button onclick="loadScenario('laundry')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="laundry">👔 Laundry</button> <button onclick="loadScenario('postoffice')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="postoffice">📮 Post Office</button> <button onclick="loadScenario('cinema')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="cinema">🎬 Cinema</button> <button onclick="loadScenario('pharmacy')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="pharmacy">💊 Pharmacy</button> <button onclick="loadScenario('petshop')" class="scenario-btn px-3 py-2 rounded-full font-700 text-xs transition-all" data-scenario="petshop">🐾 Pet Shop</button>
     </div>
     <div id="drop-zone" class="space-y-3 mb-5 min-h-[200px]"></div>
-    <div class="flex justify-center gap-3">
-     <button onclick="checkOrder()" id="check-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-700 px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"> <span class="flex items-center gap-2"><i data-lucide="check-circle" style="width:20px;height:20px"></i> Check Answer</span> </button> <button onclick="resetCurrent()" class="bg-orange-400 hover:bg-orange-500 text-white font-700 px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"> <span class="flex items-center gap-2"><i data-lucide="refresh-cw" style="width:20px;height:20px"></i> Shuffle</span> </button>
+    <div class="flex justify-center gap-3"><button onclick="checkOrder()" id="check-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-700 px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"> <span class="flex items-center gap-2"><i data-lucide="check-circle" style="width:20px;height:20px"></i> Check Answer</span> </button> <button onclick="resetCurrent()" class="bg-orange-400 hover:bg-orange-500 text-white font-700 px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"> <span class="flex items-center gap-2"><i data-lucide="refresh-cw" style="width:20px;height:20px"></i> Shuffle</span> </button>
     </div>
     <div id="feedback" class="text-center mt-4 font-700 text-lg hidden"></div>
     <div id="score" class="text-center mt-2 text-orange-800 font-600 text-sm"></div>
     <div id="definition-modal" onclick="if(event.target === this) closeDefinition()">
-     <div class="definition-card relative"><button class="close-definition" onclick="closeDefinition()">✕</button>
+     <div class="definition-card relative">
+      <button class="close-definition" onclick="closeDefinition()">✕</button>
       <h2 id="def-phrase" class="text-2xl font-800 text-orange-900 mb-3"></h2>
       <div class="space-y-3">
        <div>
@@ -85,7 +84,33 @@ const phraseDefinitions = {
   "hang on": { en: "to wait a moment", es: "esperar un momento", de: "warten" },
   "in about": { en: "approximately or roughly", es: "en aproximadamente", de: "in etwa" },
   "come in": { en: "to enter a room or place", es: "entrar", de: "hereinkommen" },
-  "run down": { en: "to feel tired and without energy", es: "agotado", de: "erschöpft" }
+  "run down": { en: "to feel tired and without energy", es: "agotado", de: "erschöpft" },
+  "set up": { en: "to organize or prepare something", es: "configurar", de: "einrichten" },
+  "check out": { en: "to pay and leave a place, or to examine", es: "salir (del hotel), revisar", de: "auschecken" },
+  "stay on": { en: "to continue to remain somewhere", es: "quedarse más tiempo", de: "bleiben" },
+  "look for": { en: "to search for something", es: "buscar", de: "suchen" },
+  "trying to find": { en: "attempting to locate or discover", es: "intentando encontrar", de: "versuchen zu finden" },
+  "ring up": { en: "to enter an amount in a cash register", es: "registrar la venta", de: "eintippen" },
+  "pay in": { en: "to make a payment using a specific method", es: "pagar con", de: "zahlen mit" },
+  "come up": { en: "to move towards (usually higher)", es: "venir hacia", de: "herankommen" },
+  "carry out": { en: "to complete or perform a task", es: "llevar a cabo", de: "durchführen" },
+  "go over": { en: "to review or examine thoroughly", es: "repasar", de: "durchgehen" },
+  "look up": { en: "to search for information", es: "buscar (información)", de: "nachschlagen" },
+  "keep for": { en: "to have possession of something for a period of time", es: "guardar por", de: "behalten für" },
+  "bring back": { en: "to return something to a place", es: "traer de vuelta", de: "zurückbringen" },
+  "put up": { en: "to raise one's hand or object", es: "levantar", de: "aufheben" },
+  "work out": { en: "to solve a problem or exercise", es: "resolver, hacer ejercicio", de: "trainieren, lösen" },
+  "hand out": { en: "to distribute or give to each person", es: "repartir", de: "austeilen" },
+  "turn in": { en: "to submit or deliver something", es: "entregar", de: "abgeben" },
+  "sign up": { en: "to register or enroll in something", es: "inscribirse", de: "sich anmelden" },
+  "run through": { en: "to go through quickly or explain", es: "repasar rápidamente", de: "durchgehen" },
+  "point out": { en: "to show or indicate something", es: "señalar", de: "hinweisen" },
+  "drop off": { en: "to deliver or leave something at a place", es: "dejar en", de: "abgeben" },
+  "take care of": { en: "to handle or look after something", es: "ocuparse de", de: "sich kümmern um" },
+  "go through": { en: "to pass or move from one side to another", es: "pasar a través de", de: "durchgehen" },
+  "ready by": { en: "prepared and available at a specific time", es: "listo para", de: "bereit um" },
+  "explain how": { en: "to describe the method or procedure", es: "explicar cómo", de: "erklären wie" },
+  "show up": { en: "to arrive at a place", es: "llegar, aparecer", de: "auftauchen" }
 };
 
 const scenarios = {
@@ -120,6 +145,149 @@ const scenarios = {
       { speaker: "Receptionist", text: "The doctor will be with you in about ten minutes.", phrase: "in about" },
       { speaker: "Doctor", text: "Hello! Come in and sit down. What's the matter?", phrase: "come in" },
       { speaker: "Patient", text: "I've been feeling run down for a week now.", phrase: "run down" }
+    ]
+  },
+  hotel: {
+    lines: [
+      { speaker: "Receptionist", text: "Welcome! Please check in here. Can I look at your passport?", phrase: "check in" },
+      { speaker: "Guest", text: "Sure! I'm looking for a room with a view.", phrase: "looking for" },
+      { speaker: "Receptionist", text: "Great! I can set up your room right away.", phrase: "set up" },
+      { speaker: "Guest", text: "How do I get to my room? Can you fill in the details?", phrase: "fill in" },
+      { speaker: "Receptionist", text: "Of course. Take the lift and come back if you need help.", phrase: "come back" },
+      { speaker: "Guest", text: "What time should I check out tomorrow?", phrase: "check out" },
+      { speaker: "Receptionist", text: "Checkout is at 11 AM. Let us know if you need to stay on longer.", phrase: "stay on" }
+    ]
+  },
+  supermarket: {
+    lines: [
+      { speaker: "Cashier", text: "Hi! Can I help you look for anything today?", phrase: "look for" },
+      { speaker: "Customer", text: "Yes, I'm trying to find the cereal aisle.", phrase: "trying to find" },
+      { speaker: "Cashier", text: "It's over in section three. Would you like to add on a loyalty card?", phrase: "add on" },
+      { speaker: "Customer", text: "Sure! Can you set up an account for me?", phrase: "set up" },
+      { speaker: "Cashier", text: "Of course! Let me ring up your items.", phrase: "ring up" },
+      { speaker: "Customer", text: "How much does it come to in total?", phrase: "come to" },
+      { speaker: "Cashier", text: "That comes to £24.99. Would you like to pay in cash or card?", phrase: "pay in" }
+    ]
+  },
+  bank: {
+    lines: [
+      { speaker: "Teller", text: "Good morning! Can I help you? Please come up to the counter.", phrase: "come up" },
+      { speaker: "Customer", text: "Yes, I'd like to set up a new account.", phrase: "set up" },
+      { speaker: "Teller", text: "Great! Can you fill in this application form?", phrase: "fill in" },
+      { speaker: "Customer", text: "Sure. How long does it take to carry out?", phrase: "carry out" },
+      { speaker: "Teller", text: "It usually takes about 15 minutes. Please hang on while I process it.", phrase: "hang on" },
+      { speaker: "Customer", text: "That's fine. Can you also look at my savings options?", phrase: "look at" },
+      { speaker: "Teller", text: "Absolutely! I'll go over the details with you right away.", phrase: "go over" }
+    ]
+  },
+  library: {
+    lines: [
+      { speaker: "Librarian", text: "Hello! Are you looking for any books today?", phrase: "looking for" },
+      { speaker: "Student", text: "Yes, I'm trying to find books about dinosaurs.", phrase: "trying to find" },
+      { speaker: "Librarian", text: "Let me search that up in the system. Please wait while I look up the titles.", phrase: "look up" },
+      { speaker: "Student", text: "Great! Can you also check out if they have audiobooks?", phrase: "check out" },
+      { speaker: "Librarian", text: "Of course! I'll set up your library card right now.", phrase: "set up" },
+      { speaker: "Student", text: "How long can I keep the books for?", phrase: "keep for" },
+      { speaker: "Librarian", text: "You have them for three weeks. You'll need to bring them back by then.", phrase: "bring back" }
+    ]
+  },
+  hairsalon: {
+    lines: [
+      { speaker: "Stylist", text: "Welcome! What are you looking for today? A new haircut?", phrase: "looking for" },
+      { speaker: "Customer", text: "Yes! Can you try out a new style for me?", phrase: "try out" },
+      { speaker: "Stylist", text: "Sure! Let me look at some pictures first. Come sit down here.", phrase: "sit down" },
+      { speaker: "Customer", text: "I'd like to go for something short and modern.", phrase: "go for" },
+      { speaker: "Stylist", text: "Perfect! I'll start working on it right away.", phrase: "right away" },
+      { speaker: "Customer", text: "How long will it take to carry out?", phrase: "carry out" },
+      { speaker: "Stylist", text: "About 20 minutes. Then we can ring up your payment.", phrase: "ring up" }
+    ]
+  },
+  airport: {
+    lines: [
+      { speaker: "Staff", text: "Good morning! Please check in your luggage here.", phrase: "check in" },
+      { speaker: "Passenger", text: "Can I also add on an extra bag? I'm looking for baggage allowance.", phrase: "add on" },
+      { speaker: "Staff", text: "Let me look up your booking details first.", phrase: "look up" },
+      { speaker: "Passenger", text: "How long will check-in take to carry out?", phrase: "carry out" },
+      { speaker: "Staff", text: "About 10 minutes. Then you can go through to security.", phrase: "go through" },
+      { speaker: "Passenger", text: "What time should I board? Can you fill in my boarding card?", phrase: "fill in" },
+      { speaker: "Staff", text: "Boarding is in 30 minutes. Have a great flight! Come back and see us!", phrase: "come back" }
+    ]
+  },
+  school: {
+    lines: [
+      { speaker: "Teacher", text: "Good morning! Please sit down and take out your homework.", phrase: "sit down" },
+      { speaker: "Student", text: "I'm looking for my pencil. Can I go to the bathroom?", phrase: "looking for" },
+      { speaker: "Teacher", text: "You need to put up your hand first and wait for my permission.", phrase: "put up" },
+      { speaker: "Student", text: "Can you help me with this problem? I'm trying to work it out.", phrase: "work out" },
+      { speaker: "Teacher", text: "Sure! Let me go over it with you after class.", phrase: "go over" },
+      { speaker: "Student", text: "What time will you hand out the test results?", phrase: "hand out" },
+      { speaker: "Teacher", text: "Tomorrow. Don't forget to turn in your project by then!", phrase: "turn in" }
+    ]
+  },
+  gym: {
+    lines: [
+      { speaker: "Trainer", text: "Welcome! Can I sign you up for a membership?", phrase: "sign up" },
+      { speaker: "Member", text: "Sure! Can you also fill in the membership form?", phrase: "fill in" },
+      { speaker: "Trainer", text: "Of course! Let me set up your account right away.", phrase: "set up" },
+      { speaker: "Member", text: "How long will it take to carry out?", phrase: "carry out" },
+      { speaker: "Trainer", text: "Just five minutes. Then I can show you around and run through all the equipment.", phrase: "run through" },
+      { speaker: "Member", text: "Great! Can you also point out the locker rooms?", phrase: "point out" },
+      { speaker: "Trainer", text: "They're over there. Feel free to work out whenever you want!", phrase: "work out" }
+    ]
+  },
+  laundry: {
+    lines: [
+      { speaker: "Staff", text: "Hi! What can I help you with today? Are you looking for dry cleaning?", phrase: "looking for" },
+      { speaker: "Customer", text: "Yes, I'd like to drop off these clothes. Can you fill in a receipt?", phrase: "drop off" },
+      { speaker: "Staff", text: "Sure! Let me set up an account for you first.", phrase: "set up" },
+      { speaker: "Customer", text: "When will they be ready? I need them by tomorrow.", phrase: "ready by" },
+      { speaker: "Staff", text: "They'll be ready in about three days. I'll call you when they come back.", phrase: "come back" },
+      { speaker: "Customer", text: "Can you also take care of this stain on my shirt?", phrase: "take care of" },
+      { speaker: "Staff", text: "Yes, we can definitely sort it out. I'll ring up the total now.", phrase: "ring up" }
+    ]
+  },
+  postoffice: {
+    lines: [
+      { speaker: "Clerk", text: "Good afternoon! Can I help you? Please come up to the counter.", phrase: "come up" },
+      { speaker: "Customer", text: "Yes, I'd like to send this package. Can you fill in a label?", phrase: "fill in" },
+      { speaker: "Clerk", text: "Of course! Let me weigh it and look up the postage rates.", phrase: "look up" },
+      { speaker: "Customer", text: "How long will it take to carry out this delivery?", phrase: "carry out" },
+      { speaker: "Clerk", text: "About two weeks. You can also pick up a tracking number.", phrase: "pick up" },
+      { speaker: "Customer", text: "Great! Can you also set up a change of address form?", phrase: "set up" },
+      { speaker: "Clerk", text: "Sure! That comes to £8.50. We can get that sorted right away.", phrase: "right away" }
+    ]
+  },
+  cinema: {
+    lines: [
+      { speaker: "Cashier", text: "Welcome! What can I get for you? Are you looking for tickets?", phrase: "get for" },
+      { speaker: "Customer", text: "Yes, I'd like to try out the new action movie. Two tickets, please.", phrase: "try out" },
+      { speaker: "Cashier", text: "Great! Can I also add on some popcorn and a drink?", phrase: "add on" },
+      { speaker: "Customer", text: "Sure! How much does it come to in total?", phrase: "come to" },
+      { speaker: "Cashier", text: "That comes to £28.50. Let me ring it up for you.", phrase: "ring up" },
+      { speaker: "Customer", text: "What time does the movie start? When do I need to come back?", phrase: "come back" },
+      { speaker: "Cashier", text: "It starts in 15 minutes. Just show up 10 minutes early. Enjoy the film!", phrase: "show up" }
+    ]
+  },
+  pharmacy: {
+    lines: [
+      { speaker: "Pharmacist", text: "Hello! Can I help you? Are you looking for anything?", phrase: "looking for" },
+      { speaker: "Customer", text: "Yes, I'd like to pick up my prescription.", phrase: "pick up" },
+      { speaker: "Pharmacist", text: "Of course! Can you fill in your information please?", phrase: "fill in" },
+      { speaker: "Customer", text: "How long will it take to carry out?", phrase: "carry out" },
+      { speaker: "Pharmacist", text: "About five minutes. Please hang on while I prepare it.", phrase: "hang on" },
+      { speaker: "Customer", text: "Can you also explain how to take the medicine?", phrase: "explain how" },
+      { speaker: "Pharmacist", text: "Absolutely! Take it twice a day and come back in two weeks for a check-up.", phrase: "come back" }
+    ]
+  },
+  petshop: {
+    lines: [
+      { speaker: "Staff", text: "Hi there! What can I get for you today?", phrase: "get for" },
+      { speaker: "Customer", text: "I'm looking for dog food. Can you help me find the right one?", phrase: "looking for" },
+      { speaker: "Staff", text: "Sure! Let me look up what your dog likes. Come over here.", phrase: "look up" },
+      { speaker: "Customer", text: "He also needs a new toy. Can you try out this one?", phrase: "try out" },
+      { speaker: "Staff", text: "Good choice! Let me ring up your items.", phrase: "ring up" },
+      { speaker: "Customer", text: "How much does it come to?", phrase: "come to" },
+      { speaker: "Staff", text: "That comes to £35.99. Come back next week for a special pet care offer!", phrase: "come back" }
     ]
   }
 };
@@ -288,5 +456,5 @@ window.elementSdk.init({
 loadScenario('restaurant');
 lucide.createIcons();
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f608df5e722a3c8',t:'MTc3NzgyNDgyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f609767e633e2db',t:'MTc3NzgyNTIwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
