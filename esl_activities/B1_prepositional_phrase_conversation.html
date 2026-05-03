@@ -1,0 +1,292 @@
+<!doctype html>
+<html class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    .drag-over { border-color: #f59e0b !important; background: #fef3c7 !important; }
+    .correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+    .incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; animation: shake 0.4s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+    @keyframes pop { 0%{transform:scale(0.95)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
+    .pop { animation: pop 0.3s ease; }
+    .phrase-tag { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #78350f; font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .phrase-tag:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4); }
+    #definition-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 50; align-items: center; justify-content: center; }
+    #definition-modal.active { display: flex; }
+    .definition-card { background: white; border-radius: 20px; padding: 24px; max-width: 400px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); animation: pop 0.3s ease; }
+    .close-definition { position: absolute; top: 12px; right: 12px; background: #fee2e2; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #991b1b; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .close-definition:hover { background: #fecaca; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="h-full w-full bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-4 md:p-8">
+   <div class="max-w-2xl mx-auto">
+    <header class="text-center mb-6">
+     <h1 id="main-title" class="text-3xl md:text-4xl font-800 text-orange-900 mb-1">Put the Conversation in Order!</h1>
+     <p id="instructions" class="text-orange-700 font-600 text-sm md:text-base">Drag the sentences into the correct order</p>
+    </header>
+    <div class="flex gap-2 mb-5 justify-center flex-wrap">
+     <button onclick="loadScenario('restaurant')" class="scenario-btn px-4 py-2 rounded-full font-700 text-sm transition-all" data-scenario="restaurant">🍽️ Restaurant</button> <button onclick="loadScenario('cafe')" class="scenario-btn px-4 py-2 rounded-full font-700 text-sm transition-all" data-scenario="cafe">☕ Café</button> <button onclick="loadScenario('clinic')" class="scenario-btn px-4 py-2 rounded-full font-700 text-sm transition-all" data-scenario="clinic">🏥 Clinic</button>
+    </div>
+    <div id="drop-zone" class="space-y-3 mb-5 min-h-[200px]"></div>
+    <div class="flex justify-center gap-3">
+     <button onclick="checkOrder()" id="check-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-700 px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"> <span class="flex items-center gap-2"><i data-lucide="check-circle" style="width:20px;height:20px"></i> Check Answer</span> </button> <button onclick="resetCurrent()" class="bg-orange-400 hover:bg-orange-500 text-white font-700 px-6 py-3 rounded-xl shadow-lg transition-all active:scale-95"> <span class="flex items-center gap-2"><i data-lucide="refresh-cw" style="width:20px;height:20px"></i> Shuffle</span> </button>
+    </div>
+    <div id="feedback" class="text-center mt-4 font-700 text-lg hidden"></div>
+    <div id="score" class="text-center mt-2 text-orange-800 font-600 text-sm"></div>
+    <div id="definition-modal" onclick="if(event.target === this) closeDefinition()">
+     <div class="definition-card relative"><button class="close-definition" onclick="closeDefinition()">✕</button>
+      <h2 id="def-phrase" class="text-2xl font-800 text-orange-900 mb-3"></h2>
+      <div class="space-y-3">
+       <div>
+        <p class="text-xs font-700 text-orange-600 uppercase tracking-wide mb-1">English</p>
+        <p id="def-en" class="text-orange-950 font-600"></p>
+       </div>
+       <div>
+        <p class="text-xs font-700 text-rose-600 uppercase tracking-wide mb-1">Español</p>
+        <p id="def-es" class="text-orange-950 font-600"></p>
+       </div>
+       <div>
+        <p class="text-xs font-700 text-amber-600 uppercase tracking-wide mb-1">Deutsch</p>
+        <p id="def-de" class="text-orange-950 font-600"></p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+const phraseDefinitions = {
+  "sit down": { en: "to move into a sitting position", es: "sentarse", de: "sich hinsetzen" },
+  "look at": { en: "to view or examine something", es: "mirar", de: "anschauen" },
+  "come back": { en: "to return to a place", es: "volver", de: "zurückkommen" },
+  "go for": { en: "to choose something", es: "elegir", de: "sich für etwas entscheiden" },
+  "add on": { en: "to include something extra", es: "agregar", de: "hinzufügen" },
+  "come to": { en: "to add up to a total amount", es: "ascender a", de: "sich auf etwas belaufen" },
+  "right away": { en: "immediately, without delay", es: "enseguida", de: "sofort" },
+  "get for": { en: "to provide or bring something", es: "traer para", de: "bringen für" },
+  "looking for": { en: "to search or try to find", es: "buscando", de: "suchen" },
+  "try out": { en: "to test or sample something new", es: "probar", de: "ausprobieren" },
+  "pick up": { en: "to collect or take something", es: "recoger", de: "abholen" },
+  "take away": { en: "food to carry out and eat elsewhere", es: "llevar", de: "mitnehmen" },
+  "wait for": { en: "to stay until someone arrives", es: "esperar", de: "warten auf" },
+  "call out": { en: "to say or announce loudly", es: "llamar", de: "ausrufen" },
+  "check in": { en: "to register arrival at a place", es: "registrarse", de: "sich anmelden" },
+  "signed up": { en: "to register or join something", es: "registrarse", de: "sich anmelden" },
+  "fill in": { en: "to complete a form with information", es: "rellenar", de: "ausfüllen" },
+  "hang on": { en: "to wait a moment", es: "esperar un momento", de: "warten" },
+  "in about": { en: "approximately or roughly", es: "en aproximadamente", de: "in etwa" },
+  "come in": { en: "to enter a room or place", es: "entrar", de: "hereinkommen" },
+  "run down": { en: "to feel tired and without energy", es: "agotado", de: "erschöpft" }
+};
+
+const scenarios = {
+  restaurant: {
+    lines: [
+      { speaker: "Waiter", text: "Good evening! Would you like to sit down over here?", phrase: "sit down" },
+      { speaker: "Customer", text: "Yes, thank you. Can I look at the menu?", phrase: "look at" },
+      { speaker: "Waiter", text: "Of course! I'll come back in a few minutes.", phrase: "come back" },
+      { speaker: "Customer", text: "I'd like to go for the pasta, please.", phrase: "go for" },
+      { speaker: "Waiter", text: "Would you like to add on a drink with that?", phrase: "add on" },
+      { speaker: "Customer", text: "Yes, I'll have water. How much does it come to?", phrase: "come to" },
+      { speaker: "Waiter", text: "That comes to £12.50. I'll bring it right away!", phrase: "right away" }
+    ]
+  },
+  cafe: {
+    lines: [
+      { speaker: "Barista", text: "Hi there! What can I get for you today?", phrase: "get for" },
+      { speaker: "Customer", text: "I'm looking for something warm. What do you recommend?", phrase: "looking for" },
+      { speaker: "Barista", text: "You should try out our new hot chocolate!", phrase: "try out" },
+      { speaker: "Customer", text: "Sounds good! Can I also pick up a muffin?", phrase: "pick up" },
+      { speaker: "Barista", text: "Sure! Would you like to eat in or take away?", phrase: "take away" },
+      { speaker: "Customer", text: "I'll eat in. I need to wait for my friend.", phrase: "wait for" },
+      { speaker: "Barista", text: "No problem! I'll call out your name when it's ready.", phrase: "call out" }
+    ]
+  },
+  clinic: {
+    lines: [
+      { speaker: "Receptionist", text: "Hello! Please check in at the front desk.", phrase: "check in" },
+      { speaker: "Patient", text: "Hi, I have an appointment at 3. I signed up online.", phrase: "signed up" },
+      { speaker: "Receptionist", text: "Great! Please fill in this form while you wait.", phrase: "fill in" },
+      { speaker: "Patient", text: "OK. How long do I need to hang on for?", phrase: "hang on" },
+      { speaker: "Receptionist", text: "The doctor will be with you in about ten minutes.", phrase: "in about" },
+      { speaker: "Doctor", text: "Hello! Come in and sit down. What's the matter?", phrase: "come in" },
+      { speaker: "Patient", text: "I've been feeling run down for a week now.", phrase: "run down" }
+    ]
+  }
+};
+
+let currentScenario = 'restaurant';
+let shuffledLines = [];
+let draggedIdx = null;
+let attempts = 0;
+let solved = 0;
+
+function shuffle(arr) {
+  let a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  // Ensure it's not already in order
+  if (JSON.stringify(a.map(x=>x.text)) === JSON.stringify(scenarios[currentScenario].lines.map(x=>x.text))) return shuffle(arr);
+  return a;
+}
+
+function loadScenario(name) {
+  currentScenario = name;
+  document.querySelectorAll('.scenario-btn').forEach(b => {
+    b.classList.toggle('bg-orange-500', b.dataset.scenario === name);
+    b.classList.toggle('text-white', b.dataset.scenario === name);
+    b.classList.toggle('bg-white', b.dataset.scenario !== name);
+    b.classList.toggle('text-orange-800', b.dataset.scenario !== name);
+    b.classList.toggle('border', b.dataset.scenario !== name);
+    b.classList.toggle('border-orange-300', b.dataset.scenario !== name);
+  });
+  shuffledLines = shuffle(scenarios[name].lines);
+  renderLines();
+  document.getElementById('feedback').classList.add('hidden');
+}
+
+function renderLines() {
+  const zone = document.getElementById('drop-zone');
+  zone.innerHTML = '';
+  shuffledLines.forEach((line, i) => {
+    const div = document.createElement('div');
+    div.className = 'bg-white border-2 border-orange-200 rounded-xl p-4 cursor-grab active:cursor-grabbing shadow-sm hover:shadow-md transition-all flex items-start gap-3 pop';
+    div.draggable = true;
+    div.dataset.index = i;
+    div.innerHTML = `
+      <span class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-800 flex items-center justify-center text-sm">${i+1}</span>
+      <div class="flex-1">
+        <span class="text-xs font-700 text-orange-500 uppercase tracking-wide">${line.speaker}</span>
+        <p class="text-orange-950 font-600 text-sm md:text-base mt-0.5">"${line.text}"</p>
+        <span class="phrase-tag mt-1 inline-block" onclick="showDefinition('${line.phrase}')">${line.phrase}</span>
+      </div>
+      <span class="flex-shrink-0 text-orange-300"><i data-lucide="grip-vertical" style="width:20px;height:20px"></i></span>
+    `;
+    div.addEventListener('dragstart', e => { draggedIdx = i; div.style.opacity = '0.5'; });
+    div.addEventListener('dragend', e => { div.style.opacity = '1'; });
+    div.addEventListener('dragover', e => { e.preventDefault(); div.classList.add('drag-over'); });
+    div.addEventListener('dragleave', e => { div.classList.remove('drag-over'); });
+    div.addEventListener('drop', e => {
+      e.preventDefault(); div.classList.remove('drag-over');
+      if (draggedIdx !== null && draggedIdx !== i) {
+        const item = shuffledLines.splice(draggedIdx, 1)[0];
+        shuffledLines.splice(i, 0, item);
+        renderLines();
+      }
+    });
+    // Touch support
+    div.addEventListener('touchstart', e => { draggedIdx = i; div.style.opacity = '0.7'; });
+    div.addEventListener('touchend', e => { div.style.opacity = '1'; });
+    zone.appendChild(div);
+  });
+  lucide.createIcons();
+}
+
+function checkOrder() {
+  const correct = scenarios[currentScenario].lines;
+  const cards = document.getElementById('drop-zone').children;
+  let allCorrect = true;
+  for (let i = 0; i < shuffledLines.length; i++) {
+    if (shuffledLines[i].text === correct[i].text) {
+      cards[i].classList.add('correct');
+      cards[i].classList.remove('incorrect');
+    } else {
+      cards[i].classList.add('incorrect');
+      cards[i].classList.remove('correct');
+      allCorrect = false;
+    }
+  }
+  attempts++;
+  const fb = document.getElementById('feedback');
+  fb.classList.remove('hidden');
+  if (allCorrect) {
+    solved++;
+    fb.textContent = '🎉 Perfect! You got it right!';
+    fb.className = 'text-center mt-4 font-700 text-lg text-emerald-600';
+  } else {
+    fb.textContent = 'Almost! The red ones are in the wrong place. Try again!';
+    fb.className = 'text-center mt-4 font-700 text-lg text-rose-600';
+  }
+  document.getElementById('score').textContent = `Score: ${solved}/${attempts} correct`;
+}
+
+function resetCurrent() {
+  shuffledLines = shuffle(scenarios[currentScenario].lines);
+  renderLines();
+  document.getElementById('feedback').classList.add('hidden');
+}
+
+function showDefinition(phrase) {
+  const def = phraseDefinitions[phrase];
+  if (!def) return;
+  document.getElementById('def-phrase').textContent = phrase;
+  document.getElementById('def-en').textContent = def.en;
+  document.getElementById('def-es').textContent = def.es;
+  document.getElementById('def-de').textContent = def.de;
+  document.getElementById('definition-modal').classList.add('active');
+}
+
+function closeDefinition() {
+  document.getElementById('definition-modal').classList.remove('active');
+}
+
+// Element SDK
+const defaultConfig = {
+  main_title: "Put the Conversation in Order!",
+  instructions_text: "Drag the sentences into the correct order",
+  background_color: "#fffbeb",
+  surface_color: "#ffffff",
+  text_color: "#431407",
+  primary_action_color: "#10b981",
+  secondary_action_color: "#f59e0b",
+  font_family: "Nunito",
+  font_size: 16
+};
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const t = (k) => config[k] || defaultConfig[k];
+    document.getElementById('main-title').textContent = t('main_title');
+    document.getElementById('instructions').textContent = t('instructions_text');
+    document.getElementById('app').style.background = `linear-gradient(135deg, ${t('background_color')}, ${t('surface_color')})`;
+    document.getElementById('main-title').style.color = t('text_color');
+    document.getElementById('instructions').style.color = t('text_color');
+    document.getElementById('check-btn').style.background = t('primary_action_color');
+    const font = t('font_family');
+    document.getElementById('main-title').style.fontFamily = `${font}, Nunito, sans-serif`;
+    const size = t('font_size');
+    document.getElementById('main-title').style.fontSize = `${size * 2}px`;
+    document.getElementById('instructions').style.fontSize = `${size * 0.9}px`;
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({background_color: v}); }},
+      { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({surface_color: v}); }},
+      { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({text_color: v}); }},
+      { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: v => { config.primary_action_color = v; window.elementSdk.setConfig({primary_action_color: v}); }},
+      { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: v => { config.secondary_action_color = v; window.elementSdk.setConfig({secondary_action_color: v}); }}
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: v => { config.font_family = v; window.elementSdk.setConfig({font_family: v}); }},
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: v => { config.font_size = v; window.elementSdk.setConfig({font_size: v}); }}
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ["main_title", config.main_title || defaultConfig.main_title],
+    ["instructions_text", config.instructions_text || defaultConfig.instructions_text]
+  ])
+});
+
+loadScenario('restaurant');
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f608df5e722a3c8',t:'MTc3NzgyNDgyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
