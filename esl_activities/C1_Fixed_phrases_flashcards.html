@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prepositional Phrases Flashcards</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .font-heading { font-family: 'Poppins', sans-serif; }
+    .font-body { font-family: 'Source Serif Pro', serif; }
+    .fade-in { animation: fadeIn 0.5s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .flip-card {
+      perspective: 1000px;
+      height: 300px;
+      cursor: pointer;
+      position: relative;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+    .context-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .context-home { background-color: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .context-work { background-color: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .stats-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      margin: 0 4px;
+    }
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .progress-fill {
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+    .filter-btn {
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      transform: scale(1.05);
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);"><!-- Header -->
+   <header class="px-6 py-8 text-center border-b border-slate-700/50">
+    <h1 id="main-title" class="font-heading text-3xl md:text-4xl font-bold mb-2" style="color: #f0f9ff;">Prepositional Phrases Flashcards</h1>
+    <p id="subtitle" class="font-body text-base" style="color: #cbd5e1;">Master Common Phrases in Home &amp; Work Contexts</p>
+   </header><!-- Stats & Controls -->
+   <div class="px-6 py-4 border-b border-slate-700/50">
+    <div class="max-w-4xl mx-auto">
+     <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+      <div class="flex flex-wrap gap-2"><span class="stats-pill" style="background-color: rgba(59, 130, 246, 0.2); color: #93c5fd;"> <i data-lucide="cards" style="width: 16px; height: 16px;"></i> <span id="card-count">0</span> Cards </span> <span class="stats-pill" style="background-color: rgba(34, 197, 94, 0.2); color: #86efac;"> <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i> <span id="reviewed-count">0</span> Reviewed </span>
+      </div>
+      <div class="flex gap-2"><button onclick="filterContext('all')" id="btn-all" class="filter-btn font-heading text-sm px-4 py-2 rounded-lg active" style="background-color: #1e293b; color: #f0f9ff; border: 1px solid #475569;">All</button> <button onclick="filterContext('home')" id="btn-home" class="filter-btn font-heading text-sm px-4 py-2 rounded-lg" style="color: #93c5fd; border: 1px solid #475569;">🏠 Home</button> <button onclick="filterContext('work')" id="btn-work" class="filter-btn font-heading text-sm px-4 py-2 rounded-lg" style="color: #86efac; border: 1px solid #475569;">💼 Work</button>
+      </div>
+     </div>
+     <div class="progress-bar">
+      <div id="progress-fill" class="progress-fill" style="width: 0%; background: linear-gradient(90deg, #3b82f6 0%, #22c55e 100%);"></div>
+     </div>
+    </div>
+   </div><!-- Main Content -->
+   <main class="max-w-4xl mx-auto px-6 py-12">
+    <div id="cards-container" class="grid md:grid-cols-2 gap-6 mb-8">
+    </div><!-- Navigation -->
+    <div class="flex justify-center items-center gap-4 mt-8"><button onclick="previousCard()" id="prev-btn" class="font-heading font-semibold px-5 py-2.5 rounded-lg transition-all hover:opacity-90" style="background-color: #475569; color: #f0f9ff; border: none;"> <i data-lucide="chevron-left" class="inline w-4 h-4 mr-2"></i>Previous </button> <span class="font-heading text-sm" style="color: #94a3b8;"> Card <span id="current-card">1</span> of <span id="total-cards">0</span> </span> <button onclick="nextCard()" id="next-btn" class="font-heading font-semibold px-5 py-2.5 rounded-lg transition-all hover:opacity-90" style="background-color: #3b82f6; color: #f0f9ff; border: none;"> Next<i data-lucide="chevron-right" class="inline w-4 h-4 ml-2"></i> </button>
+    </div><!-- Shuffle Controls -->
+    <div class="text-center mt-6"><button onclick="shuffleCards()" class="font-heading text-sm px-4 py-2 rounded-lg transition-all hover:opacity-80" style="background-color: #1e293b; color: #cbd5e1; border: 1px solid #475569;"> <i data-lucide="shuffle" class="inline w-4 h-4 mr-1"></i>Shuffle </button>
+    </div>
+   </main>
+  </div>
+  <script>
+    // --- DATA ---
+    const flashcards = [
+      // HOME CONTEXT
+      { phrase: "put up with", meaning: "tolerate; endure (something unpleasant)", example: "I can't put up with the noise from the neighbors.", context: "home" },
+      { phrase: "run out of", meaning: "have no more of something left", example: "We've run out of milk, I need to go shopping.", context: "home" },
+      { phrase: "clean up after", meaning: "tidy up following someone else's mess", example: "I'm tired of cleaning up after the children.", context: "home" },
+      { phrase: "break down", meaning: "(of appliances) stop working; (of a situation) fail", example: "The washing machine broke down yesterday.", context: "home" },
+      { phrase: "deal with", meaning: "handle; manage a situation or person", example: "I'll deal with the leaky faucet this weekend.", context: "home" },
+      { phrase: "look after", meaning: "take care of; supervise", example: "Can you look after the house while I'm away?", context: "home" },
+      { phrase: "settle down", meaning: "move to a permanent home; become calm and stable", example: "They decided to settle down in the countryside.", context: "home" },
+      { phrase: "tidy up", meaning: "put things in order; make neat", example: "Please tidy up your room before dinner.", context: "home" },
+      { phrase: "show up", meaning: "arrive at a place", example: "The plumber finally showed up at noon.", context: "home" },
+      { phrase: "worn out", meaning: "exhausted; damaged from use", example: "The carpet is worn out after ten years.", context: "home" },
+
+      // WORK CONTEXT
+      { phrase: "take on", meaning: "accept responsibility for; undertake", example: "She took on a new project this month.", context: "work" },
+      { phrase: "catch up on", meaning: "do work that has been delayed; complete unfinished tasks", example: "I need to catch up on my emails.", context: "work" },
+      { phrase: "cut back on", meaning: "reduce the amount or extent of something", example: "The company cut back on spending after the downturn.", context: "work" },
+      { phrase: "follow up", meaning: "continue communication about; pursue further", example: "I'll follow up with the client tomorrow.", context: "work" },
+      { phrase: "hand over", meaning: "transfer responsibility; give control to", example: "I'll hand over the project to the new team.", context: "work" },
+      { phrase: "keep up with", meaning: "stay at the same level or pace as; remain informed", example: "It's hard to keep up with the latest technology.", context: "work" },
+      { phrase: "meet up", meaning: "arrange to meet someone", example: "Let's meet up to discuss the proposal.", context: "work" },
+      { phrase: "put off", meaning: "postpone; delay", example: "Don't put off the deadline—start today.", context: "work" },
+      { phrase: "scale up", meaning: "increase in size or scope", example: "We're scaling up production next quarter.", context: "work" },
+      { phrase: "stand out", meaning: "be noticeably different or exceptional", example: "Her proposal stands out from the others.", context: "work" },
+      { phrase: "think through", meaning: "consider carefully; analyze thoroughly", example: "You need to think through the strategy before presenting.", context: "work" },
+      { phrase: "touch base", meaning: "make brief contact; check in", example: "Let's touch base next Friday.", context: "work" },
+      { phrase: "wrap up", meaning: "complete; finish", example: "We wrapped up the meeting by 5 PM.", context: "work" },
+      { phrase: "zero in on", meaning: "focus intensely on; target", example: "Let's zero in on the main issue.", context: "work" }
+    ];
+
+    // --- STATE ---
+    let currentIndex = 0;
+    let filteredCards = [];
+    let reviewedCards = new Set();
+    let currentFilter = 'all';
+    let shuffled = false;
+
+    // --- INITIALIZATION ---
+    function initCards() {
+      applyFilter('all');
+      updateUI();
+    }
+
+    // --- FILTERING ---
+    function applyFilter(context) {
+      currentFilter = context;
+      if (context === 'all') {
+        filteredCards = [...flashcards];
+      } else {
+        filteredCards = flashcards.filter(card => card.context === context);
+      }
+      currentIndex = 0;
+      updateFilterButtons();
+      renderCards();
+      updateUI();
+    }
+
+    function filterContext(context) {
+      applyFilter(context);
+    }
+
+    function updateFilterButtons() {
+      document.getElementById('btn-all').classList.toggle('active', currentFilter === 'all');
+      document.getElementById('btn-all').style.backgroundColor = currentFilter === 'all' ? '#3b82f6' : '#1e293b';
+      document.getElementById('btn-all').style.color = currentFilter === 'all' ? '#f0f9ff' : '#94a3b8';
+
+      document.getElementById('btn-home').classList.toggle('active', currentFilter === 'home');
+      document.getElementById('btn-home').style.backgroundColor = currentFilter === 'home' ? 'rgba(59, 130, 246, 0.3)' : 'transparent';
+
+      document.getElementById('btn-work').classList.toggle('active', currentFilter === 'work');
+      document.getElementById('btn-work').style.backgroundColor = currentFilter === 'work' ? 'rgba(34, 197, 94, 0.3)' : 'transparent';
+    }
+
+    // --- SHUFFLE ---
+    function shuffleCards() {
+      const arr = [...filteredCards];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      filteredCards = arr;
+      currentIndex = 0;
+      shuffled = true;
+      renderCards();
+      updateUI();
+    }
+
+    // --- NAVIGATION ---
+    function nextCard() {
+      if (currentIndex < filteredCards.length - 1) {
+        currentIndex++;
+        updateUI();
+      }
+    }
+
+    function previousCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateUI();
+      }
+    }
+
+    // --- FLIP CARD ---
+    function toggleFlip(index) {
+      const card = document.getElementById(`card-${index}`);
+      if (card) {
+        card.classList.toggle('flipped');
+        reviewedCards.add(filteredCards[index].phrase);
+        updateUI();
+      }
+    }
+
+    // --- RENDERING ---
+    function renderCards() {
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+
+      // Show current card in main display
+      if (filteredCards.length > 0) {
+        const card = filteredCards[currentIndex];
+        const contextClass = card.context === 'work' ? 'context-work' : 'context-home';
+        const contextLabel = card.context === 'work' ? '💼 Work' : '🏠 Home';
+
+        const cardDiv = document.createElement('div');
+        cardDiv.id = `card-${currentIndex}`;
+        cardDiv.className = 'flip-card fade-in md:col-span-2';
+        cardDiv.onclick = () => toggleFlip(currentIndex);
+
+        cardDiv.innerHTML = `
+          <div class="flip-card-inner">
+            <div class="flip-card-front" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border: 2px solid #3b82f6;">
+              <div style="width: 100%;">
+                <div class="context-badge ${contextClass}">${contextLabel}</div>
+                <h2 class="font-heading text-3xl font-bold mb-2" style="color: #f0f9ff;">${card.phrase}</h2>
+                <p class="font-body text-sm" style="color: #bfdbfe;">Click to reveal meaning</p>
+              </div>
+            </div>
+            <div class="flip-card-back" style="background: linear-gradient(135deg, #165e4d 0%, #047857 100%); border: 2px solid #10b981;">
+              <div style="width: 100%;">
+                <div class="context-badge ${contextClass}">${contextLabel}</div>
+                <p class="font-body text-lg font-semibold mb-3" style="color: #f0f9ff;">${card.meaning}</p>
+                <p class="font-body text-sm italic" style="color: #d1fae5;">"${card.example}"</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(cardDiv);
+      }
+    }
+
+    function updateUI() {
+      document.getElementById('card-count').textContent = filteredCards.length;
+      document.getElementById('reviewed-count').textContent = reviewedCards.size;
+      document.getElementById('current-card').textContent = filteredCards.length > 0 ? currentIndex + 1 : 0;
+      document.getElementById('total-cards').textContent = filteredCards.length;
+
+      // Update progress bar
+      const progress = filteredCards.length > 0 ? (reviewedCards.size / filteredCards.length) * 100 : 0;
+      document.getElementById('progress-fill').style.width = progress + '%';
+
+      // Update nav buttons
+      document.getElementById('prev-btn').disabled = currentIndex === 0;
+      document.getElementById('prev-btn').style.opacity = currentIndex === 0 ? '0.5' : '1';
+      document.getElementById('next-btn').disabled = currentIndex === filteredCards.length - 1;
+      document.getElementById('next-btn').style.opacity = currentIndex === filteredCards.length - 1 ? '0.5' : '1';
+    }
+
+    // --- ELEMENT SDK ---
+    const defaultConfig = {
+      main_title: 'Prepositional Phrases Flashcards',
+      subtitle: 'Master Common Phrases in Home & Work Contexts',
+      background_color: '#0f172a',
+      surface_color: '#1e293b',
+      text_color: '#cbd5e1',
+      primary_action_color: '#3b82f6',
+      secondary_action_color: '#22c55e',
+      font_family: 'Poppins',
+      font_size: 16
+    };
+
+    function applyConfig(config) {
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      document.getElementById('main-title').style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
+      const size = config.font_size || defaultConfig.font_size;
+      document.getElementById('main-title').style.fontSize = `${size * 1.875}px`;
+      document.getElementById('subtitle').style.fontSize = `${size}px`;
+    }
+
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange: async (config) => { applyConfig(config); },
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+          { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+          { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+          { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+          { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+        ],
+        borderables: [],
+        fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+        fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+      }),
+      mapToEditPanelValues: (config) => new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["subtitle", config.subtitle || defaultConfig.subtitle]
+      ])
+    });
+
+    // --- INIT ---
+    initCards();
+    lucide.createIcons();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f894fb3a4e3df19',t:'MTc3ODI1MjE4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
