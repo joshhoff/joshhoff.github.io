@@ -1,36 +1,188 @@
 <!doctype html>
-<html lang="en" class="h-full">
+<html lang="en" style="height: 100%;">
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C1 Food Vocabulary</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Outfit:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
   <style>
-    .card-flip { perspective: 1000px; }
-    .card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body { 
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      font-family: 'Outfit', sans-serif;
+      color: #e2e8f0;
+    }
+    #app { 
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+    }
+    .container { 
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 2.5rem 1rem;
+    }
+    header { text-align: center; margin-bottom: 2.5rem; }
+    .lang-buttons { 
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .lang-btn { 
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+    .lang-btn.active { 
+      background: #e2b04a;
+      color: #1a1a2e;
+      opacity: 1;
+    }
+    .lang-btn.inactive { 
+      background: #475569;
+      color: #e2e8f0;
+      opacity: 0.5;
+    }
+    h1 { 
+      font-family: 'DM Serif Display', serif;
+      color: #e2b04a;
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 0 0 0.5rem 0;
+    }
+    .subtitle { 
+      color: #94a3b8;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    .categories { 
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .cat-btn { 
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .cat-btn.active { 
+      background: #e2b04a;
+      color: #1a1a2e;
+    }
+    .cat-btn.inactive { 
+      background: #475569;
+      color: #e2e8f0;
+      opacity: 0.7;
+    }
+    .grid { 
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    
+    .card-flip { 
+      perspective: 1000px;
+      height: 220px;
+      cursor: pointer;
+      animation: fadeIn 0.4s ease forwards;
+      opacity: 0;
+    }
+    .card-inner { 
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
     .card-inner.flipped { transform: rotateY(180deg); }
-    .card-front, .card-back { backface-visibility: hidden; }
+    .card-front, .card-back { 
+      backface-visibility: hidden;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
     .card-back { transform: rotateY(180deg); }
-    .fade-in { animation: fadeIn 0.4s ease forwards; opacity: 0; }
-    @keyframes fadeIn { to { opacity: 1; } }
+    
+    .card-content { 
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1e293b;
+    }
+    .card-category { 
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.6;
+    }
+    .card-term { 
+      font-family: 'DM Serif Display', serif;
+      color: #e2b04a;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0;
+    }
+    .card-flip-hint { 
+      font-size: 0.75rem;
+      opacity: 0.5;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .card-definition { 
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .card-example { 
+      font-size: 0.75rem;
+      font-style: italic;
+      opacity: 0.7;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+      color: #e2b04a;
+    }
+    @keyframes fadeIn { 
+      to { opacity: 1; }
+    }
   </style>
   <style>body { box-sizing: border-box; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full">
-  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); font-family: 'Outfit', sans-serif;">
-   <div class="max-w-5xl mx-auto px-4 py-10">
-    <header class="text-center mb-10">
-     <div class="flex justify-center gap-3 mb-6"><button id="lang-en" class="px-4 py-2 rounded-lg font-semibold transition-all" style="background: #e2b04a; color: #1a1a2e;">English</button> <button id="lang-es" class="px-4 py-2 rounded-lg font-semibold transition-all opacity-50" style="background: #475569; color: #e2e8f0;">Español</button>
+ <body>
+  <div id="app">
+   <div class="container">
+    <header>
+     <div class="lang-buttons"><button id="lang-en" class="lang-btn active">English</button> <button id="lang-es" class="lang-btn inactive">Español</button>
      </div>
-     <h1 id="title" class="text-4xl md:text-5xl font-bold mb-2" style="font-family: 'DM Serif Display', serif; color: #e2b04a;">C1 Food &amp; Cooking Vocabulary</h1>
-     <p id="subtitle" class="text-lg" style="color: #94a3b8;">Master advanced culinary English — tap a card to reveal the definition</p>
+     <h1>C1 Food &amp; Cooking Vocabulary</h1>
+     <p class="subtitle">Master advanced culinary English — tap a card to reveal the definition</p>
     </header>
-    <div class="flex flex-wrap gap-2 justify-center mb-8" id="categories"></div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="card-grid"></div>
+    <div class="categories" id="categories"></div>
+    <div class="grid" id="card-grid"></div>
    </div>
   </div>
   <script>
@@ -55,142 +207,113 @@ const terms = [
   { term: "Astringent", def_en: "A dry, mouth-puckering sensation caused by tannins in food or drink.", def_es: "Una sensación seca y astringente causada por taninos en alimentos o bebidas.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "Unripe persimmons have an unpleasantly astringent quality.", example_es: "Los caquis verdes tienen una cualidad desagradablemente astringente." },
 ];
 
-const categories = ["All", ...new Set(terms.map(t => t.cat_en))];
 let activeCategory = "All";
 let flippedCards = new Set();
-let currentLang = "en"; // "en" or "es"
-
-const defaultConfig = {
-  page_title_en: "C1 Food & Cooking Vocabulary",
-  page_title_es: "Vocabulario C1 de Comida y Cocina",
-  subtitle_en: "Master advanced culinary English — tap a card to reveal the definition",
-  subtitle_es: "Domina el inglés culinario avanzado — toca una tarjeta para revelar la definición",
-  background_color: "#1a1a2e",
-  accent_color: "#e2b04a",
-  card_color: "#1e293b",
-  text_color: "#e2e8f0",
-  secondary_action_color: "#475569",
-  font_family: "DM Serif Display",
-  font_size: 16
-};
+let currentLang = "en";
 
 function renderCards() {
   const grid = document.getElementById('card-grid');
   const catKey = currentLang === "en" ? "cat_en" : "cat_es";
   const filtered = activeCategory === "All" ? terms : terms.filter(t => t[catKey] === activeCategory);
+  
   grid.innerHTML = '';
+  
   filtered.forEach((item, i) => {
     const card = document.createElement('div');
-    card.className = 'card-flip fade-in cursor-pointer';
+    card.className = 'card-flip';
     card.style.animationDelay = `${i * 0.05}s`;
-    card.style.height = '220px';
+    
     const isFlipped = flippedCards.has(item.term);
     const def = currentLang === "en" ? item.def_en : item.def_es;
     const example = currentLang === "en" ? item.example_en : item.example_es;
     const cat = currentLang === "en" ? item.cat_en : item.cat_es;
+    
     card.innerHTML = `
-      <div class="card-inner w-full h-full relative ${isFlipped ? 'flipped' : ''}">
-        <div class="card-front absolute inset-0 rounded-xl p-6 flex flex-col justify-between border border-white/10" style="background:${window.elementSdk?.config?.card_color || defaultConfig.card_color}">
-          <span class="text-xs uppercase tracking-wider opacity-60" style="color:${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${cat}</span>
-          <h2 class="text-2xl font-bold" style="font-family:'${window.elementSdk?.config?.font_family || defaultConfig.font_family}',serif; color:${window.elementSdk?.config?.accent_color || defaultConfig.accent_color}">${item.term}</h2>
-          <span class="text-xs opacity-50 flex items-center gap-1" style="color:${window.elementSdk?.config?.text_color || defaultConfig.text_color}"><i data-lucide="rotate-cw" style="width:12px;height:12px;"></i> ${currentLang === "en" ? "Tap to flip" : "Toca para girar"}</span>
+      <div class="card-inner ${isFlipped ? 'flipped' : ''}">
+        <div class="card-front">
+          <div class="card-content">
+            <div class="card-category">${cat}</div>
+            <h2 class="card-term">${item.term}</h2>
+            <div class="card-flip-hint">↻ ${currentLang === "en" ? "Tap to flip" : "Toca para girar"}</div>
+          </div>
         </div>
-        <div class="card-back absolute inset-0 rounded-xl p-5 flex flex-col justify-between border border-white/10" style="background:${window.elementSdk?.config?.card_color || defaultConfig.card_color}">
-          <p class="text-sm leading-relaxed" style="color:${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${def}</p>
-          <p class="text-xs italic opacity-70 mt-2" style="color:${window.elementSdk?.config?.accent_color || defaultConfig.accent_color}">"${example}"</p>
+        <div class="card-back">
+          <div class="card-content">
+            <p class="card-definition">${def}</p>
+            <p class="card-example">"${example}"</p>
+          </div>
         </div>
-      </div>`;
+      </div>
+    `;
+    
     card.addEventListener('click', () => {
-      if (flippedCards.has(item.term)) flippedCards.delete(item.term); else flippedCards.add(item.term);
+      if (flippedCards.has(item.term)) {
+        flippedCards.delete(item.term);
+      } else {
+        flippedCards.add(item.term);
+      }
       card.querySelector('.card-inner').classList.toggle('flipped');
     });
+    
     grid.appendChild(card);
   });
-  lucide.createIcons();
 }
 
 function renderCategories() {
   const container = document.getElementById('categories');
-  container.innerHTML = '';
   const catKey = currentLang === "en" ? "cat_en" : "cat_es";
-  const localizedCategories = activeCategory === "All" ? ["All"] : terms.filter(t => t[catKey] === activeCategory).map(t => t[catKey]);
   const allCats = ["All", ...new Set(terms.map(t => t[catKey]))];
+  
+  container.innerHTML = '';
   
   allCats.forEach(cat => {
     const btn = document.createElement('button');
     const isActive = cat === activeCategory;
-    btn.className = `px-4 py-1.5 rounded-full text-sm font-medium transition-all ${isActive ? '' : 'opacity-70 hover:opacity-100'}`;
-    btn.style.background = isActive ? (window.elementSdk?.config?.accent_color || defaultConfig.accent_color) : (window.elementSdk?.config?.secondary_action_color || defaultConfig.secondary_action_color);
-    btn.style.color = isActive ? '#1a1a2e' : (window.elementSdk?.config?.text_color || defaultConfig.text_color);
+    btn.className = `cat-btn ${isActive ? 'active' : 'inactive'}`;
     btn.textContent = cat;
-    btn.addEventListener('click', () => { activeCategory = cat; flippedCards.clear(); renderCategories(); renderCards(); });
+    btn.addEventListener('click', () => {
+      activeCategory = cat;
+      flippedCards.clear();
+      renderCategories();
+      renderCards();
+    });
     container.appendChild(btn);
   });
 }
 
-window.elementSdk.init({
-  defaultConfig,
-  onConfigChange: async (config) => {
-    const titleText = currentLang === "en" ? (config.page_title_en || defaultConfig.page_title_en) : (config.page_title_es || defaultConfig.page_title_es);
-    const subtitleText = currentLang === "en" ? (config.subtitle_en || defaultConfig.subtitle_en) : (config.subtitle_es || defaultConfig.subtitle_es);
-    document.getElementById('title').textContent = titleText;
-    document.getElementById('title').style.color = config.accent_color || defaultConfig.accent_color;
-    document.getElementById('title').style.fontFamily = `'${config.font_family || defaultConfig.font_family}', serif`;
-    document.getElementById('subtitle').textContent = subtitleText;
-    document.getElementById('subtitle').style.color = config.text_color || defaultConfig.text_color;
-    const baseSize = config.font_size || defaultConfig.font_size;
-    document.getElementById('title').style.fontSize = `${baseSize * 2.5}px`;
-    document.getElementById('subtitle').style.fontSize = `${baseSize * 1.1}px`;
-    document.getElementById('app').style.background = `linear-gradient(145deg, ${config.background_color || defaultConfig.background_color} 0%, #16213e 50%, #0f3460 100%)`;
-    renderCategories();
-    renderCards();
-  },
-  mapToCapabilities: (config) => ({
-    recolorables: [
-      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-      { get: () => config.card_color || defaultConfig.card_color, set: (v) => { config.card_color = v; window.elementSdk.setConfig({ card_color: v }); } },
-      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-      { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
-      { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } },
-    ],
-    borderables: [],
-    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
-    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
-  }),
-  mapToEditPanelValues: (config) => new Map([
-    ["page_title_en", config.page_title_en || defaultConfig.page_title_en],
-    ["page_title_es", config.page_title_es || defaultConfig.page_title_es],
-    ["subtitle_en", config.subtitle_en || defaultConfig.subtitle_en],
-    ["subtitle_es", config.subtitle_es || defaultConfig.subtitle_es],
-  ])
-});
-
-// Language toggle
-document.getElementById('lang-en').addEventListener('click', () => {
-  currentLang = "en";
+function switchLanguage(lang) {
+  currentLang = lang;
   activeCategory = "All";
   flippedCards.clear();
-  document.getElementById('lang-en').style.background = '#e2b04a';
-  document.getElementById('lang-en').style.color = '#1a1a2e';
-  document.getElementById('lang-en').style.opacity = '1';
-  document.getElementById('lang-es').style.background = '#475569';
-  document.getElementById('lang-es').style.color = '#e2e8f0';
-  document.getElementById('lang-es').style.opacity = '0.5';
-  window.elementSdk.onConfigChange(window.elementSdk.config);
-});
+  
+  const enBtn = document.getElementById('lang-en');
+  const esBtn = document.getElementById('lang-es');
+  
+  if (lang === "en") {
+    enBtn.classList.remove('inactive');
+    enBtn.classList.add('active');
+    esBtn.classList.remove('active');
+    esBtn.classList.add('inactive');
+    document.querySelector('h1').textContent = "C1 Food & Cooking Vocabulary";
+    document.querySelector('.subtitle').textContent = "Master advanced culinary English — tap a card to reveal the definition";
+  } else {
+    esBtn.classList.remove('inactive');
+    esBtn.classList.add('active');
+    enBtn.classList.remove('active');
+    enBtn.classList.add('inactive');
+    document.querySelector('h1').textContent = "Vocabulario C1 de Comida y Cocina";
+    document.querySelector('.subtitle').textContent = "Domina el inglés culinario avanzado — toca una tarjeta para revelar la definición";
+  }
+  
+  renderCategories();
+  renderCards();
+}
 
-document.getElementById('lang-es').addEventListener('click', () => {
-  currentLang = "es";
-  activeCategory = "All";
-  flippedCards.clear();
-  document.getElementById('lang-es').style.background = '#e2b04a';
-  document.getElementById('lang-es').style.color = '#1a1a2e';
-  document.getElementById('lang-es').style.opacity = '1';
-  document.getElementById('lang-en').style.background = '#475569';
-  document.getElementById('lang-en').style.color = '#e2e8f0';
-  document.getElementById('lang-en').style.opacity = '0.5';
-  window.elementSdk.onConfigChange(window.elementSdk.config);
-});
-</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f994a0d7136df19',t:'MTc3ODQxOTcyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+document.getElementById('lang-en').addEventListener('click', () => switchLanguage('en'));
+document.getElementById('lang-es').addEventListener('click', () => switchLanguage('es'));
+
+renderCategories();
+renderCards();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f99540954ef75f8',t:'MTc3ODQyMDEzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
