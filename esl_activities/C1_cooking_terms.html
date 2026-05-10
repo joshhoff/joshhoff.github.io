@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C1 Food Vocabulary</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Outfit:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    .card-flip { perspective: 1000px; }
+    .card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
+    .card-inner.flipped { transform: rotateY(180deg); }
+    .card-front, .card-back { backface-visibility: hidden; }
+    .card-back { transform: rotateY(180deg); }
+    .fade-in { animation: fadeIn 0.4s ease forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); font-family: 'Outfit', sans-serif;">
+   <div class="max-w-5xl mx-auto px-4 py-10">
+    <header class="text-center mb-10">
+     <div class="flex justify-center gap-3 mb-6"><button id="lang-en" class="px-4 py-2 rounded-lg font-semibold transition-all" style="background: #e2b04a; color: #1a1a2e;">English</button> <button id="lang-es" class="px-4 py-2 rounded-lg font-semibold transition-all opacity-50" style="background: #475569; color: #e2e8f0;">Español</button>
+     </div>
+     <h1 id="title" class="text-4xl md:text-5xl font-bold mb-2" style="font-family: 'DM Serif Display', serif; color: #e2b04a;">C1 Food &amp; Cooking Vocabulary</h1>
+     <p id="subtitle" class="text-lg" style="color: #94a3b8;">Master advanced culinary English — tap a card to reveal the definition</p>
+    </header>
+    <div class="flex flex-wrap gap-2 justify-center mb-8" id="categories"></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" id="card-grid"></div>
+   </div>
+  </div>
+  <script>
+const terms = [
+  { term: "Blanch", def_en: "To briefly immerse food in boiling water, then transfer to ice water to stop cooking.", def_es: "Sumergir brevemente alimentos en agua hirviendo y luego transferirlos a agua helada para detener la cocción.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Blanch the tomatoes to easily remove their skins.", example_es: "Blanquear los tomates para quitarles fácilmente la piel." },
+  { term: "Deglaze", def_en: "To add liquid to a hot pan to loosen browned food residue from the bottom.", def_es: "Añadir líquido a una sartén caliente para soltar los residuos de comida dorada del fondo.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Deglaze the pan with white wine after searing the chicken.", example_es: "Desglasar la sartén con vino blanco después de sellar el pollo." },
+  { term: "Emulsify", def_en: "To combine two liquids that don't normally mix (e.g., oil and vinegar) into a stable mixture.", def_es: "Combinar dos líquidos que normalmente no se mezclan (por ejemplo, aceite y vinagre) en una mezcla estable.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Slowly drizzle the oil while whisking to emulsify the vinaigrette.", example_es: "Vierte lentamente el aceite mientras bates para emulsionar la vinagreta." },
+  { term: "Braise", def_en: "To cook meat or vegetables slowly in a small amount of liquid in a covered pot.", def_es: "Cocinar carne o verduras lentamente en una pequeña cantidad de líquido en una olla tapada.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Braise the short ribs for three hours until fork-tender.", example_es: "Guisa las costillas cortas durante tres horas hasta que estén tiernas." },
+  { term: "Julienne", def_en: "To cut food into thin, uniform matchstick-shaped strips.", def_es: "Cortar alimentos en tiras finas y uniformes con forma de cerillas.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Julienne the carrots for an elegant presentation.", example_es: "Corta las zanahorias en juliana para una presentación elegante." },
+  { term: "Reduce", def_en: "To boil a liquid until its volume decreases, concentrating the flavour.", def_es: "Hervir un líquido hasta que su volumen disminuya, concentrando el sabor.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Reduce the sauce by half to intensify its richness.", example_es: "Reduce la salsa a la mitad para intensificar su riqueza." },
+  { term: "Palatable", def_en: "Pleasant or acceptable to the taste; agreeable enough to eat.", def_es: "Agradable o aceptable al paladar; lo suficientemente agradable para comer.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "The dish was surprisingly palatable despite its unusual ingredients.", example_es: "El plato fue sorprendentemente sabroso a pesar de sus ingredientes inusuales." },
+  { term: "Pungent", def_en: "Having a sharp, strong smell or taste that is often overwhelming.", def_es: "Que tiene un olor o sabor fuerte y agudo que es a menudo abrumador.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "Blue cheese has a pungent aroma that divides opinion.", example_es: "El queso azul tiene un aroma penetrante que divide opiniones." },
+  { term: "Succulent", def_en: "Tender, juicy, and extremely enjoyable to eat.", def_es: "Tierno, jugoso y extremadamente agradable de comer.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "The slow-roasted lamb was incredibly succulent.", example_es: "El cordero asado lentamente era increíblemente jugoso." },
+  { term: "Rancid", def_en: "Describing fats or oils that have deteriorated, producing an unpleasant smell and taste.", def_es: "Describiendo grasas o aceites que se han deteriorado, produciendo un olor y sabor desagradables.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "Discard the oil — it's gone rancid.", example_es: "Desecha el aceite — se ha puesto rancio." },
+  { term: "Umami", def_en: "A savoury, deeply satisfying taste sensation often called the 'fifth taste'.", def_es: "Una sensación de sabor sabroso y profundamente satisfactorio a menudo llamada el 'quinto sabor'.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "Parmesan cheese delivers an intense umami flavour.", example_es: "El queso parmesano proporciona un intenso sabor umami." },
+  { term: "Zest", def_en: "The outermost, colourful layer of citrus skin, rich in aromatic oils; also means enthusiasm.", def_es: "La capa más externa y colorida de la cáscara de los cítricos, rica en aceites aromáticos; también significa entusiasmo.", cat_en: "Ingredients", cat_es: "Ingredientes", example_en: "Add lemon zest to brighten the pasta.", example_es: "Añade ralladura de limón para iluminar la pasta." },
+  { term: "Consommé", def_en: "A clear, richly flavoured soup made by clarifying stock with egg whites.", def_es: "Una sopa clara y de sabor rico hecha clarificando caldo con claras de huevo.", cat_en: "Dishes", cat_es: "Platos", example_en: "The consommé was crystal-clear yet deeply flavoured.", example_es: "El consomé era cristalino pero profundamente sabroso." },
+  { term: "Gastronomy", def_en: "The art and science of good eating; the study of food and culture.", def_es: "El arte y la ciencia de la buena comida; el estudio de la comida y la cultura.", cat_en: "Concepts", cat_es: "Conceptos", example_en: "French gastronomy is recognised by UNESCO as cultural heritage.", example_es: "La gastronomía francesa es reconocida por la UNESCO como patrimonio cultural." },
+  { term: "Infuse", def_en: "To steep an ingredient in liquid to extract its flavour.", def_es: "Remojar un ingrediente en líquido para extraer su sabor.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Infuse the cream with vanilla pods overnight.", example_es: "Infunde la crema con vainas de vainilla durante la noche." },
+  { term: "Caramelise", def_en: "To heat sugar or food containing sugar until it turns brown and develops a rich, sweet flavour.", def_es: "Calentar azúcar o alimentos que contienen azúcar hasta que se vuelvan marrones y desarrollen un sabor dulce y rico.", cat_en: "Techniques", cat_es: "Técnicas", example_en: "Caramelise the onions slowly over low heat for forty minutes.", example_es: "Carameliza las cebollas lentamente a fuego bajo durante cuarenta minutos." },
+  { term: "Garnish", def_en: "A decorative or flavourful addition placed on or around food before serving.", def_es: "Un adorno decorativo o sabroso colocado sobre o alrededor de la comida antes de servir.", cat_en: "Concepts", cat_es: "Conceptos", example_en: "A sprig of fresh thyme makes an elegant garnish.", example_es: "Una ramita de tomillo fresco hace un adorno elegante." },
+  { term: "Astringent", def_en: "A dry, mouth-puckering sensation caused by tannins in food or drink.", def_es: "Una sensación seca y astringente causada por taninos en alimentos o bebidas.", cat_en: "Descriptors", cat_es: "Descriptores", example_en: "Unripe persimmons have an unpleasantly astringent quality.", example_es: "Los caquis verdes tienen una cualidad desagradablemente astringente." },
+];
+
+const categories = ["All", ...new Set(terms.map(t => t.cat_en))];
+let activeCategory = "All";
+let flippedCards = new Set();
+let currentLang = "en"; // "en" or "es"
+
+const defaultConfig = {
+  page_title_en: "C1 Food & Cooking Vocabulary",
+  page_title_es: "Vocabulario C1 de Comida y Cocina",
+  subtitle_en: "Master advanced culinary English — tap a card to reveal the definition",
+  subtitle_es: "Domina el inglés culinario avanzado — toca una tarjeta para revelar la definición",
+  background_color: "#1a1a2e",
+  accent_color: "#e2b04a",
+  card_color: "#1e293b",
+  text_color: "#e2e8f0",
+  secondary_action_color: "#475569",
+  font_family: "DM Serif Display",
+  font_size: 16
+};
+
+function renderCards() {
+  const grid = document.getElementById('card-grid');
+  const catKey = currentLang === "en" ? "cat_en" : "cat_es";
+  const filtered = activeCategory === "All" ? terms : terms.filter(t => t[catKey] === activeCategory);
+  grid.innerHTML = '';
+  filtered.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card-flip fade-in cursor-pointer';
+    card.style.animationDelay = `${i * 0.05}s`;
+    card.style.height = '220px';
+    const isFlipped = flippedCards.has(item.term);
+    const def = currentLang === "en" ? item.def_en : item.def_es;
+    const example = currentLang === "en" ? item.example_en : item.example_es;
+    const cat = currentLang === "en" ? item.cat_en : item.cat_es;
+    card.innerHTML = `
+      <div class="card-inner w-full h-full relative ${isFlipped ? 'flipped' : ''}">
+        <div class="card-front absolute inset-0 rounded-xl p-6 flex flex-col justify-between border border-white/10" style="background:${window.elementSdk?.config?.card_color || defaultConfig.card_color}">
+          <span class="text-xs uppercase tracking-wider opacity-60" style="color:${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${cat}</span>
+          <h2 class="text-2xl font-bold" style="font-family:'${window.elementSdk?.config?.font_family || defaultConfig.font_family}',serif; color:${window.elementSdk?.config?.accent_color || defaultConfig.accent_color}">${item.term}</h2>
+          <span class="text-xs opacity-50 flex items-center gap-1" style="color:${window.elementSdk?.config?.text_color || defaultConfig.text_color}"><i data-lucide="rotate-cw" style="width:12px;height:12px;"></i> ${currentLang === "en" ? "Tap to flip" : "Toca para girar"}</span>
+        </div>
+        <div class="card-back absolute inset-0 rounded-xl p-5 flex flex-col justify-between border border-white/10" style="background:${window.elementSdk?.config?.card_color || defaultConfig.card_color}">
+          <p class="text-sm leading-relaxed" style="color:${window.elementSdk?.config?.text_color || defaultConfig.text_color}">${def}</p>
+          <p class="text-xs italic opacity-70 mt-2" style="color:${window.elementSdk?.config?.accent_color || defaultConfig.accent_color}">"${example}"</p>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => {
+      if (flippedCards.has(item.term)) flippedCards.delete(item.term); else flippedCards.add(item.term);
+      card.querySelector('.card-inner').classList.toggle('flipped');
+    });
+    grid.appendChild(card);
+  });
+  lucide.createIcons();
+}
+
+function renderCategories() {
+  const container = document.getElementById('categories');
+  container.innerHTML = '';
+  const catKey = currentLang === "en" ? "cat_en" : "cat_es";
+  const localizedCategories = activeCategory === "All" ? ["All"] : terms.filter(t => t[catKey] === activeCategory).map(t => t[catKey]);
+  const allCats = ["All", ...new Set(terms.map(t => t[catKey]))];
+  
+  allCats.forEach(cat => {
+    const btn = document.createElement('button');
+    const isActive = cat === activeCategory;
+    btn.className = `px-4 py-1.5 rounded-full text-sm font-medium transition-all ${isActive ? '' : 'opacity-70 hover:opacity-100'}`;
+    btn.style.background = isActive ? (window.elementSdk?.config?.accent_color || defaultConfig.accent_color) : (window.elementSdk?.config?.secondary_action_color || defaultConfig.secondary_action_color);
+    btn.style.color = isActive ? '#1a1a2e' : (window.elementSdk?.config?.text_color || defaultConfig.text_color);
+    btn.textContent = cat;
+    btn.addEventListener('click', () => { activeCategory = cat; flippedCards.clear(); renderCategories(); renderCards(); });
+    container.appendChild(btn);
+  });
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const titleText = currentLang === "en" ? (config.page_title_en || defaultConfig.page_title_en) : (config.page_title_es || defaultConfig.page_title_es);
+    const subtitleText = currentLang === "en" ? (config.subtitle_en || defaultConfig.subtitle_en) : (config.subtitle_es || defaultConfig.subtitle_es);
+    document.getElementById('title').textContent = titleText;
+    document.getElementById('title').style.color = config.accent_color || defaultConfig.accent_color;
+    document.getElementById('title').style.fontFamily = `'${config.font_family || defaultConfig.font_family}', serif`;
+    document.getElementById('subtitle').textContent = subtitleText;
+    document.getElementById('subtitle').style.color = config.text_color || defaultConfig.text_color;
+    const baseSize = config.font_size || defaultConfig.font_size;
+    document.getElementById('title').style.fontSize = `${baseSize * 2.5}px`;
+    document.getElementById('subtitle').style.fontSize = `${baseSize * 1.1}px`;
+    document.getElementById('app').style.background = `linear-gradient(145deg, ${config.background_color || defaultConfig.background_color} 0%, #16213e 50%, #0f3460 100%)`;
+    renderCategories();
+    renderCards();
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.card_color || defaultConfig.card_color, set: (v) => { config.card_color = v; window.elementSdk.setConfig({ card_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+      { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } },
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ["page_title_en", config.page_title_en || defaultConfig.page_title_en],
+    ["page_title_es", config.page_title_es || defaultConfig.page_title_es],
+    ["subtitle_en", config.subtitle_en || defaultConfig.subtitle_en],
+    ["subtitle_es", config.subtitle_es || defaultConfig.subtitle_es],
+  ])
+});
+
+// Language toggle
+document.getElementById('lang-en').addEventListener('click', () => {
+  currentLang = "en";
+  activeCategory = "All";
+  flippedCards.clear();
+  document.getElementById('lang-en').style.background = '#e2b04a';
+  document.getElementById('lang-en').style.color = '#1a1a2e';
+  document.getElementById('lang-en').style.opacity = '1';
+  document.getElementById('lang-es').style.background = '#475569';
+  document.getElementById('lang-es').style.color = '#e2e8f0';
+  document.getElementById('lang-es').style.opacity = '0.5';
+  window.elementSdk.onConfigChange(window.elementSdk.config);
+});
+
+document.getElementById('lang-es').addEventListener('click', () => {
+  currentLang = "es";
+  activeCategory = "All";
+  flippedCards.clear();
+  document.getElementById('lang-es').style.background = '#e2b04a';
+  document.getElementById('lang-es').style.color = '#1a1a2e';
+  document.getElementById('lang-es').style.opacity = '1';
+  document.getElementById('lang-en').style.background = '#475569';
+  document.getElementById('lang-en').style.color = '#e2e8f0';
+  document.getElementById('lang-en').style.opacity = '0.5';
+  window.elementSdk.onConfigChange(window.elementSdk.config);
+});
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f994a0d7136df19',t:'MTc3ODQxOTcyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
