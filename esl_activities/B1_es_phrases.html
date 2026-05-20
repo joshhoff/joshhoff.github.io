@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spanish Phrase Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet">
+  <style>
+    .card-flip { transition: transform 0.5s; transform-style: preserve-3d; }
+    .card-flip.flipped { transform: rotateY(180deg); }
+    .card-front, .card-back { backface-visibility: hidden; }
+    .card-back { transform: rotateY(180deg); }
+    .toast { animation: slideUp 0.3s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); font-family: 'DM Sans', sans-serif;"><!-- Header -->
+   <header class="text-center py-8 px-4">
+    <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-amber-300" style="font-family: 'Playfair Display', serif;">Spanish ↔ English Practice</h1>
+    <p id="subtitle" class="text-slate-300 mt-2 text-lg">Master everyday phrases through flashcards, writing &amp; conversation</p>
+   </header><!-- Navigation Tabs -->
+   <nav class="flex justify-center gap-2 px-4 mb-6 flex-wrap" role="tablist"><button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn px-5 py-2 rounded-full text-sm font-medium bg-amber-400 text-slate-900 transition-all">Flashcards</button> <button onclick="switchTab('writing')" id="tab-writing" class="tab-btn px-5 py-2 rounded-full text-sm font-medium bg-slate-700 text-slate-300 transition-all">Writing Practice</button> <button onclick="switchTab('conversation')" id="tab-conversation" class="tab-btn px-5 py-2 rounded-full text-sm font-medium bg-slate-700 text-slate-300 transition-all">Conversation</button>
+   </nav><!-- Flashcards Section -->
+   <section id="section-flashcards" class="max-w-lg mx-auto px-4 pb-12">
+    <div class="text-center mb-4 text-slate-400 text-sm">
+     <span id="card-counter">1</span> / <span id="card-total">15</span>
+    </div>
+    <div onclick="flipCard()" class="cursor-pointer mx-auto" style="perspective: 1000px; height: 220px;">
+     <div id="flashcard" class="card-flip relative w-full h-full">
+      <div class="card-front absolute inset-0 bg-slate-800 border border-slate-600 rounded-2xl flex flex-col items-center justify-center p-6 shadow-xl"><span class="text-xs uppercase tracking-wider text-amber-400 mb-3" id="front-lang">Spanish</span>
+       <p class="text-2xl text-white text-center font-medium" id="front-text"></p>
+      </div>
+      <div class="card-back absolute inset-0 bg-amber-400 rounded-2xl flex flex-col items-center justify-center p-6 shadow-xl"><span class="text-xs uppercase tracking-wider text-slate-700 mb-3" id="back-lang">English</span>
+       <p class="text-2xl text-slate-900 text-center font-medium" id="back-text"></p>
+      </div>
+     </div>
+    </div>
+    <div class="flex justify-center gap-4 mt-6"><button onclick="prevCard()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition"><i data-lucide="chevron-left" style="width:20px;height:20px;display:inline;"></i></button> <button onclick="shuffleCards()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition"><i data-lucide="shuffle" style="width:20px;height:20px;display:inline;"></i> Shuffle</button> <button onclick="nextCard()" class="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition"><i data-lucide="chevron-right" style="width:20px;height:20px;display:inline;"></i></button>
+    </div>
+   </section><!-- Writing Practice Section -->
+   <section id="section-writing" class="max-w-lg mx-auto px-4 pb-12 hidden">
+    <div class="bg-slate-800 border border-slate-600 rounded-2xl p-6 shadow-xl">
+     <p class="text-amber-400 text-sm uppercase tracking-wider mb-1" id="write-direction">Translate to English:</p>
+     <p class="text-xl text-white font-medium mb-4" id="write-prompt"></p><textarea id="write-input" rows="2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 resize-none" placeholder="Type your translation..."></textarea>
+     <div class="flex gap-3 mt-4"><button onclick="checkAnswer()" class="flex-1 py-2 bg-amber-400 text-slate-900 font-medium rounded-lg hover:bg-amber-300 transition">Check</button> <button onclick="showWriteAnswer()" class="flex-1 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition">Show Answer</button>
+     </div>
+     <div id="write-feedback" class="mt-4 text-center text-sm hidden"></div><button onclick="nextWritePrompt()" class="w-full mt-4 py-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600 transition">Next Phrase →</button>
+    </div>
+    <div class="mt-4 text-center"><span class="text-slate-400 text-sm">Score: <span id="write-score" class="text-amber-300 font-bold">0</span> / <span id="write-attempts">0</span></span>
+    </div>
+   </section><!-- Conversation Section -->
+   <section id="section-conversation" class="max-w-lg mx-auto px-4 pb-12 hidden">
+    <div class="bg-slate-800 border border-slate-600 rounded-2xl p-6 shadow-xl mb-4">
+     <h3 class="text-amber-400 font-medium mb-2"><i data-lucide="message-circle" style="width:18px;height:18px;display:inline;"></i> Conversation Scenario</h3>
+     <p class="text-white text-lg mb-3" id="convo-scenario"></p>
+     <div class="bg-slate-900 rounded-lg p-4 mb-3">
+      <p class="text-slate-400 text-sm mb-1">Partner says:</p>
+      <p class="text-slate-200" id="convo-partner"></p>
+     </div>
+     <p class="text-amber-300 text-sm mb-2">How would you respond? Use: <strong id="convo-target"></strong></p><textarea id="convo-input" rows="2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 resize-none" placeholder="Write your response..."></textarea>
+     <div class="flex gap-3 mt-4"><button onclick="showConvoSample()" class="flex-1 py-2 bg-amber-400 text-slate-900 font-medium rounded-lg hover:bg-amber-300 transition">Show Sample</button> <button onclick="nextConvo()" class="flex-1 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition">Next Scenario</button>
+     </div>
+     <div id="convo-sample" class="mt-4 bg-slate-900 rounded-lg p-4 hidden">
+      <p class="text-slate-400 text-sm mb-1">Sample response:</p>
+      <p class="text-emerald-300" id="convo-sample-text"></p>
+     </div>
+    </div>
+   </section>
+  </div>
+  <script>
+const phrases = [
+  { es: "¿Se puede arreglar?", en: "Can it be fixed?" },
+  { es: "¿Cuánto tardaría?", en: "How long will it take?" },
+  { es: "Me he quedado sin...", en: "I've run out of..." },
+  { es: "Tengo prisa", en: "I'm in a hurry" },
+  { es: "A propósito", en: "Speaking of which" },
+  { es: "Todo saldrá bien", en: "Everything will be fine" },
+  { es: "Estaba a punto de...", en: "I was about to..." },
+  { es: "He perdido las llaves", en: "I've lost my keys" },
+  { es: "No es para tanto", en: "It's not such a big deal" },
+  { es: "Ya verás que...", en: "You'll see that..." },
+  { es: "Tranquilo", en: "Calm down" },
+  { es: "Me toca a mí", en: "It's my turn" },
+  { es: "Todavía no", en: "Not yet" },
+  { es: "No es tu culpa", en: "It's not your fault" },
+  { es: "De todas formas", en: "Anyway" }
+];
+
+const conversations = [
+  { scenario: "Your friend's phone screen is cracked.", partner: "Mi teléfono se ha roto la pantalla...", target: "¿Se puede arreglar?", sample: "¿Se puede arreglar? Conozco un sitio cerca de aquí." },
+  { scenario: "You're at a repair shop dropping off your laptop.", partner: "Sí, podemos repararlo.", target: "¿Cuánto tardaría?", sample: "Genial. ¿Cuánto tardaría? Lo necesito para el lunes." },
+  { scenario: "You're cooking and realize you're missing an ingredient.", partner: "¿Cómo va la cena?", target: "Me he quedado sin...", sample: "Me he quedado sin aceite de oliva. ¿Puedes ir a comprarlo?" },
+  { scenario: "A friend wants to chat but you need to leave.", partner: "¿Quieres tomar un café?", target: "Tengo prisa", sample: "Lo siento, tengo prisa. ¿Quedamos mañana?" },
+  { scenario: "The conversation reminds you of something related.", partner: "Ayer vi a María en el supermercado.", target: "A propósito", sample: "A propósito, María me dijo que se va a mudar." },
+  { scenario: "Your friend is nervous about a job interview.", partner: "Estoy muy nervioso por la entrevista.", target: "Todo saldrá bien / Tranquilo", sample: "Tranquilo, todo saldrá bien. Estás muy preparado." },
+  { scenario: "Someone interrupts you as you were about to do something.", partner: "¿Ya has llamado al médico?", target: "Estaba a punto de...", sample: "Estaba a punto de llamar cuando llegaste." },
+  { scenario: "You can't find your keys and you're running late.", partner: "¿Nos vamos ya?", target: "He perdido las llaves", sample: "He perdido las llaves. ¿Me ayudas a buscarlas?" },
+  { scenario: "A friend is overreacting to a small mistake.", partner: "¡He quemado la cena! ¡Es un desastre!", target: "No es para tanto", sample: "No es para tanto. Podemos pedir una pizza." },
+  { scenario: "Your friend doubts they'll enjoy the movie.", partner: "No sé si me va a gustar esa película.", target: "Ya verás que...", sample: "Ya verás que te encanta. Tiene muy buenas críticas." },
+  { scenario: "Deciding who goes next in a board game.", partner: "¿A quién le toca?", target: "Me toca a mí", sample: "Me toca a mí. Dame los dados." },
+  { scenario: "Someone asks if you've finished a task.", partner: "¿Has terminado el informe?", target: "Todavía no", sample: "Todavía no, pero lo termino esta tarde." },
+  { scenario: "Your friend feels guilty about a cancelled plan.", partner: "Perdona por cancelar la cena...", target: "No es tu culpa", sample: "No es tu culpa. Entiendo que estabas enfermo." },
+  { scenario: "Wrapping up a topic and moving on.", partner: "Bueno, no creo que cambie de opinión.", target: "De todas formas", sample: "De todas formas, lo importante es que estás bien." }
+];
+
+let cardIndex = 0, cardOrder = [...Array(phrases.length).keys()], flipped = false;
+let writeIndex = 0, writeScore = 0, writeAttempts = 0, writeOrder = [...Array(phrases.length).keys()];
+let convoIndex = 0, convoOrder = [...Array(conversations.length).keys()];
+
+function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i+1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+// Flashcards
+function renderCard() {
+  const p = phrases[cardOrder[cardIndex]];
+  document.getElementById('front-text').textContent = p.es;
+  document.getElementById('back-text').textContent = p.en;
+  document.getElementById('card-counter').textContent = cardIndex + 1;
+  document.getElementById('flashcard').classList.remove('flipped');
+  flipped = false;
+}
+function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); flipped = !flipped; }
+function nextCard() { cardIndex = (cardIndex + 1) % phrases.length; renderCard(); }
+function prevCard() { cardIndex = (cardIndex - 1 + phrases.length) % phrases.length; renderCard(); }
+function shuffleCards() { shuffle(cardOrder); cardIndex = 0; renderCard(); }
+
+// Writing
+function renderWritePrompt() {
+  const p = phrases[writeOrder[writeIndex]];
+  const toEng = Math.random() > 0.5;
+  document.getElementById('write-direction').textContent = toEng ? 'Translate to English:' : 'Translate to Spanish:';
+  document.getElementById('write-prompt').textContent = toEng ? p.es : p.en;
+  document.getElementById('write-prompt').dataset.answer = toEng ? p.en : p.es;
+  document.getElementById('write-input').value = '';
+  document.getElementById('write-feedback').classList.add('hidden');
+}
+function checkAnswer() {
+  const input = document.getElementById('write-input').value.trim().toLowerCase();
+  if (!input) return;
+  const answer = document.getElementById('write-prompt').dataset.answer.toLowerCase().replace(/[¿?¡!.…]/g, '').trim();
+  const userClean = input.replace(/[¿?¡!.…]/g, '').trim();
+  writeAttempts++;
+  const fb = document.getElementById('write-feedback');
+  fb.classList.remove('hidden');
+  if (userClean === answer || answer.includes(userClean) || userClean.includes(answer)) {
+    writeScore++;
+    fb.className = 'mt-4 text-center text-sm text-emerald-400 toast';
+    fb.textContent = '✓ Correct! Great job!';
+  } else {
+    fb.className = 'mt-4 text-center text-sm text-rose-400 toast';
+    fb.textContent = '✗ Not quite. The answer is: ' + document.getElementById('write-prompt').dataset.answer;
+  }
+  document.getElementById('write-score').textContent = writeScore;
+  document.getElementById('write-attempts').textContent = writeAttempts;
+}
+function showWriteAnswer() {
+  const fb = document.getElementById('write-feedback');
+  fb.classList.remove('hidden');
+  fb.className = 'mt-4 text-center text-sm text-slate-300 toast';
+  fb.textContent = 'Answer: ' + document.getElementById('write-prompt').dataset.answer;
+}
+function nextWritePrompt() { writeIndex = (writeIndex + 1) % phrases.length; renderWritePrompt(); }
+
+// Conversation
+function renderConvo() {
+  const c = conversations[convoOrder[convoIndex]];
+  document.getElementById('convo-scenario').textContent = c.scenario;
+  document.getElementById('convo-partner').textContent = c.partner;
+  document.getElementById('convo-target').textContent = c.target;
+  document.getElementById('convo-sample-text').textContent = c.sample;
+  document.getElementById('convo-sample').classList.add('hidden');
+  document.getElementById('convo-input').value = '';
+}
+function showConvoSample() { document.getElementById('convo-sample').classList.remove('hidden'); }
+function nextConvo() { convoIndex = (convoIndex + 1) % conversations.length; renderConvo(); }
+
+// Tabs
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => { b.className = 'tab-btn px-5 py-2 rounded-full text-sm font-medium bg-slate-700 text-slate-300 transition-all'; });
+  document.getElementById('tab-' + tab).className = 'tab-btn px-5 py-2 rounded-full text-sm font-medium bg-amber-400 text-slate-900 transition-all';
+  ['flashcards','writing','conversation'].forEach(s => document.getElementById('section-' + s).classList.add('hidden'));
+  document.getElementById('section-' + tab).classList.remove('hidden');
+}
+
+// Init
+shuffle(writeOrder); shuffle(convoOrder);
+document.getElementById('card-total').textContent = phrases.length;
+renderCard(); renderWritePrompt(); renderConvo();
+
+// Element SDK
+const defaultConfig = {
+  main_title: "Spanish ↔ English Practice",
+  subtitle: "Master everyday phrases through flashcards, writing & conversation",
+  background_color: "#1a1a2e",
+  surface_color: "#1e293b",
+  text_color: "#e2e8f0",
+  primary_action_color: "#fbbf24",
+  secondary_action_color: "#334155",
+  font_family: "DM Sans",
+  font_size: 16
+};
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const t = document.getElementById('main-title');
+    const s = document.getElementById('subtitle');
+    t.textContent = config.main_title || defaultConfig.main_title;
+    s.textContent = config.subtitle || defaultConfig.subtitle;
+
+    const bg = config.background_color || defaultConfig.background_color;
+    const surface = config.surface_color || defaultConfig.surface_color;
+    const text = config.text_color || defaultConfig.text_color;
+    const primary = config.primary_action_color || defaultConfig.primary_action_color;
+    const secondary = config.secondary_action_color || defaultConfig.secondary_action_color;
+    const font = config.font_family || defaultConfig.font_family;
+    const size = config.font_size || defaultConfig.font_size;
+
+    const app = document.getElementById('app');
+    app.style.background = `linear-gradient(135deg, ${bg} 0%, ${surface} 100%)`;
+    app.style.fontFamily = `${font}, DM Sans, sans-serif`;
+    app.style.fontSize = size + 'px';
+    t.style.color = primary;
+    s.style.color = text;
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+      { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ["main_title", config.main_title || defaultConfig.main_title],
+    ["subtitle", config.subtitle || defaultConfig.subtitle]
+  ])
+});
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fe7d62e315bc384',t:'MTc3OTI0MzM1OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
