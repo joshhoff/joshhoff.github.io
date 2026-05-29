@@ -1,0 +1,407 @@
+<!doctype html>
+<html class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESL Reading Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { font-family: 'Source Sans 3', sans-serif; }
+    .story-title { font-family: 'Merriweather', serif; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full h-full overflow-auto bg-amber-50">
+   <header class="bg-teal-700 text-white py-8 px-4 text-center">
+    <h1 id="page-title" class="story-title text-3xl md:text-4xl font-bold mb-2">ESL Reading Practice</h1>
+    <p class="text-teal-100 text-lg">A1 Level · Read the stories and answer the questions</p>
+   </header>
+   <nav class="sticky top-0 z-10 bg-white shadow-md px-4 py-3 flex flex-wrap gap-2 justify-between items-center">
+    <div class="flex flex-wrap gap-2 justify-center flex-1"><button onclick="scrollToStory(0)" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-teal-100 text-teal-800 hover:bg-teal-200 transition">⚽ Sports</button> <button onclick="scrollToStory(1)" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-orange-100 text-orange-800 hover:bg-orange-200 transition">🏠 At Home</button> <button onclick="scrollToStory(2)" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-blue-100 text-blue-800 hover:bg-blue-200 transition">✈️ Airport</button> <button onclick="scrollToStory(3)" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition">🏖️ Beach</button> <button onclick="scrollToStory(4)" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-red-100 text-red-800 hover:bg-red-200 transition">🍽️ Restaurant</button> <button onclick="scrollToStory(5)" class="px-3 py-1.5 rounded-full text-sm font-semibold bg-purple-100 text-purple-800 hover:bg-purple-200 transition">🛒 Shopping</button>
+    </div>
+    <div class="flex items-center gap-2 ml-4 border-l border-gray-300 pl-4">
+     <span class="text-xs font-semibold text-gray-600">EN</span> <button onclick="toggleLanguage()" id="lang-toggle" class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 transition"> <span id="toggle-dot" class="inline-block h-5 w-5 transform rounded-full bg-white transition ml-0.5"></span> </button> <span class="text-xs font-semibold text-gray-600">ES</span>
+    </div>
+   </nav>
+   <main class="max-w-3xl mx-auto px-4 py-8 space-y-12" id="stories-container"></main>
+   <footer class="bg-teal-700 text-teal-100 text-center py-6 px-4">
+    <p>Keep reading every day. You are doing great! 📚</p>
+   </footer>
+  </div>
+  <script>
+let currentLanguage = 'en';
+
+const storiesEnglish = [
+  {
+    emoji: "⚽",
+    color: "teal",
+    title: "Playing Soccer",
+    text: `My name is Carlos. I play soccer every Saturday with my friends. We go to the park near my house. The park has a big green field. We play for two hours. I am a midfielder. My friend David is the goalkeeper. He is very good. Last Saturday, I scored two goals. Our team won three to one. After the game, we drink water and eat oranges. I love soccer because it is fun and I can run a lot. My legs are tired after the game, but I am happy. Next week, we play against another team from the next neighborhood. I want to practice more this week. Soccer makes me feel strong and healthy.`,
+    questions: [
+      { q: "When does Carlos play soccer?", options: ["Every Monday", "Every Saturday", "Every Sunday"], answer: 1 },
+      { q: "Where do they play?", options: ["At school", "In the park", "At a stadium"], answer: 1 },
+      { q: "What position does Carlos play?", options: ["Goalkeeper", "Midfielder", "Striker"], answer: 1 },
+      { q: "Who is the goalkeeper?", options: ["Carlos", "David", "Juan"], answer: 1 },
+      { q: "How many goals did Carlos score?", options: ["One", "Two", "Three"], answer: 1 },
+      { q: "What was the final score?", options: ["2-1", "3-1", "3-2"], answer: 1 },
+      { q: "What do they eat after the game?", options: ["Bananas", "Oranges", "Apples"], answer: 1 },
+      { q: "How does Carlos feel after the game?", options: ["Sad", "Angry", "Happy"], answer: 2 },
+      { q: "How long do they play?", options: ["One hour", "Two hours", "Three hours"], answer: 1 },
+      { q: "Why does Carlos love soccer?", options: ["It is expensive", "It is fun", "It is easy"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "🏠",
+    color: "orange",
+    title: "Cleaning the House",
+    text: `Today is Sunday. My family cleans the house every Sunday morning. My mother washes the dishes in the kitchen. My father vacuums the living room floor. I clean my bedroom. First, I make my bed. Then, I put my clothes in the closet. I also dust the desk and the shelves. My sister cleans the bathroom. She washes the mirror and the sink. After we finish, the house looks beautiful and smells fresh. My mother makes lunch for everyone. We eat together at the table. In the afternoon, we rest and watch a movie. I don't like cleaning very much, but I like having a clean house. It feels nice when everything is in the right place.`,
+    questions: [
+      { q: "When does the family clean?", options: ["Saturday morning", "Sunday morning", "Friday evening"], answer: 1 },
+      { q: "What does the mother do?", options: ["Vacuums", "Washes dishes", "Cleans the bathroom"], answer: 1 },
+      { q: "What does the father do?", options: ["Cooks lunch", "Vacuums the floor", "Makes the bed"], answer: 1 },
+      { q: "What does the narrator clean?", options: ["The kitchen", "The bathroom", "The bedroom"], answer: 2 },
+      { q: "What is the first thing the narrator does?", options: ["Dusts the desk", "Makes the bed", "Puts clothes away"], answer: 1 },
+      { q: "Who cleans the bathroom?", options: ["The mother", "The sister", "The father"], answer: 1 },
+      { q: "What does the sister wash?", options: ["The dishes", "The mirror and sink", "The floor"], answer: 1 },
+      { q: "What happens after cleaning?", options: ["They go outside", "Mother makes lunch", "They go to sleep"], answer: 1 },
+      { q: "What do they do in the afternoon?", options: ["Clean more", "Watch a movie", "Go shopping"], answer: 1 },
+      { q: "How does the house smell after cleaning?", options: ["Bad", "Fresh", "Like food"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "✈️",
+    color: "blue",
+    title: "At the Airport",
+    text: `Lisa is at the airport. She is going to London. Her flight leaves at 3:00 PM. She arrives at the airport at 1:00 PM. First, she goes to the check-in counter. She shows her passport and her ticket. The woman at the counter gives her a boarding pass. Lisa's seat is 14A, a window seat. Then, she goes through security. She puts her bag on the belt. After security, she walks to Gate 7. She waits in the waiting area. She buys a coffee and reads a magazine. At 2:45 PM, they start boarding. Lisa shows her boarding pass and walks onto the plane. She finds her seat and puts her bag above. She is excited. This is her first time in London.`,
+    questions: [
+      { q: "Where is Lisa going?", options: ["Paris", "London", "New York"], answer: 1 },
+      { q: "What time does the flight leave?", options: ["1:00 PM", "2:45 PM", "3:00 PM"], answer: 2 },
+      { q: "What time does Lisa arrive at the airport?", options: ["12:00 PM", "1:00 PM", "2:00 PM"], answer: 1 },
+      { q: "What does Lisa show at check-in?", options: ["Her phone", "Her passport and ticket", "Her credit card"], answer: 1 },
+      { q: "What is Lisa's seat number?", options: ["7A", "14A", "3B"], answer: 1 },
+      { q: "What kind of seat does she have?", options: ["Aisle seat", "Middle seat", "Window seat"], answer: 2 },
+      { q: "What gate does Lisa go to?", options: ["Gate 3", "Gate 7", "Gate 14"], answer: 1 },
+      { q: "What does Lisa buy while waiting?", options: ["A sandwich", "A coffee", "Water"], answer: 1 },
+      { q: "When does boarding start?", options: ["2:30 PM", "2:45 PM", "3:00 PM"], answer: 1 },
+      { q: "Has Lisa been to London before?", options: ["Yes, many times", "Yes, once", "No, it's her first time"], answer: 2 }
+    ]
+  },
+  {
+    emoji: "🏖️",
+    color: "yellow",
+    title: "A Day at the Beach",
+    text: `It is a hot summer day. My family goes to the beach. We drive for thirty minutes. When we arrive, we find a good spot on the sand. My dad puts up the big umbrella. My mom puts down the towels. I put on sunscreen. The water is blue and warm. I swim with my brother for a long time. We also build a sandcastle. It is very big with four towers. My mom reads a book under the umbrella. My dad sleeps on his towel. Later, we eat sandwiches and fruit. A seagull tries to take my sandwich! I laugh and scare it away. At five o'clock, we pack everything. I am tired but very happy. I love the beach. The sound of the waves is so relaxing.`,
+    questions: [
+      { q: "What is the weather like?", options: ["Cold", "Rainy", "Hot"], answer: 2 },
+      { q: "How long is the drive to the beach?", options: ["Ten minutes", "Thirty minutes", "One hour"], answer: 1 },
+      { q: "What does the dad put up?", options: ["A tent", "An umbrella", "A flag"], answer: 1 },
+      { q: "What does the narrator put on?", options: ["A hat", "Sunglasses", "Sunscreen"], answer: 2 },
+      { q: "What color is the water?", options: ["Green", "Blue", "Grey"], answer: 1 },
+      { q: "What do they build?", options: ["A sandcastle", "A hole", "A wall"], answer: 0 },
+      { q: "What does the mom do?", options: ["Swims", "Reads a book", "Builds a sandcastle"], answer: 1 },
+      { q: "What do they eat?", options: ["Pizza", "Sandwiches and fruit", "Ice cream"], answer: 1 },
+      { q: "What bird tries to take the sandwich?", options: ["A pigeon", "A seagull", "A crow"], answer: 1 },
+      { q: "What time do they leave?", options: ["Four o'clock", "Five o'clock", "Six o'clock"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "🍽️",
+    color: "red",
+    title: "Ordering at a Restaurant",
+    text: `Tom and his wife Sarah go to an Italian restaurant for dinner. A waiter shows them to a table near the window. He gives them the menu. Tom looks at the pasta section. Sarah looks at the salads. The waiter comes back after five minutes. Sarah orders a Caesar salad and a glass of water. Tom orders spaghetti with tomato sauce and a cola. They also order garlic bread to share. The food arrives in fifteen minutes. It looks delicious. Tom says his pasta is very good. Sarah likes her salad too. For dessert, they share a chocolate cake. When they finish, Tom asks for the bill. The total is twenty-five dollars. Tom pays with his credit card and leaves a tip. They say thank you to the waiter and leave happy.`,
+    questions: [
+      { q: "What kind of restaurant is it?", options: ["Mexican", "Italian", "Chinese"], answer: 1 },
+      { q: "Where is their table?", options: ["Near the door", "Near the window", "In the corner"], answer: 1 },
+      { q: "What does Sarah order to eat?", options: ["Pasta", "A Caesar salad", "Pizza"], answer: 1 },
+      { q: "What does Tom order?", options: ["A salad", "Pizza", "Spaghetti"], answer: 2 },
+      { q: "What does Tom drink?", options: ["Water", "Cola", "Juice"], answer: 1 },
+      { q: "What do they share as a starter?", options: ["Soup", "Garlic bread", "Cheese"], answer: 1 },
+      { q: "How long does the food take?", options: ["Five minutes", "Ten minutes", "Fifteen minutes"], answer: 2 },
+      { q: "What dessert do they share?", options: ["Ice cream", "Chocolate cake", "Fruit"], answer: 1 },
+      { q: "How much is the bill?", options: ["Twenty dollars", "Twenty-five dollars", "Thirty dollars"], answer: 1 },
+      { q: "How does Tom pay?", options: ["Cash", "Credit card", "Phone"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "🛒",
+    color: "purple",
+    title: "Shopping for Clothes",
+    text: `Maria needs new clothes for work. She goes to a clothing store on Saturday. A shop assistant says "Hello, can I help you?" Maria says she needs a blouse and a skirt. The assistant shows her some blouses. Maria tries on a white blouse and a blue blouse. She likes the blue one better. It costs thirty dollars. Then she looks at skirts. She finds a black skirt in her size. She tries it on in the fitting room. It fits perfectly. The skirt costs forty dollars. Maria also sees a nice scarf on sale. It is fifty percent off, so it costs only ten dollars. She decides to buy it too. She goes to the cash register and pays. The total is eighty dollars. The assistant puts everything in a bag and says "Thank you, have a nice day!" Maria is happy with her new clothes.`,
+    questions: [
+      { q: "Why does Maria need new clothes?", options: ["For a party", "For work", "For vacation"], answer: 1 },
+      { q: "When does she go shopping?", options: ["Friday", "Saturday", "Sunday"], answer: 1 },
+      { q: "What color blouse does Maria choose?", options: ["White", "Blue", "Red"], answer: 1 },
+      { q: "How much is the blouse?", options: ["Twenty dollars", "Thirty dollars", "Forty dollars"], answer: 1 },
+      { q: "What color is the skirt?", options: ["Blue", "Grey", "Black"], answer: 2 },
+      { q: "Where does Maria try on the skirt?", options: ["At home", "In the fitting room", "At the counter"], answer: 1 },
+      { q: "How much is the skirt?", options: ["Thirty dollars", "Forty dollars", "Fifty dollars"], answer: 1 },
+      { q: "What is on sale?", options: ["The blouse", "The skirt", "A scarf"], answer: 2 },
+      { q: "How much does the scarf cost?", options: ["Five dollars", "Ten dollars", "Twenty dollars"], answer: 1 },
+      { q: "What is the total price?", options: ["Seventy dollars", "Eighty dollars", "Ninety dollars"], answer: 1 }
+    ]
+  }
+];
+
+const storiesSpanish = [
+  {
+    emoji: "⚽",
+    color: "teal",
+    title: "Jugando Fútbol",
+    text: `Me llamo Carlos. Juego fútbol cada sábado con mis amigos. Vamos al parque cerca de mi casa. El parque tiene un gran campo verde. Jugamos durante dos horas. Soy mediocampista. Mi amigo David es el portero. Es muy bueno. El sábado pasado, marqué dos goles. Nuestro equipo ganó tres a uno. Después del juego, bebemos agua y comemos naranjas. Amo el fútbol porque es divertido y puedo correr mucho. Mis piernas están cansadas después del juego, pero estoy feliz. La próxima semana, jugamos contra otro equipo del barrio siguiente. Quiero practicar más esta semana. El fútbol me hace sentir fuerte y saludable.`,
+    questions: [
+      { q: "¿Cuándo juega Carlos fútbol?", options: ["Cada lunes", "Cada sábado", "Cada domingo"], answer: 1 },
+      { q: "¿Dónde juegan?", options: ["En la escuela", "En el parque", "En un estadio"], answer: 1 },
+      { q: "¿Qué posición juega Carlos?", options: ["Portero", "Mediocampista", "Delantero"], answer: 1 },
+      { q: "¿Quién es el portero?", options: ["Carlos", "David", "Juan"], answer: 1 },
+      { q: "¿Cuántos goles marcó Carlos?", options: ["Uno", "Dos", "Tres"], answer: 1 },
+      { q: "¿Cuál fue el marcador final?", options: ["2-1", "3-1", "3-2"], answer: 1 },
+      { q: "¿Qué comen después del juego?", options: ["Plátanos", "Naranjas", "Manzanas"], answer: 1 },
+      { q: "¿Cómo se siente Carlos después del juego?", options: ["Triste", "Enojado", "Feliz"], answer: 2 },
+      { q: "¿Cuánto tiempo juegan?", options: ["Una hora", "Dos horas", "Tres horas"], answer: 1 },
+      { q: "¿Por qué ama Carlos el fútbol?", options: ["Es caro", "Es divertido", "Es fácil"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "🏠",
+    color: "orange",
+    title: "Limpiando la Casa",
+    text: `Hoy es domingo. Mi familia limpia la casa cada domingo por la mañana. Mi madre lava los platos en la cocina. Mi padre pasa la aspiradora en la sala. Limpio mi habitación. Primero, hago mi cama. Luego, pongo mi ropa en el armario. También limpio el escritorio y los estantes. Mi hermana limpia el baño. Ella lava el espejo y el lavabo. Después de terminar, la casa se ve hermosa y huele fresco. Mi madre prepara el almuerzo para todos. Comemos juntos en la mesa. Por la tarde, descansamos y vemos una película. No me gusta limpiar mucho, pero me gusta tener una casa limpia. Se siente bien cuando todo está en el lugar correcto.`,
+    questions: [
+      { q: "¿Cuándo limpia la familia?", options: ["Sábado por la mañana", "Domingo por la mañana", "Viernes por la noche"], answer: 1 },
+      { q: "¿Qué hace la madre?", options: ["Pasa la aspiradora", "Lava los platos", "Limpia el baño"], answer: 1 },
+      { q: "¿Qué hace el padre?", options: ["Cocina el almuerzo", "Pasa la aspiradora", "Hace la cama"], answer: 1 },
+      { q: "¿Qué limpia el narrador?", options: ["La cocina", "El baño", "La habitación"], answer: 2 },
+      { q: "¿Cuál es lo primero que hace el narrador?", options: ["Limpia el escritorio", "Hace la cama", "Guarda la ropa"], answer: 1 },
+      { q: "¿Quién limpia el baño?", options: ["La madre", "La hermana", "El padre"], answer: 1 },
+      { q: "¿Qué lava la hermana?", options: ["Los platos", "El espejo y el lavabo", "El piso"], answer: 1 },
+      { q: "¿Qué pasa después de limpiar?", options: ["Salen afuera", "La madre prepara el almuerzo", "Se duermen"], answer: 1 },
+      { q: "¿Qué hacen por la tarde?", options: ["Limpian más", "Ven una película", "Van de compras"], answer: 1 },
+      { q: "¿Cómo huele la casa después de limpiar?", options: ["Mal", "Fresco", "A comida"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "✈️",
+    color: "blue",
+    title: "En el Aeropuerto",
+    text: `Lisa está en el aeropuerto. Va a Londres. Su vuelo sale a las 3:00 PM. Llega al aeropuerto a la 1:00 PM. Primero, va al mostrador de facturación. Muestra su pasaporte y su boleto. La mujer en el mostrador le da una tarjeta de embarque. El asiento de Lisa es 14A, un asiento junto a la ventana. Luego, pasa por seguridad. Pone su bolsa en la cinta. Después de seguridad, camina a la Puerta 7. Espera en el área de espera. Compra un café y lee una revista. A las 2:45 PM, comienzan a embarcar. Lisa muestra su tarjeta de embarque y sube al avión. Encuentra su asiento y pone su bolsa arriba. Está emocionada. Es su primera vez en Londres.`,
+    questions: [
+      { q: "¿Adónde va Lisa?", options: ["París", "Londres", "Nueva York"], answer: 1 },
+      { q: "¿A qué hora sale el vuelo?", options: ["1:00 PM", "2:45 PM", "3:00 PM"], answer: 2 },
+      { q: "¿A qué hora llega Lisa al aeropuerto?", options: ["12:00 PM", "1:00 PM", "2:00 PM"], answer: 1 },
+      { q: "¿Qué muestra Lisa en el mostrador?", options: ["Su teléfono", "Su pasaporte y boleto", "Su tarjeta de crédito"], answer: 1 },
+      { q: "¿Cuál es el número de asiento de Lisa?", options: ["7A", "14A", "3B"], answer: 1 },
+      { q: "¿Qué tipo de asiento tiene?", options: ["Asiento de pasillo", "Asiento central", "Asiento junto a la ventana"], answer: 2 },
+      { q: "¿A qué puerta va Lisa?", options: ["Puerta 3", "Puerta 7", "Puerta 14"], answer: 1 },
+      { q: "¿Qué compra Lisa mientras espera?", options: ["Un sándwich", "Un café", "Agua"], answer: 1 },
+      { q: "¿Cuándo comienza el embarque?", options: ["2:30 PM", "2:45 PM", "3:00 PM"], answer: 1 },
+      { q: "¿Ha estado Lisa en Londres antes?", options: ["Sí, muchas veces", "Sí, una vez", "No, es su primera vez"], answer: 2 }
+    ]
+  },
+  {
+    emoji: "🏖️",
+    color: "yellow",
+    title: "Un Día en la Playa",
+    text: `Es un día caluroso de verano. Mi familia va a la playa. Conducimos durante treinta minutos. Cuando llegamos, encontramos un buen lugar en la arena. Mi papá pone la sombrilla grande. Mi mamá pone las toallas. Me pongo protector solar. El agua es azul y cálida. Nado con mi hermano durante mucho tiempo. También construimos un castillo de arena. Es muy grande con cuatro torres. Mi mamá lee un libro bajo la sombrilla. Mi papá duerme en su toalla. Más tarde, comemos sándwiches y frutas. ¡Una gaviota intenta tomar mi sándwich! Me río y la asustó. A las cinco de la tarde, guardamos todo. Estoy cansado pero muy feliz. Amo la playa. El sonido de las olas es muy relajante.`,
+    questions: [
+      { q: "¿Cómo es el clima?", options: ["Frío", "Lluvioso", "Caluroso"], answer: 2 },
+      { q: "¿Cuánto tiempo es el viaje a la playa?", options: ["Diez minutos", "Treinta minutos", "Una hora"], answer: 1 },
+      { q: "¿Qué pone el papá?", options: ["Una tienda de campaña", "Una sombrilla", "Una bandera"], answer: 1 },
+      { q: "¿Qué se pone el narrador?", options: ["Un sombrero", "Gafas de sol", "Protector solar"], answer: 2 },
+      { q: "¿De qué color es el agua?", options: ["Verde", "Azul", "Gris"], answer: 1 },
+      { q: "¿Qué construyen?", options: ["Un castillo de arena", "Un agujero", "Una pared"], answer: 0 },
+      { q: "¿Qué hace la mamá?", options: ["Nada", "Lee un libro", "Construye un castillo"], answer: 1 },
+      { q: "¿Qué comen?", options: ["Pizza", "Sándwiches y frutas", "Helado"], answer: 1 },
+      { q: "¿Qué ave intenta tomar el sándwich?", options: ["Una paloma", "Una gaviota", "Un cuervo"], answer: 1 },
+      { q: "¿A qué hora se van?", options: ["Cuatro de la tarde", "Cinco de la tarde", "Seis de la tarde"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "🍽️",
+    color: "red",
+    title: "Pidiendo en un Restaurante",
+    text: `Tom y su esposa Sarah van a un restaurante italiano para cenar. Un mesero los lleva a una mesa cerca de la ventana. Les da el menú. Tom mira la sección de pasta. Sarah mira las ensaladas. El mesero vuelve después de cinco minutos. Sarah pide una ensalada César y un vaso de agua. Tom pide espagueti con salsa de tomate y una cola. También piden pan de ajo para compartir. La comida llega en quince minutos. Se ve deliciosa. Tom dice que su pasta es muy buena. A Sarah también le gusta su ensalada. De postre, comparten un pastel de chocolate. Cuando terminan, Tom pide la cuenta. El total es veinticinco dólares. Tom paga con su tarjeta de crédito y deja una propina. Le dan las gracias al mesero y se van felices.`,
+    questions: [
+      { q: "¿Qué tipo de restaurante es?", options: ["Mexicano", "Italiano", "Chino"], answer: 1 },
+      { q: "¿Dónde está su mesa?", options: ["Cerca de la puerta", "Cerca de la ventana", "En la esquina"], answer: 1 },
+      { q: "¿Qué pide Sarah para comer?", options: ["Pasta", "Una ensalada César", "Pizza"], answer: 1 },
+      { q: "¿Qué pide Tom?", options: ["Una ensalada", "Pizza", "Espagueti"], answer: 2 },
+      { q: "¿Qué bebe Tom?", options: ["Agua", "Cola", "Jugo"], answer: 1 },
+      { q: "¿Qué comparten como entrada?", options: ["Sopa", "Pan de ajo", "Queso"], answer: 1 },
+      { q: "¿Cuánto tiempo tarda la comida?", options: ["Cinco minutos", "Diez minutos", "Quince minutos"], answer: 2 },
+      { q: "¿Qué postre comparten?", options: ["Helado", "Pastel de chocolate", "Fruta"], answer: 1 },
+      { q: "¿Cuánto cuesta la comida?", options: ["Veinte dólares", "Veinticinco dólares", "Treinta dólares"], answer: 1 },
+      { q: "¿Cómo paga Tom?", options: ["En efectivo", "Tarjeta de crédito", "Teléfono"], answer: 1 }
+    ]
+  },
+  {
+    emoji: "🛒",
+    color: "purple",
+    title: "Comprando Ropa",
+    text: `María necesita ropa nueva para trabajar. Va a una tienda de ropa el sábado. Una asistente dice "¡Hola, puedo ayudarte?" María dice que necesita una blusa y una falda. La asistente le muestra algunas blusas. María se prueba una blusa blanca y una blusa azul. Le gusta más la azul. Cuesta treinta dólares. Luego mira las faldas. Encuentra una falda negra en su talla. Se la prueba en el probador. Le queda perfectamente. La falda cuesta cuarenta dólares. María también ve un bonito pañuelo en oferta. Está al cincuenta por ciento de descuento, así que cuesta solo diez dólares. Decide comprarlo también. Va a la caja y paga. El total es ochenta dólares. La asistente pone todo en una bolsa y dice "¡Gracias, que tengas un buen día!" María está feliz con su ropa nueva.`,
+    questions: [
+      { q: "¿Por qué María necesita ropa nueva?", options: ["Para una fiesta", "Para trabajar", "Para vacaciones"], answer: 1 },
+      { q: "¿Cuándo va de compras?", options: ["Viernes", "Sábado", "Domingo"], answer: 1 },
+      { q: "¿Qué color de blusa elige María?", options: ["Blanco", "Azul", "Rojo"], answer: 1 },
+      { q: "¿Cuánto cuesta la blusa?", options: ["Veinte dólares", "Treinta dólares", "Cuarenta dólares"], answer: 1 },
+      { q: "¿De qué color es la falda?", options: ["Azul", "Gris", "Negra"], answer: 2 },
+      { q: "¿Dónde se prueba la falda?", options: ["En casa", "En el probador", "En la caja"], answer: 1 },
+      { q: "¿Cuánto cuesta la falda?", options: ["Treinta dólares", "Cuarenta dólares", "Cincuenta dólares"], answer: 1 },
+      { q: "¿Qué está en oferta?", options: ["La blusa", "La falda", "Un pañuelo"], answer: 2 },
+      { q: "¿Cuánto cuesta el pañuelo?", options: ["Cinco dólares", "Diez dólares", "Veinte dólares"], answer: 1 },
+      { q: "¿Cuál es el precio total?", options: ["Setenta dólares", "Ochenta dólares", "Noventa dólares"], answer: 1 }
+    ]
+  }
+];
+
+let stories = storiesEnglish;
+
+const colorMap = {
+  teal: { bg: "bg-teal-50", border: "border-teal-300", btn: "bg-teal-600 hover:bg-teal-700", header: "bg-teal-100 text-teal-800" },
+  orange: { bg: "bg-orange-50", border: "border-orange-300", btn: "bg-orange-600 hover:bg-orange-700", header: "bg-orange-100 text-orange-800" },
+  blue: { bg: "bg-blue-50", border: "border-blue-300", btn: "bg-blue-600 hover:bg-blue-700", header: "bg-blue-100 text-blue-800" },
+  yellow: { bg: "bg-yellow-50", border: "border-yellow-300", btn: "bg-yellow-600 hover:bg-yellow-700", header: "bg-yellow-100 text-yellow-800" },
+  red: { bg: "bg-red-50", border: "border-red-300", btn: "bg-red-600 hover:bg-red-700", header: "bg-red-100 text-red-800" },
+  purple: { bg: "bg-purple-50", border: "border-purple-300", btn: "bg-purple-600 hover:bg-purple-700", header: "bg-purple-100 text-purple-800" }
+};
+
+function renderStories() {
+  const container = document.getElementById('stories-container');
+  container.innerHTML = stories.map((story, si) => {
+    const c = colorMap[story.color];
+    return `
+      <article id="story-${si}" class="rounded-2xl border-2 ${c.border} ${c.bg} overflow-hidden shadow-lg">
+        <div class="${c.header} px-6 py-4">
+          <h2 class="story-title text-2xl font-bold">${story.emoji} ${story.title}</h2>
+        </div>
+        <div class="px-6 py-5">
+          <p class="text-gray-800 text-lg leading-relaxed mb-6">${story.text}</p>
+          <div class="border-t border-gray-200 pt-5">
+            <h3 class="font-bold text-lg text-gray-700 mb-4">${currentLanguage === 'en' ? '📝 Comprehension Questions' : '📝 Preguntas de Comprensión'}</h3>
+            <div class="space-y-4" id="questions-${si}">
+              ${story.questions.map((q, qi) => `
+                <div class="p-4 bg-white rounded-xl shadow-sm" id="q-${si}-${qi}">
+                  <p class="font-semibold text-gray-800 mb-2">${qi + 1}. ${q.q}</p>
+                  <div class="flex flex-col gap-2">
+                    ${q.options.map((opt, oi) => `
+                      <button onclick="checkAnswer(${si},${qi},${oi})" class="answer-btn-${si}-${qi} text-left px-4 py-2 rounded-lg border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition text-gray-700">${String.fromCharCode(65 + oi)}. ${opt}</button>
+                    `).join('')}
+                  </div>
+                  <p class="mt-2 text-sm font-semibold hidden" id="feedback-${si}-${qi}"></p>
+                </div>
+              `).join('')}
+            </div>
+            <div class="mt-4 p-3 bg-white rounded-xl text-center hidden" id="score-${si}">
+              <p class="font-bold text-lg" id="score-text-${si}"></p>
+            </div>
+          </div>
+        </div>
+      </article>`;
+  }).join('');
+}
+
+const answers = {};
+function checkAnswer(si, qi, oi) {
+  const key = `${si}-${qi}`;
+  if (answers[key] !== undefined) return;
+  answers[key] = oi;
+  const correct = stories[si].questions[qi].answer;
+  const btns = document.querySelectorAll(`.answer-btn-${si}-${qi}`);
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    btn.classList.remove('hover:border-gray-400', 'hover:bg-gray-50');
+    if (i === correct) { btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800'); }
+    else if (i === oi && oi !== correct) { btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800'); }
+  });
+  const fb = document.getElementById(`feedback-${si}-${qi}`);
+  fb.classList.remove('hidden');
+  fb.textContent = oi === correct ? "✅ Correct!" : "❌ Not quite. The correct answer is highlighted.";
+  fb.className = fb.className.replace('hidden', '') + (oi === correct ? ' text-green-600' : ' text-red-600');
+
+  // Check if all questions answered
+  const total = stories[si].questions.length;
+  let answered = 0, correctCount = 0;
+  for (let i = 0; i < total; i++) {
+    if (answers[`${si}-${i}`] !== undefined) { answered++; if (answers[`${si}-${i}`] === stories[si].questions[i].answer) correctCount++; }
+  }
+  if (answered === total) {
+    const scoreDiv = document.getElementById(`score-${si}`);
+    scoreDiv.classList.remove('hidden');
+    document.getElementById(`score-text-${si}`).textContent = `🎉 You got ${correctCount} out of ${total} correct!`;
+  }
+}
+
+function scrollToStory(i) { document.getElementById(`story-${i}`).scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+function toggleLanguage() {
+  currentLanguage = currentLanguage === 'en' ? 'es' : 'en';
+  stories = currentLanguage === 'en' ? storiesEnglish : storiesSpanish;
+  answers = {}; // Reset answers when switching languages
+  const toggle = document.getElementById('lang-toggle');
+  const dot = document.getElementById('toggle-dot');
+  
+  if (currentLanguage === 'es') {
+    toggle.style.backgroundColor = '#2563eb';
+    dot.style.marginLeft = '1.25rem';
+  } else {
+    toggle.style.backgroundColor = '#d1d5db';
+    dot.style.marginLeft = '0.125rem';
+  }
+  
+  renderStories();
+  lucide.createIcons();
+}
+
+renderStories();
+
+// Element SDK
+const defaultConfig = {
+  page_title: "ESL Reading Practice",
+  background_color: "#fffbeb",
+  header_color: "#0f766e",
+  text_color: "#1f2937",
+  primary_action_color: "#0d9488",
+  surface_color: "#ffffff",
+  font_family: "Source Sans 3",
+  font_size: 16
+};
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const title = config.page_title || defaultConfig.page_title;
+    document.getElementById('page-title').textContent = title;
+    document.querySelector('header').style.backgroundColor = config.header_color || defaultConfig.header_color;
+    document.querySelector('footer').style.backgroundColor = config.header_color || defaultConfig.header_color;
+    document.getElementById('app').style.backgroundColor = config.background_color || defaultConfig.background_color;
+    const font = config.font_family || defaultConfig.font_family;
+    document.body.style.fontFamily = `${font}, Source Sans 3, sans-serif`;
+    const size = config.font_size || defaultConfig.font_size;
+    document.querySelectorAll('article p').forEach(p => p.style.fontSize = `${size}px`);
+  },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.header_color || defaultConfig.header_color, set: (v) => { config.header_color = v; window.elementSdk.setConfig({ header_color: v }); } },
+      { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ["page_title", config.page_title || defaultConfig.page_title]
+  ])
+});
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0377c522a1edf5b',t:'MTc4MDA3ODUzOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
