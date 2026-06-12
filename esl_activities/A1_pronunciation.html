@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head><script src="/_sdk/telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Sounds Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+        * { font-family: 'Nunito', sans-serif; }
+        .tab-active { background: #1e3a5f; color: #fff; }
+        .tab-inactive { background: #e8f0fe; color: #1e3a5f; }
+        .sound-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(30,58,95,0.15); }
+        .sound-card { transition: all 0.2s ease; }
+        .mouth-diagram { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .quiz-option { transition: all 0.15s ease; }
+        .quiz-option:hover { transform: scale(1.02); }
+        .correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+        .incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
+        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full bg-gradient-to-br from-slate-50 to-blue-50 overflow-auto"><!-- Header -->
+   <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-4">
+     <h1 id="main-title" class="text-2xl font-800 text-slate-800">English Sounds Practice</h1>
+     <p id="welcome-msg" class="text-sm text-slate-500 mt-1">Learn and practice English sounds!</p>
+    </div>
+   </header><!-- Navigation Tabs -->
+   <nav class="max-w-4xl mx-auto px-4 pt-4">
+    <div class="flex gap-2 flex-wrap" id="nav-tabs"><button onclick="showSection('vowels')" id="tab-vowels" class="tab-active px-4 py-2 rounded-full text-sm font-600 transition-all">Vowel Sounds</button> <button onclick="showSection('consonants')" id="tab-consonants" class="tab-inactive px-4 py-2 rounded-full text-sm font-600 transition-all">Consonant Sounds</button> <button onclick="showSection('diphthongs')" id="tab-diphthongs" class="tab-inactive px-4 py-2 rounded-full text-sm font-600 transition-all">Diphthongs</button> <button onclick="showSection('practice')" id="tab-practice" class="tab-inactive px-4 py-2 rounded-full text-sm font-600 transition-all">Practice Quiz</button> <button onclick="showSection('conversation')" id="tab-conversation" class="tab-inactive px-4 py-2 rounded-full text-sm font-600 transition-all">Conversation</button>
+    </div>
+   </nav><!-- Content -->
+   <main class="max-w-4xl mx-auto px-4 py-6 pb-12"><!-- VOWELS SECTION -->
+    <section id="section-vowels" class="fade-in">
+     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6">
+      <h2 class="text-lg font-700 text-slate-800 mb-2">What are Vowel Sounds?</h2>
+      <p class="text-slate-600 text-sm leading-relaxed">Vowels are sounds you make with your mouth <strong>open</strong>. In English, the vowel letters are <strong>A, E, I, O, U</strong>. But there are more vowel <em>sounds</em> than letters! Your mouth shape changes for each sound.</p>
+     </div>
+     <div class="grid gap-4 sm:grid-cols-2" id="vowel-cards"></div>
+    </section><!-- CONSONANTS SECTION -->
+    <section id="section-consonants" class="hidden fade-in">
+     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6">
+      <h2 class="text-lg font-700 text-slate-800 mb-2">What are Consonant Sounds?</h2>
+      <p class="text-slate-600 text-sm leading-relaxed">Consonants are sounds you make by <strong>blocking</strong> air with your lips, teeth, or tongue. Some consonants are <strong>voiced</strong> (your throat vibrates) and some are <strong>voiceless</strong> (no vibration). Touch your throat to feel the difference!</p>
+     </div>
+     <div class="grid gap-4 sm:grid-cols-2" id="consonant-cards"></div>
+    </section><!-- DIPHTHONGS SECTION -->
+    <section id="section-diphthongs" class="hidden fade-in">
+     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6">
+      <h2 class="text-lg font-700 text-slate-800 mb-2">What are Diphthongs?</h2>
+      <p class="text-slate-600 text-sm leading-relaxed">Diphthongs are <strong>two vowel sounds together</strong> in one syllable. Your mouth starts in one position and <strong>glides</strong> to another. Think of them as "moving vowels." Listen carefully — they sound like one smooth sound!</p>
+     </div>
+     <div class="grid gap-4 sm:grid-cols-2" id="diphthong-cards"></div>
+    </section><!-- PRACTICE QUIZ SECTION -->
+    <section id="section-practice" class="hidden fade-in">
+     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6">
+      <h2 class="text-lg font-700 text-slate-800 mb-2">Practice Activities</h2>
+      <p class="text-slate-600 text-sm leading-relaxed mb-4">Choose the correct sound for each word. Take your time!</p>
+      <div id="quiz-container"></div>
+      <div class="flex gap-3 mt-6"><button onclick="loadQuiz()" class="bg-slate-800 text-white px-5 py-2.5 rounded-xl text-sm font-600 hover:bg-slate-700 transition-all flex items-center gap-2"> <i data-lucide="refresh-cw" style="width:16px;height:16px;"></i> New Questions </button>
+       <div id="score-display" class="flex items-center text-sm text-slate-600 font-600"></div>
+      </div>
+     </div><!-- Written Practice -->
+     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+      <h2 class="text-lg font-700 text-slate-800 mb-3">✍️ Written Practice</h2>
+      <div class="space-y-4" id="writing-activities">
+       <div class="border border-slate-200 rounded-xl p-4">
+        <p class="text-sm font-600 text-slate-700 mb-2">1. Write 3 words with the /iː/ sound (like "see"):</p><textarea class="w-full border border-slate-200 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-blue-400" rows="2" placeholder="Example: tree, free, me..."></textarea>
+       </div>
+       <div class="border border-slate-200 rounded-xl p-4">
+        <p class="text-sm font-600 text-slate-700 mb-2">2. Write 3 words with the /æ/ sound (like "cat"):</p><textarea class="w-full border border-slate-200 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-blue-400" rows="2" placeholder="Example: hat, man, bag..."></textarea>
+       </div>
+       <div class="border border-slate-200 rounded-xl p-4">
+        <p class="text-sm font-600 text-slate-700 mb-2">3. Circle the odd one out: <strong>ship, sheep, chip, sleep</strong></p><textarea class="w-full border border-slate-200 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-blue-400" rows="2" placeholder="Which word has a different vowel sound? Write it here..."></textarea>
+       </div>
+       <div class="border border-slate-200 rounded-xl p-4">
+        <p class="text-sm font-600 text-slate-700 mb-2">4. Write a short sentence using the /aʊ/ sound (like "house"):</p><textarea class="w-full border border-slate-200 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-blue-400" rows="2" placeholder="Example: The cow is brown..."></textarea>
+       </div>
+      </div>
+     </div>
+    </section><!-- CONVERSATION SECTION -->
+    <section id="section-conversation" class="hidden fade-in">
+     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6">
+      <h2 class="text-lg font-700 text-slate-800 mb-2">🗣️ Conversation Practice</h2>
+      <p class="text-slate-600 text-sm leading-relaxed mb-4">Practice these conversations with a partner or read them aloud. The <span class="bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded text-xs font-600">highlighted sounds</span> are the focus sounds.</p>
+     </div>
+     <div class="space-y-4" id="conversation-cards"></div>
+    </section>
+   </main>
+  </div>
+  <script>
+// Sound data
+const vowels = [
+    { ipa: '/iː/', mouth: '😊', name: 'Long E', tip: 'Smile wide, tongue high', examples: ['see', 'tree', 'me', 'eat'], context: 'Your lips stretch wide like a big smile. Your tongue is high and forward.' },
+    { ipa: '/ɪ/', mouth: '😐', name: 'Short I', tip: 'Relax mouth, short sound', examples: ['sit', 'big', 'fish', 'this'], context: 'Quick and relaxed. Your mouth is slightly open. Think "quick sound."' },
+    { ipa: '/æ/', mouth: '😮', name: 'Short A', tip: 'Open mouth wide, tongue low', examples: ['cat', 'hat', 'man', 'bag'], context: 'Open your mouth wide and push your tongue down. Like saying "ah" at the doctor but shorter.' },
+    { ipa: '/ɑː/', mouth: '😯', name: 'Long A (father)', tip: 'Open wide and round', examples: ['car', 'far', 'father', 'arm'], context: 'Open your mouth wide. Your tongue is low and flat. A long, relaxed sound.' },
+    { ipa: '/ʊ/', mouth: '😗', name: 'Short U (book)', tip: 'Lips slightly rounded', examples: ['book', 'look', 'put', 'good'], context: 'Round your lips a little bit, but keep it short and relaxed.' },
+    { ipa: '/uː/', mouth: '😙', name: 'Long U (food)', tip: 'Lips very round, push forward', examples: ['food', 'moon', 'blue', 'two'], context: 'Push your lips forward into a small circle. Hold the sound long.' },
+    { ipa: '/ɛ/', mouth: '😐', name: 'Short E', tip: 'Mouth slightly open', examples: ['bed', 'red', 'ten', 'yes'], context: 'Open your mouth a little. Your tongue is in the middle. A simple, short sound.' },
+    { ipa: '/ʌ/', mouth: '😶', name: 'Short U (cup)', tip: 'Mouth relaxed, short', examples: ['cup', 'bus', 'run', 'love'], context: 'Very relaxed mouth, barely open. The most natural, lazy sound in English!' },
+];
+
+const consonants = [
+    { ipa: '/θ/', mouth: '😛', name: 'TH (voiceless)', tip: 'Tongue between teeth, blow air', examples: ['think', 'three', 'bath', 'tooth'], context: 'Put your tongue between your teeth. Blow air gently. NO vibration in your throat.' },
+    { ipa: '/ð/', mouth: '😛', name: 'TH (voiced)', tip: 'Tongue between teeth, vibrate', examples: ['this', 'that', 'the', 'mother'], context: 'Same tongue position as /θ/, but now your throat vibrates. Touch your throat to feel it!' },
+    { ipa: '/ʃ/', mouth: '🤫', name: 'SH', tip: 'Lips forward, air through teeth', examples: ['she', 'shop', 'fish', 'wash'], context: 'Push your lips forward slightly. The air flows over your tongue like saying "shhh, be quiet!"' },
+    { ipa: '/tʃ/', mouth: '😬', name: 'CH', tip: 'Tongue touches roof, release', examples: ['chair', 'child', 'teach', 'lunch'], context: 'Your tongue touches the roof of your mouth, then releases with a burst of air. Like a sneeze!' },
+    { ipa: '/dʒ/', mouth: '😬', name: 'J/DG', tip: 'Like CH but with voice', examples: ['job', 'age', 'bridge', 'just'], context: 'Same as /tʃ/ but your throat vibrates. Feel the buzz!' },
+    { ipa: '/r/', mouth: '😊', name: 'R', tip: 'Tongue curls back, don\'t touch', examples: ['red', 'run', 'very', 'right'], context: 'Curl your tongue back but DON\'T touch anything! Your lips round slightly.' },
+    { ipa: '/l/', mouth: '😊', name: 'L', tip: 'Tongue tip touches behind teeth', examples: ['like', 'look', 'tell', 'ball'], context: 'The tip of your tongue touches right behind your top teeth. Air goes around the sides.' },
+    { ipa: '/w/', mouth: '😗', name: 'W', tip: 'Lips round then open', examples: ['we', 'want', 'water', 'win'], context: 'Start with round lips (like blowing a candle) then open them quickly.' },
+];
+
+const diphthongs = [
+    { ipa: '/eɪ/', mouth: '😊', name: 'Long A (day)', tip: 'Start with /e/, glide to /ɪ/', examples: ['day', 'make', 'rain', 'say'], context: 'Start with mouth slightly open, then your tongue moves UP. Two positions, one smooth sound.' },
+    { ipa: '/aɪ/', mouth: '😮', name: 'Long I (my)', tip: 'Start open, glide to /ɪ/', examples: ['my', 'time', 'buy', 'eye'], context: 'Start with mouth WIDE open (like /ɑ/), then close up to /ɪ/. A big movement!' },
+    { ipa: '/ɔɪ/', mouth: '😯', name: 'OI (boy)', tip: 'Start round, glide to /ɪ/', examples: ['boy', 'toy', 'oil', 'coin'], context: 'Start with round lips, then spread them into a smile. Your mouth changes shape!' },
+    { ipa: '/aʊ/', mouth: '😮', name: 'OW (house)', tip: 'Start open, glide to /ʊ/', examples: ['house', 'now', 'cow', 'out'], context: 'Start wide open, then round your lips forward. Like saying "ow!" when something hurts.' },
+    { ipa: '/oʊ/', mouth: '😗', name: 'Long O (go)', tip: 'Start with /o/, glide to /ʊ/', examples: ['go', 'no', 'home', 'boat'], context: 'Start with slightly round lips, then make them MORE round. A gentle glide forward.' },
+    { ipa: '/ɪər/', mouth: '😐', name: 'EAR', tip: 'Start /ɪ/, glide to /ə/', examples: ['ear', 'here', 'near', 'beer'], context: 'Start with a short /ɪ/ sound, then relax your mouth to the lazy /ə/ sound.' },
+];
+
+const quizQuestions = [
+    { word: 'sheep', options: ['/iː/', '/ɪ/', '/eɪ/'], answer: '/iː/' },
+    { word: 'ship', options: ['/iː/', '/ɪ/', '/ʊ/'], answer: '/ɪ/' },
+    { word: 'cat', options: ['/æ/', '/ɑː/', '/ʌ/'], answer: '/æ/' },
+    { word: 'think', options: ['/θ/', '/ð/', '/t/'], answer: '/θ/' },
+    { word: 'this', options: ['/θ/', '/ð/', '/s/'], answer: '/ð/' },
+    { word: 'day', options: ['/eɪ/', '/aɪ/', '/iː/'], answer: '/eɪ/' },
+    { word: 'my', options: ['/eɪ/', '/aɪ/', '/ɔɪ/'], answer: '/aɪ/' },
+    { word: 'house', options: ['/aʊ/', '/oʊ/', '/ʊ/'], answer: '/aʊ/' },
+    { word: 'boy', options: ['/ɔɪ/', '/oʊ/', '/aʊ/'], answer: '/ɔɪ/' },
+    { word: 'food', options: ['/uː/', '/ʊ/', '/ʌ/'], answer: '/uː/' },
+    { word: 'cup', options: ['/ʌ/', '/ʊ/', '/æ/'], answer: '/ʌ/' },
+    { word: 'chair', options: ['/tʃ/', '/ʃ/', '/dʒ/'], answer: '/tʃ/' },
+    { word: 'fish', options: ['/ʃ/', '/tʃ/', '/s/'], answer: '/ʃ/' },
+    { word: 'go', options: ['/oʊ/', '/aʊ/', '/ɔɪ/'], answer: '/oʊ/' },
+    { word: 'book', options: ['/ʊ/', '/uː/', '/ɒ/'], answer: '/ʊ/' },
+];
+
+const conversations = [
+    {
+        title: '🛒 At the Shop',
+        focus: '/θ/, /ð/, /iː/',
+        lines: [
+            { speaker: 'A', text: 'Hi! I <mark>think</mark> I need <mark>three</mark> apples, please.' },
+            { speaker: 'B', text: 'Sure! Is <mark>that</mark> everything?' },
+            { speaker: 'A', text: 'And <mark>these</mark> bananas too. How much is <mark>that</mark>?' },
+            { speaker: 'B', text: '<mark>Three</mark> dollars and <mark>thirty</mark> cents.' },
+            { speaker: 'A', text: '<mark>Thank</mark> you!' },
+        ]
+    },
+    {
+        title: '🏠 Describing Your Home',
+        focus: '/aʊ/, /oʊ/, /ʊ/',
+        lines: [
+            { speaker: 'A', text: 'Where is your <mark>house</mark>?' },
+            { speaker: 'B', text: 'It\'s <mark>down</mark> the road, near the park.' },
+            { speaker: 'A', text: 'Is it big? How many rooms?' },
+            { speaker: 'B', text: 'It has a <mark>good</mark> kitchen and two bedrooms. I <mark>look</mark> out the window and see trees.' },
+            { speaker: 'A', text: 'That sounds nice! I\'d like to <mark>go</mark> <mark>home</mark> <mark>now</mark>.' },
+        ]
+    },
+    {
+        title: '👨‍👩‍👧 Talking About Family',
+        focus: '/ʌ/, /æ/, /ɪ/',
+        lines: [
+            { speaker: 'A', text: 'Do you have a <mark>big</mark> family?' },
+            { speaker: 'B', text: 'Yes! I have a <mark>brother</mark> and a <mark>sister</mark>.' },
+            { speaker: 'A', text: 'What does your <mark>dad</mark> do?' },
+            { speaker: 'B', text: 'My <mark>dad</mark> is a bus driver. My <mark>mum</mark> works in a <mark>shop</mark>.' },
+            { speaker: 'A', text: 'That\'s nice. I <mark>love</mark> my family too!' },
+        ]
+    },
+    {
+        title: '🍕 Ordering Food',
+        focus: '/tʃ/, /dʒ/, /ʃ/',
+        lines: [
+            { speaker: 'A', text: 'I\'d like some <mark>chips</mark> and <mark>chicken</mark>, please.' },
+            { speaker: 'B', text: 'Would you like <mark>cheese</mark> on your <mark>chips</mark>?' },
+            { speaker: 'A', text: 'Yes! And a large <mark>orange</mark> <mark>juice</mark>.' },
+            { speaker: 'B', text: 'Sure. Anything else?' },
+            { speaker: 'A', text: 'Maybe some <mark>chocolate</mark> cake!' },
+        ]
+    },
+];
+
+// Render functions
+function renderCards(data, containerId, color) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = data.map(s => `
+        <div class="sound-card bg-white rounded-xl p-5 border border-slate-100 shadow-sm cursor-default">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="mouth-diagram bg-${color}-100">${s.mouth}</div>
+                <div>
+                    <span class="text-lg font-700 text-slate-800">${s.ipa}</span>
+                    <span class="text-xs text-slate-500 ml-2">${s.name}</span>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 mb-2 italic">${s.context}</p>
+            <p class="text-xs text-${color}-700 bg-${color}-50 px-2 py-1 rounded-lg mb-3 font-600">💡 ${s.tip}</p>
+            <div class="flex flex-wrap gap-1.5">
+                ${s.examples.map(e => `<span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-600">${e}</span>`).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderConversations() {
+    const container = document.getElementById('conversation-cards');
+    container.innerHTML = conversations.map(c => `
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-700 text-slate-800">${c.title}</h3>
+                <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-600">Focus: ${c.focus}</span>
+            </div>
+            <div class="space-y-2.5">
+                ${c.lines.map(l => `
+                    <div class="flex gap-3 items-start">
+                        <span class="text-xs font-700 ${l.speaker === 'A' ? 'text-blue-600 bg-blue-50' : 'text-emerald-600 bg-emerald-50'} px-2 py-1 rounded-full min-w-[28px] text-center">${l.speaker}</span>
+                        <p class="text-sm text-slate-700 leading-relaxed">${l.text}</p>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-100">
+                <p class="text-xs text-slate-500 font-600">🎯 Try this: Read the conversation aloud. Pay attention to the highlighted sounds. Then practice with your own words!</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+let currentQuiz = [];
+let score = 0;
+let answered = 0;
+
+function loadQuiz() {
+    const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5).slice(0, 5);
+    currentQuiz = shuffled;
+    score = 0;
+    answered = 0;
+    document.getElementById('score-display').textContent = '';
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = shuffled.map((q, i) => `
+        <div class="border border-slate-200 rounded-xl p-4 mb-3" id="q-${i}">
+            <p class="text-sm font-600 text-slate-700 mb-3">${i + 1}. What sound does <strong class="text-lg">"${q.word}"</strong> have?</p>
+            <div class="flex flex-wrap gap-2">
+                ${q.options.map(o => `
+                    <button onclick="checkAnswer(${i}, '${o}')" class="quiz-option border-2 border-slate-200 px-4 py-2 rounded-xl text-sm font-700 text-slate-700 hover:border-slate-400">${o}</button>
+                `).join('')}
+            </div>
+            <p class="text-xs mt-2 text-slate-400 hidden" id="fb-${i}"></p>
+        </div>
+    `).join('');
+    lucide.createIcons();
+}
+
+function checkAnswer(qIndex, selected) {
+    const q = currentQuiz[qIndex];
+    const container = document.getElementById(`q-${qIndex}`);
+    const buttons = container.querySelectorAll('.quiz-option');
+    const fb = document.getElementById(`fb-${qIndex}`);
+    
+    if (container.dataset.answered) return;
+    container.dataset.answered = 'true';
+    answered++;
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === q.answer) btn.classList.add('correct');
+        if (btn.textContent === selected && selected !== q.answer) btn.classList.add('incorrect');
+    });
+
+    if (selected === q.answer) {
+        score++;
+        fb.textContent = '✅ Correct!';
+        fb.classList.remove('hidden');
+        fb.classList.add('text-green-600');
+    } else {
+        fb.textContent = `❌ The answer is ${q.answer}`;
+        fb.classList.remove('hidden');
+        fb.classList.add('text-red-500');
+    }
+
+    if (answered === currentQuiz.length) {
+        document.getElementById('score-display').textContent = `Score: ${score}/${currentQuiz.length} ⭐`;
+    }
+}
+
+function showSection(name) {
+    ['vowels', 'consonants', 'diphthongs', 'practice', 'conversation'].forEach(s => {
+        document.getElementById(`section-${s}`).classList.toggle('hidden', s !== name);
+        document.getElementById(`tab-${s}`).className = s === name ? 'tab-active px-4 py-2 rounded-full text-sm font-600 transition-all' : 'tab-inactive px-4 py-2 rounded-full text-sm font-600 transition-all';
+    });
+    if (name === 'practice' && !currentQuiz.length) loadQuiz();
+}
+
+// Init
+renderCards(vowels, 'vowel-cards', 'blue');
+renderCards(consonants, 'consonant-cards', 'emerald');
+renderCards(diphthongs, 'diphthong-cards', 'purple');
+renderConversations();
+lucide.createIcons();
+
+// Element SDK
+const defaultConfig = {
+    main_title: 'English Sounds Practice',
+    welcome_message: 'Learn and practice English sounds!',
+    background_color: '#f8fafc',
+    surface_color: '#ffffff',
+    text_color: '#1e293b',
+    primary_action_color: '#1e3a5f',
+    secondary_action_color: '#3b82f6',
+    font_family: 'Nunito',
+    font_size: 16
+};
+
+window.elementSdk.init({
+    defaultConfig,
+    onConfigChange: async (config) => {
+        document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+        document.getElementById('welcome-msg').textContent = config.welcome_message || defaultConfig.welcome_message;
+        
+        const bg = config.background_color || defaultConfig.background_color;
+        const surface = config.surface_color || defaultConfig.surface_color;
+        const text = config.text_color || defaultConfig.text_color;
+        const primary = config.primary_action_color || defaultConfig.primary_action_color;
+        const secondary = config.secondary_action_color || defaultConfig.secondary_action_color;
+        const font = config.font_family || defaultConfig.font_family;
+        const size = config.font_size || defaultConfig.font_size;
+
+        document.getElementById('app').style.background = bg;
+        document.querySelectorAll('.bg-white').forEach(el => el.style.background = surface);
+        document.getElementById('main-title').style.color = text;
+        document.getElementById('main-title').style.fontFamily = `${font}, Nunito, sans-serif`;
+        document.getElementById('main-title').style.fontSize = `${size * 1.5}px`;
+        document.getElementById('welcome-msg').style.fontSize = `${size * 0.875}px`;
+
+        document.querySelectorAll('.tab-active').forEach(el => { el.style.background = primary; });
+    },
+    mapToCapabilities: (config) => ({
+        recolorables: [
+            { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+            { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+            { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+            { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+            { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } },
+        ],
+        borderables: [],
+        fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+        fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } },
+    }),
+    mapToEditPanelValues: (config) => new Map([
+        ['main_title', config.main_title || defaultConfig.main_title],
+        ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+    ])
+});
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0aae03561a7c378',t:'MTc4MTI4ODQ5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
