@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head><script src="/_sdk/telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football World Cup English</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Outfit', sans-serif; }
+    .flip-card { perspective: 1000px; }
+    .flip-card-inner { transition: transform 0.6s; transform-style: preserve-3d; }
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-card-front, .flip-card-back { backface-visibility: hidden; }
+    .flip-card-back { transform: rotateY(180deg); }
+    .tab-active { border-bottom: 3px solid #16a34a; color: #16a34a; }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full bg-green-950 text-white overflow-auto"><!-- Header -->
+   <header class="bg-green-900 border-b border-green-800 p-4 flex items-center justify-between">
+    <div class="flex items-center gap-3"><span class="text-3xl">⚽</span>
+     <h1 id="main-title" class="text-xl font-bold">Football World Cup English</h1>
+    </div>
+    <div class="flex items-center gap-2 text-sm"><span id="progress-text" class="text-green-300">0/30 mastered</span>
+    </div>
+   </header><!-- Tabs -->
+   <nav class="flex border-b border-green-800 bg-green-900/50 overflow-x-auto"><button onclick="switchTab('flashcards')" id="tab-flashcards" class="px-4 py-3 text-sm font-medium whitespace-nowrap tab-active">📇 Flashcards</button> <button onclick="switchTab('context')" id="tab-context" class="px-4 py-3 text-sm font-medium whitespace-nowrap text-green-400">📖 Context</button> <button onclick="switchTab('writing')" id="tab-writing" class="px-4 py-3 text-sm font-medium whitespace-nowrap text-green-400">✍️ Writing</button> <button onclick="switchTab('conversation')" id="tab-conversation" class="px-4 py-3 text-sm font-medium whitespace-nowrap text-green-400">💬 Conversation</button>
+   </nav><!-- Content -->
+   <main class="p-4 max-w-2xl mx-auto w-full"><!-- FLASHCARDS -->
+    <section id="sec-flashcards">
+     <p id="welcome-msg" class="text-green-300 text-center mb-4 text-sm">Learn English with football! / ¡Aprende inglés con el fútbol!</p>
+     <div class="flex justify-between items-center mb-3"><span class="text-sm text-green-400" id="card-counter">1 / 30</span> <button onclick="toggleMastered()" id="master-btn" class="text-xs bg-green-700 hover:bg-green-600 px-3 py-1 rounded-full">⭐ Mark Mastered</button>
+     </div>
+     <div class="flip-card w-full h-64 cursor-pointer" id="flashcard" onclick="flipCard()">
+      <div class="flip-card-inner w-full h-full relative">
+       <div class="flip-card-front absolute inset-0 bg-gradient-to-br from-green-700 to-green-800 rounded-2xl flex flex-col items-center justify-center p-6 border border-green-600">
+        <p class="text-2xl font-bold text-center" id="fc-english"></p>
+        <p class="text-green-300 text-sm mt-2">Tap to flip / Toca para voltear</p>
+       </div>
+       <div class="flip-card-back absolute inset-0 bg-gradient-to-br from-yellow-700 to-yellow-800 rounded-2xl flex flex-col items-center justify-center p-6 border border-yellow-600">
+        <p class="text-xl font-bold text-center" id="fc-spanish"></p>
+        <p class="text-yellow-200 text-sm mt-3 text-center" id="fc-example"></p>
+       </div>
+      </div>
+     </div>
+     <div class="flex justify-between mt-4"><button onclick="prevCard()" class="bg-green-800 hover:bg-green-700 px-5 py-2 rounded-lg">← Prev</button> <button onclick="nextCard()" class="bg-green-800 hover:bg-green-700 px-5 py-2 rounded-lg">Next →</button>
+     </div>
+    </section><!-- CONTEXT -->
+    <section id="sec-context" class="hidden">
+     <h2 class="text-lg font-bold mb-3">📖 Contextual Explanations / Explicaciones Contextuales</h2>
+     <div id="context-list" class="space-y-3"></div>
+    </section><!-- WRITING -->
+    <section id="sec-writing" class="hidden">
+     <h2 class="text-lg font-bold mb-3">✍️ Writing Activities / Actividades de Escritura</h2>
+     <div id="writing-area" class="space-y-4"></div>
+    </section><!-- CONVERSATION -->
+    <section id="sec-conversation" class="hidden">
+     <h2 class="text-lg font-bold mb-3">💬 Conversation Prompts / Temas de Conversación</h2>
+     <div id="convo-list" class="space-y-4"></div>
+    </section>
+   </main>
+  </div>
+  <script>
+const WORDS = [
+  { id:"1", en:"goal", es:"gol", example:"He scored a goal in the final! / ¡Marcó un gol en la final!", context:"When the ball enters the net, it's a goal. / Cuando el balón entra en la red, es un gol." },
+  { id:"2", en:"referee", es:"árbitro", example:"The referee showed a red card. / El árbitro mostró una tarjeta roja.", context:"The referee makes sure players follow the rules. / El árbitro se asegura de que los jugadores sigan las reglas." },
+  { id:"3", en:"team", es:"equipo", example:"Our team won the match! / ¡Nuestro equipo ganó el partido!", context:"A team is a group of players who play together. / Un equipo es un grupo de jugadores que juegan juntos." },
+  { id:"4", en:"match", es:"partido", example:"The match starts at 8 PM. / El partido empieza a las 8 PM.", context:"A match is a game between two teams. / Un partido es un juego entre dos equipos." },
+  { id:"5", en:"stadium", es:"estadio", example:"The stadium is full of fans. / El estadio está lleno de aficionados.", context:"A stadium is a large place where people watch sports. / Un estadio es un lugar grande donde la gente ve deportes." },
+  { id:"6", en:"trophy", es:"trofeo", example:"They lifted the trophy together. / Levantaron el trofeo juntos.", context:"The winning team receives the trophy. / El equipo ganador recibe el trofeo." },
+  { id:"7", en:"to score", es:"marcar", example:"She scored two goals today. / Ella marcó dos goles hoy.", context:"To score means to make a goal. / Marcar significa hacer un gol." },
+  { id:"8", en:"fan", es:"aficionado/a", example:"The fans are singing loudly. / Los aficionados están cantando fuerte.", context:"A fan is a person who supports a team. / Un aficionado es una persona que apoya a un equipo." },
+  { id:"9", en:"to win", es:"ganar", example:"Brazil wants to win the World Cup. / Brasil quiere ganar la Copa del Mundo.", context:"To win means to finish first or be the best. / Ganar significa terminar primero o ser el mejor." },
+  { id:"10", en:"to lose", es:"perder", example:"They lost the semifinal. / Perdieron la semifinal.", context:"To lose is the opposite of to win. / Perder es lo opuesto de ganar." },
+  { id:"11", en:"penalty kick", es:"tiro penal", example:"He missed the penalty kick. / Falló el tiro penal.", context:"A penalty kick is a free shot at the goal from a special spot. / Un tiro penal es un disparo libre al arco desde un punto especial." },
+  { id:"12", en:"World Cup", es:"Copa del Mundo", example:"The World Cup is every four years. / La Copa del Mundo es cada cuatro años.", context:"The World Cup is the biggest football tournament in the world. / La Copa del Mundo es el torneo de fútbol más grande del mundo." },
+  { id:"13", en:"goalkeeper", es:"portero/a", example:"The goalkeeper saved the ball. / El portero atajó el balón.", context:"The goalkeeper is the player who protects the net. / El portero es el jugador que protege la red." },
+  { id:"14", en:"to kick", es:"patear", example:"She kicked the ball very hard. / Ella pateó el balón muy fuerte.", context:"To kick means to hit the ball with your foot. / Patear significa golpear el balón con el pie." },
+  { id:"15", en:"halftime", es:"medio tiempo", example:"The score at halftime was 1-0. / El marcador en el medio tiempo fue 1-0.", context:"Halftime is the break in the middle of the match. / El medio tiempo es el descanso en la mitad del partido." },
+  { id:"16", en:"national anthem", es:"himno nacional", example:"They sang the national anthem before the match. / Cantaron el himno nacional antes del partido.", context:"Each country's song played before their game. / La canción de cada país que suena antes de su juego." },
+  { id:"17", en:"yellow card", es:"tarjeta amarilla", example:"The player got a yellow card for a foul. / El jugador recibió una tarjeta amarilla por una falta.", context:"A warning from the referee for bad behavior. / Una advertencia del árbitro por mal comportamiento." },
+  { id:"18", en:"red card", es:"tarjeta roja", example:"A red card means you leave the game. / Una tarjeta roja significa que sales del juego.", context:"A player must leave the field when they get a red card. / Un jugador debe abandonar el campo cuando recibe una tarjeta roja." },
+  { id:"19", en:"draw", es:"empate", example:"The game ended in a draw: 2-2. / El juego terminó en empate: 2-2.", context:"A draw is when both teams have the same score. / Un empate es cuando ambos equipos tienen el mismo marcador." },
+  { id:"20", en:"pitch", es:"cancha/campo", example:"The pitch looks perfect today. / La cancha se ve perfecta hoy.", context:"The pitch is the grass field where football is played. / La cancha es el campo de césped donde se juega fútbol." },
+  { id:"21", en:"offside", es:"fuera de lugar", example:"The goal was cancelled for offside. / El gol fue anulado por fuera de lugar.", context:"Offside is a rule about player position. / Fuera de lugar es una regla sobre la posición del jugador." },
+  { id:"22", en:"to celebrate", es:"celebrar", example:"The team celebrated all night. / El equipo celebró toda la noche.", context:"To celebrate means to show happiness after winning. / Celebrar significa mostrar alegría después de ganar." },
+  { id:"23", en:"coach", es:"entrenador/a", example:"The coach changed the strategy. / El entrenador cambió la estrategia.", context:"The coach teaches and leads the team. / El entrenador enseña y dirige al equipo." },
+  { id:"24", en:"to pass the ball", es:"pasar el balón", example:"Pass the ball to your teammate! / ¡Pasa el balón a tu compañero!", context:"To pass means to send the ball to another player. / Pasar significa enviar el balón a otro jugador." },
+  { id:"25", en:"group stage", es:"fase de grupos", example:"They advanced from the group stage. / Avanzaron de la fase de grupos.", context:"The first part of the World Cup where teams play in groups. / La primera parte del Mundial donde los equipos juegan en grupos." },
+  { id:"26", en:"final", es:"final", example:"The final will be on Sunday. / La final será el domingo.", context:"The last and most important match of the tournament. / El último y más importante partido del torneo." },
+  { id:"27", en:"extra time", es:"tiempo extra", example:"They went to extra time because of the draw. / Fueron a tiempo extra por el empate.", context:"Additional playing time when the match is tied. / Tiempo adicional de juego cuando el partido está empatado." },
+  { id:"28", en:"to cheer", es:"animar", example:"The crowd cheered loudly. / La multitud animó con fuerza.", context:"To cheer means to shout support for your team. / Animar significa gritar apoyo para tu equipo." },
+  { id:"29", en:"substitute", es:"suplente", example:"The substitute scored the winning goal. / El suplente marcó el gol de la victoria.", context:"A substitute is a player who replaces another during the match. / Un suplente es un jugador que reemplaza a otro durante el partido." },
+  { id:"30", en:"host country", es:"país anfitrión", example:"The host country organizes everything. / El país anfitrión organiza todo.", context:"The host country is where the World Cup takes place. / El país anfitrión es donde se celebra la Copa del Mundo." }
+];
+
+const WRITING_ACTIVITIES = [
+  { prompt:"Write 3 sentences about your favorite World Cup moment.", promptEs:"Escribe 3 oraciones sobre tu momento favorito del Mundial.", hint:"Use: goal, team, to score" },
+  { prompt:"Describe what happens at a stadium on match day.", promptEs:"Describe qué pasa en un estadio en día de partido.", hint:"Use: fans, cheer, national anthem, pitch" },
+  { prompt:"Write about a player who got a red card. What happened?", promptEs:"Escribe sobre un jugador que recibió tarjeta roja. ¿Qué pasó?", hint:"Use: referee, foul, red card, to kick" },
+  { prompt:"Imagine your country is in the World Cup final. Describe the day.", promptEs:"Imagina que tu país está en la final del Mundial. Describe el día.", hint:"Use: final, trophy, celebrate, win" },
+  { prompt:"Compare two World Cup teams. Which is better and why?", promptEs:"Compara dos equipos del Mundial. ¿Cuál es mejor y por qué?", hint:"Use: coach, goalkeeper, to pass, team" }
+];
+
+const CONVERSATIONS = [
+  { topic:"Talking about your favorite team", topicEs:"Hablar sobre tu equipo favorito", questions:["Which team do you support in the World Cup?","Why do you like that team?","Who is the best player on the team?"], questionsEs:["¿A qué equipo apoyas en el Mundial?","¿Por qué te gusta ese equipo?","¿Quién es el mejor jugador del equipo?"] },
+  { topic:"Describing a match", topicEs:"Describir un partido", questions:["What was the score?","Who scored the goals?","Was there extra time?"], questionsEs:["¿Cuál fue el marcador?","¿Quién marcó los goles?","¿Hubo tiempo extra?"] },
+  { topic:"At the stadium", topicEs:"En el estadio", questions:["Have you ever been to a stadium?","What do fans do during halftime?","How do people celebrate a goal?"], questionsEs:["¿Alguna vez has ido a un estadio?","¿Qué hacen los aficionados en el medio tiempo?","¿Cómo celebra la gente un gol?"] },
+  { topic:"World Cup memories", topicEs:"Recuerdos del Mundial", questions:["What is your best World Cup memory?","Which World Cup final do you remember?","Do you watch with friends or family?"], questionsEs:["¿Cuál es tu mejor recuerdo del Mundial?","¿Qué final del Mundial recuerdas?","¿Lo ves con amigos o familia?"] },
+  { topic:"Rules and fairness", topicEs:"Reglas y justicia", questions:["Do you think penalty kicks are fair?","Have you seen a bad referee decision?","What happens when a player gets a yellow card?"], questionsEs:["¿Crees que los penales son justos?","¿Has visto una mala decisión del árbitro?","¿Qué pasa cuando un jugador recibe tarjeta amarilla?"] }
+];
+
+let currentCard = 0;
+let userData = [];
+let currentTab = 'flashcards';
+
+// Data SDK
+const dataHandler = {
+  onDataChanged(data) {
+    userData = data;
+    updateProgress();
+    updateMasterBtn();
+  }
+};
+
+(async () => {
+  await window.dataSdk.init(dataHandler);
+})();
+
+// Element SDK
+const defaultConfig = {
+  app_title: "Football World Cup English",
+  welcome_message: "Learn English with football! / ¡Aprende inglés con el fútbol!",
+  background_color: "#052e16",
+  surface_color: "#14532d",
+  text_color: "#ffffff",
+  primary_action_color: "#16a34a",
+  secondary_action_color: "#ca8a04"
+};
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => {
+    const c = { ...defaultConfig, ...config };
+    document.getElementById('main-title').textContent = c.app_title;
+    document.getElementById('welcome-msg').textContent = c.welcome_message;
+    document.getElementById('app').style.backgroundColor = c.background_color;
+    document.querySelectorAll('header, nav').forEach(el => el.style.backgroundColor = c.surface_color);
+    document.getElementById('app').style.color = c.text_color;
+  },
+  mapToCapabilities: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return {
+      recolorables: [
+        { get: () => c.background_color, set: (v) => { c.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => c.surface_color, set: (v) => { c.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => c.text_color, set: (v) => { c.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => c.primary_action_color, set: (v) => { c.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+        { get: () => c.secondary_action_color, set: (v) => { c.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
+      ],
+      borderables: [],
+      fontEditable: { get: () => c.font_family || 'Outfit', set: (v) => { c.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+      fontSizeable: { get: () => c.font_size || 16, set: (v) => { c.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+    };
+  },
+  mapToEditPanelValues: (config) => {
+    const c = { ...defaultConfig, ...config };
+    return new Map([
+      ["app_title", c.app_title],
+      ["welcome_message", c.welcome_message]
+    ]);
+  }
+});
+
+// Tab switching
+function switchTab(tab) {
+  currentTab = tab;
+  ['flashcards','context','writing','conversation'].forEach(t => {
+    document.getElementById('sec-'+t).classList.toggle('hidden', t !== tab);
+    const btn = document.getElementById('tab-'+t);
+    if (t === tab) { btn.classList.add('tab-active'); btn.classList.remove('text-green-400'); }
+    else { btn.classList.remove('tab-active'); btn.classList.add('text-green-400'); }
+  });
+  if (tab === 'context') renderContext();
+  if (tab === 'writing') renderWriting();
+  if (tab === 'conversation') renderConversation();
+}
+
+// Flashcards
+function renderCard() {
+  const w = WORDS[currentCard];
+  document.getElementById('fc-english').textContent = w.en;
+  document.getElementById('fc-spanish').textContent = w.es;
+  document.getElementById('fc-example').textContent = w.example;
+  document.getElementById('card-counter').textContent = `${currentCard+1} / 30`;
+  document.getElementById('flashcard').classList.remove('flipped');
+  updateMasterBtn();
+}
+
+function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
+function nextCard() { currentCard = (currentCard + 1) % 30; renderCard(); }
+function prevCard() { currentCard = (currentCard - 1 + 30) % 30; renderCard(); }
+
+function updateMasterBtn() {
+  const w = WORDS[currentCard];
+  const record = userData.find(d => d.word_id === w.id);
+  const btn = document.getElementById('master-btn');
+  btn.textContent = record && record.mastered ? '✅ Mastered' : '⭐ Mark Mastered';
+}
+
+function updateProgress() {
+  const mastered = userData.filter(d => d.mastered).length;
+  document.getElementById('progress-text').textContent = `${mastered}/30 mastered`;
+}
+
+async function toggleMastered() {
+  const w = WORDS[currentCard];
+  const record = userData.find(d => d.word_id === w.id);
+  if (record) {
+    await window.dataSdk.update({ ...record, mastered: !record.mastered, last_practiced: new Date().toISOString() });
+  } else {
+    if (userData.length >= 999) return;
+    await window.dataSdk.create({ word_id: w.id, mastered: true, times_practiced: 1, last_practiced: new Date().toISOString() });
+  }
+}
+
+// Context
+function renderContext() {
+  const el = document.getElementById('context-list');
+  el.innerHTML = WORDS.map(w => `
+    <div class="bg-green-900/60 rounded-xl p-4 border border-green-800">
+      <div class="flex justify-between items-start">
+        <h3 class="font-bold text-green-300 text-lg">${w.en}</h3>
+        <span class="text-yellow-400 text-sm">${w.es}</span>
+      </div>
+      <p class="text-sm text-green-200 mt-2">${w.context}</p>
+      <p class="text-xs text-green-400 mt-2 italic">"${w.example}"</p>
+    </div>
+  `).join('');
+}
+
+// Writing
+function renderWriting() {
+  const el = document.getElementById('writing-area');
+  el.innerHTML = WRITING_ACTIVITIES.map((a, i) => `
+    <div class="bg-green-900/60 rounded-xl p-4 border border-green-800">
+      <p class="font-medium text-green-200">${a.prompt}</p>
+      <p class="text-sm text-yellow-400 mt-1">${a.promptEs}</p>
+      <p class="text-xs text-green-500 mt-2">💡 ${a.hint}</p>
+      <textarea id="writing-${i}" class="w-full mt-3 bg-green-950 border border-green-700 rounded-lg p-3 text-sm text-white placeholder-green-600 resize-none" rows="3" placeholder="Write here... / Escribe aquí..."></textarea>
+    </div>
+  `).join('');
+}
+
+// Conversation
+function renderConversation() {
+  const el = document.getElementById('convo-list');
+  el.innerHTML = CONVERSATIONS.map(c => `
+    <div class="bg-green-900/60 rounded-xl p-4 border border-green-800">
+      <h3 class="font-bold text-green-300">${c.topic}</h3>
+      <p class="text-sm text-yellow-400 mb-3">${c.topicEs}</p>
+      <ul class="space-y-2">
+        ${c.questions.map((q, i) => `
+          <li class="text-sm">
+            <span class="text-white">🗣️ ${q}</span><br>
+            <span class="text-green-400 text-xs">${c.questionsEs[i]}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+renderCard();
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0ba87c2e39708df',t:'MTc4MTQ1MjY0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
