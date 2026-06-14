@@ -24,20 +24,57 @@
   <div id="app" class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); font-family: 'Outfit', sans-serif;">
    <div class="flex flex-col items-center justify-center min-h-full px-4 py-8">
     <h1 id="title" class="text-3xl md:text-4xl font-bold mb-2 text-center" style="font-family: 'DM Serif Display', serif; color: #e94560;">Spanish Flashcards</h1>
-    <p class="text-gray-400 mb-6 text-sm">C1 Level · Tap card to flip</p>
-    <div id="progress" class="flex gap-2 mb-6 flex-wrap justify-center"></div>
-    <div class="relative w-full max-w-md h-72 cursor-pointer" id="card-container" onclick="flipCard()">
-     <div id="card" class="card-flip w-full h-full">
-      <div class="card-front rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-2xl" style="background: linear-gradient(145deg, #1f2940, #253350); border: 1px solid #e9456030;"><span class="text-xs uppercase tracking-widest mb-3" style="color: #e94560;">Español</span>
-       <p id="front-text" class="text-2xl md:text-3xl font-medium text-white leading-snug"></p>
+    <p class="text-gray-400 mb-6 text-sm">C1 Level · Master expressions through flashcards, writing, and conversation</p>
+    <div id="tabs" class="flex gap-2 mb-6 flex-wrap justify-center"><button onclick="switchTab('flashcards')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium transition" data-tab="flashcards" style="background: #e9456080; color: #ffffff;">Flashcards</button> <button onclick="switchTab('writing')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium transition" data-tab="writing" style="background: #ffffff15; color: #999999;">Writing Practice</button> <button onclick="switchTab('conversation')" class="tab-btn px-4 py-2 rounded-full text-sm font-medium transition" data-tab="conversation" style="background: #ffffff15; color: #999999;">Conversation</button>
+    </div>
+    <div id="progress" class="flex gap-2 mb-6 flex-wrap justify-center"></div><!-- FLASHCARDS TAB -->
+    <div id="tab-flashcards" class="tab-content w-full max-w-2xl">
+     <div class="relative w-full max-w-md h-72 cursor-pointer" id="card-container" onclick="flipCard()">
+      <div id="card" class="card-flip w-full h-full">
+       <div class="card-front rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-2xl" style="background: linear-gradient(145deg, #1f2940, #253350); border: 1px solid #e9456030;">
+        <span class="text-xs uppercase tracking-widest mb-3" style="color: #e94560;">Español</span>
+        <p id="front-text" class="text-2xl md:text-3xl font-medium text-white leading-snug"></p>
+       </div>
+       <div class="card-back rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-2xl" style="background: linear-gradient(145deg, #0f3460, #1a1a2e); border: 1px solid #53d8a030;">
+        <span class="text-xs uppercase tracking-widest mb-3" style="color: #53d8a0;">English</span>
+        <p id="back-text" class="text-2xl md:text-3xl font-medium text-white leading-snug"></p>
+       </div>
       </div>
-      <div class="card-back rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-2xl" style="background: linear-gradient(145deg, #0f3460, #1a1a2e); border: 1px solid #53d8a030;"><span class="text-xs uppercase tracking-widest mb-3" style="color: #53d8a0;">English</span>
-       <p id="back-text" class="text-2xl md:text-3xl font-medium text-white leading-snug"></p>
+     </div>
+     <div class="flex items-center gap-4 mt-8">
+      <button onclick="prevCard()" class="p-3 rounded-full transition hover:scale-110" style="background: #e9456020; color: #e94560;"><i data-lucide="chevron-left"></i></button> <span id="counter" class="text-gray-400 text-sm font-medium min-w-[60px] text-center"></span> <button onclick="nextCard()" class="p-3 rounded-full transition hover:scale-110" style="background: #e9456020; color: #e94560;"><i data-lucide="chevron-right"></i></button>
+     </div><button onclick="shuffle()" class="mt-4 px-5 py-2 rounded-full text-sm font-medium transition hover:scale-105" style="background: #53d8a020; color: #53d8a0;"> <i data-lucide="shuffle" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i> Shuffle </button>
+    </div><!-- WRITING PRACTICE TAB -->
+    <div id="tab-writing" class="tab-content w-full max-w-2xl hidden">
+     <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-2xl border border-slate-700">
+      <h2 class="text-xl font-semibold mb-2 text-white">Writing Practice</h2>
+      <p class="text-gray-400 text-sm mb-4">Translate the phrase and write a sentence using it.</p>
+      <div class="bg-slate-950 rounded-lg p-4 mb-4 border border-slate-700">
+       <p class="text-xs uppercase tracking-widest text-red-400 mb-2">Spanish</p>
+       <p id="writing-es" class="text-lg font-medium text-white mb-4"></p><textarea id="writing-input" placeholder="Type your translation and a sentence using this phrase..." class="w-full h-24 bg-slate-900 text-white rounded-lg p-3 text-sm border border-slate-600 focus:outline-none focus:border-blue-500 resize-none"></textarea>
+      </div>
+      <div class="bg-slate-950 rounded-lg p-4 mb-4 border border-slate-700">
+       <p class="text-xs uppercase tracking-widest text-green-400 mb-2">Reference</p>
+       <p id="writing-en" class="text-base text-white"></p>
+      </div>
+      <div class="flex gap-3"><button onclick="writingPrev()" class="p-2 rounded-lg transition hover:bg-slate-700" style="background: #ffffff10; color: #999999;"><i data-lucide="chevron-left"></i></button> <span id="writing-counter" class="text-gray-400 text-sm font-medium flex-1 text-center self-center"></span> <button onclick="writingNext()" class="p-2 rounded-lg transition hover:bg-slate-700" style="background: #ffffff10; color: #999999;"><i data-lucide="chevron-right"></i></button>
+      </div>
+     </div>
+    </div><!-- CONVERSATION PROMPTS TAB -->
+    <div id="tab-conversation" class="tab-content w-full max-w-2xl hidden">
+     <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-2xl border border-slate-700">
+      <h2 class="text-xl font-semibold mb-2 text-white">Conversation Practice</h2>
+      <p class="text-gray-400 text-sm mb-4">Practice speaking using this phrase in a realistic scenario.</p>
+      <div class="bg-slate-950 rounded-lg p-4 mb-4 border border-slate-700">
+       <p class="text-xs uppercase tracking-widest text-purple-400 mb-2">Phrase</p>
+       <p id="conv-phrase" class="text-lg font-medium text-white mb-3"></p>
+       <p class="text-xs uppercase tracking-widest text-blue-400 mb-2">Scenario</p>
+       <p id="conv-prompt" class="text-base text-gray-300 leading-relaxed"></p>
+      </div>
+      <div class="flex gap-3"><button onclick="convPrev()" class="p-2 rounded-lg transition hover:bg-slate-700" style="background: #ffffff10; color: #999999;"><i data-lucide="chevron-left"></i></button> <span id="conv-counter" class="text-gray-400 text-sm font-medium flex-1 text-center self-center"></span> <button onclick="convNext()" class="p-2 rounded-lg transition hover:bg-slate-700" style="background: #ffffff10; color: #999999;"><i data-lucide="chevron-right"></i></button>
       </div>
      </div>
     </div>
-    <div class="flex items-center gap-4 mt-8"><button onclick="prevCard()" class="p-3 rounded-full transition hover:scale-110" style="background: #e9456020; color: #e94560;"><i data-lucide="chevron-left"></i></button> <span id="counter" class="text-gray-400 text-sm font-medium min-w-[60px] text-center"></span> <button onclick="nextCard()" class="p-3 rounded-full transition hover:scale-110" style="background: #e9456020; color: #e94560;"><i data-lucide="chevron-right"></i></button>
-    </div><button onclick="shuffle()" class="mt-4 px-5 py-2 rounded-full text-sm font-medium transition hover:scale-105" style="background: #53d8a020; color: #53d8a0;"> <i data-lucide="shuffle" style="width:14px;height:14px;display:inline;vertical-align:middle;"></i> Shuffle </button>
    </div>
   </div>
   <script>
@@ -57,9 +94,47 @@ const phrases = [
   { es: "Quedándose en blanco", en: "Drawing a blank" }
 ];
 
+const conversationPrompts = [
+  { es: "A decir verdad", prompt: "You're having coffee with a friend and they ask your honest opinion about their new job. Use this phrase to introduce your candid response." },
+  { es: "Para su asombro", prompt: "Tell someone about an unexpected event that shocked your colleague. Start with this phrase." },
+  { es: "Es muy amable de su parte", prompt: "Your professor has just offered you extra help with an assignment. Respond graciously using this phrase." },
+  { es: "Me siento culpable", prompt: "You accidentally forgot a friend's birthday. Explain your feelings using this phrase." },
+  { es: "Lo que quiero decir es que", prompt: "You've just made a comment that someone misunderstood. Clarify yourself using this phrase." },
+  { es: "Sin lugar a dudas", prompt: "A colleague asks you if the project deadline is tomorrow. Confirm definitively using this phrase." },
+  { es: "Dadas las circunstancias", prompt: "Your friend had to postpone your plans. Acknowledge the situation sympathetically using this phrase." },
+  { es: "De buenas a primeras", prompt: "Tell about an unexpected visitor who appeared without warning. Use this phrase to describe the suddenness." },
+  { es: "Por lo general", prompt: "You're describing your typical morning routine to a new colleague. Use this phrase to introduce your habits." },
+  { es: "Entre tanto", prompt: "You're telling a story about waiting for something important. Use this phrase to describe what happened during the wait." },
+  { es: "Sacar de quicio", prompt: "Someone asks why you're frustrated with your roommate. Explain using this phrase to describe their annoying habit." },
+  { es: "Le dio un vuelco el corazón", prompt: "You're recounting a moment when you were suddenly startled or shocked. Use this phrase dramatically." },
+  { es: "Quedándose en blanco", prompt: "You're explaining why you froze during a presentation. Use this phrase to describe your mental block." }
+];
+
 let deck = [...phrases];
 let current = 0;
+let writingCurrent = 0;
+let convCurrent = 0;
 
+// TAB SWITCHING
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+  document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+  
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    if (btn.dataset.tab === tabName) {
+      btn.style.background = '#e9456080';
+      btn.style.color = '#ffffff';
+    } else {
+      btn.style.background = '#ffffff15';
+      btn.style.color = '#999999';
+    }
+  });
+  
+  if (tabName === 'writing') renderWriting();
+  if (tabName === 'conversation') renderConversation();
+}
+
+// FLASHCARDS
 function render() {
   const card = document.getElementById('card');
   card.classList.remove('flipped');
@@ -99,6 +174,43 @@ function shuffle() {
   }
   current = 0;
   render();
+}
+
+// WRITING PRACTICE
+function renderWriting() {
+  const phrase = phrases[writingCurrent];
+  document.getElementById('writing-es').textContent = phrase.es;
+  document.getElementById('writing-en').textContent = phrase.en;
+  document.getElementById('writing-input').value = '';
+  document.getElementById('writing-counter').textContent = `${writingCurrent + 1} / ${phrases.length}`;
+}
+
+function writingNext() {
+  writingCurrent = (writingCurrent + 1) % phrases.length;
+  renderWriting();
+}
+
+function writingPrev() {
+  writingCurrent = (writingCurrent - 1 + phrases.length) % phrases.length;
+  renderWriting();
+}
+
+// CONVERSATION PRACTICE
+function renderConversation() {
+  const item = conversationPrompts[convCurrent];
+  document.getElementById('conv-phrase').textContent = item.es;
+  document.getElementById('conv-prompt').textContent = item.prompt;
+  document.getElementById('conv-counter').textContent = `${convCurrent + 1} / ${conversationPrompts.length}`;
+}
+
+function convNext() {
+  convCurrent = (convCurrent + 1) % conversationPrompts.length;
+  renderConversation();
+}
+
+function convPrev() {
+  convCurrent = (convCurrent - 1 + conversationPrompts.length) % conversationPrompts.length;
+  renderConversation();
 }
 
 // Element SDK
@@ -145,5 +257,5 @@ window.elementSdk.init({
 render();
 lucide.createIcons();
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0b9ce1bb60908df',t:'MTc4MTQ0NTAzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0b9e122a34ddee2',t:'MTc4MTQ0NTgxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
