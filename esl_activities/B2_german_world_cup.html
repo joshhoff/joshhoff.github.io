@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+ <head><script src="/_sdk/telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Cup Vocabulary Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@700;900&amp;display=swap" rel="stylesheet">
+  <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        .heading-font { font-family: 'Fraunces', serif; }
+        .flip-card { perspective: 1000px; cursor: pointer; }
+        .flip-inner { transition: transform 0.5s; transform-style: preserve-3d; position: relative; width: 100%; height: 100%; }
+        .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+        .flip-back { transform: rotateY(180deg); }
+        .quiz-option { transition: all 0.2s; }
+        .quiz-option:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .quiz-option.correct { background: #16a34a !important; color: white !important; }
+        .quiz-option.incorrect { background: #dc2626 !important; color: white !important; }
+    </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen">
+  <header class="relative overflow-hidden"><img data-template-id="hero-image" class="canva-image absolute inset-0 w-full h-full object-cover opacity-30" loading="lazy">
+   <div class="relative z-10 py-10 px-6 text-center">
+    <h1 data-template-id="app-title" class="canva-text heading-font"></h1>
+    <p data-template-id="app-subtitle" class="canva-text mt-2"></p>
+   </div>
+  </header>
+  <main class="max-w-2xl mx-auto px-4 py-8"><!-- Mode Toggle -->
+   <div class="flex justify-center gap-3 mb-8"><button data-template-id="flashcard-mode-btn" class="canva-button px-5 py-2.5 rounded-full font-medium" onclick="setMode('flashcard')"></button> <button data-template-id="quiz-mode-btn" class="canva-button px-5 py-2.5 rounded-full font-medium" onclick="setMode('quiz')"></button>
+   </div><!-- Progress -->
+   <div class="text-center mb-6"><span id="progress-text" class="text-sm font-medium opacity-70">1 / 30</span>
+    <div class="w-full h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
+     <div id="progress-bar" class="h-full rounded-full transition-all duration-300" style="width:3.3%; background:#1d4ed8;"></div>
+    </div>
+   </div><!-- Flashcard Mode -->
+   <div id="flashcard-view">
+    <div class="flip-card mx-auto w-full max-w-md" style="height:280px" id="flashcard" onclick="document.getElementById('flashcard').classList.toggle('flipped')">
+     <div class="flip-inner">
+      <div data-template-id="card-front" class="canva-card flip-front shadow-xl"><span class="text-xs uppercase tracking-wider opacity-50 mb-2">English</span>
+       <p id="card-eng" class="text-3xl font-bold text-center"></p>
+      </div>
+      <div data-template-id="card-back" class="canva-card flip-back shadow-xl"><span class="text-xs uppercase tracking-wider opacity-50 mb-2">Deutsch</span>
+       <p id="card-de" class="text-3xl font-bold text-center"></p>
+      </div>
+     </div>
+    </div>
+    <div class="flex justify-center gap-4 mt-6"><button onclick="prevCard()" class="p-3 rounded-full bg-white shadow hover:shadow-md"><i data-lucide="chevron-left"></i></button> <button onclick="shuffleCards()" class="p-3 rounded-full bg-white shadow hover:shadow-md"><i data-lucide="shuffle"></i></button> <button onclick="nextCard()" class="p-3 rounded-full bg-white shadow hover:shadow-md"><i data-lucide="chevron-right"></i></button>
+    </div>
+   </div><!-- Quiz Mode -->
+   <div id="quiz-view" class="hidden">
+    <div class="text-center mb-6">
+     <p id="quiz-score" class="text-sm font-medium opacity-70"></p>
+     <p class="mt-2 text-xs opacity-50">Translate to German / Übersetze ins Deutsche</p>
+     <p id="quiz-word" class="text-3xl font-bold mt-4"></p>
+    </div>
+    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div><button id="quiz-next-btn" class="hidden mx-auto mt-6 px-5 py-2.5 rounded-full font-medium bg-blue-700 text-white" onclick="nextQuizQuestion()">Next →</button>
+   </div><!-- Quiz Complete -->
+   <div id="quiz-complete" class="hidden text-center py-12">
+    <h2 data-template-id="complete-title" class="canva-text heading-font"></h2>
+    <p id="final-score" class="text-xl mt-3"></p><button data-template-id="restart-btn" class="canva-button mt-6 px-6 py-3 rounded-full font-medium" onclick="setMode('quiz')"></button>
+   </div>
+  </main>
+  <script src="/_sdk/editing_sdk.js"></script>
+  <script>
+        const vocab = [
+            {en:"World Cup",de:"Weltmeisterschaft"},{en:"referee",de:"Schiedsrichter"},{en:"goal",de:"Tor"},
+            {en:"penalty kick",de:"Elfmeter"},{en:"offside",de:"Abseits"},{en:"halftime",de:"Halbzeit"},
+            {en:"group stage",de:"Gruppenphase"},{en:"knockout round",de:"K.-o.-Runde"},{en:"draw",de:"Unentschieden"},
+            {en:"squad",de:"Kader"},{en:"substitute",de:"Einwechselspieler"},{en:"yellow card",de:"Gelbe Karte"},
+            {en:"red card",de:"Rote Karte"},{en:"extra time",de:"Verlängerung"},{en:"penalty shootout",de:"Elfmeterschießen"},
+            {en:"host country",de:"Gastgeberland"},{en:"opening ceremony",de:"Eröffnungsfeier"},{en:"trophy",de:"Pokal"},
+            {en:"qualifying match",de:"Qualifikationsspiel"},{en:"corner kick",de:"Eckstoß"},
+            {en:"free kick",de:"Freistoß"},{en:"header",de:"Kopfball"},{en:"midfielder",de:"Mittelfeldspieler"},
+            {en:"striker",de:"Stürmer"},{en:"goalkeeper",de:"Torwart"},{en:"pitch",de:"Spielfeld"},
+            {en:"supporter",de:"Anhänger"},{en:"championship",de:"Meisterschaft"},{en:"national anthem",de:"Nationalhymne"},
+            {en:"VAR (Video Assistant Referee)",de:"Videoassistent"}
+        ];
+
+        let mode = 'flashcard', cardIndex = 0, order = [], quizIndex = 0, score = 0, quizOrder = [];
+
+        function shuffle(arr) { for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+
+        function setMode(m) {
+            mode = m;
+            document.getElementById('flashcard-view').classList.toggle('hidden', m!=='flashcard');
+            document.getElementById('quiz-view').classList.toggle('hidden', m!=='quiz');
+            document.getElementById('quiz-complete').classList.add('hidden');
+            document.querySelector('[data-template-id="flashcard-mode-btn"]').style.opacity = m==='flashcard'?'1':'0.5';
+            document.querySelector('[data-template-id="quiz-mode-btn"]').style.opacity = m==='quiz'?'1':'0.5';
+            if(m==='flashcard'){order=[...Array(30).keys()];cardIndex=0;showCard();}
+            else{quizOrder=shuffle([...Array(30).keys()]);quizIndex=0;score=0;updateQuizScore();showQuizQuestion();}
+        }
+
+        function showCard(){
+            document.getElementById('flashcard').classList.remove('flipped');
+            const w=vocab[order[cardIndex]];
+            document.getElementById('card-eng').textContent=w.en;
+            document.getElementById('card-de').textContent=w.de;
+            updateProgress(cardIndex+1);
+        }
+        function nextCard(){cardIndex=(cardIndex+1)%30;showCard();}
+        function prevCard(){cardIndex=(cardIndex-1+30)%30;showCard();}
+        function shuffleCards(){order=shuffle([...Array(30).keys()]);cardIndex=0;showCard();}
+
+        function updateProgress(n){
+            document.getElementById('progress-text').textContent=n+' / 30';
+            document.getElementById('progress-bar').style.width=(n/30*100)+'%';
+        }
+        function updateQuizScore(){document.getElementById('quiz-score').textContent=`Score: ${score} / ${quizIndex}`;}
+
+        function showQuizQuestion(){
+            if(quizIndex>=30){
+                document.getElementById('quiz-view').classList.add('hidden');
+                document.getElementById('quiz-complete').classList.remove('hidden');
+                document.getElementById('final-score').textContent=`${score} / 30 correct`;
+                return;
+            }
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+            const correct=vocab[quizOrder[quizIndex]];
+            document.getElementById('quiz-word').textContent=correct.en;
+            let options=[correct.de];
+            let pool=vocab.filter(v=>v.de!==correct.de).map(v=>v.de);
+            shuffle(pool);
+            options.push(...pool.slice(0,3));
+            shuffle(options);
+            const container=document.getElementById('quiz-options');
+            container.innerHTML='';
+            options.forEach(opt=>{
+                const btn=document.createElement('button');
+                btn.className='quiz-option p-4 rounded-xl border-2 border-gray-200 bg-white font-medium text-center';
+                btn.textContent=opt;
+                btn.onclick=()=>handleAnswer(btn,opt,correct.de);
+                container.appendChild(btn);
+            });
+            updateProgress(quizIndex+1);
+        }
+
+        function handleAnswer(btn,chosen,correctDe){
+            document.querySelectorAll('.quiz-option').forEach(b=>{b.disabled=true;if(b.textContent===correctDe)b.classList.add('correct');});
+            if(chosen===correctDe){score++;}else{btn.classList.add('incorrect');}
+            quizIndex++;updateQuizScore();
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+        function nextQuizQuestion(){showQuizQuestion();}
+
+        setMode('flashcard');
+        lucide.createIcons();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0f46565d077a3b6',t:'MTc4MjA1OTQwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
