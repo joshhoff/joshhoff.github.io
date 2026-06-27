@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+ <head><script src="/_sdk/telemetry_sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adverb Practice</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Fraunces', serif; }
+        .tab-active { border-bottom: 3px solid #0d9488; color: #0d9488; }
+        .correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+        .incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
+    </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen w-full">
+  <header class="relative overflow-hidden"><img data-template-id="hero-img" class="canva-image w-full h-48 object-cover opacity-30" loading="lazy">
+   <div class="absolute inset-0 flex items-center justify-center">
+    <div class="text-center">
+     <h1 data-template-id="main-title" class="canva-text text-4xl font-bold"></h1>
+     <p data-template-id="subtitle" class="canva-text mt-2 text-lg"></p>
+    </div>
+   </div>
+  </header>
+  <main class="max-w-4xl mx-auto px-4 py-8"><!-- Tabs -->
+   <nav class="flex border-b border-gray-200 mb-8 gap-4" role="tablist"><button id="tab-written" class="canva-button px-4 py-3 font-medium tab-active" role="tab" onclick="switchTab('written')" data-template-id="tab-written-btn"></button> <button id="tab-convo" class="canva-button px-4 py-3 font-medium text-gray-500" role="tab" onclick="switchTab('convo')" data-template-id="tab-convo-btn"></button>
+   </nav><!-- Written Activities Section -->
+   <section id="section-written">
+    <h2 data-template-id="written-heading" class="canva-text text-2xl font-bold mb-6"></h2><!-- Activity 1: Fill in the blank -->
+    <div data-template-id="activity1-card" class="canva-card bg-white rounded-xl p-6 shadow-sm mb-6">
+     <h3 data-template-id="activity1-title" class="canva-text font-semibold mb-4"></h3>
+     <p data-template-id="activity1-instructions" class="canva-text text-sm mb-4"></p>
+     <div class="space-y-4" id="fill-blanks">
+      <div class="flex items-center gap-2 flex-wrap"><span>She sings</span> <input type="text" class="border rounded px-2 py-1 w-32" data-answer="beautifully" placeholder="___"> <span>.</span>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap"><span>He</span> <input type="text" class="border rounded px-2 py-1 w-32" data-answer="always" placeholder="___"> <span>arrives on time.</span>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap"><span>They finished the project</span> <input type="text" class="border rounded px-2 py-1 w-32" data-answer="quickly" placeholder="___"> <span>.</span>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap"><span>I</span> <input type="text" class="border rounded px-2 py-1 w-32" data-answer="rarely" placeholder="___"> <span>eat fast food.</span>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap"><span>The cat moved</span> <input type="text" class="border rounded px-2 py-1 w-32" data-answer="silently" placeholder="___"> <span>across the room.</span>
+      </div>
+     </div><button onclick="checkFillBlanks()" data-template-id="check-btn-1" class="canva-button mt-4 px-5 py-2 rounded-lg font-medium"></button>
+     <p id="fill-feedback" class="mt-3 font-medium hidden"></p>
+    </div><!-- Activity 2: Rewrite sentences -->
+    <div data-template-id="activity2-card" class="canva-card bg-white rounded-xl p-6 shadow-sm mb-6">
+     <h3 data-template-id="activity2-title" class="canva-text font-semibold mb-4"></h3>
+     <p data-template-id="activity2-instructions" class="canva-text text-sm mb-4"></p>
+     <div class="space-y-5" id="rewrite-section">
+      <div>
+       <p class="text-gray-700 mb-1"><strong>1.</strong> She speaks English. (fluently)</p><textarea class="border rounded w-full px-3 py-2 text-sm" rows="1" placeholder="Rewrite here..."></textarea> <button onclick="toggleAnswer(this, 'She speaks English fluently.')" class="text-teal-600 text-sm mt-1 hover:underline">Show answer</button>
+       <p class="answer-reveal text-sm text-green-700 hidden mt-1"></p>
+      </div>
+      <div>
+       <p class="text-gray-700 mb-1"><strong>2.</strong> He goes to the gym. (often)</p><textarea class="border rounded w-full px-3 py-2 text-sm" rows="1" placeholder="Rewrite here..."></textarea> <button onclick="toggleAnswer(this, 'He often goes to the gym.')" class="text-teal-600 text-sm mt-1 hover:underline">Show answer</button>
+       <p class="answer-reveal text-sm text-green-700 hidden mt-1"></p>
+      </div>
+      <div>
+       <p class="text-gray-700 mb-1"><strong>3.</strong> We have been to Paris. (never)</p><textarea class="border rounded w-full px-3 py-2 text-sm" rows="1" placeholder="Rewrite here..."></textarea> <button onclick="toggleAnswer(this, 'We have never been to Paris.')" class="text-teal-600 text-sm mt-1 hover:underline">Show answer</button>
+       <p class="answer-reveal text-sm text-green-700 hidden mt-1"></p>
+      </div>
+     </div>
+    </div>
+   </section><!-- Conversation Prompts Section -->
+   <section id="section-convo" class="hidden">
+    <h2 data-template-id="convo-heading" class="canva-text text-2xl font-bold mb-6"></h2>
+    <div data-template-id="prompt-card" class="canva-card bg-white rounded-xl p-8 shadow-sm text-center">
+     <p class="text-sm uppercase tracking-wide text-teal-600 font-medium mb-3">Discussion Prompt</p>
+     <p id="prompt-text" class="text-xl leading-relaxed font-medium text-gray-800"></p><button onclick="nextPrompt()" data-template-id="next-prompt-btn" class="canva-button mt-6 px-6 py-2 rounded-lg font-medium inline-flex items-center gap-2"> <i data-lucide="refresh-cw" style="width:16px;height:16px"></i> <span>Next Prompt</span> </button>
+    </div>
+    <div data-template-id="tips-card" class="canva-card bg-white rounded-xl p-6 shadow-sm mt-6">
+     <h3 data-template-id="tips-title" class="canva-text font-semibold mb-3"></h3>
+     <ul class="space-y-2 text-gray-700 text-sm list-disc list-inside">
+      <li>Use frequency adverbs: always, usually, often, sometimes, rarely, never</li>
+      <li>Use manner adverbs: quickly, slowly, carefully, loudly, quietly</li>
+      <li>Place frequency adverbs before the main verb: "I <em>usually</em> wake up early."</li>
+      <li>Place manner adverbs after the verb or object: "She read the letter <em>carefully</em>."</li>
+     </ul>
+    </div>
+   </section>
+  </main>
+  <script src="/_sdk/editing_sdk.js"></script>
+  <script>
+        const prompts = [
+            "Describe your daily routine using at least 5 frequency adverbs (always, usually, often, sometimes, never).",
+            "Tell your partner about someone you admire. How do they do things? Use manner adverbs (gracefully, patiently, kindly).",
+            "Compare how you and your best friend do things differently. Example: 'I eat slowly, but she eats quickly.'",
+            "Describe your last holiday. Where did you go? What did you do? Use adverbs of time (yesterday, recently, already).",
+            "Talk about habits you want to change. Use 'too + adverb' (too quickly, too often, too late).",
+            "Describe how people in your family do everyday tasks. Who cooks carefully? Who drives fast?",
+            "Discuss your work or study habits. Do you usually study alone or with others? How often do you take breaks?",
+            "Tell a story about something funny that happened. Use adverbs to make it more vivid and entertaining."
+        ];
+        let promptIndex = 0;
+
+        function nextPrompt() {
+            promptIndex = (promptIndex + 1) % prompts.length;
+            document.getElementById('prompt-text').textContent = prompts[promptIndex];
+        }
+
+        function switchTab(tab) {
+            document.getElementById('section-written').classList.toggle('hidden', tab !== 'written');
+            document.getElementById('section-convo').classList.toggle('hidden', tab !== 'convo');
+            document.getElementById('tab-written').classList.toggle('tab-active', tab === 'written');
+            document.getElementById('tab-convo').classList.toggle('tab-active', tab === 'convo');
+            document.getElementById('tab-written').classList.toggle('text-gray-500', tab !== 'written');
+            document.getElementById('tab-convo').classList.toggle('text-gray-500', tab !== 'convo');
+        }
+
+        function checkFillBlanks() {
+            const inputs = document.querySelectorAll('#fill-blanks input');
+            let score = 0;
+            inputs.forEach(input => {
+                const correct = input.dataset.answer.toLowerCase();
+                const val = input.value.trim().toLowerCase();
+                input.classList.remove('correct', 'incorrect');
+                if (val === correct) { input.classList.add('correct'); score++; }
+                else if (val) { input.classList.add('incorrect'); }
+            });
+            const fb = document.getElementById('fill-feedback');
+            fb.classList.remove('hidden');
+            fb.textContent = `${score}/${inputs.length} correct!`;
+            fb.style.color = score === inputs.length ? '#10b981' : '#f59e0b';
+        }
+
+        function toggleAnswer(btn, answer) {
+            const p = btn.nextElementSibling;
+            if (p.classList.contains('hidden')) {
+                p.textContent = answer;
+                p.classList.remove('hidden');
+                btn.textContent = 'Hide answer';
+            } else {
+                p.classList.add('hidden');
+                btn.textContent = 'Show answer';
+            }
+        }
+
+        // Init
+        document.getElementById('prompt-text').textContent = prompts[0];
+        lucide.createIcons();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a11cbd4bd033763f',t:'MTc4MjQ4MjQzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
