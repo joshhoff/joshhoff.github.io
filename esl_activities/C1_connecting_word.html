@@ -8,14 +8,15 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
   <style>
-        body { font-family: 'DM Sans', sans-serif; }
-        h1, h2, h3 { font-family: 'Fraunces', serif; }
-        .tab-active { border-bottom: 3px solid #1e3a5f; color: #1e3a5f; font-weight: 700; }
-        .family-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .family-content.open { max-height: 600px; }
-        .correct { background: #d1fae5 !important; border-color: #10b981 !important; }
-        .incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
-    </style>
+    body { font-family: 'DM Sans', sans-serif; }
+    h1, h2, h3 { font-family: 'Fraunces', serif; }
+    .tab-active { border-bottom: 3px solid #1e3a5f; color: #1e3a5f; font-weight: 700; }
+    .family-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+    .family-content.open { max-height: 2000px; }
+    .correct { background: #d1fae5 !important; border-color: #10b981 !important; }
+    .incorrect { background: #fee2e2 !important; border-color: #ef4444 !important; }
+    .lang-toggle { transition: background 0.2s; }
+  </style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
  </head>
@@ -23,7 +24,7 @@
   <header class="relative overflow-hidden"><img data-template-id="hero-image" class="canva-image w-full h-48 object-cover opacity-40" loading="lazy">
    <div class="absolute inset-0 flex items-center justify-center">
     <h1 data-template-id="page-title" class="canva-text text-center drop-shadow-lg"></h1>
-   </div>
+   </div><button id="lang-toggle" class="lang-toggle absolute top-4 right-4 px-4 py-2 rounded-full font-semibold text-sm shadow-md" style="background:#1e3a5f;color:#fff;"> Español → </button>
   </header>
   <main class="max-w-4xl mx-auto px-4 py-6">
    <nav class="flex gap-6 border-b border-gray-200 mb-6" role="tablist"><button class="tab-btn tab-active pb-2 px-1" data-tab="families" role="tab" aria-selected="true"> <span data-template-id="tab-families" class="canva-text"></span> </button> <button class="tab-btn pb-2 px-1" data-tab="written" role="tab" aria-selected="false"> <span data-template-id="tab-written" class="canva-text"></span> </button> <button class="tab-btn pb-2 px-1" data-tab="conversation" role="tab" aria-selected="false"> <span data-template-id="tab-conversation" class="canva-text"></span> </button>
@@ -44,163 +45,239 @@
   </main>
   <script src="/_sdk/editing_sdk.js"></script>
   <script>
-        const wordFamilies = [
-            { name: "Addition & Emphasis", words: ["furthermore", "moreover", "in addition", "what is more", "not only… but also", "on top of that", "besides"] },
-            { name: "Contrast & Concession", words: ["nevertheless", "nonetheless", "notwithstanding", "whereas", "albeit", "even so", "be that as it may"] },
-            { name: "Cause & Effect", words: ["consequently", "as a result", "thereby", "hence", "thus", "owing to", "on account of"] },
-            { name: "Condition & Supposition", words: ["provided that", "on condition that", "assuming that", "were it not for", "supposing", "unless"] },
-            { name: "Time & Sequence", words: ["subsequently", "henceforth", "in the meantime", "prior to", "no sooner… than", "by the time"] },
-            { name: "Purpose & Result", words: ["so as to", "with a view to", "in order that", "lest", "for the purpose of", "to that end"] }
-        ];
+    var currentLang = 'en';
 
-        const exercises = [
-            { sentence: "The project was delayed; ___, the budget had to be revised.", answer: "consequently", options: ["consequently", "albeit", "provided that"] },
-            { sentence: "___ the rain, the event proceeded as planned.", answer: "Notwithstanding", options: ["Notwithstanding", "Hence", "Subsequently"] },
-            { sentence: "She studied intensely ___ pass the C1 exam on her first attempt.", answer: "so as to", options: ["so as to", "lest", "whereas"] },
-            { sentence: "The report was thorough; ___, it failed to address cost concerns.", answer: "nevertheless", options: ["nevertheless", "thereby", "furthermore"] },
-            { sentence: "___ we secure funding, the initiative will launch in September.", answer: "Provided that", options: ["Provided that", "Owing to", "Moreover"] },
-            { sentence: "He completed the internship and ___ gained valuable experience.", answer: "thereby", options: ["thereby", "albeit", "lest"] }
-        ];
+    var wordFamilies = [
+      { name: { en: "Addition & Emphasis", es: "Adición y Énfasis" }, words: [
+        { word: "furthermore", def: { en: "In addition to what has been said", es: "Además de lo dicho" }, ex: { en: "The plan is costly; furthermore, it lacks public support.", es: "El plan es costoso; además, carece de apoyo público." } },
+        { word: "moreover", def: { en: "As a further matter; besides", es: "Además; por otra parte" }, ex: { en: "The food was excellent. Moreover, the service was impeccable.", es: "La comida fue excelente. Además, el servicio fue impecable." } },
+        { word: "in addition", def: { en: "Also; as an extra point", es: "Además; como punto adicional" }, ex: { en: "In addition to her degree, she holds two certifications.", es: "Además de su título, tiene dos certificaciones." } },
+        { word: "what is more", def: { en: "More importantly", es: "Es más; lo que es más importante" }, ex: { en: "He's talented and, what is more, extremely dedicated.", es: "Es talentoso y, es más, extremadamente dedicado." } },
+        { word: "not only… but also", def: { en: "Used to add emphasis to a second point", es: "No solo… sino también" }, ex: { en: "She not only passed but also topped the class.", es: "No solo aprobó sino que también fue la primera de la clase." } },
+        { word: "on top of that", def: { en: "In addition (informal emphasis)", es: "Encima de eso; para colmo" }, ex: { en: "We missed the train. On top of that, it started raining.", es: "Perdimos el tren. Encima de eso, empezó a llover." } },
+        { word: "besides", def: { en: "In addition to; apart from", es: "Además de; aparte de" }, ex: { en: "Besides the cost, there are logistical concerns.", es: "Además del coste, hay preocupaciones logísticas." } }
+      ]},
+      { name: { en: "Contrast & Concession", es: "Contraste y Concesión" }, words: [
+        { word: "nevertheless", def: { en: "In spite of that; however", es: "Sin embargo; no obstante" }, ex: { en: "It was risky; nevertheless, they proceeded.", es: "Era arriesgado; sin embargo, procedieron." } },
+        { word: "nonetheless", def: { en: "Despite what has been said", es: "No obstante; aun así" }, ex: { en: "The evidence was weak. Nonetheless, the jury convicted.", es: "La evidencia era débil. No obstante, el jurado condenó." } },
+        { word: "notwithstanding", def: { en: "In spite of (formal)", es: "A pesar de (formal)" }, ex: { en: "Notwithstanding the delays, the project succeeded.", es: "A pesar de los retrasos, el proyecto tuvo éxito." } },
+        { word: "whereas", def: { en: "In contrast to the fact that", es: "Mientras que; en cambio" }, ex: { en: "He prefers coffee, whereas she drinks tea.", es: "Él prefiere el café, mientras que ella bebe té." } },
+        { word: "albeit", def: { en: "Although (concessive)", es: "Aunque; si bien" }, ex: { en: "It was a successful, albeit exhausting, campaign.", es: "Fue una campaña exitosa, aunque agotadora." } },
+        { word: "even so", def: { en: "Despite that", es: "Aun así" }, ex: { en: "The odds were against us. Even so, we tried.", es: "Las probabilidades estaban en nuestra contra. Aun así, lo intentamos." } },
+        { word: "be that as it may", def: { en: "Regardless of the facts", es: "Sea como sea; sea como fuere" }, ex: { en: "Be that as it may, we must move forward.", es: "Sea como fuere, debemos seguir adelante." } }
+      ]},
+      { name: { en: "Cause & Effect", es: "Causa y Efecto" }, words: [
+        { word: "consequently", def: { en: "As a result", es: "En consecuencia; por consiguiente" }, ex: { en: "He missed deadlines; consequently, he was dismissed.", es: "No cumplió los plazos; en consecuencia, fue despedido." } },
+        { word: "as a result", def: { en: "Because of this", es: "Como resultado" }, ex: { en: "Sales dropped. As a result, staff were let go.", es: "Las ventas cayeron. Como resultado, despidieron personal." } },
+        { word: "thereby", def: { en: "By that means; as a result of that", es: "De ese modo; con ello" }, ex: { en: "She automated the process, thereby saving hours.", es: "Automatizó el proceso, ahorrando así horas de trabajo." } },
+        { word: "hence", def: { en: "For this reason (formal)", es: "De ahí; por eso" }, ex: { en: "Costs rose sharply; hence the budget cuts.", es: "Los costes subieron mucho; de ahí los recortes." } },
+        { word: "thus", def: { en: "As a result of this; in this way", es: "Así; por lo tanto" }, ex: { en: "He trained daily, thus improving his stamina.", es: "Entrenaba a diario, mejorando así su resistencia." } },
+        { word: "owing to", def: { en: "Because of", es: "Debido a" }, ex: { en: "Owing to the storm, flights were cancelled.", es: "Debido a la tormenta, se cancelaron los vuelos." } },
+        { word: "on account of", def: { en: "Because of (formal)", es: "A causa de; debido a" }, ex: { en: "The match was postponed on account of rain.", es: "El partido se aplazó a causa de la lluvia." } }
+      ]},
+      { name: { en: "Condition & Supposition", es: "Condición y Suposición" }, words: [
+        { word: "provided that", def: { en: "Only if; on the condition that", es: "Siempre que; con tal de que" }, ex: { en: "You may leave provided that you finish first.", es: "Puedes irte siempre que termines primero." } },
+        { word: "on condition that", def: { en: "Only if (formal)", es: "A condición de que" }, ex: { en: "They agreed on condition that terms were met.", es: "Aceptaron a condición de que se cumplieran los términos." } },
+        { word: "assuming that", def: { en: "If we suppose that", es: "Suponiendo que" }, ex: { en: "Assuming that all goes well, we launch Monday.", es: "Suponiendo que todo vaya bien, lanzamos el lunes." } },
+        { word: "were it not for", def: { en: "If it weren't for", es: "De no ser por" }, ex: { en: "Were it not for her help, I'd have failed.", es: "De no ser por su ayuda, habría fracasado." } },
+        { word: "supposing", def: { en: "What if; assuming", es: "Suponiendo que; ¿y si…?" }, ex: { en: "Supposing it rains, what's the backup plan?", es: "Suponiendo que llueva, ¿cuál es el plan alternativo?" } },
+        { word: "unless", def: { en: "Except if", es: "A menos que; a no ser que" }, ex: { en: "Unless you hurry, we'll miss the train.", es: "A menos que te des prisa, perderemos el tren." } }
+      ]},
+      { name: { en: "Time & Sequence", es: "Tiempo y Secuencia" }, words: [
+        { word: "subsequently", def: { en: "After that; afterwards", es: "Posteriormente; a continuación" }, ex: { en: "He graduated and subsequently moved abroad.", es: "Se graduó y posteriormente se mudó al extranjero." } },
+        { word: "henceforth", def: { en: "From this time on", es: "De ahora en adelante" }, ex: { en: "Henceforth, all reports must be digital.", es: "De ahora en adelante, todos los informes deben ser digitales." } },
+        { word: "in the meantime", def: { en: "During the intervening period", es: "Mientras tanto" }, ex: { en: "The repair takes a week. In the meantime, use this laptop.", es: "La reparación tarda una semana. Mientras tanto, usa este portátil." } },
+        { word: "prior to", def: { en: "Before (formal)", es: "Antes de; previo a" }, ex: { en: "Prior to the meeting, please review the agenda.", es: "Antes de la reunión, revise la agenda." } },
+        { word: "no sooner… than", def: { en: "Immediately when", es: "Apenas… cuando; no bien… cuando" }, ex: { en: "No sooner had we arrived than it started snowing.", es: "Apenas habíamos llegado cuando empezó a nevar." } },
+        { word: "by the time", def: { en: "When (a point is reached)", es: "Para cuando" }, ex: { en: "By the time you read this, I'll be gone.", es: "Para cuando leas esto, me habré ido." } }
+      ]},
+      { name: { en: "Purpose & Result", es: "Propósito y Resultado" }, words: [
+        { word: "so as to", def: { en: "In order to", es: "Para; con el fin de" }, ex: { en: "She whispered so as to not wake the baby.", es: "Susurró para no despertar al bebé." } },
+        { word: "with a view to", def: { en: "With the aim of", es: "Con vistas a; con miras a" }, ex: { en: "He's saving with a view to buying a house.", es: "Está ahorrando con vistas a comprar una casa." } },
+        { word: "in order that", def: { en: "So that (formal)", es: "Para que; a fin de que" }, ex: { en: "We left early in order that we might avoid traffic.", es: "Salimos temprano para que pudiéramos evitar el tráfico." } },
+        { word: "lest", def: { en: "For fear that (literary)", es: "Para que no; no sea que" }, ex: { en: "She tiptoed lest she disturb the sleeping child.", es: "Caminó de puntillas no fuera a despertar al niño." } },
+        { word: "for the purpose of", def: { en: "In order to achieve", es: "Con el propósito de" }, ex: { en: "Data was collected for the purpose of analysis.", es: "Se recopilaron datos con el propósito de analizarlos." } },
+        { word: "to that end", def: { en: "For that purpose", es: "Con ese fin; a tal efecto" }, ex: { en: "We need more funding. To that end, I've written a proposal.", es: "Necesitamos más financiación. Con ese fin, he redactado una propuesta." } }
+      ]}
+    ];
 
-        const conversations = [
-            { prompt: "Discuss a time when a plan didn't work out but something positive came from it.", connectors: ["nevertheless", "even so", "as a result", "in the meantime"] },
-            { prompt: "Debate whether remote work is more productive than office work.", connectors: ["whereas", "moreover", "on the other hand", "not only… but also"] },
-            { prompt: "Explain a complex process at work or in your studies, step by step.", connectors: ["subsequently", "prior to", "thereby", "to that end"] },
-            { prompt: "Argue for or against a controversial policy, addressing counterarguments.", connectors: ["albeit", "notwithstanding", "furthermore", "be that as it may"] }
-        ];
+    var exercises = [
+      { sentence: { en: "The project was delayed; ___, the budget had to be revised.", es: "El proyecto se retrasó; ___, hubo que revisar el presupuesto." }, answer: "consequently", options: ["consequently", "albeit", "provided that"] },
+      { sentence: { en: "___ the rain, the event proceeded as planned.", es: "___ la lluvia, el evento se llevó a cabo según lo previsto." }, answer: "Notwithstanding", options: ["Notwithstanding", "Hence", "Subsequently"] },
+      { sentence: { en: "She studied intensely ___ pass the C1 exam on her first attempt.", es: "Estudió intensamente ___ aprobar el examen C1 en su primer intento." }, answer: "so as to", options: ["so as to", "lest", "whereas"] },
+      { sentence: { en: "The report was thorough; ___, it failed to address cost concerns.", es: "El informe fue exhaustivo; ___, no abordó las preocupaciones de costes." }, answer: "nevertheless", options: ["nevertheless", "thereby", "furthermore"] },
+      { sentence: { en: "___ we secure funding, the initiative will launch in September.", es: "___ consigamos financiación, la iniciativa se lanzará en septiembre." }, answer: "Provided that", options: ["Provided that", "Owing to", "Moreover"] },
+      { sentence: { en: "He completed the internship and ___ gained valuable experience.", es: "Completó las prácticas y ___ adquirió una experiencia valiosa." }, answer: "thereby", options: ["thereby", "albeit", "lest"] }
+    ];
 
-        // Build families
-        var familiesEl = document.getElementById('families-container');
-        wordFamilies.forEach(function(fam) {
-            var div = document.createElement('div');
-            div.className = 'border border-gray-200 rounded-lg overflow-hidden';
-            var btn = document.createElement('button');
-            btn.className = 'w-full flex justify-between items-center p-4 text-left font-semibold text-lg hover:bg-gray-50 transition';
-            btn.setAttribute('aria-expanded', 'false');
-            btn.innerHTML = '<span>' + fam.name + '</span><i data-lucide="chevron-down" style="width:20px;height:20px"></i>';
-            var content = document.createElement('div');
-            content.className = 'family-content px-4 pb-0';
-            var inner = document.createElement('div');
-            inner.className = 'flex flex-wrap gap-2 pb-4';
-            fam.words.forEach(function(w) {
-                var span = document.createElement('span');
-                span.className = 'inline-block px-3 py-1 rounded-full text-sm';
-                span.style.background = '#e8f0fe';
-                span.style.color = '#1e3a5f';
-                span.textContent = w;
-                inner.appendChild(span);
-            });
-            content.appendChild(inner);
-            btn.addEventListener('click', function() {
-                var isOpen = content.classList.toggle('open');
-                btn.setAttribute('aria-expanded', String(isOpen));
-            });
-            div.appendChild(btn);
-            div.appendChild(content);
-            familiesEl.appendChild(div);
+    var conversations = [
+      { prompt: { en: "Discuss a time when a plan didn't work out but something positive came from it.", es: "Habla de una vez en la que un plan no salió bien pero algo positivo surgió de ello." }, connectors: ["nevertheless", "even so", "as a result", "in the meantime"] },
+      { prompt: { en: "Debate whether remote work is more productive than office work.", es: "Debate si el trabajo remoto es más productivo que el trabajo en oficina." }, connectors: ["whereas", "moreover", "on the other hand", "not only… but also"] },
+      { prompt: { en: "Explain a complex process at work or in your studies, step by step.", es: "Explica un proceso complejo en tu trabajo o estudios, paso a paso." }, connectors: ["subsequently", "prior to", "thereby", "to that end"] },
+      { prompt: { en: "Argue for or against a controversial policy, addressing counterarguments.", es: "Argumenta a favor o en contra de una política controvertida, abordando contraargumentos." }, connectors: ["albeit", "notwithstanding", "furthermore", "be that as it may"] }
+    ];
+
+    // Toggle language
+    var toggleBtn = document.getElementById('lang-toggle');
+    toggleBtn.addEventListener('click', function() {
+      currentLang = currentLang === 'en' ? 'es' : 'en';
+      toggleBtn.textContent = currentLang === 'en' ? 'Español →' : '← English';
+      renderFamilies();
+      renderExercises();
+      renderConversations();
+    });
+
+    // Render families
+    function renderFamilies() {
+      var container = document.getElementById('families-container');
+      container.innerHTML = '';
+      wordFamilies.forEach(function(fam) {
+        var div = document.createElement('div');
+        div.className = 'border border-gray-200 rounded-lg overflow-hidden';
+        var btn = document.createElement('button');
+        btn.className = 'w-full flex justify-between items-center p-4 text-left font-semibold text-lg hover:bg-gray-50 transition';
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<span>' + fam.name[currentLang] + '</span><i data-lucide="chevron-down" style="width:20px;height:20px"></i>';
+        var content = document.createElement('div');
+        content.className = 'family-content px-4 pb-0';
+        var inner = document.createElement('div');
+        inner.className = 'space-y-3 pb-4';
+        fam.words.forEach(function(w) {
+          var wordDiv = document.createElement('div');
+          wordDiv.className = 'pl-2 border-l-4 border-blue-200';
+          var wordSpan = document.createElement('span');
+          wordSpan.className = 'inline-block px-3 py-1 rounded-full text-sm font-semibold';
+          wordSpan.style.background = '#e8f0fe';
+          wordSpan.style.color = '#1e3a5f';
+          wordSpan.textContent = w.word;
+          var defP = document.createElement('p');
+          defP.className = 'text-sm text-gray-600 mt-1';
+          defP.textContent = w.def[currentLang];
+          var exP = document.createElement('p');
+          exP.className = 'text-sm italic text-gray-500 mt-1';
+          exP.textContent = '→ ' + w.ex[currentLang];
+          wordDiv.appendChild(wordSpan);
+          wordDiv.appendChild(defP);
+          wordDiv.appendChild(exP);
+          inner.appendChild(wordDiv);
         });
-
-        // Build exercises
-        var exEl = document.getElementById('exercises-container');
-        exercises.forEach(function(ex) {
-            var parts = ex.sentence.split('___');
-            var div = document.createElement('div');
-            div.className = 'p-4 bg-white rounded-lg border border-gray-200';
-            var p = document.createElement('p');
-            p.className = 'text-gray-800';
-            p.appendChild(document.createTextNode(parts[0]));
-            var select = document.createElement('select');
-            select.className = 'ex-select mx-1 px-2 py-1 border border-gray-300 rounded';
-            select.setAttribute('data-answer', ex.answer);
-            var defaultOpt = document.createElement('option');
-            defaultOpt.value = '';
-            defaultOpt.textContent = '…';
-            select.appendChild(defaultOpt);
-            var shuffled = ex.options.slice().sort(function() { return Math.random() - 0.5; });
-            shuffled.forEach(function(o) {
-                var opt = document.createElement('option');
-                opt.value = o;
-                opt.textContent = o;
-                select.appendChild(opt);
-            });
-            p.appendChild(select);
-            p.appendChild(document.createTextNode(parts[1]));
-            div.appendChild(p);
-            exEl.appendChild(div);
+        content.appendChild(inner);
+        btn.addEventListener('click', function() {
+          var isOpen = content.classList.toggle('open');
+          btn.setAttribute('aria-expanded', String(isOpen));
         });
+        div.appendChild(btn);
+        div.appendChild(content);
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
 
-        document.getElementById('check-btn').addEventListener('click', function() {
-            var correct = 0;
-            var selects = document.querySelectorAll('.ex-select');
-            for (var i = 0; i < selects.length; i++) {
-                var sel = selects[i];
-                sel.classList.remove('correct', 'incorrect');
-                if (sel.value === sel.getAttribute('data-answer')) {
-                    sel.classList.add('correct');
-                    correct++;
-                } else {
-                    sel.classList.add('incorrect');
-                }
-            }
-            var scoreEl = document.getElementById('score-display');
-            scoreEl.textContent = 'Score: ' + correct + '/' + exercises.length;
-            scoreEl.classList.remove('hidden');
+    // Render exercises
+    function renderExercises() {
+      var container = document.getElementById('exercises-container');
+      container.innerHTML = '';
+      document.getElementById('score-display').classList.add('hidden');
+      exercises.forEach(function(ex) {
+        var parts = ex.sentence[currentLang].split('___');
+        var div = document.createElement('div');
+        div.className = 'p-4 bg-white rounded-lg border border-gray-200';
+        var p = document.createElement('p');
+        p.className = 'text-gray-800';
+        p.appendChild(document.createTextNode(parts[0]));
+        var select = document.createElement('select');
+        select.className = 'ex-select mx-1 px-2 py-1 border border-gray-300 rounded';
+        select.setAttribute('data-answer', ex.answer);
+        var defaultOpt = document.createElement('option');
+        defaultOpt.value = '';
+        defaultOpt.textContent = '…';
+        select.appendChild(defaultOpt);
+        var shuffled = ex.options.slice().sort(function() { return Math.random() - 0.5; });
+        shuffled.forEach(function(o) {
+          var opt = document.createElement('option');
+          opt.value = o;
+          opt.textContent = o;
+          select.appendChild(opt);
         });
+        p.appendChild(select);
+        if (parts[1]) p.appendChild(document.createTextNode(parts[1]));
+        div.appendChild(p);
+        container.appendChild(div);
+      });
+    }
 
-        // Build conversation prompts
-        var convoEl = document.getElementById('convo-container');
-        conversations.forEach(function(c) {
-            var div = document.createElement('div');
-            div.className = 'p-5 bg-white rounded-lg border border-gray-200';
-            var promptP = document.createElement('p');
-            promptP.className = 'text-gray-800 font-medium mb-3';
-            promptP.textContent = c.prompt;
-            div.appendChild(promptP);
-
-            var toggleBtn = document.createElement('button');
-            toggleBtn.className = 'text-sm font-semibold flex items-center gap-1';
-            toggleBtn.style.color = '#1e3a5f';
-            toggleBtn.innerHTML = '<i data-lucide="lightbulb" style="width:16px;height:16px"></i> Show suggested connectors';
-
-            var connDiv = document.createElement('div');
-            connDiv.className = 'hidden mt-2 flex flex-wrap gap-2';
-            c.connectors.forEach(function(w) {
-                var span = document.createElement('span');
-                span.className = 'inline-block px-3 py-1 rounded-full text-sm';
-                span.style.background = '#fef3c7';
-                span.style.color = '#92400e';
-                span.textContent = w;
-                connDiv.appendChild(span);
-            });
-
-            toggleBtn.addEventListener('click', function() {
-                connDiv.classList.toggle('hidden');
-            });
-
-            div.appendChild(toggleBtn);
-            div.appendChild(connDiv);
-            convoEl.appendChild(div);
+    // Render conversations
+    function renderConversations() {
+      var container = document.getElementById('convo-container');
+      container.innerHTML = '';
+      conversations.forEach(function(c) {
+        var div = document.createElement('div');
+        div.className = 'p-5 bg-white rounded-lg border border-gray-200';
+        var promptP = document.createElement('p');
+        promptP.className = 'text-gray-800 font-medium mb-3';
+        promptP.textContent = c.prompt[currentLang];
+        div.appendChild(promptP);
+        var tBtn = document.createElement('button');
+        tBtn.className = 'text-sm font-semibold flex items-center gap-1';
+        tBtn.style.color = '#1e3a5f';
+        tBtn.innerHTML = '<i data-lucide="lightbulb" style="width:16px;height:16px"></i> ' + (currentLang === 'en' ? 'Show suggested connectors' : 'Mostrar conectores sugeridos');
+        var connDiv = document.createElement('div');
+        connDiv.className = 'hidden mt-2 flex flex-wrap gap-2';
+        c.connectors.forEach(function(w) {
+          var span = document.createElement('span');
+          span.className = 'inline-block px-3 py-1 rounded-full text-sm';
+          span.style.background = '#fef3c7';
+          span.style.color = '#92400e';
+          span.textContent = w;
+          connDiv.appendChild(span);
         });
+        tBtn.addEventListener('click', function() { connDiv.classList.toggle('hidden'); });
+        div.appendChild(tBtn);
+        div.appendChild(connDiv);
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
 
-        // Tabs
-        var tabBtns = document.querySelectorAll('.tab-btn');
-        for (var i = 0; i < tabBtns.length; i++) {
-            tabBtns[i].addEventListener('click', function() {
-                for (var j = 0; j < tabBtns.length; j++) {
-                    tabBtns[j].classList.remove('tab-active');
-                    tabBtns[j].setAttribute('aria-selected', 'false');
-                }
-                this.classList.add('tab-active');
-                this.setAttribute('aria-selected', 'true');
-                var panels = document.querySelectorAll('[role="tabpanel"]');
-                for (var k = 0; k < panels.length; k++) {
-                    panels[k].classList.add('hidden');
-                }
-                document.getElementById('panel-' + this.getAttribute('data-tab')).classList.remove('hidden');
-            });
+    // Check answers
+    document.getElementById('check-btn').addEventListener('click', function() {
+      var correct = 0;
+      var selects = document.querySelectorAll('.ex-select');
+      for (var i = 0; i < selects.length; i++) {
+        var sel = selects[i];
+        sel.classList.remove('correct', 'incorrect');
+        if (sel.value === sel.getAttribute('data-answer')) {
+          sel.classList.add('correct');
+          correct++;
+        } else {
+          sel.classList.add('incorrect');
         }
+      }
+      var scoreEl = document.getElementById('score-display');
+      scoreEl.textContent = (currentLang === 'en' ? 'Score: ' : 'Puntuación: ') + correct + '/' + exercises.length;
+      scoreEl.classList.remove('hidden');
+    });
 
-        lucide.createIcons();
-    </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a12d853847278691',t:'MTc4MjY1ODQwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    // Tabs
+    var tabBtns = document.querySelectorAll('.tab-btn');
+    for (var i = 0; i < tabBtns.length; i++) {
+      tabBtns[i].addEventListener('click', function() {
+        for (var j = 0; j < tabBtns.length; j++) {
+          tabBtns[j].classList.remove('tab-active');
+          tabBtns[j].setAttribute('aria-selected', 'false');
+        }
+        this.classList.add('tab-active');
+        this.setAttribute('aria-selected', 'true');
+        var panels = document.querySelectorAll('[role="tabpanel"]');
+        for (var k = 0; k < panels.length; k++) panels[k].classList.add('hidden');
+        document.getElementById('panel-' + this.getAttribute('data-tab')).classList.remove('hidden');
+      });
+    }
+
+    // Initial render
+    renderFamilies();
+    renderExercises();
+    renderConversations();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a12d8b8346528691',t:'MTc4MjY1ODY1Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
