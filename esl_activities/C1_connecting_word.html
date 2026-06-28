@@ -27,16 +27,16 @@
   </header>
   <main class="max-w-4xl mx-auto px-4 py-6">
    <nav class="flex gap-6 border-b border-gray-200 mb-6" role="tablist"><button class="tab-btn tab-active pb-2 px-1" data-tab="families" role="tab" aria-selected="true"> <span data-template-id="tab-families" class="canva-text"></span> </button> <button class="tab-btn pb-2 px-1" data-tab="written" role="tab" aria-selected="false"> <span data-template-id="tab-written" class="canva-text"></span> </button> <button class="tab-btn pb-2 px-1" data-tab="conversation" role="tab" aria-selected="false"> <span data-template-id="tab-conversation" class="canva-text"></span> </button>
-   </nav><!-- Word Families -->
+   </nav>
    <section id="panel-families" role="tabpanel">
     <p data-template-id="families-intro" class="canva-text mb-4"></p>
     <div id="families-container" class="space-y-3"></div>
-   </section><!-- Written Practice -->
+   </section>
    <section id="panel-written" class="hidden" role="tabpanel">
     <p data-template-id="written-intro" class="canva-text mb-4"></p>
-    <div id="exercises-container" class="space-y-4"></div><button id="check-btn" class="mt-6 px-6 py-2 rounded-lg font-semibold transition" data-template-id="check-button"></button>
+    <div id="exercises-container" class="space-y-4"></div><button id="check-btn" data-template-id="check-button" class="canva-button mt-6 px-6 py-2 rounded-lg font-semibold transition"></button>
     <div id="score-display" class="mt-3 font-semibold hidden"></div>
-   </section><!-- Conversation Prompts -->
+   </section>
    <section id="panel-conversation" class="hidden" role="tabpanel">
     <p data-template-id="convo-intro" class="canva-text mb-4"></p>
     <div id="convo-container" class="space-y-4"></div>
@@ -70,72 +70,137 @@
         ];
 
         // Build families
-        const familiesEl = document.getElementById('families-container');
-        wordFamilies.forEach((fam, i) => {
-            const div = document.createElement('div');
+        var familiesEl = document.getElementById('families-container');
+        wordFamilies.forEach(function(fam) {
+            var div = document.createElement('div');
             div.className = 'border border-gray-200 rounded-lg overflow-hidden';
-            div.innerHTML = `
-                <button class="w-full flex justify-between items-center p-4 text-left font-semibold text-lg hover:bg-gray-50 transition" aria-expanded="false">
-                    <span>${fam.name}</span><i data-lucide="chevron-down" style="width:20px;height:20px"></i>
-                </button>
-                <div class="family-content px-4 pb-0">
-                    <div class="flex flex-wrap gap-2 pb-4">${fam.words.map(w => `<span class="inline-block px-3 py-1 rounded-full text-sm" style="background:#e8f0fe;color:#1e3a5f">${w}</span>`).join('')}</div>
-                </div>`;
-            div.querySelector('button').addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                const open = content.classList.toggle('open');
-                this.setAttribute('aria-expanded', open);
+            var btn = document.createElement('button');
+            btn.className = 'w-full flex justify-between items-center p-4 text-left font-semibold text-lg hover:bg-gray-50 transition';
+            btn.setAttribute('aria-expanded', 'false');
+            btn.innerHTML = '<span>' + fam.name + '</span><i data-lucide="chevron-down" style="width:20px;height:20px"></i>';
+            var content = document.createElement('div');
+            content.className = 'family-content px-4 pb-0';
+            var inner = document.createElement('div');
+            inner.className = 'flex flex-wrap gap-2 pb-4';
+            fam.words.forEach(function(w) {
+                var span = document.createElement('span');
+                span.className = 'inline-block px-3 py-1 rounded-full text-sm';
+                span.style.background = '#e8f0fe';
+                span.style.color = '#1e3a5f';
+                span.textContent = w;
+                inner.appendChild(span);
             });
+            content.appendChild(inner);
+            btn.addEventListener('click', function() {
+                var isOpen = content.classList.toggle('open');
+                btn.setAttribute('aria-expanded', String(isOpen));
+            });
+            div.appendChild(btn);
+            div.appendChild(content);
             familiesEl.appendChild(div);
         });
 
         // Build exercises
-        const exEl = document.getElementById('exercises-container');
-        exercises.forEach((ex, i) => {
-            const parts = ex.sentence.split('___');
-            const div = document.createElement('div');
+        var exEl = document.getElementById('exercises-container');
+        exercises.forEach(function(ex) {
+            var parts = ex.sentence.split('___');
+            var div = document.createElement('div');
             div.className = 'p-4 bg-white rounded-lg border border-gray-200';
-            const shuffled = [...ex.options].sort(() => Math.random() - 0.5);
-            div.innerHTML = `<p class="text-gray-800">${parts[0]}<select class="ex-select mx-1 px-2 py-1 border border-gray-300 rounded" data-answer="${ex.answer}"><option value="">…</option>${shuffled.map(o => `<option value="${o}">${o}</option>`).join('')}</select>${parts[1]}</p>`;
+            var p = document.createElement('p');
+            p.className = 'text-gray-800';
+            p.appendChild(document.createTextNode(parts[0]));
+            var select = document.createElement('select');
+            select.className = 'ex-select mx-1 px-2 py-1 border border-gray-300 rounded';
+            select.setAttribute('data-answer', ex.answer);
+            var defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = '…';
+            select.appendChild(defaultOpt);
+            var shuffled = ex.options.slice().sort(function() { return Math.random() - 0.5; });
+            shuffled.forEach(function(o) {
+                var opt = document.createElement('option');
+                opt.value = o;
+                opt.textContent = o;
+                select.appendChild(opt);
+            });
+            p.appendChild(select);
+            p.appendChild(document.createTextNode(parts[1]));
+            div.appendChild(p);
             exEl.appendChild(div);
         });
 
-        document.getElementById('check-btn').addEventListener('click', () => {
-            let correct = 0;
-            document.querySelectorAll('.ex-select').forEach(sel => {
+        document.getElementById('check-btn').addEventListener('click', function() {
+            var correct = 0;
+            var selects = document.querySelectorAll('.ex-select');
+            for (var i = 0; i < selects.length; i++) {
+                var sel = selects[i];
                 sel.classList.remove('correct', 'incorrect');
-                if (sel.value === sel.dataset.answer) { sel.classList.add('correct'); correct++; }
-                else { sel.classList.add('incorrect'); }
-            });
-            const scoreEl = document.getElementById('score-display');
-            scoreEl.textContent = `Score: ${correct}/${exercises.length}`;
+                if (sel.value === sel.getAttribute('data-answer')) {
+                    sel.classList.add('correct');
+                    correct++;
+                } else {
+                    sel.classList.add('incorrect');
+                }
+            }
+            var scoreEl = document.getElementById('score-display');
+            scoreEl.textContent = 'Score: ' + correct + '/' + exercises.length;
             scoreEl.classList.remove('hidden');
         });
 
         // Build conversation prompts
-        const convoEl = document.getElementById('convo-container');
-        conversations.forEach((c, i) => {
-            const div = document.createElement('div');
+        var convoEl = document.getElementById('convo-container');
+        conversations.forEach(function(c) {
+            var div = document.createElement('div');
             div.className = 'p-5 bg-white rounded-lg border border-gray-200';
-            div.innerHTML = `
-                <p class="text-gray-800 font-medium mb-3">${c.prompt}</p>
-                <button class="text-sm font-semibold flex items-center gap-1" style="color:#1e3a5f" onclick="this.nextElementSibling.classList.toggle('hidden');"><i data-lucide="lightbulb" style="width:16px;height:16px"></i> Show suggested connectors</button>
-                <div class="hidden mt-2 flex flex-wrap gap-2">${c.connectors.map(w => `<span class="inline-block px-3 py-1 rounded-full text-sm" style="background:#fef3c7;color:#92400e">${w}</span>`).join('')}</div>`;
+            var promptP = document.createElement('p');
+            promptP.className = 'text-gray-800 font-medium mb-3';
+            promptP.textContent = c.prompt;
+            div.appendChild(promptP);
+
+            var toggleBtn = document.createElement('button');
+            toggleBtn.className = 'text-sm font-semibold flex items-center gap-1';
+            toggleBtn.style.color = '#1e3a5f';
+            toggleBtn.innerHTML = '<i data-lucide="lightbulb" style="width:16px;height:16px"></i> Show suggested connectors';
+
+            var connDiv = document.createElement('div');
+            connDiv.className = 'hidden mt-2 flex flex-wrap gap-2';
+            c.connectors.forEach(function(w) {
+                var span = document.createElement('span');
+                span.className = 'inline-block px-3 py-1 rounded-full text-sm';
+                span.style.background = '#fef3c7';
+                span.style.color = '#92400e';
+                span.textContent = w;
+                connDiv.appendChild(span);
+            });
+
+            toggleBtn.addEventListener('click', function() {
+                connDiv.classList.toggle('hidden');
+            });
+
+            div.appendChild(toggleBtn);
+            div.appendChild(connDiv);
             convoEl.appendChild(div);
         });
 
         // Tabs
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('tab-active'); b.setAttribute('aria-selected', 'false'); });
-                btn.classList.add('tab-active');
-                btn.setAttribute('aria-selected', 'true');
-                document.querySelectorAll('[role="tabpanel"]').forEach(p => p.classList.add('hidden'));
-                document.getElementById('panel-' + btn.dataset.tab).classList.remove('hidden');
+        var tabBtns = document.querySelectorAll('.tab-btn');
+        for (var i = 0; i < tabBtns.length; i++) {
+            tabBtns[i].addEventListener('click', function() {
+                for (var j = 0; j < tabBtns.length; j++) {
+                    tabBtns[j].classList.remove('tab-active');
+                    tabBtns[j].setAttribute('aria-selected', 'false');
+                }
+                this.classList.add('tab-active');
+                this.setAttribute('aria-selected', 'true');
+                var panels = document.querySelectorAll('[role="tabpanel"]');
+                for (var k = 0; k < panels.length; k++) {
+                    panels[k].classList.add('hidden');
+                }
+                document.getElementById('panel-' + this.getAttribute('data-tab')).classList.remove('hidden');
             });
-        });
+        }
 
         lucide.createIcons();
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a12d3ec5f7958691',t:'MTc4MjY1NTUxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a12d853847278691',t:'MTc4MjY1ODQwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
