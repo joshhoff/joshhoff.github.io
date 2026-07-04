@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C1 Connecting Words Practice</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
   <style>
     body { font-family: 'DM Sans', sans-serif; }
@@ -13,9 +12,10 @@
     .tab-active { border-bottom: 3px solid #1e3a5f; color: #1e3a5f; font-weight: 700; }
     .family-content { display: none; }
     .family-content.open { display: block; }
-    .correct-answer { background-color: #d1fae5; border-color: #10b981; }
-    .incorrect-answer { background-color: #fee2e2; border-color: #ef4444; }
+    .correct-answer { background-color: #d1fae5 !important; border-color: #10b981 !important; }
+    .incorrect-answer { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
   <script src="/_sdk/0179d719c431a79e.data_sdk.js" type="text/javascript" integrity="sha512-OsRvJkI5GkC3MJQcgotQYotpzrMSX415GiKKgvYdxQEEkzD/fdchShO2FMSy0PJr/tiINMXOk5Vl2zAgg6bUiA=="></script>
   <script src="/_sdk/0b3af1c300e720aa.resizing_sdk.js" type="text/javascript" integrity="sha512-nX1P6oXZmEY5wCI2lUVg3BwKu1cr0yi+ZpXgZ0Yn90vkSwvpmyzBMvOyD6VLJUtBwFI2dSrw1b6OvORxSggw3w=="></script>
  </head>
@@ -26,7 +26,7 @@
    </div><button id="lang-toggle" class="absolute top-4 right-4 px-4 py-2 rounded-full font-semibold text-sm shadow-md" style="background:#1e3a5f;color:#fff;">Español →</button>
   </header>
   <main class="max-w-4xl mx-auto px-4 py-6">
-   <nav class="flex gap-6 border-b border-gray-200 mb-6" role="tablist"><button class="tab-btn tab-active pb-2 px-1" data-tab="families" role="tab" aria-selected="true"> <span data-template-id="tab-families" class="canva-text"></span> </button> <button class="tab-btn pb-2 px-1" data-tab="written" role="tab" aria-selected="false"> <span data-template-id="tab-written" class="canva-text"></span> </button> <button class="tab-btn pb-2 px-1" data-tab="conversation" role="tab" aria-selected="false"> <span data-template-id="tab-conversation" class="canva-text"></span> </button>
+   <nav class="flex gap-6 border-b border-gray-200 mb-6" role="tablist"><button class="tab-btn tab-active pb-2 px-1" data-tab="families" role="tab" aria-selected="true"><span data-template-id="tab-families" class="canva-text"></span></button> <button class="tab-btn pb-2 px-1" data-tab="written" role="tab" aria-selected="false"><span data-template-id="tab-written" class="canva-text"></span></button> <button class="tab-btn pb-2 px-1" data-tab="conversation" role="tab" aria-selected="false"><span data-template-id="tab-conversation" class="canva-text"></span></button>
    </nav>
    <section id="panel-families" role="tabpanel">
     <p data-template-id="families-intro" class="canva-text mb-4"></p>
@@ -206,11 +206,10 @@
         var p = document.createElement('p');
         p.className = 'text-gray-800';
 
-        var textBefore = document.createTextNode(parts[0]);
-        p.appendChild(textBefore);
+        p.appendChild(document.createTextNode(parts[0]));
 
         var select = document.createElement('select');
-        select.className = 'ex-select mx-1 px-2 py-1 border border-gray-300 rounded';
+        select.className = 'ex-select mx-1 px-2 py-1 border border-gray-300 rounded text-base';
         select.setAttribute('data-answer', ex.answer);
 
         var defaultOpt = document.createElement('option');
@@ -254,7 +253,30 @@
         tBtn.className = 'text-sm font-semibold flex items-center gap-1';
         tBtn.setAttribute('type', 'button');
         tBtn.style.color = '#1e3a5f';
-        tBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg> ' + (currentLang === 'en' ? 'Show suggested connectors' : 'Mostrar conectores sugeridos');
+
+        var svgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svgIcon.setAttribute('width', '16');
+        svgIcon.setAttribute('height', '16');
+        svgIcon.setAttribute('viewBox', '0 0 24 24');
+        svgIcon.setAttribute('fill', 'none');
+        svgIcon.setAttribute('stroke', 'currentColor');
+        svgIcon.setAttribute('stroke-width', '2');
+        svgIcon.setAttribute('stroke-linecap', 'round');
+        svgIcon.setAttribute('stroke-linejoin', 'round');
+        var path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path1.setAttribute('d', 'M9 18h6');
+        var path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path2.setAttribute('d', 'M10 22h4');
+        var path3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path3.setAttribute('d', 'M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14');
+        svgIcon.appendChild(path1);
+        svgIcon.appendChild(path2);
+        svgIcon.appendChild(path3);
+        tBtn.appendChild(svgIcon);
+
+        var btnText = document.createElement('span');
+        btnText.textContent = currentLang === 'en' ? 'Show suggested connectors' : 'Mostrar conectores sugeridos';
+        tBtn.appendChild(btnText);
 
         var connDiv = document.createElement('div');
         connDiv.className = 'hidden mt-2 flex flex-wrap gap-2';
@@ -289,7 +311,7 @@
         if (sel.value === sel.getAttribute('data-answer')) {
           sel.classList.add('correct-answer');
           correct++;
-        } else {
+        } else if (sel.value !== '') {
           sel.classList.add('incorrect-answer');
         }
       }
@@ -317,9 +339,10 @@
       })(tabBtns[i]);
     }
 
+    // Initial render
     renderFamilies();
     renderExercises();
     renderConversations();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a15e68a8975a76d4',t:'MTc4MzE3MTAzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a15e6faea04976d4',t:'MTc4MzE3MTMyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
