@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+ <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260717-01-2f85f83"}');</script><script src="/_sdk/f432b76fb310b513.telemetry_sdk.js" integrity="sha512-9FJQ55EKmmqhyyik8BhrMVfm0+iYYfb8uOlRsjtkxJMEI97qOVEI4PnHohDjQAtvAep0IOEpdQ64eki0sz62ug=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Practice B2</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Fraunces:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Fraunces', serif; }
+        .tab-active { border-bottom: 3px solid #0f766e; color: #0f766e; }
+        .correct { background: #dcfce7 !important; border-color: #16a34a !important; }
+        .incorrect { background: #fee2e2 !important; border-color: #dc2626 !important; }
+        .card-flip { transition: transform 0.4s; }
+    </style>
+  <script src="/_sdk/e3937a0574eb2d69.data_sdk.js" type="text/javascript" integrity="sha512-xbp/ACqEQy1aDxYMtXTrR3y5MUbzxuggRR/9sD48Gl4VhLMMCiAHsxMaFV6DTdeBpR6ymF+t2zhPKYkWM3+Jfw=="></script>
+  <script src="/_sdk/9432170dbd2ae0df.resizing_sdk.js" type="text/javascript" integrity="sha512-FeT+58sb1f9ejWPWFjCbJvTT+SDwGV+ngrHUnlO7TWEOoqwOLj6p256kO3vOL7DIWl1cIgrobiof8v2bOigwPg=="></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen w-full">
+  <header class="relative overflow-hidden">
+   <img data-template-id="hero-image" class="canva-image absolute inset-0 w-full h-full object-cover opacity-20" loading="lazy">
+   <div class="relative z-10 px-6 py-12 md:py-16 text-center max-w-3xl mx-auto">
+    <h1 data-template-id="main-title" class="canva-text text-4xl md:text-5xl font-bold mb-3"></h1>
+    <p data-template-id="subtitle" class="canva-text text-lg"></p>
+   </div>
+  </header>
+  <main class="max-w-4xl mx-auto px-4 pb-16">
+   <!-- Tabs -->
+   <nav class="flex border-b border-gray-200 mb-8" role="tablist">
+    <button id="tab-written" class="canva-button px-5 py-3 font-medium tab-active" role="tab" aria-selected="true" onclick="switchTab('written')"> <span data-template-id="tab-written-label" class="canva-text"></span> </button> <button id="tab-convo" class="canva-button px-5 py-3 font-medium text-gray-500" role="tab" aria-selected="false" onclick="switchTab('convo')"> <span data-template-id="tab-convo-label" class="canva-text"></span> </button> <button id="tab-guide" class="canva-button px-5 py-3 font-medium text-gray-500" role="tab" aria-selected="false" onclick="switchTab('guide')"> <span data-template-id="tab-guide-label" class="canva-text"></span> </button>
+   </nav><!-- Written Activities Section -->
+   <section id="section-written" aria-label="Written Activities">
+    <div class="flex justify-between items-center mb-6">
+     <h2 data-template-id="exercises-heading" class="canva-text text-2xl font-bold"></h2>
+     <div class="flex items-center gap-3">
+      <span id="score-display" class="text-sm font-medium text-teal-700 bg-teal-50 px-3 py-1 rounded-full">0 / 0</span> <button onclick="resetExercises()" class="text-sm px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 transition"><i data-lucide="rotate-ccw" style="width:14px;height:14px;display:inline-block;vertical-align:middle;"></i> Reset</button>
+     </div>
+    </div>
+    <div id="exercises-container" class="space-y-5"></div>
+   </section><!-- Conversation Prompts Section -->
+   <section id="section-convo" class="hidden" aria-label="Conversation Prompts">
+    <h2 data-template-id="convo-heading" class="canva-text text-2xl font-bold mb-6"></h2>
+    <div id="prompt-card" data-template-id="prompt-card" class="canva-card rounded-2xl p-8 min-h-[200px] flex flex-col justify-center items-center text-center shadow-lg">
+     <p id="prompt-text" class="text-xl md:text-2xl font-medium text-gray-800 mb-2"></p>
+     <p id="prompt-category" class="text-sm text-teal-600 font-medium mt-2"></p>
+    </div>
+    <div class="flex justify-center gap-4 mt-6">
+     <button onclick="prevPrompt()" class="px-5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition font-medium"><i data-lucide="chevron-left" style="width:18px;height:18px;display:inline-block;vertical-align:middle;"></i> Previous</button> <button onclick="nextPrompt()" class="px-5 py-2 rounded-lg bg-teal-600 hover:bg-teal-700 text-white transition font-medium">Next <i data-lucide="chevron-right" style="width:18px;height:18px;display:inline-block;vertical-align:middle;"></i></button>
+    </div>
+   </section><!-- Grammar Guide Section -->
+   <section id="section-guide" class="hidden" aria-label="Grammar Guide">
+    <h2 data-template-id="guide-heading" class="canva-text text-2xl font-bold mb-6"></h2>
+    <div class="grid md:grid-cols-2 gap-6">
+     <div data-template-id="guide-card-phrasal" class="canva-card rounded-xl p-5 shadow-sm border border-gray-100">
+      <h3 data-template-id="guide-phrasal-title" class="canva-text font-bold text-teal-700 text-lg mb-2"></h3>
+      <p data-template-id="guide-phrasal-desc" class="canva-text text-gray-600 mb-3 text-sm"></p>
+      <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500"><span data-template-id="guide-phrasal-eg" class="canva-text italic text-gray-800 block text-sm"></span>
+      </div>
+     </div>
+     <div data-template-id="guide-card-passive" class="canva-card rounded-xl p-5 shadow-sm border border-gray-100">
+      <h3 data-template-id="guide-passive-title" class="canva-text font-bold text-teal-700 text-lg mb-2"></h3>
+      <p data-template-id="guide-passive-desc" class="canva-text text-gray-600 mb-3 text-sm"></p>
+      <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500"><span data-template-id="guide-passive-eg" class="canva-text italic text-gray-800 block text-sm"></span>
+      </div>
+     </div>
+     <div data-template-id="guide-card-state" class="canva-card rounded-xl p-5 shadow-sm border border-gray-100">
+      <h3 data-template-id="guide-state-title" class="canva-text font-bold text-teal-700 text-lg mb-2"></h3>
+      <p data-template-id="guide-state-desc" class="canva-text text-gray-600 mb-3 text-sm"></p>
+      <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500"><span data-template-id="guide-state-eg" class="canva-text italic text-gray-800 block text-sm"></span>
+      </div>
+     </div>
+     <div data-template-id="guide-card-causative" class="canva-card rounded-xl p-5 shadow-sm border border-gray-100">
+      <h3 data-template-id="guide-causative-title" class="canva-text font-bold text-teal-700 text-lg mb-2"></h3>
+      <p data-template-id="guide-causative-desc" class="canva-text text-gray-600 mb-3 text-sm"></p>
+      <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500"><span data-template-id="guide-causative-eg" class="canva-text italic text-gray-800 block text-sm"></span>
+      </div>
+     </div>
+     <div data-template-id="guide-card-idioms" class="canva-card rounded-xl p-5 shadow-sm border border-gray-100">
+      <h3 data-template-id="guide-idioms-title" class="canva-text font-bold text-teal-700 text-lg mb-2"></h3>
+      <p data-template-id="guide-idioms-desc" class="canva-text text-gray-600 mb-3 text-sm"></p>
+      <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500"><span data-template-id="guide-idioms-eg" class="canva-text italic text-gray-800 block text-sm"></span>
+      </div>
+     </div>
+     <div data-template-id="guide-card-basic" class="canva-card rounded-xl p-5 shadow-sm border border-gray-100">
+      <h3 data-template-id="guide-basic-title" class="canva-text font-bold text-teal-700 text-lg mb-2"></h3>
+      <p data-template-id="guide-basic-desc" class="canva-text text-gray-600 mb-3 text-sm"></p>
+      <div class="bg-teal-50 p-3 rounded-lg border-l-4 border-teal-500"><span data-template-id="guide-basic-eg" class="canva-text italic text-gray-800 block text-sm"></span>
+      </div>
+     </div>
+    </div>
+   </section>
+  </main>
+  <script src="/_sdk/c3c8758f0a2727e0.editing_sdk.js" integrity="sha512-dyaCX4172SqnJJDw8FNGinvlT71y2EFM1ID83T2DJ7G455DOCPKL4zf8kbl1l0WewivrfD9Ggsxm/8sCD8GAJA=="></script>
+  <script>
+const exercises = [
+    { type: 'fill', category: 'Phrasal verbs', prompt: 'I need to ___ over this cold before Monday.', answer: 'get', hint: 'get over = recover from' },
+    { type: 'fill', category: 'Phrasal verbs', prompt: 'How do you ___ on with your new colleagues?', answer: 'get', hint: 'get on with = have a relationship with' },
+    { type: 'fill', category: 'Phrasal verbs', prompt: 'She finally ___ round to fixing the leak.', answer: 'got', hint: 'get round to = find time to do' },
+    { type: 'fill', category: 'Passive (get + past participle)', prompt: 'He ___ fired after the incident.', answer: 'got', hint: 'got fired = was fired' },
+    { type: 'fill', category: 'Passive (get + past participle)', prompt: 'They ___ married in a tiny chapel.', answer: 'got', hint: 'got married = were married' },
+    { type: 'fill', category: 'Change of state', prompt: "It's ___ dark — we should head home.", answer: 'getting', hint: 'getting + adjective = becoming' },
+    { type: 'fill', category: 'Change of state', prompt: "Don't ___ upset — it's not worth it.", answer: 'get', hint: 'get + adjective = become' },
+    { type: 'fill', category: 'Causative', prompt: 'I need to ___ my car serviced.', answer: 'get', hint: 'get something done = arrange for it' },
+    { type: 'fill', category: 'Causative', prompt: 'She ___ him to agree by being persistent.', answer: 'got', hint: 'get someone to do = persuade' },
+    { type: 'fill', category: 'Idioms', prompt: "Let's ___ down to business.", answer: 'get', hint: 'get down to = start seriously' },
+    { type: 'fill', category: 'Idioms', prompt: "I can't ___ my head around this grammar rule.", answer: 'get', hint: 'get your head around = understand' },
+    { type: 'fill', category: 'Phrasal verbs', prompt: 'We need to ___ rid of these old files.', answer: 'get', hint: 'get rid of = dispose of' },
+];
+
+const prompts = [
+    { text: "Describe a time you had to get over a disappointment. What helped you recover?", cat: "Get over — recovery" },
+    { text: "How do you get on with people who have very different opinions from yours?", cat: "Get on with — relationships" },
+    { text: "Is there something you've been meaning to get round to but keep postponing? Why?", cat: "Get round to — procrastination" },
+    { text: "Have you ever got lost in a foreign city? What happened?", cat: "Get + past participle" },
+    { text: "Do you think it's getting harder to find a good work-life balance? Why?", cat: "Getting + adjective — change" },
+    { text: "What's something you need to get done this week? How will you manage it?", cat: "Causative get" },
+    { text: "Describe a concept that took you a long time to get your head around.", cat: "Idiom — understanding" },
+    { text: "How do you get away from stress? Do you have any rituals?", cat: "Get away — escape" },
+    { text: "Tell me about a time you got someone to change their mind. How did you do it?", cat: "Get someone to do — persuasion" },
+    { text: "What gets on your nerves about modern technology?", cat: "Get on one's nerves — annoyance" },
+];
+
+let answered = 0, correct = 0, currentPrompt = 0;
+
+function buildExercises() {
+    const container = document.getElementById('exercises-container');
+    container.innerHTML = '';
+    exercises.forEach((ex, i) => {
+        const div = document.createElement('div');
+        div.className = 'bg-white rounded-xl p-5 shadow-sm border border-gray-100';
+        div.innerHTML = `
+            <span class="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-0.5 rounded">${ex.category}</span>
+            <p class="mt-3 text-gray-800 text-lg">${ex.prompt.replace('___', `<input type="text" id="input-${i}" class="border-b-2 border-teal-300 outline-none w-24 text-center font-medium mx-1 bg-transparent" autocomplete="off">`)}</p>
+            <div class="mt-3 flex items-center gap-3 flex-wrap">
+                <button onclick="checkAnswer(${i})" class="text-sm px-4 py-1.5 rounded-lg bg-teal-600 text-white hover:bg-teal-700 transition">Check</button>
+                <button onclick="showHint(${i})" class="text-sm px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition">Show hint</button>
+                <span id="hint-${i}" class="text-sm text-gray-500 italic hidden">${ex.hint}</span>
+                <span id="feedback-${i}" class="text-sm font-medium hidden"></span>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+    updateScore();
+}
+
+function checkAnswer(i) {
+    const input = document.getElementById(`input-${i}`);
+    const feedback = document.getElementById(`feedback-${i}`);
+    const val = input.value.trim().toLowerCase();
+    if (!val) return;
+    if (val === exercises[i].answer) {
+        input.classList.add('correct');
+        feedback.textContent = '✓ Correct!';
+        feedback.className = 'text-sm font-medium text-green-600';
+        if (!input.dataset.answered) { answered++; correct++; input.dataset.answered = '1'; }
+    } else {
+        input.classList.add('incorrect');
+        feedback.textContent = `✗ Answer: "${exercises[i].answer}"`;
+        feedback.className = 'text-sm font-medium text-red-600';
+        if (!input.dataset.answered) { answered++; input.dataset.answered = '1'; }
+    }
+    feedback.classList.remove('hidden');
+    updateScore();
+}
+
+function showHint(i) { document.getElementById(`hint-${i}`).classList.remove('hidden'); }
+function updateScore() { document.getElementById('score-display').textContent = `${correct} / ${answered}`; }
+function resetExercises() { answered = 0; correct = 0; buildExercises(); }
+
+function switchTab(tab) {
+    document.getElementById('section-written').classList.toggle('hidden', tab !== 'written');
+    document.getElementById('section-convo').classList.toggle('hidden', tab !== 'convo');
+    document.getElementById('section-guide').classList.toggle('hidden', tab !== 'guide');
+    document.getElementById('tab-written').classList.toggle('tab-active', tab === 'written');
+    document.getElementById('tab-written').classList.toggle('text-gray-500', tab !== 'written');
+    document.getElementById('tab-convo').classList.toggle('tab-active', tab === 'convo');
+    document.getElementById('tab-convo').classList.toggle('text-gray-500', tab !== 'convo');
+    document.getElementById('tab-guide').classList.toggle('tab-active', tab === 'guide');
+    document.getElementById('tab-guide').classList.toggle('text-gray-500', tab !== 'guide');
+}
+
+function showPrompt() {
+    document.getElementById('prompt-text').textContent = prompts[currentPrompt].text;
+    document.getElementById('prompt-category').textContent = prompts[currentPrompt].cat;
+}
+function nextPrompt() { currentPrompt = (currentPrompt + 1) % prompts.length; showPrompt(); }
+function prevPrompt() { currentPrompt = (currentPrompt - 1 + prompts.length) % prompts.length; showPrompt(); }
+
+buildExercises();
+showPrompt();
+lucide.createIcons();
+</script>
+ </body>
+</html>
