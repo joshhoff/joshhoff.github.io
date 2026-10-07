@@ -12,23 +12,26 @@
       --rust: #bf5b35;
       --sage: #dfe8d9;
       --line: #e5d9c5;
+      --mist: #fffdf8;
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
       width: 100%;
+      min-width: 0;
       margin: 0;
       color: var(--ink);
       font-family: "DM Sans", sans-serif;
       background: var(--paper);
     }
 
-    .app-shell {
+    .lesson-shell {
       width: 100%;
       min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      overflow: hidden;
+      background-color: var(--paper);
       background-image: linear-gradient(rgba(194, 169, 126, .13) 1px, transparent 1px);
       background-size: 100% 32px;
     }
@@ -36,7 +39,7 @@
     .display-face { font-family: "Fraunces", serif; }
 
     .paper-panel {
-      border: 1px solid rgba(151, 122, 79, .18);
+      border: 1px solid rgba(151, 122, 79, .19);
       box-shadow: 0 16px 38px rgba(70, 51, 29, .09);
     }
 
@@ -46,6 +49,7 @@
 
     .section-reveal:nth-child(2) { animation-delay: .08s; }
     .section-reveal:nth-child(3) { animation-delay: .16s; }
+    .section-reveal:nth-child(4) { animation-delay: .24s; }
 
     @keyframes reveal {
       from { opacity: 0; transform: translateY(14px); }
@@ -56,11 +60,24 @@
     .grammar-panel.is-open .grammar-copy { display: block; }
     .grammar-panel.is-open .grammar-chevron { transform: rotate(180deg); }
 
+    .answer-choice {
+      background: #fffdf8;
+      border-color: #dfd2bd;
+    }
+
+    .answer-choice:hover {
+      background: #fff8ed;
+      border-color: #bca78a;
+    }
+
     .answer-choice.is-selected {
       border-color: #203343;
       background: #eaf0e5;
       box-shadow: inset 4px 0 0 #78966c;
     }
+
+    .feedback { display: none; }
+    .feedback.is-visible { display: flex; }
 
     .prompt-card { display: none; }
     .prompt-card.is-active {
@@ -73,14 +90,23 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
-    .feedback { display: none; }
-    .feedback.is-visible { display: flex; }
+    .writing-message { display: none; }
+    .writing-message.is-visible { display: block; }
 
     button:focus-visible,
     a:focus-visible,
     textarea:focus-visible {
       outline: 3px solid #d4865c;
       outline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .hero-note-position {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        margin: -1rem 1rem 0;
+      }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js" type="text/javascript"></script>
@@ -90,48 +116,48 @@
   <script src="/_sdk/ab4336f91e694f96.resizing_sdk.js" type="text/javascript" integrity="sha512-cxmeUrBrNlwwLr+tEu/iwM5F3boeK4qDMoH3QjUPqJptkO5NkaDVhQvyIHIn+3EflI5/uubWzkSA78B1tCswgA=="></script>
  </head>
  <body data-template-id="__page-root">
-  <div class="app-shell">
+  <div class="lesson-shell">
    <header class="w-full px-5 pt-6 sm:px-8 lg:px-12 lg:pt-10">
-    <div data-template-id="top-banner" class="canva-banner mx-auto flex max-w-6xl items-center justify-between rounded-full px-4 py-2"><span data-template-id="banner-label" class="canva-tag text-xs font-bold uppercase tracking-[0.18em]"></span> <span data-template-id="level-label" class="canva-text text-xs font-semibold"></span>
+    <div data-template-id="top-banner" class="canva-banner mx-auto flex max-w-6xl items-center justify-between rounded-full px-4 py-2"><span data-template-id="banner-label" class="canva-tag text-xs font-bold uppercase tracking-[0.18em]">Grammar studio</span> <span data-template-id="level-label" class="canva-text text-xs font-semibold">B2 • Upper intermediate</span>
     </div>
    </header>
    <main class="w-full px-5 pb-12 sm:px-8 lg:px-12">
     <section class="section-reveal mx-auto grid max-w-6xl gap-8 py-10 lg:grid-cols-[1.1fr_.9fr] lg:items-center lg:py-14" aria-labelledby="page-title">
      <div>
-      <p data-template-id="eyebrow" class="canva-text mb-3 text-sm font-bold uppercase tracking-[0.2em]"></p>
-      <h1 data-template-id="page-title" class="canva-text display-face max-w-2xl leading-[1.05]"></h1>
-      <p data-template-id="page-intro" class="canva-text mt-5 max-w-xl leading-7"></p>
-      <nav class="mt-7 flex flex-wrap gap-3" aria-label="Lesson navigation"><a href="#grammar" class="inline-flex items-center gap-2 rounded-full bg-[#203343] px-5 py-3 font-bold text-white transition hover:-translate-y-0.5"> <i data-lucide="book-open" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="grammar-link" class="canva-button"></span> </a> <a href="#practice" class="inline-flex items-center gap-2 rounded-full bg-[#e6efdf] px-5 py-3 font-bold text-[#203343] transition hover:-translate-y-0.5"> <i data-lucide="pencil-line" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="practice-link" class="canva-button"></span> </a>
+      <p data-template-id="eyebrow" class="canva-text mb-3 text-sm font-bold uppercase tracking-[0.2em]">English language practice</p>
+      <h1 data-template-id="page-title" class="canva-text display-face max-w-2xl leading-[1.05]">Make every verb do its job.</h1>
+      <p data-template-id="page-intro" class="canva-text mt-5 max-w-xl leading-7">Sharpen your control of transitive and intransitive verbs through clear grammar notes, focused written practice, and natural conversation.</p>
+      <nav class="mt-7 flex flex-wrap gap-3" aria-label="Lesson navigation"><a href="#grammar" class="inline-flex items-center gap-2 rounded-full bg-[#203343] px-5 py-3 font-bold text-white transition hover:-translate-y-0.5"> <i data-lucide="book-open" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="grammar-link" class="canva-button">Review grammar</span> </a> <a href="#practice" class="inline-flex items-center gap-2 rounded-full bg-[#e6efdf] px-5 py-3 font-bold text-[#203343] transition hover:-translate-y-0.5"> <i data-lucide="pencil-line" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="practice-link" class="canva-button">Start practice</span> </a>
       </nav>
      </div>
      <div class="relative mx-auto w-full max-w-md">
       <div class="absolute -left-3 -top-3 h-full w-full rounded-[2rem] border-2 border-dashed border-[#cf9b7d]"></div><img data-template-id="hero-image" loading="lazy" class="canva-image relative h-72 w-full rounded-[2rem] object-cover shadow-xl sm:h-80">
-      <div data-template-id="hero-note" class="canva-card absolute -bottom-5 -left-4 max-w-[220px] rounded-2xl p-4">
-       <p data-template-id="hero-note-text" class="canva-text text-sm font-semibold leading-5"></p>
+      <div data-template-id="hero-note" class="canva-card hero-note-position absolute -bottom-5 -left-4 max-w-[220px] rounded-2xl p-4">
+       <p data-template-id="hero-note-text" class="canva-text text-sm font-semibold leading-5">B2 tip: meaning can change when a verb takes an object.</p>
       </div>
      </div>
     </section>
     <section id="grammar" class="section-reveal mx-auto max-w-6xl scroll-mt-5" aria-labelledby="grammar-title">
      <div class="mb-5 flex items-end justify-between gap-4">
       <div>
-       <p data-template-id="grammar-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]"></p>
-       <h2 data-template-id="grammar-title" class="canva-text display-face mt-1"></h2>
-      </div><span data-template-id="grammar-hint" class="canva-text hidden text-sm sm:block"></span>
+       <p data-template-id="grammar-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]">01 / Grammar reference</p>
+       <h2 data-template-id="grammar-title" class="canva-text display-face mt-1">Find the object. Find the pattern.</h2>
+      </div><span data-template-id="grammar-hint" class="canva-text hidden text-sm sm:block">Select a card to open the note.</span>
      </div>
      <div class="grid gap-4 lg:grid-cols-2">
-      <article data-template-id="transitive-panel" class="canva-panel grammar-panel paper-panel rounded-3xl p-2"><button class="flex w-full items-center justify-between rounded-2xl p-5 text-left" type="button" aria-expanded="false"> <span> <span data-template-id="transitive-label" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"></span> <span data-template-id="transitive-title" class="canva-text display-face mt-3 block"></span> </span> <i data-lucide="chevron-down" class="grammar-chevron h-6 w-6 transition-transform" aria-hidden="true"></i> </button>
+      <article data-template-id="transitive-panel" class="canva-panel grammar-panel paper-panel rounded-3xl p-2"><button class="flex w-full items-center justify-between rounded-2xl p-5 text-left" type="button" aria-expanded="false"> <span> <span data-template-id="transitive-label" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider">Transitive</span> <span data-template-id="transitive-title" class="canva-text display-face mt-3 block">The action lands somewhere</span> </span> <i data-lucide="chevron-down" class="grammar-chevron h-6 w-6 transition-transform" aria-hidden="true"></i> </button>
        <div class="grammar-copy px-5 pb-5">
-        <p data-template-id="transitive-copy" class="canva-text leading-7"></p>
+        <p data-template-id="transitive-copy" class="canva-text leading-7">A transitive verb needs or can take a direct object: someone or something receives the action. Ask “what?” or “whom?” after the verb.</p>
         <div data-template-id="transitive-example" class="canva-card mt-4 rounded-xl px-4 py-3">
-         <p data-template-id="transitive-example-text" class="canva-text text-sm font-semibold leading-6"></p>
+         <p data-template-id="transitive-example-text" class="canva-text text-sm font-semibold leading-6">They discussed the proposal for over an hour. → Discussed what? The proposal.</p>
         </div>
        </div>
       </article>
-      <article data-template-id="intransitive-panel" class="canva-panel grammar-panel paper-panel rounded-3xl p-2"><button class="flex w-full items-center justify-between rounded-2xl p-5 text-left" type="button" aria-expanded="false"> <span> <span data-template-id="intransitive-label" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"></span> <span data-template-id="intransitive-title" class="canva-text display-face mt-3 block"></span> </span> <i data-lucide="chevron-down" class="grammar-chevron h-6 w-6 transition-transform" aria-hidden="true"></i> </button>
+      <article data-template-id="intransitive-panel" class="canva-panel grammar-panel paper-panel rounded-3xl p-2"><button class="flex w-full items-center justify-between rounded-2xl p-5 text-left" type="button" aria-expanded="false"> <span> <span data-template-id="intransitive-label" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider">Intransitive</span> <span data-template-id="intransitive-title" class="canva-text display-face mt-3 block">The action stands on its own</span> </span> <i data-lucide="chevron-down" class="grammar-chevron h-6 w-6 transition-transform" aria-hidden="true"></i> </button>
        <div class="grammar-copy px-5 pb-5">
-        <p data-template-id="intransitive-copy" class="canva-text leading-7"></p>
+        <p data-template-id="intransitive-copy" class="canva-text leading-7">An intransitive verb does not take a direct object. The sentence can be complete after the verb, though it may include time, place, or manner.</p>
         <div data-template-id="intransitive-example" class="canva-card mt-4 rounded-xl px-4 py-3">
-         <p data-template-id="intransitive-example-text" class="canva-text text-sm font-semibold leading-6"></p>
+         <p data-template-id="intransitive-example-text" class="canva-text text-sm font-semibold leading-6">The audience laughed at the joke. → “At the joke” is a prepositional phrase, not a direct object.</p>
         </div>
        </div>
       </article>
@@ -140,48 +166,48 @@
     <section id="practice" class="section-reveal mx-auto mt-14 max-w-6xl scroll-mt-5" aria-labelledby="practice-title">
      <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
-       <p data-template-id="practice-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]"></p>
-       <h2 data-template-id="practice-title" class="canva-text display-face mt-1"></h2>
+       <p data-template-id="practice-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]">02 / Written activities</p>
+       <h2 data-template-id="practice-title" class="canva-text display-face mt-1">Classify the verb in context.</h2>
       </div>
-      <div data-template-id="progress-chip" class="canva-progress rounded-full px-4 py-2"><span data-template-id="progress-label" class="canva-text text-sm font-bold"></span> <span id="score-display" aria-live="polite" class="text-sm font-bold">0 / 3</span>
+      <div data-template-id="progress-chip" class="canva-progress rounded-full px-4 py-2"><span data-template-id="progress-label" class="canva-text text-sm font-bold">Progress:</span> <span id="score-display" class="ml-1 text-sm font-bold" aria-live="polite">0 / 3</span>
       </div>
      </div>
      <div class="grid gap-5">
       <article data-question="1" data-correct="b" class="paper-panel rounded-3xl bg-[#fffdf8] p-6">
-       <div class="flex gap-4"><span data-template-id="q1-number" class="canva-tag flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold"></span>
+       <div class="flex gap-4"><span data-template-id="q1-number" class="canva-tag flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold">01</span>
         <div class="w-full">
-         <p data-template-id="q1-sentence" class="canva-text font-semibold leading-7"></p>
-         <fieldset class="mt-5 grid gap-3 sm:grid-cols-2"><legend class="sr-only">Question one answer choices</legend> <button data-answer="a" data-template-id="q1-choice-a" class="canva-button answer-choice rounded-xl border border-[#dfd2bd] px-4 py-3 text-left font-semibold transition" type="button"></button> <button data-answer="b" data-template-id="q1-choice-b" class="canva-button answer-choice rounded-xl border border-[#dfd2bd] px-4 py-3 text-left font-semibold transition" type="button"></button>
+         <p data-template-id="q1-sentence" class="canva-text font-semibold leading-7">1. After the meeting, the committee discussed the revised schedule.</p>
+         <fieldset class="mt-5 grid gap-3 sm:grid-cols-2"><legend class="sr-only">Question one answer choices</legend> <button data-answer="a" data-template-id="q1-choice-a" class="canva-button answer-choice rounded-xl border px-4 py-3 text-left font-semibold transition" type="button">Intransitive — the action is complete.</button> <button data-answer="b" data-template-id="q1-choice-b" class="canva-button answer-choice rounded-xl border px-4 py-3 text-left font-semibold transition" type="button">Transitive — “the revised schedule” is the direct object.</button>
          </fieldset>
-         <div data-template-id="correct-feedback" class="canva-banner feedback mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="correct-feedback-text" class="canva-text"></span>
+         <div data-template-id="correct-feedback" class="canva-banner feedback correct-message mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="correct-feedback-text" class="canva-text">Correct. You identified the verb pattern accurately.</span>
          </div>
-         <div data-template-id="incorrect-feedback" class="canva-banner feedback mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="rotate-ccw" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="incorrect-feedback-text" class="canva-text"></span>
+         <div data-template-id="incorrect-feedback" class="canva-banner feedback incorrect-message mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="rotate-ccw" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="incorrect-feedback-text" class="canva-text">Look again: ask whether a noun directly receives the action.</span>
          </div>
         </div>
        </div>
       </article>
       <article data-question="2" data-correct="a" class="paper-panel rounded-3xl bg-[#fffdf8] p-6">
-       <div class="flex gap-4"><span data-template-id="q2-number" class="canva-tag flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold"></span>
+       <div class="flex gap-4"><span data-template-id="q2-number" class="canva-tag flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold">02</span>
         <div class="w-full">
-         <p data-template-id="q2-sentence" class="canva-text font-semibold leading-7"></p>
-         <fieldset class="mt-5 grid gap-3 sm:grid-cols-2"><legend class="sr-only">Question two answer choices</legend> <button data-answer="a" data-template-id="q2-choice-a" class="canva-button answer-choice rounded-xl border border-[#dfd2bd] px-4 py-3 text-left font-semibold transition" type="button"></button> <button data-answer="b" data-template-id="q2-choice-b" class="canva-button answer-choice rounded-xl border border-[#dfd2bd] px-4 py-3 text-left font-semibold transition" type="button"></button>
+         <p data-template-id="q2-sentence" class="canva-text font-semibold leading-7">2. The guests arrived shortly after midnight.</p>
+         <fieldset class="mt-5 grid gap-3 sm:grid-cols-2"><legend class="sr-only">Question two answer choices</legend> <button data-answer="a" data-template-id="q2-choice-a" class="canva-button answer-choice rounded-xl border px-4 py-3 text-left font-semibold transition" type="button">Intransitive — “shortly after midnight” gives time, not an object.</button> <button data-answer="b" data-template-id="q2-choice-b" class="canva-button answer-choice rounded-xl border px-4 py-3 text-left font-semibold transition" type="button">Transitive — “midnight” receives the action.</button>
          </fieldset>
-         <div data-template-id="correct-feedback" class="canva-banner feedback mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="correct-feedback-text" class="canva-text"></span>
+         <div data-template-id="correct-feedback" class="canva-banner feedback correct-message mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="correct-feedback-text" class="canva-text">Correct. You identified the verb pattern accurately.</span>
          </div>
-         <div data-template-id="incorrect-feedback" class="canva-banner feedback mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="rotate-ccw" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="incorrect-feedback-text" class="canva-text"></span>
+         <div data-template-id="incorrect-feedback" class="canva-banner feedback incorrect-message mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="rotate-ccw" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="incorrect-feedback-text" class="canva-text">Look again: ask whether a noun directly receives the action.</span>
          </div>
         </div>
        </div>
       </article>
       <article data-question="3" data-correct="b" class="paper-panel rounded-3xl bg-[#fffdf8] p-6">
-       <div class="flex gap-4"><span data-template-id="q3-number" class="canva-tag flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold"></span>
+       <div class="flex gap-4"><span data-template-id="q3-number" class="canva-tag flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold">03</span>
         <div class="w-full">
-         <p data-template-id="q3-sentence" class="canva-text font-semibold leading-7"></p>
-         <fieldset class="mt-5 grid gap-3 sm:grid-cols-2"><legend class="sr-only">Question three answer choices</legend> <button data-answer="a" data-template-id="q3-choice-a" class="canva-button answer-choice rounded-xl border border-[#dfd2bd] px-4 py-3 text-left font-semibold transition" type="button"></button> <button data-answer="b" data-template-id="q3-choice-b" class="canva-button answer-choice rounded-xl border border-[#dfd2bd] px-4 py-3 text-left font-semibold transition" type="button"></button>
+         <p data-template-id="q3-sentence" class="canva-text font-semibold leading-7">3. Her confidence grew steadily during the course.</p>
+         <fieldset class="mt-5 grid gap-3 sm:grid-cols-2"><legend class="sr-only">Question three answer choices</legend> <button data-answer="a" data-template-id="q3-choice-a" class="canva-button answer-choice rounded-xl border px-4 py-3 text-left font-semibold transition" type="button">Transitive — “steadily” is the direct object.</button> <button data-answer="b" data-template-id="q3-choice-b" class="canva-button answer-choice rounded-xl border px-4 py-3 text-left font-semibold transition" type="button">Intransitive — the verb describes a change without an object.</button>
          </fieldset>
-         <div data-template-id="correct-feedback" class="canva-banner feedback mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="correct-feedback-text" class="canva-text"></span>
+         <div data-template-id="correct-feedback" class="canva-banner feedback correct-message mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="correct-feedback-text" class="canva-text">Correct. You identified the verb pattern accurately.</span>
          </div>
-         <div data-template-id="incorrect-feedback" class="canva-banner feedback mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="rotate-ccw" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="incorrect-feedback-text" class="canva-text"></span>
+         <div data-template-id="incorrect-feedback" class="canva-banner feedback incorrect-message mt-4 items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold" aria-live="polite"><i data-lucide="rotate-ccw" class="h-5 w-5 shrink-0" aria-hidden="true"></i> <span data-template-id="incorrect-feedback-text" class="canva-text">Look again: ask whether a noun directly receives the action.</span>
          </div>
         </div>
        </div>
@@ -190,89 +216,92 @@
     </section>
     <section class="section-reveal mx-auto mt-14 grid max-w-6xl gap-6 lg:grid-cols-2">
      <article data-template-id="writing-panel" class="canva-panel paper-panel rounded-3xl p-6 sm:p-8" aria-labelledby="writing-title">
-      <p data-template-id="writing-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]"></p>
-      <h2 data-template-id="writing-title" class="canva-text display-face mt-1"></h2>
-      <p data-template-id="writing-task" class="canva-text mt-4 leading-7"></p>
-      <form id="writing-form" class="mt-5"><label data-template-id="writing-label" class="canva-text mb-2 block text-sm font-bold" for="writing-response"></label> <textarea id="writing-response" data-template-id="writing-input" class="canva-input w-full rounded-xl border border-[#d8c8b0] bg-[#fffdf8] p-4 leading-6" rows="5"></textarea> <button class="mt-4 inline-flex items-center gap-2 rounded-full bg-[#bf5b35] px-5 py-3 font-bold text-white transition hover:-translate-y-0.5" type="submit"> <i data-lucide="sparkles" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="writing-button" class="canva-button"></span> </button>
-       <p id="writing-message" class="mt-4 hidden rounded-xl bg-[#e4efdf] p-3 text-sm font-semibold text-[#36543b]" aria-live="polite"></p>
+      <p data-template-id="writing-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]">03 / Write it</p>
+      <h2 data-template-id="writing-title" class="canva-text display-face mt-1">A small grammar workout</h2>
+      <p data-template-id="writing-task" class="canva-text mt-4 leading-7">Write two connected sentences about a memorable event. Use one transitive verb and one intransitive verb.</p>
+      <form id="writing-form" class="mt-5"><label data-template-id="writing-label" class="canva-text mb-2 block text-sm font-bold" for="writing-response">Your response</label> <textarea id="writing-response" data-template-id="writing-input" class="canva-input w-full rounded-xl border border-[#d8c8b0] bg-[#fffdf8] p-4 leading-6" rows="5" placeholder="For example: We organised a surprise dinner, and everyone arrived early."></textarea> <button class="mt-4 inline-flex items-center gap-2 rounded-full bg-[#bf5b35] px-5 py-3 font-bold text-white transition hover:-translate-y-0.5" type="submit"> <i data-lucide="sparkles" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="writing-button" class="canva-button">Check my focus</span> </button>
+       <p data-template-id="writing-short-message" class="writing-message mt-4 rounded-xl bg-[#f8e3d8] p-3 text-sm font-semibold text-[#8a3d26]" aria-live="polite">Try adding a little more detail: write at least two complete sentences.</p>
+       <p data-template-id="writing-success-message" class="writing-message mt-4 rounded-xl bg-[#e4efdf] p-3 text-sm font-semibold text-[#36543b]" aria-live="polite">Nice work. Now underline each verb and identify whether it has a direct object.</p>
       </form>
      </article>
      <aside data-template-id="conversation-panel" class="canva-panel paper-panel rounded-3xl p-6 sm:p-8" aria-labelledby="conversation-title">
-      <p data-template-id="conversation-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]"></p>
-      <h2 data-template-id="conversation-title" class="canva-text display-face mt-1"></h2>
-      <p data-template-id="conversation-intro" class="canva-text mt-4 leading-7"></p>
+      <p data-template-id="conversation-kicker" class="canva-text text-sm font-bold uppercase tracking-[0.16em]">04 / Speak it</p>
+      <h2 data-template-id="conversation-title" class="canva-text display-face mt-1">Conversation prompts</h2>
+      <p data-template-id="conversation-intro" class="canva-text mt-4 leading-7">Speak for one minute. Listen for the objects your partner uses.</p>
       <div class="mt-6 min-h-[155px]">
-       <div class="prompt-card is-active" data-prompt="0"><span data-template-id="prompt-one-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold"></span>
-        <p data-template-id="prompt-one" class="canva-text display-face mt-4 leading-8"></p>
+       <div class="prompt-card is-active" data-prompt="0"><span data-template-id="prompt-one-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold">Prompt 1</span>
+        <p data-template-id="prompt-one" class="canva-text display-face mt-4 leading-8">Describe a project you completed recently. What did you create, change, or improve?</p>
        </div>
-       <div class="prompt-card" data-prompt="1"><span data-template-id="prompt-two-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold"></span>
-        <p data-template-id="prompt-two" class="canva-text display-face mt-4 leading-8"></p>
+       <div class="prompt-card" data-prompt="1"><span data-template-id="prompt-two-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold">Prompt 2</span>
+        <p data-template-id="prompt-two" class="canva-text display-face mt-4 leading-8">Talk about an event that went unexpectedly well or badly. What happened first, and what happened afterwards?</p>
        </div>
-       <div class="prompt-card" data-prompt="2"><span data-template-id="prompt-three-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold"></span>
-        <p data-template-id="prompt-three" class="canva-text display-face mt-4 leading-8"></p>
+       <div class="prompt-card" data-prompt="2"><span data-template-id="prompt-three-number" class="canva-tag inline-block rounded-full px-3 py-1 text-xs font-bold">Prompt 3</span>
+        <p data-template-id="prompt-three" class="canva-text display-face mt-4 leading-8">Which habits help you learn effectively? Explain what you do, and what changes over time.</p>
        </div>
       </div>
-      <div class="mt-5 flex gap-3"><button id="previous-prompt" class="inline-flex items-center gap-2 rounded-full bg-[#36543b] px-4 py-2.5 font-bold text-white transition hover:-translate-y-0.5" type="button"> <i data-lucide="arrow-left" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="previous-prompt" class="canva-button"></span> </button> <button id="next-prompt" class="inline-flex items-center gap-2 rounded-full bg-[#f0b493] px-4 py-2.5 font-bold text-[#203343] transition hover:-translate-y-0.5" type="button"> <span data-template-id="next-prompt" class="canva-button"></span> <i data-lucide="arrow-right" class="h-4 w-4" aria-hidden="true"></i> </button>
+      <div class="mt-5 flex gap-3"><button id="previous-prompt" class="inline-flex items-center gap-2 rounded-full bg-[#36543b] px-4 py-2.5 font-bold text-white transition hover:-translate-y-0.5" type="button"> <i data-lucide="arrow-left" class="h-4 w-4" aria-hidden="true"></i> <span data-template-id="previous-prompt-label" class="canva-button">Previous</span> </button> <button id="next-prompt" class="inline-flex items-center gap-2 rounded-full bg-[#f0b493] px-4 py-2.5 font-bold text-[#203343] transition hover:-translate-y-0.5" type="button"> <span data-template-id="next-prompt-label" class="canva-button">Next</span> <i data-lucide="arrow-right" class="h-4 w-4" aria-hidden="true"></i> </button>
       </div>
      </aside>
     </section>
    </main>
    <footer class="w-full px-5 pb-8 sm:px-8 lg:px-12">
     <div class="mx-auto max-w-6xl border-t border-[#ddcfbb] pt-5">
-     <p data-template-id="footer-text" class="canva-text text-sm"></p>
+     <p data-template-id="footer-text" class="canva-text text-sm">Study slowly, notice the pattern, then use it in your own sentences.</p>
     </div>
    </footer>
   </div>
   <script>
-    document.querySelectorAll(".grammar-panel > button").forEach((button) => {
-      button.addEventListener("click", () => {
-        const panel = button.closest(".grammar-panel");
-        const isOpen = panel.classList.toggle("is-open");
+    document.querySelectorAll(".grammar-panel > button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var panel = button.closest(".grammar-panel");
+        var isOpen = panel.classList.toggle("is-open");
         button.setAttribute("aria-expanded", String(isOpen));
       });
     });
 
-    const answers = new Map();
+    var answers = new Map();
 
-    document.querySelectorAll("[data-question]").forEach((question) => {
-      question.querySelectorAll(".answer-choice").forEach((choice) => {
-        choice.addEventListener("click", () => {
-          question.querySelectorAll(".answer-choice").forEach((item) => {
+    document.querySelectorAll("[data-question]").forEach(function (question) {
+      question.querySelectorAll(".answer-choice").forEach(function (choice) {
+        choice.addEventListener("click", function () {
+          question.querySelectorAll(".answer-choice").forEach(function (item) {
             item.classList.remove("is-selected");
           });
 
           choice.classList.add("is-selected");
 
-          const correct = choice.dataset.answer === question.dataset.correct;
-          answers.set(question.dataset.question, correct);
+          var isCorrect = choice.dataset.answer === question.dataset.correct;
+          answers.set(question.dataset.question, isCorrect);
 
-          question.querySelectorAll(".feedback").forEach((feedback) => {
+          question.querySelectorAll(".feedback").forEach(function (feedback) {
             feedback.classList.remove("is-visible");
           });
 
-          const feedbackId = correct ? "correct-feedback" : "incorrect-feedback";
-          question.querySelector(`[data-template-id="${feedbackId}"]`).classList.add("is-visible");
-
-          document.getElementById("score-display").textContent = `${answers.size} / 3`;
+          question.querySelector(isCorrect ? ".correct-message" : ".incorrect-message").classList.add("is-visible");
+          document.getElementById("score-display").textContent = answers.size + " / 3";
         });
       });
     });
 
-    document.getElementById("writing-form").addEventListener("submit", (event) => {
+    document.getElementById("writing-form").addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const response = document.getElementById("writing-response").value.trim();
-      const message = document.getElementById("writing-message");
+      var response = document.getElementById("writing-response").value.trim();
+      var shortMessage = document.querySelector('[data-template-id="writing-short-message"]');
+      var successMessage = document.querySelector('[data-template-id="writing-success-message"]');
 
-      message.textContent = response.length < 12
-        ? "Try adding a little more detail: write at least two complete sentences."
-        : "Nice work. Now underline each verb and identify whether it has a direct object.";
+      shortMessage.classList.remove("is-visible");
+      successMessage.classList.remove("is-visible");
 
-      message.classList.remove("hidden");
+      if (response.length < 12) {
+        shortMessage.classList.add("is-visible");
+      } else {
+        successMessage.classList.add("is-visible");
+      }
     });
 
-    const prompts = [...document.querySelectorAll(".prompt-card")];
-    let currentPrompt = 0;
+    var prompts = Array.from(document.querySelectorAll(".prompt-card"));
+    var currentPrompt = 0;
 
     function showPrompt(index) {
       prompts[currentPrompt].classList.remove("is-active");
@@ -280,16 +309,18 @@
       prompts[currentPrompt].classList.add("is-active");
     }
 
-    document.getElementById("previous-prompt").addEventListener("click", () => {
+    document.getElementById("previous-prompt").addEventListener("click", function () {
       showPrompt(currentPrompt - 1);
     });
 
-    document.getElementById("next-prompt").addEventListener("click", () => {
+    document.getElementById("next-prompt").addEventListener("click", function () {
       showPrompt(currentPrompt + 1);
     });
 
-    window.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
+    window.addEventListener("DOMContentLoaded", function () {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
     });
   </script>
  </body>
